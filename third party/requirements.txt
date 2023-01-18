@@ -1,0 +1,4 @@
+gtsam (with all deps)
+pathlib2
+rosbags
+psutil
