@@ -7,6 +7,7 @@ It estimates the timestamp of the next vertex (state) in graph based on timestam
 from src.data_manager.data_reader.DataLoader import DataLoader
 
 class MeasurementsSynchronizer:
+    isDataBatchSynchronized = True
     def __init__(self, data_list):
         self.CurrentTime = min([min(data) for data in data_list])
         assert self.CurrentTime >= 0
@@ -15,7 +16,7 @@ class MeasurementsSynchronizer:
         self.MeasurementsList = data_list
         self.CurrentState = None
         self.isSystemInitialized = False
-        self.isDataSynchronized = True
+        self.isDataBatchSynchronized = True
         self.FreshData = None
 
     def start_sync(self):
@@ -23,9 +24,9 @@ class MeasurementsSynchronizer:
             init_synchronizer()
             self.isSystemInitialized = True
 
-        if self.isDataSynchronized:
+        if self.isDataBatchSynchronized:
             self.FreshData = DataLoader.get_data()
-            self.isDataSynchronized = False
+            self.isDataBatchSynchronized = False
 
     def sync_measurements(self):
         NextTime = self.CurrentTime + self.TimeStep

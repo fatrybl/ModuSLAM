@@ -1,5 +1,6 @@
 from MemoryAnalyzer import MemoryAnalyzer
 from DataReader import FileReader
+from src.data_manager.data_synchronizer.MeasurementsSynchronizer import MeasurementsSynchronizer as Synchronizer
 class DataLoader:
     def __init__(self, data_file_path, batch_size=None, mode='full batch'):
         self.Mode = mode
@@ -9,6 +10,15 @@ class DataLoader:
         self.NumBatches = None
         self.Status = None
         self.Data = None
+        self.isDataAvailable = False
+        self.Synchronizer = MeasurementsSynchronizer()
+        self.Reader = FileReader()
+
+    def update_status(self):
+        if self.Reader.isUnprocessedDataLeft:
+            self.isDataAvailable = True
+        else:
+            self.isDataAvailable = False
 
     def calculate_batch_size(self, batch_size):
         if batch_size is None:
@@ -20,10 +30,7 @@ class DataLoader:
             return batch_size
 
     def read_data(self):
-        Reader = FileReader()
-        return Reader.read_file(self.DataFilePath, self.BatchSize)
+        self.Data = self.Reader.read_file(self.DataFilePath, self.BatchSize)
 
-    def split_data(self):
-        BatchList = []
-        num_batches = ceil(file_size / BatchSize)
-        return BatchList
+    def convert_to_csv(self):
+        pass
