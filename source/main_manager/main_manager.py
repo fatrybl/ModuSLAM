@@ -1,45 +1,46 @@
-from src.setup_manager import SetupManager
-from src.data_manager import DataManager
-from src.frontend_manager import FrontendManager
-from src.backend_manager import BackendManager
-from src.map_manager import MapManager
+from source.setup_manager import SetupManager
+from source.data_manager import DataManager
+from source.frontend_manager import FrontendManager
+from source.backend_manager import BackendManager
+from source.map_manager import MapManager
+import logging
 
 
 class MainManager:
     def __init__(self) -> None:
-        setup_manager = SetupManager()
-        data_manager = DataManager()
-        frontend_manager = FrontendManager()
-        backend_manager = BackendManager()
-        map_manager = MapManager()
-        logger = Logger()
+        self.finished = False
+        self.setup_manager = SetupManager()
+        self.data_manager = DataManager()
+        self.frontend_manager = FrontendManager()
+        self.backend_manager = BackendManager()
+        self.map_manager = MapManager()
+        self.main_logger = logging.getLogger(__name__)
 
-    def somefunc(self, arg:int) -> None:
-        print(arg)
+    def setup_system(self) -> None:
+        objects = [self.data_manager, 
+                   self.frontend_manager, 
+                   self.backend_manager, 
+                   self.map_manager, 
+                   self.main_logger]
+        try:
+            self.setup_manager.setup(objects)
+
+        except SomeException:
+            self.main_logger.error("Setup failed")
+
 
     def build_map(self) ->  None:
-        try:
-            setup_manager.setup_system()
-        except "SetumManagerException"
-
-        self.somefunc("asd")
-
-        while not Exception:
+        while not self.finished:
             try: 
-                data_manager.make_data_chunk()
-            except: "DataManagerException"
+                chunk = self.data_manager.make_data_chunk()
 
-            try: 
-                frontend_manager.proccess_data_chunk()
-            except: "FrontendManagerException"
+                self.frontend_manager.proccess_data_chunk(chunk)
 
-            try:
-                backend_manager.solve_problem()
-            except: "BackendManagerException"
+                self.backend_manager.solve_problem()
 
-            try: 
-                map_manager.update_map()
-            except: "MapManagerException"
+                self.map_manager.update_map()
+
+            except Exception: pass
 
             finally:
                 pass
