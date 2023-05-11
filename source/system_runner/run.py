@@ -1,6 +1,5 @@
 from ast import main
 from source.main_manager import MainManager
-# SetupManager, DataManager, FrontendManager, BackendManager, MapManager
 
 """
 Author: Mark Griguletskii.

@@ -1,5 +1,7 @@
 class DataManager():
     def __init__(self):
+        self.initializer = DataManagerInitializer()
+        
         self.data_loader = DataLoader()
         self.memory_analyzer = MemoryAnalyzer()
         self.chunk_provider = ChunkProvider()
