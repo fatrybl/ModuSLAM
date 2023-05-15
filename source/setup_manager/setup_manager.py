@@ -1,19 +1,17 @@
-from source.configs.paths import DEFAULT_FILE_PATHS
-from source.setup_manager import config
-from source.setup_manager.initializers import initializer
+from pathlib2 import Path
+from asdasdasd import DEFAULT_CFG_DIRECTORY_PATH
 
 class SetupManager:
-    def __init__(self) -> None:
-        self.initializer = SetupManagerInitializer(self)
-        self._base_path = None
-        self._something_else = None
+    def __init__(self, cfg_directory_path = None) -> None:
+        if cfg_directory_path:
+            self.cfg_directory_path = Path(cfg_directory_path)
+        else:
+            self.cfg_directory_path = Path(DEFAULT_CFG_DIRECTORY_PATH)
 
-    @staticmethod
-    def setup(objects: list) -> None:
-        assert len(objects) > 0
 
-        for object in objects:
+    def setup(self, objects: list) -> None:
+        for obj in objects:
             try:
-                object.initializer.setup()
+                obj.setup()
             except: 
                 Exception

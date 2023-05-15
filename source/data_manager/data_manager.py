@@ -1,14 +1,19 @@
 class DataManager():
     def __init__(self):
-        self.initializer = DataManagerInitializer()
-        
+        """
+        base attributes
+        """
         self.data_loader = DataLoader()
         self.memory_analyzer = MemoryAnalyzer()
         self.chunk_provider = ChunkProvider()
-        self.raw_data_filter = DataFilter()
     
-    def itinialize(self):
-        pass
+    def setup(self):
+        cfg = Config()
+        
+        if cfg.use_filter:
+            self.raw_data_filter = DataFilter()
+        if cfg.use_something:
+            self.something = Something()
 
     def check_memory_usage(self):
         pass
