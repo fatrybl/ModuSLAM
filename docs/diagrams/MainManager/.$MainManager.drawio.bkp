@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-05-05T10:41:59.757Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="xR3NfuRG1pzssK9ccdnG" version="21.1.2" type="device">
+<mxfile host="Electron" modified="2023-05-05T10:42:04.360Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="WXqaCJiOtzBxySkZFNBm" version="21.1.2" type="device">
   <diagram name="Page-1" id="5f0bae14-7c28-e335-631c-24af17079c00">
     <mxGraphModel dx="2458" dy="786" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
@@ -158,7 +158,7 @@
           <mxGeometry x="371" y="210" width="370" height="132.5" as="geometry" />
         </mxCell>
         <mxCell id="wG_TOprUD2TI2NFrCxs7-1" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Main Manager&lt;/font&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-1012" y="860" width="999" height="664" as="geometry" />
+          <mxGeometry x="-1012" y="860" width="567" height="337" as="geometry" />
         </mxCell>
         <mxCell id="HuXE95MxmL2E_wQSAet0-1" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;MainManager&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="-944.5" y="909" width="307.5" height="242" as="geometry" />

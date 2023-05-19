@@ -1,0 +1,8 @@
+# type of solver for non-linear problems: Gauss-Newton (GN), Levenberg-Marquardt (LM)
+solver_type: GN
+
+# max number of iterations
+iterations: 10
+
+# epsilon threshold
+epsilon: 1e-5

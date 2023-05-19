@@ -1,17 +1,19 @@
+import logging
+
 class FrontendManager:
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
-        """
-        base attributes
-        """
         self.measurements_processor = MeasurementsProcessor()
         self.graph_builder = GraphBuilder()
     
     def setup(self):
         cfg = Config()
 
-        if cfg.attributes.use_loop_closure:
+        if cfg.attributes.loop_detector:
             self.loop_detector = LoopDetector()
-        if cfg.attributes.use_anomaly_detector:
+
+        if cfg.attributes.anomaly_detector:
             self.anomaly_detector = AnomalyDetector()
 
         

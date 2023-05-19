@@ -1,3 +1,5 @@
+import psutil
+
 class MemoryAnalyzer():
     def __init__(self):
         self.a = 0
@@ -11,3 +13,4 @@ class MemoryAnalyzer():
             pass
         if cfg.use_something:
             self.something = Something()
+

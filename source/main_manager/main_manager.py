@@ -4,10 +4,14 @@ from source.frontend_manager import FrontendManager
 from source.backend_manager import BackendManager
 from source.map_manager import MapManager
 
+import logging
+from source.logger import logging_config
+
 class MainManager:
+    logger = logging.getLogger(__name__)
+
     def __init__(self) -> None:
         self.finished = False
-
         self.setup_manager = SetupManager()
         self.data_manager = DataManager()
         self.frontend_manager = FrontendManager()

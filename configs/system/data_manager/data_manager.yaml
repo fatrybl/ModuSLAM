@@ -1,0 +1,3 @@
+# % of RAM to be used for data batch and pose_graph
+RAM_USAGE : { "data_batch": 0.5,
+              "graph": 0.3,}     

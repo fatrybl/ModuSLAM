@@ -1,19 +1,18 @@
+import logging
+
 class DataManager():
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
-        """
-        base attributes
-        """
-        self.data_loader = DataLoader()
+        self.batch_factory = BatchFactory()
+        self.chunk_factory = ChunkFactory()
         self.memory_analyzer = MemoryAnalyzer()
-        self.chunk_provider = ChunkProvider()
     
     def setup(self):
         cfg = Config()
         
         if cfg.use_filter:
-            self.raw_data_filter = DataFilter()
-        if cfg.use_something:
-            self.something = Something()
+            self.data_filter = DataFilter()
 
     def check_memory_usage(self):
         pass

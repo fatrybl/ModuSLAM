@@ -1,0 +1,16 @@
+# modules to be included
+loop_detection: false
+anomaly_detection: false
+
+# crieterion to add new state: by time (secs) or by travelled distance (meters)
+new_state_criterion: time
+
+# factor-sensor in graph
+factors : {camera1_odometry: camera1,
+           camera1_landmark: camera1,
+           imu1_odometry: imu1}
+
+# factor-kernel in graph
+kernels: {camera1_odometry: default,
+          camera1_landmark: Huber,
+          imu1_odometry: Pseudo-Huber}

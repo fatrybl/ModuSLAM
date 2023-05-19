@@ -1,4 +1,3 @@
-from pathlib2 import Path
 class DataBatch:
     def __init__(self):
         pass

@@ -1,10 +1,10 @@
-<mxfile host="Electron" modified="2023-05-05T15:36:20.713Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="onSZ5cuPFgHA7dSEJ8ll" version="21.1.2" type="device">
+<mxfile host="Electron" modified="2023-05-16T12:18:47.238Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="_HfSZ7bsdghFihooH_Fc" version="21.1.2" type="device">
   <diagram name="Page-1" id="9f46799a-70d6-7492-0946-bef42562c5a5">
-    <mxGraphModel dx="4431" dy="441" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#FFCE9F" math="0" shadow="0">
+    <mxGraphModel dx="4803" dy="657" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#FFCE9F" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="U7_jPe6CuGnI9PTVLj4C-52" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Chunk provider&lt;/font&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="U7_jPe6CuGnI9PTVLj4C-52" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Chunk Factory&lt;/font&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1903" y="1911" width="926.75" height="1174" as="geometry" />
         </mxCell>
         <mxCell id="ocK-KpDrbQQQFr26P3qb-122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="ocK-KpDrbQQQFr26P3qb-110" target="ocK-KpDrbQQQFr26P3qb-99" edge="1">
@@ -36,7 +36,7 @@
         <mxCell id="_LQi3goQdABTxO5C51Vf-141" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=35;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="_LQi3goQdABTxO5C51Vf-139" target="_LQi3goQdABTxO5C51Vf-29" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_LQi3goQdABTxO5C51Vf-139" value="&lt;font style=&quot;font-size: 28px;&quot;&gt;Data Loader&lt;/font&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="_LQi3goQdABTxO5C51Vf-139" value="" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1907" y="958" width="1251" height="875" as="geometry" />
         </mxCell>
         <mxCell id="_LQi3goQdABTxO5C51Vf-115" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -45,7 +45,7 @@
         <mxCell id="cgtKHkuM48J9Ty5OMgtg-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="lU-VyZ4p-aKHjOAaM008-3" target="cgtKHkuM48J9Ty5OMgtg-26" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="lU-VyZ4p-aKHjOAaM008-3" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Batch Creator&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates data batches from file(s) based on available RAM and Manager tasks)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="lU-VyZ4p-aKHjOAaM008-3" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Batch Factory&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates data batches from file(s) based on available RAM and Manager tasks)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-353" y="1589" width="160" height="119" as="geometry" />
         </mxCell>
         <mxCell id="cgtKHkuM48J9Ty5OMgtg-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="lU-VyZ4p-aKHjOAaM008-4" target="cgtKHkuM48J9Ty5OMgtg-1" edge="1">
@@ -276,7 +276,7 @@
         <mxCell id="_LQi3goQdABTxO5C51Vf-126" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="_LQi3goQdABTxO5C51Vf-123" target="_LQi3goQdABTxO5C51Vf-125" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_LQi3goQdABTxO5C51Vf-123" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Batch Creator&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates batches from file(s) based on available RAM)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="_LQi3goQdABTxO5C51Vf-123" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Batch Factory&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates batches from file(s) based on available RAM)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1580.5" y="1046" width="160" height="106" as="geometry" />
         </mxCell>
         <mxCell id="_LQi3goQdABTxO5C51Vf-125" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=90;" parent="1" vertex="1">
@@ -291,7 +291,7 @@
         <mxCell id="DAQNkXUYjtsXxi17LZvh-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="_LQi3goQdABTxO5C51Vf-131" target="_LQi3goQdABTxO5C51Vf-61" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_LQi3goQdABTxO5C51Vf-131" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Chunk Provider&lt;/span&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="_LQi3goQdABTxO5C51Vf-131" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Chunk Factory&lt;/span&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1189.75" y="1142" width="180" height="52" as="geometry" />
         </mxCell>
         <mxCell id="_LQi3goQdABTxO5C51Vf-134" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="_LQi3goQdABTxO5C51Vf-103" target="_LQi3goQdABTxO5C51Vf-109" edge="1">
@@ -591,7 +591,7 @@
         <mxCell id="DAQNkXUYjtsXxi17LZvh-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="DAQNkXUYjtsXxi17LZvh-1" target="DAQNkXUYjtsXxi17LZvh-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="DAQNkXUYjtsXxi17LZvh-1" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Chunk Provider&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates chunk from batch based on regime)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="DAQNkXUYjtsXxi17LZvh-1" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Chunk Factory&lt;/span&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;(creates chunk from batch based on regime)&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-112.25" y="1589" width="160" height="119" as="geometry" />
         </mxCell>
         <mxCell id="DAQNkXUYjtsXxi17LZvh-2" value="ChunkProvider" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fillColor=none;fontFamily=Verdana;fontSize=12" parent="1" vertex="1">
@@ -624,7 +624,7 @@
         <mxCell id="DAQNkXUYjtsXxi17LZvh-14" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Raw Data Filter&lt;/span&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-793" y="1249" width="107" height="54" as="geometry" />
         </mxCell>
-        <mxCell id="PSk8g93ab5gi8Mub64Hs-1" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Spark+pySpark&lt;br&gt;YTsaurus&lt;br&gt;ulimits&lt;br&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="PSk8g93ab5gi8Mub64Hs-1" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Spark+pySpark&lt;br&gt;YTsaurus&lt;br&gt;ulimits&lt;br&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-1055.25" y="987" width="165" height="59" as="geometry" />
         </mxCell>
       </root>

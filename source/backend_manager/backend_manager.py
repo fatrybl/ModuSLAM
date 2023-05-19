@@ -1,14 +1,15 @@
+import logging
+
 class BackendManager():
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
-        """
-        base attributes
-        """
         self.solver = GraphSolver()
+
+    def setup(self):
+        cfg = Config()
+        if cfg.compute_metrics:
+            self.metrics = MetricsFactory()
 
     def solve(self):
         pass
-    
-    def setup(self):
-        cfg = Config()
-        if cfg.use_something:
-            self.something = Something()

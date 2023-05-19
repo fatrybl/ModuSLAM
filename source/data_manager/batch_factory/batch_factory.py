@@ -1,4 +1,8 @@
-class DataLoader():
+import logging
+
+class BatchFactory():
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
         self.memory_analyzer = MemoryAnalyzer()
         self.batch_creator = BatchCreator()
