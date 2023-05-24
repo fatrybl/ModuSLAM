@@ -1,11 +1,11 @@
-from source.setup_manager import SetupManager
-from source.data_manager import DataManager
-from source.frontend_manager import FrontendManager
-from source.backend_manager import BackendManager
-from source.map_manager import MapManager
+from source.setup_manager.setup_manager import SetupManager
+from source.data_manager.data_manager import DataManager
+from source.frontend_manager.frontend_manager import FrontendManager
+from source.backend_manager.backend_manager import BackendManager
+from source.map_manager.map_manager import MapManager
 
 import logging
-from source.logger import logging_config
+import source.logger.logging_config
 
 class MainManager:
     logger = logging.getLogger(__name__)

@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+source/main_manager/mySLAM.egg-info/PKG-INFO
+source/main_manager/mySLAM.egg-info/SOURCES.txt
+source/main_manager/mySLAM.egg-info/dependency_links.txt
+source/main_manager/mySLAM.egg-info/top_level.txt
