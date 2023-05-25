@@ -1,7 +1,0 @@
-numpy
-opencv-python
-pathlib2
-
-[test]
-pytest
-coverage
