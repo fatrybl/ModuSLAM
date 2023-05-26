@@ -4,13 +4,15 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>source &mdash; mySLAM 0.0.1 documentation</title>
+  <title>slam &mdash; mySLAM 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -38,11 +40,10 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">source</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="slam.html">slam package</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -57,7 +58,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">source</li>
+      <li class="breadcrumb-item active">slam</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -67,9 +68,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="source">
-<h1>source<a class="headerlink" href="#source" title="Permalink to this heading"></a></h1>
+  <section id="slam">
+<h1>slam<a class="headerlink" href="#slam" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="slam.html">slam package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slam.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.backend_manager.html">slam.backend_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.backend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.backend_manager.html#module-slam.backend_manager.backend_manager">slam.backend_manager.backend_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.backend_manager.html#module-slam.backend_manager.solver">slam.backend_manager.solver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.backend_manager.html#module-slam.backend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.html">slam.data_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.html#module-slam.data_manager.data_manager">slam.data_manager.data_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.html#module-slam.data_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.frontend_manager.html">slam.frontend_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.frontend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.frontend_manager.html#module-slam.frontend_manager.frontend_manager">slam.frontend_manager.frontend_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.frontend_manager.html#module-slam.frontend_manager.logger">slam.frontend_manager.logger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.frontend_manager.html#module-slam.frontend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.main_manager.html">slam.main_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.main_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.main_manager.html#slam-main-manager-main-manager-module">slam.main_manager.main_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.main_manager.html#module-slam.main_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.map_manager.html">slam.map_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.html#slam-map-manager-map-manager-module">slam.map_manager.map_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.html#module-slam.map_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.setup_manager.html">slam.setup_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.setup_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.setup_manager.html#module-slam.setup_manager.config">slam.setup_manager.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.setup_manager.html#slam-setup-manager-setup-manager-module">slam.setup_manager.setup_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.setup_manager.html#module-slam.setup_manager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="slam.html#module-slam">Module contents</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
 

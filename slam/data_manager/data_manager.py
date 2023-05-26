@@ -1,4 +1,10 @@
 import logging
+from utils.config import Config
+from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from data_manager.batch_factory.batch_factory import BatchFactory
+from data_manager.chunk_factory.chunk_factory import ChunkFactory, DataChunk
+from data_manager.data_filter.raw_data_filter import RawDataFilter
+
 
 class DataManager():
     logger = logging.getLogger(__name__)
@@ -6,19 +12,18 @@ class DataManager():
     def __init__(self):
         self.batch_factory = BatchFactory()
         self.chunk_factory = ChunkFactory()
-        self.memory_analyzer = MemoryAnalyzer()
-    
+
     def setup(self):
-        cfg = Config()
-        
-        if cfg.use_filter:
-            self.data_filter = DataFilter()
+        cfg = Config(ConfigFilePaths.data_manager_config)
+        if cfg.attributes.use_filter:
+            self.data_filter = RawDataFilter()
 
-    def check_memory_usage(self):
-        pass
+    def make_data_chunk(self) -> DataChunk:
+        if self.batch_factory.isEmpty:
+            self.batch_factory.create_batch()
 
-    def filter_data(self):
-        pass
+        if self.data_filter:
+            self.data_filter.filter(self.batch_factory.batch)
 
-    def make_data_chunk(self):
-        pass
+        self.chunk_factory.create_chunk(self.batch_factory.batch)
+        return self.chunk_factory.chunk

@@ -1,11 +1,11 @@
-from source.setup_manager.setup_manager import SetupManager
-from source.data_manager.data_manager import DataManager
-from source.frontend_manager.frontend_manager import FrontendManager
-from source.backend_manager.backend_manager import BackendManager
-from source.map_manager.map_manager import MapManager
+from slam.setup_manager.setup_manager import SetupManager
+from slam.data_manager.data_manager import DataManager
+from slam.frontend_manager.frontend_manager import FrontendManager
+from slam.backend_manager.backend_manager import BackendManager
+from slam.map_manager.map_manager import MapManager
 
 import logging
-import source.logger.logging_config
+# import slam.logger.logging_config
 
 class MainManager:
     logger = logging.getLogger(__name__)
@@ -19,13 +19,12 @@ class MainManager:
         self.map_manager = MapManager()
 
     def setup_system(self) -> None:
-        objects = [self.setup_manager,
-                   self.data_manager, 
+        objects = [self.data_manager, 
                    self.frontend_manager, 
                    self.backend_manager, 
                    self.map_manager]
         try:
-            SetupManager.setup(objects)
+            self.setup_manager.setup(objects)
 
         except Exception: pass
 

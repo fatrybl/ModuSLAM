@@ -4,3 +4,4 @@ rosbags
 psutil
 sphinx
 sphinx_rtd_theme
+pandas

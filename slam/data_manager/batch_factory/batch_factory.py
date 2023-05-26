@@ -1,40 +1,32 @@
 import logging
+from data_batch import DataBatch
+from data_reader.data_reader import DataReader
+from data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
+
 
 class BatchFactory():
     logger = logging.getLogger(__name__)
 
     def __init__(self):
-        self.memory_analyzer = MemoryAnalyzer()
-        self.batch_creator = BatchCreator()
-        self.chunk_provider = ChunkProvider()
-        self.raw_data_filter = DataFilter()
-        self._data_batch = None
-        self._data_chunk = None
+        self.__memory_analyzer = MemoryAnalyzer()
+        self.__batch = DataBatch()
+        self.__data_files = []
+        self.__current_file = None
+        self.isEmpty = True
+        self.current_batch_position = None
 
     @property
-    def data_batch():
+    def batch(self) -> DataBatch:
+        return self.__batch
+
+    def create_batch(self) -> None:
+        while self.__memory_analyzer.used_memory_percent <= self.__memory_analyzer.allowed_memory_percent:
+            self.__batch.add_data()
+        
+        self.isEmpty = False
+
+    def delete_batch(self) -> None:
         pass
 
-    @data_batch.setter
-    def data_batch(self, data_batch):
-        self._data_batch = data_batch
-
-    @property
-    def data_chunk():
+    def save_batch(self) -> None:
         pass
-    
-    @data_chunk.setter
-    def data_chunk(self, data_chunk):
-        self._data_chunk = data_chunk
-    
-    def make_data_chunk(self) -> DataChunk:
-        if not self._data_batch:
-            try:
-                self._data_batch = self.batch_creator.load_batch()
-            except Exception as e:
-                print(e)
-
-        data_chunk = self.chunk_provider.make_chunk(self._data_batch)
-        self.raw_data_filter.filter(data_chunk)  
-
-        return data_chunk

@@ -1,9 +1,9 @@
-from source.main_manager.main_manager import MainManager
+from slam.main_manager. main_manager import MainManager
 
 """
 Author: Mark Griguletskii.
 
-Main runner of the mapping system.
+Main runner of SLAM system.
 """
 
 

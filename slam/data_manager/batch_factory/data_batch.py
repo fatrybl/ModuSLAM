@@ -1,21 +1,14 @@
+import pandas as pd
+
+
 class DataBatch:
     def __init__(self):
-        pass
+        self.__data = pd.DataFrame(columns=['time', 'sensor', 'data'])
 
-    def create_batch(self):
-        pass
-
-    def delete_batch(self):
-        pass
-
-    def save(self):
-        pass
-
-    def upload(self):
-        pass
-
-    def observe_file(self, file_path):
-        if Path.is_file(file_path):
-            analyze_max_size_of_batch(file_path)
-        else:
-            raise FileExistsError
+    @property
+    def data(self) -> pd.DataFrame:
+        return self.__data
+    
+    @property
+    def size_bytes(self) -> int:
+        return self.__data.memory_usage(deep=True, index=True).sum()
