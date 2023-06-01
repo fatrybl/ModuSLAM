@@ -1,32 +1,16 @@
-import psutil
 from pathlib2 import Path
 from rosbags.rosbag1 import Reader as RosBagReader
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
-import pandas as pd
 # import sys
 import json
-# from math import ceil
-# from bagpy import bagreader
-import psutil
 
 """
-DataReader reads data from a file and sends to Data Loader.
-params: size of data batch, file path
-output: batch of raw data
+Reads data from a file and sends to Batch Factory.
 """
 
 class DataReader():
     def __init__(self):
-        self.BatchSize = None
-        self.NumBatches = None
-        self.AllowedFilesList = ['.bag', '.csv', '.json', '.txt']
-        self.Reader = None
 
-    def is_correct_type(self, file_path):
-        if file_path.suffix in self.AllowedFilesList:
-            return True
-        else:
-            return False
 
     def check_file(self, file_path):
         """

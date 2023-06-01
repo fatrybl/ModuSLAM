@@ -18,12 +18,13 @@ class DataManager():
         if cfg.attributes.use_filter:
             self.data_filter = RawDataFilter()
 
-    def make_data_chunk(self) -> DataChunk:
-        if self.batch_factory.isEmpty:
-            self.batch_factory.create_batch()
+    def make_chunk(self) -> DataChunk:
+        if not self.batch_factory.batch.exist():
+            self.batch_factory.create()
 
         if self.data_filter:
             self.data_filter.filter(self.batch_factory.batch)
 
-        self.chunk_factory.create_chunk(self.batch_factory.batch)
+        self.chunk_factory.create(self.batch_factory.batch)
+
         return self.chunk_factory.chunk

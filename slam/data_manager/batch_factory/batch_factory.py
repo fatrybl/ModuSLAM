@@ -10,23 +10,25 @@ class BatchFactory():
     def __init__(self):
         self.__memory_analyzer = MemoryAnalyzer()
         self.__batch = DataBatch()
+        self.__data_reader = DataReader()
         self.__data_files = []
         self.__current_file = None
-        self.isEmpty = True
         self.current_batch_position = None
 
     @property
     def batch(self) -> DataBatch:
         return self.__batch
 
-    def create_batch(self) -> None:
-        while self.__memory_analyzer.used_memory_percent <= self.__memory_analyzer.allowed_memory_percent:
-            self.__batch.add_data()
-        
-        self.isEmpty = False
+    def __add_data(self):
+        new_row = self.__data_reader.get_row()
+        self.__batch += new_row
 
-    def delete_batch(self) -> None:
+    def create(self) -> None:
+        while self.__memory_analyzer.used_percent <= self.__memory_analyzer.allowed_percent:
+            self.__add_data()
+
+    def delete(self) -> None:
         pass
 
-    def save_batch(self) -> None:
+    def save(self) -> None:
         pass
