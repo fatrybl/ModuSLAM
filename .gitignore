@@ -2,3 +2,4 @@ build
 slam.egg-info
 .idea
 .vscode
+__pycache__

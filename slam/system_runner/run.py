@@ -9,7 +9,6 @@ Main runner of SLAM system.
 
 def run():
     main_manager = MainManager()
-    # main_manager.setup_system()
     # main_manager.build_map()
 
 

@@ -1,45 +1,32 @@
+import errno
+from os import error
 from pathlib2 import Path
 from rosbags.rosbag1 import Reader as RosBagReader
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
 # import sys
 import json
-
+from abc import ABC, abstractmethod
 """
 Reads data from a file and sends to Batch Factory.
 """
 
-class DataReader():
+class FileReader(ABC):
     def __init__(self):
+        pass
 
-
-    def check_file(self, file_path):
+    def __check_file(self, file_path) -> bool:
         """
         Checks data file before reading
         """
         if not Path.is_file(file_path):
             raise FileNotFoundError
 
-        if not self.is_correct_type(file_path):
-            raise TypeError('Incorrect type of input file. Allowed types are: ', self.AllowedFilesList)
-
-        FileSize = file_path.stat().st_size # size in bytes
-        if FileSize == 0:
+        if file_path.stat().st_size == 0:
             raise Exception("Empty input file")
 
-    def choose_file_reader(self, file_path):
-        FileType = file_path.suffix
-        if FileType == '.bag':
-            self.Reader = RosBagReader
-        elif FileType == '.csv':
-            pass
-        elif FileType == '.txt':
-            pass
-        elif FileType == '.json':
-            pass
-        else:
-            raise NotImplementedError(f"A reader for the file type {FileType} has not been implemented")
 
-    def read_file(self, file_path, topics, batch_size=None):
+    def read(self, file_path, topics, batch_size=None):
+        self.__check_file()
         size = 0
         current_message_idx = 0
         with RosBagReader(file_path) as reader:
@@ -123,13 +110,5 @@ class DataReader():
             # for connection, timestamp, rawdata in reader.messages(connections=connections):
             #     msg = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
             #     print(msg.header.frame_id)
-
-if __name__ == "__main__":
-    file_reader = FileReader()
-    file_path = Path('/home/mark/Desktop/work/bags/Carla/carla-simulator-town2_n1-006_2022-10-27-14-28-04Z.evo1h_record_default.bag')
-    file_reader.choose_file_reader(file_path)
-    topics = ['/gnss/odometry',
-              '/sensors/imu_driver/imu']
-    file_reader.read_file(file_path, topics, 10)
 
 

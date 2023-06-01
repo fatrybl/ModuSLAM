@@ -13,6 +13,6 @@ class DataBatch:
     def size_bytes(self) -> int:
         return self.__data.memory_usage(deep=True, index=True).sum()
     
-    def exist(self):
+    def exist(self) -> bool:
         """Check if any data is available in dataframe"""
         pass

@@ -1,6 +1,11 @@
 # % of RAM to be used for data batch and pose_graph
-ram_usage: { "data_batch": 0.5,
-              "graph": 0.3,}     
+ram_usage: { "data_batch": 0.5, "graph": 0.3 }
 
 # simple filter for raw data
-use_filter : false
+use_filter: false
+
+# path to directory with data files
+data_dir: "./data"
+
+# key to sort files in data directory: modification time or name
+data_files_sort_type: "time"
