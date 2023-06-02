@@ -8,4 +8,4 @@ use_filter: false
 data_dir: "./data"
 
 # key to sort files in data directory: modification time or name
-data_files_sort_type: "time"
+sort_key: "time"
