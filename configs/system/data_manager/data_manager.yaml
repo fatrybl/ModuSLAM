@@ -9,3 +9,7 @@ data_dir: "./data"
 
 # key to sort files in data directory: modification time or name
 sort_key: "time"
+
+# position (row number) in file to start from
+start_position : start
+stop_position : stop

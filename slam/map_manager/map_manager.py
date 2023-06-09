@@ -1,4 +1,7 @@
 import logging
+from utils.config import Config
+from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+
 
 class MapManager:
     logger = logging.getLogger(__name__)
@@ -6,15 +9,14 @@ class MapManager:
     def __init__(self) -> None:
         self.map_saver = MapSaver()
         self.map_updater = MapUpdater()
-    
-    def setup(self):
-        cfg = Config()
+        self.__map = Map()
+        self.config = Config(ConfigFilePaths.map_manager_config)
+        if self.config.attributes.smth:
+            pass
 
-        if cfg.attributes.smth:
-            self.smth = smth()
-
-    def get_map(self) -> self.map:
-        return self.map
+    @property
+    def map(self) -> Map:
+        return self.__map
 
     def save_map() -> None:
         pass

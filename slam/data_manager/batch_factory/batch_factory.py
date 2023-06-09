@@ -1,19 +1,29 @@
 import logging
 
 from data_batch import DataBatch
-from data_reader.data_reader import FileReader
+from data_reader.data_reader import FileReader, FileReaderFactory
 from data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
+from utils.file_sorter import FileSorter
 from collections import deque
+from pathlib2 import Path
+from utils.config import Config
+from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from main_manager.main_manager import StoppingCriterion
 
 
 class BatchFactory():
     logger = logging.getLogger(__name__)
 
     def __init__(self):
+        self.__config = Config(ConfigFilePaths.data_manager_config)
         self.__memory_analyzer = MemoryAnalyzer()
         self.__batch = DataBatch()
-        self.__file_reader = FileReader()
         self.__data_files = deque()
+        self.__create_file_list()
+        if self.__data_files:
+            self.__file_reader = FileReader.create(self.__data_files[0])
+        else:
+            raise OSError('No data available')
         self.__current_file = None
 
     @property
@@ -24,34 +34,36 @@ class BatchFactory():
     def data_files(self) -> deque:
         return self.__data_files
 
-    @data_files.setter
-    def data_files(self, value: deque):
-        assert value is not None
-        self.__data_files = value
+    def __create_file_list(self) -> None:
+        self.__data_files = FileSorter.sort(
+            Path(self.__config.attributes.data_dir),
+            self.__config.attributes.sort_key)
 
     def __update_current_file(self) -> None:
         if self.__file_reader.is_file_processed:
             self.__data_files.popleft()
+
         if self.__data_files:
             self.__current_file = self.__data_files[0]
             self.__file_reader.is_file_processed = False
         else:
-            raise Exception("All data files are processed")
+            self.__current_file = None
+            print("All data files are processed")
 
     def __add_data(self) -> None:
         self.__update_current_file()
-        new_element = self.__file_reader.get_element(self.__current_file)
-        self.__batch += new_element
+        if self.__current_file:
+            new_element = self.__file_reader.get_element(self.__current_file)
+            self.__batch += new_element
+        else:
+            StoppingCriterion.is_data_processed = True
 
     def create(self) -> None:
-        while self.__memory_analyzer.used_percent <= self.__memory_analyzer.allowed_percent:
-            try:
-                self.__add_data()
-            except Exception as e:
-                pass
+        while self.__memory_analyzer.used_percent < self.__memory_analyzer.allowed_percent and not StoppingCriterion.is_data_processed:
+            self.__add_data()
 
     def delete(self) -> None:
-        del self.__batch
+        self.__batch = None
 
     def save(self) -> None:
-        pass
+        raise NotImplementedError
