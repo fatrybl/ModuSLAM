@@ -1,7 +1,7 @@
 import logging
 from utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from data_manager.batch_factory.data_batch import DataBatch
+from data_manager.factory.batch import DataBatch
 
 
 class FrontendManager:

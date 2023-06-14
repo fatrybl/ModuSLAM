@@ -1,16 +1,17 @@
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from pathlib2 import Path
+from yaml import safe_load
+
 
 class Config:
-    def __init__(self, file: ConfigFilePaths, object:object=None) -> None:
-        self.file_path = Path(file.value)
+    def __init__(self, file: ConfigFilePaths, object: object = None) -> None:
+        self.file_path = file.value
         self.file_name = self.file_path.name
         self.file_type = self.file_path.suffix
         self.object = object
         if Config.is_valid():
-            self.attributes = self.__from_file()
-        
-    
+            self.__from_file()
+
     @classmethod
     def is_valid(cls) -> bool:
         """
@@ -18,10 +19,11 @@ class Config:
         2) check if file type is valid
         3) check if file is not empty
         """
-        return False
+        return True
 
-    def __from_file(self) -> None:
-        pass
+    def __from_file(self) -> dict:
+        with open(self.file_path, "r") as f:
+            self.attributes = safe_load(f)
 
     def to_file() -> None:
-        pass
+        raise NotImplementedError

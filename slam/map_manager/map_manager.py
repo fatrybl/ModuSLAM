@@ -15,8 +15,8 @@ class MapManager:
             pass
 
     @property
-    def map(self) -> Map:
-        return self.__map
+    def map(self):
+        pass
 
     def save_map() -> None:
         pass

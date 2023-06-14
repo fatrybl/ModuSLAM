@@ -1,8 +1,8 @@
 import logging
-from data_manager.factory.batch_factory import BatchFactory
-from data_manager.filter.data_filter import RawDataFilter
-from data_manager.factory.batch import DataBatch
-from utils.stopping_criterion import StoppingCriterion
+from slam.data_manager.factory import BatchFactory
+from slam.data_manager.data_filter import RawDataFilter
+from slam.data_manager.factory.data_batch import DataBatch
+from slam.utils.stopping_criterion import StoppingCriterion
 from utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 

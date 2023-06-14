@@ -1,4 +1,4 @@
-from slam.main_manager. main_manager import MainManager
+from main_manager.main_manager import MainManager
 
 """
 Author: Mark Griguletskii.
@@ -8,6 +8,7 @@ Main runner of SLAM system.
 
 
 def run():
+    print('Starting SLAM')
     main_manager = MainManager()
     # main_manager.build_map()
 

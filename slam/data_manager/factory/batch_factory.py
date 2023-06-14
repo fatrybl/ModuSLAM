@@ -1,14 +1,14 @@
 import logging
 
-from data_batch import DataBatch
-from data_reader.data_reader import FileReader, FileReaderFactory
+from .batch import DataBatch
+from .reader.data_reader import FileReader
 from data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from utils.file_sorter import FileSorter
 from collections import deque
 from pathlib2 import Path
 from utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from main_manager.main_manager import StoppingCriterion
+from utils.stopping_criterion import StoppingCriterion
 
 
 class BatchFactory():
@@ -36,8 +36,8 @@ class BatchFactory():
 
     def __create_file_list(self) -> None:
         self.__data_files = FileSorter.sort(
-            Path(self.__config.attributes.data_dir),
-            self.__config.attributes.sort_key)
+            Path(self.__config.attributes['data_dir']),
+            self.__config.attributes['sort_key'])
 
     def __update_current_file(self) -> None:
         if self.__file_reader.is_file_processed:

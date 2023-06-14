@@ -11,7 +11,7 @@ class MemoryAnalyzer():
         self.__total_memory = psutil.virtual_memory().total
         self.__available_memory = psutil.virtual_memory().available
         self.__used_memory_percent = psutil.virtual_memory().percent
-        self.__allowed_memory_percent = self.__config.attributes.batch_memory_percent
+        self.__allowed_memory_percent = self.__config.attributes['ram_usage']['data_batch']
 
     @property
     def total_memory(self):

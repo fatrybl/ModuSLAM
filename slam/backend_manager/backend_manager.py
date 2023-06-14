@@ -1,8 +1,8 @@
 import logging
 from utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from solver import Solver
-from metrics_factory import MetricsFactory
+from .solver import Solver
+from .metrics_factory import MetricsFactory
 
 class BackendManager():
     logger = logging.getLogger(__name__)

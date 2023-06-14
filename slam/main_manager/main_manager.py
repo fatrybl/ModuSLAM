@@ -1,8 +1,8 @@
-from slam.data_manager.data_manager import DataManager
-from slam.frontend_manager.frontend_manager import FrontendManager
-from slam.backend_manager.backend_manager import BackendManager
-from slam.map_manager.map_manager import MapManager
-from slam.utils.stopping_criterion import StoppingCriterion
+from data_manager.data_manager import DataManager
+from frontend_manager.frontend_manager import FrontendManager
+from backend_manager.backend_manager import BackendManager
+from map_manager.map_manager import MapManager
+from utils.stopping_criterion import StoppingCriterion
 
 import logging
 # import slam.logger.logging_config
@@ -29,4 +29,4 @@ class MainManager:
 
             self.data_manager.make_batch()
 
-            self.__process_batch()
+            # self.__process_batch()
