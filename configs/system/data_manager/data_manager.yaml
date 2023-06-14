@@ -5,11 +5,11 @@ ram_usage: { "data_batch": 0.5, "graph": 0.3 }
 use_filter: false
 
 # path to directory with data files
-data_dir: "./data"
+data_dir: "data"
 
 # key to sort files in data directory: modification time or name
 sort_key: "time"
 
 # position (row number) in file to start from
-start_position : start
-stop_position : stop
+start_position: start
+stop_position: stop
