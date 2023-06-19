@@ -8,9 +8,8 @@ Main runner of SLAM system.
 
 
 def run():
-    print('Starting SLAM')
     main_manager = MainManager()
-    # main_manager.build_map()
+    main_manager.build_map()
 
 
 if __name__ == "__main__":

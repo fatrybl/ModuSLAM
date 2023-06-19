@@ -29,4 +29,4 @@ class MainManager:
 
             self.data_manager.make_batch()
 
-            # self.__process_batch()
+            self.__process_batch()
