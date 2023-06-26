@@ -1,86 +1,15 @@
-from abc import ABC, abstractmethod
-import csv
-import logging
-from pathlib2 import Path
-
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from utils.config import Config
 from rosbags.rosbag1 import Reader as RosBagReader
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
 
 
-
-class FileReader(ABC):
-    logger = logging.getLogger(__name__)
-
-    def __init__(self, file_path: Path):
-        self._file_name = file_path.stem
-        self._file_type = file_path.suffix
-        self._file_size = file_path.stat().st_size
-        self._is_file_processed = False
-        self._current_position = None
-        self._config = Config(ConfigFilePaths.file_reader_config)
-
-    @staticmethod
-    def check_file(file_path: Path) -> bool:
-        if not Path.is_file(file_path):
-            raise FileNotFoundError
-
-        if file_path.stat().st_size == 0:
-            raise OSError("Empty input file")
-
-    @staticmethod
-    def map_file2reader(file_path: Path):
-        file_type = file_path.suffix
-        if file_type == '.csv':
-            return CsvReader()
-        if file_type == '.bag':
-            return Ros1BagReader()
-        if file_type == '.mcap' or file_type == '.db3':
-            return Ros2BagReader()
-
-    @classmethod
-    def create(cls, file_path: Path):
-        return cls.map_file2reader(file_path)
-    
-    @abstractmethod
-    def get_element(self, file_path: Path):
-        pass
-
-
-class CsvReader(FileReader):
-    def __init__(self, file_path: Path):
-        super().__init__(file_path)
-        self.__newline = self._config.attributes.csv_file.newline
-        self.__delimiter = self._config.attributes.csv_file.delimiter
-        self.__quotechar = self._config.attributes.csv_file.quotechar
-
-    def get_element(self, file_path: Path):
-        self.check_file(file_path)
-        with open(file_path, 'r', newline=self.__newline) as f:
-            reader = csv.reader(f, delimiter=self.__delimiter,
-                                quotechar=self.__quotechar)
-            row = next(reader)
-            self._current_position = reader.line_num
-        return row
-
-
-class Ros1BagReader(FileReader):
+class Ros1BagReader(DataReader):
     def __init__():
         super().__init__()
 
-    def get_element(self, file_path: Path):
+    def get_elements(self, file_path: Path):
         pass
 
-
-class Ros2BagReader(FileReader):
-    def __init__():
-        super().__init__()
-
-    def get_element(self, file_path: Path):
-        pass
-
-    # def read(self, file_path, topics, batch_size=None):
+# def read(self, file_path, topics, batch_size=None):
     #     self.__check_file()
     #     size = 0
     #     current_message_idx = 0

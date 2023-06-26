@@ -4,14 +4,14 @@ from utils.config import Config
 
 
 class MemoryAnalyzer():
-    DEFAULT_MEMORY_PERCENT = 0.5
+    DEFAULT_MEMORY_PERCENT = 50
 
     def __init__(self):
         self.__config = Config(ConfigFilePaths.data_manager_config)
         self.__total_memory = psutil.virtual_memory().total
         self.__available_memory = psutil.virtual_memory().available
         self.__used_memory_percent = psutil.virtual_memory().percent
-        self.__allowed_memory_percent = self.__config.attributes['ram_usage']['data_batch']
+        self.__allowed_memory_percent = self.__config.attributes['memory_analyzer']['data_batch']
 
     @property
     def total_memory(self):

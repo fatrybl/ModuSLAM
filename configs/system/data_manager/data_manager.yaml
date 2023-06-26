@@ -1,15 +1,13 @@
-# % of RAM to be used for data batch and pose_graph
-ram_usage: { "data_batch": 0.5, "graph": 0.3 }
+# % of RAM to be used
+memory_analyzer:
+  "data_batch": 50
+  "graph": 30
 
 # simple filter for raw data
-use_filter: false
+data_filter:
+  use_filter: false
 
 # path to directory with data files
-data_dir: "data"
-
-# key to sort files in data directory: modification time or name
-sort_key: "time"
-
-# position (row number) in file to start from
-start_position: start
-stop_position: stop
+data:
+  dataset_type: "kaist"
+  dataset_directory: "/home/oem/Downloads/urban18-highway/"

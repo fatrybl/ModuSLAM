@@ -8,7 +8,7 @@ class StoppingCriterion():
     is_solver_error = False
 
     @classmethod
-    def ON(cls):
+    def OFF(cls):
         return any(cls.__dict__.values())
 
     @classmethod

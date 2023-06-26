@@ -21,7 +21,7 @@ class Config:
         """
         return True
 
-    def __from_file(self) -> dict:
+    def __from_file(self):
         with open(self.file_path, "r") as f:
             self.attributes = safe_load(f)
 

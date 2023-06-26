@@ -13,20 +13,20 @@ class MainManager:
 
     def __init__(self) -> None:
         self.data_manager = DataManager()
-        self.frontend_manager = FrontendManager()
-        self.backend_manager = BackendManager()
-        self.map_manager = MapManager()
+        # self.frontend_manager = FrontendManager()
+        # self.backend_manager = BackendManager()
+        # self.map_manager = MapManager()
 
     def __process_batch(self):
         batch = self.data_manager.batch_factory.batch
-        while batch:
-            self.frontend_manager.process(batch)
-            self.backend_manager.solve()
-            self.map_manager.update_map()
+        # while batch:
+        #     self.frontend_manager.process(batch)
+        #     self.backend_manager.solve()
+        #     self.map_manager.update_map()
 
     def build_map(self) -> None:
-        while not StoppingCriterion.ON():
+        # while StoppingCriterion.OFF():
 
-            self.data_manager.make_batch()
+        self.data_manager.make_batch()
 
-            self.__process_batch()
+        self.__process_batch()
