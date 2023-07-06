@@ -8,7 +8,7 @@ class Config:
         self.file_path = file.value
         self.file_name = self.file_path.name
         self.file_type = self.file_path.suffix
-        self.object = object
+        self.owner = object
         if Config.is_valid():
             self.__from_file()
 

@@ -9,7 +9,7 @@ from utils.stopping_criterion import StoppingCriterion
 class BatchFactory():
     logger = logging.getLogger(__name__)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__memory_analyzer = MemoryAnalyzer()
         self.__batch = DataBatch()
         self.__data_reader = DataReaderFactory()
@@ -19,22 +19,30 @@ class BatchFactory():
         return self.__batch
 
     def __add_data(self) -> None:
-        new_element = self.__data_reader.get_element()
-        self.__batch.add(new_element)
-
-    def __is_criteria(self,):
-        if (self.__memory_analyzer.used_memory_percent < self.__memory_analyzer.allowed_memory_percent and
-                not StoppingCriterion.is_data_processed):
-            return True
+        self.__data_reader.get_element()
+        new_element = self.__data_reader.element
+        if new_element:
+            self.__batch.add(new_element)
         else:
+            StoppingCriterion.is_data_processed = True
+
+    def __limitation(self) -> bool:
+        used_memory = self.__memory_analyzer.used_memory_percent
+        permissible_memory = self.__memory_analyzer.permissible_memory_percent
+        if (used_memory < permissible_memory and not StoppingCriterion.is_data_processed):
             return False
+        else:
+            return True
 
     def create_batch(self) -> None:
-        while self.__is_criteria():
+        while not self.__limitation():
             self.__add_data()
 
     def delete_batch(self) -> None:
         self.__batch = None
+
+    def create_batch_from_measurements(self) -> None:
+        raise NotImplementedError
 
     def save_batch(self) -> None:
         raise NotImplementedError

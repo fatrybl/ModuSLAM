@@ -11,6 +11,3 @@ class DataReaderFactory():
             return KaistReader()
         else:
             raise NotImplementedError
-
-    def __init__(self):
-        pass

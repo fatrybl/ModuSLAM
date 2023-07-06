@@ -25,4 +25,19 @@ class DataReader(ABC):
 
     @abstractmethod
     def get_element(self) -> Element:
-        "Get element from dataset"
+        """
+        Gets element from dataset.
+        Should be implemented for each reader
+        """
+
+    @abstractmethod
+    def get_element_with_measurement(self, measurement: tuple) -> Element:
+        """
+        Args:
+            measurement: 
+                {"sensor": "camera_rgb_left",
+                "location": {"file": Path(),
+                             "position": 0}  }
+        Gets element from dataset with particular sensor measurement.
+        Should be implemented for each reader
+        """

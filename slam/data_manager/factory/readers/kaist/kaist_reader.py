@@ -1,5 +1,4 @@
 from csv import DictReader as dict_reader
-
 from pathlib2 import Path
 
 from data_manager.factory.readers.data_reader import DataReader
@@ -11,36 +10,63 @@ from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
 class KaistReader(DataReader):
     def __init__(self):
         super().__init__()
-        self.__sensor_order_file = self._dataset_dir / KaistDataset.data_stamp.value
         self.__collector = MeasurementCollector(self._dataset_dir)
+        self.__iterator = self.__init_iterator()
+        self.__element = Element
+        self.__sensor_order_file = self._dataset_dir / KaistDataset.data_stamp.value
 
-    def __get_data_by_sensor(self, row):
-        if row["sensor"] == "imu":
-            self.__collector.get_imu()
-        if row["sensor"] == "sick_back":
-            self.__collector.get_lidar_2D()
-        if row["sensor"] == "sick_middle":
-            self.__collector.get_lidar_2D()
-        if row["sensor"] == "velodyne_right":
-            self.__collector.get_lidar_3D()
-        if row["sensor"] == "velodyne_left":
-            self.__collector.get_lidar_3D()
-        if row["sensor"] == "fog":
-            self.__collector.get_fog()
-        if row["sensor"] == "encoder":
-            self.__collector.get_encoder
-        if row["sensor"] == "stereo":
-            self.__collector.get_stereo()
-        if row["sensor"] == "gps":
-            self.__collector.get_gps()
-        if row["sensor"] == "vrs":
-            self.__collector.get_vrs()
+    @property
+    def element(self):
+        if self.__element:
+            return self.__element
+        else:
+            raise ValueError("No element")
 
-    def get_element(self) -> Element:
+    def __init_iterator(self):
         with open(self.__sensor_order_file, "r") as f:
             names = ["timestamp", "sensor"]
             reader = dict_reader(f, fieldnames=names)
-            row = next(reader)
-            self.__get_data_by_sensor(row)
+            for line in reader:
+                yield line
 
-        return self.__element
+    def __get_data_by_sensor(self, line):
+        if line["sensor"] == "imu":
+            message, location = self.__collector.get_imu()
+        if line["sensor"] == "fog":
+            message, location = self.__collector.get_fog()
+        if line["sensor"] == "encoder":
+            message, location = self.__collector.get_encoder()
+        if line["sensor"] == "gps":
+            message, location = self.__collector.get_gps()
+        if line["sensor"] == "vrs":
+            message, location = self.__collector.get_vrs_gps()
+        if line["sensor"] == "altimeter":
+            message, location = self.__collector.get_altimeter()
+        if line["sensor"] == "sick_back":
+            message, location = self.__collector.get_lidar_2D(line)
+        if line["sensor"] == "sick_middle":
+            message, location = self.__collector.get_lidar_2D(line)
+        if line["sensor"] == "velodyne_right":
+            message, location = self.__collector.get_lidar_3D(line)
+        if line["sensor"] == "velodyne_left":
+            message, location = self.__collector.get_lidar_3D(line)
+        if line["sensor"] == "stereo":
+            message, location = self.__collector.get_stereo(line)
+
+        return message, location
+
+    def get_element(self):
+        try:
+            line = next(self.__iterator)
+            message, location = self.__get_data_by_sensor(line)
+            time = int(message["timestamp"])
+            measurement = {"sesnsor": line["sensor"]}
+            measurement.update(data=message["data"])
+            self.__element = Element(time, measurement, location)
+
+        except StopIteration:
+            # log exception
+            self.__element = None
+
+    def get_element_with_measurement(self, measurement: tuple) -> Element:
+        raise NotImplementedError
