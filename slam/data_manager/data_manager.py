@@ -5,22 +5,23 @@ from slam.data_manager.factory.batch import DataBatch
 from utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 
+logger = logging.getLogger(__name__)
+
 
 class DataManager():
-    logger = logging.getLogger(__name__)
 
     def __init__(self) -> None:
         self.config = Config(ConfigFilePaths.data_manager_config)
         self.batch_factory = BatchFactory()
-        if self.config.attributes["data_filter"]["use_filter"]:
-            self.data_filter = RawDataFilter()
-        else:
-            self.data_filter = None
+        logger.info("Data Manager has been configured")
 
     def make_batch(self):
         self.batch_factory.create_batch()
-        if self.data_filter:
-            self.data_filter.filter(self.batch_factory.batch)
+        logger.info("Data Batch has been created")
+        if self.config.attributes["data_filter"]["use_filter"]:
+            data_filter = RawDataFilter()
+            data_filter.filter(self.batch_factory.batch)
+            logger.info("Data Batch has been filtered")
 
     def make_batch_from_measurements(self, measurements: list) -> DataBatch:
         """

@@ -3,33 +3,30 @@ import logging
 from .batch import DataBatch
 from .readers.data_reader_factory import DataReaderFactory
 from data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
-from utils.stopping_criterion import StoppingCriterion
+from slam.utils.stopping_criterion import StoppingCriterionSingleton
+
+logger = logging.getLogger(__name__)
 
 
 class BatchFactory():
-    logger = logging.getLogger(__name__)
-
     def __init__(self) -> None:
         self.__memory_analyzer = MemoryAnalyzer()
         self.__batch = DataBatch()
         self.__data_reader = DataReaderFactory()
+        self.__break_point = StoppingCriterionSingleton()
 
     @property
     def batch(self) -> DataBatch:
         return self.__batch
 
     def __add_data(self) -> None:
-        self.__data_reader.get_element()
-        new_element = self.__data_reader.element
-        if new_element:
-            self.__batch.add(new_element)
-        else:
-            StoppingCriterion.is_data_processed = True
+        new_element = self.__data_reader.get_element()
+        self.__batch.add(new_element)
 
     def __limitation(self) -> bool:
         used_memory = self.__memory_analyzer.used_memory_percent
         permissible_memory = self.__memory_analyzer.permissible_memory_percent
-        if (used_memory < permissible_memory and not StoppingCriterion.is_data_processed):
+        if (used_memory < permissible_memory and not self.__break_point.is_data_processed):
             return False
         else:
             return True

@@ -1,17 +1,24 @@
-from dataclasses import dataclass
+class MetaSingleton(type):
+    _instances = {}
 
-@dataclass
-class StoppingCriterion():
-    is_data_processed = False
-    is_time_finished = False
-    is_map_diverged = False
-    is_solver_error = False
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(
+                MetaSingleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-    @classmethod
-    def OFF(cls):
-        return any(cls.__dict__.values())
 
-    @classmethod
-    def reset(cls):
-        for attr in cls.__dict__.keys():
-            attr = False
+class StoppingCriterionSingleton(metaclass=MetaSingleton):
+    def __init__(self):
+        self.is_data_processed = False
+        self.is_time_finished = False
+        self.is_map_diverged = False
+        self.is_solver_error = False
+
+    @property
+    def ON(self) -> bool:
+        return any(self.__dict__.values())
+
+    def reset(self):
+        for value in self.__dict__.values():
+            value = False

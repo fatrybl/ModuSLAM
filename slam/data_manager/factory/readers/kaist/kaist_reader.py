@@ -1,10 +1,13 @@
 from csv import DictReader as dict_reader
-from pathlib2 import Path
+import logging
 
 from data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.kaist.measurement_collector import MeasurementCollector
 from slam.data_manager.factory.readers.element_factory import Element
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
+from slam.utils.stopping_criterion import StoppingCriterionSingleton
+
+logger = logging.getLogger(__name__)
 
 
 class KaistReader(DataReader):
@@ -12,22 +15,20 @@ class KaistReader(DataReader):
         super().__init__()
         self.__collector = MeasurementCollector(self._dataset_dir)
         self.__iterator = self.__init_iterator()
-        self.__element = Element
         self.__sensor_order_file = self._dataset_dir / KaistDataset.data_stamp.value
-
-    @property
-    def element(self):
-        if self.__element:
-            return self.__element
-        else:
-            raise ValueError("No element")
+        self.__break_point = StoppingCriterionSingleton()
 
     def __init_iterator(self):
-        with open(self.__sensor_order_file, "r") as f:
-            names = ["timestamp", "sensor"]
-            reader = dict_reader(f, fieldnames=names)
-            for line in reader:
-                yield line
+        if (DataReader.is_file_valid(self.__sensor_order_file)):
+            with open(self.__sensor_order_file, "r") as f:
+                names = ["timestamp", "sensor"]
+                reader = dict_reader(f, fieldnames=names)
+                for line in reader:
+                    yield line
+        else:
+            logger.critical(
+                f"Couldn't initialize the iterator for {self.__sensor_order_file}")
+            self.__break_point.is_data_processed = True
 
     def __get_data_by_sensor(self, line):
         if line["sensor"] == "imu":
@@ -55,18 +56,23 @@ class KaistReader(DataReader):
 
         return message, location
 
-    def get_element(self):
+    def get_element(self) -> Element:
         try:
             line = next(self.__iterator)
             message, location = self.__get_data_by_sensor(line)
             time = int(message["timestamp"])
-            measurement = {"sesnsor": line["sensor"]}
-            measurement.update(data=message["data"])
-            self.__element = Element(time, measurement, location)
+            measurement = {"sesnsor": line["sensor"],
+                           "data": message["data"]}
+            return Element(time, measurement, location)
 
         except StopIteration:
-            # log exception
-            self.__element = None
+            logger.info("All data has been used")
+            self.__break_point.is_data_processed = True
+            logger.warning(
+                f" is_data_proccessed: {self.__break_point.is_data_processed}")
+
+        except Exception as e:
+            logger.exception(e)
 
     def get_element_with_measurement(self, measurement: tuple) -> Element:
         raise NotImplementedError

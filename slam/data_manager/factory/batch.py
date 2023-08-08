@@ -8,10 +8,11 @@ class DataBatch:
                        "measurement": [],
                        "location": [], }
 
-    def add(self, new_element: Element):
-        self.__data["timestamp"].append(new_element.time)
-        self.__data["measurement"].append(new_element.measurement)
-        self.__data["location"].append(new_element.location)
+    def add(self, new_element: Element) -> None:
+        if new_element:
+            self.__data["timestamp"].append(new_element.time)
+            self.__data["measurement"].append(new_element.measurement)
+            self.__data["location"].append(new_element.location)
 
     def to_dataframe(self,) -> None:
         self.__data = pd.DataFrame.from_dict(self.__data)

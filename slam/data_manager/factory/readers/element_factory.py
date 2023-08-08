@@ -9,7 +9,7 @@ class Element:
     # measurement["data"] = list()
     location: dict
     # location["file"]: Path()
-    # location["position"]: int()
+    # location["position"]: list()
 
 
 # class ElementFactory():

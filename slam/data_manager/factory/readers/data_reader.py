@@ -7,21 +7,24 @@ from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from utils.config import Config
 from data_manager.factory.readers.element_factory import Element
 
+logger = logging.getLogger(__name__)
+
 
 class DataReader(ABC):
-    logger = logging.getLogger(__name__)
-
     def __init__(self):
         cfg = Config(
             ConfigFilePaths.data_manager_config).attributes["data"]
         self._dataset_dir = cfg["dataset_directory"]
 
     @staticmethod
-    def check_file(file_path: Path) -> None:
+    def is_file_valid(file_path: Path) -> bool:
         if not Path.is_file(file_path):
-            raise FileNotFoundError
+            logger.critical(f"File {file_path} does not exist")
+            return False
         if file_path.stat().st_size == 0:
-            raise OSError("Empty input file")
+            logger.critical(f"File {file_path} is empty")
+            return False
+        return True
 
     @abstractmethod
     def get_element(self) -> Element:
