@@ -10,6 +10,7 @@ class MetaSingleton(type):
 
 class StoppingCriterionSingleton(metaclass=MetaSingleton):
     def __init__(self):
+        self.is_memory_limit = False
         self.is_data_processed = False
         self.is_time_finished = False
         self.is_map_diverged = False

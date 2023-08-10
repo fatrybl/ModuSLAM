@@ -12,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 class KaistReader(DataReader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.__collector = MeasurementCollector(self._dataset_dir)
         self.__iterator = self.__init_iterator()
         self.__sensor_order_file = self._dataset_dir / KaistDataset.data_stamp.value
         self.__break_point = StoppingCriterionSingleton()
 
-    def __init_iterator(self):
+    def __init_iterator(self) -> None:
         if (DataReader.is_file_valid(self.__sensor_order_file)):
             with open(self.__sensor_order_file, "r") as f:
                 names = ["timestamp", "sensor"]
@@ -31,7 +31,7 @@ class KaistReader(DataReader):
                 f"Couldn't initialize the iterator for {self.__sensor_order_file}")
             self.__break_point.is_data_processed = True
 
-    def __get_data_by_sensor(self, line):
+    def __get_data_by_sensor(self, line) -> tuple:
         if line["sensor"] == "imu":
             message, location = self.__collector.get_imu()
         if line["sensor"] == "fog":

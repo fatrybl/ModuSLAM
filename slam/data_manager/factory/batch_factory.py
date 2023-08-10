@@ -30,10 +30,14 @@ class BatchFactory():
     def __limitation(self) -> bool:
         used_memory = self.__memory_analyzer.used_memory_percent
         permissible_memory = self.__memory_analyzer.permissible_memory_percent
-        if (used_memory < permissible_memory and not self.__break_point.is_data_processed):
-            return False
-        else:
+        if used_memory > permissible_memory:
+            self.__break_point.is_memory_limit = True
+            logger.info("Memory limit for Data Batch has been reached")
             return True
+        if self.__break_point.is_data_processed:
+            return True
+        else:
+            return False
 
     def create_batch(self) -> None:
         while not self.__limitation():

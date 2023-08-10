@@ -1,9 +1,11 @@
 from csv import reader as csv_reader
-
+import logging
 from pathlib2 import Path
 import cv2
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
 from collections import namedtuple
+
+logger = logging.getLogger(__name__)
 
 
 class MeasurementCollector():
@@ -48,9 +50,9 @@ class MeasurementCollector():
     def __read_bin(self, file: Path) -> dict:
         with open(file, 'rb') as f:
             line = f.read()
-        message = {"timestamp": file.stem,
-                   "data": line}
-        return message
+            message = {"timestamp": file.stem,
+                       "data": line}
+            return message
 
     def get_imu(self) -> tuple:
         it = self.__iterators["imu"]

@@ -1,6 +1,6 @@
 # % of RAM to be used for graph storage. Adequate values in range of [10-30]
 memory_analyzer:
-  "graph": 20
+  "graph": 30
 
 # simple filter for raw data
 data_filter:
