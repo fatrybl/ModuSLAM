@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="slam.data_manager.batch_factory package" href="slam.data_manager.batch_factory.html" />
+    <link rel="next" title="slam.data_manager.factory package" href="slam.data_manager.factory.html" />
     <link rel="prev" title="slam.backend_manager package" href="slam.backend_manager.html" /> 
 </head>
 
@@ -42,23 +42,46 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">slam</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="slam.html">slam package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="slam.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="slam.backend_manager.html">slam.backend_manager package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">slam.data_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.frontend_manager.html">slam.frontend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.logger.html">slam.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.html">slam.map_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.utils.html">slam.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slam.html#slam-run-module">slam.run module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slam.html#module-slam">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="slam.html">slam package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="slam.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="slam.backend_manager.html">slam.backend_manager package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">slam.data_manager package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-slam.data_manager.data_manager">slam.data_manager.data_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#slam-data-manager-data-manager-module">slam.data_manager.data_manager module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-slam.data_manager">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="slam.frontend_manager.html">slam.frontend_manager package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="slam.main_manager.html">slam.main_manager package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slam.logger.html">slam.logger package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="slam.map_manager.html">slam.map_manager package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="slam.setup_manager.html">slam.setup_manager package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slam.utils.html">slam.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="slam.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.html#slam-run-module">slam.run module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="slam.html#module-slam">Module contents</a></li>
 </ul>
 </li>
@@ -78,6 +101,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">slam</a></li>
           <li class="breadcrumb-item"><a href="slam.html">slam package</a></li>
       <li class="breadcrumb-item active">slam.data_manager package</li>
       <li class="wy-breadcrumbs-aside">
@@ -95,61 +119,37 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="slam.data_manager.batch_factory.html">slam.data_manager.batch_factory package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.batch_factory.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.batch_factory.data_reader.html">slam.data_manager.batch_factory.data_reader package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.data_reader.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.data_reader.html#slam-data-manager-batch-factory-data-reader-datareader-module">slam.data_manager.batch_factory.data_reader.DataReader module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.data_reader.html#module-slam.data_manager.batch_factory.data_reader">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slam.data_manager.factory.html">slam.data_manager.factory package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.factory.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.factory.readers.html">slam.data_manager.factory.readers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.readers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.readers.html#slam-data-manager-factory-readers-data-reader-module">slam.data_manager.factory.readers.data_reader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.readers.html#slam-data-manager-factory-readers-data-reader-factory-module">slam.data_manager.factory.readers.data_reader_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.readers.html#module-slam.data_manager.factory.readers.element_factory">slam.data_manager.factory.readers.element_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.readers.html#module-slam.data_manager.factory.readers">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.batch_factory.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam-data-manager-batch-factory-batch-factory-module">slam.data_manager.batch_factory.batch_factory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.batch_factory.html#module-slam.data_manager.batch_factory.data_batch">slam.data_manager.batch_factory.data_batch module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch"><code class="docutils literal notranslate"><span class="pre">DataBatch</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch.create_batch"><code class="docutils literal notranslate"><span class="pre">DataBatch.create_batch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch.delete_batch"><code class="docutils literal notranslate"><span class="pre">DataBatch.delete_batch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch.observe_file"><code class="docutils literal notranslate"><span class="pre">DataBatch.observe_file()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch.save"><code class="docutils literal notranslate"><span class="pre">DataBatch.save()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.batch_factory.html#slam.data_manager.batch_factory.data_batch.DataBatch.upload"><code class="docutils literal notranslate"><span class="pre">DataBatch.upload()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.factory.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.factory.html#module-slam.data_manager.factory.batch">slam.data_manager.factory.batch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch.DataBatch"><code class="docutils literal notranslate"><span class="pre">DataBatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch.DataBatch.add"><code class="docutils literal notranslate"><span class="pre">DataBatch.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch.DataBatch.data"><code class="docutils literal notranslate"><span class="pre">DataBatch.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch.DataBatch.size_bytes"><code class="docutils literal notranslate"><span class="pre">DataBatch.size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch.DataBatch.to_dataframe"><code class="docutils literal notranslate"><span class="pre">DataBatch.to_dataframe()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.batch_factory.html#module-slam.data_manager.batch_factory">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.factory.html#slam-data-manager-factory-batch-factory-module">slam.data_manager.factory.batch_factory module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.factory.html#module-slam.data_manager.factory">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slam.data_manager.chunk_factory.html">slam.data_manager.chunk_factory package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.chunk_factory.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.chunk_factory.html#module-slam.data_manager.chunk_factory.chunk_factory">slam.data_manager.chunk_factory.chunk_factory module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.chunk_factory.html#slam.data_manager.chunk_factory.chunk_factory.ChunkFactory"><code class="docutils literal notranslate"><span class="pre">ChunkFactory</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.chunk_factory.html#slam.data_manager.chunk_factory.chunk_factory.ChunkFactory.logger"><code class="docutils literal notranslate"><span class="pre">ChunkFactory.logger</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.chunk_factory.html#module-slam.data_manager.chunk_factory.data_chunk">slam.data_manager.chunk_factory.data_chunk module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.chunk_factory.html#slam.data_manager.chunk_factory.data_chunk.DataChunk"><code class="docutils literal notranslate"><span class="pre">DataChunk</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.chunk_factory.html#module-slam.data_manager.chunk_factory">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="slam.data_manager.data_filter.html">slam.data_manager.data_filter package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.data_filter.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.data_filter.html#module-slam.data_manager.data_filter.RawDataFilter">slam.data_manager.data_filter.RawDataFilter module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="slam.data_manager.data_filter.html#slam.data_manager.data_filter.RawDataFilter.RawDataFilter"><code class="docutils literal notranslate"><span class="pre">RawDataFilter</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.data_filter.html#slam.data_manager.data_filter.RawDataFilter.RawDataFilter.filter_empty_messages"><code class="docutils literal notranslate"><span class="pre">RawDataFilter.filter_empty_messages()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.data_filter.html#slam.data_manager.data_filter.RawDataFilter.RawDataFilter.filter_extreme_values"><code class="docutils literal notranslate"><span class="pre">RawDataFilter.filter_extreme_values()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.data_filter.html#slam.data_manager.data_filter.RawDataFilter.RawDataFilter.logger"><code class="docutils literal notranslate"><span class="pre">RawDataFilter.logger</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="slam.data_manager.data_filter.html#slam.data_manager.data_filter.RawDataFilter.RawDataFilter.setup"><code class="docutils literal notranslate"><span class="pre">RawDataFilter.setup()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.data_filter.html#module-slam.data_manager.data_filter">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slam.data_manager.filter.html">slam.data_manager.filter package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.filter.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.filter.html#slam-data-manager-filter-data-filter-module">slam.data_manager.filter.data_filter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.data_manager.filter.html#module-slam.data_manager.filter">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slam.data_manager.memory_analyzer.html">slam.data_manager.memory_analyzer package</a><ul>
@@ -164,39 +164,8 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-slam.data_manager.data_manager">
-<span id="slam-data-manager-data-manager-module"></span><h2>slam.data_manager.data_manager module<a class="headerlink" href="#module-slam.data_manager.data_manager" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.data_manager.data_manager.</span></span><span class="sig-name descname"><span class="pre">DataManager</span></span><a class="reference internal" href="_modules/slam/data_manager/data_manager.html#DataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.data_manager.DataManager" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager.check_memory_usage">
-<span class="sig-name descname"><span class="pre">check_memory_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/data_manager/data_manager.html#DataManager.check_memory_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.data_manager.DataManager.check_memory_usage" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager.filter_data">
-<span class="sig-name descname"><span class="pre">filter_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/data_manager/data_manager.html#DataManager.filter_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.data_manager.DataManager.filter_data" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager.logger">
-<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">slam.data_manager.data_manager</span> <span class="pre">(WARNING)&gt;</span></em><a class="headerlink" href="#slam.data_manager.data_manager.DataManager.logger" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager.make_data_chunk">
-<span class="sig-name descname"><span class="pre">make_data_chunk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/data_manager/data_manager.html#DataManager.make_data_chunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.data_manager.DataManager.make_data_chunk" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="slam.data_manager.data_manager.DataManager.setup">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/data_manager/data_manager.html#DataManager.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.data_manager.DataManager.setup" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="slam-data-manager-data-manager-module">
+<h2>slam.data_manager.data_manager module<a class="headerlink" href="#slam-data-manager-data-manager-module" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-slam.data_manager">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.data_manager" title="Permalink to this heading"></a></h2>
@@ -208,7 +177,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="slam.backend_manager.html" class="btn btn-neutral float-left" title="slam.backend_manager package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="slam.data_manager.batch_factory.html" class="btn btn-neutral float-right" title="slam.data_manager.batch_factory package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slam.data_manager.factory.html" class="btn btn-neutral float-right" title="slam.data_manager.factory package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

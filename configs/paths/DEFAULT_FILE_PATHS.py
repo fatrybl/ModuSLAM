@@ -17,7 +17,7 @@ class KaistDataset(Enum):
     image_data_dir = Path("image")
     calibration_data_dir = Path("calibration")
 
-    data_stamp = sensor_data_dir / "data_stamp.csv"
+    data_stamp = sensor_data_dir / "test_data_stamp.csv"
     fog_data_file = sensor_data_dir / "fog.csv"
     imu_data_file = sensor_data_dir / "xsens_imu.csv"
     encoder_data_file = sensor_data_dir / "encoder.csv"

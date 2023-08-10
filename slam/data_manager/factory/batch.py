@@ -21,9 +21,3 @@ class DataBatch:
     @property
     def size_bytes(self) -> int:
         return self.__data.memory_usage(deep=True, index=True).sum()
-
-    def exist(self) -> bool:
-        if self.__data.timestamp:
-            return True
-        else:
-            return False
