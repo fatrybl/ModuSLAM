@@ -1,0 +1,4 @@
+freeze all pip packages: pip3 list --local --format=freeze  > requirements.txt
+update sphinx docs: 
+    1) sphinx-apidoc -o docs slam/
+    2) inside "docs" dir: make html
