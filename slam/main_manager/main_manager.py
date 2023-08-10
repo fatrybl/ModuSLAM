@@ -1,10 +1,10 @@
 import logging
-from slam.logger import logging_config
 
-from data_manager.data_manager import DataManager
-from frontend_manager.frontend_manager import FrontendManager
-from backend_manager.backend_manager import BackendManager
-from map_manager.map_manager import MapManager
+from slam.logger import logging_config
+from slam.data_manager.data_manager import DataManager
+from slam.frontend_manager.frontend_manager import FrontendManager
+from slam.backend_manager.backend_manager import BackendManager
+from slam.map_manager.map_manager import MapManager
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 
@@ -21,8 +21,8 @@ class MainManager:
         self.__break_point = StoppingCriterionSingleton()
         logger.info("System has been successfully configured")
 
-    def __process_batch(self) -> None:
-        batch = self.data_manager.batch_factory.batch
+    # def __process_batch(self) -> None:
+        # batch = self.data_manager.batch_factory.batch
         # while batch:
         #     self.frontend_manager.process(batch)
         #     self.backend_manager.solve()
@@ -32,6 +32,6 @@ class MainManager:
         while not self.__break_point.ON:
             logger.info("Building map...")
             self.data_manager.make_batch()
-            self.__process_batch()
+            # self.__process_batch()
 
         logger.info("Map has been built")

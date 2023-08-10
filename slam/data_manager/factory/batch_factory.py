@@ -1,8 +1,8 @@
 import logging
 
-from .batch import DataBatch
-from .readers.data_reader_factory import DataReaderFactory
-from data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
+from slam.data_manager.factory.batch import DataBatch
+from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
+from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,11 @@ class BatchFactory():
 
     def __add_data(self) -> None:
         new_element = self.__data_reader.get_element()
-        self.__batch.add(new_element)
+        if new_element:
+            self.__batch.add(new_element)
+        else:
+            logger.info("All data has been processed")
+            self.__break_point.is_data_processed = True
 
     def __limitation(self) -> bool:
         used_memory = self.__memory_analyzer.used_memory_percent

@@ -101,9 +101,6 @@ class MeasurementCollector():
         return message, location
 
     def get_lidar_2D(self, line: dict) -> tuple:
-        """
-        0-location when whole file is used
-        """
         sensor = line["sensor"]
         f_name = line["timestamp"]
         if sensor == 'sick_back':
@@ -114,14 +111,10 @@ class MeasurementCollector():
         file = self.__dataset_dir / dir / f_name
         file = file.with_suffix('.bin')
         message = self.__read_bin(file)
-        location = {"file": file,
-                    "position": 0}
+        location = {"file": file}
         return message, location
 
     def get_lidar_3D(self, line: dict) -> dict:
-        """
-        0-location when whole file is used
-        """
         sensor = line["sensor"]
         f_name = line["timestamp"]
         if sensor == 'velodyne_right':
@@ -132,8 +125,7 @@ class MeasurementCollector():
         file = self.__dataset_dir / dir / f_name
         file = file.with_suffix('.bin')
         message = self.__read_bin(file)
-        location = {"file": file,
-                    "position": 0}
+        location = {"file": file}
         return message, location
 
     def get_stereo(self, line: dict) -> tuple:
@@ -151,7 +143,6 @@ class MeasurementCollector():
 
         message = {"timestamp": line["timestamp"],
                    "data": [left_img, right_img]}
-        location = {"file": [left_img_file, right_img_file],
-                    "position": 0}
+        location = {"file": [left_img_file, right_img_file]}
 
         return message, location

@@ -20,7 +20,7 @@ CONFIG = {
         'main_manager': {
             'level': 'DEBUG',
             'propagate': False,
-            'handlers': ['console_handler'],
+            'handlers': ['console_handler', 'file_handler'],
         },
     },
     'handlers': {

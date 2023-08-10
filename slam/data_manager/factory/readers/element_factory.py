@@ -1,16 +1,25 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
+
+
+@dataclass
+class Measurement:
+    sensor: str
+    values: Any
+
+
+@dataclass
+class Data:
+    timestamp: list = field(default_factory=list)
+    measurement: list = field(default_factory=list)
+    location: list = field(default_factory=list)
 
 
 @dataclass
 class Element:
-    time: int
-    measurement: dict
-    # measurement["sensor"] = str()
-    # measurement["data"] = list()
+    timestamp: int
+    measurement: Measurement
     location: dict
-    # location["file"]: Path()
-    # location["position"]: list()
-
 
 # class ElementFactory():
 #     def __init__(self):

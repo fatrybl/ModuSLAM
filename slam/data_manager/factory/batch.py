@@ -1,18 +1,15 @@
 import pandas as pd
-from data_manager.factory.readers.data_reader import Element
+from slam.data_manager.factory.readers.element_factory import Data, Element
 
 
 class DataBatch:
     def __init__(self):
-        self.__data = {"timestamp": [],
-                       "measurement": [],
-                       "location": [], }
+        self.__data = Data()
 
     def add(self, new_element: Element) -> None:
-        if new_element:
-            self.__data["timestamp"].append(new_element.time)
-            self.__data["measurement"].append(new_element.measurement)
-            self.__data["location"].append(new_element.location)
+        self.__data.timestamp.append(new_element.timestamp)
+        self.__data.measurement.append(new_element.measurement)
+        self.__data.location.append(new_element.location)
 
     def to_dataframe(self,) -> None:
         self.__data = pd.DataFrame.from_dict(self.__data)
@@ -26,7 +23,7 @@ class DataBatch:
         return self.__data.memory_usage(deep=True, index=True).sum()
 
     def exist(self) -> bool:
-        if self.__data["timestamp"]:
+        if self.__data.timestamp:
             return True
         else:
             return False

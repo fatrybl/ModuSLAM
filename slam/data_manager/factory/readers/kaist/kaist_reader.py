@@ -1,7 +1,8 @@
 from csv import DictReader as dict_reader
 import logging
 
-from data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.element_factory import Measurement
 from slam.data_manager.factory.readers.kaist.measurement_collector import MeasurementCollector
 from slam.data_manager.factory.readers.element_factory import Element
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
@@ -60,16 +61,14 @@ class KaistReader(DataReader):
         try:
             line = next(self.__iterator)
             message, location = self.__get_data_by_sensor(line)
+
             time = int(message["timestamp"])
-            measurement = {"sesnsor": line["sensor"],
-                           "data": message["data"]}
+            measurement = Measurement(line["sensor"], message["data"])
+
             return Element(time, measurement, location)
 
         except StopIteration:
-            logger.info("All data has been used")
-            self.__break_point.is_data_processed = True
-            logger.warning(
-                f" is_data_proccessed: {self.__break_point.is_data_processed}")
+            return None
 
         except Exception as e:
             logger.exception(e)

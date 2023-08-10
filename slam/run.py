@@ -1,4 +1,4 @@
-from main_manager.main_manager import MainManager
+from slam.main_manager.main_manager import MainManager
 
 """
 Author: Mark Griguletskii.

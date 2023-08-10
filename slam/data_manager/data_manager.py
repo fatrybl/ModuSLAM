@@ -1,8 +1,8 @@
 import logging
-from data_manager.factory.batch_factory import BatchFactory
-from data_manager.filter.data_filter import RawDataFilter
+from slam.data_manager.factory.batch_factory import BatchFactory
+from slam.data_manager.filter.data_filter import RawDataFilter
 from slam.data_manager.factory.batch import DataBatch
-from utils.config import Config
+from slam.utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 
 logger = logging.getLogger(__name__)

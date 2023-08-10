@@ -3,3 +3,6 @@ slam.egg-info
 .idea
 .vscode
 __pycache__
+logs
+data
+dist
