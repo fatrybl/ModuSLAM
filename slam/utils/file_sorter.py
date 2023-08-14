@@ -1,6 +1,5 @@
-from pathlib2 import Path
+from pathlib import Path
 from natsort import natsorted
-import glob
 
 
 class FileSorter():

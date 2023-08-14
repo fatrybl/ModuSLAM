@@ -1,4 +1,5 @@
 import logging
+
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.filter.data_filter import RawDataFilter
 from slam.data_manager.factory.batch import DataBatch

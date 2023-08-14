@@ -1,12 +1,22 @@
+import logging
+import sys
 import psutil
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from slam import logger
 from utils.config import Config
+
+logger = logging.getLogger(__name__)
 
 
 class MemoryAnalyzer():
     def __init__(self):
         self.__config = Config(ConfigFilePaths.data_manager_config)
-        self.__graph_memory_percent = self.__config.attributes['memory_analyzer']['graph']
+        try:
+            self.__graph_memory_percent = self.__config.attributes['memory_analyzer']['graph']
+        except KeyError:
+            logger.critical(
+                f'"memory_analyzer.graph" params not found in {self.__config.file_path}')
+            sys.exit(1)
 
     @property
     def total_memory(self):

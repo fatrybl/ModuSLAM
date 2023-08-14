@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 import logging
 
-from pathlib2 import Path
+from pathlib import Path
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from utils.config import Config
-from data_manager.factory.readers.element_factory import Element
+from slam.utils.config import Config
+from slam.data_manager.factory.readers.element_factory import Element
 
 logger = logging.getLogger(__name__)
 

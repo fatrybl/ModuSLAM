@@ -1,5 +1,5 @@
 from enum import Enum
-from pathlib2 import Path
+from pathlib import Path
 
 
 class ConfigFilePaths(Enum):

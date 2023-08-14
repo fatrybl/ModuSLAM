@@ -1,6 +1,6 @@
 import logging
 
-from pathlib2 import Path
+from pathlib import Path
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from readers.data_reader import DataReader
