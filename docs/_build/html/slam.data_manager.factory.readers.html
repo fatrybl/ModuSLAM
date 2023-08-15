@@ -120,11 +120,52 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="slam-data-manager-factory-readers-data-reader-module">
-<h2>slam.data_manager.factory.readers.data_reader module<a class="headerlink" href="#slam-data-manager-factory-readers-data-reader-module" title="Permalink to this heading"></a></h2>
+<section id="module-slam.data_manager.factory.readers.data_reader">
+<span id="slam-data-manager-factory-readers-data-reader-module"></span><h2>slam.data_manager.factory.readers.data_reader module<a class="headerlink" href="#module-slam.data_manager.factory.readers.data_reader" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.data_manager.factory.readers.data_reader.DataReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.data_manager.factory.readers.data_reader.</span></span><span class="sig-name descname"><span class="pre">DataReader</span></span><a class="reference internal" href="_modules/slam/data_manager/factory/readers/data_reader.html#DataReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.factory.readers.data_reader.DataReader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.data_manager.factory.readers.data_reader.DataReader.get_element">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_element</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#slam.data_manager.factory.readers.element_factory.Element" title="slam.data_manager.factory.readers.element_factory.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/slam/data_manager/factory/readers/data_reader.html#DataReader.get_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.factory.readers.data_reader.DataReader.get_element" title="Permalink to this definition"></a></dt>
+<dd><p>Gets element from dataset.
+Should be implemented for each reader</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.data_manager.factory.readers.data_reader.DataReader.get_element_with_measurement">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_element_with_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#slam.data_manager.factory.readers.element_factory.Element" title="slam.data_manager.factory.readers.element_factory.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/slam/data_manager/factory/readers/data_reader.html#DataReader.get_element_with_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.factory.readers.data_reader.DataReader.get_element_with_measurement" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurement</strong> – <p>{“sensor”: “camera_rgb_left”,
+“location”: {“file”: Path(),</p>
+<blockquote>
+<div><p>”position”: 0}  }</p>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<p>Gets element from dataset with particular sensor measurement.
+Should be implemented for each reader</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.data_manager.factory.readers.data_reader.DataReader.is_file_valid">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_file_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/data_manager/factory/readers/data_reader.html#DataReader.is_file_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.factory.readers.data_reader.DataReader.is_file_valid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="slam-data-manager-factory-readers-data-reader-factory-module">
-<h2>slam.data_manager.factory.readers.data_reader_factory module<a class="headerlink" href="#slam-data-manager-factory-readers-data-reader-factory-module" title="Permalink to this heading"></a></h2>
+<section id="module-slam.data_manager.factory.readers.data_reader_factory">
+<span id="slam-data-manager-factory-readers-data-reader-factory-module"></span><h2>slam.data_manager.factory.readers.data_reader_factory module<a class="headerlink" href="#module-slam.data_manager.factory.readers.data_reader_factory" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.data_manager.factory.readers.data_reader_factory.DataReaderFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.data_manager.factory.readers.data_reader_factory.</span></span><span class="sig-name descname"><span class="pre">DataReaderFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/oem/Desktop/PhD/mySLAM/configs/system/data_manager/data_manager.yaml')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/data_manager/factory/readers/data_reader_factory.html#DataReaderFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.data_manager.factory.readers.data_reader_factory.DataReaderFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
 </section>
 <section id="module-slam.data_manager.factory.readers.element_factory">
 <span id="slam-data-manager-factory-readers-element-factory-module"></span><h2>slam.data_manager.factory.readers.element_factory module<a class="headerlink" href="#module-slam.data_manager.factory.readers.element_factory" title="Permalink to this heading"></a></h2>

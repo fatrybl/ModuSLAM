@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 
 class MemoryAnalyzer():
     def __init__(self):
-        self.__config = Config(ConfigFilePaths.data_manager_config)
+        self.__config = Config.from_file(
+            ConfigFilePaths.data_manager_config.value)
         try:
             self.__graph_memory_percent = self.__config.attributes['memory_analyzer']['graph']
         except KeyError:

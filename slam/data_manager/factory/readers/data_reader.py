@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 
 class DataReader(ABC):
     def __init__(self):
-        config = Config(
-            ConfigFilePaths.data_manager_config).attributes["data"]
-        self._dataset_dir = config["dataset_directory"]
+        config = Config.from_file(
+            ConfigFilePaths.data_manager_config.value)
+        self._dataset_dir = config.attributes["data"]["dataset_directory"]
 
     @staticmethod
     def is_file_valid(file_path: Path) -> bool:

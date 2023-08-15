@@ -1,5 +1,5 @@
 import pytest
-import yaml
+from yaml import dump
 from enum import Enum
 from pathlib import Path
 
@@ -31,7 +31,7 @@ fail_scenarios = [scenario2, scenario3, scenario4]
 
 def create_config_file(cfg: dict) -> None:
     with open(DEFAULT_CONFIG_PATH, 'w') as outfile:
-        yaml.dump(cfg, outfile, default_flow_style=False)
+        dump(cfg, outfile)
 
 
 @pytest.mark.parametrize(
@@ -39,7 +39,7 @@ def create_config_file(cfg: dict) -> None:
 )
 def test_DataReaderFactory_success(test_cfg, expected_output):
     create_config_file(test_cfg)
-    reader = DataReaderFactory(ConfigEnum.config_path)
+    reader = DataReaderFactory(ConfigEnum.config_path.value)
     assert issubclass(type(reader), expected_output)
 
 
@@ -49,4 +49,4 @@ def test_DataReaderFactory_success(test_cfg, expected_output):
 def test_DataReaderFactory_fail(test_cfg, expected_output):
     create_config_file(test_cfg)
     with pytest.raises(expected_output):
-        reader = DataReaderFactory(ConfigEnum.config_path)
+        reader = DataReaderFactory(ConfigEnum.config_path.value)
