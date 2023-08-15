@@ -35,3 +35,15 @@ class KaistDataset(Enum):
     gps_data_file = sensor_data_dir / "gps.csv"
     stereo_left_data_dir = image_data_dir / "stereo_left"
     stereo_right_data_dir = image_data_dir / "stereo_right"
+
+class RosDataset(Enum):
+    """
+    dataset format from 
+    https://projects.asl.ethz.ch/datasets/doku.php?id=laserregistration:laserregistration
+    """
+
+    imu_data_topic =  '/imu_data' # ['/imu1']
+    gps_data_topic = '/position_gps'
+    gps_info_topic = '/info_gps'
+
+    data_stamp = Path('0-Tiltlaser.bag')

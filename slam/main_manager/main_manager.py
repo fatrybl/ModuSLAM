@@ -1,4 +1,8 @@
 import logging
+import sys
+import os
+sys.path.insert(0, os.getcwd())
+from slam.logger import logging_config
 
 from slam.logger import logging_config
 from slam.data_manager.data_manager import DataManager
