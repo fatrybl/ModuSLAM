@@ -1,5 +1,5 @@
 import pytest
-from yaml import dump
+from yaml import safe_dump
 from enum import Enum
 from pathlib import Path
 
@@ -31,7 +31,7 @@ fail_scenarios = [scenario2, scenario3, scenario4]
 
 def create_config_file(cfg: dict) -> None:
     with open(DEFAULT_CONFIG_PATH, 'w') as outfile:
-        dump(cfg, outfile)
+        safe_dump(cfg, outfile)
 
 
 @pytest.mark.parametrize(
