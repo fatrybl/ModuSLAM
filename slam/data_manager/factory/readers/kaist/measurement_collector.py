@@ -44,7 +44,7 @@ class MeasurementCollector():
         self._iterators["gps"] = file_iterator(
             file, self._init_iterator(file))
         file = self._dataset_dir / KaistDataset.vrs_gps_data_file.value
-        self._iterators["vrs_gps"] = file_iterator(
+        self._iterators["vrs"] = file_iterator(
             file, self._init_iterator(file))
 
     def _parse_line(self, line) -> tuple:
@@ -141,7 +141,7 @@ class MeasurementCollector():
 
     @dispatch
     def get_vrs_gps(self) -> tuple[dict, dict]:
-        it = self._iterators["vrs_gps"]
+        it = self._iterators["vrs"]
         line = next(it.iterator)
         message, position = self._parse_line(line)
         location = {"file": it.file,
