@@ -1,4 +1,7 @@
 from slam.main_manager.main_manager import MainManager
+# import sys
+# sys.dont_write_bytecode = True
+
 
 """
 Author: Mark Griguletskii.

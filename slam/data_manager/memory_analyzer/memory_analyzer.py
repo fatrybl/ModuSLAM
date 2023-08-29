@@ -3,7 +3,7 @@ import sys
 import psutil
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from slam import logger
-from utils.config import Config
+from slam.utils.config import Config
 
 logger = logging.getLogger(__name__)
 

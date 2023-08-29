@@ -1,7 +1,8 @@
-from abc import ABC, abstractmethod
 import logging
 
+from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import Any
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from slam.utils.config import Config
@@ -27,20 +28,13 @@ class DataReader(ABC):
         return True
 
     @abstractmethod
-    def get_element(self) -> Element:
+    def get_element(self, args: Any) -> Element:
         """
-        Gets element from dataset.
-        Should be implemented for each reader
-        """
-
-    @abstractmethod
-    def get_element_with_measurement(self, measurement: tuple) -> Element:
-        """
+        Gets element from a dataset. 
+        If no args: iterates through a dataset.
+        if args: parces them in a dispatch method of a child class.
         Args:
-            measurement: 
-                {"sensor": "camera_rgb_left",
-                "location": {"file": Path(),
-                             "position": 0}  }
-        Gets element from dataset with particular sensor measurement.
-        Should be implemented for each reader
+            element: Data Batch element w/o raw sensor data
+        Returns:
+            element of type Element
         """
