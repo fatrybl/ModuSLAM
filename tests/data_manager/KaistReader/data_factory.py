@@ -5,6 +5,7 @@ from yaml import safe_dump
 from pathlib import Path
 from numpy import array as numpy_array
 from cv2 import imwrite
+from shutil import copyfile
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 
@@ -16,6 +17,10 @@ class TestDataFactory:
     MODIFIED_DATAMANAGER_CONFIG_NAME = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
     MODIFIED_DATAMANAGER_CONFIG_PATH = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
         MODIFIED_DATAMANAGER_CONFIG_NAME
+
+    @classmethod
+    def to_bytes_array(cls, floats: list[float]) -> bytes:
+        return array('d', floats).tobytes()
 
     @classmethod
     def to_binary_file(cls, data: list[float], path: Path) -> None:
@@ -64,7 +69,7 @@ class TestDataFactory:
             ['1234', 'imu'],
             ['1234', 'fog'],
             ['1234', 'gps'],
-            ['1234', 'vrs_gps'],
+            ['1234', 'vrs'],
             ['1234', 'altimeter'],
             ['1234', 'encoder'],
             ['1234', 'sick_back'],
@@ -116,15 +121,14 @@ class TestDataFactory:
 
     def modify_default_config(self,) -> None:
         """
-        1) rename to original
+        1) rename to "default_name + _original.yaml"
         2) copy data
         3) create with default name and insert copied data
         4) run test
         5) rename original to default name
         """
-        original_config_path = TestDataFactory.DEFAULT_DATAMANAGER_CONFIG_PATH
-        original_config_path.rename(
-            TestDataFactory.MODIFIED_DATAMANAGER_CONFIG_PATH)
+        copyfile(TestDataFactory.DEFAULT_DATAMANAGER_CONFIG_PATH,
+                 TestDataFactory.MODIFIED_DATAMANAGER_CONFIG_PATH)
 
         test_dataset_dir = TestDataFactory.CURRENT_DIR / "test_data"
         test_params = {"data":
@@ -133,5 +137,5 @@ class TestDataFactory:
                            "dataset_directory":  test_dataset_dir.as_posix()}
                        }
 
-        with open(original_config_path, 'w') as outfile:
+        with open(TestDataFactory.DEFAULT_DATAMANAGER_CONFIG_PATH, 'w') as outfile:
             safe_dump(test_params, outfile)

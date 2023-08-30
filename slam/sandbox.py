@@ -23,5 +23,4 @@ def get_parser(sensor: str):
 
 
 if __name__ == '__main__':
-    parser = get_parser(sensor='imu')
-    parser()
+    int('asdasdas')

@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from csv import DictReader as dict_reader
+from csv import DictReader
 from plum import dispatch
 
 from slam.data_manager.factory.readers.data_reader import DataReader
@@ -24,7 +24,7 @@ class KaistReader(DataReader):
         if (DataReader.is_file_valid(self.__sensor_order_file)):
             with open(self.__sensor_order_file, "r") as f:
                 names = ["timestamp", "sensor"]
-                reader = dict_reader(f, fieldnames=names)
+                reader = DictReader(f, fieldnames=names)
                 for line in reader:
                     yield line
         else:
@@ -45,7 +45,13 @@ class KaistReader(DataReader):
             message, location = self.__collector.get_data(line)
             sensor = line["sensor"]
             data = message["data"]
+        try:
             timestamp = int(message["timestamp"])
+        except ValueError:
+            logger.error(
+                f"Couldn't convert {timestamp} of type {type(timestamp)} to integer")
+            return None
+        else:
             measurement = Measurement(sensor, data)
             element = Element(timestamp,
                               measurement,
@@ -66,16 +72,4 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_element(self, element: dict) -> Element:
-        # location = element.location
-        # timestamp = element.timestamp
-        # sensor = element.measurement.sensor
-        # line = {"timestamp": timestamp,
-        #         "sensor": sensor}
-        # message, _ = self._get_data_from_sensor(
-        #     line, from_measurement=True)
-        # sensor = line["sensor"]
-        # data = message["data"]
-        # measurement = Measurement(sensor, data)
-        # element = Element(timestamp, measurement, location)
-        # return element
-        pass
+        raise NotImplementedError

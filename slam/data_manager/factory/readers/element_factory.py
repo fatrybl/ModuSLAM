@@ -3,13 +3,6 @@ from typing import Any
 
 
 @dataclass
-class Data:
-    timestamps: list = field(default_factory=list)
-    measurements: list = field(default_factory=list)
-    locations: list = field(default_factory=list)
-
-
-@dataclass
 class Measurement:
     sensor: str
     values: Any
@@ -19,4 +12,9 @@ class Measurement:
 class Element:
     timestamp: int
     measurement: Measurement
-    location: dict
+    location: dict[Any, Any]
+
+
+@dataclass
+class Data:
+    elements: list[Measurement] = field(default_factory=list)
