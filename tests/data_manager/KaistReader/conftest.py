@@ -7,7 +7,7 @@ from tests.data_manager.KaistReader.data_factory import TestDataFactory
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 
-@fixture(scope='module', autouse=False)
+@fixture(scope='module', autouse=True)
 def prepare_data():
     data_factory = TestDataFactory()
     data_factory.prepare_data()
@@ -20,7 +20,7 @@ def kaist_reader():
     yield KaistReader()
 
 
-@fixture(scope='module', autouse=False)
+@fixture(scope='module', autouse=True)
 def clean():
     yield
     copyfile(TestDataFactory.MODIFIED_DATAMANAGER_CONFIG_PATH,

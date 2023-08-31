@@ -17,4 +17,4 @@ class Element:
 
 @dataclass
 class Data:
-    elements: list[Measurement] = field(default_factory=list)
+    elements: list[Element] = field(default_factory=list)

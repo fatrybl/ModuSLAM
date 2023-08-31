@@ -5,13 +5,14 @@ from slam.data_manager.data_manager import DataManager
 from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.backend_manager.backend_manager import BackendManager
 from slam.map_manager.map_manager import MapManager
+from slam.utils.meta_singleton import MetaSingleton
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 
 logger = logging.getLogger(__name__)
 
 
-class MainManager:
+class MainManager(metaclass=MetaSingleton):
 
     def __init__(self) -> None:
         self.data_manager = DataManager()

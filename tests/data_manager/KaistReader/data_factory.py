@@ -18,6 +18,50 @@ class TestDataFactory:
     MODIFIED_DATAMANAGER_CONFIG_PATH = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
         MODIFIED_DATAMANAGER_CONFIG_NAME
 
+    data_stamp = [
+        ['1234', 'imu'],
+        ['1234', 'fog'],
+        ['1234', 'gps'],
+        ['1234', 'vrs'],
+        ['1234', 'altimeter'],
+        ['1234', 'encoder'],
+        ['1234', 'sick_back'],
+        ['1234', 'sick_middle'],
+        ['1234', 'velodyne_left'],
+        ['1234', 'velodyne_right'],
+        ['1234', 'stereo']
+    ]
+
+    imu = [1234, 0.1234, -0.1234, 0.1234]
+    fog = [1234, 0.1234, -0.1234, 0.1234]
+    gps = [1234, 0.1234, -0.1234, 0.1234]
+    vrs_gps = [1234, 0.1234, -0.1234, 0.1234]
+    altimeter = [1234, 0.1234, -0.1234, 0.1234]
+    encoder = [1234, 0.1234, -0.1234, 0.1234]
+    sick_back = [1234, 0.1234, -0.1234, 0.1234]
+    sick_middle = [1234, 0.1234, -0.1234, 0.1234]
+    velodyne_left = [1234, 0.1234, -0.1234, 0.1234]
+    velodyne_right = [1234, 0.1234, -0.1234, 0.1234]
+    stereo_left = [0, 255, 255, 0]
+    stereo_right = [0, 255, 255, 0]
+
+    sensor_data_dir = TEST_DATA_DIR / 'sensor_data'
+
+    binary_data = [(sick_back, sensor_data_dir / 'SICK_back'),
+                   (sick_middle, sensor_data_dir / 'SICK_middle'),
+                   (velodyne_left, sensor_data_dir / 'VLP_left'),
+                   (velodyne_right, sensor_data_dir / 'VLP_right')
+                   ]
+    png_data = [(stereo_left, TEST_DATA_DIR / 'image' / 'stereo_left'),
+                (stereo_right, TEST_DATA_DIR / 'image' / 'stereo_right'),]
+
+    csv_data = [(imu, sensor_data_dir / 'xsens_imu.csv'),
+                (fog, sensor_data_dir / 'fog.csv'),
+                (gps, sensor_data_dir / 'gps.csv'),
+                (vrs_gps, sensor_data_dir / 'vrs_gps.csv'),
+                (altimeter, sensor_data_dir / 'altimeter.csv'),
+                (encoder, sensor_data_dir / 'encoder.csv'),]
+
     @classmethod
     def to_bytes_array(cls, floats: list[float]) -> bytes:
         return array('d', floats).tobytes()
@@ -43,99 +87,55 @@ class TestDataFactory:
         imwrite(path.as_posix(), data)
 
     def prepare_data(self,) -> None:
-        test_dataset_dir = TestDataFactory.CURRENT_DIR / "test_data"
-        test_dataset_dir.mkdir(parents=True, exist_ok=True)
+        self.TEST_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-        Path.mkdir(test_dataset_dir / 'calibration',
+        Path.mkdir(self.TEST_DATA_DIR / 'calibration',
                    parents=True, exist_ok=True)
-        Path.mkdir(test_dataset_dir / 'image', parents=True, exist_ok=True)
-        Path.mkdir(test_dataset_dir / 'sensor_data',
+        Path.mkdir(self.TEST_DATA_DIR / 'image', parents=True, exist_ok=True)
+        Path.mkdir(self.TEST_DATA_DIR / 'sensor_data',
                    parents=True, exist_ok=True)
 
-        Path.mkdir(test_dataset_dir / 'image' /
+        Path.mkdir(self.TEST_DATA_DIR / 'image' /
                    'stereo_left', parents=True, exist_ok=True)
-        Path.mkdir(test_dataset_dir / 'image' /
+        Path.mkdir(self.TEST_DATA_DIR / 'image' /
                    'stereo_right', parents=True, exist_ok=True)
 
-        sensor_data_dir = test_dataset_dir / 'sensor_data'
-
-        Path.mkdir(sensor_data_dir / 'SICK_back', parents=True, exist_ok=True)
-        Path.mkdir(sensor_data_dir / 'SICK_middle',
+        Path.mkdir(self.sensor_data_dir / 'SICK_back',
                    parents=True, exist_ok=True)
-        Path.mkdir(sensor_data_dir / 'VLP_left', parents=True, exist_ok=True)
-        Path.mkdir(sensor_data_dir / 'VLP_right', parents=True, exist_ok=True)
+        Path.mkdir(self.sensor_data_dir / 'SICK_middle',
+                   parents=True, exist_ok=True)
+        Path.mkdir(self.sensor_data_dir / 'VLP_left',
+                   parents=True, exist_ok=True)
+        Path.mkdir(self.sensor_data_dir / 'VLP_right',
+                   parents=True, exist_ok=True)
 
-        test_data_stamp = [
-            ['1234', 'imu'],
-            ['1234', 'fog'],
-            ['1234', 'gps'],
-            ['1234', 'vrs'],
-            ['1234', 'altimeter'],
-            ['1234', 'encoder'],
-            ['1234', 'sick_back'],
-            ['1234', 'sick_middle'],
-            ['1234', 'velodyne_left'],
-            ['1234', 'velodyne_right'],
-            ['1234', 'stereo']
-        ]
-        test_data_stamp_file = sensor_data_dir / "data_stamp.csv"
+        test_data_stamp_file = self.sensor_data_dir / "data_stamp.csv"
         self.to_csv_file(
-            test_data_stamp, test_data_stamp_file, multilines=True)
+            self.data_stamp, test_data_stamp_file, multilines=True)
 
-        test_imu = [1234, 0.1234, -0.1234, 0.1234]
-        test_fog = [1234, 0.1234, -0.1234, 0.1234]
-        test_gps = [1234, 0.1234, -0.1234, 0.1234]
-        test_vrs_gps = [1234, 0.1234, -0.1234, 0.1234]
-        test_altimeter = [1234, 0.1234, -0.1234, 0.1234]
-        test_encoder = [1234, 0.1234, -0.1234, 0.1234]
-        test_sick_back = [1234, 0.1234, -0.1234, 0.1234]
-        test_sick_middle = [1234, 0.1234, -0.1234, 0.1234]
-        test_velodyne_left = [1234, 0.1234, -0.1234, 0.1234]
-        test_velodyne_right = [1234, 0.1234, -0.1234, 0.1234]
-        test_stereo_left = [0, 255, 255, 0]
-        test_stereo_right = [0, 255, 255, 0]
-
-        binary_data = [(test_sick_back, sensor_data_dir / 'SICK_back'),
-                       (test_sick_middle, sensor_data_dir / 'SICK_middle'),
-                       (test_velodyne_left, sensor_data_dir / 'VLP_left'),
-                       (test_velodyne_right, sensor_data_dir / 'VLP_right')
-                       ]
-        png_data = [(test_stereo_left, test_dataset_dir / 'image' / 'stereo_left'),
-                    (test_stereo_right, test_dataset_dir / 'image' / 'stereo_right'),]
-
-        csv_data = [(test_imu, sensor_data_dir / 'xsens_imu.csv'),
-                    (test_fog, sensor_data_dir / 'fog.csv'),
-                    (test_gps, sensor_data_dir / 'gps.csv'),
-                    (test_vrs_gps, sensor_data_dir / 'vrs_gps.csv'),
-                    (test_altimeter, sensor_data_dir / 'altimeter.csv'),
-                    (test_encoder, sensor_data_dir / 'encoder.csv'),]
-
-        for element, path in binary_data:
-            self.to_binary_file(element, path / '1234.bin')
-
-        for element, path in csv_data:
+        for element, path in self.csv_data:
             self.to_csv_file(element, path)
 
-        for element, path in png_data:
+        for element, path in self.binary_data:
+            self.to_binary_file(element, path / '1234.bin')
+
+        for element, path in self.png_data:
             self.to_png_file(element, path / '1234.png')
 
     def modify_default_config(self,) -> None:
         """
-        1) rename to "default_name + _original.yaml"
-        2) copy data
-        3) create with default name and insert copied data
-        4) run test
-        5) rename original to default name
+        1) copy 'data_manager.yaml "data_manager_original.yaml"
+        2) write test config to 'data_manager.yaml'
         """
-        copyfile(TestDataFactory.DEFAULT_DATAMANAGER_CONFIG_PATH,
-                 TestDataFactory.MODIFIED_DATAMANAGER_CONFIG_PATH)
+        copyfile(self.DEFAULT_DATAMANAGER_CONFIG_PATH,
+                 self.MODIFIED_DATAMANAGER_CONFIG_PATH)
 
-        test_dataset_dir = TestDataFactory.CURRENT_DIR / "test_data"
+        test_dataset_dir = self.CURRENT_DIR / "test_data"
         test_params = {"data":
                        {
                            "dataset_type": "kaist",
                            "dataset_directory":  test_dataset_dir.as_posix()}
                        }
 
-        with open(TestDataFactory.DEFAULT_DATAMANAGER_CONFIG_PATH, 'w') as outfile:
+        with open(self.DEFAULT_DATAMANAGER_CONFIG_PATH, 'w') as outfile:
             safe_dump(test_params, outfile)

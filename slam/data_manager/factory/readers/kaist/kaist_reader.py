@@ -62,7 +62,7 @@ class KaistReader(DataReader):
     def get_element(self, element: Element) -> Element:
         line = {"timestamp": element.timestamp,
                 "sensor": element.measurement.sensor}
-        message, location = self.__collector.get_data_by_measurement(line)
+        message, location = self.__collector.get_data_of_element(line)
         data = message["data"]
         measurement = Measurement(element.measurement.sensor, data)
         element = Element(element.timestamp,

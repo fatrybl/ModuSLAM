@@ -2,24 +2,37 @@ import pytest
 
 from numpy import array as numpy_array
 from numpy import array_equal, dstack
+from slam.data_manager.factory.readers.element_factory import Element, Measurement
 
 from tests.data_manager.KaistReader.data_factory import TestDataFactory
 
-scenario1 = ([1234, '0.1234', '-0.1234', '0.1234'], 'imu')
-scenario2 = ([1234, '0.1234', '-0.1234', '0.1234'], 'fog')
-scenario3 = ([1234, '0.1234', '-0.1234', '0.1234'], 'gps')
-scenario4 = ([1234, '0.1234', '-0.1234', '0.1234'], 'vrs')
-scenario5 = ([1234, '0.1234', '-0.1234', '0.1234'], 'altimeter')
-scenario6 = ([1234, '0.1234', '-0.1234', '0.1234'], 'encoder')
+scenario1 = (TestDataFactory.imu, TestDataFactory.data_stamp[0][1])
+scenario2 = (TestDataFactory.fog, TestDataFactory.data_stamp[1][1])
+scenario3 = (TestDataFactory.gps, TestDataFactory.data_stamp[2][1])
+scenario4 = (TestDataFactory.vrs_gps, TestDataFactory.data_stamp[3][1])
+scenario5 = (TestDataFactory.altimeter, TestDataFactory.data_stamp[4][1])
+scenario6 = (TestDataFactory.encoder, TestDataFactory.data_stamp[5][1])
 
-scenario7 = (1234, TestDataFactory.to_bytes_array(
-    [1234, 0.1234, -0.1234, 0.1234]), 'sick_back')
-scenario8 = (1234, TestDataFactory.to_bytes_array(
-    [1234, 0.1234, -0.1234, 0.1234]), 'sick_middle')
-scenario9 = (1234, TestDataFactory.to_bytes_array(
-    [1234, 0.1234, -0.1234, 0.1234]), 'velodyne_left')
-scenario10 = (1234, TestDataFactory.to_bytes_array(
-    [1234, 0.1234, -0.1234, 0.1234]), 'velodyne_right')
+scenario7 = (
+    TestDataFactory.sick_back[0],
+    TestDataFactory.to_bytes_array(TestDataFactory.sick_back),
+    TestDataFactory.data_stamp[6][1]
+)
+scenario8 = (
+    TestDataFactory.sick_middle[0],
+    TestDataFactory.to_bytes_array(TestDataFactory.sick_middle),
+    TestDataFactory.data_stamp[7][1]
+)
+scenario9 = (
+    TestDataFactory.velodyne_left[0],
+    TestDataFactory.to_bytes_array(TestDataFactory.velodyne_left),
+    TestDataFactory.data_stamp[8][1]
+)
+scenario10 = (
+    TestDataFactory.velodyne_right[0],
+    TestDataFactory.to_bytes_array(TestDataFactory.velodyne_right),
+    TestDataFactory.data_stamp[9][1]
+)
 
 success_scenarios_csv = [scenario1, scenario2,
                          scenario3, scenario4,
@@ -29,24 +42,30 @@ success_scenarios_bin = [scenario7, scenario8,
                          scenario9, scenario10]
 
 
-gray_img = numpy_array([0, 255, 255, 0]).reshape(2, 2)
+gray_img = numpy_array(TestDataFactory.stereo_left).reshape(2, 2)
 rgb_img = dstack([gray_img, gray_img, gray_img])
-scenario11 = (1234, rgb_img, 'stereo')
+scenario11 = (
+    TestDataFactory.data_stamp[10][0],
+    rgb_img,
+    TestDataFactory.data_stamp[10][1]
+)
 
 success_scenarios_png = [scenario11]
 
 
 @pytest.mark.parametrize(("test_data", "sensor"), success_scenarios_csv)
-def test_get_element_csv(prepare_data, kaist_reader, clean, test_data, sensor):
+def test_get_element_csv(kaist_reader, test_data, sensor):
     element = kaist_reader.get_element()
     expected_timestamp = test_data[0]
+    float_values = [float(i) for i in element.measurement.values]
+    test_data_without_time = test_data[1:]
     assert expected_timestamp == element.timestamp
-    assert test_data[1:] == element.measurement.values
+    assert test_data_without_time == float_values
     assert sensor == element.measurement.sensor
 
 
 @pytest.mark.parametrize(("expected_timestamp", "test_data", "sensor"), success_scenarios_bin)
-def test_get_element_bin(prepare_data, kaist_reader, clean, expected_timestamp, test_data, sensor):
+def test_get_element_bin(kaist_reader, expected_timestamp, test_data, sensor):
     element = kaist_reader.get_element()
     assert expected_timestamp == element.timestamp
     assert sensor == element.measurement.sensor
@@ -54,11 +73,38 @@ def test_get_element_bin(prepare_data, kaist_reader, clean, expected_timestamp, 
 
 
 @pytest.mark.parametrize(("expected_timestamp", "test_data", "sensor"), success_scenarios_png)
-def test_get_element_png(prepare_data, kaist_reader, clean, expected_timestamp, test_data, sensor):
+def test_get_element_png(kaist_reader, expected_timestamp, test_data, sensor):
     element = kaist_reader.get_element()
     first_img = element.measurement.values[0]
     second_img = element.measurement.values[1]
+    expected_timestamp = int(expected_timestamp)
     assert array_equal(first_img, test_data)
     assert array_equal(second_img, test_data)
     assert expected_timestamp == element.timestamp
     assert sensor == element.measurement.sensor
+
+
+scenario1 = (
+    Element(TestDataFactory.imu[0],
+            Measurement('imu', None),
+            {'file': TestDataFactory.csv_data[0][1],
+            'position': 0}),
+    TestDataFactory.imu[1:]
+)
+
+scenario2 = (
+    Element(TestDataFactory.fog[0],
+            Measurement('imu', None),
+            {'file': TestDataFactory.csv_data[1][1],
+            'position': 0}),
+    TestDataFactory.fog[1:]
+)
+
+success_scenarios_csv = [scenario1, scenario2]
+
+
+@pytest.mark.parametrize(("element_without_data", "expected_data"), success_scenarios_csv)
+def test_get_element(kaist_reader, element_without_data, expected_data):
+    element_with_data = kaist_reader.get_element(element_without_data)
+    float_list = [float(i) for i in element_with_data.measurement.values]
+    assert expected_data == float_list

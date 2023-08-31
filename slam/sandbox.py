@@ -1,6 +1,8 @@
 
 from plum import dispatch
 
+from slam.data_manager.data_manager import DataManager
+
 
 @dispatch
 def get_imu():
@@ -23,4 +25,6 @@ def get_parser(sensor: str):
 
 
 if __name__ == '__main__':
-    int('asdasdas')
+    dm1 = DataManager()
+    dm2 = DataManager()
+    print(id(dm1) == id(dm2))

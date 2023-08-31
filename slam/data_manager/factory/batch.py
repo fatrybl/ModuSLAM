@@ -8,9 +8,7 @@ class DataBatch:
         self.__margin_location = None
 
     def add(self, new_element: Element) -> None:
-        self.__data.timestamps.append(new_element.timestamp)
-        self.__data.measurements.append(new_element.measurement)
-        self.__data.locations.append(new_element.location)
+        self.__data.elements.append(new_element)
 
     def to_dataframe(self,) -> None:
         self.__data = pd.DataFrame.from_dict(self.__data)

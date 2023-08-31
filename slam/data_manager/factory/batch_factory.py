@@ -61,7 +61,10 @@ class BatchFactory():
         else:
             return False
 
-    def save_marginal_location(self) -> None:
+    def save_current_state(self) -> None:
+        """
+        Saves current state of iterators before reset.
+        """
         # save marginals
         # self.delete_batch()
         pass

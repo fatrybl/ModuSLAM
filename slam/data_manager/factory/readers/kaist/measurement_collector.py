@@ -61,11 +61,24 @@ class MeasurementCollector():
             return message
 
     def _find_in_file(self, it, timestamp: int) -> dict[str, str]:
+        current_timestamp = -1
         while current_timestamp != timestamp:
-            line = next(it.iterator)
-            _, data = line
-            current_timestamp = data[0]
-        return line
+            try:
+                line = next(it.iterator)
+            except StopIteration:
+                logger.error(
+                    f"Could not find measurement in file with timestamp={timestamp}")
+                raise
+            else:
+                position_in_file, data = line
+                try:
+                    current_timestamp = int(data[0])
+                except ValueError:
+                    logger.error(
+                        f"Could not convert timestamp {data[0]} of type {type(data[0])} to string")
+                    raise
+
+                return line
 
     @dispatch
     def get_imu(self) -> tuple[dict, dict]:
@@ -175,32 +188,42 @@ class MeasurementCollector():
                     "position": position}
         return message, location
 
-    def _get_lidar(self, timestamp, dir):
-        f_name = timestamp
+    def _get_lidar(self, timestamp: int, dir: Path) -> tuple[dict, dict]:
+        try:
+            f_name = str(timestamp)
+        except ValueError:
+            logger.error(
+                f"Could not convert timestamp {timestamp} of type {type(timestamp)} to string")
+            raise
         file = self._dataset_dir / dir / f_name
         file = file.with_suffix('.bin')
         message = self._read_bin(file)
         location = {"file": file}
         return message, location
 
-    def get_lidar_2D_sick_back(self, timestamp: str) -> tuple[dict, dict]:
+    def get_lidar_2D_sick_back(self, timestamp: int) -> tuple[dict, dict]:
         dir = KaistDataset.lidar_2D_back_dir.value
         return self._get_lidar(timestamp, dir)
 
-    def get_lidar_2D_sick_middle(self, timestamp: str) -> tuple[dict, dict]:
+    def get_lidar_2D_sick_middle(self, timestamp: int) -> tuple[dict, dict]:
         dir = KaistDataset.lidar_2D_middle_dir.value
         return self._get_lidar(timestamp, dir)
 
-    def get_lidar_3D_velodyne_left(self, timestamp: str) -> tuple[dict, dict]:
+    def get_lidar_3D_velodyne_left(self, timestamp: int) -> tuple[dict, dict]:
         dir = KaistDataset.lidar_3D_left_dir.value
         return self._get_lidar(timestamp, dir)
 
-    def get_lidar_3D_velodyne_right(self, timestamp: str) -> tuple[dict, dict]:
+    def get_lidar_3D_velodyne_right(self, timestamp: int) -> tuple[dict, dict]:
         dir = KaistDataset.lidar_3D_right_dir.value
         return self._get_lidar(timestamp, dir)
 
-    def get_stereo(self, timestamp: str) -> tuple[dict, dict]:
-        f_name = timestamp
+    def get_stereo(self, timestamp: int) -> tuple[dict, dict]:
+        try:
+            f_name = str(timestamp)
+        except ValueError:
+            logger.error(
+                f"Could not convert timestamp {timestamp} of type {type(timestamp)} to string")
+            raise
         left_camera_dir = self._dataset_dir / KaistDataset.stereo_left_data_dir.value
         right_camera_dir = self._dataset_dir / KaistDataset.stereo_right_data_dir.value
 
@@ -265,7 +288,7 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_data_by_measurement(self, line: dict[str, str | int]) -> tuple[dict, dict]:
+    def get_data_of_element(self, line: dict[str, str | int]) -> tuple[dict, dict]:
         """
         Gets raw data based on input measurement
         Args:
@@ -273,14 +296,10 @@ class MeasurementCollector():
         Returns: 
             tuple[dict, dict]: message with raw data and location
         """
-        print('sadsfsdfsdsdsdsd')
+        self._reset_iterators()
         timestamp = line['timestamp']
         sensor = line['sensor']
-        if isinstance(timestamp, int):
-            timestamp = str(timestamp)
-
         data_reader = self._get_reader(sensor)
         message, location = data_reader(timestamp)
 
-        self._reset_iterators()
         return message, location
