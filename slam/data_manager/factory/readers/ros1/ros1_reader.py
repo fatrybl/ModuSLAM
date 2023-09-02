@@ -1,82 +1,103 @@
 from rosbags.rosbag1 import Reader
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
+from rosbags.interfaces import Connection
+from pathlib import Path
 from data_manager.factory.readers.data_reader import DataReader
 import logging
 from data_manager.factory.readers.element_factory import Element, Measurement
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from configs.paths.DEFAULT_FILE_PATHS import RosDataset
+from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from slam.utils.config import Config
 import numpy as np
 #from slam.logger import logging_config
+from typing import Iterable, Callable, Optional
+
 logger = logging.getLogger(__name__)
 
 class Ros1BagReader(DataReader):
-    def __init__(self):
+    def __init__(self, raw_data: bool = False, config_path: Path = ConfigFilePaths.data_reader_config.value):
         super().__init__()
         logger.info("Initializing Ros1BagReader")
-
+        self.raw_data = raw_data
+        self.file = self._dataset_dir / RosDataset.data_stamp.value
         self.__iterator = self.__init_iterator()
-        self.__sensor_order_file = self._dataset_dir / RosDataset.data_stamp.value
         self.__break_point = StoppingCriterionSingleton()
+        cfg = Config.from_file(config_path)
+        topic_info = cfg.attributes["ros1_reader"]["used_sensors"]
+        self.__sensor_info = {k: v for d in topic_info for k, v in d.items()} #keqy - ros topic, value - sensor name
+        print(self.__sensor_info)
 
-    def __init_iterator(self) -> None:
-        if (DataReader.is_file_valid(self.__sensor_order_file)):
-            with Reader(self.__sensor_order_file) as reader:
-                avilable_topics = list(reader.topics.keys())
-                print(avilable_topics)
-                for connection in reader.connections:
-                    print(connection.topic, " : ", connection.msgtype)
-                print("---------------")
-                for line in enumerate(reader.messages()):
+    def __init_iterator(self, topic: str = None,  start: Optional[int] = None, stop: Optional[int] = None)  -> None:
+        if (DataReader.is_file_valid(self.file)):
+            with Reader(self.file) as reader:
+                avilable_topics = set(list(reader.topics.keys()))
+                if(not topic):
+                    for connection in reader.connections:
+                        print(connection.topic, " : ", connection.msgtype)
+                    print("---------------")
+                for topic_name in self.__sensor_info.keys():
+                    if topic_name not in avilable_topics:
+                        logger.critical("there are no topic %s " ,topic_name)
+                        raise ValueError
+                    
+                if(not topic):
+                    connections =  ()
+                else:
+                    connections =  reader.topics[topic].connections
+                for line in enumerate(reader.messages(connections = connections, start = start, stop = stop)):
                     yield line
             
         else:
             logger.critical(
-                f"Couldn't initialize the iterator for {self.__sensor_order_file}")
+                f"Couldn't initialize the iterator for {self.file}")
             self.__break_point.is_data_processed = True
 
-    def __get_next_data(self) -> tuple:
+    def __get_next_data(self, iterator) -> tuple:
         while True:
-            line = next(self.__iterator)
+            line = next(iterator)
             ind, (connection, timestamp, rawdata) = line
-            if connection.topic == RosDataset.imu_data_topic.value:
-                sensor = "imu"
-                msg = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
-                data = [msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z, msg.linear_acceleration.x, msg.linear_acceleration.y, msg.linear_acceleration.z]
-                break
-            if connection.topic == RosDataset.gps_data_topic.value:
-                sensor = "gps"
-                msg = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
-                data = np.array([msg.longitude, msg.latitude, msg.altitude, msg.status.status])
+            if(connection.topic in self.__sensor_info.keys()):
+                sensor = self.__sensor_info[connection.topic]
+                if(self.raw_data):
+                    data = rawdata
+                else:
+                    data = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
                 break
 
-        location = {"file": self.__sensor_order_file,
-                    "topic": connection.topic,
-                    "position": ind}
-        
+        location = {"file": self.file,
+                    "topic": connection.topic}
         return sensor, data, timestamp, location
 
-    def get_element(self) -> Element:
+    def get_element(self, iterator = None) -> Element:
         """
         Gets element from dataset.
         Should be implemented for each reader
-        """        
+        """      
         try:
-            sensor, data, timestamp, location = self.__get_next_data()
-            # measurement = {"sesnsor": sensor,
-            #                "data": data}
+            if(iterator == None):
+                sensor, data, timestamp, location = self.__get_next_data(self.__iterator)
+            else:
+                sensor, data, timestamp, location = self.__get_next_data(iterator)
+
             measurement = Measurement(sensor, data)
-            print(measurement, location)
+            # print(measurement, location, timestamp)
+            # print("----------------------------------------------------------")
+            # if(location["position"] > 300000):
+            #     raise StopIteration
             return Element(timestamp, measurement, location)
 
         except StopIteration:
-            #self.__break_point =..
+            self.__break_point.is_data_processed = True
+            logger.info("data finished")
             return None
 
         except Exception as e:
+            self.__break_point.is_data_processed = True
             logger.exception(e)
-
+            return None
     
-    def get_element_with_measurement(self, measurement: tuple) :
+    def get_element_with_measurement(self, measurement: tuple)-> Element:
         """
         Args:
             measurement: 
@@ -86,7 +107,14 @@ class Ros1BagReader(DataReader):
         Gets element from dataset with particular sensor measurement.
         Should be implemented for each reader
         """
-        raise NotImplementedError
+        location = measurement["location"]
+        timestamp = measurement["timestamp"]
+        topic = location["topic"]
+
+        iterator = self.__init_iterator(topic = topic, start = timestamp, stop = timestamp+1)
+        element = self.get_element(iterator)
+        return  element
+
     
 # def read(self, file_path, topics, batch_size=None):
     #     self.__check_file()

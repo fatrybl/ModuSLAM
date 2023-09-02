@@ -33,8 +33,8 @@ class MainManager:
         #     self.map_manager.update_map()
 
     def build_map(self) -> None:
+        logger.info("Building map...")
         while not self.__break_point.ON:
-            logger.info("Building map...")
             self.data_manager.make_batch()
             self.__process_batch()
 

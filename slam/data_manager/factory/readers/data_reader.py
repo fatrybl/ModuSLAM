@@ -1,20 +1,20 @@
 from abc import ABC, abstractmethod
 import logging
 
-from pathlib2 import Path
+from pathlib import Path
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
-from utils.config import Config
-from data_manager.factory.readers.element_factory import Element
+from slam.utils.config import Config
+from slam.data_manager.factory.readers.element_factory import Element
 
 logger = logging.getLogger(__name__)
 
 
 class DataReader(ABC):
     def __init__(self):
-        config = Config(
-            ConfigFilePaths.data_manager_config).attributes["data"]
-        self._dataset_dir = config["dataset_directory"]
+        config = Config.from_file(
+            ConfigFilePaths.data_manager_config.value)
+        self._dataset_dir = config.attributes["data"]["dataset_directory"]
 
     @staticmethod
     def is_file_valid(file_path: Path) -> bool:

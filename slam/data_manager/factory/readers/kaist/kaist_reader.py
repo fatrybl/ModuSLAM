@@ -1,5 +1,6 @@
-from csv import DictReader as dict_reader
 import logging
+import sys
+from csv import DictReader as dict_reader
 
 from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.element_factory import Measurement
@@ -29,7 +30,7 @@ class KaistReader(DataReader):
         else:
             logger.critical(
                 f"Couldn't initialize the iterator for {self.__sensor_order_file}")
-            self.__break_point.is_data_processed = True
+            sys.exit(1)
 
     def __get_data_by_sensor(self, line) -> tuple:
         if line["sensor"] == "imu":
@@ -60,18 +61,15 @@ class KaistReader(DataReader):
     def get_element(self) -> Element:
         try:
             line = next(self.__iterator)
-            message, location = self.__get_data_by_sensor(line)
-
-            time = int(message["timestamp"])
-            measurement = Measurement(line["sensor"], message["data"])
-
-            return Element(time, measurement, location)
 
         except StopIteration:
             return None
 
-        except Exception as e:
-            logger.exception(e)
+        else:
+            message, location = self.__get_data_by_sensor(line)
+            time = int(message["timestamp"])
+            measurement = Measurement(line["sensor"], message["data"])
+            return Element(time, measurement, location)
 
     def get_element_with_measurement(self, measurement: tuple) -> Element:
         raise NotImplementedError

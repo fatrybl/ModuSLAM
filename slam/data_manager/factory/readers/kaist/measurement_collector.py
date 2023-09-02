@@ -1,6 +1,6 @@
 from csv import reader as csv_reader
 import logging
-from pathlib2 import Path
+from pathlib import Path
 import cv2
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
 from collections import namedtuple

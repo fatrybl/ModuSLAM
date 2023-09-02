@@ -1,9 +1,10 @@
 import logging
+
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.filter.data_filter import RawDataFilter
 from slam.data_manager.factory.batch import DataBatch
 from slam.utils.config import Config
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths as paths
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 class DataManager():
 
     def __init__(self) -> None:
-        self.config = Config(ConfigFilePaths.data_manager_config)
+        self.config = Config.from_file(paths.data_manager_config.value)
         self.batch_factory = BatchFactory()
         logger.info("Data Manager has been configured")
 

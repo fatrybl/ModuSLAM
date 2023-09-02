@@ -1,6 +1,6 @@
 from logging.config import dictConfig
 
-from pathlib2 import Path
+from pathlib import Path
 
 LOG_DIR = Path(__file__).parents[2] / 'logs'
 LOG_DIR.mkdir(parents=True, exist_ok=True)

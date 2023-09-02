@@ -1,0 +1,3 @@
+data:
+  dataset_directory: /home/ilia/mySLAM/data/rosbag/0-Tiltlaser.bag
+  dataset_type: ros1

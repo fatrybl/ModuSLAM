@@ -3,16 +3,11 @@ stop_position: stop
 
 # names of topics in .bag file or headers in .csv or whatever
 ros1_reader:
-  used_messages:
-    - "sensors/imu_data/imu"
-    - "sensors/gnss/status"
-    - "sensors/gnss/position"
+  used_sensors:
+    - "/imu_data": "imu"
+    - "/position_gps": "gps"
+    - "/scan": "lidar"
 
-ros2_reader:
-  used_messages:
-    - "sensors/imu_data/imu"
-    - "sensors/gnss/status"
-    - "sensors/gnss/position"
 
 csv_reader:
   new_line: ""

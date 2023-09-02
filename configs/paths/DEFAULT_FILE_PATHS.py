@@ -1,5 +1,5 @@
 from enum import Enum
-from pathlib2 import Path
+from pathlib import Path
 
 
 class ConfigFilePaths(Enum):
@@ -41,9 +41,4 @@ class RosDataset(Enum):
     dataset format from 
     https://projects.asl.ethz.ch/datasets/doku.php?id=laserregistration:laserregistration
     """
-
-    imu_data_topic =  '/imu_data' # ['/imu1']
-    gps_data_topic = '/position_gps'
-    gps_info_topic = '/info_gps'
-
     data_stamp = Path('0-Tiltlaser.bag')
