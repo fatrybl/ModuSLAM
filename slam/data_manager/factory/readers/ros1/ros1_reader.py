@@ -16,30 +16,35 @@ from typing import Iterable, Callable, Optional
 logger = logging.getLogger(__name__)
 
 class Ros1BagReader(DataReader):
-    def __init__(self, raw_data: bool = False, config_path: Path = ConfigFilePaths.data_reader_config.value):
+    def __init__(self, config_path: Path = ConfigFilePaths.data_reader_config.value,
+                       file_name_path: Path = None,
+                       raw_data: bool = False):
         super().__init__()
-        logger.info("Initializing Ros1BagReader")
         self.raw_data = raw_data
-        self.file = self._dataset_dir / RosDataset.data_stamp.value
-        self.__iterator = self.__init_iterator()
-        self.__break_point = StoppingCriterionSingleton()
+        if(file_name_path == None):
+            self.file = self._dataset_dir / RosDataset.data_stamp.value
+        else:
+            self.file = file_name_path
+        logger.info("Initializing Ros1BagReader: %s\n",self.file.name)
         cfg = Config.from_file(config_path)
         topic_info = cfg.attributes["ros1_reader"]["used_sensors"]
         self.__sensor_info = {k: v for d in topic_info for k, v in d.items()} #keqy - ros topic, value - sensor name
-        print(self.__sensor_info)
+        logger.info("readable topics: %s\n",  self.__sensor_info.keys())
+        self.__iterator = self.__init_iterator()
+        self.__break_point = StoppingCriterionSingleton()
 
-    def __init_iterator(self, topic: str = None,  start: Optional[int] = None, stop: Optional[int] = None)  -> None:
+    def __init_iterator(self, topic: str = None,  start: Optional[int] = None, stop: Optional[int] = None):
         if (DataReader.is_file_valid(self.file)):
             with Reader(self.file) as reader:
                 avilable_topics = set(list(reader.topics.keys()))
-                if(not topic):
-                    for connection in reader.connections:
-                        print(connection.topic, " : ", connection.msgtype)
-                    print("---------------")
+                logger.info("available topics ",  avilable_topics)
+                # print("available topics ",  avilable_topics)
+                # print("required topics ",  self.__sensor_info.keys())
                 for topic_name in self.__sensor_info.keys():
                     if topic_name not in avilable_topics:
-                        logger.critical("there are no topic %s " ,topic_name)
-                        raise ValueError
+                        logger.critical(f"there are no topic {topic_name} ")
+                        raise KeyError
+                    
                     
                 if(not topic):
                     connections =  ()
@@ -52,7 +57,8 @@ class Ros1BagReader(DataReader):
             logger.critical(
                 f"Couldn't initialize the iterator for {self.file}")
             self.__break_point.is_data_processed = True
-
+            raise ValueError
+        
     def __get_next_data(self, iterator) -> tuple:
         while True:
             line = next(iterator)
@@ -64,6 +70,8 @@ class Ros1BagReader(DataReader):
                 else:
                     data = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
                 break
+            else:
+                logger.info("topic %s is ignored" ,connection.topic)
 
         location = {"file": self.file,
                     "topic": connection.topic}
@@ -92,10 +100,11 @@ class Ros1BagReader(DataReader):
             logger.info("data finished")
             return None
 
-        except Exception as e:
-            self.__break_point.is_data_processed = True
-            logger.exception(e)
-            return None
+        # except Exception as e:
+        #     logger.exception(e)
+        #     print("error", e)
+        #     self.__break_point.is_data_processed = True
+        #     raise e
     
     def get_element_with_measurement(self, measurement: tuple)-> Element:
         """
@@ -113,7 +122,7 @@ class Ros1BagReader(DataReader):
 
         iterator = self.__init_iterator(topic = topic, start = timestamp, stop = timestamp+1)
         element = self.get_element(iterator)
-        return  element
+        return element
 
     
 # def read(self, file_path, topics, batch_size=None):
