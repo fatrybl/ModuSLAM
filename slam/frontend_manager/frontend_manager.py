@@ -1,5 +1,5 @@
 import logging
-from utils.config import Config
+from slam.utils.config import Config
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from data_manager.factory.batch import DataBatch
 

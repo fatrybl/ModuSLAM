@@ -3,7 +3,7 @@ import logging
 import sys
 
 from pathlib import Path
-from yaml import safe_load, dump
+from yaml import safe_load, safe_dump
 from slam.utils.exceptions import ConfigFileNotValid
 
 logger = logging.getLogger(__name__)
@@ -80,6 +80,6 @@ class Config:
     def to_file(self, file_path: Path) -> None:
         try:
             with open(file_path, 'w') as outfile:
-                dump(self._attributes, outfile)
+                safe_dump(self._attributes, outfile)
         except OSError:
             logger.exception(f'can not save config to file: {file_path}')
