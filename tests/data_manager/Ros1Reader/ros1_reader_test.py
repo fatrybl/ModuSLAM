@@ -31,16 +31,16 @@ def test_unknown_topic_scenario():
 
 
 
-scenario_all_topics = ({"ros1_reader": {"used_sensors": [{"/imu_topic": "imu"},
-                                                   {"/camera_topic": "camera"},
-                                                   {"/lidar_topic": "lidar"},
-                                                   {"/gnss_topic": "gnss"}]
+scenario_all_topics = ({"ros1_reader": {"used_sensors": [{"imu": "/imu_topic"},
+                                                        {"camera": "/camera_topic"},
+                                                        {"lidar": "/lidar_topic"},
+                                                        {"gnss": "/gnss_topic"}]
                                  }
-                 }, 8)
+                       }, 8)
 
 
-scenario_half_topics = ({"ros1_reader": {"used_sensors": [{"/imu_topic": "imu"},
-                                                   {"/camera_topic": "camera"},
+scenario_half_topics = ({"ros1_reader": {"used_sensors": [{"imu": "/imu_topic"},
+                                                          {"camera": "/camera_topic"},
                                                   ]
                                  }
                  }, 4)
@@ -65,12 +65,12 @@ def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_eleme
 
 
 def test_ros_get_element():
-    create_config_file({"ros1_reader": {"used_sensors": [{"/imu_topic": "imu"},
-                                                        {"/camera_topic": "camera"},
-                                                        {"/lidar_topic": "lidar"},
-                                                        {"/gnss_topic": "gnss"}]
-                                        }
-                      })
+    create_config_file({"ros1_reader": {"used_sensors": [{"imu": "/imu_topic"},
+                                                        {"camera": "/camera_topic"},
+                                                        {"lidar": "/lidar_topic"},
+                                                        {"gnss": "/gnss_topic"}]
+                                 }
+                       })
     reader = Ros1BagReader(config_path = DEFAULT_CONFIG_PATH,
                            file_name_path = TEST_BAG_PATH,
                            raw_data= True)
@@ -79,9 +79,10 @@ def test_ros_get_element():
         request_element_wrong_topic = Element(timestamp=300, location={"topic": "/unexist_topic"}, measurement = ())
         read_element = reader.get_element(request_element_wrong_topic)
 
-    with pytest.raises(KeyError):
-        request_element_wrond_timestamp = Element(timestamp=30000, location={"topic": "/camera_topic"}, measurement = ())
-        read_element = reader.get_element(request_element_wrond_timestamp)
+
+    request_element_wrond_timestamp = Element(timestamp=30000, location={"topic": "/camera_topic"}, measurement = ())
+    read_element = reader.get_element(request_element_wrond_timestamp)
+    assert read_element == None
 
     request_element = Element(timestamp=1, location={"topic": "/imu_topic"}, measurement = ())
     read_element = reader.get_element(request_element)

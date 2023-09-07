@@ -1,6 +1,6 @@
 from plum import dispatch
 from pathlib import Path
-from typing import Iterable, Callable, Optional
+from typing import  Optional
 import logging
 
 from rosbags.rosbag1 import Reader
@@ -29,7 +29,7 @@ class Ros1BagReader(DataReader):
             self.file = self._dataset_dir / RosDataset.data_stamp.value
         else:
             self.file = file_name_path
-        logger.info("Initializing Ros1BagReader: %s\n",self.file.name)
+        logger.info("Initializing Ros1BagReader: ",self.file.name)
         if (not DataReader.is_file_valid(self.file)):
             logger.critical(
                 f"Couldn't initialize the iterator for {self.file}")
@@ -38,12 +38,12 @@ class Ros1BagReader(DataReader):
         
         cfg = Config.from_file(config_path)
         topic_info = cfg.attributes["ros1_reader"]["used_sensors"]
-        self.__sensor_info = {k: v for d in topic_info for k, v in d.items()} #keqy - ros topic, value - sensor name
-        logger.info("readable topics: %s\n",  self.__sensor_info.keys())
+        self.__sensor_info = {k: v for d in topic_info for v, k in d.items()} #keqy - ros topic, value - sensor name
+        logger.info(f"readable topics: {self.__sensor_info.keys()}")
         self.__iterator = self.__init_iterator()
         
 
-    def __init_iterator(self, topic: str = None,  start: Optional[int] = None, stop: Optional[int] = None):
+    def __init_iterator(self, topic: Optional[str] = None,  start: Optional[int] = None, stop: Optional[int] = None):
         with Reader(self.file) as reader:
             avilable_topics = set(list(reader.topics.keys()))
             logger.info("available topics ",  avilable_topics)
@@ -74,7 +74,7 @@ class Ros1BagReader(DataReader):
                     data = deserialize_cdr(ros1_to_cdr(rawdata, connection.msgtype), connection.msgtype)
                 break
             else:
-                logger.info("topic %s is ignored" ,connection.topic)
+                logger.info(f"topic {connection.topic} is ignored")
 
         location = {"file": self.file,
                     "topic": connection.topic}
@@ -99,17 +99,14 @@ class Ros1BagReader(DataReader):
             return Element(timestamp, measurement, location)
 
         except StopIteration:
-            self.__break_point.is_data_processed = True
-            logger.info("data finished")
+            logger.info("data finished in ", self.file)
             return None
 
     @dispatch
-    def get_element(self, element: Element) -> Element:
+    def get_element(self, element: Element) -> Element | None:
         timestamp = element.timestamp
         topic = element.location["topic"]
         iterator = self.__init_iterator(topic = topic, start = timestamp, stop = timestamp+1)
         element = self.get_element(iterator)
-        if(element == None):
-            raise KeyError
         return element
 

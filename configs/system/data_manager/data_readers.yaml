@@ -3,10 +3,10 @@ stop_position: stop
 
 # names of topics in .bag file or headers in .csv or whatever
 ros1_reader:
-  used_sensors:
-    - "/imu_data": "imu"
-    - "/position_gps": "gps"
-    - "/scan": "lidar"
+  used_sensors: #sensor: sensor topic
+  - "imu":   "/imu_data"
+  - "gps" :  "/position_gps": 
+  - "lidar": "/scan"
 
 
 csv_reader:

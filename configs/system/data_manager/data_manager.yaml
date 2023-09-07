@@ -8,5 +8,5 @@ data_filter:
 
 # path to directory with data files
 data:
-  dataset_type: "ros1"
-  dataset_directory: "/home/ilia/mySLAM/data/rosbag" #"/home/oem/Downloads/urban18-highway/"
+  dataset_type: "kaist" #possiple values kaist, ros1
+  dataset_directory: "/home/oem/Downloads/urban18-highway/" #"/home/ilia/mySLAM/data/rosbag" 
