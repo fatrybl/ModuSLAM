@@ -1,18 +1,20 @@
 import pytest
 from pathlib import Path
 
-from rosbags.rosbag1 import Writer
-
 from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
-from tests.data_manager.Ros1Reader.conftest import TEST_BAG_PATH, DEFAULT_CONFIG_PATH, create_config_file
-
+from tests.data_manager.Ros1Reader.data_factory import TestDataFactory, create_config_file
 
 
 def test_unknown_file_scenario():
+    create_config_file({"ros1_reader": {"used_sensors": [{"/imu_topic": "imu"},
+                                                        {"/camera_topic": "camera"},
+                                                    ]
+                                    }
+                        })
     path = Path(__file__).parent/ "non_exist.bag" 
     with pytest.raises(FileNotFoundError):
-        reader = Ros1BagReader(file_name_path = path)
+        reader = Ros1BagReader(master_file_path = path)
         reader.get_element()
 
 
@@ -24,10 +26,9 @@ def test_unknown_topic_scenario():
                                         }
                           })
     with pytest.raises(KeyError):
-        reader = Ros1BagReader(config_path = DEFAULT_CONFIG_PATH,
-                            file_name_path = TEST_BAG_PATH,
+        reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+                            master_file_path = TestDataFactory.MASTER_BAG_DIR,
                             raw_data= True)
-        reader.get_element()
 
 
 
@@ -36,14 +37,14 @@ scenario_all_topics = ({"ros1_reader": {"used_sensors": [{"imu": "/imu_topic"},
                                                         {"lidar": "/lidar_topic"},
                                                         {"gnss": "/gnss_topic"}]
                                  }
-                       }, 8)
+                       }, 20)
 
 
 scenario_half_topics = ({"ros1_reader": {"used_sensors": [{"imu": "/imu_topic"},
                                                           {"camera": "/camera_topic"},
                                                   ]
                                  }
-                 }, 4)
+                 }, 10)
 success_scenarios = [scenario_all_topics, scenario_half_topics]
 
 @pytest.mark.parametrize(
@@ -51,8 +52,8 @@ success_scenarios = [scenario_all_topics, scenario_half_topics]
 )
 def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_element_cnt):
     create_config_file(test_cfg)
-    reader = Ros1BagReader(config_path = DEFAULT_CONFIG_PATH,
-                           file_name_path = TEST_BAG_PATH,
+    reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+                           master_file_path = TestDataFactory.MASTER_BAG_DIR,
                            raw_data= True)
     element_cnt = 0
     while True:
@@ -71,28 +72,31 @@ def test_ros_get_element():
                                                         {"gnss": "/gnss_topic"}]
                                  }
                        })
-    reader = Ros1BagReader(config_path = DEFAULT_CONFIG_PATH,
-                           file_name_path = TEST_BAG_PATH,
+    reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+                           master_file_path = TestDataFactory.MASTER_BAG_DIR,
                            raw_data= True)
     
     with pytest.raises(KeyError):
-        request_element_wrong_topic = Element(timestamp=300, location={"topic": "/unexist_topic"}, measurement = ())
+        request_element_wrong_topic = Element(timestamp=300, location={"file": TestDataFactory.FILE1,"topic": "/unexist_topic"}, measurement = ())
         read_element = reader.get_element(request_element_wrong_topic)
 
 
-    request_element_wrond_timestamp = Element(timestamp=30000, location={"topic": "/camera_topic"}, measurement = ())
+    request_element_wrond_timestamp = Element(timestamp=30000, location={"file": TestDataFactory.FILE1, "topic": "/camera_topic"}, measurement = ())
     read_element = reader.get_element(request_element_wrond_timestamp)
     assert read_element == None
 
-    request_element = Element(timestamp=1, location={"topic": "/imu_topic"}, measurement = ())
+    request_element = Element(timestamp=1, location={"file": TestDataFactory.FILE1, "topic": "/imu_topic"}, measurement = ())
     read_element = reader.get_element(request_element)
     assert read_element.measurement == Measurement(sensor='imu', values=b'123456789ABCDEQGEGKJBNKJBN')
-    request_element = Element(timestamp=8, location={"topic": "/gnss_topic"}, measurement = ())
+    request_element = Element(timestamp=8, location={"file": TestDataFactory.FILE1, "topic": "/gnss_topic"}, measurement = ())
     read_element = reader.get_element(request_element)
     assert read_element.measurement == Measurement(sensor='gnss', values=b'kjnk987')
-    request_element = Element(timestamp=3, location={"topic": "/camera_topic"}, measurement = ())
+    request_element = Element(timestamp=3, location={"file": TestDataFactory.FILE1, "topic": "/camera_topic"}, measurement = ())
     read_element = reader.get_element(request_element)
     assert read_element.measurement == Measurement(sensor='camera', values=b'JFVNKJGJHK')
-    request_element = Element(timestamp=2, location={"topic": "/lidar_topic"}, measurement = ())
+    request_element = Element(timestamp=14, location={"file": TestDataFactory.FILE2, "topic": "/gnss_topic"}, measurement = ())
     read_element = reader.get_element(request_element)
-    assert read_element.measurement == Measurement(sensor='lidar', values=b'DEADSFEEF')
+    assert read_element.measurement == Measurement(sensor='gnss', values=b'iubgkhnlkml')
+    request_element = Element(timestamp=23, location={"file": TestDataFactory.FILE3, "topic": "/camera_topic"}, measurement = ())
+    read_element = reader.get_element(request_element)
+    assert read_element.measurement == Measurement(sensor='camera', values=b'KJHKJ')
