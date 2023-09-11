@@ -14,30 +14,28 @@ logger = logging.getLogger(__name__)
 class RosFileStorage():
     def __init__(self, file: Path):
         self.file = file
-        self.__reader = Reader(file)
-        self.__reader.open()
-        # if(self.__reader.message_count == 0):
-        #     raise ValueError
-        self.__avilable_topics = set(list(self.__reader.topics.keys()))
-        logger.info(f"available topics {self.__avilable_topics}")
+
         
-    def check_correct_topic(self, topics: Iterable[str]):
-        for topic_name in topics:
-            if topic_name not in self.__avilable_topics:
-                logger.critical(f"there are no topic {topic_name} ")
-                raise KeyError
+    def check_topics(self, topics: Iterable[str]):
+        with Reader(self.file) as reader: 
+            if(reader.message_count == 0):
+                logger.critical(f"Empty Rosbag file {self.file.name}")
+            logger.info(f"available topics {reader.topics.keys()}")
+            
+            for topic_name in topics:
+                if topic_name not in reader.topics.keys():
+                    logger.critical(f"there are no topic {topic_name} ")
+                    raise KeyError
             
     def get_iterator(self, topics: Iterable[str],  start: Optional[int] = None, stop: Optional[int] = None):
-        self.check_correct_topic(topics)
-        connections = []
-        for topic in topics:
-            connections.append(*self.__reader.topics[topic].connections)
-        for line in self.__reader.messages(connections = connections, start = start, stop = stop):
-            connection, timestamp, rawdata = line
-            yield self.file, connection.topic, connection.msgtype, timestamp, rawdata
+        with Reader(self.file) as reader: 
+            connections = []
+            for topic in topics:
+                connections.append(*reader.topics[topic].connections)
+            for line in reader.messages(connections = connections, start = start, stop = stop):
+                connection, timestamp, rawdata = line
+                yield self.file, connection.topic, connection.msgtype, timestamp, rawdata
 
-    def __exit__(self):
-        self.__reader.close()
         
 class RosDatasetIterator():
     def __init__(self, master_file_path:Path, topics: Iterable[str]):
@@ -59,7 +57,7 @@ class RosDatasetIterator():
                     raise FileNotFoundError
                 logger.info(f"open {file}")
                 ros_file_storage = RosFileStorage(file)
-                ros_file_storage.check_correct_topic(topics)
+                ros_file_storage.check_topics(topics)
                 self.__iterator_stotage[file] = ros_file_storage
 
             if(not any(self.__iterator_stotage)):
