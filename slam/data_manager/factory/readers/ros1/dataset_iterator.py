@@ -1,7 +1,6 @@
-from plum import dispatch
+import logging
 from pathlib import Path
 from typing import  Optional, Iterable
-import logging
 
 from rosbags.rosbag1 import Reader
 
@@ -15,12 +14,11 @@ class RosFileStorage():
     def __init__(self, file: Path):
         self.file = file
 
-        
     def check_topics(self, topics: Iterable[str]):
         with Reader(self.file) as reader: 
             if(reader.message_count == 0):
                 logger.critical(f"Empty Rosbag file {self.file.name}")
-            logger.info(f"available topics {reader.topics.keys()}")
+            logger.debug(f"file {self.file.name} has available topics {reader.topics.keys()}")
             
             for topic_name in topics:
                 if topic_name not in reader.topics.keys():
@@ -38,9 +36,9 @@ class RosFileStorage():
 
         
 class RosDatasetIterator():
-    def __init__(self, master_file_path:Path, topics: Iterable[str]):
-        file_data_dir = master_file_path/RosDataset.data_files_folder.value
-        master_file_name = master_file_path/RosDataset.master_filename.value
+    def __init__(self, master_file_dir:Path, topics: Iterable[str]):
+        file_data_dir = master_file_dir/RosDataset.data_files_folder.value
+        master_file_name = master_file_dir/RosDataset.master_filename.value
         if (not DataReader.is_file_valid(master_file_name)):
             print(f"Can't open Masterfile {master_file_name}")
             logger.critical(
@@ -48,41 +46,41 @@ class RosDatasetIterator():
             raise FileNotFoundError
         self.topics = topics
         with master_file_name.open() as f: 
-            self.__iterator_stotage = {}
+            self.__file_stotage = {}
             for line in f.read().splitlines():
                 file = file_data_dir/line
                 if (not DataReader.is_file_valid(file)):
                     logger.critical(
-                        f"Can't open data file  {file.name}")
+                        f"Can't open data file {file.name}")
                     raise FileNotFoundError
-                logger.info(f"open {file}")
+                logger.debug(f"open {file}")
                 ros_file_storage = RosFileStorage(file)
                 ros_file_storage.check_topics(topics)
-                self.__iterator_stotage[file] = ros_file_storage
+                self.__file_stotage[file] = ros_file_storage
 
-            if(not any(self.__iterator_stotage)):
+            if(not any(self.__file_stotage)):
                 logger.critical("empty Masterfile")
                 raise Exception("empty Masterfile")
-            logger.info("Creating Ros1IteratorDataset OK")
+            logger.debug("Creating Ros1IteratorDataset OK")
     
-        self.iterator_files = self.__get_file_iterator()
-        first_file = next(self.iterator_files)
-        self.iterator_data = self.__iterator_stotage[first_file].get_iterator(topics = self.topics)
+        self.__file_iterator = self.__get_file_iterator()
+        first_file = next(self.__file_iterator)
+        self.__data_iterator = self.__file_stotage[first_file].get_iterator(topics = self.topics)
         
     def get_iterator(self, file: Path, topics: Iterable[str],  start: Optional[int] = None, stop: Optional[int] = None):
-        ros_file_storage = self.__iterator_stotage[file]
+        ros_file_storage = self.__file_stotage[file]
         return ros_file_storage.get_iterator(topics = topics, start = start, stop = stop)
         
     def __next__(self):
         try:
-            return next(self.iterator_data)
+            return next(self.__data_iterator)
         except StopIteration:
-            next_file = next(self.iterator_files) ### switch between files
-            self.iterator_data = self.__iterator_stotage[next_file].get_iterator(topics = self.topics)
-            logger.info(f"switch to new file {next_file}")
-            return next(self.iterator_data)
+            next_file = next(self.__file_iterator) ### switch between files
+            self.__data_iterator = self.__file_stotage[next_file].get_iterator(topics = self.topics)
+            logger.debug(f"switch to new file {next_file}")
+            return next(self.__data_iterator)
         
     def __get_file_iterator(self):
-        for file in self.__iterator_stotage.keys():
+        for file in self.__file_stotage.keys():
             yield file
     

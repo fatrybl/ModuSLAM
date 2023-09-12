@@ -16,7 +16,7 @@ def test_unknown_file_scenario():
                         })
     path = Path(__file__).parent/ "non_exist.bag" 
     with pytest.raises(FileNotFoundError):
-        reader = Ros1BagReader(master_file_path = path)
+        reader = Ros1BagReader(master_file_dir = path)
         reader.get_element()
 
 
@@ -29,7 +29,7 @@ def test_unknown_topic_scenario():
                           })
     with pytest.raises(KeyError):
         reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                            master_file_path = TestDataFactory.MASTER_BAG_DIR,
+                            master_file_dir = TestDataFactory.MASTER_BAG_DIR,
                             deserialize_raw_data = False)
 
 
@@ -55,7 +55,7 @@ success_scenarios = [scenario_all_topics, scenario_half_topics]
 def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_element_cnt):
     create_config_file(test_cfg)
     reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           master_file_path = TestDataFactory.MASTER_BAG_DIR,
+                           master_file_dir = TestDataFactory.MASTER_BAG_DIR,
                            deserialize_raw_data = False)
     element_cnt = 0
     while True:
@@ -70,7 +70,7 @@ def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_eleme
 def test_ros_get_element():
     create_config_file()
     reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           master_file_path = TestDataFactory.MASTER_BAG_DIR,
+                           master_file_dir = TestDataFactory.MASTER_BAG_DIR,
                            deserialize_raw_data= False)
     
     with pytest.raises(KeyError):
@@ -109,10 +109,10 @@ def test_ros_get_element():
 def test_ros_get_element_in_middle():
     create_config_file()
     reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           master_file_path = TestDataFactory.MASTER_BAG_DIR,
+                           master_file_dir = TestDataFactory.MASTER_BAG_DIR,
                            deserialize_raw_data= False)
     element_cnt = 0
-    for i in range(10):
+    for i in range(7):
         element = reader.get_element()
         element_cnt+=1
     request_element = Element(timestamp=8, location={"file": TestDataFactory.FILE1, "topic": "/gnss_topic"}, measurement = ())
