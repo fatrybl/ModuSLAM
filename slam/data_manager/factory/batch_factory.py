@@ -1,5 +1,6 @@
 import logging
 
+from dataclasses import dataclass
 from plum import dispatch
 
 from slam.data_manager.factory.batch import DataBatch
@@ -11,12 +12,19 @@ from slam.data_manager.factory.readers.element_factory import Element
 logger = logging.getLogger(__name__)
 
 
+@dataclass
+class DataBatchMargin:
+    main_batch: dict
+    loop_batch: dict
+
+
 class BatchFactory():
     def __init__(self) -> None:
         self._memory_analyzer = MemoryAnalyzer()
         self._batch = DataBatch()
         self._data_reader = DataReaderFactory()
         self._break_point = StoppingCriterionSingleton()
+        # self._margin = DataBatchMargin()
 
     @property
     def batch(self) -> DataBatch:
@@ -27,6 +35,7 @@ class BatchFactory():
         new_element = self._data_reader.get_element()
         if new_element:
             self._batch.add(new_element)
+            # self._margin.main_batch.update(new_element)
         else:
             logger.info("All data has been processed")
             self._break_point.is_data_processed = True
@@ -35,6 +44,7 @@ class BatchFactory():
     def _add_data(self, element: Element) -> None:
         new_element = self._data_reader.get_element(element)
         self._batch.add(new_element)
+        # self._margin.loop_batch.update(new_element)
 
     @dispatch
     def create_batch(self) -> None:

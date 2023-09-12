@@ -10,3 +10,32 @@ data_filter:
 data:
   dataset_type: "kaist"
   dataset_directory: "/home/oem/Downloads/urban18-highway/"
+  timestamp_limits:
+    start: 1234
+    stop: 1234
+
+# supported sensors` types: imu, camera, lidar, gps, encoder ...
+sensors:
+  fog:
+    type: "fog"
+    config: "fog.yaml"
+
+  imu:
+    type: "imu"
+    config: "xsense_imu.yaml"
+
+  encoder:
+    type: "encoder"
+    config: "encoder.yaml"
+
+  sick_back:
+    type: "lidar_2D"
+    config: "lidar_sick_back.yaml"
+
+  sick_middle:
+    type: "lidar_2D"
+    config: "lidar_sick_middle.yaml"
+
+  stereo:
+    type: "stereo_camera"
+    config: "realsense_camera.yaml"

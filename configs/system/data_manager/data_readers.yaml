@@ -1,28 +1,15 @@
-start_position: start
-stop_position: stop
-
 # names of topics in .bag file or headers in .csv or whatever
 ros1_reader:
-  used_messages:
-    - "sensors/imu_data/imu"
-    - "sensors/gnss/status"
-    - "sensors/gnss/position"
+  used_topics:
+    "xsense_imu": "sensors/imu_data/imu"
+    "vlp32_lidar": "sensors/lidar"
+    "realsense_camera": "sensors/realsense/stereo"
 
-ros2_reader:
-  used_messages:
-    - "sensors/imu_data/imu"
-    - "sensors/gnss/status"
-    - "sensors/gnss/position"
+kaist_reader:
+  # sensor names in data_stamp.csv
+  used_sensors: ["fog", "encoder"]
 
 csv_reader:
   new_line: ""
   delimiter: ","
   quotechar: "|"
-  used_messages:
-    time: [0, 1]
-    imu: [1, 7]
-    wheel_odom: [7, 10]
-    gps_pose: [10, 13]
-
-kaist_reader:
-  # one_file_sensors: [imu, fog, gps, vrs, altimeter, encoder]
