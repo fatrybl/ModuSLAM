@@ -39,7 +39,7 @@ class RosDatasetIterator():
     def __init__(self, master_file_dir:Path, topics: Iterable[str]):
         file_data_dir = master_file_dir/RosDataset.data_files_folder.value
         master_file_name = master_file_dir/RosDataset.master_filename.value
-        if (not DataReader.is_file_valid(master_file_name)):
+        if (not DataReader._is_file_valid(master_file_name)):
             print(f"Can't open Masterfile {master_file_name}")
             logger.critical(
                 f"Can't open Masterfile {master_file_name}")
@@ -49,7 +49,7 @@ class RosDatasetIterator():
             self.__file_stotage = {}
             for line in f.read().splitlines():
                 file = file_data_dir/line
-                if (not DataReader.is_file_valid(file)):
+                if (not DataReader._is_file_valid(file)):
                     logger.critical(
                         f"Can't open data file {file.name}")
                     raise FileNotFoundError

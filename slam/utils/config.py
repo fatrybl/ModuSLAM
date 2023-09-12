@@ -74,7 +74,6 @@ class Config:
             cfg._read_file()
             return cfg
         else:
-            logger.critical(f'Config file: {file_path}  is not valid')
             raise ConfigFileNotValid
 
     def to_file(self, file_path: Path) -> None:

@@ -10,6 +10,7 @@ from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.backend_manager.backend_manager import BackendManager
 from slam.map_manager.map_manager import MapManager
 from slam.utils.meta_singleton import MetaSingleton
+from slam.utils.sensor_factory.factory import SensorFactory
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 
@@ -19,11 +20,12 @@ logger = logging.getLogger(__name__)
 class MainManager(metaclass=MetaSingleton):
 
     def __init__(self) -> None:
+        self.break_point = StoppingCriterionSingleton()
+        self.sensor_factory = SensorFactory()
         self.data_manager = DataManager()
         # self.frontend_manager = FrontendManager()
         # self.backend_manager = BackendManager()
         # self.map_manager = MapManager()
-        self.__break_point = StoppingCriterionSingleton()
         logger.info("System has been successfully configured")
 
     def _process_batch(self) -> None:
@@ -37,7 +39,7 @@ class MainManager(metaclass=MetaSingleton):
 
     def build_map(self) -> None:
         logger.info("Building map...")
-        while not self.__break_point.ON:
+        while not self.break_point.ON:
             self.data_manager.make_batch()
             self._process_batch()
 

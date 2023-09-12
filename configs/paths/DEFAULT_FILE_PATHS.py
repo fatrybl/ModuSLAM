@@ -6,6 +6,7 @@ class ConfigFilePaths(Enum):
     root_path = Path(__file__).parent.parent
     data_manager_config = root_path / "system/data_manager/data_manager.yaml"
     data_reader_config = root_path / "system/data_manager/data_readers.yaml"
+    sensors_config_dir = root_path / "sensors/"
 
 
 class KaistDataset(Enum):
@@ -37,8 +38,5 @@ class KaistDataset(Enum):
     stereo_right_data_dir = image_data_dir / "stereo_right"
 
 class RosDataset(Enum):
-    """
-    dataset format from 
-    https://projects.asl.ethz.ch/datasets/doku.php?id=laserregistration:laserregistration
-    """
-    data_stamp = Path('0-Tiltlaser.bag')
+    master_filename = "MasterFilename.txt"
+    data_files_folder = Path("dataset1")

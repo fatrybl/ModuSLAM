@@ -20,13 +20,15 @@ class Ros1BagReader(DataReader):
                        deserialize_raw_data: bool = False):
         super().__init__()
         self.deserialize_raw_data = deserialize_raw_data
-        
         if(master_file_dir == None):
             master_file_dir = Path(self._dataset_dir)
  
         cfg = Config.from_file(config_path)
-        topic_sensor_cfg = cfg.attributes["ros1_reader"]["used_sensors"]
-        self.__topic_sensor_dict = {k: v for d in topic_sensor_cfg for v, k in d.items()} #key - ros topic, value - sensor name
+        topic_sensor_cfg = cfg.attributes["ros1_reader"]["used_topics"]
+        print("--------------------------------")
+        print("topic_sensor_cfg",topic_sensor_cfg)
+        
+        self.__topic_sensor_dict = {k: v for v, k in topic_sensor_cfg.items()} #key - ros topic, value - sensor name
         logger.debug(f"available topics in RosReader: {self.__topic_sensor_dict.keys()}")
         self.__iterator = RosDatasetIterator(master_file_dir = master_file_dir, topics = self.__topic_sensor_dict.keys())
               
