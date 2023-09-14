@@ -1,15 +1,21 @@
 # names of topics in .bag file or headers in .csv or whatever
 ros1_reader:
   used_topics:
-    "xsense_imu": "sensors/imu_data/imu"
-    "vlp32_lidar": "sensors/lidar"
-    "realsense_camera": "sensors/realsense/stereo"
+    imu: "sensors/imu_data/imu"
+    encoder: "sensors/lidar"
+    stereo": "sensors/realsense/stereo"
 
 kaist_reader:
   # sensor names in data_stamp.csv
-  used_sensors: ["fog", "encoder"]
-
-csv_reader:
-  new_line: ""
-  delimiter: ","
-  quotechar: "|"
+used_sensors:
+  [
+    encoder,
+    imu,
+    altimeter,
+    fog,
+    sick_middle,
+    sick_back,
+    velodyne_right,
+    velodyne_left,
+    stereo,
+  ]
