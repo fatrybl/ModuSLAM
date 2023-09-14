@@ -12,7 +12,7 @@ def prepare_data():
 @fixture(scope='module', autouse=True)
 def clean():
     yield
-    rmtree(TestDataFactory.DATA_PATH_FILDER.name)
+    rmtree(TestDataFactory.DATA_PATH_FOLDER.name)
     TestDataFactory.MASTER_FILE_PATH.unlink()
     TestDataFactory.DEFAULT_CONFIG_PATH.unlink()
 

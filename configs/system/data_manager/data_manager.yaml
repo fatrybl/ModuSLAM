@@ -39,4 +39,3 @@ sensors:
   stereo:
     type: "stereo_camera"
     config: "realsense_camera.yaml"
->>>>>>> develop

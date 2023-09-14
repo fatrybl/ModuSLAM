@@ -37,6 +37,6 @@ class KaistDataset(Enum):
     stereo_left_data_dir = image_data_dir / "stereo_left"
     stereo_right_data_dir = image_data_dir / "stereo_right"
 
-class RosDataset(Enum):
+class RosDatasetStructure(Enum):
     master_filename = "MasterFilename.txt"
     data_files_folder = Path("dataset1")
