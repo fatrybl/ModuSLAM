@@ -6,7 +6,7 @@ from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.backend_manager.backend_manager import BackendManager
 from slam.map_manager.map_manager import MapManager
 from slam.utils.meta_singleton import MetaSingleton
-from slam.utils.sensor_factory.factory import SensorFactory
+from slam.utils.sensor_factory.sensors_factory import SensorFactory
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 

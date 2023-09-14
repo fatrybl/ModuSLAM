@@ -36,6 +36,18 @@ sensors:
     type: "lidar_2D"
     config: "lidar_sick_middle.yaml"
 
+  velodyne_left:
+    type: "lidar_3D"
+    config: "velodyne_left.yaml"
+
+  velodyne_right:
+    type: "lidar_3D"
+    config: "velodyne_right.yaml"
+
   stereo:
     type: "stereo_camera"
     config: "realsense_camera.yaml"
+
+  altimeter:
+    type: "altimeter"
+    config: "altimeter.yaml"

@@ -1,20 +1,16 @@
-import pandas as pd
-from slam.data_manager.factory.readers.element_factory import Data, Element
+from slam.data_manager.factory.readers.element_factory import Element
 
 
 class DataBatch:
     def __init__(self):
-        self.__data = Data()
+        self.__data: list[Element] = []
         self.__margin_location = None
 
     def add(self, new_element: Element) -> None:
-        self.__data.elements.append(new_element)
-
-    def to_dataframe(self,) -> None:
-        self.__data = pd.DataFrame.from_dict(self.__data)
+        self.__data.append(new_element)
 
     @property
-    def data(self) -> dict:
+    def data(self) -> list[Element]:
         return self.__data
 
     @property

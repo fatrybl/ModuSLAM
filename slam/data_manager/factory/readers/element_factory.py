@@ -1,10 +1,20 @@
-from dataclasses import dataclass, field
-from typing import Any
+from abc import ABC
+from dataclasses import dataclass
+from typing import Any, Type
+
+from slam.utils.sensor_factory.sensors import Sensor
+
+
+@dataclass
+class Location(ABC):
+    """
+    Abstract location for inheritence of
+    """
 
 
 @dataclass
 class Measurement:
-    sensor: str
+    sensor: Type[Sensor]
     values: Any
 
 
@@ -12,9 +22,4 @@ class Measurement:
 class Element:
     timestamp: int
     measurement: Measurement
-    location: dict[Any, Any]
-
-
-@dataclass
-class Data:
-    elements: list[Element] = field(default_factory=list)
+    location: Type[Location]

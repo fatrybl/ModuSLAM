@@ -25,6 +25,9 @@ class Sensor:
         self.name = name
         self.config = Config.from_file(config_file)
 
+    def __repr__(self) -> str:
+        return self.name
+
     def _set_parameters(self) -> None:
         """
         gets parameters from config file and sets the attributes
