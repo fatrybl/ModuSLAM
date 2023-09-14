@@ -83,8 +83,7 @@ class KaistReader(DataReader):
         sensor: Type[Sensor] = self.__sensor_factory.name_to_sensor(
             element.measurement.sensor)
         timestamp: int = element.timestamp
-        message = self.__collector.get_data_of_element(
-            sensor, timestamp)
+        message = self.__collector.get_data_of_element(sensor, timestamp)
 
         measurement = Measurement(element.measurement.sensor, message.data)
         element = Element(element.timestamp,

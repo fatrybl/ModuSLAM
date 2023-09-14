@@ -29,8 +29,6 @@ class SensorFactory(metaclass=MetaSingleton):
         cfg = Config.from_file(paths.data_reader_config.value)
         used_sensors: set[str] = set(cfg.attributes['used_sensors'])
         all_sensors: set[str] = set(s.name for s in self.sensors)
-        print(used_sensors)
-        print(all_sensors)
         if not used_sensors.issubset(all_sensors):
             logger.critical(
                 f'some of used sesnor: {used_sensors} is not a part of known sensors: {self.sensors}')
