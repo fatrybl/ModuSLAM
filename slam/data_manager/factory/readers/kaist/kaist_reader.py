@@ -13,8 +13,8 @@ from slam.data_manager.factory.readers.element_factory import Element
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths, KaistDataset
 from slam.utils.config import Config
 from slam.utils.exceptions import FileNotValid
-from slam.utils.sensor_factory.sensors_factory import SensorFactory
-from slam.utils.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 

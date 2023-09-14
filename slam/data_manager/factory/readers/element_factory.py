@@ -2,7 +2,7 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Any, Type
 
-from slam.utils.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
 @dataclass

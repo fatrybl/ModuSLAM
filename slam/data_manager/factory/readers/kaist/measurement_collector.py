@@ -4,15 +4,14 @@ from dataclasses import dataclass, field
 from collections.abc import Iterable, Iterator, Callable
 from csv import reader as csv_reader
 from pathlib import Path
-from typing import Any, Type, Optional
+from typing import Any, Type
 
 from cv2 import imread, IMREAD_COLOR
 from plum import dispatch
 
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
 from slam.data_manager.factory.readers.element_factory import Location
-from slam.utils.sensor_factory.sensors import Sensor, Imu, Fog, Encoder, Altimeter, Gps, VrsGps, StereoCamera, Lidar2D, Lidar3D
-from slam.utils.sensor_factory.sensors_factory import SensorFactory
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 

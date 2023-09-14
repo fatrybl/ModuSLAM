@@ -6,7 +6,8 @@ from pathlib import Path
 from slam.utils.config import Config
 from slam.utils.exceptions import NotSubset
 from slam.utils.meta_singleton import MetaSingleton
-from slam.utils.sensor_factory.sensors import Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D
+from slam.setup_manager.sensor_factory.sensors import (
+    Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths as paths
 
 logger = logging.getLogger(__name__)
