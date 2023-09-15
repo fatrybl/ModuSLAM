@@ -22,19 +22,31 @@ sensors:
 
   imu:
     type: "imu"
-    config: "xsense_imu.yaml"
+    config: "imu.yaml"
 
   encoder:
     type: "encoder"
     config: "encoder.yaml"
 
+  gps:
+    type: "gps"
+    config: "gps.yaml"
+
+  vrs:
+    type: "vrs_gps"
+    config: "vrs.yaml"
+
+  altimeter:
+    type: "altimeter"
+    config: "altimeter.yaml"
+
   sick_back:
     type: "lidar_2D"
-    config: "lidar_sick_back.yaml"
+    config: "sick_back.yaml"
 
   sick_middle:
     type: "lidar_2D"
-    config: "lidar_sick_middle.yaml"
+    config: "sick_middle.yaml"
 
   velodyne_left:
     type: "lidar_3D"
@@ -46,8 +58,4 @@ sensors:
 
   stereo:
     type: "stereo_camera"
-    config: "realsense_camera.yaml"
-
-  altimeter:
-    type: "altimeter"
-    config: "altimeter.yaml"
+    config: "stereo.yaml"

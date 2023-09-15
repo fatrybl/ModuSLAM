@@ -80,8 +80,7 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_element(self, element: Element) -> Element:
-        sensor: Type[Sensor] = self.__sensor_factory.name_to_sensor(
-            element.measurement.sensor)
+        sensor: Type[Sensor] = element.measurement.sensor
         timestamp: int = element.timestamp
         message = self.__collector.get_data_of_element(sensor, timestamp)
 

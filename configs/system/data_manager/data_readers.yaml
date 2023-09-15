@@ -9,10 +9,12 @@ kaist_reader:
   # sensor names in data_stamp.csv
 used_sensors:
   [
-    encoder,
     imu,
+    encoder,
     altimeter,
     fog,
+    gps,
+    vrs,
     sick_middle,
     sick_back,
     velodyne_right,

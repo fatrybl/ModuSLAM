@@ -12,11 +12,56 @@ from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 
 class TestDataFactory:
     CURRENT_DIR = Path(__file__).parent
-    TEST_DATA_DIR = CURRENT_DIR / 'test_data'
-    DEFAULT_DATAMANAGER_CONFIG_PATH = ConfigFilePaths.data_manager_config.value
-    MODIFIED_DATAMANAGER_CONFIG_NAME = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
-    MODIFIED_DATAMANAGER_CONFIG_PATH = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
+    TEST_DATA_DIR: Path = CURRENT_DIR / 'test_data'
+    DEFAULT_DATAMANAGER_CONFIG_PATH: Path = ConfigFilePaths.data_manager_config.value
+    MODIFIED_DATAMANAGER_CONFIG_NAME: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
+    MODIFIED_DATAMANAGER_CONFIG_PATH: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
         MODIFIED_DATAMANAGER_CONFIG_NAME
+
+    sensors = {
+        "fog": {
+            "type": "fog",
+            "config": "fog.yaml"},
+
+        "imu": {
+            "type": "imu",
+            "config": "imu.yaml"},
+
+        "encoder": {
+            "type": "encoder",
+                    "config": "encoder.yaml"},
+
+        "altimeter": {
+            "type": "altimeter",
+                    "config": "altimeter.yaml"},
+
+        "gps": {
+            "type": "gps",
+                    "config": "gps.yaml"},
+
+        "vrs": {
+            "type": "vrs_gps",
+                    "config": "vrs.yaml"},
+
+        "sick_back": {
+            "type": "lidar_2D",
+                    "config": "sick_back.yaml"},
+
+        "sick_middle": {
+            "type": "lidar_2D",
+                    "config": "sick_middle.yaml"},
+
+        "velodyne_left": {
+            "type": "lidar_3D",
+                    "config": "velodyne_left.yaml"},
+
+        "velodyne_right": {
+            "type": "lidar_3D",
+                    "config": "velodyne_right.yaml"},
+
+        "stereo": {
+            "type": "stereo_camera",
+                    "config": "stereo.yaml"}, }
 
     data_stamp = [
         ['1234', 'imu'],
@@ -134,8 +179,9 @@ class TestDataFactory:
         test_params = {"data":
                        {
                            "dataset_type": "kaist",
-                           "dataset_directory":  test_dataset_dir.as_posix()}
-                       }
+                           "dataset_directory":  test_dataset_dir.as_posix()
+                       },
+                       "sensors": self.sensors}
 
         with open(self.DEFAULT_DATAMANAGER_CONFIG_PATH, 'w') as outfile:
             safe_dump(test_params, outfile)

@@ -2,6 +2,7 @@ from pytest import fixture
 
 from shutil import rmtree, copyfile
 from pathlib import Path
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 
 from tests.data_manager.KaistReader.data_factory import TestDataFactory
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
@@ -12,6 +13,7 @@ def prepare_data():
     data_factory = TestDataFactory()
     data_factory.prepare_data()
     data_factory.modify_default_config()
+    sensor_factory = SensorFactory()
     yield
 
 

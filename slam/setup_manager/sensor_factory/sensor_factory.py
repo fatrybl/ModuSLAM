@@ -32,7 +32,7 @@ class SensorFactory(metaclass=MetaSingleton):
         all_sensors: set[str] = set(s.name for s in self.sensors)
         if not used_sensors.issubset(all_sensors):
             logger.critical(
-                f'some of used sesnor: {used_sensors} is not a part of known sensors: {self.sensors}')
+                f'some of used sensor: {used_sensors} is not in known sensors: {all_sensors}')
             raise NotSubset
 
     def name_to_sensor(self, name: str) -> Type[Sensor]:
