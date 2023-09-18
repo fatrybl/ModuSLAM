@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-08-18T15:12:58.514Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="05sH5aJsZTzYnAiZH4Nn" version="21.1.2" type="device">
+<mxfile host="Electron" modified="2023-09-18T08:22:06.337Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="ndb9bBK2nilPIzPn5h1p" version="21.1.2" type="device">
   <diagram name="Page-1" id="9f46799a-70d6-7492-0946-bef42562c5a5">
-    <mxGraphModel dx="3762" dy="54" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#FFCE9F" math="0" shadow="0">
+    <mxGraphModel dx="4038" dy="214" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#FFCE9F" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -70,7 +70,7 @@
         <mxCell id="_LQi3goQdABTxO5C51Vf-140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=15;entryPerimeter=0;" parent="1" source="_LQi3goQdABTxO5C51Vf-28" target="_LQi3goQdABTxO5C51Vf-139" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_LQi3goQdABTxO5C51Vf-28" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Commands &amp;amp; info from Managers&lt;/font&gt;" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="_LQi3goQdABTxO5C51Vf-28" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;DataManager API&lt;/font&gt;" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-2145" y="886" width="182" height="84" as="geometry" />
         </mxCell>
         <mxCell id="_LQi3goQdABTxO5C51Vf-29" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Data Batch&lt;/font&gt;" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
