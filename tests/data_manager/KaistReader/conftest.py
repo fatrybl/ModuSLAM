@@ -30,9 +30,9 @@ def clean():
     Path.unlink(TestDataFactory.MODIFIED_DATAMANAGER_CONFIG_PATH,
                 missing_ok=True)
 
+    rmtree(TestDataFactory.DEFAULT_SENSORS_CONFIG_DIR)
     copytree(TestDataFactory.MODIFIED_SENSORS_CONFIG_DIR,
-             TestDataFactory.DEFAULT_SENSORS_CONFIG_DIR,
-             dirs_exist_ok=True)
+             TestDataFactory.DEFAULT_SENSORS_CONFIG_DIR)
 
     rmtree(TestDataFactory.MODIFIED_SENSORS_CONFIG_DIR)
     rmtree(TestDataFactory.TEST_DATA_DIR)
