@@ -1,6 +1,5 @@
 import logging
 
-from dataclasses import dataclass
 from plum import dispatch
 
 from slam.data_manager.factory.batch import DataBatch
@@ -10,12 +9,6 @@ from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class DataBatchMargin:
-    main_batch: dict
-    loop_batch: dict
 
 
 class BatchFactory():
@@ -29,6 +22,10 @@ class BatchFactory():
     @property
     def batch(self) -> DataBatch:
         return self._batch
+
+    @batch.deleter
+    def batch(self) -> None:
+        del self._batch
 
     @dispatch
     def _add_data(self) -> None:
@@ -78,9 +75,6 @@ class BatchFactory():
         # save marginals
         # self.delete_batch()
         pass
-
-    def delete_batch(self) -> None:
-        self._batch = None
 
     def save_batch(self) -> None:
         raise NotImplementedError

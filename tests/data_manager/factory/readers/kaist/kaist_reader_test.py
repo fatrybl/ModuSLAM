@@ -6,7 +6,7 @@ from slam.data_manager.factory.readers.element_factory import Element, Measureme
 from slam.data_manager.factory.readers.kaist.measurement_collector import CsvDataLocation
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
-from tests.data_manager.KaistReader.data_factory import TestDataFactory
+from tests.data_manager.factory.readers.kaist.data_factory import TestDataFactory
 
 scenario1 = (TestDataFactory.imu, TestDataFactory.data_stamp[0][1])
 scenario2 = (TestDataFactory.fog, TestDataFactory.data_stamp[1][1])

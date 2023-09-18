@@ -1,10 +1,12 @@
 import logging
 
+from abc import ABC
+from dataclasses import dataclass
 from csv import DictReader
 from collections.abc import Iterator
 from plum import dispatch
 from pathlib import Path
-from typing import Type
+from typing import Type, Any
 
 from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.element_factory import Measurement
@@ -17,6 +19,21 @@ from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class DataFlowState(ABC):
+    """Keeps up-to-date state of a data flow for the reader. 
+    Should be implemented for each reader."""
+
+
+class KaisReaderState(DataFlowState):
+    """
+    Keeps iterators for each measurement. 
+    Updates when a new measurement has been read.
+    """
+    data_stamp: Iterator[str] = None
+    sensors: set(Iterator[Any]) = None
 
 
 class KaistReader(DataReader):

@@ -13,20 +13,20 @@ class DataManager(metaclass=MetaSingleton):
 
     def __init__(self) -> None:
         self.batch_factory = BatchFactory()
-        logger.info("Data Manager has been configured")
+        logger.debug("Data Manager has been configured")
 
     @dispatch
     def make_batch(self) -> None:
         self.batch_factory.create_batch()
-        logger.info("Data Batch has been created")
+        logger.debug("Data Batch has been created")
 
     @dispatch
-    def make_batch(self, measurements: list[Element | dict]) -> None:
+    def make_batch(self, measurements: list[Element]) -> None:
         """
         Interface for getting row data from measurements.
         Args: 
             measurements:
-                 list of Elements or dicts 
+                 list of Elements
         """
         self.batch_factory.save_current_state()
         self.batch_factory.create_batch(measurements)

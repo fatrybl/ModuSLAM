@@ -1,8 +1,7 @@
-from email.policy import default
 import logging
 
 from dataclasses import InitVar, dataclass, field
-from collections.abc import Iterable, Iterator, Callable
+from collections.abc import Iterator, Callable
 from csv import reader as csv_reader
 from pathlib import Path
 from typing import Any, Type
@@ -48,7 +47,7 @@ class CsvDataLocation(Location):
 
 
 @dataclass(frozen=True)
-class Sensor:
+class SensorNames:
     """
     Sensors` names must match with names in data_manager.yaml and data_readers.yaml
     """
@@ -68,7 +67,7 @@ class Sensor:
 @dataclass
 class SensorIterators:
     directory: InitVar[Path]
-    init: InitVar[Callable[[Path], Iterable[tuple[int, list[str]]]]]
+    init: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
 
     imu: FileIterator = field(init=False)
     fog: FileIterator = field(init=False)
@@ -77,19 +76,19 @@ class SensorIterators:
     gps: FileIterator = field(init=False)
     vrs: FileIterator = field(init=False)
 
-    def __post_init__(self, directory, init):
+    def __post_init__(self, directory: Path, init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
         file = directory / KaistDataset.imu_data_file.value
-        self.imu = FileIterator(Sensor.imu, file, init(file))
+        self.imu = FileIterator(SensorNames.imu, file, init(file))
         file = directory / KaistDataset.fog_data_file.value
-        self.fog = FileIterator(Sensor.fog, file, init(file))
+        self.fog = FileIterator(SensorNames.fog, file, init(file))
         file = directory / KaistDataset.encoder_data_file.value
-        self.encoder = FileIterator(Sensor.encoder, file, init(file))
+        self.encoder = FileIterator(SensorNames.encoder, file, init(file))
         file = directory / KaistDataset.altimeter_data_file.value
-        self.altimeter = FileIterator(Sensor.altimeter, file, init(file))
+        self.altimeter = FileIterator(SensorNames.altimeter, file, init(file))
         file = directory / KaistDataset.gps_data_file.value
-        self.gps = FileIterator(Sensor.gps, file, init(file))
+        self.gps = FileIterator(SensorNames.gps, file, init(file))
         file = directory / KaistDataset.vrs_gps_data_file.value
-        self.vrs = FileIterator(Sensor.vrs, file, init(file))
+        self.vrs = FileIterator(SensorNames.vrs, file, init(file))
 
     def has_iterator_for(self, sensor: Type[Sensor]) -> bool:
         sensor_name: str = sensor.name
@@ -271,27 +270,27 @@ class MeasurementCollector():
         return message, location
 
     def _get_reader(self, sensor: Type[Sensor]) -> Callable[[str | int | None], tuple[Message, Type[Location]]]:
-        if sensor.name == Sensor.imu:
+        if sensor.name == SensorNames.imu:
             return self.get_imu
-        elif sensor.name == Sensor.fog:
+        elif sensor.name == SensorNames.fog:
             return self.get_fog
-        elif sensor.name == Sensor.encoder:
+        elif sensor.name == SensorNames.encoder:
             return self.get_encoder
-        elif sensor.name == Sensor.gps:
+        elif sensor.name == SensorNames.gps:
             return self.get_gps
-        elif sensor.name == Sensor.vrs:
+        elif sensor.name == SensorNames.vrs:
             return self.get_vrs_gps
-        elif sensor.name == Sensor.altimeter:
+        elif sensor.name == SensorNames.altimeter:
             return self.get_altimeter
-        elif sensor.name == Sensor.sick_back:
+        elif sensor.name == SensorNames.sick_back:
             return self.get_lidar_2D_sick_back
-        elif sensor.name == Sensor.sick_middle:
+        elif sensor.name == SensorNames.sick_middle:
             return self.get_lidar_2D_sick_middle
-        elif sensor.name == Sensor.velodyne_left:
+        elif sensor.name == SensorNames.velodyne_left:
             return self.get_lidar_3D_velodyne_left
-        elif sensor.name == Sensor.velodyne_right:
+        elif sensor.name == SensorNames.velodyne_right:
             return self.get_lidar_3D_velodyne_right
-        elif sensor.name == Sensor.stereo:
+        elif sensor.name == SensorNames.stereo:
             return self.get_stereo
         else:
             logger.critical(
