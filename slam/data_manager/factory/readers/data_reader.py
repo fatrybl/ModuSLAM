@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import logging
 
 from abc import ABC, abstractmethod
@@ -32,3 +33,9 @@ class DataReader(ABC):
         Returns:
             element of type Element
         """
+
+
+@dataclass
+class DataFlowState(ABC):
+    """Keeps up-to-date state of a data flow for the reader. 
+    Should be implemented for each reader."""

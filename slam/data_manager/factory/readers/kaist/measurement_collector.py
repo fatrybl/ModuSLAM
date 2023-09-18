@@ -102,14 +102,20 @@ class SensorIterators:
 class MeasurementCollector():
     def __init__(self, dataset_dir: Path):
         self._dataset_dir: Path = dataset_dir
-        self._create_iterators()
-
-    def _create_iterators(self) -> None:
         self._iterators = SensorIterators(
             self._dataset_dir, self._init_iterator)
 
+    @property
+    def sensor_iterators(self) -> SensorIterators:
+        return self._iterators
+
+    @sensor_iterators.setter
+    def sensor_iterators(self, value: SensorIterators):
+        self._iterators = value
+
     def _reset_iterators(self) -> None:
-        self._create_iterators()
+        self._iterators = SensorIterators(
+            self._dataset_dir, self._init_iterator)
 
     def _init_iterator(self, file: Path) -> Iterator[tuple[int, list[str]]]:
         with open(file, "r") as f:

@@ -28,5 +28,4 @@ class DataManager(metaclass=MetaSingleton):
             measurements:
                  list of Elements
         """
-        self.batch_factory.save_current_state()
         self.batch_factory.create_batch(measurements)

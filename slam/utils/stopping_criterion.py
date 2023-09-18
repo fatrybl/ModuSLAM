@@ -2,12 +2,12 @@ from slam.utils.meta_singleton import MetaSingleton
 
 
 class StoppingCriterionSingleton(metaclass=MetaSingleton):
-    def __init__(self):
-        self.is_memory_limit = False
-        self.is_data_processed = False
-        self.is_time_finished = False
-        self.is_map_diverged = False
-        self.is_solver_error = False
+    def __init__(self) -> None:
+        self.is_memory_limit: bool = False
+        self.is_data_processed: bool = False
+        self.is_time_finished: bool = False
+        self.is_map_diverged: bool = False
+        self.is_solver_error: bool = False
 
     @property
     def ON(self) -> bool:

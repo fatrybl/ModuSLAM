@@ -1,6 +1,9 @@
 import logging
 from pathlib import Path
+from typing import Type
+
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.utils.config import Config
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
@@ -8,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class DataReaderFactory():
-    def __new__(cls, config_path: Path = ConfigFilePaths.data_manager_config.value):
+    def __new__(cls, config_path: Path = ConfigFilePaths.data_manager_config.value) -> Type[DataReader]:
         cfg = Config.from_file(config_path)
         try:
-            dataset_type = cfg.attributes["data"]["dataset_type"]
+            dataset_type: str = cfg.attributes["data"]["dataset_type"]
 
         except KeyError:
             logger.critical(
