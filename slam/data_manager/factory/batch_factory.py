@@ -1,10 +1,8 @@
 import logging
 
 from plum import dispatch
-from typing import Type
 
 from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
@@ -17,7 +15,7 @@ class BatchFactory():
     def __init__(self) -> None:
         self._memory_analyzer = MemoryAnalyzer()
         self._batch = DataBatch()
-        self._data_reader: Type[DataReader] = DataReaderFactory()
+        self._data_reader = DataReaderFactory()
         self._break_point = StoppingCriterionSingleton()
 
     @property

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataReaderFactory():
-    def __new__(cls, config_path: Path = ConfigFilePaths.data_manager_config.value) -> Type[DataReader]:
+    def __new__(cls, config_path: Path = ConfigFilePaths.data_manager_config.value):
         cfg = Config.from_file(config_path)
         try:
             dataset_type: str = cfg.attributes["data"]["dataset_type"]

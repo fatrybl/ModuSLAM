@@ -1,9 +1,8 @@
-from dataclasses import dataclass
 import logging
 
+from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
 
 from slam.data_manager.factory.readers.element_factory import Element
 
@@ -23,15 +22,15 @@ class DataReader(ABC):
             return True
 
     @abstractmethod
-    def get_element(self, args: Any) -> Element:
+    def get_element(self, args: list[Element] | None) -> Element:
         """
         Gets element from a dataset. 
         If no args: iterates through a dataset.
-        if args: parces them in a dispatch method of a child class.
+        if args: parces them in a dispatched method of a child class.
         Args:
             element: Data Batch element w/o raw sensor data
         Returns:
-            element of type Element
+            element with data of type Element
         """
 
 

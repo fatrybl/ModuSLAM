@@ -10,6 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 class DataManager(metaclass=MetaSingleton):
+    """Manages all data.
+
+    Args:
+        Defaults to MetaSingleton.
+    """
 
     def __init__(self) -> None:
         self.batch_factory = BatchFactory()
@@ -17,8 +22,19 @@ class DataManager(metaclass=MetaSingleton):
 
     @dispatch
     def make_batch(self) -> None:
+        """Creates a data batch sequantically
+        """
         self.batch_factory.create_batch()
         logger.debug("Data Batch has been created")
+
+    @dispatch
+    def make_batch(self, measurements: list[Element]) -> None:
+        """Creates a data batch with given measurements
+
+        Args:
+            measurements (list[Element]): list of elements wihtout row data
+        """
+        self.batch_factory.create_batch(measurements)
 
     @dispatch
     def make_batch(self, measurements: list[Element]) -> None:

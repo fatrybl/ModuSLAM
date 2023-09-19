@@ -11,6 +11,8 @@ Main runner of SLAM system.
 
 
 def run():
+    """creates Main Manager instance and runs SLAM
+    """
     main_manager = MainManager()
     main_manager.build_map()
 
