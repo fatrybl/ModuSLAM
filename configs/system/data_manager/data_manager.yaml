@@ -8,8 +8,8 @@ data_filter:
 
 # path to directory with data files
 data:
-  dataset_type: "kaist"
-  dataset_directory: "/home/oem/Downloads/urban18-highway/"
+  dataset_type: "ros1"   ##"kaist"
+  dataset_directory: "/home/ilia/mySLAM/data/rosbag" # "/home/oem/Downloads/urban18-highway/"
   timestamp_limits:
     start: 1234
     stop: 1234
@@ -51,3 +51,9 @@ sensors:
   altimeter:
     type: "altimeter"
     config: "altimeter.yaml"
+
+  gps:
+    type: "gps"
+    config: "gps.yaml"
+
+  

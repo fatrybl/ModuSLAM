@@ -1,12 +1,28 @@
 import logging
 from pathlib import Path
-from typing import  Optional, Iterable
+from typing import  Optional, Iterable, Iterator
+from dataclasses import dataclass, field
 
 from rosbags.rosbag1 import Reader
 
 from configs.paths.DEFAULT_FILE_PATHS import RosDatasetStructure
 from slam.data_manager.factory.readers.data_reader import DataReader
-from slam.utils.exceptions import FileNotValid
+from slam.utils.exceptions import FileNotValid, TopicNotFound
+from slam.data_manager.factory.readers.element_factory import Location
+
+
+@dataclass
+class RosElementLocation(Location):
+    file: Path
+    topic: str
+    msgtype: str
+    timestamp: int
+
+@dataclass
+class RosFileRangeLocation():
+    topics: Iterable[str]
+    start: Optional[int] = None
+    stop: Optional[int] = None
 
 logger = logging.getLogger(__name__)
 
@@ -23,30 +39,31 @@ class RosFileStorage():
             for topic_name in topics:
                 if topic_name not in reader.topics.keys():
                     logger.critical(f"there are no topic {topic_name} ")
-                    raise KeyError
+                    raise TopicNotFound
             
-    def get_iterator(self, topics: Iterable[str],  start: Optional[int] = None, stop: Optional[int] = None):
+    def get_iterator(self, location: RosFileRangeLocation) -> Iterator[tuple[RosElementLocation, bytes]]:
         with Reader(self.file) as reader: 
             connections = []
-            for topic in topics:
+            for topic in location.topics:
                 connections.append(*reader.topics[topic].connections)
-            for line in reader.messages(connections = connections, start = start, stop = stop):
+            for line in reader.messages(connections = connections, start = location.start, stop = location.stop):
                 connection, timestamp, rawdata = line
-                yield self.file, connection.topic, connection.msgtype, timestamp, rawdata
+                loc = RosElementLocation(self.file, connection.topic, connection.msgtype, timestamp)
+                yield loc, rawdata
 
         
-class RosDatasetStructureIterator():
+class RosDatasetIterator():
     def __init__(self, master_file_dir:Path, topics: Iterable[str]):
-        file_data_dir = master_file_dir/RosDatasetStructure.data_files_folder.value
-        master_file_name = master_file_dir/RosDatasetStructure.master_filename.value
+        file_data_dir: Path  = master_file_dir/RosDatasetStructure.data_files_folder.value
+        master_file_name: Path = master_file_dir/RosDatasetStructure.master_filename.value
         if (not DataReader._is_file_valid(master_file_name)):
             print(f"Can't open Masterfile {master_file_name}")
             logger.critical(
                 f"Can't open Masterfile {master_file_name}")
             raise FileNotValid
-        self.topics = topics
+        self.topics: Iterable[str] = topics
+        self.__file_stotage = dict()
         with master_file_name.open() as f: 
-            self.__file_stotage = {}
             for line in f.read().splitlines():
                 file = file_data_dir/line
                 if (not DataReader._is_file_valid(file)):
@@ -59,24 +76,24 @@ class RosDatasetStructureIterator():
                 self.__file_stotage[file] = ros_file_storage
             logger.debug("Creating Ros1IteratorDataset OK")
     
-        self.__file_iterator = self.__get_file_iterator()
-        first_file = next(self.__file_iterator)
-        self.__data_iterator = self.__file_stotage[first_file].get_iterator(topics = self.topics)
+        self.__file_iterator: Iterator[Path] = self.__get_file_iterator()
+        first_file: Path = next(self.__file_iterator)
+        self.__data_iterator: Iterator[tuple[RosElementLocation, bytes]]  = self.__file_stotage[first_file].get_iterator(RosFileRangeLocation(topics = self.topics))
 
     def __next__(self):
         try:
             return next(self.__data_iterator)
         except StopIteration:
             next_file = next(self.__file_iterator) ### switch between files
-            self.__data_iterator = self.__file_stotage[next_file].get_iterator(topics = self.topics)
+            self.__data_iterator = self.__file_stotage[next_file].get_iterator(RosFileRangeLocation(topics = self.topics))
             logger.debug(f"switch to new file {next_file}")
             return next(self.__data_iterator)    
         
-    def get_iterator(self, file: Path, topics: Iterable[str],  start: Optional[int] = None, stop: Optional[int] = None):
+    def get_iterator(self, file: Path,  location: RosFileRangeLocation) ->  Iterator[tuple[RosElementLocation, bytes]]:
         ros_file_storage = self.__file_stotage[file]
-        return ros_file_storage.get_iterator(topics = topics, start = start, stop = stop)
+        return ros_file_storage.get_iterator(location)
     
-    def __get_file_iterator(self):
+    def __get_file_iterator(self) -> Iterator[Path]:
         for file in self.__file_stotage.keys():
             yield file
     

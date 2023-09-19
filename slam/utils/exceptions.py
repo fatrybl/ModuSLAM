@@ -13,3 +13,6 @@ class FileNotValid(Exception):
 
 class NotSubset(Exception):
     'if a set is not a subset of another set'
+
+class TopicNotFound(Exception):
+    'no such topic in file'
