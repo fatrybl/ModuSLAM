@@ -1,22 +1,71 @@
 import csv
 
 from array import array
+
 from yaml import safe_dump
 from pathlib import Path
 from numpy import array as numpy_array
 from cv2 import imwrite
-from shutil import copyfile
+from shutil import copyfile, copytree
 
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 
 
 class TestDataFactory:
     CURRENT_DIR = Path(__file__).parent
-    TEST_DATA_DIR = CURRENT_DIR / 'test_data'
-    DEFAULT_DATAMANAGER_CONFIG_PATH = ConfigFilePaths.data_manager_config.value
-    MODIFIED_DATAMANAGER_CONFIG_NAME = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
-    MODIFIED_DATAMANAGER_CONFIG_PATH = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
+    TEST_DATA_DIR: Path = CURRENT_DIR / 'test_data'
+    DEFAULT_SENSORS_CONFIG_DIR: Path = ConfigFilePaths.sensors_config_dir.value
+    MODIFIED_SENSORS_CONFIG_DIR: Path = DEFAULT_SENSORS_CONFIG_DIR.parent / \
+        (DEFAULT_SENSORS_CONFIG_DIR.stem + '_original')
+    DEFAULT_DATAMANAGER_CONFIG_PATH: Path = ConfigFilePaths.data_manager_config.value
+    MODIFIED_DATAMANAGER_CONFIG_NAME: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
+    MODIFIED_DATAMANAGER_CONFIG_PATH: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
         MODIFIED_DATAMANAGER_CONFIG_NAME
+
+    sensors = {
+        "fog": {
+            "type": "fog",
+            "config": "fog.yaml"},
+
+        "imu": {
+            "type": "imu",
+            "config": "imu.yaml"},
+
+        "encoder": {
+            "type": "encoder",
+                    "config": "encoder.yaml"},
+
+        "altimeter": {
+            "type": "altimeter",
+                    "config": "altimeter.yaml"},
+
+        "gps": {
+            "type": "gps",
+                    "config": "gps.yaml"},
+
+        "vrs": {
+            "type": "vrs_gps",
+                    "config": "vrs.yaml"},
+
+        "sick_back": {
+            "type": "lidar_2D",
+                    "config": "sick_back.yaml"},
+
+        "sick_middle": {
+            "type": "lidar_2D",
+                    "config": "sick_middle.yaml"},
+
+        "velodyne_left": {
+            "type": "lidar_3D",
+                    "config": "velodyne_left.yaml"},
+
+        "velodyne_right": {
+            "type": "lidar_3D",
+                    "config": "velodyne_right.yaml"},
+
+        "stereo": {
+            "type": "stereo_camera",
+                    "config": "stereo.yaml"}, }
 
     data_stamp = [
         ['1234', 'imu'],
@@ -86,6 +135,22 @@ class TestDataFactory:
         data = numpy_array(data).reshape(2, 2)
         imwrite(path.as_posix(), data)
 
+    @classmethod
+    def create_sensors_config_files(cls) -> None:
+        """
+        Copies ".../sensors/" directory with configs to ".../sensors_original/".
+        Creates test config files for sensors
+        """
+        test_params = {"pose": (1, 2, 3, 4)}
+        src: Path = cls.DEFAULT_SENSORS_CONFIG_DIR
+        dst: Path = cls.MODIFIED_SENSORS_CONFIG_DIR
+        copytree(src, dst, dirs_exist_ok=True)
+
+        for config_data in cls.sensors.values():
+            path = src / config_data['config']
+            with open(path, 'w') as f:
+                safe_dump(test_params, f)
+
     def prepare_data(self,) -> None:
         self.TEST_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -122,6 +187,8 @@ class TestDataFactory:
         for element, path in self.png_data:
             self.to_png_file(element, path / '1234.png')
 
+        self.create_sensors_config_files()
+
     def modify_default_config(self,) -> None:
         """
         1) copy 'data_manager.yaml "data_manager_original.yaml"
@@ -134,8 +201,9 @@ class TestDataFactory:
         test_params = {"data":
                        {
                            "dataset_type": "kaist",
-                           "dataset_directory":  test_dataset_dir.as_posix()}
-                       }
+                           "dataset_directory":  test_dataset_dir.as_posix()
+                       },
+                       "sensors": self.sensors}
 
         with open(self.DEFAULT_DATAMANAGER_CONFIG_PATH, 'w') as outfile:
             safe_dump(test_params, outfile)

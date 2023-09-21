@@ -1,18 +1,17 @@
 import logging
 
-from dataclasses import dataclass, field
-from collections.abc import Iterable, Iterator, Callable
+from dataclasses import InitVar, dataclass, field
+from collections.abc import Iterator, Callable
 from csv import reader as csv_reader
 from pathlib import Path
-from typing import Any, Type, Optional
+from typing import Any, Type
 
 from cv2 import imread, IMREAD_COLOR
 from plum import dispatch
 
 from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
 from slam.data_manager.factory.readers.element_factory import Location
-from slam.utils.sensor_factory.sensors import Sensor, Imu, Fog, Encoder, Altimeter, Gps, VrsGps, StereoCamera, Lidar2D, Lidar3D
-from slam.utils.sensor_factory.sensors_factory import SensorFactory
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +24,7 @@ class Message:
 
 @dataclass
 class FileIterator:
+    sensor_name: str
     file: Path
     iterator: Iterator[tuple[int, list[str]]]
 
@@ -46,24 +46,55 @@ class CsvDataLocation(Location):
     position: int
 
 
-class SensorIteratorFactory:
-    def __init__(self, directory: Path, init: Callable[..., Iterable[tuple[int, list[str]]]]) -> None:
+@dataclass(frozen=True)
+class SensorNames:
+    """
+    Sensors` names must match with names in data_manager.yaml and data_readers.yaml
+    """
+    imu: str = 'imu'
+    fog: str = 'fog'
+    encoder: str = 'encoder'
+    altimeter: str = 'altimeter'
+    gps: str = 'gps'
+    vrs: str = 'vrs'
+    sick_back: str = 'sick_back'
+    sick_middle: str = 'sick_middle'
+    velodyne_left: str = 'velodyne_left'
+    velodyne_right: str = 'velodyne_right'
+    stereo: str = 'stereo'
+
+
+@dataclass
+class SensorIterators:
+    directory: InitVar[Path]
+    init: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
+
+    imu: FileIterator = field(init=False)
+    fog: FileIterator = field(init=False)
+    encoder: FileIterator = field(init=False)
+    altimeter: FileIterator = field(init=False)
+    gps: FileIterator = field(init=False)
+    vrs: FileIterator = field(init=False)
+
+    def __post_init__(self, directory: Path, init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
         file = directory / KaistDataset.imu_data_file.value
-        self.imu = FileIterator(file, init(file))
+        self.imu = FileIterator(SensorNames.imu, file, init(file))
         file = directory / KaistDataset.fog_data_file.value
-        self.fog = FileIterator(file, init(file))
+        self.fog = FileIterator(SensorNames.fog, file, init(file))
         file = directory / KaistDataset.encoder_data_file.value
-        self.encoder = FileIterator(file, init(file))
+        self.encoder = FileIterator(SensorNames.encoder, file, init(file))
         file = directory / KaistDataset.altimeter_data_file.value
-        self.altimeter = FileIterator(file, init(file))
+        self.altimeter = FileIterator(SensorNames.altimeter, file, init(file))
         file = directory / KaistDataset.gps_data_file.value
-        self.gps = FileIterator(file, init(file))
+        self.gps = FileIterator(SensorNames.gps, file, init(file))
         file = directory / KaistDataset.vrs_gps_data_file.value
-        self.vrs_gps = FileIterator(file, init(file))
+        self.vrs = FileIterator(SensorNames.vrs, file, init(file))
 
     def has_iterator_for(self, sensor: Type[Sensor]) -> bool:
-        for attr in self.__dir__():
-            if attr == sensor.name:
+        sensor_name: str = sensor.name
+        class_names = self.__dataclass_fields__.keys()
+        for s in class_names:
+            if s == sensor_name:
                 return True
         return False
 
@@ -71,15 +102,20 @@ class SensorIteratorFactory:
 class MeasurementCollector():
     def __init__(self, dataset_dir: Path):
         self._dataset_dir: Path = dataset_dir
-        self._iterators_factory = SensorIteratorFactory(
+        self._iterators = SensorIterators(
             self._dataset_dir, self._init_iterator)
 
-    def _create_iterators(self) -> None:
-        self._iterators_factory = SensorIteratorFactory(
-            self._dataset_dir, self._init_iterator)
+    @property
+    def sensor_iterators(self) -> SensorIterators:
+        return self._iterators
+
+    @sensor_iterators.setter
+    def sensor_iterators(self, value: SensorIterators):
+        self._iterators = value
 
     def _reset_iterators(self) -> None:
-        self._create_iterators()
+        self._iterators = SensorIterators(
+            self._dataset_dir, self._init_iterator)
 
     def _init_iterator(self, file: Path) -> Iterator[tuple[int, list[str]]]:
         with open(file, "r") as f:
@@ -119,12 +155,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_imu(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.imu
+        it = self._iterators.imu
         return self._iterate(it)
 
     @dispatch
     def get_imu(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.imu
+        it = self._iterators.imu
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -132,12 +168,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_fog(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.fog
+        it = self._iterators.fog
         return self._iterate(it)
 
     @dispatch
     def get_fog(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.fog
+        it = self._iterators.fog
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -145,12 +181,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_encoder(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.encoder
+        it = self._iterators.encoder
         return self._iterate(it)
 
     @dispatch
     def get_encoder(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.encoder
+        it = self._iterators.encoder
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -158,12 +194,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_gps(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.gps
+        it = self._iterators.gps
         return self._iterate(it)
 
     @dispatch
     def get_gps(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.gps
+        it = self._iterators.gps
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -171,12 +207,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_vrs_gps(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.vrs_gps
+        it = self._iterators.vrs
         return self._iterate(it)
 
     @dispatch
     def get_vrs_gps(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.vrs_gps
+        it = self._iterators.vrs
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -184,12 +220,12 @@ class MeasurementCollector():
 
     @dispatch
     def get_altimeter(self) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.altimeter
+        it = self._iterators.altimeter
         return self._iterate(it)
 
     @dispatch
     def get_altimeter(self, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._iterators_factory.altimeter
+        it = self._iterators.altimeter
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -240,27 +276,27 @@ class MeasurementCollector():
         return message, location
 
     def _get_reader(self, sensor: Type[Sensor]) -> Callable[[str | int | None], tuple[Message, Type[Location]]]:
-        if sensor.name == "imu":
+        if sensor.name == SensorNames.imu:
             return self.get_imu
-        elif sensor.name == "fog":
+        elif sensor.name == SensorNames.fog:
             return self.get_fog
-        elif sensor.name == "encoder":
+        elif sensor.name == SensorNames.encoder:
             return self.get_encoder
-        elif sensor.name == "gps":
+        elif sensor.name == SensorNames.gps:
             return self.get_gps
-        elif sensor.name == "vrs":
+        elif sensor.name == SensorNames.vrs:
             return self.get_vrs_gps
-        elif sensor.name == "altimeter":
+        elif sensor.name == SensorNames.altimeter:
             return self.get_altimeter
-        elif sensor.name == "sick_back":
+        elif sensor.name == SensorNames.sick_back:
             return self.get_lidar_2D_sick_back
-        elif sensor.name == "sick_middle":
+        elif sensor.name == SensorNames.sick_middle:
             return self.get_lidar_2D_sick_middle
-        elif sensor.name == "velodyne_left":
+        elif sensor.name == SensorNames.velodyne_left:
             return self.get_lidar_3D_velodyne_left
-        elif sensor.name == "velodyne_right":
+        elif sensor.name == SensorNames.velodyne_right:
             return self.get_lidar_3D_velodyne_right
-        elif sensor.name == "stereo":
+        elif sensor.name == SensorNames.stereo:
             return self.get_stereo
         else:
             logger.critical(
@@ -269,7 +305,7 @@ class MeasurementCollector():
 
     def get_data(self, sensor: Type[Sensor], timestamp: str) -> tuple[Message, Type[Location]]:
         data_reader = self._get_reader(sensor)
-        if self._iterators_factory.has_iterator_for(sensor):
+        if self._iterators.has_iterator_for(sensor):
             message, location = data_reader()
         else:
             message, location = data_reader(timestamp)

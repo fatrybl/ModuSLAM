@@ -6,7 +6,8 @@ from pathlib import Path
 from slam.utils.config import Config
 from slam.utils.exceptions import NotSubset
 from slam.utils.meta_singleton import MetaSingleton
-from slam.utils.sensor_factory.sensors import Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D
+from slam.setup_manager.sensor_factory.sensors import (
+    Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths as paths
 
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ class SensorFactory(metaclass=MetaSingleton):
         all_sensors: set[str] = set(s.name for s in self.sensors)
         if not used_sensors.issubset(all_sensors):
             logger.critical(
-                f'some of used sesnor: {used_sensors} is not a part of known sensors: {self.sensors}')
+                f'some of used sensor: {used_sensors} is not in known sensors: {all_sensors}')
             raise NotSubset
 
     def name_to_sensor(self, name: str) -> Type[Sensor]:

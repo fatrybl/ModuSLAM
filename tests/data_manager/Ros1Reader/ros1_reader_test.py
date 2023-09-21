@@ -2,12 +2,12 @@ import pytest
 from pathlib import Path
 
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
+import hydra
 
 from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
 from tests.data_manager.Ros1Reader.data_factory import TestDataFactory, create_config_file
 from slam.utils.exceptions import FileNotValid, TopicNotFound, NotSubset
-from slam.utils.config import Config
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLocation
 
 DEFAULT_TOPIC_CONFIG = {"ros1_reader": {
@@ -23,7 +23,7 @@ def test_unknown_file_scenario():
     create_config_file(DEFAULT_TOPIC_CONFIG)
     path = Path(__file__).parent/ "non_exist.bag" 
     with pytest.raises(FileNotValid):
-        reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH, 
+        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH, 
                                master_file_dir = path)
 
 
@@ -36,7 +36,7 @@ def test_unknown_topic_scenario():
                         "used_sensors": ["imu", "camera"]   
                           })
     with pytest.raises(TopicNotFound):
-        reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
                                 deserialize_raw_data = False,
                                 master_file_dir = TestDataFactory.MASTER_BAG_DIR)
 
@@ -49,7 +49,7 @@ def test_unknown_sensor_scenario():
                         "used_sensors": ["imu", "unknown_sonsor"]   
                           })
     with pytest.raises(NotSubset):
-        reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
                                 deserialize_raw_data = False,
                                 master_file_dir = TestDataFactory.MASTER_BAG_DIR)
 
@@ -69,7 +69,7 @@ success_scenarios = [scenario_all_topics, scenario_half_topics]
 )
 def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_elements_amount):
     create_config_file(test_cfg)
-    reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
                            deserialize_raw_data = False,
                            master_file_dir = TestDataFactory.MASTER_BAG_DIR)
     element_cnt = 0
@@ -86,7 +86,7 @@ def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_eleme
 
 def test_ros_get_element_with_arg():
     create_config_file(DEFAULT_TOPIC_CONFIG)
-    reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
                            deserialize_raw_data = False,
                            master_file_dir = TestDataFactory.MASTER_BAG_DIR)
     
@@ -123,7 +123,7 @@ def test_ros_get_element_with_arg():
 
 def test_close_loop():
     create_config_file(DEFAULT_TOPIC_CONFIG)
-    reader = Ros1BagReader(config_path = TestDataFactory.DEFAULT_CONFIG_PATH,
+    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
                            deserialize_raw_data = False,
                            master_file_dir = TestDataFactory.MASTER_BAG_DIR,
                            )

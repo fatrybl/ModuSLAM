@@ -8,8 +8,8 @@ data_filter:
 
 # path to directory with data files
 data:
-  dataset_type: "ros1"   ##"kaist"
-  dataset_directory: "/home/ilia/mySLAM/data/rosbag" # "/home/oem/Downloads/urban18-highway/"
+  dataset_type: "kaist" #  "ros1"  
+  dataset_directory: "/home/oem/Downloads/urban18-highway/" # "/home/ilia/mySLAM/data/rosbag"
   timestamp_limits:
     start: 1234
     stop: 1234
@@ -22,19 +22,31 @@ sensors:
 
   imu:
     type: "imu"
-    config: "xsense_imu.yaml"
+    config: "imu.yaml"
 
   encoder:
     type: "encoder"
     config: "encoder.yaml"
 
+  gps:
+    type: "gps"
+    config: "gps.yaml"
+
+  vrs:
+    type: "vrs_gps"
+    config: "vrs.yaml"
+
+  altimeter:
+    type: "altimeter"
+    config: "altimeter.yaml"
+
   sick_back:
     type: "lidar_2D"
-    config: "lidar_sick_back.yaml"
+    config: "sick_back.yaml"
 
   sick_middle:
     type: "lidar_2D"
-    config: "lidar_sick_middle.yaml"
+    config: "sick_middle.yaml"
 
   velodyne_left:
     type: "lidar_3D"
@@ -46,7 +58,7 @@ sensors:
 
   stereo:
     type: "stereo_camera"
-    config: "realsense_camera.yaml"
+    config: "stereo.yaml"
 
   altimeter:
     type: "altimeter"

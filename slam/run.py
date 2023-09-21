@@ -16,13 +16,8 @@ Main runner of SLAM system.
 
 
 def run():
-    # main_manager = MainManager()
-    # main_manager.build_map()
-    reader = Ros1BagReader()
-    while True:
-        element = reader.get_element()
-        #print(element)
-        if(element == None):
-            break
+    main_manager = MainManager()
+    main_manager.build_map()
+
 if __name__ == "__main__":
     run()

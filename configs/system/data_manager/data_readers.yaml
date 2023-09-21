@@ -10,5 +10,14 @@ kaist_reader:
 used_sensors:
   [
     imu,
-    gps
+    encoder,
+    altimeter,
+    fog,
+    gps,
+    vrs,
+    sick_middle,
+    sick_back,
+    velodyne_right,
+    velodyne_left,
+    stereo
   ]
