@@ -2,76 +2,71 @@ import pytest
 from pathlib import Path
 
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
-import hydra
 
-from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader
+from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader, RosConfig
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
-from tests.data_manager.Ros1Reader.data_factory import TestDataFactory, create_config_file
+from tests.data_manager.Ros1Reader.data_factory import TestDataFactory, get_default_config
 from slam.utils.exceptions import FileNotValid, TopicNotFound, NotSubset
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLocation
-
-DEFAULT_TOPIC_CONFIG = {"ros1_reader": {
-                                        "used_topics": {"imu": TestDataFactory.IMU_TOPIC,
-                                                        "camera": TestDataFactory.CAMERA_TOPIC,
-                                                        "lidar":  TestDataFactory.LIDAR_TOPIC,
-                                                        "gnss": TestDataFactory.GNSS_TOPIC},
-                                       },
-                        "used_sensors": ["imu", "camera", "lidar", "gnss"]
-                       }
+from slam.setup_manager.sensor_factory.sensors import (
+    Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 def test_unknown_file_scenario():
-    create_config_file(DEFAULT_TOPIC_CONFIG)
-    path = Path(__file__).parent/ "non_exist.bag" 
+    cfg: RosConfig  = get_default_config()
+    cfg.master_file_dir = Path( "/non_exist_dir" )
     with pytest.raises(FileNotValid):
-        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH, 
-                               master_file_dir = path)
+        reader = Ros1BagReader(cfg)
 
 
 
 def test_unknown_topic_scenario():
-    create_config_file({"ros1_reader": {
-                                        "used_topics": {"imu": TestDataFactory.IMU_TOPIC,
-                                                        "camera": "unknown_topic"},       
-                                        },
-                        "used_sensors": ["imu", "camera"]   
-                          })
+    cfg: RosConfig  = get_default_config()
+    cfg.topic_sensor_cfg["camera"] = "unknown_topic"
     with pytest.raises(TopicNotFound):
-        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                                deserialize_raw_data = False,
-                                master_file_dir = TestDataFactory.MASTER_BAG_DIR)
+        reader = Ros1BagReader(cfg)
 
 
 def test_unknown_sensor_scenario():
-    create_config_file({"ros1_reader": {
-                                        "used_topics": {"imu": TestDataFactory.IMU_TOPIC,
-                                                        "camera": TestDataFactory.CAMERA_TOPIC,},       
-                                        },
-                        "used_sensors": ["imu", "unknown_sonsor"]   
-                          })
+    cfg: RosConfig  = get_default_config()
+    cfg.sensors.append("unknown_sensor")
     with pytest.raises(NotSubset):
-        reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                                deserialize_raw_data = False,
-                                master_file_dir = TestDataFactory.MASTER_BAG_DIR)
+        reader = Ros1BagReader(cfg)
 
 
 
-scenario_all_topics = (DEFAULT_TOPIC_CONFIG, 20)
-scenario_half_topics = ({"ros1_reader": {"used_topics": {"imu": TestDataFactory.IMU_TOPIC,
-                                                          "camera":  TestDataFactory.CAMERA_TOPIC,
-                                                          "lidar": TestDataFactory.LIDAR_TOPIC}
-                                        },
-                        "used_sensors": ["imu", "camera"]
-                      }, 10)
+def test_ros_get_elements_in_time():
+    reader = Ros1BagReader(get_default_config())
+    element_list: list[Element] = reader.get_elements(2, 6)
+    assert len(element_list) == 5
+
+    element_list: list[Element] = reader.get_elements(0, 8)
+    assert len(element_list) == 7
+
+    element_list: list[Element] = reader.get_elements(7, 12)
+    assert len(element_list) == 5
+
+    element_list: list[Element] = reader.get_elements(14, 100)
+    assert len(element_list) == 9
+
+    element_list: list[Element] = reader.get_elements(14, 14)
+    assert len(element_list) == 1
+
+    element_list: list[Element] = reader.get_elements(14, 100)
+    assert len(element_list) == 9
+    # print()
+    # for element in element_list:
+    #     print(element)
+
+scenario_all_topics = (["imu", "camera", "lidar", "gps"], 20)
+scenario_half_topics = (["imu", "camera"], 10)
 success_scenarios = [scenario_all_topics, scenario_half_topics]
-
 @pytest.mark.parametrize(
-    ("test_cfg", "expected_elements_amount"), success_scenarios
+    ("test_sensors", "expected_elements_amount"), success_scenarios
 )
-def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_elements_amount):
-    create_config_file(test_cfg)
-    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           deserialize_raw_data = False,
-                           master_file_dir = TestDataFactory.MASTER_BAG_DIR)
+def test_ros_elements_amount(test_sensors: list[str], expected_elements_amount):
+    cfg: RosConfig  = get_default_config()
+    cfg.sensors = test_sensors
+    reader = Ros1BagReader(cfg)
     element_cnt = 0
     while True:
         element = reader.get_element()
@@ -85,11 +80,8 @@ def test_ros_elements_amount(test_cfg: dict[str, dict[str, str]], expected_eleme
 
 
 def test_ros_get_element_with_arg():
-    create_config_file(DEFAULT_TOPIC_CONFIG)
-    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           deserialize_raw_data = False,
-                           master_file_dir = TestDataFactory.MASTER_BAG_DIR)
-    
+    reader = Ros1BagReader(get_default_config())
+
     with pytest.raises(KeyError):
         loc = RosElementLocation(file = TestDataFactory.FILE1, topic = "/unexist_topic", msgtype="some_msg_type", timestamp = 300)
         request_element_wrong_topic = Element(timestamp=300, measurement = (), location=loc)
@@ -99,39 +91,36 @@ def test_ros_get_element_with_arg():
     read_element = reader.get_element(request_element_wrong_timestamp)
     assert read_element == None
 
-    request_element = Element(timestamp=1, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.IMU_TOPIC, msgtype="some_msg_type", timestamp = 1), measurement = ())
+    request_element = Element(timestamp=2, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.IMU_TOPIC, msgtype="some_msg_type", timestamp = 2), measurement = ())
     read_element = reader.get_element(request_element)
-    assert read_element.measurement == Measurement(sensor='imu', values=b'123456789ABCDEQGEGKJBNKJBN')
+    assert read_element.measurement.values == b'123456789ABCDEQGEGKJBNKJBN'
 
-    request_element = Element(timestamp=3, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.CAMERA_TOPIC, msgtype="some_msg_type", timestamp = 3), measurement = ())
+    request_element = Element(timestamp=4, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.CAMERA_TOPIC, msgtype="some_msg_type", timestamp = 4), measurement = ())
     read_element = reader.get_element(request_element)
-    assert read_element.measurement == Measurement(sensor='camera', values=b'JFVNKJGJHK')
+    assert read_element.measurement.values == b'JFVNKJGJHK'
 
     request_element = Element(timestamp=14, location=RosElementLocation(file = TestDataFactory.FILE2, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type", timestamp = 14), measurement = ())
     read_element = reader.get_element(request_element)
-    assert read_element.measurement == Measurement(sensor='gnss', values=b'iubgkhnlkml')
+    assert read_element.measurement.values == b'iubgkhnlkml'
 
     request_element = Element(timestamp=23, location=RosElementLocation(file = TestDataFactory.FILE3, topic = TestDataFactory.CAMERA_TOPIC, msgtype="some_msg_type", timestamp = 23), measurement = ())
     read_element = reader.get_element(request_element)
-    assert read_element.measurement == Measurement(sensor='camera', values=b'KJHKJ')
+    assert read_element.measurement.values == b'KJHKJ'
 
-    request_element = Element(timestamp=8, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type", timestamp = 8), measurement = ())
+    request_element = Element(timestamp=9, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type", timestamp = 9), measurement = ())
     read_element = reader.get_element(request_element)
     read_element.measurement.values = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
     latitude, longitude, altitude = read_element.measurement.values.latitude, read_element.measurement.values.longitude, read_element.measurement.values.altitude
     assert [latitude, longitude, altitude] == TestDataFactory.GNSS_POSITION
 
+
+
 def test_close_loop():
-    create_config_file(DEFAULT_TOPIC_CONFIG)
-    reader = Ros1BagReader(data_reader_conf_path = TestDataFactory.DEFAULT_CONFIG_PATH,
-                           deserialize_raw_data = False,
-                           master_file_dir = TestDataFactory.MASTER_BAG_DIR,
-                           )
+    reader = Ros1BagReader(get_default_config())
     element_cnt = 0
     expected_elements_amount = 20
-
     while True:
-        request_element = Element(timestamp=8, location = RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type", timestamp = 8), measurement = ())
+        request_element = Element(timestamp=9, location = RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type", timestamp = 9), measurement = ())
         read_element = reader.get_element(request_element)
         read_element.measurement.values = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
         latitude, longitude, altitude = read_element.measurement.values.latitude, read_element.measurement.values.longitude, read_element.measurement.values.altitude

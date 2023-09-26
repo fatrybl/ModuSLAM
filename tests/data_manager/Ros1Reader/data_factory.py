@@ -10,13 +10,9 @@ from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__Imu
 from rosbags.serde import serialize_ros1
 from numpy import array
-
+from slam.data_manager.factory.readers.ros1.ros1_reader import RosConfig
 from configs.paths.DEFAULT_FILE_PATHS import RosDatasetStructure
 
-
-def create_config_file(cfg: dict) -> None:
-    with open(TestDataFactory.DEFAULT_CONFIG_PATH, 'w') as outfile:
-        safe_dump(cfg, outfile)
 
 
 class Sensor(Enum):
@@ -25,7 +21,15 @@ class Sensor(Enum):
     LIDAR = 3, 
     GNSS = 4
 
+
+
+def get_default_config() ->RosConfig:
+    return RosConfig(topic_sensor_cfg = {"imu": TestDataFactory.IMU_TOPIC, "camera": TestDataFactory.CAMERA_TOPIC, "lidar": TestDataFactory.LIDAR_TOPIC, "gps": TestDataFactory.GNSS_TOPIC}, 
+                                            sensors= ["imu", "camera", "lidar", "gps"], 
+                                            deserialize_raw_data= False, 
+                                            master_file_dir= TestDataFactory.MASTER_BAG_DIR)
 class TestDataFactory:
+
     MASTER_BAG_DIR = Path(__file__).parent
     DEFAULT_CONFIG_PATH = Path(__file__).parent / "data_readers.yaml"
 
@@ -41,9 +45,12 @@ class TestDataFactory:
     CAMERA_TOPIC, CAMERA_MSG = '/camera_topic', 'sensor_msgs/msg/Image'
     LIDAR_TOPIC, LIDAR_MSG = '/lidar_topic', 'sensor_msgs/msg/LaserScan'
     GNSS_TOPIC, GNSS_MSG = '/gnss_topic', 'sensor_msgs/msg/NavSatFix'
-    
+
     GNSS_POSITION  = [1.0, 2.0, 3.0]
     IMU_DATA = [1.11, 1.12, 1.13]
+
+
+    
     def prepare_data(self):
         latitude, longitude, altitude = self.GNSS_POSITION
         msg = sensor_msgs__msg__NavSatFix(header = std_msgs__msg__Header(stamp=builtin_interfaces__msg__Time(sec=1314117928, nanosec=475285578, __msgtype__='builtin_interfaces/msg/Time'), frame_id = '/base_imu'),
@@ -66,14 +73,14 @@ class TestDataFactory:
         bin_data_imu = serialize_ros1(msg, self.IMU_MSG).tobytes()
 
         data_file1  = (self.FILE1,
-                     [(Sensor.IMU, 1, b'123456789ABCDEQGEGKJBNKJBN'),
-                      (Sensor.LIDAR, 2, b'DEADSFEEF'),
-                      (Sensor.CAMERA, 3, b'JFVNKJGJHK'),
-                      (Sensor.GNSS, 4, b'lugjgkjllk'),
-                      (Sensor.IMU, 5, b'LKMLK2'),
-                      (Sensor.LIDAR, 6, b'LKMLK2'),
-                      (Sensor.CAMERA, 7, b'12345'),
-                      (Sensor.GNSS, 8, bin_data_gnss)
+                     [(Sensor.IMU, 2, b'123456789ABCDEQGEGKJBNKJBN'),
+                      (Sensor.LIDAR, 3, b'DEADSFEEF'),
+                      (Sensor.CAMERA, 4, b'JFVNKJGJHK'),
+                      (Sensor.GNSS, 5, b'lugjgkjllk'),
+                      (Sensor.IMU, 6, b'LKMLK2'),
+                      (Sensor.LIDAR, 7, b'LKMLK2'),
+                      (Sensor.CAMERA, 8, b'12345'),
+                      (Sensor.GNSS, 9, bin_data_gnss)
                       ])
         
         data_file2  = (self.FILE2,

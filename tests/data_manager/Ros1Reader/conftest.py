@@ -14,6 +14,6 @@ def clean():
     yield
     rmtree(TestDataFactory.DATA_PATH_FOLDER.name)
     TestDataFactory.MASTER_FILE_PATH.unlink()
-    TestDataFactory.DEFAULT_CONFIG_PATH.unlink()
+
 
 
