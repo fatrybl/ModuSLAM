@@ -1,7 +1,7 @@
-from slam.main_manager.main_manager import MainManager
-import sys
-sys.dont_write_bytecode = True
+from hydra import main
 
+# from slam.main_manager.main_manager import MainManager
+from configs import config as cfg
 
 """
 Author: Mark Griguletskii.
@@ -10,11 +10,13 @@ Main runner of SLAM system.
 """
 
 
-def run():
-    """creates Main Manager instance and runs SLAM
+@main(config_name='default_config')
+def run(cfg: cfg.Config):
+    """creates Main Manager and runs SLAM
     """
-    main_manager = MainManager()
-    main_manager.build_map()
+    print(cfg)
+    # main_manager = MainManager(cfg)
+    # main_manager.build_map()
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from plum import dispatch
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.meta_singleton import MetaSingleton
+from configs.system.data_manager.manager import DataManager as DataManagerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class DataManager(metaclass=MetaSingleton):
         Defaults to MetaSingleton.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, cfg: DataManagerConfig) -> None:
         self.batch_factory = BatchFactory()
         logger.debug("Data Manager has been configured")
 
@@ -37,11 +38,11 @@ class DataManager(metaclass=MetaSingleton):
         self.batch_factory.create_batch(measurements)
 
     @dispatch
-    def make_batch(self, measurements: list[Element]) -> None:
+    def make_batch(self, measurements=None) -> None:
         """
         Interface for getting row data from measurements.
         Args: 
             measurements:
                  list of Elements
         """
-        self.batch_factory.create_batch(measurements)
+        raise NotImplementedError

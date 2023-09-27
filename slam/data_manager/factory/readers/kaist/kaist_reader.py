@@ -30,7 +30,7 @@ class KaistReaderState(DataFlowState):
 
 
 class KaistReader(DataReader):
-    def __init__(self):
+    def __init__(self,):
         cfg1: Config = Config.from_file(
             ConfigFilePaths.data_manager_config.value)
         cfg2: Config = Config.from_file(

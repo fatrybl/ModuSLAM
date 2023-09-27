@@ -1,23 +1,6 @@
-from dataclasses import dataclass, field
 from pathlib import Path
 
 from slam.utils.config import Config
-
-
-@dataclass
-class Pose:
-    position: list[float] = field(default_factory=list)
-    rotation: list[float] = field(default_factory=list)
-
-
-@dataclass
-class ExtrinsicParameters:
-    pose: Pose
-
-
-@dataclass
-class IntrinsicParameters:
-    measurement_covariance: list[float] = field(default_factory=list)
 
 
 class Sensor:
