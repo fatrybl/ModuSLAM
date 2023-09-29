@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
 from configs.system.data_manager.manager import DataManager
-from configs.system.data_manager.dataset import Dataset
+from configs.system.data_manager.datasets.base_dataset import Dataset
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 

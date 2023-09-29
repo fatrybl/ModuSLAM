@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from configs.system.data_manager.dataset import Dataset
+from configs.system.data_manager.datasets.base_dataset import Dataset
 from configs.system.data_manager.memory import MemoryAnalyzer
 
 

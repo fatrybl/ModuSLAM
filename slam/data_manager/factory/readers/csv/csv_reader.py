@@ -1,9 +1,7 @@
 import logging
 
-from pathlib import Path
-
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from readers.data_reader import DataReader
+
 
 class CsvReader(DataReader):
 
@@ -11,7 +9,6 @@ class CsvReader(DataReader):
 
     def __init__(self):
         super().__init__()
-        self.__params = Config(ConfigFilePaths.data_reader_config).attributes["csv_reader"]
         self.__newline = self.__params["new_line"]
         self.__delimiter = self.__params["delimiter"]
         self.__quotechar = self.__params["quotechar"]

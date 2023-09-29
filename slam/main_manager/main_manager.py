@@ -1,5 +1,6 @@
 import logging
 
+from configs.main_config import Config
 from slam.logger import logging_config
 from slam.data_manager.data_manager import DataManager
 from slam.frontend_manager.frontend_manager import FrontendManager
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 class MainManager(metaclass=MetaSingleton):
 
-    def __init__(self, cfg) -> None:
+    def __init__(self, cfg: Config) -> None:
         self.break_point = StoppingCriterionSingleton()
         self.sensor_factory = SensorFactory(cfg.setup_manager)
         self.data_manager = DataManager(cfg.data_manager)

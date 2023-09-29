@@ -1,6 +1,4 @@
 import logging
-from slam.utils.config import Config
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from data_manager.factory.batch import DataBatch
 
 
@@ -10,7 +8,6 @@ class FrontendManager:
     def __init__(self):
         self.measurements_processor = MeasurementsProcessor()
         self.graph_builder = GraphBuilder()
-        self.config = Config(ConfigFilePaths.frontend_manager_config)
         if self.config.attributes.loop_detector:
             self.loop_detector = LoopDetector()
         if self.config.attributes.anomaly_detector:

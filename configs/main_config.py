@@ -8,7 +8,7 @@ from configs.experiments.ros1.config import Ros1
 
 
 @dataclass
-class Config(Ros1):
+class Config(Kaist):
     pass
 
 

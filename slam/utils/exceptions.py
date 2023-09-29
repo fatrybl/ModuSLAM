@@ -13,3 +13,7 @@ class FileNotValid(Exception):
 
 class NotSubset(Exception):
     'if a set is not a subset of another set'
+
+
+class SensorNotFound(Exception):
+    'Sensor has not benn found'
