@@ -5,11 +5,14 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 from slam.data_manager.factory.readers.element_factory import Element
-
 logger = logging.getLogger(__name__)
 
 
 class DataReader(ABC):
+    # def __init__(self):
+    #     cfg = Sensors()
+    #     self.__sensor_factory = SensorFactory(cfg)
+
     @staticmethod
     def _is_file_valid(file_path: Path) -> bool:
         if not Path.is_file(file_path):

@@ -16,10 +16,9 @@ class RosElementLocation(Location):
     file: Path
     topic: str
     msgtype: str
-    timestamp: int
 
 @dataclass
-class RosFileRangeLocation():
+class RosDataRange():
     topics: Iterable[str] = None
     start: Optional[int] = None
     stop: Optional[int] = None
@@ -45,7 +44,7 @@ class RosFileStorage():
                     logger.critical(f"there are no topic {topic_name} ")
                     raise TopicNotFound
             
-    def get_data_iterator(self, location: RosFileRangeLocation) -> Iterator[tuple[RosElementLocation, bytes]]:
+    def get_data_iterator(self, location: RosDataRange) -> Iterator[tuple[RosElementLocation, int,  bytes]]:
         with Reader(self.file) as reader: 
             connections = []
             for topic in location.topics:
@@ -53,25 +52,26 @@ class RosFileStorage():
 
             for line in reader.messages(connections = connections, start = location.start, stop = location.stop):
                 connection, timestamp, rawdata = line
-                loc = RosElementLocation(self.file, connection.topic, connection.msgtype, timestamp)
-                yield loc, rawdata
+                loc = RosElementLocation(self.file, connection.topic, connection.msgtype)
+                yield loc, timestamp, rawdata
 
 class RosDatasetIterator():
-    def __init__(self, file_storages: list[RosFileStorage], location: RosFileRangeLocation):
+    def __init__(self, file_storages: list[RosFileStorage], location: RosDataRange):
         self.__file_storages: list[RosFileStorage] = file_storages
-        self.__location: RosFileRangeLocation = location
-        self.__data_iterator: Iterator[tuple[RosElementLocation, bytes]]  = self.__file_storages[0].get_data_iterator(self.__location)
+        self.__location: RosDataRange = location
+        self.__data_iterator: Iterator[tuple[RosElementLocation, int, bytes]]  = self.__file_storages[0].get_data_iterator(self.__location)
         self.__file_iterator : Iterator[RosFileStorage] = self.__get_file_iterator()
         self.__file_iterator.__next__()
 
-    def __next__(self) -> tuple[RosElementLocation, bytes]:
+    def __next__(self) -> tuple[RosElementLocation, int, bytes]:
         try:
-            return next(self.__data_iterator)
+            loc, timestamp, rawdata = next(self.__data_iterator)
+            return loc, timestamp, rawdata
         except StopIteration:
-            next_file_store = next(self.__file_iterator) ### switch between files
+            next_file_store: RosFileStorage = next(self.__file_iterator) ### switch between files
             self.__data_iterator = next_file_store.get_data_iterator(self.__location)
             logger.debug(f"switch to new file {next_file_store.file}")
-            return next(self.__data_iterator)    
+            return next(self.__data_iterator)
         
     def __get_file_iterator(self) -> Iterator[RosFileStorage]:
         for file_store in self.__file_storages:
@@ -115,15 +115,15 @@ class RosManager():
         Returns:
             RosDatasetIterator
         """
-        return RosDatasetIterator([self.__file_storage[file] for file in self.__file_list], RosFileRangeLocation(topics=self.__topics))
+        return RosDatasetIterator([self.__file_storage[file] for file in self.__file_list], RosDataRange(topics=self.__topics))
     
     
 
-    def get_iterator_from_file(self, file: Path,  location: RosFileRangeLocation) ->  RosDatasetIterator:
+    def get_iterator_from_file(self, file: Path,  location: RosDataRange) ->  RosDatasetIterator:
         """return iterator for dataset for given file and location
         Args:
             file (Path): 
-            location (RosFileRangeLocation): 
+            location (RosDataRange): 
 
         Returns:
             RosDatasetIterator: 
@@ -133,11 +133,11 @@ class RosManager():
             location.topics = self.__topics
         return RosDatasetIterator([ros_file_storage], location)
 
-    def get_iterator(self, location: RosFileRangeLocation) ->  RosDatasetIterator:
+    def get_iterator(self, location: RosDataRange) ->  RosDatasetIterator:
         """return iterator for dataset for given location
         Args:
             file (Path): 
-            location (RosFileRangeLocation): 
+            location (RosDataRange): 
 
         Returns:
             RosDatasetIterator: 

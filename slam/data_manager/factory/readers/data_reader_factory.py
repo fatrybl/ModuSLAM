@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 
-
 from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
 from slam.utils.config import Config
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
