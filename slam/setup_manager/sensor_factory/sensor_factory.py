@@ -34,16 +34,14 @@ class SensorFactory(metaclass=MetaSingleton):
 
     @classmethod
     def name_to_sensor(cls, name: str) -> Type[Sensor]:
-        sensor = None
         for s in cls.all_sensors:
             if s.name == name:
                 sensor = s
-        if sensor:
-            return sensor
-        else:
-            msg = f"No sensor with name {name} in {cls.all_sensors}"
-            logger.critical(msg)
-            raise SensorNotFound
+                return sensor
+
+        msg = f"No sensor with name {name} in {cls.all_sensors}"
+        logger.critical(msg)
+        raise SensorNotFound(msg)
 
     def _init_sesnors(self) -> None:
         for s in self.__all_sensors_list:

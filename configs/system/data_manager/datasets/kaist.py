@@ -13,8 +13,11 @@ class Pair:
 @dataclass
 class KaistDataset(Dataset):
 
-    sensor_data_location: list[Pair] = field(metadata={
-        'description': 'pairs of (<SENSOR_NAME>, <DATA_PATH>)'})
+    iterable_data_files: list[Pair] = field(metadata={
+        'description': 'iterable data files: pairs of (<SENSOR_NAME>, <DATA_PATH>)'})
+
+    data_dirs: list[Pair] = field(metadata={
+        'description': 'directory containing data files'})
 
     data_stamp_file: str = field(default='data_stamp.csv', metadata={
                                  'description': 'file with sorted list of sensor measurements'})

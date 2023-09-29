@@ -34,5 +34,5 @@ class KaistDataset(Enum):
     stereo_stamp_file = sensor_data_dir / "stereo_stamp.csv"
     vrs_gps_data_file = sensor_data_dir / "vrs_gps.csv"
     gps_data_file = sensor_data_dir / "gps.csv"
-    stereo_left_data_dir = image_data_dir / "stereo_left"
-    stereo_right_data_dir = image_data_dir / "stereo_right"
+    stereo_left_data_dir = "stereo_left"
+    stereo_right_data_dir = "stereo_right"

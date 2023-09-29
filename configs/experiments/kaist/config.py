@@ -8,17 +8,17 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 
-imu = SensorConfig('xsens_imu', Imu.__name__, 'imu.yaml')
+imu = SensorConfig('imu', Imu.__name__, 'imu.yaml')
 fog = SensorConfig('fog', Fog.__name__, 'fog.yaml')
-encoder = SensorConfig('encoder_1', Encoder.__name__, 'encoder.yaml')
+encoder = SensorConfig('encoder', Encoder.__name__, 'encoder.yaml')
 altimeter = SensorConfig('altimeter', Altimeter.__name__, 'altimeter.yaml')
 gps = SensorConfig('gps', Gps.__name__, 'gps.yaml')
-vrs_gps = SensorConfig('vrs_gps', VrsGps.__name__, 'vrs_gps.yaml')
-stereo = SensorConfig('realsense_stereo', StereoCamera.__name__, 'stereo.yaml')
+vrs_gps = SensorConfig('vrs', VrsGps.__name__, 'vrs_gps.yaml')
+stereo = SensorConfig('stereo', StereoCamera.__name__, 'stereo.yaml')
 lidar_3D_right = SensorConfig(
-    'vlp32_right', Lidar3D.__name__, 'velodyne_right.yaml')
+    'velodyne_right', Lidar3D.__name__, 'velodyne_right.yaml')
 lidar_3D_left = SensorConfig(
-    'vlp32_left', Lidar3D.__name__, 'velodyne_left.yaml')
+    'velodyne_left', Lidar3D.__name__, 'velodyne_left.yaml')
 lidar_2D_back = SensorConfig(
     'sick_back', Lidar2D.__name__, 'sick_back.yaml')
 lidar_2D_middle = SensorConfig(
@@ -51,7 +51,7 @@ class KaistDS(KaistDataset):
     type: str = 'kaist'
     directory: str = "/home/oem/Downloads/urban18-highway/"
     data_stamp_file = 'data_stamp.csv'
-    sensor_data_location: list[Pair] = field(default_factory=lambda: [
+    iterable_data_files: list[Pair] = field(default_factory=lambda: [
         Pair(imu.name, KaistDatasetPaths.imu_data_file.value),
         Pair(fog.name, KaistDatasetPaths.fog_data_file.value),
         Pair(encoder.name, KaistDatasetPaths.encoder_data_file.value),
@@ -59,15 +59,23 @@ class KaistDS(KaistDataset):
              KaistDatasetPaths.altimeter_data_file.value),
         Pair(gps.name, KaistDatasetPaths.gps_data_file.value),
         Pair(vrs_gps.name, KaistDatasetPaths.vrs_gps_data_file.value),
-        Pair(stereo.name, KaistDatasetPaths.image_data_dir.value),
+        Pair(stereo.name, KaistDatasetPaths.stereo_stamp_file.value),
         Pair(lidar_2D_back.name,
-             KaistDatasetPaths.lidar_2D_back_dir.value),
+             KaistDatasetPaths.lidar_2D_back_stamp_file.value),
         Pair(lidar_2D_middle.name,
-             KaistDatasetPaths.lidar_2D_middle_dir.value),
+             KaistDatasetPaths.lidar_2D_middle_stamp_file.value),
         Pair(lidar_3D_left.name,
-             KaistDatasetPaths.lidar_3D_left_dir.value),
+             KaistDatasetPaths.lidar_3D_left_stamp_file.value),
         Pair(lidar_3D_right.name,
-             KaistDatasetPaths.lidar_3D_right_dir.value),
+             KaistDatasetPaths.lidar_3D_right_stamp_file.value),
+    ])
+
+    data_dirs: list[Pair] = field(default_factory=lambda: [
+        Pair(stereo.name, KaistDatasetPaths.image_data_dir.value),
+        Pair(lidar_2D_back.name, KaistDatasetPaths.lidar_2D_back_dir.value),
+        Pair(lidar_2D_middle.name, KaistDatasetPaths.lidar_2D_middle_dir.value),
+        Pair(lidar_3D_left.name, KaistDatasetPaths.lidar_3D_left_dir.value),
+        Pair(lidar_3D_right.name, KaistDatasetPaths.lidar_3D_right_dir.value),
     ])
 
 

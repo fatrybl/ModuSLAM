@@ -11,11 +11,6 @@ class Sensor:
     def __repr__(self) -> str:
         return self.name
 
-    def _set_parameters(self) -> None:
-        """
-        gets parameters from config file and sets the attributes
-        """
-
 
 class Imu(Sensor):
     def __init__(self, name: str, config_file: Path):
@@ -52,16 +47,11 @@ class Altimeter(Sensor):
         super().__init__(name, config_file)
 
 
-class Lidar(Sensor):
+class Lidar2D(Sensor):
     def __init__(self, name: str, config_file: Path):
         super().__init__(name, config_file)
 
 
-class Lidar2D(Lidar):
-    def __init__(self, name: str, config_file: Path):
-        super().__init__(name, config_file)
-
-
-class Lidar3D(Lidar):
+class Lidar3D(Sensor):
     def __init__(self, name: str, config_file: Path):
         super().__init__(name, config_file)
