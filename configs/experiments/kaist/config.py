@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 
+from configs.paths.DEFAULT_FILE_PATHS import KaistDataset as KaistDatasetPaths
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
 from configs.system.data_manager.manager import DataManager
-from configs.system.data_manager.dataset import Dataset
-from configs.system.data_manager.reader import Reader
+from configs.system.data_manager.datasets.kaist import KaistDataset, Pair
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
@@ -47,17 +47,28 @@ class Sensors(SetupManager):
 
 
 @dataclass
-class KaistReader(Reader):
-    data_stamp_file: str = field(default='data_stamp.csv', metadata={
-                                 'description': 'file with sorted list of sensor measurements'})
-
-
-@dataclass
-class KaistDS(Dataset):
+class KaistDS(KaistDataset):
     type: str = 'kaist'
-    reader: KaistReader = field(default_factory=KaistReader)
     directory: str = "/home/oem/Downloads/urban18-highway/"
-    time_limit: list[int] = field(default_factory=lambda: [0, 100])
+    data_stamp_file = 'data_stamp.csv'
+    sensor_data_location: list[Pair] = field(default_factory=lambda: [
+        Pair(imu.name, KaistDatasetPaths.imu_data_file.value),
+        Pair(fog.name, KaistDatasetPaths.fog_data_file.value),
+        Pair(encoder.name, KaistDatasetPaths.encoder_data_file.value),
+        Pair(altimeter.name,
+             KaistDatasetPaths.altimeter_data_file.value),
+        Pair(gps.name, KaistDatasetPaths.gps_data_file.value),
+        Pair(vrs_gps.name, KaistDatasetPaths.vrs_gps_data_file.value),
+        Pair(stereo.name, KaistDatasetPaths.image_data_dir.value),
+        Pair(lidar_2D_back.name,
+             KaistDatasetPaths.lidar_2D_back_dir.value),
+        Pair(lidar_2D_middle.name,
+             KaistDatasetPaths.lidar_2D_middle_dir.value),
+        Pair(lidar_3D_left.name,
+             KaistDatasetPaths.lidar_3D_left_dir.value),
+        Pair(lidar_3D_right.name,
+             KaistDatasetPaths.lidar_3D_right_dir.value),
+    ])
 
 
 @dataclass

@@ -19,3 +19,12 @@ class NotSubset(Exception):
 
 class TopicNotFound(Exception):
     'no such topic in file'
+
+
+class SensorNotFound(Exception):
+    'Sensor has not benn found'
+
+
+
+
+    

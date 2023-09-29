@@ -1,7 +1,6 @@
 import logging
 from plum import dispatch
 from pathlib import Path
-from typing import  Optional
 from typing import Type
 from dataclasses import dataclass
 
@@ -10,41 +9,39 @@ from rosbags.serde import deserialize_cdr, ros1_to_cdr
 from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosManager, RosDatasetIterator, RosDataRange, RosElementLocation
-from slam.utils.exceptions import NotSubset
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
-from configs.experiments.ros1.config import Sensors
-from slam.utils.auxiliary import SensorData, TimeLimit
+from configs.experiments.ros1.config import Ros1, SensorConfig
+from slam.utils.auxiliary import TimeLimit
 
-@dataclass
-class RosConfig():
-    topic_sensor_cfg: dict[str, str] #key is sensor name value is topic name
-    sensors: list[str]
-    master_file_dir: Path
-    deserialize_raw_data: bool
+# @dataclass
+# class RosConfig():
+#     topic_sensor_cfg: dict[str, str] #key is sensor name value is topic name
+#     sensors: list[str]
+#     master_file_dir: Path
+#     deserialize_raw_data: bool
 
 logger = logging.getLogger(__name__)
 
 
 class Ros1BagReader(DataReader):
-    def __init__(self, cfg : RosConfig):
+    def __init__(self, cfg : Ros1):
         super().__init__()
-        self.deserialize_raw_data = cfg.deserialize_raw_data
-        used_sensors: set[str] = set(cfg.sensors)
-        self.__topic_sensor_dict = dict()
-        for sensor in used_sensors:
-            if(sensor not in cfg.topic_sensor_cfg):
-                logger.critical(f"no topic info for {sensor}, available sensors are {used_sensors}")
-                raise NotSubset
-            topic: str = cfg.topic_sensor_cfg[sensor]
-            self.__topic_sensor_dict[topic] = sensor
 
+        self.deserialize_raw_data = cfg.data_manager.dataset.deserialize_raw_data
+        used_sensors:list[SensorConfig] = cfg.setup_manager.used_sensors
+        self.__topic_sensor_dict: dict[str, Sensor] = dict()
+        self.__sensor_topic_dict: dict[str, str] = dict()
+        for sensor_cfg in used_sensors:
+            sensor: Type[Sensor] = SensorFactory.name_to_sensor(sensor_cfg.name)
+            topic: str = sensor_cfg.topic
+            self.__topic_sensor_dict[topic] = sensor
+            self.__sensor_topic_dict[sensor_cfg.type] = topic
         logger.debug(f"available topics in RosReader: {self.__topic_sensor_dict.keys()}")
-        self.__ros_manager = RosManager(master_file_dir = cfg.master_file_dir, topics = self.__topic_sensor_dict.keys())
+        self.__ros_manager = RosManager(master_file_dir = cfg.data_manager.dataset.directory, topics = self.__topic_sensor_dict.keys())
         self.__main_dataset_iterator: RosDatasetIterator = self.__ros_manager.get_main_iterator()
         self.__temp_dataset_iterator  = None
-        # cfg = Sensors()
-        self.__sensor_factory = SensorFactory()
+        # self.__sensor_factory = SensorFactory()
 
     def __get_next_element(self, iterator: RosDatasetIterator) -> Element | None:
         while True:
@@ -58,8 +55,7 @@ class Ros1BagReader(DataReader):
                  return None
             topic: str = location.topic
             if(topic in self.__topic_sensor_dict.keys()):
-                sensor_name: str = self.__topic_sensor_dict[topic]
-                sensor: Type[Sensor] = self.__sensor_factory.name_to_sensor(sensor_name)
+                sensor: Type[Sensor]  = self.__topic_sensor_dict[topic]
                 if(self.deserialize_raw_data):
                     msgtype = location.msgtype
                     data = deserialize_cdr(ros1_to_cdr(rawdata, msgtype), msgtype)
@@ -98,19 +94,19 @@ class Ros1BagReader(DataReader):
 
 
     @dispatch
-    def get_element(self, data_range : SensorData, first_element: bool = False) -> Element | None:
+    def get_element(self, time_range : TimeLimit, sensor_nmae: str, first_element: bool = False) -> Element | None:
         """get elements from given locations
 
         Args:
-            t1 (int): start time
+            data_range (SensorData): sensor time
             t2 (int): end time
 
         Returns:
             list[Element]: list of elements
         """
         if(first_element):
-            #name: str = data_range.sensor.name
-            location = RosDataRange(topics=None, start = data_range.period.start, stop = data_range.period.stop +1)
+            topic = self.__sensor_topic_dict[sensor_nmae]
+            location = RosDataRange(topics=[topic], start = time_range.start, stop = time_range.stop +1)
             self.__temp_dataset_iterator = self.__ros_manager.get_iterator(location = location)
 
         return self.__get_next_element(self.__temp_dataset_iterator)

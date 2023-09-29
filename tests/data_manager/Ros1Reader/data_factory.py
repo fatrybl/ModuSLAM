@@ -1,7 +1,7 @@
-from yaml import safe_dump
 from pathlib import Path
 from enum import Enum
-
+import copy
+import dataclasses
 from rosbags.rosbag1 import Writer
 from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__NavSatStatus, \
@@ -10,10 +10,10 @@ from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__Imu
 from rosbags.serde import serialize_ros1
 from numpy import array
-from slam.data_manager.factory.readers.ros1.ros1_reader import RosConfig
 from configs.paths.DEFAULT_FILE_PATHS import RosDatasetStructure
-
-
+from configs.experiments.ros1.config import Ros1, SensorConfig, RosSensorConfig
+from slam.setup_manager.sensor_factory.sensors import (
+    Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 class Sensor(Enum):
     IMU = 1,
@@ -23,11 +23,6 @@ class Sensor(Enum):
 
 
 
-def get_default_config() ->RosConfig:
-    return RosConfig(topic_sensor_cfg = {"imu": TestDataFactory.IMU_TOPIC, "camera": TestDataFactory.CAMERA_TOPIC, "lidar": TestDataFactory.LIDAR_TOPIC, "gps": TestDataFactory.GNSS_TOPIC}, 
-                                            sensors= ["imu", "camera", "lidar", "gps"], 
-                                            deserialize_raw_data= False, 
-                                            master_file_dir= TestDataFactory.MASTER_BAG_DIR)
 class TestDataFactory:
 
     MASTER_BAG_DIR = Path(__file__).parent
@@ -46,10 +41,45 @@ class TestDataFactory:
     LIDAR_TOPIC, LIDAR_MSG = '/lidar_topic', 'sensor_msgs/msg/LaserScan'
     GNSS_TOPIC, GNSS_MSG = '/gnss_topic', 'sensor_msgs/msg/NavSatFix'
 
+    imu = RosSensorConfig('xsens_imu', Imu.__name__, 'imu.yaml', IMU_TOPIC)
+    gps = RosSensorConfig('gps', Gps.__name__, 'gps.yaml', GNSS_TOPIC)
+    stereo = RosSensorConfig(
+        'realsense_stereo', StereoCamera.__name__, 'stereo.yaml', CAMERA_TOPIC)
+    lidar_2D_middle = RosSensorConfig(
+        'sick_middle', Lidar2D.__name__, 'sick_middle.yaml', LIDAR_TOPIC)
+
     GNSS_POSITION  = [1.0, 2.0, 3.0]
     IMU_DATA = [1.11, 1.12, 1.13]
 
 
+    @classmethod
+    def get_default_config(self) :
+        # return RosConfig(topic_sensor_cfg = {"xsens_imu": TestDataFactory.IMU_TOPIC, "camera": TestDataFactory.CAMERA_TOPIC, "lidar": TestDataFactory.LIDAR_TOPIC, "gps": TestDataFactory.GNSS_TOPIC}, 
+        #                                         sensors= ["xsens_imu", "camera", "lidar", "gps"], 
+        #                                         deserialize_raw_data= False, 
+        #                                         master_file_dir= TestDataFactory.MASTER_BAG_DIR)
+        #cfg =replace(Ros1())
+        cfg = Ros1()
+        # print(cfg__)
+        
+        cfg.setup_manager.all_sensors = [
+                    self.imu,
+                    self.stereo,
+                    self.gps,
+                    self.lidar_2D_middle,
+                ]
+        cfg.setup_manager.used_sensors = [
+                    self.imu,
+                    self.stereo,
+                    self.gps,
+                    self.lidar_2D_middle,
+                ]
+        cfg.data_manager.dataset.deserialize_raw_data = False
+        cfg.data_manager.dataset.directory = self.MASTER_BAG_DIR
+        # cfg_copy = dataclasses.replace(cfg)
+        # dataclasses.asdict()
+        cfg_copy = copy.deepcopy(cfg)
+        return cfg_copy
     
     def prepare_data(self):
         latitude, longitude, altitude = self.GNSS_POSITION

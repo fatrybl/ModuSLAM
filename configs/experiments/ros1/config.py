@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
 from configs.system.data_manager.manager import DataManager
-from configs.system.data_manager.dataset import Dataset
+from configs.system.data_manager.datasets.base_dataset import Dataset
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
@@ -57,9 +58,9 @@ class Sensors(SetupManager):
 @dataclass
 class Ros1DS(Dataset):
     type: str = 'ros1'
-    directory: str = "/home/oem/Downloads/urban18-highway/"
+    directory: Path = Path("/home/oem/Downloads/urban18-highway/")
     time_limit: list[int] = field(default_factory=lambda: [0, 300])
-
+    deserialize_raw_data: bool  = False
 
 @dataclass
 class Ros1DM(DataManager):

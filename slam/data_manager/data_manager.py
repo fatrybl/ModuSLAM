@@ -12,13 +12,12 @@ logger = logging.getLogger(__name__)
 
 class DataManager(metaclass=MetaSingleton):
     """Manages all data.
-
     Args:
         Defaults to MetaSingleton.
     """
 
     def __init__(self, cfg: DataManagerConfig) -> None:
-        self.batch_factory = BatchFactory()
+        self.batch_factory = BatchFactory(cfg)
         logger.debug("Data Manager has been configured")
 
     @dispatch
@@ -36,13 +35,3 @@ class DataManager(metaclass=MetaSingleton):
             measurements (list[Element]): list of elements wihtout row data
         """
         self.batch_factory.create_batch(measurements)
-
-    @dispatch
-    def make_batch(self, measurements=None) -> None:
-        """
-        Interface for getting row data from measurements.
-        Args: 
-            measurements:
-                 list of Elements
-        """
-        raise NotImplementedError

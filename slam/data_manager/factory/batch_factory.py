@@ -7,15 +7,16 @@ from slam.data_manager.factory.readers.data_reader_factory import DataReaderFact
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
+from configs.system.data_manager.manager import DataManager as DataManagerConfig
 
 logger = logging.getLogger(__name__)
 
 
 class BatchFactory():
-    def __init__(self) -> None:
-        self._memory_analyzer = MemoryAnalyzer()
+    def __init__(self, cfg: DataManagerConfig) -> None:
+        self._memory_analyzer = MemoryAnalyzer(cfg.memory)
+        self._data_reader = DataReaderFactory(cfg.dataset)
         self._batch = DataBatch()
-        self._data_reader = DataReaderFactory()
         self._break_point = StoppingCriterionSingleton()
 
     @property
