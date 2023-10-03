@@ -1,103 +1,25 @@
 import logging
 
-from dataclasses import InitVar, dataclass, field
-from collections.abc import Iterator, Callable
+from collections.abc import Iterator
 from csv import reader as csv_reader
 from pathlib import Path
-from typing import Any, Type
+from typing import Type
 
 from cv2 import imread, IMREAD_COLOR
 from plum import dispatch
 
-from configs.paths.DEFAULT_FILE_PATHS import KaistDataset
+from configs.paths.kaist_dataset import KaistDataset
 from configs.system.data_manager.datasets.kaist import Pair
 from slam.data_manager.factory.readers.element_factory import Location
-from slam.setup_manager.sensor_factory.sensors import Altimeter, Encoder, Fog, Gps, Imu, Lidar2D, Lidar3D, Sensor, StereoCamera, VrsGps
+from slam.data_manager.factory.readers.kaist.data_classes import (
+    BinaryDataLocation, CsvDataLocation, DataStorage, FileIterator,
+    Message, SensorIterators, StereoImgDataLocation, Storage)
+from slam.setup_manager.sensor_factory.sensors import (
+    Altimeter, Encoder, Fog, Gps, Imu, 
+    Lidar2D, Lidar3D, Sensor, StereoCamera, VrsGps)
+
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass(frozen=True, eq=True)
-class Message:
-    timestamp: str
-    data: list[str] | bytes | Any
-
-
-@dataclass(frozen=True, eq=True)
-class FileIterator:
-    sensor_name: str
-    file: Path
-    iterator: Iterator[tuple[int, list[str]]]
-
-
-@dataclass(frozen=True, eq=True)
-class SensorStorage:
-    sensor_name: str
-    path: Path
-
-
-@dataclass(frozen=True, eq=True)
-class BinaryDataLocation(Location):
-    file: Path
-
-
-@dataclass(frozen=True, eq=True)
-class StereoImgDataLocation(Location):
-    files: list[Path] = field(default_factory=list, metadata={
-                              'unit': 'list of Path-objects'})
-
-
-@dataclass(frozen=True, eq=True)
-class CsvDataLocation(Location):
-    file: Path
-    position: int
-
-
-@dataclass
-class SensorIterators:
-    directory: InitVar[Path]
-    iterable_locations: InitVar[list[Pair]]
-    init: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
-
-    iterators: set[FileIterator] = field(default_factory=lambda: set())
-
-    def __post_init__(self, directory: Path, iterable_locations: list[Pair], init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
-        for pair in iterable_locations:
-            name = pair.sensor_name
-            location = directory / pair.location
-            iterator = init(location)
-            file_iter = FileIterator(name,
-                                     location,
-                                     iterator)
-            self.iterators.add(file_iter)
-
-    def get_file_iterator(self, sensor_name: str):
-        for it in self.iterators:
-            if it.sensor_name == sensor_name:
-                return it
-        msg = f'No FileIterator for {sensor_name} in set of {self.iterators}'
-        logger.critical(msg)
-        raise ValueError(msg)
-
-
-@dataclass(frozen=True, eq=True)
-class DataStorage:
-    sensors_locations: InitVar[list[Pair]]
-
-    storages: set[SensorStorage] = field(default_factory=lambda: set())
-
-    def __post_init__(self, sensors_locations: list[Pair]):
-        for s in sensors_locations:
-            item = SensorStorage(s.sensor_name, s.location)
-            self.storages.add(item)
-
-    def get_data_location(self, sensor_name: str):
-        for s in self.storages:
-            if s.sensor_name == sensor_name:
-                return s
-        msg = f'No Storage for {sensor_name} in set of {self.storages}'
-        logger.critical(msg)
-        raise ValueError(msg)
 
 
 class MeasurementCollector():
@@ -181,10 +103,10 @@ class MeasurementCollector():
     @dispatch
     def get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        timestamp: str = next(it.iterator)
-        storage: SensorStorage = self._sensor_data_storages.get_data_location(
+        position, timestamp = next(it.iterator)
+        storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
-        file: Path = storage.path / str(timestamp)
+        file: Path = self._dataset_dir / storage.path / timestamp[0]
         file = file.with_suffix('.bin')
         message = self._read_bin(file)
         location = BinaryDataLocation(file)
@@ -192,7 +114,7 @@ class MeasurementCollector():
 
     @dispatch
     def get_bin_data(self, sensor: Sensor, timestamp: str) -> tuple[Message, BinaryDataLocation]:
-        storage: SensorStorage = self._sensor_data_storages.get_data_location(
+        storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
         file: Path = storage.path / str(timestamp)
         file = file.with_suffix('.bin')
@@ -204,13 +126,13 @@ class MeasurementCollector():
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
         __, timestamp = next(it.iterator)
         timestamp = timestamp[0]
-        storage: SensorStorage = self._sensor_data_storages.get_data_location(
+        storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
 
         left_camera_dir: Path = self._dataset_dir / \
-            storage.path / KaistDataset.stereo_left_data_dir.value
+            storage.path / KaistDataset.stereo_left_data_dir
         right_camera_dir: Path = self._dataset_dir / \
-            storage.path / KaistDataset.stereo_right_data_dir.value
+            storage.path / KaistDataset.stereo_right_data_dir
 
         left_img_file = left_camera_dir / timestamp
         right_img_file = right_camera_dir / timestamp

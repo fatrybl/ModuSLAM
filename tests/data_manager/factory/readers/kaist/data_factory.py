@@ -8,16 +8,16 @@ from numpy import array as numpy_array
 from cv2 import imwrite
 from shutil import copyfile, copytree
 
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from configs.paths.default import ConfigPaths
 
 
 class TestDataFactory:
     CURRENT_DIR = Path(__file__).parent
     TEST_DATA_DIR: Path = CURRENT_DIR / 'test_data'
-    DEFAULT_SENSORS_CONFIG_DIR: Path = ConfigFilePaths.sensors_config_dir.value
+    DEFAULT_SENSORS_CONFIG_DIR: Path = ConfigPaths.sensors_config_dir.value
     MODIFIED_SENSORS_CONFIG_DIR: Path = DEFAULT_SENSORS_CONFIG_DIR.parent / \
         (DEFAULT_SENSORS_CONFIG_DIR.stem + '_original')
-    DEFAULT_DATAMANAGER_CONFIG_PATH: Path = ConfigFilePaths.data_manager_config.value
+    DEFAULT_DATAMANAGER_CONFIG_PATH: Path = ConfigPaths.data_manager_config.value
     MODIFIED_DATAMANAGER_CONFIG_NAME: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.stem + '_original.yaml'
     MODIFIED_DATAMANAGER_CONFIG_PATH: Path = DEFAULT_DATAMANAGER_CONFIG_PATH.parent / \
         MODIFIED_DATAMANAGER_CONFIG_NAME

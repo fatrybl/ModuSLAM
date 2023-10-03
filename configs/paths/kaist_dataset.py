@@ -1,15 +1,9 @@
-from enum import Enum
+from dataclasses import dataclass
 from pathlib import Path
 
 
-class ConfigFilePaths(Enum):
-    root_path = Path(__file__).parent.parent
-    data_manager_config = root_path / "system/data_manager/data_manager.yaml"
-    data_reader_config = root_path / "system/data_manager/data_readers.yaml"
-    sensors_config_dir = root_path / "sensors/"
-
-
-class KaistDataset(Enum):
+@dataclass
+class KaistDataset:
     """
     dataset format from 
     https://sites.google.com/view/complex-urban-dataset/format"

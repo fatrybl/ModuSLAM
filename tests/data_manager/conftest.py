@@ -1,9 +1,9 @@
 from pytest import fixture
 from shutil import rmtree, copytree
 from pathlib import Path
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths
+from configs.paths.default import ConfigPaths
 
-CONFIGS_DIR: Path = ConfigFilePaths.root_path.value
+CONFIGS_DIR: Path = ConfigPaths.root_path.value
 BACKUP_DIR: Path = Path(CONFIGS_DIR.as_posix() + '_backup')
 
 

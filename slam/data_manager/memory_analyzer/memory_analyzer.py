@@ -1,5 +1,4 @@
 import logging
-import sys
 import psutil
 
 from slam import logger

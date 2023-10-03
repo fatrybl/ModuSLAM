@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 
 class BatchFactory():
     def __init__(self, cfg: DataManagerConfig) -> None:
+        self._break_point = StoppingCriterionSingleton()
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
         self._data_reader = DataReaderFactory(cfg.dataset)
         self._batch = DataBatch()
-        self._break_point = StoppingCriterionSingleton()
 
     @property
     def batch(self) -> DataBatch:
@@ -33,7 +33,8 @@ class BatchFactory():
         if new_element:
             self._batch.add(new_element)
         else:
-            logger.info("All data has been processed")
+            msg = "All data has been processed"
+            logger.info(msg)
             self._break_point.is_data_processed = True
 
     @dispatch
@@ -58,7 +59,8 @@ class BatchFactory():
 
         if used_memory > permissible_memory:
             self._break_point.is_memory_limit = True
-            logger.info("Memory limit for Data Batch has been reached")
+            msg = "Memory limit for Data Batch has been reached"
+            logger.info(msg)
             return True
 
         if self._break_point.is_data_processed:
