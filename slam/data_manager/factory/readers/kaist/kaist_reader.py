@@ -11,13 +11,13 @@ from plum import dispatch
 from slam.data_manager.factory.readers.data_reader import DataReader, DataFlowState
 from slam.data_manager.factory.readers.element_factory import Measurement
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
-    MeasurementCollector, FileIterator, Message)
+    MeasurementCollector, FileIterator)
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.exceptions import FileNotValid
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.utils.auxiliary_methods import as_int
 from configs.system.data_manager.datasets.kaist import Kaist
-from configs.paths.kaist_dataset import KaistDataset
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +32,14 @@ class KaistReaderState(DataFlowState):
 
 
 class KaistReader(DataReader):
+
+    TIMESTAMP: str = 'timestamp'
+    SENSOR_NAME: str = 'sensor_name'
+
     def __init__(self, cfg: Kaist):
-        dataset_dir: Path = cfg.directory
         self.__collector = MeasurementCollector(
-            dataset_dir, cfg.iterable_data_files, cfg.data_dirs)
-        self.__sensor_order_file: Path = dataset_dir / \
-            KaistDataset.sensor_data_dir / cfg.data_stamp_file
+            cfg.iterable_data_files, cfg.data_dirs)
+        self.__sensor_order_file: Path = cfg.data_stamp_file
         self.__data_stamp_iterator: Iterator[dict[str, str]] = self.__init_iterator(
         )
         self.__current_iterators = KaistReaderState(
@@ -51,7 +53,7 @@ class KaistReader(DataReader):
     def __init_iterator(self) -> Iterator[dict[str, str]]:
         if (DataReader._is_file_valid(self.__sensor_order_file)):
             with open(self.__sensor_order_file, "r") as f:
-                names = ["timestamp", "sensor_name"]
+                names = [self.TIMESTAMP, self.SENSOR_NAME]
                 reader = DictReader(f, fieldnames=names)
                 for line in reader:
                     yield line
@@ -60,20 +62,12 @@ class KaistReader(DataReader):
                 f"file: {self.__sensor_order_file} is not valid to initialize the iterator")
             raise FileNotValid
 
-    def __as_int(self, timestamp: str) -> int:
-        try:
-            return int(timestamp)
-        except ValueError:
-            logger.error(
-                f"Could not convert timestamp {timestamp} of type {type(timestamp)} to string")
-            raise
-
     @dispatch
     def get_element(self) -> Element | None:
         try:
             while True:
                 line = next(self.__data_stamp_iterator)
-                sensor = SensorFactory.name_to_sensor(line["sensor_name"])
+                sensor = SensorFactory.name_to_sensor(line[self.SENSOR_NAME])
                 if sensor in SensorFactory.used_sensors:
                     break
 
@@ -84,13 +78,13 @@ class KaistReader(DataReader):
 
         else:
             sensor: Type[Sensor] = SensorFactory.name_to_sensor(
-                line["sensor_name"])
-            timestamp: str = line["timestamp"]
+                line[self.SENSOR_NAME])
+            timestamp = line[self.TIMESTAMP]
 
             self.__collector.iterators = self.__current_iterators.sensors_iterators
             message, location = self.__collector.get_data(sensor)
 
-            timestamp = self.__as_int(timestamp)
+            timestamp = as_int(timestamp, logger)
             measurement = Measurement(sensor, message.data)
             element = Element(timestamp,
                               measurement,

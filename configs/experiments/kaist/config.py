@@ -61,33 +61,39 @@ sensor_config_dir: Path = ConfigPaths.sensors_config_dir
 
 
 dataset_directory: Path = Path("/home/oem/Downloads/urban18-highway/")
-data_stamp_file = 'data_stamp.csv'
+
 
 iterable_data_files: list[Pair] = field(default_factory=lambda: [
-    Pair(imu.name, KaistPaths.imu_data_file),
-    Pair(fog.name, KaistPaths.fog_data_file),
-    Pair(encoder.name, KaistPaths.encoder_data_file),
-    Pair(altimeter.name, KaistPaths.altimeter_data_file),
-    Pair(gps.name, KaistPaths.gps_data_file),
-    Pair(vrs_gps.name, KaistPaths.vrs_gps_data_file),
-    Pair(stereo.name, KaistPaths.stereo_stamp_file),
-    Pair(lidar_2D_back.name, KaistPaths.lidar_2D_back_stamp_file),
-    Pair(lidar_2D_middle.name, KaistPaths.lidar_2D_middle_stamp_file),
-    Pair(lidar_3D_left.name, KaistPaths.lidar_3D_left_stamp_file),
-    Pair(lidar_3D_right.name, KaistPaths.lidar_3D_right_stamp_file),
+    Pair(imu.name, dataset_directory / KaistPaths.imu_data_file),
+    Pair(fog.name, dataset_directory / KaistPaths.fog_data_file),
+    Pair(encoder.name, dataset_directory / KaistPaths.encoder_data_file),
+    Pair(altimeter.name, dataset_directory / KaistPaths.altimeter_data_file),
+    Pair(gps.name, dataset_directory / KaistPaths.gps_data_file),
+    Pair(vrs_gps.name, dataset_directory / KaistPaths.vrs_gps_data_file),
+    Pair(stereo.name, dataset_directory / KaistPaths.stereo_stamp_file),
+    Pair(lidar_2D_back.name, dataset_directory /
+         KaistPaths.lidar_2D_back_stamp_file),
+    Pair(lidar_2D_middle.name, dataset_directory /
+         KaistPaths.lidar_2D_middle_stamp_file),
+    Pair(lidar_3D_left.name, dataset_directory /
+         KaistPaths.lidar_3D_left_stamp_file),
+    Pair(lidar_3D_right.name, dataset_directory /
+         KaistPaths.lidar_3D_right_stamp_file),
 ])
 
 data_dirs: list[Pair] = field(default_factory=lambda: [
-    Pair(stereo.name, KaistPaths.image_data_dir),
-    Pair(lidar_2D_back.name, KaistPaths.lidar_2D_back_dir),
-    Pair(lidar_2D_middle.name, KaistPaths.lidar_2D_middle_dir),
-    Pair(lidar_3D_left.name, KaistPaths.lidar_3D_left_dir),
-    Pair(lidar_3D_right.name, KaistPaths.lidar_3D_right_dir),
+    Pair(stereo.name, dataset_directory / KaistPaths.image_data_dir),
+    Pair(lidar_2D_back.name, dataset_directory / KaistPaths.lidar_2D_back_dir),
+    Pair(lidar_2D_middle.name, dataset_directory /
+         KaistPaths.lidar_2D_middle_dir),
+    Pair(lidar_3D_left.name, dataset_directory / KaistPaths.lidar_3D_left_dir),
+    Pair(lidar_3D_right.name, dataset_directory / KaistPaths.lidar_3D_right_dir),
 ])
 
 
 @dataclass
 class KaistDS(Kaist):
+    data_stamp_file: Path = dataset_directory / KaistPaths.data_stamp
     directory: Path = dataset_directory
     iterable_data_files: list[Pair] = iterable_data_files
     data_dirs: list[Pair] = data_dirs

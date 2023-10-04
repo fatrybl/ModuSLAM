@@ -48,17 +48,16 @@ class CsvDataLocation(Location):
 
 @dataclass
 class SensorIterators:
-    directory: InitVar[Path]
     iterable_locations: InitVar[list[Pair]]
-    init: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
+    init_method: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
 
     iterators: set[FileIterator] = field(default_factory=lambda: set())
 
-    def __post_init__(self, directory: Path, iterable_locations: list[Pair], init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
+    def __post_init__(self, iterable_locations: list[Pair], init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
         for pair in iterable_locations:
-            name = pair.sensor_name
-            location = directory / pair.location
-            iterator = init(location)
+            name: str = pair.sensor_name
+            location: Path = pair.location
+            iterator: Iterator[tuple[int, list[str]]] = init(location)
             file_iter = FileIterator(name,
                                      location,
                                      iterator)

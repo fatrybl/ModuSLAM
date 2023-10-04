@@ -14,6 +14,8 @@ from slam.utils.stopping_criterion import StoppingCriterionSingleton
 
 logger = logging.getLogger(__name__)
 
+print(type(logger))
+
 
 class MainManager(metaclass=MetaSingleton):
 
