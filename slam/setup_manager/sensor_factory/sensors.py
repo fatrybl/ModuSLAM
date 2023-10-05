@@ -1,15 +1,24 @@
 from pathlib import Path
 
-from slam.utils.config import Config
-
 
 class Sensor:
+
+    """Base class for any Sensor object. 
+    __Hash__(), __eq__() are overridden to prevent sensors` duplicates creation.
+    """
+
     def __init__(self, name: str, config_file: Path):
         self.name = name
-        self.config = Config.from_file(config_file)
+        self.config_file: Path = config_file
 
     def __repr__(self) -> str:
         return self.name
+
+    def __hash__(self) -> int:
+        return hash((self.name, self.config_file))
+
+    def __eq__(self, value: object) -> bool:
+        return self.name == value.name and self.config_file == value.config_file
 
 
 class Imu(Sensor):

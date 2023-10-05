@@ -4,7 +4,7 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
 @dataclass
-class TimeLimit:
+class TimeRange:
     start: int
     stop: int
 
@@ -18,9 +18,9 @@ class TimeLimit:
 
 
 @dataclass
-class SensorData:
+class PeriodicData:
     sensor: Type[Sensor]
-    period: TimeLimit
+    period: TimeRange
 
     def __hash__(self) -> int:
         return hash((self.period, self.sensor))

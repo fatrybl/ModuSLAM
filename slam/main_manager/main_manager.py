@@ -39,17 +39,17 @@ class MainManager(metaclass=MetaSingleton):
     def create_batch_with_measurement(self):
         self.data_manager.make_batch(self.test_batch.data)
 
-    # def validate(self):
-    #     for element1, element2 in zip(self.test_batch.data, self.data_manager.batch_factory.batch.data):
-    #         print('validating element')
-    #         assert element1.location == element2.location
-    #         assert element1.timestamp == element2.timestamp
-    #         assert element1.measurement.sensor.name == element2.measurement.sensor.name
+    def validate(self):
+        for element1, element2 in zip(self.test_batch.data, self.data_manager.batch_factory.batch.data):
+            print('validating element')
+            assert element1.location == element2.location
+            assert element1.timestamp == element2.timestamp
+            assert element1.measurement.sensor == element2.measurement.sensor
 
     def build_map(self) -> None:
         logger.info("Building map...")
         while not self.break_point.ON:
             self.data_manager.make_batch()
-            # self._process_batch()
+            self._process_batch()
 
         logger.info("Map has been built")
