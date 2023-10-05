@@ -104,13 +104,13 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
+    def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
         message, location = self._iterate(it)
         return message, location
 
     @dispatch
-    def get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
+    def _get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
         position, line = self._find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
@@ -118,7 +118,7 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
+    def _get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
         __, line = next(it.iterator)
         storage: Storage = self._sensor_data_storages.get_data_location(
@@ -131,7 +131,7 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
+    def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
         file: Path = storage.path / str(timestamp)
@@ -141,7 +141,7 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
+    def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
         it = self._sensor_data_iterators.get_file_iterator(sensor.name)
         __, line = next(it.iterator)
         timestamp: Path = Path(line[0])
@@ -149,7 +149,7 @@ class MeasurementCollector():
         return message, location
 
     @dispatch
-    def get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
+    def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
         timestamp: Path = Path(str(timestamp))
         message, location = self._get_image(sensor.name, timestamp)
         return message, location
@@ -157,13 +157,13 @@ class MeasurementCollector():
     @dispatch
     def _get_data_by_sensor(self, sensor: Sensor) -> tuple[Message, Type[Location]]:
         if isinstance(sensor, (Imu, Fog, Altimeter, Gps, VrsGps, Encoder)):
-            message, location = self.get_csv_data(sensor)
+            message, location = self._get_csv_data(sensor)
             return message, location
         elif isinstance(sensor, (Lidar2D, Lidar3D)):
-            message, location = self.get_bin_data(sensor)
+            message, location = self._get_bin_data(sensor)
             return message, location
         elif isinstance(sensor, (StereoCamera)):
-            message, location = self.get_img_data(sensor)
+            message, location = self._get_img_data(sensor)
             return message, location
         else:
             msg = f"no method to parse data for sensor: {sensor} of type: {type(sensor)}"
@@ -173,13 +173,13 @@ class MeasurementCollector():
     @dispatch
     def _get_data_by_sensor(self, sensor: Sensor, timestamp: int) -> tuple[Message, Type[Location]]:
         if isinstance(sensor, (Imu, Fog, Altimeter, Gps, VrsGps, Encoder)):
-            message, location = self.get_csv_data(sensor, timestamp)
+            message, location = self._get_csv_data(sensor, timestamp)
             return message, location
         elif isinstance(sensor, (Lidar2D, Lidar3D)):
-            message, location = self.get_bin_data(sensor, timestamp)
+            message, location = self._get_bin_data(sensor, timestamp)
             return message, location
         elif isinstance(sensor, (StereoCamera)):
-            message, location = self.get_img_data(sensor, timestamp)
+            message, location = self._get_img_data(sensor, timestamp)
             return message, location
         else:
             msg = f"no method to parse data for sensor: {sensor} of type: {type(sensor)}"
