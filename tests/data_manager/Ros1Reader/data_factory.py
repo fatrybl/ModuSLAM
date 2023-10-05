@@ -10,7 +10,7 @@ from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__Imu
 from rosbags.serde import serialize_ros1
 from numpy import array
-from configs.paths.DEFAULT_FILE_PATHS import RosDatasetStructure
+from configs.paths.default import RosDatasetStructure
 from configs.experiments.ros1.config import Ros1, SensorConfig, RosSensorConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)

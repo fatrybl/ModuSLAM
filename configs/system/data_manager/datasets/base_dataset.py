@@ -1,7 +1,12 @@
 from dataclasses import dataclass
+from pathlib import Path
+from omegaconf import MISSING
 
 
 @dataclass
 class Dataset:
-    type: str
-    directory: str
+    """Base class for any supported dataset"""
+    name: str = MISSING
+    url: str = MISSING
+    directory: Path = MISSING
+    datset_type: str = MISSING

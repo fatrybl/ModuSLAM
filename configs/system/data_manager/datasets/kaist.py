@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from omegaconf import MISSING
+
 from configs.system.data_manager.datasets.base_dataset import Dataset
 
 
@@ -11,10 +13,18 @@ class Pair:
 
 
 @dataclass
-class KaistDataset(Dataset):
+class Kaist(Dataset):
+    dataset_type: str = 'Kaist'
 
-    sensor_data_location: list[Pair] = field(metadata={
-        'description': 'pairs of (<SENSOR_NAME>, <DATA_PATH>)'})
+    name: str = 'Kaist Urban Dataset'
 
-    data_stamp_file: str = field(default='data_stamp.csv', metadata={
-                                 'description': 'file with sorted list of sensor measurements'})
+    url: str = 'https://sites.google.com/view/complex-urban-dataset'
+
+    data_stamp_file: Path = field(
+        metadata={'description': 'file with sorted list of sensor measurements'}, default_factory=MISSING)
+
+    iterable_data_files: list[Pair] = field(metadata={
+        'description': 'iterable data files: pairs of (<SENSOR_NAME>, <DATA_PATH>)'}, default_factory=MISSING)
+
+    data_dirs: list[Pair] = field(metadata={
+        'description': 'directories containing data files'}, default_factory=MISSING)

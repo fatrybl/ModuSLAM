@@ -30,6 +30,8 @@ def run(cfg: Config):
     main_manager = MainManager(cfg)
 >>>>>>> develop
     main_manager.build_map()
+    # main_manager.create_batch_with_measurement()
+    # main_manager.validate()
 
 
 if __name__ == "__main__":

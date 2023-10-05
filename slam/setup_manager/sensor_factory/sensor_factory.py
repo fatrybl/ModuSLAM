@@ -5,10 +5,9 @@ from pathlib import Path
 
 from slam.utils.exceptions import NotSubset, SensorNotFound
 from slam.utils.meta_singleton import MetaSingleton
+from configs.system.setup_manager.setup import SensorConfig, SetupManager as SetupManagerConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
-from configs.paths.DEFAULT_FILE_PATHS import ConfigFilePaths as paths
-from configs.system.setup_manager.setup import SensorConfig, SetupManager as SetupManagerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +20,7 @@ class SensorFactory(metaclass=MetaSingleton):
     def __init__(self, cfg: SetupManagerConfig):
         self.__all_sensors_list: list[SensorConfig] = cfg.all_sensors
         self.__used_sensors_list: list[SensorConfig] = cfg.used_sensors
+        self.__sensor_config_dir: Path = cfg.sensor_config_dir
         self._init_sesnors()
         self._check_used_sesnors()
 
@@ -34,7 +34,6 @@ class SensorFactory(metaclass=MetaSingleton):
 
     @classmethod
     def name_to_sensor(cls, name: str) -> Type[Sensor]:
-        sensor = None
         for s in cls.all_sensors:
             if s.name == name:
                 sensor = s
@@ -43,6 +42,7 @@ class SensorFactory(metaclass=MetaSingleton):
         msg = f"No sensor with name {name} in {cls.all_sensors}"
         logger.critical(msg)
         raise SensorNotFound
+
 
     def _init_sesnors(self) -> None:
         for s in self.__all_sensors_list:
@@ -55,14 +55,14 @@ class SensorFactory(metaclass=MetaSingleton):
 
     def _check_used_sesnors(self) -> None:
         if not self.used_sensors or not self.used_sensors.issubset(self.all_sensors):
-            msg = f'some of used sensors: {self.used_sensors} are not in known sensors: {self.all_sensors} or empty'
+            msg = f'Used sensors: {self.used_sensors} are not in known sensors: {self.all_sensors} or empty'
             logger.critical(msg)
             raise NotSubset(msg)
 
     def _map_item_to_sesnor(self, item: SensorConfig) -> Type[Sensor]:
         name: str = item.name
         sensor_type: str = item.type
-        config_file: Path = paths.sensors_config_dir.value / item.config_name
+        config_file: Path = self.__sensor_config_dir / item.config_name
 
         if sensor_type == Imu.__name__:
             return Imu(name, config_file)
