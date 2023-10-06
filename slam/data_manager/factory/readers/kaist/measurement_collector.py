@@ -55,12 +55,12 @@ class MeasurementCollector():
             for position, line in enumerate(reader):
                 yield position, line
 
-    def _read_bin(self, file: Path) -> Message:
+    def __read_bin(self, file: Path) -> Message:
         with open(file, 'rb') as f:
             line = f.read()
             return Message(file.stem, line)
 
-    def _find_in_file(self, iter: Iterator[tuple[int, list[str]]], timestamp: int) -> tuple[int, list[str]] | None:
+    def __find_in_file(self, iter: Iterator[tuple[int, list[str]]], timestamp: int) -> tuple[int, list[str]] | None:
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         while current_timestamp != timestamp:
             try:
@@ -73,21 +73,25 @@ class MeasurementCollector():
                 current_timestamp = as_int(line[0], logger)
         return position, line
 
-    def _iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
+    def __iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
         position, line = next(it.iterator)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
         return message, location
 
-    def _get_image(self, sensor_name: str, timestamp: Path) -> tuple[Message, StereoImgDataLocation]:
+    def __update_iterator(self, iterator: Iterator[tuple[int, list[str]]], timestamp: int) -> None:
+        self.__find_in_file(iterator, timestamp)
+
+    def _get_image(self, sensor_name: str, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
+        timestamp_path: Path = Path(str(timestamp))
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor_name)
 
         left_camera_dir: Path = storage.path / KaistDataset.stereo_left_data_dir
         right_camera_dir: Path = storage.path / KaistDataset.stereo_right_data_dir
 
-        left_img_file = left_camera_dir / timestamp
-        right_img_file = right_camera_dir / timestamp
+        left_img_file = left_camera_dir / timestamp_path
+        right_img_file = right_camera_dir / timestamp_path
         left_img_file = left_img_file.with_suffix(self.IMAGE_EXTENSION)
         right_img_file = right_img_file.with_suffix(self.IMAGE_EXTENSION)
         left_img = imread(left_img_file.as_posix(), IMREAD_COLOR)
@@ -105,52 +109,61 @@ class MeasurementCollector():
 
     @dispatch
     def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
-        it = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        message, location = self._iterate(it)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
+        message, location = self.__iterate(it)
         return message, location
 
     @dispatch
     def _get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
-        it = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        position, line = self._find_in_file(it.iterator, timestamp)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
+        position, line = self.__find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
         return message, location
 
     @dispatch
     def _get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
-        it = self._sensor_data_iterators.get_file_iterator(sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
         __, line = next(it.iterator)
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
         timestamp: Path = Path(line[0])
         file: Path = storage.path / timestamp
         file = file.with_suffix(self.BINARY_EXTENSION)
-        message = self._read_bin(file)
+        message = self.__read_bin(file)
         location = BinaryDataLocation(file)
         return message, location
 
     @dispatch
     def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
+        self.__update_iterator(it.iterator, timestamp)
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
         file: Path = storage.path / str(timestamp)
         file = file.with_suffix(self.BINARY_EXTENSION)
-        message = self._read_bin(file)
+        message = self.__read_bin(file)
         location = BinaryDataLocation(file)
         return message, location
 
     @dispatch
     def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
-        it = self._sensor_data_iterators.get_file_iterator(sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
         __, line = next(it.iterator)
-        timestamp: Path = Path(line[0])
+        timestamp: int = as_int(line[0], logger)
         message, location = self._get_image(sensor.name, timestamp)
         return message, location
 
     @dispatch
     def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
-        timestamp: Path = Path(str(timestamp))
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
+            sensor.name)
+        self.__update_iterator(it.iterator, timestamp)
         message, location = self._get_image(sensor.name, timestamp)
         return message, location
 
