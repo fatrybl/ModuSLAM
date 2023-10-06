@@ -66,12 +66,12 @@ class MeasurementCollector():
             try:
                 position, line = next(iter)
             except StopIteration:
-                msg = f"Could not find measurement in file with timestamp={timestamp}"
+                msg = f"Could not find measurement with timestamp={timestamp}"
                 logger.error(msg)
                 raise
             else:
                 current_timestamp = as_int(line[0], logger)
-                return position, line
+        return position, line
 
     def _iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
         position, line = next(it.iterator)

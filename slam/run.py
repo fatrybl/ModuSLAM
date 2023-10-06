@@ -17,6 +17,7 @@ def run(cfg: Config):
     print(cfg)
     main_manager = MainManager(cfg)
     main_manager.build_map()
+    # main_manager.create_batch_with_requests()
     # main_manager.create_batch_with_measurement()
     # main_manager.validate()
 

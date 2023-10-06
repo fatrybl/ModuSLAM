@@ -38,10 +38,10 @@ class DataManager(metaclass=MetaSingleton):
         self.batch_factory.create_batch(measurements)
 
     @dispatch
-    def make_batch(self, measurements: set[PeriodicData]) -> None:
+    def make_batch(self, requests: set[PeriodicData]) -> None:
         """Creates a data batch with given measurements
 
         Args:
-            measurements (list[Element]): list of elements wihtout row data
+            requests (set[PeriodicData]): _description_
         """
-        self.batch_factory.create_batch(measurements)
+        self.batch_factory.create_batch(requests)
