@@ -10,7 +10,7 @@ from slam.utils.exceptions import FileNotValid, TopicNotFound, NotSubset
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLocation
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
-from slam.utils.auxiliary import SensorData, TimeLimit
+from slam.utils.auxiliary_dataclasses import SensorData, TimeLimit
 from configs.experiments.ros1.config import Ros1
 
 def test_unknown_file_scenario():

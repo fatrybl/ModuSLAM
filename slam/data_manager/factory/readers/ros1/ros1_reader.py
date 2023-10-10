@@ -11,7 +11,7 @@ from slam.data_manager.factory.readers.ros1.ros_manager import RosManager
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from configs.experiments.ros1.config import Ros1, SensorConfig
-from slam.utils.auxiliary import TimeLimit
+from slam.utils.auxiliary_dataclasses import TimeLimit
 
 logger = logging.getLogger(__name__)
 

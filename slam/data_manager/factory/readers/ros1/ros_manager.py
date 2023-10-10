@@ -3,7 +3,7 @@ from pathlib import Path
 import logging
 from plum import dispatch
 
-from configs.paths.DEFAULT_FILE_PATHS import RosDatasetStructure
+from configs.experiments.ros1.config import RosDatasetStructure
 from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosFileStorage, RosDatasetIterator, RosDataRange
 from slam.utils.exceptions import FileNotValid

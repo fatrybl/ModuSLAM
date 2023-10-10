@@ -1,7 +1,6 @@
 from pathlib import Path
 from enum import Enum
 import copy
-import dataclasses
 from rosbags.rosbag1 import Writer
 from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__NavSatStatus, \
@@ -10,8 +9,8 @@ from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
                                 sensor_msgs__msg__Imu
 from rosbags.serde import serialize_ros1
 from numpy import array
-from configs.paths.default import RosDatasetStructure
-from configs.experiments.ros1.config import Ros1, SensorConfig, RosSensorConfig
+from configs.experiments.ros1.config import RosDatasetStructure
+from configs.experiments.ros1.config import Ros1, RosSensorConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 

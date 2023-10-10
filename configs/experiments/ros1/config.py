@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from omegaconf import MISSING
+from enum import Enum
 
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
 from configs.system.data_manager.manager import DataManager
@@ -8,9 +10,13 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 
+class RosDatasetStructure(Enum):
+    master_filename = "MasterFilename.txt"
+    data_files_folder = Path("dataset1")
+
 @dataclass
 class RosSensorConfig(SensorConfig):
-    topic: str
+    topic: str = MISSING
 
 
 imu = RosSensorConfig('xsens_imu', Imu.__name__, 'imu.yaml', '/sensors/imu/')

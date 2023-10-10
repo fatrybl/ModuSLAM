@@ -9,7 +9,7 @@ from slam.utils.exceptions import  TopicNotFound
 from slam.data_manager.factory.readers.element_factory import Location
 
 
-@dataclass
+@dataclass(frozen=True)
 class RosElementLocation(Location):
     file: Path
     topic: str
