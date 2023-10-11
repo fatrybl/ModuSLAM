@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-10-05T11:08:06.456Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="-GMWgehM7gPU3sOZpkjK" version="21.1.2" type="device">
+<mxfile host="Electron" modified="2023-10-05T11:08:09.895Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="2bwtTtI3dJ2tN-OAI-Hf" version="21.1.2" type="device">
   <diagram name="Page-1" id="amy6pQFvX8r8L1cMmpqH">
     <mxGraphModel dx="3415" dy="623" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
@@ -958,7 +958,7 @@
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-17" value="4) Tests for: main data flow -&amp;gt; batch from measurements -&amp;gt; main data flow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="120" width="570" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-10" value="6) Create data batch with time limits: from start to stop." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
+        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-10" value="5) Create data batch with time limits: from start to stop." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="150" width="570" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-11" value="&lt;font color=&quot;#ea6b66&quot; style=&quot;font-size: 16px;&quot;&gt;What tools are missing in Data Manager ?&lt;/font&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">

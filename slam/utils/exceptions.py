@@ -16,4 +16,4 @@ class NotSubset(Exception):
 
 
 class SensorNotFound(Exception):
-    'Sensor has not benn found'
+    'Sensor has not been found'

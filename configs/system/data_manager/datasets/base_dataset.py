@@ -9,4 +9,4 @@ class Dataset:
     name: str = MISSING
     url: str = MISSING
     directory: Path = MISSING
-    datset_type: str = MISSING
+    dataset_type: str = MISSING

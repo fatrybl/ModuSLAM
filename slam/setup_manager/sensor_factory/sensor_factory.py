@@ -13,6 +13,17 @@ logger = logging.getLogger(__name__)
 
 
 class SensorFactory(metaclass=MetaSingleton):
+    """Factory class for sensors management. Defaults to MetaSingleton.
+
+    Class Attributes: 
+        all_sensors: sensors to be used in experiments for a particluar dataset.
+        used_sensors: sensors to be used in the experiment for a particluar dataset. Must be a subset of all_sensors.
+
+    Raises:
+        SensorNotFound: there is no sensor with the requested sensor name among all sensors.
+        NotSubset: some of used sensor are not defined in all sensors set.
+        ValueError: there is no available sensor type for the item from config.
+    """
 
     all_sensors: set[Type[Sensor]] = set()
     used_sensors: set[Type[Sensor]] = set()
@@ -34,6 +45,17 @@ class SensorFactory(metaclass=MetaSingleton):
 
     @classmethod
     def name_to_sensor(cls, name: str) -> Type[Sensor]:
+        """Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
+
+        Args:
+            name (str): sensor name
+
+        Raises:
+            SensorNotFound: there is no sensor with the requested sensor name among all sensors.
+
+        Returns:
+            Type[Sensor]: sensor if it exists among all sensors.
+        """
         for s in cls.all_sensors:
             if s.name == name:
                 sensor = s
@@ -44,6 +66,7 @@ class SensorFactory(metaclass=MetaSingleton):
         raise SensorNotFound(msg)
 
     def _init_sesnors(self) -> None:
+        """Initializes all sensors and used sensors from config."""
         for s in self.__all_sensors_list:
             sensor = self._map_item_to_sesnor(s)
             self.all_sensors.add(sensor)
@@ -53,12 +76,27 @@ class SensorFactory(metaclass=MetaSingleton):
             self.used_sensors.add(sensor)
 
     def _check_used_sesnors(self) -> None:
+        """Checks if used sensors are part of all initialized sensors.
+
+        Raises:
+            NotSubset: Some of used sensor are not defined in all sensors set.
+        """
         if not self.used_sensors or not self.used_sensors.issubset(self.all_sensors):
             msg = f'Used sensors: {self.used_sensors} are not in known sensors: {self.all_sensors} or empty'
             logger.critical(msg)
             raise NotSubset(msg)
 
     def _map_item_to_sesnor(self, item: SensorConfig) -> Type[Sensor]:
+        """ Creates sensor from config item.
+
+        Args:
+            item (SensorConfig): item from config
+
+        Raises:
+            ValueError: there is no available sensor type for the item from config.
+        Returns:
+            Type[Sensor]: sensor
+        """
         name: str = item.name
         sensor_type: str = item.type
         config_file: Path = self.__sensor_config_dir / item.config_name
@@ -93,4 +131,4 @@ class SensorFactory(metaclass=MetaSingleton):
         else:
             msg = f'unsupported sensor type: {sensor_type}'
             logger.error(msg)
-            raise KeyError(msg)
+            raise ValueError(msg)
