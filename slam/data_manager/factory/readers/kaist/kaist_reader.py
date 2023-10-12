@@ -58,9 +58,9 @@ class KaistReader(DataReader):
                 for line in reader:
                     yield line
         else:
-            logger.critical(
-                f"file: {self.__sensor_order_file} is not valid to initialize the iterator")
-            raise FileNotValid
+            msg = f"file: {self.__sensor_order_file} is not valid to initialize the iterator"
+            logger.critical(msg)
+            raise FileNotValid(msg)
 
     @dispatch
     def get_element(self) -> Element | None:
@@ -104,8 +104,15 @@ class KaistReader(DataReader):
         return element
 
     @dispatch
-    def get_element(self, sensor: Type[Sensor], timestamp: int) -> Element:
-        # 1) найти элемент с t0
-        # 2) проинициализировать итератор с него
-        # 3) итерироваться по нему.
-        raise NotImplementedError
+    def get_element(self, sensor: Sensor, init_time: int | None = None) -> Element:
+        if init_time:
+            message, location = self.__collector.get_data(sensor, init_time)
+        else:
+            message, location = self.__collector.get_data(sensor)
+
+        measurement = Measurement(sensor, message.data)
+        timestamp: int = as_int(message.timestamp, logger)
+        element = Element(timestamp,
+                          measurement,
+                          location)
+        return element

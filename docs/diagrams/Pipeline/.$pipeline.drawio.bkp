@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-10-04T09:20:24.579Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="Bz88hUqW0XPcKhlM_SU8" version="21.1.2" type="device">
+<mxfile host="Electron" modified="2023-10-05T11:08:06.456Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="-GMWgehM7gPU3sOZpkjK" version="21.1.2" type="device">
   <diagram name="Page-1" id="amy6pQFvX8r8L1cMmpqH">
-    <mxGraphModel dx="3285" dy="548" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="3415" dy="623" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -944,7 +944,7 @@
           <mxGeometry x="-1698.38" y="1383" width="95" height="15" as="geometry" />
         </mxCell>
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-1" value="&lt;font color=&quot;#ea6b66&quot; style=&quot;font-size: 16px;&quot;&gt;What should be done to finish DataManager v 0.0.1&lt;/font&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-2274" y="2594" width="570" height="208" as="geometry" />
+          <mxGeometry x="-2274" y="2594" width="570" height="178" as="geometry" />
         </mxCell>
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-2" value="1) Memory Analyzer tests" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="30" width="570" height="30" as="geometry" />
@@ -952,17 +952,14 @@
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-7" value="2) All Fucntions description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="60" width="570" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-8" value="3) make_batch (dict {Sensor_type, range of measurements})" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
+        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-9" value="3) Tests for new make_batch regime&amp;nbsp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="90" width="570" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-9" value="4) Tests for new make_batch regime&amp;nbsp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
+        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-17" value="4) Tests for: main data flow -&amp;gt; batch from measurements -&amp;gt; main data flow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
           <mxGeometry y="120" width="570" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HoDFv_qUpZ7LxNlIAZH2-17" value="5) Tests for: main data flow -&amp;gt; batch from measurements -&amp;gt; main data flow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
-          <mxGeometry y="150" width="570" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-10" value="6) Create data batch with time limits: from start to stop." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-1" vertex="1">
-          <mxGeometry y="180" width="570" height="28" as="geometry" />
+          <mxGeometry y="150" width="570" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-11" value="&lt;font color=&quot;#ea6b66&quot; style=&quot;font-size: 16px;&quot;&gt;What tools are missing in Data Manager ?&lt;/font&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-2275.88" y="2831" width="570" height="180" as="geometry" />
@@ -982,19 +979,19 @@
         <mxCell id="HoDFv_qUpZ7LxNlIAZH2-16" value="5) Some other tests?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="HoDFv_qUpZ7LxNlIAZH2-11" vertex="1">
           <mxGeometry y="150" width="570" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="iqSWQIKPsEfug9fX-E3l-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="iqSWQIKPsEfug9fX-E3l-1" target="KpYmoEpn27h0bMTAHkpe-9">
+        <mxCell id="iqSWQIKPsEfug9fX-E3l-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="iqSWQIKPsEfug9fX-E3l-1" target="KpYmoEpn27h0bMTAHkpe-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="iqSWQIKPsEfug9fX-E3l-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FFFF66;gradientDirection=north;" vertex="1" parent="1">
+        <mxCell id="iqSWQIKPsEfug9fX-E3l-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FFFF66;gradientDirection=north;" parent="1" vertex="1">
           <mxGeometry x="-2257.26" y="220.5" width="298.88" height="97" as="geometry" />
         </mxCell>
-        <mxCell id="iqSWQIKPsEfug9fX-E3l-2" value="Sensor Factory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="iqSWQIKPsEfug9fX-E3l-2" value="Sensor Factory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="-2098.3300000000004" y="249" width="109.88" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="iqSWQIKPsEfug9fX-E3l-3" value="Config &lt;br&gt;(Hydra)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="iqSWQIKPsEfug9fX-E3l-3" value="Config &lt;br&gt;(Hydra)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="-2244.9500000000003" y="250.5" width="109.88" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="iqSWQIKPsEfug9fX-E3l-4" value="&lt;b&gt;&lt;font style=&quot;font-size: 17px;&quot;&gt;Setup Manager&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="iqSWQIKPsEfug9fX-E3l-4" value="&lt;b&gt;&lt;font style=&quot;font-size: 17px;&quot;&gt;Setup Manager&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-2160" y="182" width="127" height="33" as="geometry" />
         </mxCell>
       </root>

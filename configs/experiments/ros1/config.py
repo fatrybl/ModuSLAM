@@ -5,6 +5,7 @@ from enum import Enum
 
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
 from configs.system.data_manager.manager import DataManager
+from configs.system.data_manager.memory import MemoryAnalyzer
 from configs.system.data_manager.datasets.base_dataset import Dataset
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
@@ -59,7 +60,8 @@ class Sensors(SetupManager):
 
     used_sensors: list[SensorConfig] = field(
         default_factory=lambda: [imu, stereo])
-
+    
+    sensor_config_dir: Path = field(default_factory=lambda: Path("/home/ilia/mySLAM/configs/sensors"))
 
 @dataclass
 class Ros1DS(Dataset):
@@ -67,11 +69,17 @@ class Ros1DS(Dataset):
     directory: Path = Path("/home/oem/Downloads/urban18-highway/")
     time_limit: list[int] = field(default_factory=lambda: [0, 300])
     deserialize_raw_data: bool  = False
+    dataset_type: str = 'ros1'
+    
+@dataclass
+class Memory(MemoryAnalyzer):
+    graph_memory: float = 30.0
+
 
 @dataclass
 class Ros1DM(DataManager):
     dataset: Ros1DS = field(default_factory=Ros1DS)
-
+    memory: MemoryAnalyzer = field(default_factory=Memory)
 
 @dataclass
 class Ros1:

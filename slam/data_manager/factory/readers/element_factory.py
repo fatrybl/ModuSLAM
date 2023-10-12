@@ -5,7 +5,7 @@ from typing import Any, Type
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
-@dataclass(frozen=True, eq=True)
+@dataclass(frozen=True)
 class Location(ABC):
     """
     Abstract location for inheritence of

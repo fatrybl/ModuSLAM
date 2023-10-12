@@ -31,7 +31,7 @@ class DataReaderFactory():
             if cfg.dataset_type == 'kaist':
                 return KaistReader()
             if cfg.dataset_type == 'ros1':
-                return Ros1BagReader()
+                return Ros1BagReader(cfg)
             else:
                 logger.critical(
                     f'No DataReader for dataset type: {cfg.dataset_type}')

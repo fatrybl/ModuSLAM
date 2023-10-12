@@ -1,7 +1,4 @@
-import sys
-import os
-sys.path.insert(0, os.getcwd())
-from slam.main_manager.main_manager import MainManager
+
 import sys
 sys.dont_write_bytecode = True
 from hydra import main
@@ -18,18 +15,14 @@ Main runner of SLAM system.
 """
 
 
-<<<<<<< HEAD
-def run():
-    main_manager = MainManager()
-=======
 @main(config_name='default_config')
 def run(cfg: Config):
     """creates Main Manager and runs SLAM
     """
     print(cfg)
     main_manager = MainManager(cfg)
->>>>>>> develop
     main_manager.build_map()
+    # main_manager.create_batch_with_requests()
     # main_manager.create_batch_with_measurement()
     # main_manager.validate()
 

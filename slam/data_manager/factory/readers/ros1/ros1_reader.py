@@ -11,7 +11,7 @@ from slam.data_manager.factory.readers.ros1.ros_manager import RosManager
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from configs.experiments.ros1.config import Ros1, SensorConfig
-from slam.utils.auxiliary_dataclasses import TimeLimit
+from slam.utils.auxiliary_dataclasses import TimeRange
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +85,7 @@ class Ros1BagReader(DataReader):
 
 
     @dispatch
-    def get_element(self, time_range : TimeLimit, sensor_name: str, first_element: bool = False) -> Element | None:
+    def get_element(self, time_range : TimeRange, sensor_name: str, first_element: bool = False) -> Element | None:
         """get elements from given locations
 
         Args:

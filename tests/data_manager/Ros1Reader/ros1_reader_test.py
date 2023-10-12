@@ -10,7 +10,7 @@ from slam.utils.exceptions import FileNotValid, TopicNotFound, NotSubset
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLocation
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
-from slam.utils.auxiliary_dataclasses import SensorData, TimeLimit
+from slam.utils.auxiliary_dataclasses import TimeRange
 from configs.experiments.ros1.config import Ros1
 
 def test_unknown_file_scenario():
@@ -32,7 +32,7 @@ def test_unknown_topic_scenario():
 def test_ros_get_elements_in_time():
     reader = Ros1BagReader(TestDataFactory.get_default_config())
 
-    time_range = TimeLimit(2, 6)
+    time_range = TimeRange(2, 6)
     element_list = []
     element: Element = reader.get_element(time_range, Imu.__name__, True)
     element_list.append(element)
@@ -47,7 +47,7 @@ def test_ros_get_elements_in_time():
     assert len(element_list) == 2
 
 
-    time_range = TimeLimit(4, 20)
+    time_range = TimeRange(4, 20)
     element_list = []
     element: Element = reader.get_element(time_range, Gps.__name__, True)
     element_list.append(element)
@@ -61,7 +61,7 @@ def test_ros_get_elements_in_time():
 
     assert len(element_list) == 4
 
-    time_range = TimeLimit(4, 20)
+    time_range = TimeRange(4, 20)
     element_list = []
     element: Element = reader.get_element(time_range, Lidar2D.__name__, True)
     element_list.append(element)
