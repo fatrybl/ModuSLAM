@@ -17,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class BatchFactory():
-    """Creates and manages Data Batch.
-    """
+    """Creates and manages Data Batch."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         self._break_point = StoppingCriterionSingleton()

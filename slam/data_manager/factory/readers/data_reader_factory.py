@@ -12,14 +12,29 @@ logger = logging.getLogger(__name__)
 
 
 class DataReaderFactory():
+    """Factory for creating DataReader instance based on supported datasets.
+
+    Returns:
+        Type[DataReader]: data reader for a dataset.
+    """
+
     def __new__(cls, dataset_params: Type[Dataset], regime_params: type[Regime]) -> Type[DataReader]:
+        """Creates data reader for a given dataset.
+
+        Args:
+            dataset_params (Type[Dataset]): params of a dataset.
+            regime_params (type[Regime]): params of a data flow regime: Stream or TimeRange. 
+
+        Raises:
+            NotImplementedError: no data reader for a given dataset.
+
+        Returns:
+            Type[DataReader]: data reader object for a given dataset.
+        """
         if dataset_params.dataset_type == Kaist.__name__:
             return KaistReader(dataset_params, regime_params)
-
-        elif dataset_params.dataset_type == Ros1.__name__:
-            raise NotImplementedError
 
         else:
             logger.critical(
                 f'No DataReader for dataset type: {dataset_params.dataset_type}')
-            raise TypeError
+            raise NotImplementedError

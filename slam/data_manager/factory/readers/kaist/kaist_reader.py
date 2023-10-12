@@ -37,6 +37,18 @@ class KaistReaderState(DataFlowState):
 
 
 class KaistReader(DataReader):
+    """Data reader for Kaist Urban Dataset.
+
+    Args:
+        DataReader (_type_): Base abstract class.
+
+    Raises:
+        FileNotValid: _description_
+        ValueError: _description_
+        ValueError: _description_
+        SensorNotFound: no sensor with <NAME> in used
+    """
+
     EMPTY_STRING: str = ""
     INCORRECT_TIMESTAMP: int = -1
     TIMESTAMP: str = 'timestamp'
@@ -45,10 +57,11 @@ class KaistReader(DataReader):
     def __init__(self, dataset_params: Kaist, regime_params: type[Regime]):
         self._dataset_params = dataset_params
         self._regime_params = regime_params
+        self._data_stamp_file: Path = dataset_params.data_stamp_file
         self._collector = MeasurementCollector(
-            dataset_params.iterable_data_files, dataset_params.data_dirs)
-        data_stamp_iterator: Iterator[dict[str, str]] = self.init_iterator(
-            dataset_params.data_stamp_file)
+            dataset_params.iterable_data_files,
+            dataset_params.data_dirs)
+        data_stamp_iterator: Iterator[dict[str, str]] = self.init_iterator()
         self.__current_state = KaistReaderState(
             data_stamp_iterator,
             self._collector.iterators)
@@ -61,13 +74,26 @@ class KaistReader(DataReader):
 
     @property
     def current_state(self) -> KaistReaderState:
+        """
+        Returns:
+            KaistReaderState: state of iterators
+        """
         return self.__current_state
 
-    @classmethod
-    def init_iterator(cls, file: Path) -> Iterator[dict[str, str]]:
+    def init_iterator(self) -> Iterator[dict[str, str]]:
+        """Initialize a new iterator for a given file. 
+            Each line is a dictionary with timestamp and sensor keys.
+
+        Raises:
+            FileNotValid: raises when the file does not exist or empty.
+
+        Yields:
+            Iterator[dict[str, str]]: file iterator as a dictionary. 
+        """
+        file = self._data_stamp_file
         if (DataReader._is_file_valid(file)):
             with open(file, "r") as f:
-                names = [cls.TIMESTAMP, cls.SENSOR_NAME]
+                names = [self.TIMESTAMP, self.SENSOR_NAME]
                 reader = DictReader(f, fieldnames=names)
                 for line in reader:
                     yield line
@@ -77,20 +103,38 @@ class KaistReader(DataReader):
             raise FileNotValid(msg)
 
     def __reset_current_state(self) -> None:
+        """ Re-initializes  all iterators."""
+
         self._collector.reset_iterators()
-        data_stamp_file: Path = self._dataset_params.data_stamp_file
         data_stamp_iterator: Iterator[dict[str, str]
-                                      ] = self.init_iterator(data_stamp_file)
+                                      ] = self.init_iterator()
         self.__current_state = KaistReaderState(
             data_stamp_iterator,
             self._collector.iterators)
 
     def __get_file_iterator(self, senor_name: str) -> FileIterator | None:
+        """Seeks for the file iterator which corresponds to sensor with the given sensor name.
+
+        Args:
+            senor_name (str): name of sensor to look up in the file iterator collection.
+
+        Returns:
+            FileIterator | None: for sensor with the given sensor name.
+        """
         for it in self.__current_state.sensors_iterators:
             if it.sensor_name == senor_name:
                 return it
 
     def __get_sensor_name(self, timestamp: int) -> tuple[str, int]:
+        """Returns the name of the sensor which corresponds to the given timestamp in data_stamp.csv file.
+            and a number of iterations before the sensor has been found.
+
+        Args:
+            timestamp (int): time of a sensor measurement
+
+        Returns:
+            tuple[str, int]: sensor name and number of iterations
+        """
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         sensor_name: str = self.EMPTY_STRING
         counter: int = 0
@@ -105,6 +149,15 @@ class KaistReader(DataReader):
         return sensor_name, counter
 
     def __iterate_to_timestamp(self, it: FileIterator, timestamp: int) -> int:
+        """iterates with an iterator until a timestamp is encountered.
+
+        Args:
+            it (FileIterator): file iterator
+            timestamp (int): timestamp of a measurement.
+
+        Returns:
+            int: a number of iterations before the timestamp is encountered.
+        """
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         counter: int = 0
         while current_timestamp != timestamp:
@@ -115,6 +168,15 @@ class KaistReader(DataReader):
 
     @dispatch
     def __iterate_N_times(self, N: int, it: FileIterator) -> None:
+        """ Overloaded method to iterate N times with the given iterator.
+
+        Args:
+            N (int): a number of iterations.
+            it (FileIterator): an iterator for a file with sensor timestamps.
+
+        Raises:
+            ValueError: amount of iterations is negative.
+        """
         if N >= 0:
             for _ in range(N):
                 next(it.iterator)
@@ -125,6 +187,15 @@ class KaistReader(DataReader):
 
     @dispatch
     def __iterate_N_times(self, N: int, it: Iterator[dict[str, str]]) -> None:
+        """Overloaded method to iterate N times with the given iterator.
+
+        Args:
+            N (int): a number of iterations.
+            it (Iterator[dict[str, str]]): an iterator for data_stamp.csv file.
+
+        Raises:
+            ValueError: amount of iterations is negative.
+        """
         if N >= 0:
             for _ in range(N):
                 next(it)
@@ -134,10 +205,16 @@ class KaistReader(DataReader):
             raise ValueError(msg)
 
     def _set_initial_state(self, time_range: TimeRange):
-        """ Sets the initial state of the iterators
+        """ Sets the initial state of iterators for Time Range regime.
+            1) Gets sensor and N (number of iterations which corresponds to "start" timestamp).
+            2) Gets iterator and M (number of iterations for the sensor of "start" timestamp).
+            3) Checks if a sensor with the "stop" timestamp has been initialized in SensorFactory
+            4) Resers all iterators
+            5) Iterates the corresponding iterators N-1 and M-1 times s.t. 
+                the future call of next() will return an iterator of the "start" timestamp.
 
         Args:
-            initial_state (int): timestamp of the first measurement
+            time_range (TimeRange): start and stop timestamps structure.
         """
         first_sensor_name, data_stamp_num_iterations = self.__get_sensor_name(
             time_range.start)
@@ -166,6 +243,13 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_element(self) -> Element | None:
+        """
+        Gets element from a dataset sequantially based on iterator position. 
+
+        Returns:
+            Element | None: element with raw sensor measurement 
+                            or None if all measurements from a dataset has already been processed
+        """
         try:
             while True:
                 line = next(self.__current_state.data_stamp_iterator)
@@ -199,6 +283,16 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_element(self, element: Element) -> Element:
+        """
+        Gets an element with raw sensor measurement from a dataset for 
+            a given element without raw sensor measurement.
+
+        Args:
+            element (Element): without raw sensor measurement.
+
+        Returns:
+            Element: with raw sensor measurement.
+        """
         sensor: Type[Sensor] = element.measurement.sensor
         timestamp: int = element.timestamp
         message, __ = self._collector.get_data(sensor, timestamp)
@@ -210,9 +304,22 @@ class KaistReader(DataReader):
         return element
 
     @dispatch
-    def get_element(self, sensor: Sensor, init_time: int | None = None) -> Element:
-        if init_time:
-            message, location = self._collector.get_data(sensor, init_time)
+    def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
+        """
+        Gets an element with raw sensor measurement from a dataset for 
+            a given sensor and timestamp. If timestamp is None, 
+            gets the element sequantally based on iterator position.
+
+        Args:
+            sensor (Sensor): a sensor to get measurement of.
+            init_time (int | None, optional): timestamp of sensor`s measurement. 
+                                                Defaults to None.
+
+        Returns:
+            Element: with raw sensor measurement.
+        """
+        if timestamp:
+            message, location = self._collector.get_data(sensor, timestamp)
         else:
             message, location = self._collector.get_data(sensor)
 

@@ -17,3 +17,7 @@ class NotSubset(Exception):
 
 class SensorNotFound(Exception):
     'Sensor has not been found'
+
+
+class ExternalModuleException(Exception):
+    'External module failed to work properly'
