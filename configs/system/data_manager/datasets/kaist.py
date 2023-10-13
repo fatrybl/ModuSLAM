@@ -8,12 +8,19 @@ from configs.system.data_manager.datasets.base_dataset import Dataset
 
 @dataclass
 class Pair:
+    """
+    Pair of unique sensor name and sensor`s data location.
+    """
     sensor_name: str
     location: Path
 
 
 @dataclass
 class Kaist(Dataset):
+    """
+    Kaist Urban Dataset parameters.
+    """
+
     dataset_type: str = 'Kaist'
 
     name: str = 'Kaist Urban Dataset'

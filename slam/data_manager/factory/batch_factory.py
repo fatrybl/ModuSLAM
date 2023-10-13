@@ -20,6 +20,10 @@ class BatchFactory():
     """Creates and manages Data Batch."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
+        """
+        Args:
+            cfg (DataManagerConfig): config with parameters 
+        """
         self._break_point = StoppingCriterionSingleton()
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
         self._batch = DataBatch()

@@ -22,7 +22,11 @@ print(type(logger))
 class MainManager(metaclass=MetaSingleton):
 
     def __init__(self, cfg: Config) -> None:
-        """Initializes all managers"""
+        """Initializes all managers
+
+        Args:
+            cfg (Config): main config for all managers.
+        """
         self.break_point = StoppingCriterionSingleton()
         self.setup_manager = SetupManager(cfg.setup_manager)
         self.data_manager = DataManager(cfg.data_manager)

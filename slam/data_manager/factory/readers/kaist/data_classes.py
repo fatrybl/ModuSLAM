@@ -13,12 +13,18 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class Message:
+    """
+    Message with a timestamp and any data
+    """
     timestamp: str
     data: Any
 
 
 @dataclass(frozen=True)
 class FileIterator:
+    """
+    Iterator for sensor`s stamp file 
+    """
     sensor_name: str
     file: Path
     iterator: Iterator[tuple[int, list[str]]]
@@ -26,28 +32,46 @@ class FileIterator:
 
 @dataclass(frozen=True)
 class Storage:
+    """
+    Storage for sensor`s data. For a directory with bin / png / ...
+    """
     sensor_name: str
     path: Path
 
 
 @dataclass(frozen=True)
 class BinaryDataLocation(Location):
+    """
+    Binary data location.
+    """
     file: Path
 
 
 @dataclass(frozen=True)
 class StereoImgDataLocation(Location):
+    """
+    Stereo data location. Stores paths as a list.
+    """
     files: list[Path] = field(metadata={'unit': 'list of img paths'})
 
 
 @dataclass(frozen=True)
 class CsvDataLocation(Location):
+    """
+    Csv data location: a file and position (line number) in a file.
+    """
     file: Path
     position: int
 
 
 @dataclass
 class SensorIterators:
+    """
+    Iterators for sensors` data files.
+
+    Raises:
+        ValueError: No FileIterator found for the given sensor name.
+    """
     iterable_locations: InitVar[list[Pair]]
     init_method: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
 
@@ -74,6 +98,15 @@ class SensorIterators:
 
 @dataclass(frozen=True, eq=True)
 class DataStorage:
+    """
+    Data storages for sensors` data of type .bin / .png / etc. 
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
     sensors_locations: InitVar[list[Pair]]
 
     storages: set[Storage] = field(default_factory=lambda: set())

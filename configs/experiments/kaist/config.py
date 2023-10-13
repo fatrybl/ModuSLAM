@@ -121,7 +121,7 @@ class Range(TimeRange):
 class DM(DataManager):
     dataset: Dataset = field(default_factory=KaistDS)
     memory: MemoryAnalyzer = field(default_factory=Memory)
-    regime: Regime = field(default_factory=Stream)
+    regime: Regime = field(default_factory=Range)
 
 
 @dataclass

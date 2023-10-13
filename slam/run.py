@@ -12,7 +12,7 @@ Main runner of SLAM system.
 
 @main(config_name='default_config')
 def run(cfg: Config):
-    """creates Main Manager and runs SLAM
+    """creates Main Manager and runs SLAM based on configuration
     """
     # print(cfg.data_manager)
     main_manager = MainManager(cfg)

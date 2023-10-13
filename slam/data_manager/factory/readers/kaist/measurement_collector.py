@@ -8,9 +8,6 @@ from typing import Callable, Type
 from cv2 import imread, IMREAD_COLOR
 from plum import dispatch
 
-from configs.paths.kaist_dataset import KaistDataset
-from configs.system.data_manager.datasets.kaist import Pair
-
 from slam.data_manager.factory.readers.element_factory import Location
 from slam.data_manager.factory.readers.kaist.data_classes import (
     BinaryDataLocation, CsvDataLocation, DataStorage, FileIterator,
@@ -20,6 +17,9 @@ from slam.setup_manager.sensor_factory.sensors import (
     Lidar2D, Lidar3D, Sensor, StereoCamera, VrsGps)
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ExternalModuleException
+
+from configs.paths.kaist_dataset import KaistDataset
+from configs.system.data_manager.datasets.kaist import Pair
 
 logger = logging.getLogger(__name__)
 
