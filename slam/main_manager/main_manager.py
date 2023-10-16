@@ -1,4 +1,3 @@
-from copy import deepcopy
 import logging
 from slam.data_manager.factory.batch import DataBatch
 

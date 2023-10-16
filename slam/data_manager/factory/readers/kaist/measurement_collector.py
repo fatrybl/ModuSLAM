@@ -31,15 +31,15 @@ class MeasurementCollector():
     IMAGE_EXTENSION: str = '.png'
     BINARY_EXTENSION: str = '.bin'
 
-    def __init__(self, iterable_files: list[Pair], data_dirs: list[Pair]):
+    def __init__(self, iterable_files: tuple[Pair], data_dirs: tuple[Pair]):
         """
         Args:
-            iterable_files (list[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
+            iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
                 which corresponds to unique sensor name and its stamp file path.
-            data_dirs (list[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
+            data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
                 which corresponds to unique sensor name and its data directory.
         """
-        self._iterable_data_files: list[Pair] = iterable_files
+        self._iterable_data_files: tuple[Pair] = iterable_files
         self._sensor_data_storages = DataStorage(data_dirs)
         self._sensor_data_iterators = SensorIterators(
             iterable_files,
@@ -60,18 +60,19 @@ class MeasurementCollector():
             self._iterable_data_files,
             self._init_iterator)
 
-    def _init_iterator(self, file: Path) -> Iterator[tuple[int, list[str]]]:
+    def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str]]]:
         """Initializes an iterator for a given file.
 
         Args:
             file (Path): file to be iterated.
 
         Yields:
-            Iterator[tuple[int, list[str]]]: line number and list of string for each line in the file.
+            Iterator[tuple[int, tuple[str]]]: line number and tuple of string for each line in the file.
         """
         with open(file, "r") as f:
             reader = csv_reader(f)
             for position, line in enumerate(reader):
+                line = tuple(line)
                 yield position, line
 
     def __read_bin(self, file: Path) -> Message:
@@ -85,21 +86,23 @@ class MeasurementCollector():
         """
         with open(file, 'rb') as f:
             line = f.read()
+            line = tuple(line)
             timestamp: str = file.stem
-            return Message(timestamp, line)
+            message = Message(timestamp, line)
+            return message
 
-    def __find_in_file(self, iter: Iterator[tuple[int, list[str]]], timestamp: int) -> tuple[int, list[str]]:
+    def __find_in_file(self, iter: Iterator[tuple[int, tuple[str]]], timestamp: int) -> tuple[int, tuple[str]]:
         """ Iterates over file and finds the line with the given timestamp.
 
         Args:
-            iter (Iterator[tuple[int, list[str]]]): iterator of tuple. 
+            iter (Iterator[tuple[int, tuple[str]]]): iterator of tuple. 
             timestamp (int): timestamp.
 
         Raises:
             StopIteration: if no line with the given timestamp in a file.
 
         Returns:
-            tuple[int, list[str]]: line number and line as list of strings.
+            tuple[int, tuple[str]]: line number and line as tuple of strings.
         """
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         while current_timestamp != timestamp:
@@ -127,12 +130,12 @@ class MeasurementCollector():
         location = CsvDataLocation(it.file, position)
         return message, location
 
-    def __update_iterator(self, iterator: Iterator[tuple[int, list[str]]], timestamp: int) -> None:
+    def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str]]], timestamp: int) -> None:
         """ Wrapper method to iterate over a file.
             Only for dummy iterations until given timestamp is reached.
 
         Args:
-            iterator (Iterator[tuple[int, list[str]]]): _description_
+            iterator (Iterator[tuple[int, tuple[str]]]): _description_
             timestamp (int): _description_
         """
         __, __ = self.__find_in_file(iterator, timestamp)
@@ -150,6 +153,7 @@ class MeasurementCollector():
             tuple[Message, StereoImgDataLocation]: message with raw stereo images and timestamp;
                                                    location of imgages
         """
+
         timestamp_path: Path = Path(str(timestamp))
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor_name)
@@ -166,12 +170,12 @@ class MeasurementCollector():
 
         for img, path in zip([left_img, right_img], [left_img_file, right_img_file]):
             if img is None:
-                msg = f"img with path {path} has not been read with OpenCV::IMREAD"
+                msg = f"Img with path {path} has not been read with OpenCV::IMREAD"
                 logger.critical(msg)
                 raise ExternalModuleException(msg)
 
-        message = Message(timestamp, [left_img, right_img])
-        location = StereoImgDataLocation([left_img_file, right_img_file])
+        message = Message(timestamp, (left_img, right_img))
+        location = StereoImgDataLocation((left_img_file, right_img_file))
         return message, location
 
     @dispatch

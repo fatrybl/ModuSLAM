@@ -33,6 +33,7 @@ class BatchFactory():
 
     @property
     def batch(self) -> DataBatch:
+        self._batch.sort()
         return self._batch
 
     @batch.deleter
