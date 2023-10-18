@@ -30,7 +30,7 @@ def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader
 
 @mark.parametrize(
     ("overrides", "exception"),
-    [(["type=Ros1"],
+    [(["type=SomeUnsupportedType"],
       NotImplementedError)]
 )
 def test_DataReaderFactory_exception(overrides: list[str], exception: Type[Exception]):

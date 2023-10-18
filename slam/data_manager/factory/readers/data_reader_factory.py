@@ -15,5 +15,5 @@ class DataReaderFactory():
     def __init__(self, dataset_type: str) -> None:
         if dataset_type == Kaist.__name__:
             self.data_reader = KaistReader
-        elif dataset_type == Ros1.__name__:
+        else:
             raise NotImplementedError
