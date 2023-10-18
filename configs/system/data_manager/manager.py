@@ -16,13 +16,13 @@ class Regime(ABC):
 
 
 @dataclass
-class TimeRange(Regime):
+class TimeLimit(Regime):
     """
     Data flow is limited by time range.
     """
     start: int = MISSING
     stop: int = MISSING
-    name: str = "TimeRange"
+    name: str = "TimeLimit"
 
 
 @dataclass

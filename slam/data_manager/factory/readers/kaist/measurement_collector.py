@@ -31,7 +31,7 @@ class MeasurementCollector():
     IMAGE_EXTENSION: str = '.png'
     BINARY_EXTENSION: str = '.bin'
 
-    def __init__(self, iterable_files: tuple[Pair], data_dirs: tuple[Pair]):
+    def __init__(self, iterable_files: list[Pair], data_dirs: list[Pair]):
         """
         Args:
             iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
@@ -39,6 +39,8 @@ class MeasurementCollector():
             data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
                 which corresponds to unique sensor name and its data directory.
         """
+        iterable_files: tuple[Pair] = tuple(iterable_files)
+        data_dirs: tuple[Pair] = tuple(data_dirs)
         self._iterable_data_files: tuple[Pair] = iterable_files
         self._sensor_data_storages = DataStorage(data_dirs)
         self._sensor_data_iterators = SensorIterators(

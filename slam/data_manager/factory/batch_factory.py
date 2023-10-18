@@ -27,12 +27,16 @@ class BatchFactory():
         self._break_point = StoppingCriterionSingleton()
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
         self._batch = DataBatch()
-        self._data_reader: Type[DataReader] = DataReaderFactory(
-            cfg.dataset,
-            cfg.regime)
+        self.__factory = DataReaderFactory(cfg.dataset.type)
+        self._data_reader: Type[DataReader] = self.__factory.data_reader(
+            cfg.dataset, cfg.regime)
 
     @property
     def batch(self) -> DataBatch:
+        """
+        Returns:
+            DataBatch: Sorted Data Batch by timestamp.
+        """
         self._batch.sort()
         return self._batch
 

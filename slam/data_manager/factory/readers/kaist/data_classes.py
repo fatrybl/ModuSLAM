@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class Message:
     """
-    Message with a timestamp and any data
+    Message with a timestamp and any data.
     """
     timestamp: str
     data: tuple[Any]
@@ -23,7 +23,7 @@ class Message:
 @dataclass(frozen=True)
 class FileIterator:
     """
-    Iterator for sensor`s stamp file 
+    Iterator for sensor`s stamp file.
     """
     sensor_name: str
     file: Path

@@ -20,7 +20,7 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_methods import as_int
 
 from configs.system.data_manager.datasets.kaist import Kaist
-from configs.system.data_manager.manager import TimeRange as TimeRangeRegime
+from configs.system.data_manager.manager import TimeLimit
 from configs.system.data_manager.manager import Regime
 
 logger = logging.getLogger(__name__)
@@ -41,12 +41,6 @@ class KaistReader(DataReader):
 
     Args:
         DataReader (_type_): Base abstract class.
-
-    Raises:
-        FileNotValid: _description_
-        ValueError: _description_
-        ValueError: _description_
-        SensorNotFound: no sensor with <NAME> in used
     """
 
     EMPTY_STRING: str = ""
@@ -66,7 +60,7 @@ class KaistReader(DataReader):
             data_stamp_iterator,
             self._collector.iterators)
 
-        if regime_params.name == TimeRangeRegime.__name__:
+        if regime_params.name == TimeLimit.__name__:
             self.__time_range = TimeRange(
                 regime_params.start,
                 regime_params.stop)
@@ -268,7 +262,7 @@ class KaistReader(DataReader):
                 line[self.SENSOR_NAME])
             timestamp = line[self.TIMESTAMP]
             timestamp = as_int(timestamp, logger)
-            if self._regime_params.name == TimeRangeRegime.__name__:
+            if self._regime_params.name == TimeLimit.__name__:
                 if timestamp > self.__time_range.stop:
                     return None
 

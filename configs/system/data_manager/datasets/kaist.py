@@ -21,7 +21,7 @@ class Kaist(Dataset):
     Kaist Urban Dataset parameters.
     """
 
-    dataset_type: str = 'Kaist'
+    type: str = 'Kaist'
 
     name: str = 'Kaist Urban Dataset'
 
