@@ -1,7 +1,6 @@
 import logging
 
 from configs.system.data_manager.datasets.kaist import Kaist
-from configs.system.data_manager.datasets.ros1 import Ros1
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 logger = logging.getLogger(__name__)
@@ -16,4 +15,6 @@ class DataReaderFactory():
         if dataset_type == Kaist.__name__:
             self.data_reader = KaistReader
         else:
-            raise NotImplementedError
+            msg = f"No DataReader exists for dataset type {dataset_type}."
+            logger.critical(msg)
+            raise NotImplementedError(msg)
