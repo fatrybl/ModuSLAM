@@ -38,7 +38,6 @@ class RosFileStorage():
                 logger.critical(msg)
             msg = f"file {self.file.name} has available topics {reader.topics.keys()}"
             logger.debug(msg)
-            
             for topic_name in topics:
                 if topic_name not in reader.topics.keys():
                     msg = f"there are no topic {topic_name} "

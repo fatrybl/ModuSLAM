@@ -1,10 +1,13 @@
+from dataclasses import dataclass
 import logging
 
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from pathlib import Path
 
 from slam.data_manager.factory.readers.element_factory import Element
+from slam.utils.auxiliary_dataclasses import PeriodicData
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,7 +28,7 @@ class DataReader(ABC):
             return True
 
     @abstractmethod
-    def get_element(self, args: list[Element] | None) -> Element:
+    def get_element(self, args: list[Element] | set[PeriodicData] | None = None) -> Element:
         """
         Gets element from a dataset. 
         If no args: iterates through a dataset.

@@ -88,11 +88,17 @@ class RosManager():
         used_file_storages: list[RosFileStorage] = []
         for file in self.__file_list:
             ros_file_storage: RosFileStorage = self.__file_storage[file]
-            intersection1: bool  = (ros_file_storage.start_time  >= data_range.start and ros_file_storage.start_time <= data_range.stop) or \
-                                        (ros_file_storage.end_time  >= data_range.start and ros_file_storage.end_time <= data_range.stop) 
-            
-            intersection2: bool  = (data_range.start  >= ros_file_storage.start_time and data_range.start <= ros_file_storage.end_time) or \
-                                       (data_range.stop  >= ros_file_storage.start_time and data_range.stop <= ros_file_storage.end_time) 
+            if(data_range.stop):
+                intersection1: bool  = (ros_file_storage.start_time  >= data_range.start and ros_file_storage.start_time <= data_range.stop) or \
+                                            (ros_file_storage.end_time  >= data_range.start and ros_file_storage.end_time <= data_range.stop) 
+                
+                intersection2: bool  = (data_range.start  >= ros_file_storage.start_time and data_range.start <= ros_file_storage.end_time) or \
+                                        (data_range.stop  >= ros_file_storage.start_time and data_range.stop <= ros_file_storage.end_time) 
+            else:
+                intersection1: bool  = (ros_file_storage.start_time  >= data_range.start) or \
+                                            (ros_file_storage.end_time  >= data_range.start ) 
+                
+                intersection2: bool  = (data_range.start  >= ros_file_storage.start_time and data_range.start <= ros_file_storage.end_time)
             if(intersection1 or intersection2):
                 used_file_storages.append(ros_file_storage)
         if not data_range.topics:

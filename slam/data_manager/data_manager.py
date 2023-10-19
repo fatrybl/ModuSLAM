@@ -12,10 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataManager(metaclass=MetaSingleton):
-    """Manages all data.
-    Args:
-        Defaults to MetaSingleton.
-    """
+    """Manages all data processes. Defaults to MetaSingleton."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         self.batch_factory = BatchFactory(cfg)
@@ -23,8 +20,7 @@ class DataManager(metaclass=MetaSingleton):
 
     @dispatch
     def make_batch(self) -> None:
-        """Creates a data batch sequantically
-        """
+        """Creates a data batch sequentially based on regime in config."""
         self.batch_factory.create_batch()
         logger.debug("Data Batch has been created")
 
@@ -36,12 +32,15 @@ class DataManager(metaclass=MetaSingleton):
             measurements (list[Element]): list of elements wihtout row data
         """
         self.batch_factory.create_batch(measurements)
+        logger.debug("Data Batch has been created")
 
     @dispatch
     def make_batch(self, requests: set[PeriodicData]) -> None:
-        """Creates a data batch with given measurements
+        """Creates a data batch from requests. 
 
         Args:
-            requests (set[PeriodicData]): _description_
+            requests (set[PeriodicData]): set of requests.
+            Each request corresponds to sensor and time limits: (start, stop)
         """
         self.batch_factory.create_batch(requests)
+        logger.debug("Data Batch has been created")

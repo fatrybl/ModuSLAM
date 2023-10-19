@@ -10,7 +10,7 @@ from rosbags.typesys.types import sensor_msgs__msg__NavSatFix, \
 from rosbags.serde import serialize_ros1
 from numpy import array
 from configs.experiments.ros1.config import RosDatasetStructure
-from configs.experiments.ros1.config import Ros1, RosSensorConfig
+from configs.experiments.ros1.config import Ros1DS, RosSensorConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
@@ -58,27 +58,22 @@ class TestDataFactory:
         #                                         deserialize_raw_data= False, 
         #                                         master_file_dir= TestDataFactory.MASTER_BAG_DIR)
         #cfg =replace(Ros1())
-        cfg = Ros1()
+        cfg = Ros1DS()
         # print(cfg__)
         
-        cfg.setup_manager.all_sensors = [
+        cfg.used_sensors = [
                     self.imu,
                     self.stereo,
                     self.gps,
                     self.lidar_2D_middle,
                 ]
-        cfg.setup_manager.used_sensors = [
-                    self.imu,
-                    self.stereo,
-                    self.gps,
-                    self.lidar_2D_middle,
-                ]
-        cfg.data_manager.dataset.deserialize_raw_data = False
-        cfg.data_manager.dataset.directory = self.MASTER_BAG_DIR
+        cfg.deserialize_raw_data = False
+        cfg.directory = self.MASTER_BAG_DIR
         # cfg_copy = dataclasses.replace(cfg)
         # dataclasses.asdict()
         cfg_copy = copy.deepcopy(cfg)
-        return cfg_copy
+
+        return cfg_copy 
     
     def prepare_data(self):
         latitude, longitude, altitude = self.GNSS_POSITION

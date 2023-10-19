@@ -6,7 +6,7 @@ from configs.paths.kaist_dataset import KaistDataset as KaistPaths
 from configs.system.data_manager.datasets.base_dataset import Dataset
 from configs.system.data_manager.memory import MemoryAnalyzer
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
-from configs.system.data_manager.manager import DataManager
+from configs.system.data_manager.manager import DataManager, Regime, Stream, TimeRange
 from configs.system.data_manager.datasets.kaist import Kaist, Pair
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
@@ -112,9 +112,16 @@ class SM(SetupManager):
 
 
 @dataclass
+class Range(TimeRange):
+    start: int = 1544578498418802396
+    stop: int = 1544578498428802229
+
+
+@dataclass
 class DM(DataManager):
     dataset: Dataset = field(default_factory=KaistDS)
     memory: MemoryAnalyzer = field(default_factory=Memory)
+    regime: Regime = field(default_factory=Range)
 
 
 @dataclass

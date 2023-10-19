@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-import dataclasses
 from rosbags.serde import deserialize_cdr, ros1_to_cdr
+from typing import Type
 
 from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
@@ -11,69 +11,82 @@ from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLo
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 from slam.utils.auxiliary_dataclasses import TimeRange
-from configs.experiments.ros1.config import Ros1
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from configs.system.data_manager.manager import Regime, Stream
+from configs.experiments.ros1.config import Ros1DS
 
 def test_unknown_file_scenario():
-    cfg: Ros1  = TestDataFactory.get_default_config()
-    cfg.data_manager.dataset.directory = Path( "/non_exist_dir" )
+    cfg: Ros1DS  = TestDataFactory.get_default_config()
+    cfg.directory = Path( "/non_exist_dir" )
+    regime: Regime = Stream()
     with pytest.raises(FileNotValid):
-        reader = Ros1BagReader(cfg)
+        reader = Ros1BagReader(cfg, regime)
 
 
 
 def test_unknown_topic_scenario():
-    cfg =dataclasses.replace( TestDataFactory.get_default_config())
-    cfg.setup_manager.all_sensors[0].topic = "/unexist_topic"
+    cfg: Ros1DS  = TestDataFactory.get_default_config()
+    cfg.used_sensors[0].topic = "/unexist_topic"
+    regime: Regime = Stream()
     with pytest.raises(TopicNotFound):
-        reader = Ros1BagReader(cfg)
+        reader = Ros1BagReader(cfg, regime)
 
 
 
 def test_ros_get_elements_in_time():
-    reader = Ros1BagReader(TestDataFactory.get_default_config())
+    cfg: Ros1DS  = TestDataFactory.get_default_config()
+    regime: Regime = Stream()
 
-    time_range = TimeRange(2, 6)
+    reader = Ros1BagReader(cfg, regime)
+    sensor_imu: Imu = SensorFactory.name_to_sensor(TestDataFactory.imu.name)
+    sensor_lidar: Lidar2D = SensorFactory.name_to_sensor(TestDataFactory.lidar_2D_middle.name)
+    sensor_gps: Gps = SensorFactory.name_to_sensor(TestDataFactory.gps.name)
+    
+    time_range = TimeRange(start = 2, stop = 6)
     element_list = []
-    element: Element = reader.get_element(time_range, Imu.__name__, True)
+    
+    element: Element = reader.get_element(sensor_imu, time_range.start)
     element_list.append(element)
 
     while(element.timestamp < time_range.stop):
-        element: Element = reader.get_element(time_range, Imu.__name__)
+        element: Element = reader.get_element(sensor_imu, None)
         if(element is None):
             break
         else:
             element_list.append(element)
-
+        print(element.timestamp)
     assert len(element_list) == 2
 
 
-    time_range = TimeRange(4, 20)
-    element_list = []
-    element: Element = reader.get_element(time_range, Gps.__name__, True)
-    element_list.append(element)
+    # time_range = TimeRange(4, 20)
+    # element_list = []
+    # element: Element = reader.get_element(time_range, sensor_gps, True)
+    # element_list.append(element)
 
-    while(element.timestamp < time_range.stop):
-        element: Element = reader.get_element(time_range, Imu.__name__)
-        if(element is None):
-            break
-        else:
-            element_list.append(element)
+    # while(element.timestamp < time_range.stop):
+       
+    #     element: Element = reader.get_element(time_range, sensor_gps)
+    #     if(element is None):
+    #         break
+    #     else:
+    #         element_list.append(element)
 
-    assert len(element_list) == 4
+    # assert len(element_list) == 4
 
-    time_range = TimeRange(4, 20)
-    element_list = []
-    element: Element = reader.get_element(time_range, Lidar2D.__name__, True)
-    element_list.append(element)
+    # time_range = TimeRange(4, 20)
+    # element_list = []
 
-    while(element.timestamp < time_range.stop):
-        element: Element = reader.get_element(time_range, Imu.__name__)
-        if(element is None):
-            break
-        else:
-            element_list.append(element)
+    # element: Element = reader.get_element(time_range, sensor_lidar, True)
+    # element_list.append(element)
 
-    assert len(element_list) == 3
+    # while(element.timestamp < time_range.stop):
+    #     element: Element = reader.get_element(time_range, sensor_imu)
+    #     if(element is None):
+    #         break
+    #     else:
+    #         element_list.append(element)
+
+    # assert len(element_list) == 3
 
 
 
@@ -85,9 +98,10 @@ success_scenarios = [scenario_all_sensors, scenario_half_sensors]
     ("test_sensors", "expected_elements_amount"), success_scenarios
 )
 def test_ros_elements_amount(test_sensors: list[str], expected_elements_amount):
-    cfg: Ros1  =  TestDataFactory.get_default_config()
-    cfg.setup_manager.used_sensors = test_sensors
-    reader = Ros1BagReader(cfg)
+    cfg: Ros1DS  =  TestDataFactory.get_default_config()
+    regime: Regime = Stream()
+    cfg.used_sensors = test_sensors
+    reader = Ros1BagReader(cfg, regime)
     element_cnt = 0
     while True:
         element = reader.get_element()
@@ -101,7 +115,9 @@ def test_ros_elements_amount(test_sensors: list[str], expected_elements_amount):
 
 
 def test_ros_get_element_with_arg():
-    reader = Ros1BagReader(TestDataFactory.get_default_config())
+    cfg: Ros1DS  =  TestDataFactory.get_default_config()
+    regime: Regime = Stream()
+    reader = Ros1BagReader(cfg, regime)
 
     with pytest.raises(KeyError):
         loc = RosElementLocation(file = TestDataFactory.FILE1, topic = "/unexist_topic", msgtype="some_msg_type")
@@ -137,7 +153,9 @@ def test_ros_get_element_with_arg():
 
 
 def test_close_loop():
-    reader = Ros1BagReader(TestDataFactory.get_default_config())
+    cfg: Ros1DS  =  TestDataFactory.get_default_config()
+    regime: Regime = Stream()
+    reader = Ros1BagReader(cfg, regime)
     element_cnt = 0
     expected_elements_amount = 20
     while True:

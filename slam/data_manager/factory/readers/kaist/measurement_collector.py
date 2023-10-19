@@ -44,7 +44,7 @@ class MeasurementCollector():
     def iterators(self, value: set[FileIterator]):
         self._sensor_data_iterators.iterators = value
 
-    def _reset_iterators(self) -> None:
+    def reset_iterators(self) -> None:
         self._sensor_data_iterators = SensorIterators(
             self._iterable_data_files,
             self._init_iterator)
@@ -206,6 +206,6 @@ class MeasurementCollector():
 
     @dispatch
     def get_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, Type[Location]]:
-        self._reset_iterators()
+        self.reset_iterators()
         message, location = self._get_data_by_sensor(sensor, timestamp)
         return message, location
