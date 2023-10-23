@@ -20,8 +20,8 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_methods import as_int
 
 from configs.system.data_manager.datasets.kaist import Kaist
-from configs.system.data_manager.manager import TimeLimit
-from configs.system.data_manager.manager import Regime
+from configs.system.data_manager.data_manager import Regime
+from configs.system.data_manager.regime import TimeLimit
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,8 @@ class KaistReader(DataReader):
     def __init__(self, dataset_params: Kaist, regime_params: type[Regime]):
         self._dataset_params = dataset_params
         self._regime_params = regime_params
-        self._data_stamp_file: Path = dataset_params.data_stamp_file
+        self._data_stamp_file: Path = dataset_params.directory / \
+            dataset_params.paths.data_stamp
         self._collector = MeasurementCollector(
             dataset_params.iterable_data_files,
             dataset_params.data_dirs)

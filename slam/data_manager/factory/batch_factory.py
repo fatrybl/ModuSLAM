@@ -1,4 +1,5 @@
 import logging
+from collections import deque
 from typing import Type
 
 from plum import dispatch
@@ -11,7 +12,7 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
-from configs.system.data_manager.manager import DataManager as DataManagerConfig
+from configs.system.data_manager.data_manager import DataManager as DataManagerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -125,11 +126,11 @@ class BatchFactory():
             self._add_data()
 
     @dispatch
-    def create_batch(self, elements: list[Element]) -> None:
-        """Creates a new Data Batch from the list of elements.
+    def create_batch(self, elements: deque[Element]) -> None:
+        """Creates a new Data Batch from the deque of elements.
 
         Args:
-            elements (list[Element]): list of elements w/o raw sensor measurements.
+            elements (deque[Element]): deque of elements w/o raw sensor measurements.
         """
         for element in elements:
             self._add_data(element)

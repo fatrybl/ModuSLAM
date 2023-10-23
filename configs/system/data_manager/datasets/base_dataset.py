@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from omegaconf import MISSING
 
@@ -10,5 +10,9 @@ class Dataset:
     """
     name: str = MISSING
     url: str = MISSING
-    directory: Path = MISSING
-    type: str = MISSING
+    directory: Path = field(default=MISSING,
+                            metadata={
+                                "description": "dataset directory"})
+    type: str = field(default=MISSING,
+                      metadata={
+                          "description": "type of a supported dataset"})

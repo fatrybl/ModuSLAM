@@ -6,7 +6,7 @@ from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.meta_singleton import MetaSingleton
-from configs.system.data_manager.manager import DataManager as DataManagerConfig
+from configs.system.data_manager.data_manager import DataManager as DataManagerConfig
 
 logger = logging.getLogger(__name__)
 

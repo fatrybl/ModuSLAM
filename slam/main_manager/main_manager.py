@@ -1,5 +1,4 @@
 import logging
-from slam.data_manager.factory.batch import DataBatch
 
 
 from slam.logger import logging_config
