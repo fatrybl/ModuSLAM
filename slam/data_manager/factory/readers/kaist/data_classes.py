@@ -13,51 +13,75 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class Message:
+    """
+    Message with a timestamp and any data.
+    """
     timestamp: str
-    data: Any
+    data: tuple[Any]
 
 
 @dataclass(frozen=True)
 class FileIterator:
+    """
+    Iterator for sensor`s stamp file.
+    """
     sensor_name: str
     file: Path
-    iterator: Iterator[tuple[int, list[str]]]
+    iterator: Iterator[tuple[int, tuple[str]]]
 
 
 @dataclass(frozen=True)
 class Storage:
+    """
+    Storage for sensor`s data. For a directory with bin / png / ...
+    """
     sensor_name: str
     path: Path
 
 
 @dataclass(frozen=True)
 class BinaryDataLocation(Location):
+    """
+    Binary data location.
+    """
     file: Path
 
 
 @dataclass(frozen=True)
 class StereoImgDataLocation(Location):
-    files: list[Path] = field(metadata={'unit': 'list of img paths'})
+    """
+    Stereo data location. Stores paths as a tuple.
+    """
+    files: tuple[Path] = field(metadata={'unit': 'tuple of img paths'})
 
 
 @dataclass(frozen=True)
 class CsvDataLocation(Location):
+    """
+    Csv data location: a file and position (line number) in a file.
+    """
     file: Path
     position: int
 
 
 @dataclass
 class SensorIterators:
-    iterable_locations: InitVar[list[Pair]]
-    init_method: InitVar[Callable[[Path], Iterator[tuple[int, list[str]]]]]
+    """
+    Iterators for sensors` data files.
+
+    Raises:
+        ValueError: No FileIterator found for the given sensor name.
+    """
+    iterable_locations: InitVar[tuple[Pair]]
+    init_method: InitVar[Callable[[Path], Iterator[tuple[int, tuple[str]]]]]
 
     iterators: set[FileIterator] = field(default_factory=lambda: set())
 
-    def __post_init__(self, iterable_locations: list[Pair], init: Callable[[Path], Iterator[tuple[int, list[str]]]]):
+    def __post_init__(self, iterable_locations: tuple[Pair], init: Callable[[Path], Iterator[tuple[int, tuple[str]]]]):
         for pair in iterable_locations:
             name: str = pair.sensor_name
             location: Path = pair.location
-            iterator: Iterator[tuple[int, list[str]]] = init(location)
+            iterator: Iterator[tuple[int, tuple[str]]] = init(location)
             file_iter = FileIterator(name,
                                      location,
                                      iterator)
@@ -74,11 +98,20 @@ class SensorIterators:
 
 @dataclass(frozen=True, eq=True)
 class DataStorage:
-    sensors_locations: InitVar[list[Pair]]
+    """
+    Data storages for sensors` data of type .bin / .png / etc. 
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    sensors_locations: InitVar[tuple[Pair]]
 
     storages: set[Storage] = field(default_factory=lambda: set())
 
-    def __post_init__(self, sensors_locations: list[Pair]):
+    def __post_init__(self, sensors_locations: tuple[Pair]):
         for s in sensors_locations:
             item = Storage(s.sensor_name, s.location)
             self.storages.add(item)

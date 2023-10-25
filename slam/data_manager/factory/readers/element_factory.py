@@ -12,13 +12,16 @@ class Location(ABC):
     """
 
 
-@dataclass
+@dataclass(frozen=True)
 class Measurement:
     sensor: Type[Sensor]
-    values: Any
+    values: tuple[Any]
+
+    def __hash__(self) -> int:
+        return hash(self.sensor)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Element:
     timestamp: int
     measurement: Measurement

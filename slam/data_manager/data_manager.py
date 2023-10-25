@@ -15,6 +15,10 @@ class DataManager(metaclass=MetaSingleton):
     """Manages all data processes. Defaults to MetaSingleton."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
+        """
+        Args:
+            cfg (DataManagerConfig): config for DataManager.
+        """
         self.batch_factory = BatchFactory(cfg)
         logger.debug("Data Manager has been configured")
 

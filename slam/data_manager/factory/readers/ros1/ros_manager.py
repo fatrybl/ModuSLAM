@@ -46,15 +46,15 @@ class RosManager():
                 logger.critical(msg)
                 raise ValueError(msg)
             
-    @dispatch       
-    def get_iterator(self) -> RosDatasetIterator:
-        """return iterator for main dataset
-        Returns:
-            RosDatasetIterator
-        """
-        filestorages: list[RosFileStorage] = [self.__file_storage[file] for file in self.__file_list]
-        data_range = RosDataRange(topics = self.__topics)
-        return RosDatasetIterator(filestorages, data_range)
+    # @dispatch       
+    # def get_iterator(self) -> RosDatasetIterator:
+    #     """return iterator for main dataset
+    #     Returns:
+    #         RosDatasetIterator
+    #     """
+    #     filestorages: list[RosFileStorage] = [self.__file_storage[file] for file in self.__file_list]
+    #     data_range = RosDataRange(topics = self.__topics)
+    #     return RosDatasetIterator(filestorages, data_range)
     
     
 
@@ -94,11 +94,15 @@ class RosManager():
                 
                 intersection2: bool  = (data_range.start  >= ros_file_storage.start_time and data_range.start <= ros_file_storage.end_time) or \
                                         (data_range.stop  >= ros_file_storage.start_time and data_range.stop <= ros_file_storage.end_time) 
-            else:
+            elif(data_range.start):
                 intersection1: bool  = (ros_file_storage.start_time  >= data_range.start) or \
                                             (ros_file_storage.end_time  >= data_range.start ) 
                 
                 intersection2: bool  = (data_range.start  >= ros_file_storage.start_time and data_range.start <= ros_file_storage.end_time)
+            else:
+                intersection1: bool = True
+                intersection2: bool = True
+
             if(intersection1 or intersection2):
                 used_file_storages.append(ros_file_storage)
         if not data_range.topics:

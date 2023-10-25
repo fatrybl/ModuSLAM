@@ -4,7 +4,7 @@ from omegaconf import MISSING
 from enum import Enum
 
 from configs.system.setup_manager.setup import SensorConfig, SetupManager
-from configs.system.data_manager.manager import DataManager, Regime, TimeRange
+from configs.system.data_manager.manager import DataManager, Regime, TimeLimit
 from configs.system.data_manager.memory import MemoryAnalyzer
 from configs.system.data_manager.datasets.base_dataset import Dataset
 from slam.setup_manager.sensor_factory.sensors import (
@@ -59,7 +59,7 @@ class Memory(MemoryAnalyzer):
     graph_memory: float = 40.0
 
 @dataclass
-class Range(TimeRange):
+class Range(TimeLimit):
     start: int = 1544578498418802396
     stop: int = 1544578498428802229
 

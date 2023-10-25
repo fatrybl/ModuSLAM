@@ -17,7 +17,7 @@ Main runner of SLAM system.
 
 @main(config_name='default_config')
 def run(cfg: Config):
-    """creates Main Manager and runs SLAM
+    """creates Main Manager and runs SLAM based on configuration
     """
     main_manager = MainManager(cfg)
     main_manager.build_map()

@@ -12,10 +12,11 @@ from slam.data_manager.factory.readers.ros1.ros_manager import RosManager
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.utils.auxiliary_dataclasses import TimeRange
+from configs.system.data_manager.manager import TimeLimit
 from configs.experiments.ros1.config import  SensorConfig
 from configs.system.data_manager.manager import Regime
 from configs.system.data_manager.datasets.ros1 import Ros1
-from configs.system.data_manager.manager import TimeRange as TimeRangeRegime
+
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 logger = logging.getLogger(__name__)
@@ -27,24 +28,23 @@ class Ros1BagReader(DataReader):
         self.deserialize_raw_data: bool = cfg.deserialize_raw_data
         used_sensors: list[SensorConfig] = cfg.used_sensors
         self.__topic_sensor_dict: dict[str, Sensor] = dict()
-        self.__sensor_topic_dict: dict[str, str] = dict()
+        self.__sensor_topic_dict: dict[Sensor, str] = dict()
         for sensor_cfg in used_sensors:
             sensor: Type[Sensor] = SensorFactory.name_to_sensor(sensor_cfg.name)
             topic: str = sensor_cfg.topic
             self.__topic_sensor_dict[topic] = sensor
-            self.__sensor_topic_dict[sensor_cfg.name] = topic
+            self.__sensor_topic_dict[sensor] = topic
         msg = f"available topics in RosReader: {self.__topic_sensor_dict.keys()}"  
         logger.debug(msg)
         master_file_dir: Path = Path(cfg.directory)
         self.__ros_manager = RosManager(master_file_dir = master_file_dir, topics = self.__topic_sensor_dict.keys())
 
-        # if regime_params.name == TimeRangeRegime.__name__:
-        #     self.__time_range = TimeRange(
-        #         regime_params.start,
-        #         regime_params.stop)
+        data_range = RosDataRange()
+        if regime_params.name == TimeLimit.__name__:
+            data_range.start = regime_params.start
+            data_range.stop = regime_params.stop
 
-            
-        self.__main_dataset_iterator: RosDatasetIterator = self.__ros_manager.get_iterator()
+        self.__main_dataset_iterator: RosDatasetIterator = self.__ros_manager.get_iterator(data_range)
   
     def __get_next_element(self, iterator: RosDatasetIterator) -> Element | None:
         while True:
@@ -65,7 +65,7 @@ class Ros1BagReader(DataReader):
                 else:
                     data = rawdata
                 break
-        measurement = Measurement(sensor, data)
+        measurement = Measurement(sensor, (data))
         return Element(timestamp, measurement, location)
 
     @dispatch
@@ -106,8 +106,7 @@ class Ros1BagReader(DataReader):
             list[Element]: list of elements
         """
         if(init_time):
-            sensor_name: str = sensor.name
-            topic: str = self.__sensor_topic_dict[sensor_name]
+            topic: str = self.__sensor_topic_dict[sensor]
             data_range = RosDataRange(topics=[topic], start = init_time)
             self.__temp_dataset_iterator: RosDatasetIterator = self.__ros_manager.get_iterator(data_range)
 

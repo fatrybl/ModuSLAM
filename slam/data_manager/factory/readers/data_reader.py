@@ -1,46 +1,77 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Type
 import logging
 
-from abc import ABC, abstractmethod
 from pathlib import Path
 
+from plum import dispatch
+
 from slam.data_manager.factory.readers.element_factory import Element
-from slam.utils.auxiliary_dataclasses import PeriodicData
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
 logger = logging.getLogger(__name__)
 
 
 class DataReader(ABC):
-    # def __init__(self):
-    #     cfg = Sensors()
-    #     self.__sensor_factory = SensorFactory(cfg)
 
     @staticmethod
     def _is_file_valid(file_path: Path) -> bool:
         if not Path.is_file(file_path):
-            logger.critical(f"File {file_path} does not exist")
+            msg = f"File {file_path} does not exist"
+            logger.critical(msg)
             return False
         elif file_path.stat().st_size == 0:
-            logger.critical(f"File {file_path} is empty")
+            msg = f"File {file_path} is empty"
+            logger.critical(msg)
             return False
         else:
             return True
 
     @abstractmethod
-    def get_element(self, args: list[Element] | set[PeriodicData] | None = None) -> Element:
+    @dispatch
+    def get_element(self) -> Element | None:
         """
-        Gets element from a dataset. 
-        If no args: iterates through a dataset.
-        if args: parces them in a dispatched method of a child class.
-        Args:
-            element: Data Batch element w/o raw sensor data
+        Gets element from a dataset sequantially based on iterator position. 
+
         Returns:
-            element with data of type Element
+            Element | None: element with raw sensor measurement 
+                            or None if all measurements from a dataset has already been processed
+        """
+
+    @abstractmethod
+    @dispatch
+    def get_element(self, element: Element) -> Element:
+        """
+        Gets an element with raw sensor measurement from a dataset for 
+            a given element without raw sensor measurement.
+
+        Args:
+            element (Element): without raw sensor measurement.
+
+        Returns:
+            Element: with raw sensor measurement.
+        """
+
+    @abstractmethod
+    @dispatch
+    def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
+        """
+        Gets an element with raw sensor measurement from a dataset for 
+            a given sensor and timestamp. If timestamp is None, 
+            gets the element sequantally based on iterator position.
+
+        Args:
+            sensor (Type[Sensor]): a sensor to get measurement of.
+            timestamp (int | None, optional): timestamp of sensor`s measurement. Defaults to None.
+
+        Returns:
+            Element: with raw sensor measurement.
         """
 
 
 @dataclass
 class DataFlowState(ABC):
-    """Keeps up-to-date state of a data flow for the reader. 
+    """Keeps up-to-date state of iterators for a data reader. 
     Should be implemented for each reader."""

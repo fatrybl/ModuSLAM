@@ -54,39 +54,40 @@ def test_ros_get_elements_in_time():
             break
         else:
             element_list.append(element)
-        print(element.timestamp)
+
     assert len(element_list) == 2
 
 
-    # time_range = TimeRange(4, 20)
-    # element_list = []
-    # element: Element = reader.get_element(time_range, sensor_gps, True)
-    # element_list.append(element)
+    time_range = TimeRange(4, 20)
+    element_list = []
+    element: Element = reader.get_element(sensor_gps, time_range.start)
+    current_timestamp = element.timestamp
+    element_list.append(element)
 
-    # while(element.timestamp < time_range.stop):
-       
-    #     element: Element = reader.get_element(time_range, sensor_gps)
-    #     if(element is None):
-    #         break
-    #     else:
-    #         element_list.append(element)
+    while 1:
+        element: Element = reader.get_element(sensor_gps, None)
+        current_timestamp = element.timestamp
+        if(current_timestamp > time_range.stop):
+            break
+        element_list.append(element)
 
-    # assert len(element_list) == 4
+    assert len(element_list) == 4
 
-    # time_range = TimeRange(4, 20)
-    # element_list = []
+    time_range = TimeRange(4, 20)
+    element_list = []
 
-    # element: Element = reader.get_element(time_range, sensor_lidar, True)
-    # element_list.append(element)
+    element: Element = reader.get_element(sensor_lidar, time_range.start)
+    current_timestamp = element.timestamp
+    element_list.append(element)
 
-    # while(element.timestamp < time_range.stop):
-    #     element: Element = reader.get_element(time_range, sensor_imu)
-    #     if(element is None):
-    #         break
-    #     else:
-    #         element_list.append(element)
+    while 1:
+        element: Element = reader.get_element(sensor_lidar, None)
+        current_timestamp = element.timestamp
+        if(current_timestamp > time_range.stop):
+            break
+        element_list.append(element)
 
-    # assert len(element_list) == 3
+    assert len(element_list) == 3
 
 
 
@@ -146,8 +147,8 @@ def test_ros_get_element_with_arg():
 
     request_element = Element(timestamp=9, location=RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type"), measurement = ())
     read_element = reader.get_element(request_element)
-    read_element.measurement.values = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
-    latitude, longitude, altitude = read_element.measurement.values.latitude, read_element.measurement.values.longitude, read_element.measurement.values.altitude
+    ros_msg = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
+    latitude, longitude, altitude = ros_msg.latitude, ros_msg.longitude, ros_msg.altitude
     assert [latitude, longitude, altitude] == TestDataFactory.GNSS_POSITION
 
 
@@ -161,14 +162,15 @@ def test_close_loop():
     while True:
         request_element = Element(timestamp=9, location = RosElementLocation(file = TestDataFactory.FILE1, topic = TestDataFactory.GNSS_TOPIC, msgtype="some_msg_type"), measurement = ())
         read_element = reader.get_element(request_element)
-        read_element.measurement.values = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
-        latitude, longitude, altitude = read_element.measurement.values.latitude, read_element.measurement.values.longitude, read_element.measurement.values.altitude
+        ros_msg = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype),  read_element.location.msgtype)
+        latitude, longitude, altitude = ros_msg.latitude, ros_msg.longitude, ros_msg.altitude
         assert [latitude, longitude, altitude] == TestDataFactory.GNSS_POSITION
 
         request_element = Element(timestamp=15, location=RosElementLocation(file = TestDataFactory.FILE2, topic = TestDataFactory.IMU_TOPIC, msgtype="some_msg_type"), measurement = ())
         read_element = reader.get_element(request_element)
-        read_element.measurement.values = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
-        w_x, w_y, w_z = read_element.measurement.values.angular_velocity.x, read_element.measurement.values.angular_velocity.y, read_element.measurement.values.angular_velocity.z
+
+        ros_msg = deserialize_cdr(ros1_to_cdr(read_element.measurement.values, read_element.location.msgtype), read_element.location.msgtype)
+        w_x, w_y, w_z = ros_msg.angular_velocity.x, ros_msg.angular_velocity.y, ros_msg.angular_velocity.z
         assert [w_x, w_y, w_z] == TestDataFactory.IMU_DATA
 
         element = reader.get_element()

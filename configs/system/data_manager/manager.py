@@ -9,26 +9,35 @@ from configs.system.data_manager.memory import MemoryAnalyzer
 
 @dataclass
 class Regime(ABC):
-    """abstract regime of data flow"""
+    """
+    Abstract regime of data flow.
+    """
     name: str = MISSING
 
 
 @dataclass
-class TimeRange(Regime):
-    """Data flow is limited by time range"""
+class TimeLimit(Regime):
+    """
+    Data flow is limited by time range.
+    """
     start: int = MISSING
     stop: int = MISSING
-    name: str = "TimeRange"
+    name: str = "TimeLimit"
 
 
 @dataclass
 class Stream(Regime):
-    """Free data flow: all data without time limitations"""
+    """
+    Free data flow: each measurement is processed sequantially.
+    """
     name: str = "Stream"
 
 
 @dataclass
 class DataManager:
+    """
+    Configures DataManager.
+    """
     regime: Regime = MISSING
     dataset: Dataset = MISSING
     memory: MemoryAnalyzer = MISSING

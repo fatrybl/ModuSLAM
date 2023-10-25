@@ -2,7 +2,9 @@ from slam.utils.meta_singleton import MetaSingleton
 
 
 class StoppingCriterionSingleton(metaclass=MetaSingleton):
-    """High level criteria to stop mapping process. Defaults to MetaSingleton."""
+    """
+    High level criteria to stop mapping process. Defaults to MetaSingleton.
+    """
 
     def __init__(self) -> None:
         self.is_memory_limit: bool = False
