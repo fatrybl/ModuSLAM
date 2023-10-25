@@ -259,8 +259,6 @@ class KaistReader(DataReader):
             return None
 
         else:
-            sensor: Type[Sensor] = SensorFactory.name_to_sensor(
-                line[self.SENSOR_NAME])
             timestamp = line[self.TIMESTAMP]
             timestamp = as_int(timestamp, logger)
             if self._regime_params.name == TimeLimit.__name__:
@@ -317,9 +315,9 @@ class KaistReader(DataReader):
             message, location = self._collector.get_data(sensor, timestamp)
         else:
             message, location = self._collector.get_data(sensor)
+            timestamp: int = as_int(message.timestamp, logger)
 
         measurement = Measurement(sensor, message.data)
-        timestamp: int = as_int(message.timestamp, logger)
         element = Element(timestamp,
                           measurement,
                           location)

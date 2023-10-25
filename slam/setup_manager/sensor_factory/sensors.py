@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from configs.sensors.base_sensor_parameters import Parameter
 
 
