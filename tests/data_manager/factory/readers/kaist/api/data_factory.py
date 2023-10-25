@@ -1,5 +1,4 @@
 import csv
-from array import array
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Type
@@ -16,7 +15,7 @@ from slam.data_manager.factory.readers.kaist.data_classes import BinaryDataLocat
 @dataclass
 class Measurement:
     sensor_name: str
-    values: tuple[Any]
+    values: tuple[Any, ...]
 
 
 @dataclass
@@ -185,7 +184,7 @@ class DataFactory:
 
     el1 = PseudoElement(timestamp=z_encoder_1[0],
                         measurement=Measurement(sensor_name=encoder.name,
-                                                values=z_encoder_1[1:]),
+                                                values=tuple(str(i) for i in z_encoder_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / encoder.file_path,
                                                  position=0))
 
@@ -197,67 +196,77 @@ class DataFactory:
 
     el3 = PseudoElement(timestamp=z_imu_1[0],
                         measurement=Measurement(sensor_name=imu.name,
-                                                values=z_imu_1[1:]),
+                                                values=tuple(str(i) for i in z_imu_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / imu.file_path,
                                                  position=0))
 
     el4 = PseudoElement(timestamp=z_fog_1[0],
                         measurement=Measurement(
-                            sensor_name=fog.name, values=z_fog_1[1:]),
+                            sensor_name=fog.name,
+                            values=tuple(str(i) for i in z_fog_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / fog.file_path,
                                                  position=0))
 
     el5 = PseudoElement(timestamp=z_sick_middle_1[0],
                         measurement=Measurement(
-                            sensor_name=sick_middle.name, values=z_sick_middle_1[1:]),
+                            sensor_name=sick_middle.name,
+                            values=z_sick_middle_1[1:]),
                         location=BinaryDataLocation(
                             file=(SENSOR_DATA_DIR / SICK_MIDDLE_DIR / str(z_sick_middle_1[0])).with_suffix(BINARY_FILE_EXTENSION)))
 
     el6 = PseudoElement(timestamp=z_gps_1[0],
                         measurement=Measurement(
-                            sensor_name=gps.name, values=z_gps_1[1:]),
+                            sensor_name=gps.name,
+                            values=tuple(str(i) for i in z_gps_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / gps.file_path,
                                                  position=0))
 
     el7 = PseudoElement(timestamp=z_vrs_gps_1[0],
                         measurement=Measurement(
-                            sensor_name=vrs_gps.name, values=z_vrs_gps_1[1:]),
+                            sensor_name=vrs_gps.name,
+                            values=tuple(str(i) for i in z_vrs_gps_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / vrs_gps.file_path,
                                                  position=0))
 
     el8 = PseudoElement(timestamp=z_altimeter_1[0],
                         measurement=Measurement(
-                            sensor_name=altimeter.name, values=z_altimeter_1[1:]),
+                            sensor_name=altimeter.name,
+                            values=tuple(str(i) for i in z_altimeter_1[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / altimeter.file_path,
                                                  position=0))
 
     el9 = PseudoElement(timestamp=z_altimeter_2[0],
                         measurement=Measurement(
-                            sensor_name=altimeter.name, values=z_altimeter_2[1:]),
+                            sensor_name=altimeter.name,
+                            values=tuple(str(i) for i in z_altimeter_2[1:])),
                         location=CsvDataLocation(file=SENSOR_DATA_DIR / altimeter.file_path,
                                                  position=1))
 
     el10 = PseudoElement(timestamp=z_imu_2[0],
                          measurement=Measurement(
-                             sensor_name=imu.name, values=z_imu_2[1:]),
+                             sensor_name=imu.name,
+                             values=tuple(str(i) for i in z_imu_2[1:])),
                          location=CsvDataLocation(file=SENSOR_DATA_DIR / imu.file_path,
                                                   position=1))
 
     el11 = PseudoElement(timestamp=z_encoder_2[0],
                          measurement=Measurement(
-                             sensor_name=encoder.name, values=z_encoder_2[1:]),
+                             sensor_name=encoder.name,
+                             values=tuple(str(i) for i in z_encoder_2[1:])),
                          location=CsvDataLocation(file=SENSOR_DATA_DIR / encoder.file_path,
                                                   position=1))
 
     el12 = PseudoElement(timestamp=z_sick_back_2[0],
                          measurement=Measurement(
-                             sensor_name=sick_back.name, values=z_sick_back_2[1:]),
+                             sensor_name=sick_back.name,
+                             values=z_sick_back_2[1:]),
                          location=BinaryDataLocation(
                              file=(SENSOR_DATA_DIR / SICK_BACK_DIR / str(z_sick_back_2[0])).with_suffix(BINARY_FILE_EXTENSION)))
 
     el13 = PseudoElement(timestamp=z_gps_2[0],
                          measurement=Measurement(
-                             sensor_name=gps.name, values=z_gps_2[1:]),
+                             sensor_name=gps.name,
+                             values=tuple(str(i) for i in z_gps_2[1:])),
                          location=CsvDataLocation(file=SENSOR_DATA_DIR / gps.file_path,
                                                   position=1))
 
@@ -287,7 +296,8 @@ class DataFactory:
 
     el18 = PseudoElement(timestamp=z_vrs_gps_2[0],
                          measurement=Measurement(
-                             sensor_name=vrs_gps.name, values=z_vrs_gps_2[1:]),
+                             sensor_name=vrs_gps.name,
+                             values=tuple(str(i) for i in z_vrs_gps_2[1:])),
                          location=CsvDataLocation(file=SENSOR_DATA_DIR / vrs_gps.file_path,
                                                   position=1))
 
@@ -307,7 +317,8 @@ class DataFactory:
 
     el21 = PseudoElement(timestamp=z_fog_2[0],
                          measurement=Measurement(
-                             sensor_name=fog.name, values=z_fog_2[1:]),
+                             sensor_name=fog.name,
+                             values=tuple(str(i) for i in z_fog_2[1:])),
                          location=CsvDataLocation(file=SENSOR_DATA_DIR / fog.file_path,
                                                   position=1))
 
@@ -350,14 +361,18 @@ class DataFactory:
     ]
 
     @classmethod
-    def to_bytes_array(cls, floats: list[float]) -> bytes:
-        return array('d', floats).tobytes()
-
-    @classmethod
     def to_binary_file(cls, data: list[float], path: Path) -> None:
+        """
+        Writes data to a binary file with floating point representation (float32) 
+        due to lidar measurements format in Kaist Urban Dataset.
+
+        Args:
+            data (list[float]): data to be written.
+            path (Path): binary file path.
+        """
         with open(path, 'wb') as output_file:
-            float_array = array('d', data)
-            float_array.tofile(output_file)
+            numpy_array = np.asarray(data, dtype=np.float32)
+            numpy_array.tofile(output_file)
 
     @classmethod
     def to_csv_file(cls, data: list[float | list[str]], path: Path, multilines: bool = False) -> None:

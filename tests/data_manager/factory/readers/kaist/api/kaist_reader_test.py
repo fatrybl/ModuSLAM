@@ -42,7 +42,7 @@ def convert_to_element(element: PseudoElement, sensor_factory: SensorFactory) ->
     return real_element
 
 
-def flatten(set: tuple[Any]) -> Iterator[Any]:
+def flatten(set: tuple[Any, ...]) -> Iterator[Any]:
     """
     Flattens tuple of tuples for propper comparison,
     Args:
@@ -52,7 +52,7 @@ def flatten(set: tuple[Any]) -> Iterator[Any]:
         Iterator[Any]: _description_
     """
     for item in set:
-        if isinstance(item, Iterable):
+        if isinstance(item, Iterable) and not isinstance(item, str):
             for x in flatten(item):
                 yield x
         else:
