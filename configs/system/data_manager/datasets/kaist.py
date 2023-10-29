@@ -4,7 +4,7 @@ from pathlib import Path
 from omegaconf import MISSING
 
 from configs.paths.kaist_dataset import KaistDatasetPath
-from configs.system.data_manager.datasets.base_dataset import Dataset
+from configs.system.data_manager.datasets.base_dataset import DatasetConfig
 
 
 @dataclass
@@ -17,7 +17,7 @@ class Pair:
 
 
 @dataclass
-class Kaist(Dataset):
+class Kaist(DatasetConfig):
     """
     Kaist Urban Dataset parameters.
     """

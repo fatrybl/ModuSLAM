@@ -7,7 +7,7 @@ from slam.data_manager.factory.readers.element_factory import Element, Measureme
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
-from tests.data_manager.factory.readers.kaist.api.data_factory import (
+from tests.data_manager.factory.readers.kaist.api.one_element_dataset.data_factory import (
     PseudoElement, DataFactory, SensorElementPair)
 """
 How to test any DataReader:
@@ -70,6 +70,9 @@ class TestGetElement:
         element: Element = data_reader.get_element()
         expected_values = list(flatten(element.measurement.values))
         true_values = list(flatten(input_element.measurement.values))
+        print('================================================================\n')
+        print(element.location)
+        print(input_element.location)
         assert element.timestamp == input_element.timestamp
         assert element.location == input_element.location
         assert element.measurement.sensor == input_element.measurement.sensor

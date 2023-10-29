@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .sensor_factory import SensorFactory
+from .sensor_factory import SensorFactoryConfig
 
 
 @dataclass
@@ -8,4 +8,5 @@ class SetupManager:
     """
     Config for SetupManager.
     """
-    sensor_factory: SensorFactory = field(default_factory=SensorFactory)
+    sensor_factory: SensorFactoryConfig = field(
+        default_factory=SensorFactoryConfig)

@@ -97,7 +97,9 @@ class BatchFactory():
 
     @dispatch
     def _add_data(self, request: PeriodicData) -> None:
-        """Adds a new element to the Data Batch based on the request.
+        """
+        Adds a new element to the Data Batch based on the request.
+        Assumption: start/stop timestamps must be valid, exist in a dataset and correspond to real measurements.
 
         Args:
             request (PeriodicData): contains sensor and time range (start, stop) 

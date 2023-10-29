@@ -10,10 +10,10 @@ from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 
 from configs.system.data_manager.regime import Regime, Stream
 
-from tests.data_manager.factory.readers.kaist.api.config_factory import SensorFactoryConfig, KaistReaderConfig
-from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.api.empty_dataset.config_factory import SensorFactoryConfig, KaistReaderConfig
+from tests.data_manager.factory.readers.kaist.api.empty_dataset.data_factory import DataFactory
 
-CONFIG_MODULE_DIR: str = "kaist.api.conf"
+CONFIG_MODULE_DIR: str = "empty_dataset.conf"
 SENSOR_FACTORY_CONFIG_NAME: str = "sensor_factory_config"
 DATASET_CONFIG_NAME: str = "dataset_config"
 REGIME_CONFIG_NAME: str = "regime_config"
@@ -39,21 +39,21 @@ def register_configs() -> None:
     cs.store(name=REGIME_CONFIG_NAME, node=Stream)
 
 
-@fixture(scope='module')
+@fixture(scope='class')
 def sensor_factory_cfg() -> SensorFactoryConfig:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
         return cfg
 
 
-@fixture(scope='module')
+@fixture(scope='class')
 def dataset_cfg() -> KaistReaderConfig:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=DATASET_CONFIG_NAME)
         return cfg
 
 
-@fixture(scope='module')
+@fixture(scope='class')
 def regime_cfg() -> Type[Regime]:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=REGIME_CONFIG_NAME)

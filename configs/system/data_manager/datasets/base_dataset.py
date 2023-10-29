@@ -4,7 +4,7 @@ from omegaconf import MISSING
 
 
 @dataclass
-class Dataset:
+class DatasetConfig:
     """
     Base class for any supported dataset.
     """

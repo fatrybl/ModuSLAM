@@ -250,6 +250,7 @@ class KaistReader(DataReader):
                 line = next(self.__current_state.data_stamp_iterator)
                 sensor = SensorFactory.name_to_sensor(
                     line[self.SENSOR_NAME])
+
                 if sensor in SensorFactory.used_sensors:
                     break
 
@@ -288,6 +289,7 @@ class KaistReader(DataReader):
         """
         sensor: Type[Sensor] = element.measurement.sensor
         timestamp: int = element.timestamp
+
         message, __ = self._collector.get_data(sensor, timestamp)
 
         measurement = Measurement(element.measurement.sensor, message.data)

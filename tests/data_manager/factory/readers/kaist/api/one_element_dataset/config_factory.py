@@ -7,53 +7,53 @@ from slam.setup_manager.sensor_factory.sensors import (
 
 from configs.paths.kaist_dataset import KaistDatasetPath as KaistPaths
 from configs.system.data_manager.datasets.kaist import Kaist, Pair
-from configs.system.setup_manager.sensor_factory import Sensor, SensorFactory
-from configs.sensors.base_sensor_parameters import Parameter
+from configs.system.setup_manager.sensor_factory import Sensor, SensorFactoryConfig
+from configs.sensors.base_sensor_parameters import ParameterConfig
 
 from .data_factory import DataFactory
 
 
-class ImuParameter(Parameter):
+class ImuParameter(ParameterConfig):
     "some parameters"
 
 
-class FogParameter(Parameter):
+class FogParameter(ParameterConfig):
     "some parameters"
 
 
-class EncoderParameter(Parameter):
+class EncoderParameter(ParameterConfig):
     "some parameters"
 
 
-class AltimeterParameter(Parameter):
+class AltimeterParameter(ParameterConfig):
     "some parameters"
 
 
-class GpsParameter(Parameter):
+class GpsParameter(ParameterConfig):
     "some parameters"
 
 
-class VrsGpsParameter(Parameter):
+class VrsGpsParameter(ParameterConfig):
     "some parameters"
 
 
-class StereoParameter(Parameter):
+class StereoParameter(ParameterConfig):
     "some parameters"
 
 
-class VelodyneLeftParameter(Parameter):
+class VelodyneLeftParameter(ParameterConfig):
     "some parameters"
 
 
-class VelodyneRightParameter(Parameter):
+class VelodyneRightParameter(ParameterConfig):
     "some parameters"
 
 
-class SickBackParameter(Parameter):
+class SickBackParameter(ParameterConfig):
     "some parameters"
 
 
-class SickMiddleParameter(Parameter):
+class SickMiddleParameter(ParameterConfig):
     "some parameters"
 
 
@@ -132,7 +132,7 @@ data_dirs: list[Pair] = field(default_factory=lambda: [
 
 
 @dataclass
-class SensorFactoryConfig(SensorFactory):
+class SensorFactoryConfig(SensorFactoryConfig):
     all_sensors: list[Sensor] = all_sensors
     used_sensors: list[Sensor] = used_sensors
 

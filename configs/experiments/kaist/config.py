@@ -5,10 +5,10 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 from configs.paths.kaist_dataset import KaistDatasetPath as KaistPaths
-from configs.system.data_manager.datasets.base_dataset import Dataset
+from configs.system.data_manager.datasets.base_dataset import DatasetConfig
 from configs.system.data_manager.memory import MemoryAnalyzer
 from configs.system.data_manager.regime import TimeLimit, Stream
-from configs.system.setup_manager.sensor_factory import Sensor, SensorFactory
+from configs.system.setup_manager.sensor_factory import Sensor, SensorFactoryConfig
 from configs.system.setup_manager.setup_manager import SetupManager
 from configs.system.data_manager.data_manager import DataManager, Regime
 from configs.system.data_manager.datasets.kaist import Kaist, Pair
@@ -126,19 +126,19 @@ class Range(TimeLimit):
 
 
 @dataclass
-class SF(SensorFactory):
+class SF(SensorFactoryConfig):
     all_sensors: list[Sensor] = all_sensors
     used_sensors: list[Sensor] = used_sensors
 
 
 @dataclass
 class SM(SetupManager):
-    sensor_factory: SensorFactory = field(default_factory=SF)
+    sensor_factory: SensorFactoryConfig = field(default_factory=SF)
 
 
 @dataclass
 class DM(DataManager):
-    dataset: Dataset = field(default_factory=KaistDS)
+    dataset: DatasetConfig = field(default_factory=KaistDS)
     memory: MemoryAnalyzer = field(default_factory=Memory)
     regime: Regime = field(default_factory=Stream)
 
