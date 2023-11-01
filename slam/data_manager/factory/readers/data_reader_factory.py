@@ -12,7 +12,7 @@ class DataReaderFactory():
     """
 
     def __init__(self, dataset_type: str) -> None:
-        if dataset_type == KaistConfig.__name__:
+        if dataset_type == 'Kaist':
             self.data_reader = KaistReader
         else:
             msg = f"No DataReader exists for dataset type {dataset_type}."

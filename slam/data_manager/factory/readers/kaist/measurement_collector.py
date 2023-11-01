@@ -26,6 +26,31 @@ from configs.system.data_manager.datasets.kaist import Pair
 logger = logging.getLogger(__name__)
 
 
+class CsvFileGenerator:
+    """
+    Generator for a ".csv" file to read each row and row`s number in a file.
+    """
+
+    def __init__(self, file_path: Path):
+        self.__file = open(file_path, 'r')
+        self.__reader = csv_reader(self.__file)
+        self.__count = -1
+
+    def __next__(self) -> tuple[int, tuple[str, ...]]:
+        try:
+            line = next(self.__reader)
+            line = tuple(line)
+            self.__count += 1
+            return self.__count, line
+
+        except StopIteration:
+            self.__file.close()
+            raise
+
+    def __iter__(self):
+        return self
+
+
 class MeasurementCollector():
     """ Collects sensors` measurements from Kaist Urban Dataset."""
 
@@ -73,11 +98,7 @@ class MeasurementCollector():
             Iterator[tuple[int, tuple[str]]]: line number, tuple of string for each line in the file.
         """
         if DataReader.is_file_valid(file):
-            with open(file, "r") as f:
-                reader = csv_reader(f)
-                for position, line in enumerate(reader):
-                    line = tuple(line)
-                    yield position, line
+            return CsvFileGenerator(file)
         else:
             msg = f"file: {file} is not valid to initialize the iterator"
             logger.critical(msg)

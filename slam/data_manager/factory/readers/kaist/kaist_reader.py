@@ -36,6 +36,26 @@ class KaistReaderState(DataFlowState):
     sensors_iterators: set[FileIterator]
 
 
+class CsvFileGenerator:
+    """
+    Generator for a file to read each row of "data_stamp.csv" as a dictionary.
+    """
+
+    def __init__(self, file_path: Path, names: list[str]):
+        self.__file = open(file_path, 'r')
+        self.__reader = DictReader(self.__file, fieldnames=names)
+
+    def __next__(self) -> dict[str, str]:
+        try:
+            return next(self.__reader)
+        except StopIteration:
+            self.__file.close()
+            raise
+
+    def __iter__(self):
+        return self
+
+
 class KaistReader(DataReader):
     """Data reader for Kaist Urban Dataset.
 
@@ -87,11 +107,8 @@ class KaistReader(DataReader):
         """
         file = self._data_stamp_file
         if DataReader.is_file_valid(file):
-            with open(file, "r") as f:
-                names = [self.__TIMESTAMP, self.__SENSOR_NAME]
-                reader = DictReader(f, fieldnames=names)
-                for line in reader:
-                    yield line
+            names: list[str] = [self.__TIMESTAMP, self.__SENSOR_NAME]
+            return CsvFileGenerator(file, names)
         else:
             msg = f"file: {file} is not valid to initialize the iterator"
             logger.critical(msg)
