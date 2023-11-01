@@ -1,20 +1,20 @@
+from typing import Type
 from omegaconf import DictConfig
 from pytest import fixture, raises
-from unittest.mock import Mock, patch
 
 from hydra.core.config_store import ConfigStore
 
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-
-from configs.system.data_manager.regime import Stream
 from slam.setup_manager.sensor_factory.sensors import Encoder
 from slam.utils.exceptions import FileNotValid
+
+from configs.system.data_manager.regime import Regime, Stream
+from configs.system.data_manager.datasets.kaist import KaistConfig
 
 from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory
 
 from api.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
-
 from .data import element
 from .config import KaistReaderConfig
 
@@ -47,25 +47,33 @@ def generate_dataset():
 
 
 class TestGetElement:
+    """
+    All test should raise FileNotValidException as KaistReader object cannot be initialized properly 
+    with empty '.csv' files. The Reader checks file validity before initializing files` iterators.
+    """
 
     timestamp: int = 1
     sensor = Encoder('encoder', DictConfig({"params": ()}))
     element: Element = element
 
-    def test_get_element_1(self, data_reader: KaistReader):
+    def test_get_element_1(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
         with raises(FileNotValid):
-            element: Element = data_reader.get_element()
+            reader = KaistReader(dataset_cfg, regime_cfg)
+            element: Element = reader.get_element()
 
-    def test_get_element_2(self, data_reader: KaistReader):
+    def test_get_element_2(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
         with raises(FileNotValid):
-            element: Element = data_reader.get_element(self.element)
+            reader = KaistReader(dataset_cfg, regime_cfg)
+            element: Element = reader.get_element(self.element)
 
-    def test_get_element_3(self, data_reader: KaistReader):
+    def test_get_element_3(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
         with raises(FileNotValid):
-            element: Element = data_reader.get_element(
+            reader = KaistReader(dataset_cfg, regime_cfg)
+            element: Element = reader.get_element(
                 self.sensor)
 
-#     def test_get_element_4(self, data_reader: KaistReader):
-#         with raises(FileNotValid):
-#             element: Element = data_reader.get_element(
-#                 self.sensor, self.timestamp)
+    def test_get_element_4(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
+        with raises(FileNotValid):
+            reader = KaistReader(dataset_cfg, regime_cfg)
+            element: Element = reader.get_element(
+                self.sensor, self.timestamp)

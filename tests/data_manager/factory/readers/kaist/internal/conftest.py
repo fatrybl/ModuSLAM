@@ -52,4 +52,4 @@ def data_reader(dataset_cfg: KaistReaderConfig, regime_cfg: Type[Regime]) -> Kai
 @fixture(scope='class', autouse=True)
 def clean():
     yield
-    # rmtree(TMP_DIR, ignore_errors=True)
+    # rmtree(TMP_DIR, ignore_errors=False)
