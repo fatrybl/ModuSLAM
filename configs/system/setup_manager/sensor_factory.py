@@ -6,7 +6,7 @@ from configs.sensors.base_sensor_parameters import ParameterConfig
 
 
 @dataclass
-class Sensor:
+class SensorConfig:
     """
     Configures the sensor.
     """
@@ -17,5 +17,5 @@ class Sensor:
 
 @dataclass
 class SensorFactoryConfig:
-    all_sensors: list[Sensor] = MISSING
-    used_sensors: list[Sensor] = MISSING
+    all_sensors: list[SensorConfig] = MISSING
+    used_sensors: list[SensorConfig] = MISSING

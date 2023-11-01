@@ -8,10 +8,10 @@ from configs.paths.kaist_dataset import KaistDatasetPath as KaistPaths
 from configs.system.data_manager.datasets.base_dataset import DatasetConfig
 from configs.system.data_manager.memory import MemoryAnalyzer
 from configs.system.data_manager.regime import TimeLimit, Stream
-from configs.system.setup_manager.sensor_factory import Sensor, SensorFactoryConfig
+from configs.system.setup_manager.sensor_factory import SensorConfig, SensorFactoryConfig
 from configs.system.setup_manager.setup_manager import SetupManager
 from configs.system.data_manager.data_manager import DataManager, Regime
-from configs.system.data_manager.datasets.kaist import Kaist, Pair
+from configs.system.data_manager.datasets.kaist import KaistConfig, Pair
 
 from configs.sensors.imu import ImuParameter
 from configs.sensors.fog import FogParameter
@@ -26,24 +26,24 @@ from configs.sensors.velodyne_right import VelodyneRightParameter
 from configs.sensors.vrs_gps import VrsGpsParameter
 
 
-imu = Sensor('imu', Imu.__name__, ImuParameter())
-fog = Sensor('fog', Fog.__name__, FogParameter())
-encoder = Sensor('encoder', Encoder.__name__, EncoderParameter())
-altimeter = Sensor('altimeter', Altimeter.__name__, AltimeterParameter())
-gps = Sensor('gps', Gps.__name__, GpsParameter())
-vrs_gps = Sensor('vrs', VrsGps.__name__, VrsGpsParameter())
-stereo = Sensor('stereo', StereoCamera.__name__, StereoParameter())
-lidar_3D_right = Sensor(
+imu = SensorConfig('imu', Imu.__name__, ImuParameter())
+fog = SensorConfig('fog', Fog.__name__, FogParameter())
+encoder = SensorConfig('encoder', Encoder.__name__, EncoderParameter())
+altimeter = SensorConfig('altimeter', Altimeter.__name__, AltimeterParameter())
+gps = SensorConfig('gps', Gps.__name__, GpsParameter())
+vrs_gps = SensorConfig('vrs', VrsGps.__name__, VrsGpsParameter())
+stereo = SensorConfig('stereo', StereoCamera.__name__, StereoParameter())
+lidar_3D_right = SensorConfig(
     'velodyne_right', Lidar3D.__name__, VelodyneLeftParameter())
-lidar_3D_left = Sensor('velodyne_left', Lidar3D.__name__,
-                       VelodyneRightParameter())
-lidar_2D_back = Sensor(
+lidar_3D_left = SensorConfig('velodyne_left', Lidar3D.__name__,
+                             VelodyneRightParameter())
+lidar_2D_back = SensorConfig(
     'sick_back', Lidar2D.__name__, SickBackParameter())
-lidar_2D_middle = Sensor(
+lidar_2D_middle = SensorConfig(
     'sick_middle', Lidar2D.__name__, SickMiddleParameter())
 
 
-all_sensors: list[Sensor] = field(
+all_sensors: list[SensorConfig] = field(
     default_factory=lambda: [
         imu,
         fog,
@@ -58,7 +58,7 @@ all_sensors: list[Sensor] = field(
         lidar_2D_back
     ])
 
-used_sensors: list[Sensor] = field(
+used_sensors: list[SensorConfig] = field(
     default_factory=lambda: [imu,
                              fog,
                              encoder,
@@ -108,7 +108,7 @@ data_dirs: list[Pair] = field(default_factory=lambda: [
 
 
 @dataclass
-class KaistDS(Kaist):
+class KaistDS(KaistConfig):
     directory: Path = dataset_directory
     iterable_data_files: list[Pair] = iterable_data_files
     data_dirs: list[Pair] = data_dirs
@@ -127,8 +127,8 @@ class Range(TimeLimit):
 
 @dataclass
 class SF(SensorFactoryConfig):
-    all_sensors: list[Sensor] = all_sensors
-    used_sensors: list[Sensor] = used_sensors
+    all_sensors: list[SensorConfig] = all_sensors
+    used_sensors: list[SensorConfig] = used_sensors
 
 
 @dataclass

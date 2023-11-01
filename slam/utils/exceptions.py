@@ -8,7 +8,7 @@ class ConfigFileNotValid(OSError):
 
 
 class FileNotValid(Exception):
-    'invalid file'
+    'Invalid file: not exists or empty'
 
 
 class NotSubset(Exception):

@@ -9,7 +9,7 @@ from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 from configs.system.setup_manager.sensor_factory import SensorFactoryConfig as Config
-from configs.system.setup_manager.sensor_factory import Sensor as SensorConfig
+from configs.system.setup_manager.sensor_factory import SensorConfig as SensorConfig
 
 logger = logging.getLogger(__name__)
 

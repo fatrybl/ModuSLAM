@@ -17,7 +17,7 @@ class DataReader(ABC):
     """Base abstract class for any data reader."""
 
     @staticmethod
-    def _is_file_valid(file_path: Path) -> bool:
+    def is_file_valid(file_path: Path) -> bool:
         if not Path.is_file(file_path):
             msg = f"File {file_path} does not exist"
             logger.critical(msg)

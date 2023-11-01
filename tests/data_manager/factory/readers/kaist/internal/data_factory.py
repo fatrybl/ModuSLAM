@@ -484,10 +484,7 @@ class DataFactory:
         img = asarray(data[1])
         imwrite(path.as_posix(), img)
 
-    def generate_data(self,) -> None:
-        """
-        Creates Kaist Urban dataset directory structure and generates data.
-        """
+    def generate_directories(self) -> None:
 
         TEST_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -508,6 +505,11 @@ class DataFactory:
                    parents=True, exist_ok=True)
         Path.mkdir(self.SENSOR_DATA_DIR / self.VLP_RIGHT_DIR,
                    parents=True, exist_ok=True)
+
+    def generate_data(self,) -> None:
+        """
+        Creates Kaist Urban dataset directory structure and generates data.
+        """
 
         self.to_csv_file(
             self.data_stamp, self.DATA_STAMP_FILE, multilines=True)

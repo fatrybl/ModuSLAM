@@ -8,6 +8,7 @@ import numpy as np
 import numpy.typing as npt
 from cv2 import imread, IMREAD_UNCHANGED
 from plum import dispatch
+from slam.data_manager.factory.readers.data_reader import DataReader
 
 from slam.data_manager.factory.readers.element_factory import Location
 from slam.data_manager.factory.readers.kaist.data_classes import (
@@ -17,7 +18,7 @@ from slam.setup_manager.sensor_factory.sensors import (
     Altimeter, Encoder, Fog, Gps, Imu,
     Lidar2D, Lidar3D, Sensor, StereoCamera, VrsGps)
 from slam.utils.auxiliary_methods import as_int
-from slam.utils.exceptions import ExternalModuleException
+from slam.utils.exceptions import ExternalModuleException, FileNotValid
 
 from configs.paths.kaist_dataset import KaistDatasetPath
 from configs.system.data_manager.datasets.kaist import Pair
@@ -71,11 +72,16 @@ class MeasurementCollector():
         Yields:
             Iterator[tuple[int, tuple[str]]]: line number, tuple of string for each line in the file.
         """
-        with open(file, "r") as f:
-            reader = csv_reader(f)
-            for position, line in enumerate(reader):
-                line = tuple(line)
-                yield position, line
+        if DataReader.is_file_valid(file):
+            with open(file, "r") as f:
+                reader = csv_reader(f)
+                for position, line in enumerate(reader):
+                    line = tuple(line)
+                    yield position, line
+        else:
+            msg = f"file: {file} is not valid to initialize the iterator"
+            logger.critical(msg)
+            raise FileNotValid(msg)
 
     def __read_bin(self, file: Path) -> npt.NDArray[np.float32]:
         """Reads a binary file with Single-precision floating-point data (float32).

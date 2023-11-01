@@ -1,21 +1,31 @@
-from typing import Any, Iterable, Type
-from collections.abc import Iterator
-from pytest import mark
+from typing import Type
+from pytest import fixture, mark
 from unittest.mock import Mock, patch
+
+from hydra.core.config_store import ConfigStore
 
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
-from .data_factory import SensorElementPair
+from configs.system.data_manager.regime import Stream
 
-from tests.data_manager.factory.readers.kaist.api.full_dataset.data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory, SensorElementPair
+
+from api.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
+
+from .data import (elements, sensor_element_pairs, data_stamp,
+                   stamp_files, csv_data, binary_data, image_data)
+
+from .config import KaistReaderConfig
+
+
 """
-How to test any DataReader:
+Tests description:
+
 1) Create a dataset for a DataReader.
-2) Initialize config files for DataReader and SensorFactory.
-3.1) Initialize SensorFactory object.
-3.2) Initialize DataReader object with config file.
+2) Initialize config files for DataReader
+3) Initialize DataReader with config files.
 4) Test methods:
     4.1) get_element()
     4.2) get_element(element[Element])
@@ -24,38 +34,43 @@ How to test any DataReader:
 """
 
 
-def flatten(set: tuple[Any, ...]) -> Iterator[Any]:
-    """
-    Flattens tuple of tuples for propper comparison,
-    Args:
-        set (tuple[Any]): tuple of any-type-measurements
+OBJECT_PATH_TO_PATCH = "slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory"
 
-    Yields:
-        Iterator[Any]: _description_
-    """
-    for item in set:
-        if isinstance(item, Iterable) and not isinstance(item, str):
-            for x in flatten(item):
-                yield x
-        else:
-            yield item
+
+@fixture(scope='class', autouse=True)
+def register_configs() -> None:
+    cs = ConfigStore.instance()
+    cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
+    cs.store(name=REGIME_CONFIG_NAME, node=Stream)
+
+
+@fixture(scope="class", autouse=True)
+def generate_dataset():
+    data_factory = DataFactory()
+    data_factory.create_dataset_structure()
+    data_factory.generate_data(
+        data_stamp,
+        stamp_files,
+        csv_data,
+        binary_data,
+        image_data)
 
 
 class TestGetElement:
 
     @mark.parametrize("reference_element",
-                      (DataFactory.elements))
-    @patch("slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory")
+                      (elements))
+    @patch(OBJECT_PATH_TO_PATCH)
     def test_get_element_1(self, mock_sensor_factory: Mock, data_reader: KaistReader, reference_element: Element):
         sensor: Type[Sensor] = reference_element.measurement.sensor
-
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
         element: Element = data_reader.get_element()
 
-        values = list(flatten(element.measurement.values))
-        true_values = list(flatten(reference_element.measurement.values))
+        values = list(DataFactory.flatten(element.measurement.values))
+        true_values = list(DataFactory.flatten(
+            reference_element.measurement.values))
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
@@ -63,18 +78,18 @@ class TestGetElement:
         assert values == true_values
 
     @mark.parametrize("reference_element",
-                      (DataFactory.elements))
-    @patch("slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory")
-    def test_get_element_2(self, mock_sensor_factory, data_reader: KaistReader, reference_element: Element):
+                      (elements))
+    @patch(OBJECT_PATH_TO_PATCH)
+    def test_get_element_2(self, mock_sensor_factory: Mock, data_reader: KaistReader, reference_element: Element):
         sensor: Type[Sensor] = reference_element.measurement.sensor
-
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
         element: Element = data_reader.get_element(reference_element)
 
-        values = list(flatten(element.measurement.values))
-        true_values = list(flatten(reference_element.measurement.values))
+        values = list(DataFactory.flatten(element.measurement.values))
+        true_values = list(DataFactory.flatten(
+            reference_element.measurement.values))
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
@@ -84,19 +99,19 @@ class TestGetElement:
 
 class TestGetElementOfSensor:
     @mark.parametrize("sensor_element_pair",
-                      (DataFactory.sensor_element_pairs))
-    @patch("slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory")
-    def test_get_element_3(self, mock_sensor_factory, data_reader: KaistReader, sensor_element_pair: SensorElementPair):
+                      (sensor_element_pairs))
+    @patch(OBJECT_PATH_TO_PATCH)
+    def test_get_element_3(self, mock_sensor_factory: Mock, data_reader: KaistReader, sensor_element_pair: SensorElementPair):
         sensor: Type[Sensor] = sensor_element_pair.sensor
-        reference_element: Element = sensor_element_pair.element
-
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
+        reference_element: Element = sensor_element_pair.element
         element: Element = data_reader.get_element(sensor)
 
-        values = list(flatten(element.measurement.values))
-        true_values = list(flatten(reference_element.measurement.values))
+        values = list(DataFactory.flatten(element.measurement.values))
+        true_values = list(DataFactory.flatten(
+            reference_element.measurement.values))
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
@@ -104,20 +119,20 @@ class TestGetElementOfSensor:
         assert values == true_values
 
     @mark.parametrize("sensor_element_pair",
-                      (DataFactory.sensor_element_pairs))
-    @patch("slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory")
-    def test_get_element_4(self, mock_sensor_factory, data_reader: KaistReader, sensor_element_pair: SensorElementPair):
+                      (sensor_element_pairs))
+    @patch(OBJECT_PATH_TO_PATCH)
+    def test_get_element_4(self, mock_sensor_factory: Mock, data_reader: KaistReader, sensor_element_pair: SensorElementPair):
         sensor: Type[Sensor] = sensor_element_pair.sensor
-        reference_element: Element = sensor_element_pair.element
-        timestamp: int = reference_element.timestamp
-
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
+        reference_element: Element = sensor_element_pair.element
+        timestamp: int = reference_element.timestamp
         element: Element = data_reader.get_element(sensor, timestamp)
 
-        values = list(flatten(element.measurement.values))
-        true_values = list(flatten(reference_element.measurement.values))
+        values = list(DataFactory.flatten(element.measurement.values))
+        true_values = list(DataFactory.flatten(
+            reference_element.measurement.values))
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location

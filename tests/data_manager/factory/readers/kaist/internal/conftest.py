@@ -1,5 +1,5 @@
 from shutil import rmtree
-from typing import Type
+from typing import Type, Callable
 from pytest import fixture
 
 from hydra.core.config_store import ConfigStore
@@ -15,17 +15,19 @@ from .config import (
 from .data_factory import DataFactory
 
 
-@fixture(scope='class', autouse=True)
-def register_configs() -> None:
-    cs = ConfigStore.instance()
-    cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
-    cs.store(name=REGIME_CONFIG_NAME, node=Stream)
+@fixture(scope='function')
+def data_factory() -> DataFactory:
+    return DataFactory()
 
 
-@fixture(scope='class', autouse=True)
-def create_dataset() -> None:
-    factory = DataFactory()
-    factory.generate_data()
+@fixture(scope='function')
+def generate_directories(data_factory: DataFactory) -> None:
+    data_factory.generate_directories()
+
+
+@fixture(scope='function')
+def generate_data(data_factory: DataFactory, generate_directories: Callable[[DataFactory], None]) -> None:
+    data_factory.generate_data()
 
 
 @fixture(scope='class')
@@ -50,4 +52,4 @@ def data_reader(dataset_cfg: KaistReaderConfig, regime_cfg: Type[Regime]) -> Kai
 @fixture(scope='class', autouse=True)
 def clean():
     yield
-    rmtree(TMP_DIR)
+    # rmtree(TMP_DIR, ignore_errors=True)

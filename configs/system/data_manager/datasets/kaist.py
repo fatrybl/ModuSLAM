@@ -17,7 +17,7 @@ class Pair:
 
 
 @dataclass
-class Kaist(DatasetConfig):
+class KaistConfig(DatasetConfig):
     """
     Kaist Urban Dataset parameters.
     """

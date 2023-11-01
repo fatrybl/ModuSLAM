@@ -1,22 +1,30 @@
-from pytest import mark, raises
-from pathlib import Path
+from omegaconf import DictConfig
+from pytest import fixture, raises
+from unittest.mock import Mock, patch
 
-from slam.data_manager.factory.readers.element_factory import Element, Measurement
-from slam.data_manager.factory.readers.kaist.data_classes import CsvDataLocation
+from hydra.core.config_store import ConfigStore
 
+from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
-from slam.setup_manager.sensor_factory.sensors import Imu
+
+from configs.system.data_manager.regime import Stream
+from slam.setup_manager.sensor_factory.sensors import Encoder
 from slam.utils.exceptions import FileNotValid
 
-from .config_factory import imu
+from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory
+
+from api.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
+
+from .data import element
+from .config import KaistReaderConfig
+
 
 """
-How to test any DataReader:
+Tests description:
+
 1) Create a dataset for a DataReader.
-2) Initialize config files for DataReader and SensorFactory.
-3.1) Initialize SensorFactory object.
-3.2) Initialize DataReader object with config file.
+2) Initialize config files for DataReader
+3) Initialize DataReader with config files.
 4) Test methods:
     4.1) get_element()
     4.2) get_element(element[Element])
@@ -25,52 +33,39 @@ How to test any DataReader:
 """
 
 
+@fixture(scope='class', autouse=True)
+def register_configs() -> None:
+    cs = ConfigStore.instance()
+    cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
+    cs.store(name=REGIME_CONFIG_NAME, node=Stream)
+
+
+@fixture(scope="class", autouse=True)
+def generate_dataset():
+    data_factory = DataFactory()
+    data_factory.create_dataset_structure()
+
+
 class TestGetElement:
 
+    timestamp: int = 1
+    sensor = Encoder('encoder', DictConfig({"params": ()}))
+    element: Element = element
+
     def test_get_element_1(self, data_reader: KaistReader):
-        """
-        Tries to get an element from a dataaset. 
-        Raises an exception as "data_stamp.csv" is not valid (empty).
-
-        Args:
-            data_reader (KaistReader): reader to an element from a dataaset.
-        """
         with raises(FileNotValid):
-            data_reader.get_element()
+            element: Element = data_reader.get_element()
 
-    @mark.xfail
-    def test_get_element_2(self, data_reader: KaistReader, sensor_factory: SensorFactory):
-        """
-        Test must fail as the dataset is empty.
-        get_element() method accepts only those elements which exist in the dataset.
-        """
-        sensor = sensor_factory.name_to_sensor(imu.name)
-        m = Measurement(sensor, values=(1, 2, 3))
-        loc = CsvDataLocation(file=Path(), position=0)
-        t: int = 1
+    def test_get_element_2(self, data_reader: KaistReader):
+        with raises(FileNotValid):
+            element: Element = data_reader.get_element(self.element)
 
-        element = Element(timestamp=t,
-                          measurement=m,
-                          location=loc)
+    def test_get_element_3(self, data_reader: KaistReader):
+        with raises(FileNotValid):
+            element: Element = data_reader.get_element(
+                self.sensor)
 
-        data_reader.get_element(element)
-
-    @mark.xfail
-    def test_get_element_3(self, data_reader: KaistReader, sensor_factory: SensorFactory):
-        """
-        Test must fail as the dataset is empty.
-        get_element() method accepts only those elements which have existed in the dataset before.
-        """
-        sensor: Imu = sensor_factory.name_to_sensor(imu.name)
-        data_reader.get_element(sensor)
-
-    @mark.xfail
-    def test_get_element_4(self, data_reader: KaistReader, sensor_factory: SensorFactory):
-        """
-        Test must fail as the dataset is empty.
-        get_element() method accepts only those elements which have existed in the dataset before.
-        """
-        t: int = 1
-        sensor: Imu = sensor_factory.name_to_sensor(imu.name)
-        data_reader.get_element(sensor=sensor,
-                                timestamp=t)
+#     def test_get_element_4(self, data_reader: KaistReader):
+#         with raises(FileNotValid):
+#             element: Element = data_reader.get_element(
+#                 self.sensor, self.timestamp)

@@ -19,7 +19,7 @@ from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_methods import as_int
 
-from configs.system.data_manager.datasets.kaist import Kaist
+from configs.system.data_manager.datasets.kaist import KaistConfig
 from configs.system.data_manager.data_manager import Regime
 from configs.system.data_manager.regime import TimeLimit
 
@@ -43,12 +43,12 @@ class KaistReader(DataReader):
         DataReader (_type_): Base abstract class.
     """
 
-    EMPTY_STRING: str = ""
-    INCORRECT_TIMESTAMP: int = -1
-    TIMESTAMP: str = 'timestamp'
-    SENSOR_NAME: str = 'sensor_name'
+    __EMPTY_STRING: str = ""
+    __INCORRECT_TIMESTAMP: int = -1
+    __TIMESTAMP: str = 'timestamp'
+    __SENSOR_NAME: str = 'sensor_name'
 
-    def __init__(self, dataset_params: Kaist, regime_params: type[Regime]):
+    def __init__(self, dataset_params: KaistConfig, regime_params: type[Regime]):
         self._dataset_params = dataset_params
         self._regime_params = regime_params
         self._data_stamp_file: Path = dataset_params.directory / \
@@ -56,7 +56,7 @@ class KaistReader(DataReader):
         self._collector = MeasurementCollector(
             dataset_params.iterable_data_files,
             dataset_params.data_dirs)
-        data_stamp_iterator: Iterator[dict[str, str]] = self.init_iterator()
+        data_stamp_iterator: Iterator[dict[str, str]] = self._init_iterator()
         self.__current_state = KaistReaderState(
             data_stamp_iterator,
             self._collector.iterators)
@@ -75,7 +75,7 @@ class KaistReader(DataReader):
         """
         return self.__current_state
 
-    def init_iterator(self) -> Iterator[dict[str, str]]:
+    def _init_iterator(self) -> Iterator[dict[str, str]]:
         """Initialize a new iterator for a given file. 
             Each line is a dictionary with timestamp and sensor keys.
 
@@ -86,9 +86,9 @@ class KaistReader(DataReader):
             Iterator[dict[str, str]]: file iterator as a dictionary. 
         """
         file = self._data_stamp_file
-        if (DataReader._is_file_valid(file)):
+        if DataReader.is_file_valid(file):
             with open(file, "r") as f:
-                names = [self.TIMESTAMP, self.SENSOR_NAME]
+                names = [self.__TIMESTAMP, self.__SENSOR_NAME]
                 reader = DictReader(f, fieldnames=names)
                 for line in reader:
                     yield line
@@ -102,7 +102,7 @@ class KaistReader(DataReader):
 
         self._collector.reset_iterators()
         data_stamp_iterator: Iterator[dict[str, str]
-                                      ] = self.init_iterator()
+                                      ] = self._init_iterator()
         self.__current_state = KaistReaderState(
             data_stamp_iterator,
             self._collector.iterators)
@@ -130,15 +130,15 @@ class KaistReader(DataReader):
         Returns:
             tuple[str, int]: sensor name and number of iterations
         """
-        current_timestamp: int = self.INCORRECT_TIMESTAMP
-        sensor_name: str = self.EMPTY_STRING
+        current_timestamp: int = self.__INCORRECT_TIMESTAMP
+        sensor_name: str = self.__EMPTY_STRING
         counter: int = 0
 
         while current_timestamp != timestamp:
             current_line = next(self.__current_state.data_stamp_iterator)
             current_timestamp: int = as_int(
-                current_line[self.TIMESTAMP], logger)
-            sensor_name = current_line[self.SENSOR_NAME]
+                current_line[self.__TIMESTAMP], logger)
+            sensor_name = current_line[self.__SENSOR_NAME]
             counter += 1
 
         return sensor_name, counter
@@ -153,7 +153,7 @@ class KaistReader(DataReader):
         Returns:
             int: a number of iterations before the timestamp is encountered.
         """
-        current_timestamp: int = self.INCORRECT_TIMESTAMP
+        current_timestamp: int = self.__INCORRECT_TIMESTAMP
         counter: int = 0
         while current_timestamp != timestamp:
             __, line = next(it.iterator)
@@ -249,8 +249,7 @@ class KaistReader(DataReader):
             while True:
                 line = next(self.__current_state.data_stamp_iterator)
                 sensor = SensorFactory.name_to_sensor(
-                    line[self.SENSOR_NAME])
-
+                    line[self.__SENSOR_NAME])
                 if sensor in SensorFactory.used_sensors:
                     break
 
@@ -260,7 +259,7 @@ class KaistReader(DataReader):
             return None
 
         else:
-            timestamp = line[self.TIMESTAMP]
+            timestamp = line[self.__TIMESTAMP]
             timestamp = as_int(timestamp, logger)
             if self._regime_params.name == TimeLimit.__name__:
                 if timestamp > self.__time_range.stop:
