@@ -4,7 +4,7 @@ from omegaconf import MISSING
 
 
 @dataclass
-class MemoryAnalyzer:
+class MemoryAnalyzerConfig:
     """
     Configures MemoryAnalyzer
     """

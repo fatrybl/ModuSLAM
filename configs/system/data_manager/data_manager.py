@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
 
 from configs.system.data_manager.datasets.base_dataset import DatasetConfig
-from configs.system.data_manager.memory import MemoryAnalyzer
-from configs.system.data_manager.regime import Regime
+from configs.system.data_manager.memory import MemoryAnalyzerConfig
+from configs.system.data_manager.regime import RegimeConfig
 
 
 @dataclass
-class DataManager:
+class DataManagerConfig:
     """
     Configures DataManager.
     """
-    regime: Regime = field(default_factory=Regime)
+    regime: RegimeConfig = field(default_factory=RegimeConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)
-    memory: MemoryAnalyzer = field(default_factory=MemoryAnalyzer)
+    memory: MemoryAnalyzerConfig = field(default_factory=MemoryAnalyzerConfig)

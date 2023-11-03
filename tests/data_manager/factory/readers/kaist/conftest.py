@@ -5,7 +5,7 @@ from pytest import fixture
 from hydra import compose, initialize_config_module
 
 from configs.system.data_manager.datasets.kaist import KaistConfig
-from configs.system.data_manager.regime import Regime
+from configs.system.data_manager.regime import RegimeConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from data_factory import DatasetStructure
 
@@ -18,7 +18,7 @@ Fixture: TypeAlias = Callable[[Any], Any]
 
 
 @fixture(scope='class')
-def data_reader(dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]) -> KaistReader:
+def data_reader(dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]) -> KaistReader:
     return KaistReader(dataset_cfg, regime_cfg)
 
 
@@ -30,7 +30,7 @@ def dataset_cfg() -> Type[KaistConfig]:
 
 
 @fixture(scope='class')
-def regime_cfg() -> Type[Regime]:
+def regime_cfg() -> Type[RegimeConfig]:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=REGIME_CONFIG_NAME)
         return cfg

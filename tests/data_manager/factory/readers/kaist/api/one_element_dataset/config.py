@@ -5,8 +5,8 @@ from pathlib import Path
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
-from configs.paths.kaist_dataset import KaistDatasetPath as KaistPaths
-from configs.system.data_manager.datasets.kaist import KaistConfig, Pair
+from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
+from configs.system.data_manager.datasets.kaist import KaistConfig, PairConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
@@ -31,36 +31,37 @@ lidar_2D_back = SensorConfig(
 lidar_2D_middle = SensorConfig(
     'sick_middle', Lidar2D.__name__, ParameterConfig())
 
-iterable_data_files: list[Pair] = field(default_factory=lambda: [
-    Pair(imu.name, DATASET_DIR / KaistPaths.imu_data_file),
-    Pair(fog.name, DATASET_DIR / KaistPaths.fog_data_file),
-    Pair(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
-    Pair(altimeter.name, DATASET_DIR / KaistPaths.altimeter_data_file),
-    Pair(gps.name, DATASET_DIR / KaistPaths.gps_data_file),
-    Pair(vrs_gps.name, DATASET_DIR / KaistPaths.vrs_gps_data_file),
-    Pair(stereo.name, DATASET_DIR / KaistPaths.stereo_stamp_file),
-    Pair(lidar_2D_back.name, DATASET_DIR /
-         KaistPaths.lidar_2D_back_stamp_file),
-    Pair(lidar_2D_middle.name, DATASET_DIR /
-         KaistPaths.lidar_2D_middle_stamp_file),
-    Pair(lidar_3D_left.name, DATASET_DIR /
-         KaistPaths.lidar_3D_left_stamp_file),
-    Pair(lidar_3D_right.name, DATASET_DIR /
-         KaistPaths.lidar_3D_right_stamp_file),
+iterable_data_files: list[PairConfig] = field(default_factory=lambda: [
+    PairConfig(imu.name, DATASET_DIR / KaistPaths.imu_data_file),
+    PairConfig(fog.name, DATASET_DIR / KaistPaths.fog_data_file),
+    PairConfig(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
+    PairConfig(altimeter.name, DATASET_DIR / KaistPaths.altimeter_data_file),
+    PairConfig(gps.name, DATASET_DIR / KaistPaths.gps_data_file),
+    PairConfig(vrs_gps.name, DATASET_DIR / KaistPaths.vrs_gps_data_file),
+    PairConfig(stereo.name, DATASET_DIR / KaistPaths.stereo_stamp_file),
+    PairConfig(lidar_2D_back.name, DATASET_DIR /
+               KaistPaths.lidar_2D_back_stamp_file),
+    PairConfig(lidar_2D_middle.name, DATASET_DIR /
+               KaistPaths.lidar_2D_middle_stamp_file),
+    PairConfig(lidar_3D_left.name, DATASET_DIR /
+               KaistPaths.lidar_3D_left_stamp_file),
+    PairConfig(lidar_3D_right.name, DATASET_DIR /
+               KaistPaths.lidar_3D_right_stamp_file),
 ])
 
-data_dirs: list[Pair] = field(default_factory=lambda: [
-    Pair(stereo.name, DATASET_DIR / KaistPaths.image_data_dir),
-    Pair(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_dir),
-    Pair(lidar_2D_middle.name, DATASET_DIR /
-         KaistPaths.lidar_2D_middle_dir),
-    Pair(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_dir),
-    Pair(lidar_3D_right.name, DATASET_DIR / KaistPaths.lidar_3D_right_dir),
+data_dirs: list[PairConfig] = field(default_factory=lambda: [
+    PairConfig(stereo.name, DATASET_DIR / KaistPaths.image_data_dir),
+    PairConfig(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_dir),
+    PairConfig(lidar_2D_middle.name, DATASET_DIR /
+               KaistPaths.lidar_2D_middle_dir),
+    PairConfig(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_dir),
+    PairConfig(lidar_3D_right.name, DATASET_DIR /
+               KaistPaths.lidar_3D_right_dir),
 ])
 
 
 @dataclass
 class KaistReaderConfig(KaistConfig):
     directory: Path = DATASET_DIR
-    iterable_data_files: list[Pair] = iterable_data_files
-    data_dirs: list[Pair] = data_dirs
+    iterable_data_files: list[PairConfig] = iterable_data_files
+    data_dirs: list[PairConfig] = data_dirs

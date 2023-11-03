@@ -20,8 +20,8 @@ from slam.setup_manager.sensor_factory.sensors import (
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ExternalModuleException, FileNotValid
 
-from configs.paths.kaist_dataset import KaistDatasetPath
-from configs.system.data_manager.datasets.kaist import Pair
+from configs.paths.kaist_dataset import KaistDatasetPathConfig
+from configs.system.data_manager.datasets.kaist import PairConfig
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class MeasurementCollector():
     IMAGE_EXTENSION: str = '.png'
     BINARY_EXTENSION: str = '.bin'
 
-    def __init__(self, iterable_files: list[Pair], data_dirs: list[Pair]):
+    def __init__(self, iterable_files: list[PairConfig], data_dirs: list[PairConfig]):
         """
         Args:
             iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
@@ -66,8 +66,9 @@ class MeasurementCollector():
             data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
                 which corresponds to unique sensor name and its data directory.
         """
-        dirs: tuple[Pair, ...] = tuple(data_dirs)
-        self._iterable_data_files: tuple[Pair, ...] = tuple(iterable_files)
+        dirs: tuple[PairConfig, ...] = tuple(data_dirs)
+        self._iterable_data_files: tuple[PairConfig, ...] = tuple(
+            iterable_files)
         self._sensor_data_storages = DataStorage(dirs)
         self._sensor_data_iterators = SensorIterators(
             self._iterable_data_files,
@@ -187,8 +188,10 @@ class MeasurementCollector():
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor_name)
 
-        left_camera_dir: Path = storage.path / KaistDatasetPath.stereo_left_data_dir
-        right_camera_dir: Path = storage.path / KaistDatasetPath.stereo_right_data_dir
+        left_camera_dir: Path = storage.path / \
+            KaistDatasetPathConfig.stereo_left_data_dir
+        right_camera_dir: Path = storage.path / \
+            KaistDatasetPathConfig.stereo_right_data_dir
 
         left_img_file = left_camera_dir / timestamp_path
         right_img_file = right_camera_dir / timestamp_path

@@ -4,7 +4,7 @@ from .sensor_factory import SensorFactoryConfig
 
 
 @dataclass
-class SetupManager:
+class SetupManagerConfig:
     """
     Config for SetupManager.
     """

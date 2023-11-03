@@ -6,7 +6,7 @@ from omegaconf import MISSING
 
 
 @dataclass
-class Regime(ABC):
+class RegimeConfig(ABC):
     """
     Abstract regime of data flow.
     """
@@ -14,7 +14,7 @@ class Regime(ABC):
 
 
 @dataclass
-class TimeLimit(Regime):
+class TimeLimitConfig(RegimeConfig):
     """
     Data flow is limited by time range.
     """
@@ -24,7 +24,7 @@ class TimeLimit(Regime):
 
 
 @dataclass
-class Stream(Regime):
+class StreamConfig(RegimeConfig):
     """
     Free data flow: each measurement is processed sequantially.
     """

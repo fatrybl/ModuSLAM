@@ -20,8 +20,8 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_methods import as_int
 
 from configs.system.data_manager.datasets.kaist import KaistConfig
-from configs.system.data_manager.data_manager import Regime
-from configs.system.data_manager.regime import TimeLimit
+from configs.system.data_manager.data_manager import RegimeConfig
+from configs.system.data_manager.regime import TimeLimitConfig
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ class KaistReader(DataReader):
     __TIMESTAMP: str = 'timestamp'
     __SENSOR_NAME: str = 'sensor_name'
 
-    def __init__(self, dataset_params: Type[KaistConfig], regime_params: type[Regime]):
+    def __init__(self, dataset_params: Type[KaistConfig], regime_params: type[RegimeConfig]):
         self._dataset_params = dataset_params
         self._regime_params = regime_params
         self._data_stamp_file: Path = dataset_params.directory / \
@@ -81,7 +81,7 @@ class KaistReader(DataReader):
             data_stamp_iterator,
             self._collector.iterators)
 
-        if regime_params.name == TimeLimit.__name__:
+        if regime_params.name == TimeLimitConfig.__name__:
             self.__time_range = TimeRange(
                 regime_params.start,
                 regime_params.stop)
@@ -278,7 +278,7 @@ class KaistReader(DataReader):
         else:
             timestamp = line[self.__TIMESTAMP]
             timestamp = as_int(timestamp, logger)
-            if self._regime_params.name == TimeLimit.__name__:
+            if self._regime_params.name == TimeLimitConfig.__name__:
                 if timestamp > self.__time_range.stop:
                     return None
 

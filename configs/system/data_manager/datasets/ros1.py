@@ -6,7 +6,7 @@ from configs.system.data_manager.datasets.base_dataset import DatasetConfig
 
 
 @dataclass
-class Ros1(DatasetConfig):
+class Ros1Config(DatasetConfig):
     """
     Base parameters for any Ros 1 dataset.
     """

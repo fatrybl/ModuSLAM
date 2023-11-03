@@ -2,7 +2,7 @@ import logging
 
 from slam.utils.meta_singleton import MetaSingleton
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
-from configs.system.setup_manager.setup_manager import SetupManager as SetupManagerConfig
+from configs.system.setup_manager.setup_manager import SetupManagerConfig
 
 logger = logging.getLogger(__name__)
 

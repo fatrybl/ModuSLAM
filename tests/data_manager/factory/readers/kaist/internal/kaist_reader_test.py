@@ -8,8 +8,8 @@ from hydra.core.config_store import ConfigStore
 from slam.utils.exceptions import FileNotValid
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
-from configs.system.data_manager.regime import Regime, Stream
-from configs.system.data_manager.datasets.kaist import KaistConfig, Pair
+from configs.system.data_manager.regime import RegimeConfig, StreamConfig
+from configs.system.data_manager.datasets.kaist import KaistConfig, PairConfig
 
 from tests.data_manager.factory.readers.kaist.internal.config import KaistReaderConfig
 from tests.data_manager.factory.readers.kaist.conftest import (
@@ -39,7 +39,7 @@ def create_dataset():
 def register_configs() -> None:
     cs = ConfigStore.instance()
     cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
-    cs.store(name=REGIME_CONFIG_NAME, node=Stream)
+    cs.store(name=REGIME_CONFIG_NAME, node=StreamConfig)
 
 
 class TestKaistReader:
@@ -48,7 +48,7 @@ class TestKaistReader:
     """
 
     def test_kaist_reader(self, create_dataset: Fixture, register_configs: Fixture,
-                          dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
+                          dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
         """
         Successfull KaistReader creation with proper configuration when the dataset exists and not empty.
         """
@@ -56,7 +56,7 @@ class TestKaistReader:
         reader = KaistReader(dataset_cfg, regime_cfg)
         assert reader is not None
 
-    def test_kaist_reader_invalid_confgis_1(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
+    def test_kaist_reader_invalid_confgis_1(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
         """
         Unsuccessfull KaistReader creation with improper configuration: dataset path.
         """
@@ -66,14 +66,14 @@ class TestKaistReader:
         with raises(FileNotValid):
             KaistReader(dataset_cfg, regime_cfg)
 
-    def test_kaist_reader_invalid_confgis_2(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
+    def test_kaist_reader_invalid_confgis_2(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
         """
         Unsuccessfull KaistReader creation with improper configuration: <SENSOR>.csv file.
         """
 
-        dataset_cfg.iterable_data_files: list[Pair] = [
-            Pair(sensor_name='some_sensor',
-                 location=Path('some/invalid/sensor_data.csv'))
+        dataset_cfg.iterable_data_files: list[PairConfig] = [
+            PairConfig(sensor_name='some_sensor',
+                       location=Path('some/invalid/sensor_data.csv'))
         ]
 
         with raises(FileNotValid):

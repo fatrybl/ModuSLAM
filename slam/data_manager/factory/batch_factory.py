@@ -12,7 +12,7 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
-from configs.system.data_manager.data_manager import DataManager as DataManagerConfig
+from configs.system.data_manager.data_manager import DataManagerConfig as DataManagerConfig
 
 logger = logging.getLogger(__name__)
 

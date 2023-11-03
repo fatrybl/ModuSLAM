@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 @dataclass(frozen=True)
-class KaistDatasetPath:
+class KaistDatasetPathConfig:
     """
     dataset format from 
     https://sites.google.com/view/complex-urban-dataset/format"
