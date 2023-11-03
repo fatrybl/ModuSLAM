@@ -1,6 +1,5 @@
 import logging
 
-from configs.system.data_manager.datasets.kaist import KaistConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 logger = logging.getLogger(__name__)

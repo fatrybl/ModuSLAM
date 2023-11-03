@@ -21,7 +21,7 @@ Test description:
 )
 def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader]):
     with initialize_config_module(config_module="data_reader_factory.conf"):
-        cfg = compose(config_name="test_config", overrides=overrides)
+        cfg = compose(config_name="config", overrides=overrides)
         dataset_type: str = cfg.type
         factory = DataReaderFactory(dataset_type)
         reader = factory.data_reader
@@ -35,7 +35,7 @@ def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader
 )
 def test_DataReaderFactory_exception(overrides: list[str], exception: Type[Exception]):
     with initialize_config_module(config_module="data_reader_factory.conf"):
-        cfg = compose(config_name="test_config", overrides=overrides)
+        cfg = compose(config_name="config", overrides=overrides)
         dataset_type: str = cfg.type
         with pytest.raises(exception):
             DataReaderFactory(dataset_type)

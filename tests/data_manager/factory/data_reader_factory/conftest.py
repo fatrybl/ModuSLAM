@@ -13,4 +13,4 @@ class Config:
 @pytest.fixture(scope='module', autouse=True)
 def register_config():
     cs = ConfigStore.instance()
-    cs.store(name="test_config", node=Config)
+    cs.store(name="config", node=Config)
