@@ -8,8 +8,8 @@ from hydra.core.config_store import ConfigStore
 from slam.utils.exceptions import FileNotValid
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
-from configs.system.data_manager.regime import RegimeConfig, StreamConfig
-from configs.system.data_manager.datasets.kaist import KaistConfig, PairConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
 
 from tests.data_manager.factory.readers.kaist.internal.config import KaistReaderConfig
 from tests.data_manager.factory.readers.kaist.conftest import (

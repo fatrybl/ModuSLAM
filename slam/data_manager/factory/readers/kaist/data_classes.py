@@ -3,7 +3,7 @@ import logging
 from dataclasses import dataclass, field, InitVar
 from pathlib import Path
 from typing import Any, Iterator, Callable
-from configs.system.data_manager.datasets.kaist import PairConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
 
 from slam.data_manager.factory.readers.element_factory import Location
 

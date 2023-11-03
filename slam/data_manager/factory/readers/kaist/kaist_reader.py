@@ -19,9 +19,9 @@ from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_methods import as_int
 
-from configs.system.data_manager.datasets.kaist import KaistConfig
-from configs.system.data_manager.data_manager import RegimeConfig
-from configs.system.data_manager.regime import TimeLimitConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
+from configs.system.data_manager.batch_factory.batch_factory import RegimeConfig
+from configs.system.data_manager.batch_factory.regime import TimeLimitConfig
 
 logger = logging.getLogger(__name__)
 

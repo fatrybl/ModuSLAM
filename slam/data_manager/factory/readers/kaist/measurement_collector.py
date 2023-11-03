@@ -21,7 +21,7 @@ from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ExternalModuleException, FileNotValid
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
-from configs.system.data_manager.datasets.kaist import PairConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
 
 logger = logging.getLogger(__name__)
 

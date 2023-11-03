@@ -8,7 +8,7 @@ from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
-from configs.system.data_manager.regime import StreamConfig
+from configs.system.data_manager.batch_factory.regime import StreamConfig
 
 from tests.data_manager.factory.readers.kaist.data_factory import DataFactory, SensorElementPair
 from tests.data_manager.factory.readers.kaist.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME

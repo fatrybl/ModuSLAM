@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from configs.system.data_manager.data_manager import DataManagerConfig
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
 
 
@@ -12,4 +12,5 @@ class BaseConfig:
     """
     setup_manager: SetupManagerConfig = field(
         default_factory=SetupManagerConfig)
-    data_manager: DataManagerConfig = field(default_factory=DataManagerConfig)
+    data_manager: BatchFactoryConfig = field(
+        default_factory=BatchFactoryConfig)

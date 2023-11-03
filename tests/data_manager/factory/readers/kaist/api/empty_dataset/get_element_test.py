@@ -9,8 +9,8 @@ from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Encoder
 from slam.utils.exceptions import FileNotValid
 
-from configs.system.data_manager.regime import RegimeConfig, StreamConfig
-from configs.system.data_manager.datasets.kaist import KaistConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 
 from tests.data_manager.factory.readers.kaist.data_factory import DataFactory
 from tests.data_manager.factory.readers.kaist.conftest import (

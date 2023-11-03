@@ -5,7 +5,7 @@ from pathlib import Path
 from slam.setup_manager.sensor_factory.sensors import Encoder
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
-from configs.system.data_manager.datasets.kaist import KaistConfig, PairConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 

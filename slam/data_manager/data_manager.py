@@ -6,7 +6,8 @@ from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.meta_singleton import MetaSingleton
-from configs.system.data_manager.data_manager import DataManagerConfig as DataManagerConfig
+
+from configs.system.data_manager.data_manager import DataManagerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class DataManager(metaclass=MetaSingleton):
         Args:
             cfg (DataManagerConfig): config for DataManager.
         """
-        self.batch_factory = BatchFactory(cfg)
+        self.batch_factory = BatchFactory(cfg.batch_factory)
         logger.debug("Data Manager has been configured")
 
     @dispatch

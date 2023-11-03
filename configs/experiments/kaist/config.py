@@ -1,17 +1,18 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from configs.system.data_manager.data_manager import DataManagerConfig
 
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
-from configs.system.data_manager.datasets.base_dataset import DatasetConfig
-from configs.system.data_manager.memory import MemoryAnalyzerConfig
-from configs.system.data_manager.regime import TimeLimitConfig, StreamConfig
+from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
+from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
+from configs.system.data_manager.batch_factory.regime import TimeLimitConfig, StreamConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig, SensorFactoryConfig
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
-from configs.system.data_manager.data_manager import DataManagerConfig, RegimeConfig
-from configs.system.data_manager.datasets.kaist import KaistConfig, PairConfig
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig, RegimeConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
 
 from configs.sensors.imu import ImuParameter
 from configs.sensors.fog import FogParameter
@@ -138,10 +139,15 @@ class SM(SetupManagerConfig):
 
 
 @dataclass
-class DM(DataManagerConfig):
+class BF(BatchFactoryConfig):
     dataset: DatasetConfig = field(default_factory=KaistDS)
     memory: MemoryAnalyzerConfig = field(default_factory=Memory)
     regime: RegimeConfig = field(default_factory=StreamConfig)
+
+
+@dataclass
+class DM(DataManagerConfig):
+    batch_factory: BatchFactoryConfig = field(default_factory=BF)
 
 
 @dataclass

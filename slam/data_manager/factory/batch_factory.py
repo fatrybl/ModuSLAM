@@ -12,15 +12,14 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
-from configs.system.data_manager.data_manager import DataManagerConfig as DataManagerConfig
-
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 logger = logging.getLogger(__name__)
 
 
 class BatchFactory():
     """Creates and manages Data Batch."""
 
-    def __init__(self, cfg: DataManagerConfig) -> None:
+    def __init__(self, cfg: BatchFactoryConfig) -> None:
         """
         Args:
             cfg (DataManagerConfig): config with parameters 

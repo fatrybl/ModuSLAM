@@ -2,7 +2,7 @@ import logging
 import psutil
 
 from slam import logger
-from configs.system.data_manager.memory import MemoryAnalyzerConfig as MemoryAnalyzerConfig
+from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig as MemoryAnalyzerConfig
 
 logger = logging.getLogger(__name__)
 

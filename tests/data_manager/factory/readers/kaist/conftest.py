@@ -4,8 +4,8 @@ from pytest import fixture
 
 from hydra import compose, initialize_config_module
 
-from configs.system.data_manager.datasets.kaist import KaistConfig
-from configs.system.data_manager.regime import RegimeConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from data_factory import DatasetStructure
 
