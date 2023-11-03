@@ -10,9 +10,8 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 
 from configs.system.data_manager.regime import Stream
 
-from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory, SensorElementPair
-
-from api.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
+from tests.data_manager.factory.readers.kaist.data_factory import DataFactory, SensorElementPair
+from tests.data_manager.factory.readers.kaist.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
 
 from .data import (elements, sensor_element_pairs, data_stamp,
                    stamp_files, csv_data, binary_data, image_data)
@@ -57,6 +56,11 @@ def generate_dataset():
 
 
 class TestGetElement:
+    """
+    KaistReader object is used as a fixture with scope "class" to be created once. 
+    This prevents the creation of KaistReader objects every time the test is called with new parameters
+    ==> prevents resetig of iterators for get_element() method.
+    """
 
     @mark.parametrize("reference_element",
                       (elements))
@@ -98,6 +102,12 @@ class TestGetElement:
 
 
 class TestGetElementOfSensor:
+    """
+    KaistReader object is used as a fixture with scope "class" to be created once. 
+    This prevents the creation of KaistReader objects every time the test is called with new parameters
+    ==> prevents resetig of iterators for get_element() method.
+    """
+
     @mark.parametrize("sensor_element_pair",
                       (sensor_element_pairs))
     @patch(OBJECT_PATH_TO_PATCH)

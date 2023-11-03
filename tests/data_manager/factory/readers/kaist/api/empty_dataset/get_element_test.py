@@ -1,7 +1,7 @@
 from typing import Type
-from omegaconf import DictConfig
 from pytest import fixture, raises
 
+from omegaconf import DictConfig
 from hydra.core.config_store import ConfigStore
 
 from slam.data_manager.factory.readers.element_factory import Element
@@ -12,9 +12,10 @@ from slam.utils.exceptions import FileNotValid
 from configs.system.data_manager.regime import Regime, Stream
 from configs.system.data_manager.datasets.kaist import KaistConfig
 
-from tests.data_manager.factory.readers.kaist.api.data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.conftest import (
+    DATASET_CONFIG_NAME, REGIME_CONFIG_NAME, Fixture)
 
-from api.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
 from .data import element
 from .config import KaistReaderConfig
 
@@ -33,14 +34,14 @@ Tests description:
 """
 
 
-@fixture(scope='class', autouse=True)
+@fixture(scope='class')
 def register_configs() -> None:
     cs = ConfigStore.instance()
     cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
     cs.store(name=REGIME_CONFIG_NAME, node=Stream)
 
 
-@fixture(scope="class", autouse=True)
+@fixture(scope="class")
 def generate_dataset():
     data_factory = DataFactory()
     data_factory.create_dataset_structure()
@@ -56,24 +57,23 @@ class TestGetElement:
     sensor = Encoder('encoder', DictConfig({"params": ()}))
     element: Element = element
 
-    def test_get_element_1(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
+    def test_get_element_1(self, register_configs: Fixture, generate_dataset: Fixture,
+                           dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
-            element: Element = reader.get_element()
+            reader.get_element()
 
-    def test_get_element_2(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
+    def test_get_element_2(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
-            element: Element = reader.get_element(self.element)
+            reader.get_element(self.element)
 
-    def test_get_element_3(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
+    def test_get_element_3(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
-            element: Element = reader.get_element(
-                self.sensor)
+            reader.get_element(self.sensor)
 
-    def test_get_element_4(self, dataset_cfg: KaistConfig, regime_cfg: Type[Regime]):
+    def test_get_element_4(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[Regime]):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
-            element: Element = reader.get_element(
-                self.sensor, self.timestamp)
+            reader.get_element(self.sensor, self.timestamp)

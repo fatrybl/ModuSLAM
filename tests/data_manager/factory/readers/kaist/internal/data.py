@@ -3,6 +3,7 @@ from pathlib import Path
 from numpy import ones
 from hydra.core.config_store import ConfigStore
 from hydra import compose, initialize_config_module
+from configs.sensors.base_sensor_parameters import ParameterConfig
 
 
 from slam.data_manager.factory.readers.element_factory import (
@@ -12,8 +13,6 @@ from slam.data_manager.factory.readers.kaist.data_classes import (
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, Altimeter, Gps,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
-
-from configs.sensors.base_sensor_parameters import ParameterConfig
 
 from tests.data_manager.factory.readers.kaist.data_factory import (
     SensorElementPair, SensorNamePath, DatasetStructure)

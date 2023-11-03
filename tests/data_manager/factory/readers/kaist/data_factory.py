@@ -27,6 +27,7 @@ class SensorElementPair:
 
 @dataclass(frozen=True)
 class DatasetStructure:
+
     CURRENT_DIR: Path = Path(__file__).parent
     DATASET_DIR: Path = CURRENT_DIR / 'test_data'
 

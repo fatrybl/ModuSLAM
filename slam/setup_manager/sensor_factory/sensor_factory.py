@@ -59,8 +59,7 @@ class SensorFactory(metaclass=MetaSingleton):
         """
         for s in cls.all_sensors:
             if s.name == name:
-                sensor = s
-                return sensor
+                return s
 
         msg = f"No sensor with name {name} in {cls.all_sensors}"
         logger.critical(msg)

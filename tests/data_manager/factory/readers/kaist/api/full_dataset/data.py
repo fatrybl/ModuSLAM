@@ -14,8 +14,8 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, Altimeter, Gps,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
 
-from tests.data_manager.factory.readers.kaist.api.data_factory import SensorElementPair, SensorNamePath, DatasetStructure
-from api.conftest import SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR
+from tests.data_manager.factory.readers.kaist.data_factory import SensorElementPair, SensorNamePath, DatasetStructure
+from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR
 
 cs = ConfigStore.instance()
 cs.store(name=SENSOR_CONFIG_NAME, node=ParameterConfig)

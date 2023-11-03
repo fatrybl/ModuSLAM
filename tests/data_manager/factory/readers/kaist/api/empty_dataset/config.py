@@ -9,7 +9,7 @@ from configs.system.data_manager.datasets.kaist import KaistConfig, Pair
 from configs.system.setup_manager.sensor_factory import SensorConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
-from api.data_factory import DatasetStructure
+from tests.data_manager.factory.readers.kaist.data_factory import DatasetStructure
 
 DATASET_DIR: Path = DatasetStructure.DATASET_DIR
 

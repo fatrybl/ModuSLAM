@@ -9,8 +9,8 @@ from slam.data_manager.factory.readers.element_factory import Element, Measureme
 from slam.data_manager.factory.readers.kaist.data_classes import CsvDataLocation
 from slam.setup_manager.sensor_factory.sensors import Encoder
 
-from tests.data_manager.factory.readers.kaist.api.data_factory import SensorNamePath, DatasetStructure
-from api.conftest import SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR
+from tests.data_manager.factory.readers.kaist.data_factory import SensorNamePath, DatasetStructure
+from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR
 
 
 cs = ConfigStore.instance()

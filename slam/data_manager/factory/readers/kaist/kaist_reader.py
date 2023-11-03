@@ -68,7 +68,7 @@ class KaistReader(DataReader):
     __TIMESTAMP: str = 'timestamp'
     __SENSOR_NAME: str = 'sensor_name'
 
-    def __init__(self, dataset_params: KaistConfig, regime_params: type[Regime]):
+    def __init__(self, dataset_params: Type[KaistConfig], regime_params: type[Regime]):
         self._dataset_params = dataset_params
         self._regime_params = regime_params
         self._data_stamp_file: Path = dataset_params.directory / \
