@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.setup_manager.sensor_factory.sensor_factory &mdash; mySLAM 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            mySLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">slam</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../slam.html">slam package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">mySLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">slam.setup_manager.sensor_factory.sensor_factory</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for slam.setup_manager.sensor_factory.sensor_factory</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">configs.sensors.base_sensor_parameters</span> <span class="kn">import</span> <span class="n">ParameterConfig</span>
+
+<span class="kn">from</span> <span class="nn">slam.utils.exceptions</span> <span class="kn">import</span> <span class="n">NotSubset</span><span class="p">,</span> <span class="n">SensorNotFound</span>
+<span class="kn">from</span> <span class="nn">slam.utils.meta_singleton</span> <span class="kn">import</span> <span class="n">MetaSingleton</span>
+<span class="kn">from</span> <span class="nn">slam.setup_manager.sensor_factory.sensors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Sensor</span><span class="p">,</span> <span class="n">Imu</span><span class="p">,</span> <span class="n">Fog</span><span class="p">,</span> <span class="n">Encoder</span><span class="p">,</span> <span class="n">StereoCamera</span><span class="p">,</span> <span class="n">Altimeter</span><span class="p">,</span> <span class="n">Gps</span><span class="p">,</span> <span class="n">VrsGps</span><span class="p">,</span> <span class="n">Lidar2D</span><span class="p">,</span> <span class="n">Lidar3D</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">configs.system.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorFactoryConfig</span> <span class="k">as</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">configs.system.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorConfig</span> <span class="k">as</span> <span class="n">SensorConfig</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SensorFactory">
+<a class="viewcode-back" href="../../../../slam.setup_manager.sensor_factory.html#slam.setup_manager.sensor_factory.sensor_factory.SensorFactory">[docs]</a>
+<span class="k">class</span> <span class="nc">SensorFactory</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">MetaSingleton</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Factory class for sensors management. Defaults to MetaSingleton.</span>
+
+<span class="sd">    Class Attributes: </span>
+<span class="sd">        all_sensors: sensors to be used in experiments for a particluar dataset.</span>
+<span class="sd">        used_sensors: sensors to be used in the experiment for a particluar dataset. Must be a subset of all_sensors.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        SensorNotFound: there is no sensor with the requested sensor name among all sensors.</span>
+<span class="sd">        NotSubset: some of used sensor are not defined in all sensors set.</span>
+<span class="sd">        ValueError: there is no available sensor type for the item from config.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">all_sensors</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">used_sensors</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__all_sensors_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SensorConfig</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">all_sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__used_sensors_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SensorConfig</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">used_sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_sesnors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_used_sesnors</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SensorFactory.get_used_sensors">
+<a class="viewcode-back" href="../../../../slam.setup_manager.sensor_factory.html#slam.setup_manager.sensor_factory.sensor_factory.SensorFactory.get_used_sensors">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_used_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">used_sensors</span></div>
+
+
+<div class="viewcode-block" id="SensorFactory.get_all_sensors">
+<a class="viewcode-back" href="../../../../slam.setup_manager.sensor_factory.html#slam.setup_manager.sensor_factory.sensor_factory.SensorFactory.get_all_sensors">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_all_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">all_sensors</span></div>
+
+
+<div class="viewcode-block" id="SensorFactory.name_to_sensor">
+<a class="viewcode-back" href="../../../../slam.setup_manager.sensor_factory.html#slam.setup_manager.sensor_factory.sensor_factory.SensorFactory.name_to_sensor">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">name_to_sensor</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps sensor name to Sensor (if exists) and returns the corresponding sensor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): sensor name</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SensorNotFound: there is no sensor with the requested sensor name among all sensors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Type[Sensor]: sensor if it exists among all sensors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">all_sensors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">s</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;No sensor with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">all_sensors</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">SensorNotFound</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_init_sesnors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes all sensors and used sensors from config.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__all_sensors_list</span><span class="p">:</span>
+            <span class="n">sensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_from_config</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_sensors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__used_sensors_list</span><span class="p">:</span>
+            <span class="n">sensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_to_sensor</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">used_sensors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_used_sesnors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if used sensors are part of all initialized sensors.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotSubset: Some of used sensor are not defined in all sensors set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_sensors</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_sensors</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_sensors</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Used sensors: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">used_sensors</span><span class="si">}</span><span class="s1"> are not in known sensors: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">all_sensors</span><span class="si">}</span><span class="s1"> or empty&#39;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">NotSubset</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SensorFactory.sensor_from_config">
+<a class="viewcode-back" href="../../../../slam.setup_manager.sensor_factory.html#slam.setup_manager.sensor_factory.sensor_factory.SensorFactory.sensor_from_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sensor_from_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">SensorConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Creates sensor from config item.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            item (SensorConfig): item from config</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: there is no available sensor type for the item from config.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Type[Sensor]: sensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">sensor_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">type</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">ParameterConfig</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">config</span>
+
+        <span class="k">if</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Imu</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Imu</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Fog</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Fog</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Altimeter</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Altimeter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Lidar2D</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lidar2D</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Lidar3D</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lidar3D</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Encoder</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">StereoCamera</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">StereoCamera</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">Gps</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Gps</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">sensor_type</span> <span class="o">==</span> <span class="n">VrsGps</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">VrsGps</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;unsupported sensor type: </span><span class="si">{</span><span class="n">sensor_type</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
