@@ -1,8 +1,10 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 from numpy import ones
 from hydra.core.config_store import ConfigStore
 from hydra import compose, initialize_config_module
+from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
 
 from slam.data_manager.factory.readers.element_factory import (
@@ -13,50 +15,96 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, Altimeter, Gps,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
 
+from slam.utils.kaist_data_factory import SensorElementPair, SensorNamePath
+
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
-from tests.data_manager.factory.readers.kaist.data_factory import (
-    SensorElementPair, SensorNamePath, DatasetStructure)
-from tests.data_manager.factory.readers.kaist.conftest import (
-    SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR)
-
+from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME
+from tests.data_manager.factory.readers.kaist.api.one_element_dataset.config import DATASET_DIR
 
 cs = ConfigStore.instance()
 cs.store(name=SENSOR_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module=CONFIG_MODULE_DIR):
+with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
     params = compose(config_name=SENSOR_CONFIG_NAME)
 
-DATASET_DIR: Path = DatasetStructure.DATASET_DIR
 
-CALIBRATION_DATA_DIR: Path = DatasetStructure.CALIBRATION_DATA_DIR
-SENSOR_DATA_DIR: Path = DatasetStructure.SENSOR_DATA_DIR
-IMAGE_DATA_DIR: Path = DatasetStructure.IMAGE_DATA_DIR
+@dataclass(frozen=True)
+class DatasetStructure:
 
-DATA_STAMP_FILE: Path = DatasetStructure.DATA_STAMP_FILE
+    dataset_directory: Path = DATASET_DIR
+    calibration_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.calibration_data_dir
+    sensor_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.sensor_data_dir
+    image_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir
+    data_stamp: Path = dataset_directory / \
+        KaistDatasetPathConfig.data_stamp
+    lidar_2D_back_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_back_dir
+    lidar_2D_middle_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_middle_dir
+    lidar_3D_left_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_left_dir
+    lidar_3D_right_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_right_dir
+    stereo_left_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir / \
+        KaistDatasetPathConfig.stereo_left_data_dir
+    stereo_right_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir / \
+        KaistDatasetPathConfig.stereo_right_data_dir
 
-SICK_BACK_DIR: Path = DatasetStructure.SICK_BACK_DIR
-SICK_MIDDLE_DIR: Path = DatasetStructure.SICK_MIDDLE_DIR
-VLP_LEFT_DIR: Path = DatasetStructure.VLP_LEFT_DIR
-VLP_RIGHT_DIR: Path = DatasetStructure.VLP_RIGHT_DIR
-STEREO_LEFT_DIR: Path = DatasetStructure.STEREO_LEFT_DIR
-STEREO_RIGHT_DIR: Path = DatasetStructure.STEREO_RIGHT_DIR
+    imu_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.imu_data_file
+    fog_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.fog_data_file
+    encoder_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.encoder_data_file
+    altimeter_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.altimeter_data_file
+    gps_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.gps_data_file
+    vrs_gps_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.vrs_gps_data_file
+    lidar_2D_back_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_back_stamp_file
+    lidar_2D_middle_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_middle_stamp_file
+    lidar_3D_left_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_left_stamp_file
+    lidar_3D_right_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_right_stamp_file
+    stereo_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.stereo_stamp_file
 
-BINARY_FILE_EXTENSION: str = DatasetStructure.BINARY_FILE_EXTENSION
-IMAGE_FILE_EXTENSION: str = DatasetStructure.IMAGE_FILE_EXTENSION
+    binary_file_extension: str = '.bin'
+    image_file_extension: str = '.png'
 
 
-imu = SensorNamePath('imu', Path('xsens_imu.csv'),)
-fog = SensorNamePath('fog', Path('fog.csv'))
-encoder = SensorNamePath('encoder', Path('encoder.csv'))
-altimeter = SensorNamePath('altimeter', Path('altimeter.csv'))
-gps = SensorNamePath('gps', Path('gps.csv'))
-vrs_gps = SensorNamePath('vrs', Path('vrs_gps.csv'))
-sick_back = SensorNamePath('sick_back', Path('SICK_back_stamp.csv'))
-sick_middle = SensorNamePath('sick_middle', Path('SICK_middle_stamp.csv'))
-velodyne_left = SensorNamePath('velodyne_left', Path('VLP_left_stamp.csv'))
+# sensor stamp files
+imu = SensorNamePath(
+    'imu', DatasetStructure.imu_data_file)
+fog = SensorNamePath(
+    'fog', DatasetStructure.fog_data_file)
+encoder = SensorNamePath(
+    'encoder', DatasetStructure.encoder_data_file)
+altimeter = SensorNamePath(
+    'altimeter', DatasetStructure.altimeter_data_file)
+gps = SensorNamePath(
+    'gps', DatasetStructure.gps_data_file)
+vrs_gps = SensorNamePath(
+    'vrs', DatasetStructure.vrs_gps_data_file)
+sick_back = SensorNamePath(
+    'sick_back', DatasetStructure.lidar_2D_back_stamp_file)
+sick_middle = SensorNamePath(
+    'sick_middle', DatasetStructure.lidar_2D_middle_stamp_file)
+velodyne_left = SensorNamePath(
+    'velodyne_left', DatasetStructure.lidar_3D_left_stamp_file)
 velodyne_right = SensorNamePath(
-    'velodyne_right', Path('VLP_right_stamp.csv'))
-stereo = SensorNamePath('stereo', Path('stereo_stamp.csv'))
+    'velodyne_right', DatasetStructure.lidar_3D_right_stamp_file)
+stereo = SensorNamePath(
+    'stereo', DatasetStructure.stereo_stamp_file)
 
 # data_stamp.csv file content. The order of the measurements.
 data_stamp = [
@@ -88,36 +136,31 @@ z_stereo_left_1 = (11, tuple(ones(shape=(2, 2, 3))))
 z_stereo_right_1 = (11, tuple(ones(shape=(2, 2, 3))))
 
 binary_data = [(z_sick_back_1[1:],
-                SENSOR_DATA_DIR / SICK_BACK_DIR / str(z_sick_back_1[0])),
+                (DatasetStructure.lidar_2D_back_dir / str(z_sick_back_1[0])).with_suffix(DatasetStructure.binary_file_extension)),
                (z_sick_middle_1[1:],
-                SENSOR_DATA_DIR / SICK_MIDDLE_DIR / str(z_sick_middle_1[0])),
+                (DatasetStructure.lidar_2D_middle_dir / str(z_sick_middle_1[0])).with_suffix(DatasetStructure.binary_file_extension)),
                (z_velodyne_left_1[1:],
-                SENSOR_DATA_DIR / VLP_LEFT_DIR / str(z_velodyne_left_1[0])),
+                (DatasetStructure.lidar_3D_left_dir / str(z_velodyne_left_1[0])).with_suffix(DatasetStructure.binary_file_extension)),
                (z_velodyne_right_1[1:],
-                SENSOR_DATA_DIR / VLP_RIGHT_DIR / str(z_velodyne_right_1[0]))]
+                (DatasetStructure.lidar_3D_right_dir / str(z_velodyne_right_1[0])).with_suffix(DatasetStructure.binary_file_extension))]
 
 image_data = [(z_stereo_left_1,
-               IMAGE_DATA_DIR / STEREO_LEFT_DIR / str(z_stereo_left_1[0])),
+               (DatasetStructure.stereo_left_data_dir / str(z_stereo_left_1[0])).with_suffix(DatasetStructure.image_file_extension)),
               (z_stereo_right_1,
-               IMAGE_DATA_DIR / STEREO_RIGHT_DIR / str(z_stereo_right_1[0])),]
+               (DatasetStructure.stereo_right_data_dir / str(z_stereo_right_1[0])).with_suffix(DatasetStructure.image_file_extension)),]
 
-csv_data = [(z_imu_1, SENSOR_DATA_DIR / imu.file_path),
-            (z_fog_1, SENSOR_DATA_DIR / fog.file_path),
-            (z_gps_1, SENSOR_DATA_DIR / gps.file_path),
-            (z_vrs_gps_1, SENSOR_DATA_DIR / vrs_gps.file_path),
-            (z_altimeter_1, SENSOR_DATA_DIR / altimeter.file_path),
-            (z_encoder_1, SENSOR_DATA_DIR / encoder.file_path),]
+csv_data = [(z_imu_1, imu.file_path),
+            (z_fog_1, fog.file_path),
+            (z_gps_1, gps.file_path),
+            (z_vrs_gps_1, vrs_gps.file_path),
+            (z_altimeter_1, altimeter.file_path),
+            (z_encoder_1, encoder.file_path),]
 
-stamp_files = [([z_sick_back_1[0]],
-                SENSOR_DATA_DIR / sick_back.file_path),
-               ([z_sick_middle_1[0]],
-                SENSOR_DATA_DIR / sick_middle.file_path),
-               ([z_velodyne_left_1[0]],
-                SENSOR_DATA_DIR / velodyne_left.file_path),
-               ([z_velodyne_right_1[0]],
-                SENSOR_DATA_DIR / velodyne_right.file_path),
-               ([z_stereo_left_1[0]],
-                SENSOR_DATA_DIR / stereo.file_path),]
+stamp_files = [([z_sick_back_1[0]], sick_back.file_path),
+               ([z_sick_middle_1[0]], sick_middle.file_path),
+               ([z_velodyne_left_1[0]], velodyne_left.file_path),
+               ([z_velodyne_right_1[0]], velodyne_right.file_path),
+               ([z_stereo_left_1[0]], stereo.file_path),]
 
 el1 = Element(
     timestamp=z_encoder_1[0],
@@ -125,7 +168,7 @@ el1 = Element(
         sensor=Encoder(encoder.name, params),
         values=tuple(str(i) for i in z_encoder_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / encoder.file_path,
+        file=encoder.file_path,
         position=0))
 
 el2 = Element(
@@ -134,7 +177,8 @@ el2 = Element(
         sensor=Lidar2D(sick_back.name, params),
         values=z_sick_back_1[1:]),
     location=BinaryDataLocation(
-        file=(SENSOR_DATA_DIR / SICK_BACK_DIR / str(z_sick_back_1[0])).with_suffix(BINARY_FILE_EXTENSION)))
+        file=(DatasetStructure.lidar_2D_back_dir /
+              str(z_sick_back_1[0])).with_suffix(DatasetStructure.binary_file_extension)))
 
 el3 = Element(
     timestamp=z_imu_1[0],
@@ -142,7 +186,7 @@ el3 = Element(
         sensor=Imu(imu.name, params),
         values=tuple(str(i) for i in z_imu_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / imu.file_path,
+        file=imu.file_path,
         position=0))
 
 el4 = Element(
@@ -151,7 +195,7 @@ el4 = Element(
         sensor=Fog(fog.name, params),
         values=tuple(str(i) for i in z_fog_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / fog.file_path,
+        file=fog.file_path,
         position=0))
 
 el5 = Element(
@@ -160,7 +204,8 @@ el5 = Element(
         sensor=Lidar2D(sick_middle.name, params),
         values=z_sick_middle_1[1:]),
     location=BinaryDataLocation(
-        file=(SENSOR_DATA_DIR / SICK_MIDDLE_DIR / str(z_sick_middle_1[0])).with_suffix(BINARY_FILE_EXTENSION)))
+        file=(DatasetStructure.lidar_2D_middle_dir /
+              str(z_sick_middle_1[0])).with_suffix(DatasetStructure.binary_file_extension)))
 
 el6 = Element(
     timestamp=z_gps_1[0],
@@ -168,7 +213,7 @@ el6 = Element(
         sensor=Gps(gps.name, params),
         values=tuple(str(i) for i in z_gps_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / gps.file_path,
+        file=gps.file_path,
         position=0))
 
 el7 = Element(
@@ -177,7 +222,7 @@ el7 = Element(
         sensor=VrsGps(vrs_gps.name, params),
         values=tuple(str(i) for i in z_vrs_gps_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / vrs_gps.file_path,
+        file=vrs_gps.file_path,
         position=0))
 
 el8 = Element(
@@ -186,7 +231,7 @@ el8 = Element(
         sensor=Altimeter(altimeter.name, params),
         values=tuple(str(i) for i in z_altimeter_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / altimeter.file_path,
+        file=altimeter.file_path,
         position=0))
 
 el9 = Element(
@@ -195,7 +240,8 @@ el9 = Element(
         sensor=Lidar3D(velodyne_left.name, params),
         values=z_velodyne_left_1[1:]),
     location=BinaryDataLocation(
-        file=(SENSOR_DATA_DIR / VLP_LEFT_DIR / str(z_velodyne_left_1[0])).with_suffix(BINARY_FILE_EXTENSION)))
+        file=(DatasetStructure.lidar_3D_left_dir /
+              str(z_velodyne_left_1[0])).with_suffix(DatasetStructure.binary_file_extension)))
 
 el10 = Element(
     timestamp=z_velodyne_right_1[0],
@@ -203,7 +249,8 @@ el10 = Element(
         sensor=Lidar3D(velodyne_right.name, params),
         values=z_velodyne_right_1[1:]),
     location=BinaryDataLocation(
-        file=(SENSOR_DATA_DIR / VLP_RIGHT_DIR / str(z_velodyne_right_1[0])).with_suffix(BINARY_FILE_EXTENSION)))
+        file=(DatasetStructure.lidar_3D_right_dir /
+              str(z_velodyne_right_1[0])).with_suffix(DatasetStructure.binary_file_extension)))
 
 el11 = Element(
     timestamp=z_stereo_left_1[0],
@@ -212,8 +259,11 @@ el11 = Element(
         values=(z_stereo_left_1[1:],
                 z_stereo_right_1[1:])),
     location=StereoImgDataLocation(
-        files=((IMAGE_DATA_DIR / STEREO_LEFT_DIR / str(z_stereo_left_1[0])).with_suffix(IMAGE_FILE_EXTENSION),
-               (IMAGE_DATA_DIR / STEREO_RIGHT_DIR / str(z_stereo_right_1[0])).with_suffix(IMAGE_FILE_EXTENSION))))
+        files=(
+            (DatasetStructure.stereo_left_data_dir /
+             str(z_stereo_left_1[0])).with_suffix(DatasetStructure.image_file_extension),
+            (DatasetStructure.stereo_right_data_dir /
+             str(z_stereo_right_1[0])).with_suffix(DatasetStructure.image_file_extension))))
 
 elements: list[Element] = [el1, el2, el3, el4, el5, el6, el7,
                            el8, el9, el10, el11]

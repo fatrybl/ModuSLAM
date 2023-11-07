@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
@@ -10,9 +9,8 @@ from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
-from tests.data_manager.factory.readers.kaist.data_factory import DatasetStructure
 
-DATASET_DIR: Path = DatasetStructure.DATASET_DIR
+DATASET_DIR: Path = Path(__file__).parent / 'test_data'
 
 
 imu = SensorConfig('imu', Imu.__name__, ParameterConfig())

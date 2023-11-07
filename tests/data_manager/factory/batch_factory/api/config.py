@@ -4,6 +4,12 @@ from pathlib import Path
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
+
+from configs.experiments.kaist.config import Memory
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
+from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
+from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig
@@ -63,3 +69,10 @@ class KaistReaderConfig(KaistConfig):
     directory: Path = DATASET_DIR
     iterable_data_files: list[PairConfig] = iterable_data_files
     data_dirs: list[PairConfig] = data_dirs
+
+
+@dataclass
+class BFConfig(BatchFactoryConfig):
+    regime: RegimeConfig = field(default_factory=StreamConfig)
+    dataset: DatasetConfig = field(default_factory=KaistReaderConfig)
+    memory: MemoryAnalyzerConfig = field(default_factory=Memory)

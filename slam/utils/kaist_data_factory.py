@@ -8,9 +8,10 @@ import numpy.typing as npt
 import numpy as np
 from cv2 import imwrite
 
-
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.setup_manager.sensor_factory.sensors import Sensor
+
+from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
 
 @dataclass
@@ -25,45 +26,13 @@ class SensorElementPair:
     element: Element
 
 
-@dataclass(frozen=True)
-class DatasetStructure:
-
-    CURRENT_DIR: Path = Path(__file__).parent
-    DATASET_DIR: Path = CURRENT_DIR / 'test_data'
-
-    CALIBRATION_DATA_DIR: Path = DATASET_DIR / 'calibration'
-    SENSOR_DATA_DIR: Path = DATASET_DIR / 'sensor_data'
-    IMAGE_DATA_DIR: Path = DATASET_DIR / 'image'
-
-    DATA_STAMP_FILE: Path = SENSOR_DATA_DIR / "data_stamp.csv"
-
-    SICK_BACK_DIR: Path = SENSOR_DATA_DIR / 'SICK_back'
-    SICK_MIDDLE_DIR: Path = SENSOR_DATA_DIR / 'SICK_middle'
-    VLP_LEFT_DIR: Path = SENSOR_DATA_DIR / 'VLP_left'
-    VLP_RIGHT_DIR: Path = SENSOR_DATA_DIR / 'VLP_right'
-    STEREO_LEFT_DIR: Path = IMAGE_DATA_DIR / 'stereo_left'
-    STEREO_RIGHT_DIR: Path = IMAGE_DATA_DIR / 'stereo_right'
-
-    imu_data_file: Path = SENSOR_DATA_DIR / 'xsens_imu.csv'
-    fog_data_file: Path = SENSOR_DATA_DIR / 'fog.csv'
-    encoder_data_file: Path = SENSOR_DATA_DIR / 'encoder.csv'
-    altimeter_data_file: Path = SENSOR_DATA_DIR / 'altimeter.csv'
-    gps_data_file: Path = SENSOR_DATA_DIR / 'gps.csv'
-    vrs_gps_data_file: Path = SENSOR_DATA_DIR / 'vrs_gps.csv'
-    sick_back_stamp_file: Path = SENSOR_DATA_DIR / 'SICK_back_stamp.csv'
-    sick_middle_stamp_file: Path = SENSOR_DATA_DIR / 'SICK_middle_stamp.csv'
-    velodyne_left_stamp_file: Path = SENSOR_DATA_DIR / 'VLP_left_stamp.csv'
-    velodyne_right_stamp_file: Path = SENSOR_DATA_DIR / 'VLP_right_stamp.csv'
-    stereo_stamp_file: Path = SENSOR_DATA_DIR / 'stereo_stamp.csv'
-
-    BINARY_FILE_EXTENSION: str = '.bin'
-    IMAGE_FILE_EXTENSION: str = '.png'
-
-
 class DataFactory:
+    """
+    Generates Kaist Urban-like Dataset with the given measurements.
+    """
 
-    def __init__(self) -> None:
-        self.dataset_structure = DatasetStructure()
+    def __init__(self, dataset_structure: Any) -> None:
+        self.dataset_structure = dataset_structure
 
     @staticmethod
     def flatten(set: tuple[Any, ...]) -> Iterator[Any]:
@@ -106,7 +75,8 @@ class DataFactory:
             data (Iterable[Iterable[int | str]] | Iterable[float | int]): 
                 data to be written to a CSV file.
             path (Path): file path.
-            multilines (bool, optional): If True: writes list[list[str]] to the file. Defaults to False.
+            multilines (bool, optional): If True: writes list[list[str]] to the file. 
+            Defaults to False.
         """
         with open(path, 'a', encoding='UTF8', newline='') as outfile:
             writer = csv.writer(outfile)
@@ -126,6 +96,7 @@ class DataFactory:
             path (Path): file path.
         """
         img = asarray(data[1])
+        print("++++++++++++++++++++++++++++++++++++++++++++++++\n", path)
         imwrite(path.as_posix(), img)
 
     def create_dataset_structure(self) -> None:
@@ -133,10 +104,13 @@ class DataFactory:
         Creates Kaist Urban dataset empty directories & files structure.
         """
         for field in fields(self.dataset_structure):
+
             field_name: str = field.name
             field_value: Path | str = getattr(
                 self.dataset_structure, field_name)
+
             if isinstance(field_value, Path):
+
                 if field_value.suffix == '':
                     Path.mkdir(field_value, parents=True, exist_ok=True)
                 else:
@@ -160,7 +134,7 @@ class DataFactory:
         """
 
         self.to_csv_file(
-            data_stamp, self.dataset_structure.DATA_STAMP_FILE, multilines=True)
+            data_stamp, self.dataset_structure.data_stamp, multilines=True)
 
         for element, path in stamp_files:
             self.to_csv_file(element, path)
@@ -169,11 +143,7 @@ class DataFactory:
             self.to_csv_file(element, path)
 
         for element, path in binary_data:
-            self.to_binary_file(
-                element,
-                path.with_suffix(self.dataset_structure.BINARY_FILE_EXTENSION))
+            self.to_binary_file(element, path)
 
         for element, path in image_data:
-            self.to_img_file(
-                element,
-                path.with_suffix(self.dataset_structure.IMAGE_FILE_EXTENSION))
+            self.to_img_file(element, path)

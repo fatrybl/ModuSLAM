@@ -1,4 +1,3 @@
-from shutil import rmtree
 from typing import Any, Callable, Type, TypeAlias
 from pytest import fixture
 
@@ -7,7 +6,6 @@ from hydra import compose, initialize_config_module
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from data_factory import DatasetStructure
 
 CONFIG_MODULE_DIR: str = "conf"
 DATASET_CONFIG_NAME: str = "dataset_config"
@@ -34,9 +32,3 @@ def regime_cfg() -> Type[RegimeConfig]:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=REGIME_CONFIG_NAME)
         return cfg
-
-
-@fixture(scope='class', autouse=True)
-def clean():
-    yield
-    rmtree(DatasetStructure.DATASET_DIR)

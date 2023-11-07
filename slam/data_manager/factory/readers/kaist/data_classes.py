@@ -78,11 +78,12 @@ class SensorIterators:
 
     iterators: set[FileIterator] = field(default_factory=lambda: set())
 
-    def __post_init__(self, iterable_locations: tuple[PairConfig, ...], init: Callable[[Path], Iterator[tuple[int, tuple[str, ...]]]]):
+    def __post_init__(self, iterable_locations: tuple[PairConfig, ...], init_method: Callable[[Path], Iterator[tuple[int, tuple[str, ...]]]]):
         for pair in iterable_locations:
             name: str = pair.sensor_name
             location: Path = pair.location
-            iterator: Iterator[tuple[int, tuple[str, ...]]] = init(location)
+            iterator: Iterator[tuple[int, tuple[str, ...]]
+                               ] = init_method(location)
             file_iter = FileIterator(name,
                                      location,
                                      iterator)

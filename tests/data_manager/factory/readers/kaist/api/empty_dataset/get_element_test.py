@@ -12,11 +12,11 @@ from slam.utils.exceptions import FileNotValid
 from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 
-from tests.data_manager.factory.readers.kaist.data_factory import DataFactory
+from slam.utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.readers.kaist.conftest import (
     DATASET_CONFIG_NAME, REGIME_CONFIG_NAME, Fixture)
 
-from .data import element
+from .data import el1, DatasetStructure
 from .config import KaistReaderConfig
 
 
@@ -43,7 +43,7 @@ def register_configs() -> None:
 
 @fixture(scope="class")
 def generate_dataset():
-    data_factory = DataFactory()
+    data_factory = DataFactory(DatasetStructure())
     data_factory.create_dataset_structure()
 
 
@@ -55,7 +55,7 @@ class TestGetElement:
 
     timestamp: int = 1
     sensor = Encoder('encoder', DictConfig({"params": ()}))
-    element: Element = element
+    element: Element = el1
 
     def test_get_element_1(self, register_configs: Fixture, generate_dataset: Fixture,
                            dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):

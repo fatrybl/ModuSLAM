@@ -1,42 +1,85 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 from hydra.core.config_store import ConfigStore
 from hydra import compose, initialize_config_module
-from configs.sensors.base_sensor_parameters import ParameterConfig
+from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
 
-from slam.data_manager.factory.readers.element_factory import Element, Measurement
+from slam.data_manager.factory.readers.element_factory import (
+    Element, Measurement)
 from slam.data_manager.factory.readers.kaist.data_classes import CsvDataLocation
 from slam.setup_manager.sensor_factory.sensors import Encoder
 
-from tests.data_manager.factory.readers.kaist.data_factory import SensorNamePath, DatasetStructure
-from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME, CONFIG_MODULE_DIR
+from slam.utils.kaist_data_factory import SensorNamePath
 
+from configs.sensors.base_sensor_parameters import ParameterConfig
+
+from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME
+from tests.data_manager.factory.readers.kaist.api.empty_dataset.config import DATASET_DIR
 
 cs = ConfigStore.instance()
 cs.store(name=SENSOR_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module=CONFIG_MODULE_DIR):
+with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
     params = compose(config_name=SENSOR_CONFIG_NAME)
 
-DATASET_DIR: Path = DatasetStructure.DATASET_DIR
 
-CALIBRATION_DATA_DIR: Path = DatasetStructure.CALIBRATION_DATA_DIR
-SENSOR_DATA_DIR: Path = DatasetStructure.SENSOR_DATA_DIR
-IMAGE_DATA_DIR: Path = DatasetStructure.IMAGE_DATA_DIR
+@dataclass(frozen=True)
+class DatasetStructure:
 
-DATA_STAMP_FILE: Path = DatasetStructure.DATA_STAMP_FILE
+    dataset_directory: Path = DATASET_DIR
+    calibration_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.calibration_data_dir
+    sensor_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.sensor_data_dir
+    image_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir
+    data_stamp: Path = dataset_directory / \
+        KaistDatasetPathConfig.data_stamp
+    lidar_2D_back_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_back_dir
+    lidar_2D_middle_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_middle_dir
+    lidar_3D_left_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_left_dir
+    lidar_3D_right_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_right_dir
+    stereo_left_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir / \
+        KaistDatasetPathConfig.stereo_left_data_dir
+    stereo_right_data_dir: Path = dataset_directory / \
+        KaistDatasetPathConfig.image_data_dir / \
+        KaistDatasetPathConfig.stereo_right_data_dir
 
-SICK_BACK_DIR: Path = DatasetStructure.SICK_BACK_DIR
-SICK_MIDDLE_DIR: Path = DatasetStructure.SICK_MIDDLE_DIR
-VLP_LEFT_DIR: Path = DatasetStructure.VLP_LEFT_DIR
-VLP_RIGHT_DIR: Path = DatasetStructure.VLP_RIGHT_DIR
-STEREO_LEFT_DIR: Path = DatasetStructure.STEREO_LEFT_DIR
-STEREO_RIGHT_DIR: Path = DatasetStructure.STEREO_RIGHT_DIR
+    imu_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.imu_data_file
+    fog_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.fog_data_file
+    encoder_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.encoder_data_file
+    altimeter_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.altimeter_data_file
+    gps_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.gps_data_file
+    vrs_gps_data_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.vrs_gps_data_file
+    lidar_2D_back_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_back_stamp_file
+    lidar_2D_middle_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_2D_middle_stamp_file
+    lidar_3D_left_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_left_stamp_file
+    lidar_3D_right_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.lidar_3D_right_stamp_file
+    stereo_stamp_file: Path = dataset_directory / \
+        KaistDatasetPathConfig.stereo_stamp_file
 
-BINARY_FILE_EXTENSION: str = DatasetStructure.BINARY_FILE_EXTENSION
-IMAGE_FILE_EXTENSION: str = DatasetStructure.IMAGE_FILE_EXTENSION
+    binary_file_extension: str = '.bin'
+    image_file_extension: str = '.png'
 
-encoder = SensorNamePath('encoder', Path('encoder.csv'))
+
+encoder = SensorNamePath(
+    'encoder', DatasetStructure.encoder_data_file)
 
 # data_stamp.csv file content. The order of the measurements.
 data_stamp = [
@@ -46,11 +89,11 @@ data_stamp = [
 # raw measurements
 z_encoder_1 = (1, 1.0, 1.0, 1.0)
 
-element = Element(
+el1 = Element(
     timestamp=z_encoder_1[0],
     measurement=Measurement(
         sensor=Encoder(encoder.name, params),
         values=tuple(str(i) for i in z_encoder_1[1:])),
     location=CsvDataLocation(
-        file=SENSOR_DATA_DIR / encoder.file_path,
+        file=encoder.file_path,
         position=0))

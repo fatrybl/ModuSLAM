@@ -1,22 +1,16 @@
 from typing import Type
-from pytest import fixture, mark
+from pytest import mark
 from unittest.mock import Mock, patch
 
-from hydra.core.config_store import ConfigStore
 
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
-from configs.system.data_manager.batch_factory.regime import StreamConfig
 
-from tests.data_manager.factory.readers.kaist.data_factory import DataFactory, SensorElementPair
-from tests.data_manager.factory.readers.kaist.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
+from slam.utils.kaist_data_factory import DataFactory, SensorElementPair
 
-from .data import (elements, sensor_element_pairs, data_stamp,
-                   stamp_files, csv_data, binary_data, image_data)
-
-from .config import KaistReaderConfig
+from .data import (elements, sensor_element_pairs)
 
 
 """
@@ -34,25 +28,6 @@ Tests description:
 
 
 OBJECT_PATH_TO_PATCH = "slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory"
-
-
-@fixture(scope='class', autouse=True)
-def register_configs() -> None:
-    cs = ConfigStore.instance()
-    cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
-    cs.store(name=REGIME_CONFIG_NAME, node=StreamConfig)
-
-
-@fixture(scope="class", autouse=True)
-def generate_dataset():
-    data_factory = DataFactory()
-    data_factory.create_dataset_structure()
-    data_factory.generate_data(
-        data_stamp,
-        stamp_files,
-        csv_data,
-        binary_data,
-        image_data)
 
 
 class TestGetElement:
