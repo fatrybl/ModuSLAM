@@ -63,7 +63,7 @@ class DataReader(ABC):
             gets the element sequantally based on iterator position.
 
         Args:
-            sensor (Type[Sensor]): a sensor to get measurement of.
+            sensor (Sensor): a sensor to get measurement of.
             timestamp (int | None, optional): timestamp of sensor`s measurement. Defaults to None.
 
         Returns:

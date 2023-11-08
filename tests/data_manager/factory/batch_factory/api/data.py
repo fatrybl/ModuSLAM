@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Type
 
 from numpy import ones
 from hydra.core.config_store import ConfigStore
@@ -12,7 +13,7 @@ from slam.data_manager.factory.readers.element_factory import (
 from slam.data_manager.factory.readers.kaist.data_classes import (
     BinaryDataLocation, CsvDataLocation, StereoImgDataLocation)
 from slam.setup_manager.sensor_factory.sensors import (
-    Imu, Fog, Encoder, Altimeter, Gps,
+    Imu, Fog, Encoder, Altimeter, Gps, Sensor,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
 from slam.data_manager.factory.batch import DataBatch
 from slam.utils.kaist_data_factory import SensorElementPair, SensorNamePath
@@ -42,49 +43,6 @@ each sensor request:
     In total: 7*N cases, 7 - number of test cases per sensor, N - number of sensors.
 """
 
-# sets: list[set[PeriodicData]] = []
-
-# for sensor in sensors:
-#     r1 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-#     r2 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=-1,
-#                                        stop=-1))
-#     r3 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-#     r4 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-#     r5 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-#     r6 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-#     r7 = PeriodicData(sensor=sensor,
-#                       period=TimeRange(start=0,
-#                                        stop=0))
-
-#     sets.append({r1, r2, r3, r4, r5, r6, r7})
-
-
-# batch_1 = DataBatch()
-# batch_2 = DataBatch()
-# batch_3 = DataBatch()
-# batch_4 = DataBatch()
-# batch_5 = DataBatch()
-# batch_6 = DataBatch()
-# batch_7 = DataBatch()
-# batch_8 = DataBatch()
-# batch_9 = DataBatch()
-# batch_10 = DataBatch()
-# batch_11 = DataBatch()
-
-
-# data_batches: list[DataBatch] = [batch_1, batch_2, batch_3, batch_4, batch_5, batch_6,
-#                                  batch_7, batch_8, batch_9, batch_10, batch_11]
 
 @dataclass(frozen=True)
 class DatasetStructure:
@@ -188,6 +146,7 @@ data_stamp = [
     [20, velodyne_right.name],
     [21, fog.name],
     [22, stereo.name],
+    [23, encoder.name],
 ]
 
 # raw measurements
@@ -215,6 +174,7 @@ z_velodyne_right_2 = (20, 1.0, 1.0, 1.0)
 z_fog_2 = (21, 1.0, 1.0, 1.0)
 z_stereo_left_2 = (22, tuple(ones(shape=(2, 2, 3))))
 z_stereo_right_2 = (22, tuple(ones(shape=(2, 2, 3))))
+z_encoder_3 = (23, 1.0, 1.0, 1.0)
 
 binary_data = [(z_sick_back_1[1:],
                 (DatasetStructure.lidar_2D_back_dir / str(z_sick_back_1[0])).with_suffix(DatasetStructure.binary_file_extension)),
@@ -253,7 +213,8 @@ csv_data = [(z_imu_1, imu.file_path),
             (z_altimeter_1, altimeter.file_path),
             (z_altimeter_2, altimeter.file_path),
             (z_encoder_1, encoder.file_path),
-            (z_encoder_2, encoder.file_path),]
+            (z_encoder_2, encoder.file_path),
+            (z_encoder_3, encoder.file_path)]
 
 stamp_files = [([z_sick_back_1[0]], sick_back.file_path),
                ([z_sick_back_2[0]], sick_back.file_path),
@@ -471,10 +432,19 @@ el22 = Element(
                (DatasetStructure.stereo_right_data_dir /
                 str(z_stereo_right_2[0])).with_suffix(DatasetStructure.image_file_extension))))
 
+el23 = Element(
+    timestamp=z_encoder_3[0],
+    measurement=Measurement(
+        sensor=Encoder(encoder.name, params),
+        values=tuple(str(i) for i in z_encoder_3[1:])),
+    location=CsvDataLocation(
+        file=encoder.file_path,
+        position=2))
+
 elements: list[Element] = [el1, el2, el3, el4, el5, el6, el7,
                            el8, el9, el10, el11, el12, el13,
                            el14, el15, el16, el17, el18, el19,
-                           el20, el21, el22]
+                           el20, el21, el22, el23]
 
 sensor_element_pairs = [
     SensorElementPair(
@@ -544,3 +514,41 @@ sensor_element_pairs = [
         StereoCamera(stereo.name, params),
         el22)
 ]
+
+
+encoder_requests: set[PeriodicData] = {
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el1.timestamp,
+                                  stop=el1.timestamp)),
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el11.timestamp,
+                                  stop=el11.timestamp)),
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el23.timestamp,
+                                  stop=el23.timestamp)),
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el1.timestamp,
+                                  stop=el11.timestamp)),
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el11.timestamp,
+                                  stop=el23.timestamp)),
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el1.timestamp,
+                                  stop=el23.timestamp)),
+}
+encoder_requests: set[PeriodicData] = {
+    PeriodicData(sensor=el1.measurement.sensor,
+                 period=TimeRange(start=el1.timestamp,
+                                  stop=el11.timestamp)),
+}
+
+batch = DataBatch()
+batch.add(el1)
+batch.add(el11)
+# batch.add(el23)
+
+sc1: tuple[set[PeriodicData], DataBatch] = (encoder_requests, batch)
+# sc2: tuple[set[PeriodicData], set[DataBatch]] = ()
+# sc3: tuple[set[PeriodicData], set[DataBatch]] = ()
+
+kaist_dataset_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [sc1]

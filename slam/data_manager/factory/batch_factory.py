@@ -108,9 +108,7 @@ class BatchFactory():
         stop: int = request.period.stop
         sensor: Type[Sensor] = request.sensor
 
-        first_element: Element = self._data_reader.get_element(
-            sensor=sensor,
-            timestamp=start)
+        first_element: Element = self._data_reader.get_element(sensor, start)
         self._batch.add(first_element)
         current_timestamp: int = first_element.timestamp
 

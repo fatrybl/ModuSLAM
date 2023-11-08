@@ -1,12 +1,10 @@
-from collections import deque
 from pytest import mark
+from slam.data_manager.factory.batch import DataBatch
 
-# from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.batch_factory import BatchFactory
-# from slam.utils.auxiliary_dataclasses import PeriodicData
+from slam.utils.auxiliary_dataclasses import PeriodicData
 
-# from .conftest import Fixture, kaist_urban_dataset
-# from .data import data_batches, sets
+from .data import kaist_dataset_scenarios
 
 """
 each sensor request:
@@ -29,26 +27,14 @@ each sensor request:
 #             return False
 #     return True
 
+class TestBatchFactoryKaistDataset:
 
-class TestBatchFactory:
-
-    # @mark.parametrize("reference_data_batch, requests",
-    #                   ([data_batches, sets]))
-    # def create_batch(self,
-    #                  kaist_batch_factory: BatchFactory,
-    #                  reference_data_batch: DataBatch,
-    #                  requests: set[PeriodicData]):
-    def test_create_batch(self, kaist_batch_factory: BatchFactory):
-        assert 1 == 1
-    # kaist_batch_factory.create_batch(requests)
-    # assert reference_data_batch.data == kaist_batch_factory.batch.data
-
-
-# class Ros1DatasetBatchFactoryTest:
-
-#     @mark.parametrize("reference_data_batch, requests",
-#                       ([data_batches, sets]))
-#     def create_batch(self, ros1_batch_factory: BatchFactory,
-#                      reference_data_batch: DataBatch, requests: set[PeriodicData]):
-#         ros1_batch_factory.create_batch(requests)
-#         assert reference_data_batch.data == ros1_batch_factory.batch.data
+    @mark.parametrize("scenario",
+                      (kaist_dataset_scenarios))
+    def test_create_batch(self,
+                          kaist_batch_factory: BatchFactory,
+                          scenario: tuple[set[PeriodicData], DataBatch]):
+        requests: set[PeriodicData] = scenario[0]
+        reference_batch: DataBatch = scenario[1]
+        kaist_batch_factory.create_batch(requests)
+        assert kaist_batch_factory.batch.data == reference_batch.data

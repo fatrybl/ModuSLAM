@@ -96,7 +96,6 @@ class DataFactory:
             path (Path): file path.
         """
         img = asarray(data[1])
-        print("++++++++++++++++++++++++++++++++++++++++++++++++\n", path)
         imwrite(path.as_posix(), img)
 
     def create_dataset_structure(self) -> None:

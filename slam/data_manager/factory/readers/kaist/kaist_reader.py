@@ -329,11 +329,12 @@ class KaistReader(DataReader):
         Returns:
             Element: with raw sensor measurement.
         """
+
         if timestamp:
             message, location = self._collector.get_data(sensor, timestamp)
         else:
             message, location = self._collector.get_data(sensor)
-            timestamp: int = as_int(message.timestamp, logger)
+            timestamp = as_int(message.timestamp, logger)
 
         measurement = Measurement(sensor, message.data)
         element = Element(timestamp,
