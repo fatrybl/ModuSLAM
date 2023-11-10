@@ -15,7 +15,7 @@ class TestBatchFactoryKaistDataset:
     Tests create_batch() method of a BatchFactory with Kaist Urban based dataset.
 
     Args: 
-        <ANY>_batch_factory (BatchFactory): any BatchFactory for particular dataset.
+        kaist_batch_factory (BatchFactory): BatchFactory for particular Kaist Urban Dataset.
         scenario (tuple[set[PeriodicData], DataBatch]):test scenario: set of PeriodicData requests and 
             resulting DataBatch.
     """
@@ -28,15 +28,14 @@ class TestBatchFactoryKaistDataset:
 
         requests: set[PeriodicData] = scenario[0]
         reference_batch: DataBatch = scenario[1]
+        reference_batch.sort()
 
         kaist_batch_factory.create_batch(requests)
+        result_batch: DataBatch = kaist_batch_factory.batch
 
-        reference_batch.sort()
-        kaist_batch_factory.batch.sort()
+        assert len(result_batch.data) == len(reference_batch.data)
 
-        assert len(kaist_batch_factory.batch.data) == len(reference_batch.data)
-
-        for el1, el2 in zip(kaist_batch_factory.batch.data, reference_batch.data):
+        for el1, el2 in zip(result_batch.data, reference_batch.data):
             if (isinstance(el1.measurement.values[0], Image) and
                     isinstance(el2.measurement.values[0], Image)):
                 assert DataFactory.equal_images(el1, el2) is True
