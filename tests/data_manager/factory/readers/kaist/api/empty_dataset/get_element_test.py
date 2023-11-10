@@ -12,7 +12,7 @@ from slam.utils.exceptions import FileNotValid
 from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 
-from slam.utils.kaist_data_factory import DataFactory
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.readers.kaist.conftest import (
     DATASET_CONFIG_NAME, REGIME_CONFIG_NAME, Fixture)
 

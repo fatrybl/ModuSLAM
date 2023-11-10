@@ -1,14 +1,14 @@
 from typing import Type
 from pytest import mark
 from unittest.mock import Mock, patch
-
+from PIL.Image import Image
 
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
-from slam.utils.kaist_data_factory import DataFactory, SensorElementPair
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory, SensorElementPair
 
 from .data import (elements, sensor_element_pairs)
 
@@ -47,14 +47,14 @@ class TestGetElement:
 
         element: Element = data_reader.get_element()
 
-        values = list(DataFactory.flatten(element.measurement.values))
-        true_values = list(DataFactory.flatten(
-            reference_element.measurement.values))
+        if isinstance(element.measurement.values[0], Image):
+            assert DataFactory.equal_images(element, reference_element) is True
+        else:
+            assert element.measurement.values == reference_element.measurement.values
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
         assert element.measurement.sensor == reference_element.measurement.sensor
-        assert values == true_values
 
     @mark.parametrize("reference_element",
                       (elements))
@@ -66,19 +66,19 @@ class TestGetElement:
 
         element: Element = data_reader.get_element(reference_element)
 
-        values = list(DataFactory.flatten(element.measurement.values))
-        true_values = list(DataFactory.flatten(
-            reference_element.measurement.values))
+        if isinstance(element.measurement.values[0], Image):
+            assert DataFactory.equal_images(element, reference_element) is True
+        else:
+            assert element.measurement.values == reference_element.measurement.values
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
         assert element.measurement.sensor == reference_element.measurement.sensor
-        assert values == true_values
 
 
 class TestGetElementOfSensor:
     """
-    KaistReader object is used as a fixture with scope "class" to be created once. 
+    KaistReader object is used as a fixture with scope "class" to be created once.
     This prevents the creation of KaistReader objects every time the test is called with new parameters
     ==> prevents resetig of iterators for get_element() method.
     """
@@ -94,14 +94,14 @@ class TestGetElementOfSensor:
         reference_element: Element = sensor_element_pair.element
         element: Element = data_reader.get_element(sensor)
 
-        values = list(DataFactory.flatten(element.measurement.values))
-        true_values = list(DataFactory.flatten(
-            reference_element.measurement.values))
+        if isinstance(element.measurement.values[0], Image):
+            assert DataFactory.equal_images(element, reference_element) is True
+        else:
+            assert element.measurement.values == reference_element.measurement.values
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
         assert element.measurement.sensor == reference_element.measurement.sensor
-        assert values == true_values
 
     @mark.parametrize("sensor_element_pair",
                       (sensor_element_pairs))
@@ -115,11 +115,11 @@ class TestGetElementOfSensor:
         timestamp: int = reference_element.timestamp
         element: Element = data_reader.get_element(sensor, timestamp)
 
-        values = list(DataFactory.flatten(element.measurement.values))
-        true_values = list(DataFactory.flatten(
-            reference_element.measurement.values))
+        if isinstance(element.measurement.values[0], Image):
+            assert DataFactory.equal_images(element, reference_element) is True
+        else:
+            assert element.measurement.values == reference_element.measurement.values
 
         assert element.timestamp == reference_element.timestamp
         assert element.location == reference_element.location
         assert element.measurement.sensor == reference_element.measurement.sensor
-        assert values == true_values

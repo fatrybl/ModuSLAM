@@ -11,7 +11,7 @@ from slam.data_manager.factory.readers.element_factory import (
 from slam.data_manager.factory.readers.kaist.data_classes import CsvDataLocation
 from slam.setup_manager.sensor_factory.sensors import Encoder
 
-from slam.utils.kaist_data_factory import SensorNamePath
+from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
@@ -20,7 +20,7 @@ from tests.data_manager.factory.readers.kaist.api.empty_dataset.config import DA
 
 cs = ConfigStore.instance()
 cs.store(name=SENSOR_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
+with initialize_config_module(config_module="conf"):
     params = compose(config_name=SENSOR_CONFIG_NAME)
 
 

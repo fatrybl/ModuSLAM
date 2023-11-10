@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from numpy import ones
+from numpy import ones, uint8
 from hydra.core.config_store import ConfigStore
 from hydra import compose, initialize_config_module
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
-
+from PIL import Image
 
 from slam.data_manager.factory.readers.element_factory import (
     Element, Measurement)
@@ -15,7 +15,7 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, Altimeter, Gps,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
 
-from slam.utils.kaist_data_factory import SensorElementPair, SensorNamePath
+from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorElementPair, SensorNamePath
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
@@ -132,8 +132,8 @@ z_vrs_gps_1 = (7, 1.0, 1.0, 1.0)
 z_altimeter_1 = (8, 1.0, 1.0, 1.0)
 z_velodyne_left_1 = (9, 1.0, 1.0, 1.0)
 z_velodyne_right_1 = (10, 1.0, 1.0, 1.0)
-z_stereo_left_1 = (11, tuple(ones(shape=(2, 2, 3))))
-z_stereo_right_1 = (11, tuple(ones(shape=(2, 2, 3))))
+z_stereo_left_1 = (11, ones(shape=(2, 2, 3)).astype(uint8))
+z_stereo_right_1 = (11, ones(shape=(2, 2, 3)).astype(uint8))
 
 binary_data = [(z_sick_back_1[1:],
                 (DatasetStructure.lidar_2D_back_dir / str(z_sick_back_1[0])).with_suffix(DatasetStructure.binary_file_extension)),
@@ -256,8 +256,8 @@ el11 = Element(
     timestamp=z_stereo_left_1[0],
     measurement=Measurement(
         sensor=StereoCamera(stereo.name, params),
-        values=(z_stereo_left_1[1:],
-                z_stereo_right_1[1:])),
+        values=(Image.fromarray(z_stereo_left_1[1]),
+                Image.fromarray(z_stereo_right_1[1]))),
     location=StereoImgDataLocation(
         files=(
             (DatasetStructure.stereo_left_data_dir /

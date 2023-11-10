@@ -3,7 +3,7 @@ from pytest import fixture
 
 from hydra.core.config_store import ConfigStore
 
-from slam.utils.kaist_data_factory import DataFactory
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 
 from configs.system.data_manager.batch_factory.regime import StreamConfig
 

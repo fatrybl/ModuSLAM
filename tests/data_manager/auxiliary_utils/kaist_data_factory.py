@@ -3,15 +3,12 @@ from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Type
 
-from numpy import asarray
 import numpy.typing as npt
 import numpy as np
-from cv2 import imwrite
+from PIL import Image
 
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.setup_manager.sensor_factory.sensors import Sensor
-
-from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
 
 @dataclass
@@ -33,6 +30,32 @@ class DataFactory:
 
     def __init__(self, dataset_structure: Any) -> None:
         self.dataset_structure = dataset_structure
+
+    @staticmethod
+    def equal_images(el1: Element, el2: Element) -> bool:
+        """
+        Compares two elements with Image data.
+
+        PIL images can not be compared directly because of different subclasses.
+        Manualy created image from numpy.array is of type Image.Image,
+        but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.
+
+        Args:
+            el1 (Element): 1-st element to be compared.
+            el2 (Element): 2-nd element to be compared.
+
+        Returns:
+            bool: comparison result
+        """
+        el1_array_img1 = np.asarray(el1.measurement.values[0])
+        el1_array_img2 = np.asarray(el1.measurement.values[1])
+        el2_array_img1 = np.asarray(el2.measurement.values[0])
+        el2_array_img2 = np.asarray(el2.measurement.values[1])
+        result = (np.array_equal(el1_array_img1,
+                                 el2_array_img1)
+                  and np.array_equal(el1_array_img2,
+                                     el2_array_img2))
+        return result
 
     @staticmethod
     def flatten(set: tuple[Any, ...]) -> Iterator[Any]:
@@ -86,7 +109,7 @@ class DataFactory:
                 writer.writerow(data)
 
     def to_img_file(self,
-                    data: tuple[int, npt.NDArray[np.float32]],
+                    data: tuple[int, npt.NDArray[np.uint8]],
                     path: Path) -> None:
         """
         Writes image to the given file path with OpenCV module.
@@ -95,8 +118,8 @@ class DataFactory:
             data (tuple[int, npt.NDArray[np.float32]]): image as a numpy array.
             path (Path): file path.
         """
-        img = asarray(data[1])
-        imwrite(path.as_posix(), img)
+        img = Image.fromarray(data[1])
+        img.save(path)
 
     def create_dataset_structure(self) -> None:
         """
@@ -120,7 +143,7 @@ class DataFactory:
                       stamp_files: list[tuple[list[int], Path]],
                       csv_data: list[tuple[tuple[float, ...], Path]],
                       binary_data: list[tuple[tuple[float, ...], Path]],
-                      image_data: list[tuple[tuple[int, npt.NDArray[np.float32]], Path]]) -> None:
+                      image_data: list[tuple[tuple[int, npt.NDArray[np.uint8]], Path]]) -> None:
         """
         Writes data to the directories & files.
 
