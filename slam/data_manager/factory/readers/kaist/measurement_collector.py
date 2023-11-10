@@ -1,12 +1,12 @@
 import logging
 from collections.abc import Iterator
 from csv import reader as csv_reader
+from PIL import Image
 from pathlib import Path
 from typing import Callable, Type
 
 import numpy as np
 import numpy.typing as npt
-from cv2 import imread, IMREAD_UNCHANGED
 from plum import dispatch
 from slam.data_manager.factory.readers.data_reader import DataReader
 
@@ -197,14 +197,13 @@ class MeasurementCollector():
         right_img_file = right_camera_dir / timestamp_path
         left_img_file = left_img_file.with_suffix(self.IMAGE_EXTENSION)
         right_img_file = right_img_file.with_suffix(self.IMAGE_EXTENSION)
-        left_img = imread(left_img_file.as_posix(), IMREAD_UNCHANGED)
-        right_img = imread(right_img_file.as_posix(), IMREAD_UNCHANGED)
-
-        for img, path in zip([left_img, right_img], [left_img_file, right_img_file]):
-            if img is None:
-                msg = f"Img with path {path} has not been read with OpenCV::IMREAD"
-                logger.critical(msg)
-                raise ExternalModuleException(msg)
+        try:
+            left_img = Image.open(left_img_file)
+            right_img = Image.open(right_img_file)
+        except:
+            msg = f"Can not read images: {left_img_file}, {right_img_file}"
+            logger.critical(msg)
+            raise ExternalModuleException(msg)
 
         message = Message(timestamp_str, (left_img, right_img))
         location = StereoImgDataLocation((left_img_file, right_img_file))

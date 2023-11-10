@@ -111,7 +111,6 @@ class BatchFactory():
         first_element: Element = self._data_reader.get_element(sensor, start)
         self._batch.add(first_element)
         current_timestamp: int = first_element.timestamp
-
         if start != stop:
             while current_timestamp < stop:
                 element: Element = self._data_reader.get_element(sensor)
