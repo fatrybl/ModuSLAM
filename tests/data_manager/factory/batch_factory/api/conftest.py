@@ -6,9 +6,10 @@ from hydra import initialize_config_module, compose
 from hydra.core.config_store import ConfigStore
 
 from slam.data_manager.factory.batch_factory import BatchFactory
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 
-from tests.data_manager.factory.batch_factory.conftest import CONFIG_MODULE_DIR, BATCH_FACTORY_CONFIG_NAME
+from tests.data_manager.factory.batch_factory.conftest import CONFIG_MODULE_DIR, BATCH_FACTORY_CONFIG_NAME, SENSOR_FACTORY_CONFIG_NAME
 
 from .data import (DatasetStructure,
                    data_stamp,
@@ -17,7 +18,7 @@ from .data import (DatasetStructure,
                    binary_data,
                    image_data)
 
-from .config import BFConfig
+from .config import BFConfig, SFConfig
 
 Fixture: TypeAlias = Callable[[Any], Any]
 
@@ -45,6 +46,15 @@ def kaist_batch_factory(kaist_urban_dataset: Fixture) -> BatchFactory:
     with initialize_config_module(config_module=CONFIG_MODULE_DIR):
         cfg = compose(config_name=BATCH_FACTORY_CONFIG_NAME)
         return BatchFactory(cfg)
+
+
+@fixture(scope='class')
+def sensor_factory() -> None:
+    cs = ConfigStore.instance()
+    cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=SFConfig)
+    with initialize_config_module(config_module=CONFIG_MODULE_DIR):
+        cfg = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
+        SensorFactory(cfg)
 
 
 @fixture(scope='class', autouse=True)

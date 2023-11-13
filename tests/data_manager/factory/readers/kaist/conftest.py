@@ -10,7 +10,7 @@ from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 CONFIG_MODULE_DIR: str = "conf"
 DATASET_CONFIG_NAME: str = "dataset_config"
 REGIME_CONFIG_NAME: str = "regime_config"
-SENSOR_CONFIG_NAME: str = "sensor_factory_config"
+SENSOR_FACTORY_CONFIG_NAME: str = "sensor_factory_config"
 
 Fixture: TypeAlias = Callable[[Any], Any]
 

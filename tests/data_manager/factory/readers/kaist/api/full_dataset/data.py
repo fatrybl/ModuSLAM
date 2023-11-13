@@ -18,13 +18,13 @@ from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorElementP
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
-from tests.data_manager.factory.readers.kaist.conftest import SENSOR_CONFIG_NAME
+from tests.data_manager.factory.readers.kaist.conftest import SENSOR_FACTORY_CONFIG_NAME
 from tests.data_manager.factory.readers.kaist.api.full_dataset.config import DATASET_DIR
 
 cs = ConfigStore.instance()
-cs.store(name=SENSOR_CONFIG_NAME, node=ParameterConfig)
+cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=ParameterConfig)
 with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
-    params = compose(config_name=SENSOR_CONFIG_NAME)
+    params = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
 
 
 @dataclass(frozen=True)

@@ -1,5 +1,5 @@
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 from numpy import ones, uint8
@@ -21,19 +21,14 @@ from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 from configs.sensors.base_sensor_parameters import ParameterConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
-from tests.data_manager.factory.batch_factory.conftest import SENSOR_CONFIG_NAME
+from tests.data_manager.factory.batch_factory.conftest import SENSOR_FACTORY_CONFIG_NAME
 from tests.data_manager.factory.batch_factory.api.config import DATASET_DIR
 
 
-@dataclass
-class Param(ParameterConfig):
-    pose: list[float] = field(default_factory=lambda: [1, 2, 3])
-
-
 cs = ConfigStore.instance()
-cs.store(name=SENSOR_CONFIG_NAME, node=Param)
+cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=ParameterConfig)
 with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
-    params = compose(config_name=SENSOR_CONFIG_NAME)
+    params = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
 
 
 """
@@ -587,7 +582,7 @@ stereo_scenario: tuple[set[PeriodicData], DataBatch] = (
 common_scenario: tuple[set[PeriodicData], DataBatch] = (
     common_requests, common_batch)
 
-kaist_dataset_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
+kaist_dataset_requests_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
     imu_scenario, lidar2D_scenario, stereo_scenario, common_scenario]
 
 

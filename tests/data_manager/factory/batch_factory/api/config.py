@@ -12,7 +12,7 @@ from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfi
 from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
-from configs.system.setup_manager.sensor_factory import SensorConfig
+from configs.system.setup_manager.sensor_factory import SensorConfig, SensorFactoryConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
 
@@ -64,6 +64,35 @@ data_dirs: list[PairConfig] = field(default_factory=lambda: [
 ])
 
 
+all_sensors: list[SensorConfig] = field(
+    default_factory=lambda: [
+        imu,
+        fog,
+        encoder,
+        stereo,
+        altimeter,
+        gps,
+        vrs_gps,
+        lidar_3D_right,
+        lidar_3D_left,
+        lidar_2D_middle,
+        lidar_2D_back
+    ])
+
+used_sensors: list[SensorConfig] = field(
+    default_factory=lambda: [imu,
+                             fog,
+                             encoder,
+                             stereo,
+                             altimeter,
+                             gps,
+                             vrs_gps,
+                             lidar_3D_right,
+                             lidar_3D_left,
+                             lidar_2D_middle,
+                             lidar_2D_back])
+
+
 @dataclass
 class KaistReaderConfig(KaistConfig):
     directory: Path = DATASET_DIR
@@ -76,3 +105,9 @@ class BFConfig(BatchFactoryConfig):
     regime: RegimeConfig = field(default_factory=StreamConfig)
     dataset: DatasetConfig = field(default_factory=KaistReaderConfig)
     memory: MemoryAnalyzerConfig = field(default_factory=Memory)
+
+
+@dataclass
+class SFConfig(SensorFactoryConfig):
+    all_sensors: list[SensorConfig] = all_sensors
+    used_sensors: list[SensorConfig] = used_sensors
