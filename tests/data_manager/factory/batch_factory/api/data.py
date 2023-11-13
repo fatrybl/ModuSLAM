@@ -1,3 +1,4 @@
+from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -484,11 +485,6 @@ el25 = Element(
               str(z_sick_middle_3[0])).with_suffix(DatasetStructure.binary_file_extension)))
 
 
-elements: list[Element] = [el1, el2, el3, el4, el5, el6, el7,
-                           el8, el9, el10, el11, el12, el13,
-                           el14, el15, el16, el17, el18, el19,
-                           el20, el21, el22, el23, el24, el25]
-
 imu_requests: set[PeriodicData] = {
     PeriodicData(sensor=el3.measurement.sensor,
                  period=TimeRange(start=el3.timestamp,
@@ -593,3 +589,15 @@ common_scenario: tuple[set[PeriodicData], DataBatch] = (
 
 kaist_dataset_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
     imu_scenario, lidar2D_scenario, stereo_scenario, common_scenario]
+
+
+elements: deque[Element] = deque([el1, el2, el3, el4, el5, el6, el7,
+                                  el8, el9, el10, el11, el12, el13,
+                                  el14, el15, el16, el17, el18, el19,
+                                  el20, el21, el22, el23, el24, el25])
+elements_batch = DataBatch()
+for el in elements:
+    elements_batch.add(el)
+
+kaist_dataset_deque_scenario: tuple[deque[Element], DataBatch] = (
+    elements, elements_batch)
