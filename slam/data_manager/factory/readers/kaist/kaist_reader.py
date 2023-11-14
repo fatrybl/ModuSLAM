@@ -294,7 +294,7 @@ class KaistReader(DataReader):
             Element: with raw sensor measurement.
         """
         sensor: Type[Sensor] = element.measurement.sensor
-        message, location = self._collector.get_data(sensor, timestamp)
+        message, location = self._collector.get_data(sensor, element.timestamp)
 
         timestamp: int = as_int(message.timestamp, logger)
         measurement = Measurement(sensor, message.data)
