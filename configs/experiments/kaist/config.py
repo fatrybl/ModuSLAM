@@ -123,8 +123,8 @@ class Memory(MemoryAnalyzerConfig):
 
 @dataclass
 class Range(TimeLimitConfig):
-    start: int = 1544578498418802396
-    stop: int = 1544578498428802229
+    start: int = 1544578498493167947
+    stop: int = 1544578498493167947
 
 
 @dataclass
@@ -142,7 +142,7 @@ class SM(SetupManagerConfig):
 class BF(BatchFactoryConfig):
     dataset: DatasetConfig = field(default_factory=KaistDS)
     memory: MemoryAnalyzerConfig = field(default_factory=Memory)
-    regime: RegimeConfig = field(default_factory=StreamConfig)
+    regime: RegimeConfig = field(default_factory=Range)
 
 
 @dataclass

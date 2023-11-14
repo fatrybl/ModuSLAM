@@ -20,5 +20,5 @@ class StoppingCriterionSingleton(metaclass=MetaSingleton):
 
     def reset(self):
         """resets all criteria to default values"""
-        for value in self.__dict__.values():
-            value = False
+        for key in self.__dict__.keys():
+            self.__dict__[key] = False

@@ -75,7 +75,6 @@ class BatchFactory():
     @dispatch
     def _add_data(self) -> None:
         """Adds new element to the Data Batch."""
-
         new_element: Element = self._data_reader.get_element()
         if new_element:
             self._batch.add(new_element)

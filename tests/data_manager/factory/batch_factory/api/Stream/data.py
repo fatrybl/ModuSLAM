@@ -22,7 +22,7 @@ from configs.sensors.base_sensor_parameters import ParameterConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
 from tests.data_manager.factory.batch_factory.conftest import SENSOR_FACTORY_CONFIG_NAME
-from tests.data_manager.factory.batch_factory.api.config import DATASET_DIR
+from tests.data_manager.factory.batch_factory.api.Stream.config import DATASET_DIR
 
 
 cs = ConfigStore.instance()
