@@ -1,4 +1,3 @@
-from collections import deque
 import itertools
 from dataclasses import dataclass
 from pathlib import Path
@@ -16,14 +15,14 @@ from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, Altimeter, Gps,
     VrsGps, Lidar2D, Lidar3D, StereoCamera)
 from slam.data_manager.factory.batch import DataBatch
-from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 
+from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 from tests.data_manager.factory.batch_factory.conftest import SENSOR_FACTORY_CONFIG_NAME
-from tests.data_manager.factory.batch_factory.api.TimeRange.config import DATASET_DIR
+from tests.data_manager.factory.batch_factory.api.TimeLimit.config import DATASET_DIR
 
 
 cs = ConfigStore.instance()
@@ -587,15 +586,15 @@ kaist_dataset_requests_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
     imu_scenario, lidar2D_scenario, stereo_scenario, common_scenario]
 
 
-elements: deque[Element] = deque([el1, el2, el3, el4, el5, el6, el7,
-                                  el8, el9, el10, el11, el12, el13,
-                                  el14, el15, el16, el17, el18, el19,
-                                  el20, el21, el22, el23, el24, el25])
+elements: list[Element] = [el1, el2, el3, el4, el5, el6, el7,
+                           el8, el9, el10, el11, el12, el13,
+                           el14, el15, el16, el17, el18, el19,
+                           el20, el21, el22, el23, el24, el25]
 elements_batch = DataBatch()
 for el in elements:
     elements_batch.add(el)
 
-kaist_dataset_deque_scenario: tuple[deque[Element], DataBatch] = (
+kaist_dataset_deque_scenario: tuple[list[Element], DataBatch] = (
     elements, elements_batch)
 
 
@@ -614,3 +613,40 @@ scenarios: list[tuple[TimeRange, DataBatch]] = [(TimeRange(el1.timestamp, el1.ti
                                                  b2),
                                                 (TimeRange(el10.timestamp, el20.timestamp),
                                                  b3)]
+
+b4 = DataBatch()
+for el in [el3, el10, el23]:
+    b4.add(el)
+
+requests: set[PeriodicData] = {PeriodicData(sensor=el1.measurement.sensor,
+                                            period=TimeRange(start=el1.timestamp,
+                                                             stop=el1.timestamp)),
+                               PeriodicData(sensor=el25.measurement.sensor,
+                                            period=TimeRange(start=el25.timestamp,
+                                                             stop=el25.timestamp)),
+                               PeriodicData(sensor=el3.measurement.sensor,
+                                            period=TimeRange(start=el3.timestamp,
+                                                             stop=el23.timestamp)), }
+
+b5 = DataBatch()
+for el in [el1, el3, el10, el23, el25]:
+    b5.add(el)
+
+periodic_request_scenarios: list[tuple[TimeRange, DataBatch, set[PeriodicData]]] = [
+    (TimeRange(el1.timestamp, el1.timestamp), b1, {PeriodicData(sensor=el1.measurement.sensor,
+                                                                period=TimeRange(start=el1.timestamp,
+                                                                                 stop=el1.timestamp))}),
+    (TimeRange(el25.timestamp, el25.timestamp), b2, {PeriodicData(sensor=el25.measurement.sensor,
+                                                                  period=TimeRange(start=el25.timestamp,
+                                                                                   stop=el25.timestamp))}),
+    (TimeRange(el3.timestamp, el23.timestamp), b4, {PeriodicData(sensor=el3.measurement.sensor,
+                                                                 period=TimeRange(start=el3.timestamp,
+                                                                                  stop=el23.timestamp))}),
+    (TimeRange(el1.timestamp, el25.timestamp), b5, requests),
+]
+
+incorrect_scenario: list[tuple[TimeRange, DataBatch, set[PeriodicData]]] = [
+    (TimeRange(el10.timestamp, el20.timestamp), b3, {PeriodicData(sensor=el3.measurement.sensor,
+                                                                  period=TimeRange(start=el3.timestamp,
+                                                                                   stop=el23.timestamp))}),
+]

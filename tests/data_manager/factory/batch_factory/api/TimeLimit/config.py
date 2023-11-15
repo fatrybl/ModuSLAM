@@ -9,7 +9,7 @@ from configs.experiments.kaist.config import Memory
 from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
 from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
-from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig, TimeLimitConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig, TimeLimitConfig
 from configs.paths.kaist_dataset import KaistDatasetPathConfig as KaistPaths
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
 from configs.system.setup_manager.sensor_factory import SensorConfig, SensorFactoryConfig
