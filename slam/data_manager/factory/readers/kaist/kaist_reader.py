@@ -58,7 +58,8 @@ class CsvFileGenerator:
 
 
 class KaistReader(DataReader):
-    """Data reader for Kaist Urban Dataset.
+    """
+    Data reader for Kaist Urban Dataset.
 
     Args:
         DataReader (_type_): Base abstract class.
@@ -97,7 +98,8 @@ class KaistReader(DataReader):
         return self.__current_state
 
     def _init_iterator(self) -> Iterator[dict[str, str]]:
-        """Initialize a new iterator for a given file. 
+        """
+        Initialize a new iterator for a given file. 
             Each line is a dictionary with timestamp and sensor keys.
 
         Raises:
@@ -116,7 +118,9 @@ class KaistReader(DataReader):
             raise FileNotValid(msg)
 
     def __reset_current_state(self) -> None:
-        """ Re-initializes  all iterators."""
+        """
+        Re-initializes all iterators.
+        """
 
         self._collector.reset_iterators()
         data_stamp_iterator: Iterator[dict[str, str]
@@ -126,7 +130,8 @@ class KaistReader(DataReader):
             self._collector.iterators)
 
     def __get_file_iterator(self, senor_name: str) -> FileIterator | None:
-        """Seeks for the file iterator which corresponds to sensor with the given sensor name.
+        """
+        Seeks for the file iterator which corresponds to sensor with the given sensor name.
 
         Args:
             senor_name (str): name of sensor to look up in the file iterator collection.
@@ -139,14 +144,16 @@ class KaistReader(DataReader):
                 return it
 
     def __get_sensor_name(self, timestamp: int) -> tuple[str, Counter]:
-        """Returns the name of the sensor which corresponds to the given timestamp in data_stamp.csv file.
-            and a number of iterations before the sensor has been found.
+        """
+        Returns the name of the sensor which corresponds to the given timestamp 
+        in data_stamp.csv file and a number of occurrences of each sensor before the given timestamp.
 
         Args:
             timestamp (int): time of a sensor measurement
 
         Returns:
-            tuple[str, int]: sensor name and number of iterations
+            tuple[str, Counter]: 
+                sensor name and number of occurrences of each sensor before the given timestamp.
         """
         current_timestamp: int = self.__INCORRECT_TIMESTAMP
         sensor_name: str = self.__EMPTY_STRING
@@ -163,7 +170,8 @@ class KaistReader(DataReader):
 
     @dispatch
     def __iterate_N_times(self, N: int, it: FileIterator) -> None:
-        """ Overloaded method to iterate N times with the given iterator.
+        """ 
+        Overloaded method to iterate N times with the given iterator.
 
         Args:
             N (int): a number of iterations.
@@ -182,7 +190,8 @@ class KaistReader(DataReader):
 
     @dispatch
     def __iterate_N_times(self, N: int, it: Iterator[dict[str, str]]) -> None:
-        """Overloaded method to iterate N times with the given iterator.
+        """
+        Overloaded method to iterate N times with the given iterator.
 
         Args:
             N (int): a number of iterations.
@@ -200,15 +209,16 @@ class KaistReader(DataReader):
             raise ValueError(msg)
 
     def _set_initial_state(self, time_range: TimeRange):
-        """ Sets the initial state of iterators for Time Range regime.
-            1) Gets sensor`s name and N - number of iterations which corresponds to "start" timestamp.
-            2) Resets all iterators.
+        """ 
+        Sets the initial state of iterators for Time Range regime.
+            1) Gets sensor`s name and N - number of occurrences of each sensor 
+                before the given "start" timestamp.
+            2) Resets all iterators for the future search.
             3) Gets sensor`s name which corresponds to "stop" timestamp.
-            4) Gets iterator and M (number of iterations for the sensor of "start" timestamp).
-            5) Checks if sensors with  "start, stop" timestamp have been initialized in SensorFactory.
-            6) Resets all iterators.
-            7) Iterates the corresponding iterators N-1 and M-1 times s.t. 
-                the future call of next() will return an iterator of the "start" timestamp.
+            4) Сhecks if start/stop sensors are initialized in SensorFactory Singleton.
+            5) Resets all iterators for the future search.
+            6) Sets all iterators to the "pre-start" position s.t. 
+                the future call of next() will return values of the "start" position (timestamp).
 
         Args:
             time_range (TimeRange): start & stop timestamps structure.

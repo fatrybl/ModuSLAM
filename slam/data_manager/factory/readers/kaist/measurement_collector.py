@@ -52,7 +52,9 @@ class CsvFileGenerator:
 
 
 class MeasurementCollector():
-    """ Collects sensors` measurements from Kaist Urban Dataset."""
+    """ 
+    Collects sensors` measurements from Kaist Urban Dataset.
+    """
 
     INCORRECT_TIMESTAMP: int = -1
     IMAGE_EXTENSION: str = '.png'
@@ -76,7 +78,9 @@ class MeasurementCollector():
 
     @property
     def iterators(self) -> set[FileIterator]:
-        """ set of iterators for sensors` stamp files."""
+        """ 
+        Set of iterators for sensors` stamp files.
+        """
         return self._sensor_data_iterators.iterators
 
     @iterators.setter
@@ -84,13 +88,16 @@ class MeasurementCollector():
         self._sensor_data_iterators.iterators = value
 
     def reset_iterators(self) -> None:
-        """re-initialize all iterators"""
+        """
+        Re-initialize all iterators
+        """
         self._sensor_data_iterators = SensorIterators(
             self._iterable_data_files,
             self._init_iterator)
 
     def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
-        """Initializes an iterator for a given file.
+        """
+        Initializes an iterator for a given file.
 
         Args:
             file (Path): file to be iterated.
@@ -106,7 +113,8 @@ class MeasurementCollector():
             raise FileNotValid(msg)
 
     def __read_bin(self, file: Path) -> npt.NDArray[np.float32]:
-        """Reads a binary file with Single-precision floating-point data (float32).
+        """
+        Reads a binary file with Single-precision floating-point data (float32).
 
         Args:
             file (Path): binary file to be read.
@@ -119,17 +127,18 @@ class MeasurementCollector():
             return data
 
     def __find_in_file(self, iter: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> tuple[int, tuple[str, ...]]:
-        """ Iterates over file and finds the line with the given timestamp.
+        """
+        Iterates over file and finds the line with the given timestamp.
 
         Args:
-            iter (Iterator[tuple[int, tuple[float]]]): iterator of tuple. 
+            iter (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple. 
             timestamp (int): timestamp.
 
         Raises:
             StopIteration: if no line with the given timestamp in a file.
 
         Returns:
-            tuple[int, tuple[float]]: line number and line as tuple of strings.
+            tuple[int, tuple[str, ...]]: line number and line as tuple of strings.
         """
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         while current_timestamp != timestamp:
@@ -145,7 +154,8 @@ class MeasurementCollector():
         return position, line
 
     def __iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
-        """ Iterates once with a given iterator.
+        """
+        Iterates once with a given iterator.
 
         Args:
             it (FileIterator): iterator for sensor stamp ".csv" file.
@@ -161,17 +171,18 @@ class MeasurementCollector():
         return message, location
 
     def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> None:
-        """ Wrapper method to iterate over a file.
-            Only for dummy iterations until given timestamp is reached.
+        """ 
+        Sets the iterator to the position of the given timestamp.
 
         Args:
-            iterator (Iterator[tuple[int, tuple[float]]]): _description_
-            timestamp (int): _description_
+            iterator (Iterator[tuple[int, tuple[str, ...]]]): to be set to the position.
+            timestamp (int): timestamp.
         """
         __, __ = self.__find_in_file(iterator, timestamp)
 
     def _get_image(self, sensor_name: str, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
-        """ Gets an image for a sensor with the given name and the timestamp.
+        """ 
+        Gets an image for a sensor with the given name and the timestamp.
 
         Args:
             sensor_name (str): name of sensor.

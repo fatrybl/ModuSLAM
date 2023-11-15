@@ -13,6 +13,7 @@ from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
 from slam.data_manager.factory.readers.element_factory import Element
 from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,21 +46,26 @@ class BatchFactory():
         del self._batch.data
 
     def __data_processed(self) -> None:
-        """Called when all data has been processed. Turns ON global Stopping Criterion."""
+        """
+        Called when all data has been processed. Turns ON global Stopping Criterion.
+        """
 
         msg = "All data has been processed"
         logger.info(msg)
         self._break_point.is_data_processed = True
 
     def __memory_limit_reached(self) -> None:
-        """Called when the memory limit for a batch has been reached. Turns ON global Stopping Criterion."""
+        """
+        Called when the memory limit for a batch has been reached. Turns ON global Stopping Criterion.
+        """
 
         msg = "Memory limit for Data Batch has been reached"
         logger.info(msg)
         self._break_point.is_memory_limit = True
 
     def __limitation(self) -> bool:
-        """Checks if any limitation has been reached to stop the creation of a new element for the Data Batch. 
+        """
+        Checks if any limitation has been reached to stop the creation of a new element for the Data Batch. 
 
         Returns:
             bool: state of the Stopping Criterion singleton
@@ -74,7 +80,9 @@ class BatchFactory():
 
     @dispatch
     def _add_data(self) -> None:
-        """Adds new element to the Data Batch."""
+        """
+        Adds new element to the DataBatch.
+        """
         new_element: Element = self._data_reader.get_element()
         if new_element:
             self._batch.add(new_element)
@@ -83,7 +91,8 @@ class BatchFactory():
 
     @dispatch
     def _add_data(self, no_data_element: Element) -> None:
-        """Adds a new element to the Data Batch based on the requested Element 
+        """
+        Adds a new element to the Data Batch based on the requested Element 
         w/o raw sensor measurement.
 
         Args:
@@ -118,7 +127,8 @@ class BatchFactory():
 
     @dispatch
     def create_batch(self) -> None:
-        """Creates a new Data Batch from the dataset.
+        """
+        Creates a new Data Batch from the dataset.
         """
         del (self.batch)
         self._break_point.is_data_processed = False
@@ -127,7 +137,8 @@ class BatchFactory():
 
     @dispatch
     def create_batch(self, elements: deque[Element]) -> None:
-        """Creates a new Data Batch from the deque of elements.
+        """
+        Creates a new Data Batch from the deque of elements.
 
         Args:
             elements (deque[Element]): deque of elements w/o raw sensor measurements.
@@ -139,7 +150,8 @@ class BatchFactory():
 
     @dispatch
     def create_batch(self, requests: set[PeriodicData]) -> None:
-        """Creates a new Data Batch from the set of requests.
+        """
+        Creates a new Data Batch from the set of requests.
 
         Args:
             requests (set[PeriodicData]): each request contains sensor and time range (start, stop) 

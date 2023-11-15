@@ -11,6 +11,17 @@ class DataReaderFactory():
     """
 
     def __init__(self, dataset_type: str) -> None:
+        """
+        Creates DataReader object based on dataset type.
+
+        TODO: Remove string comparison.
+
+        Args:
+            dataset_type (str): Unique name of the dataset`s type.
+
+        Raises:
+            NotImplementedError: No DataReader for the specified dataset type.
+        """
         if dataset_type == 'Kaist':
             self.data_reader = KaistReader
         else:
