@@ -36,6 +36,11 @@ class DataBatch:
     def data(self) -> deque[Element]:
         return self.__data_deque
 
+    @data.deleter
+    def data(self) -> None:
+        self.__data_set.clear()
+        self.__data_deque.clear()
+
     @property
     def size_bytes(self) -> int:
         raise NotImplementedError

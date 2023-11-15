@@ -42,7 +42,7 @@ class BatchFactory():
 
     @batch.deleter
     def batch(self) -> None:
-        del self._batch
+        del self._batch.data
 
     def __data_processed(self) -> None:
         """Called when all data has been processed. Turns ON global Stopping Criterion."""
@@ -120,6 +120,7 @@ class BatchFactory():
     def create_batch(self) -> None:
         """Creates a new Data Batch from the dataset.
         """
+        del (self.batch)
         self._break_point.is_data_processed = False
         while not self.__limitation():
             self._add_data()
@@ -131,6 +132,7 @@ class BatchFactory():
         Args:
             elements (deque[Element]): deque of elements w/o raw sensor measurements.
         """
+        del (self.batch)
         self._break_point.is_data_processed = False
         for element in elements:
             self._add_data(element)
@@ -143,6 +145,7 @@ class BatchFactory():
             requests (set[PeriodicData]): each request contains sensor and time range (start, stop) 
             of measurements to be added to the Data Batch
         """
+        del (self.batch)
         self._break_point.is_data_processed = False
         for request in requests:
             self._add_data(request)
