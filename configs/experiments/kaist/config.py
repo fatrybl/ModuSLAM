@@ -73,7 +73,7 @@ used_sensors: list[SensorConfig] = field(
                              lidar_2D_back])
 
 
-dataset_directory: Path = Path("/home/oem/Downloads/urban18-highway/")
+dataset_directory: Path = Path("/home/oem/Downloads/urban19-highway/")
 
 
 iterable_data_files: list[PairConfig] = field(default_factory=lambda: [
@@ -118,13 +118,13 @@ class KaistDS(KaistConfig):
 
 @dataclass
 class Memory(MemoryAnalyzerConfig):
-    graph_memory: float = 30.0
+    graph_memory: float = 15.0
 
 
 @dataclass
-class Range(TimeLimitConfig):
-    start: int = 1544578498493167947
-    stop: int = 1544578498493167947
+class TLimit(TimeLimitConfig):
+    start: int = 1544578682416523355
+    stop: int = 1544578682426144851
 
 
 @dataclass
@@ -142,7 +142,7 @@ class SM(SetupManagerConfig):
 class BF(BatchFactoryConfig):
     dataset: DatasetConfig = field(default_factory=KaistDS)
     memory: MemoryAnalyzerConfig = field(default_factory=Memory)
-    regime: RegimeConfig = field(default_factory=Range)
+    regime: RegimeConfig = field(default_factory=TLimit)
 
 
 @dataclass

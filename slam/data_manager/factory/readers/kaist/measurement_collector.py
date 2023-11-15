@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class CsvFileGenerator:
     """
-    Generator for a ".csv" file to read each row and row`s number in a file.
+    Generator for a ".csv" file to read a row and calculate row`s number.
     """
 
     def __init__(self, file_path: Path):
@@ -39,13 +39,16 @@ class CsvFileGenerator:
     def __next__(self) -> tuple[int, tuple[str, ...]]:
         try:
             line = next(self.__reader)
-            line = tuple(line)
-            self.__count += 1
-            return self.__count, line
 
         except StopIteration:
             self.__file.close()
+            msg = f'File {self.__file} has been exhausted.'
+            logger.critical(msg)
             raise
+        else:
+            line = tuple(line)
+            self.__count += 1
+            return self.__count, line
 
     def __iter__(self):
         return self
@@ -163,12 +166,18 @@ class MeasurementCollector():
         Returns:
             tuple[Message, CsvDataLocation]: message and location in CSV data file.
         """
-        position, line = next(it.iterator)
-        timestamp: str = line[0]
-        data: tuple[str, ...] = line[1:]
-        message = Message(timestamp, data)
-        location = CsvDataLocation(it.file, position)
-        return message, location
+        try:
+            position, line = next(it.iterator)
+        except StopIteration:
+            msg = f'File: {it.file} has been exhausted.'
+            logger.critical(msg)
+            raise
+        else:
+            timestamp: str = line[0]
+            data: tuple[str, ...] = line[1:]
+            message = Message(timestamp, data)
+            location = CsvDataLocation(it.file, position)
+            return message, location
 
     def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> None:
         """ 
@@ -274,18 +283,24 @@ class MeasurementCollector():
 
         it: FileIterator = self._sensor_data_iterators.get_file_iterator(
             sensor.name)
-        __, line = next(it.iterator)
-        storage: Storage = self._sensor_data_storages.get_data_location(
-            sensor.name)
-        timestamp: str = str(line[0])
-        timestamp_path: Path = Path(timestamp)
-        file: Path = storage.path / timestamp_path
-        file = file.with_suffix(self.BINARY_EXTENSION)
-        raw_data: npt.NDArray[np.float32] = self.__read_bin(file)
-        raw_data_tuple: tuple[float, ...] = tuple(raw_data)
-        message = Message(timestamp, raw_data_tuple)
-        location = BinaryDataLocation(file)
-        return message, location
+        try:
+            __, line = next(it.iterator)
+        except StopIteration:
+            msg = f'File {it.file} has been exhausted'
+            logger.critical(msg)
+            raise
+        else:
+            storage: Storage = self._sensor_data_storages.get_data_location(
+                sensor.name)
+            timestamp: str = str(line[0])
+            timestamp_path: Path = Path(timestamp)
+            file: Path = storage.path / timestamp_path
+            file = file.with_suffix(self.BINARY_EXTENSION)
+            raw_data: npt.NDArray[np.float32] = self.__read_bin(file)
+            raw_data_tuple: tuple[float, ...] = tuple(raw_data)
+            message = Message(timestamp, raw_data_tuple)
+            location = BinaryDataLocation(file)
+            return message, location
 
     @dispatch
     def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
@@ -330,10 +345,16 @@ class MeasurementCollector():
         """
         it: FileIterator = self._sensor_data_iterators.get_file_iterator(
             sensor.name)
-        __, line = next(it.iterator)
-        timestamp: int = as_int(line[0], logger)
-        message, location = self._get_image(sensor.name, timestamp)
-        return message, location
+        try:
+            __, line = next(it.iterator)
+        except StopIteration:
+            msg = f'File {it.file} has been exhausted'
+            logger.critical(msg)
+            raise
+        else:
+            timestamp: int = as_int(line[0], logger)
+            message, location = self._get_image(sensor.name, timestamp)
+            return message, location
 
     @dispatch
     def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:

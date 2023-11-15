@@ -43,12 +43,18 @@ class CsvFileGenerator:
     """
 
     def __init__(self, file_path: Path, names: list[str]):
+        """
+        Args:
+            file_path (Path): file to read.
+            names (list[str]): dictionary keys` names.
+        """
         self.__file = open(file_path, 'r')
         self.__reader = DictReader(self.__file, fieldnames=names)
 
     def __next__(self) -> dict[str, str]:
         try:
-            return next(self.__reader)
+            val = next(self.__reader)
+            return val
         except StopIteration:
             self.__file.close()
             raise
@@ -160,11 +166,17 @@ class KaistReader(DataReader):
         occurrence = Counter()
 
         while current_timestamp != timestamp:
-            current_line = next(self.__current_state.data_stamp_iterator)
-            current_timestamp: int = as_int(
-                current_line[self.__TIMESTAMP], logger)
-            sensor_name = current_line[self.__SENSOR_NAME]
-            occurrence.update({sensor_name})
+            try:
+                current_line = next(self.__current_state.data_stamp_iterator)
+            except StopIteration:
+                msg = f'can not find a line with timestamp {timestamp} in {self._data_stamp_file}'
+                logger.critical(msg)
+                raise
+            else:
+                current_timestamp: int = as_int(
+                    current_line[self.__TIMESTAMP], logger)
+                sensor_name = current_line[self.__SENSOR_NAME]
+                occurrence.update({sensor_name})
 
         return sensor_name, occurrence
 
@@ -182,7 +194,12 @@ class KaistReader(DataReader):
         """
         if N >= 0:
             for _ in range(N):
-                next(it.iterator)
+                try:
+                    next(it.iterator)
+                except StopIteration:
+                    msg = f'can not iterate N={N} times for file: {it.file}'
+                    logger.critical(msg)
+                    raise
         else:
             msg = f"N must be non-negative, but N = {N}"
             logger.critical(msg)
@@ -202,7 +219,12 @@ class KaistReader(DataReader):
         """
         if N >= 0:
             for _ in range(N):
-                next(it)
+                try:
+                    next(it)
+                except StopIteration:
+                    msg = f'can not iterate N={N} times with iterator: {it}'
+                    logger.critical(msg)
+                    raise
         else:
             msg = f"N must be non-negative, but N = {N}"
             logger.critical(msg)
