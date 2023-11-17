@@ -67,6 +67,9 @@ class KaistReader(DataReader):
     """
     Data reader for Kaist Urban Dataset.
 
+    TODO: Synchronize sensors` iterators for data_stamp.csv and <SENSOR>_stamp.csv:
+    TODO: check if a timestamp from data_stamp.csv exists in  <SENSOR>_stamp.csv
+
     Args:
         DataReader (_type_): Base abstract class.
     """
