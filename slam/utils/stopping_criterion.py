@@ -15,10 +15,14 @@ class StoppingCriterionSingleton(metaclass=MetaSingleton):
 
     @property
     def ON(self) -> bool:
-        """Checks if any of stopping criteria is active."""
+        """
+        Checks if any of stopping criteria is active.
+        """
         return any(self.__dict__.values())
 
     def reset(self):
-        """resets all criteria to default values"""
+        """
+        Resets all criteria to default values.
+        """
         for key in self.__dict__.keys():
             self.__dict__[key] = False

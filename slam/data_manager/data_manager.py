@@ -25,13 +25,16 @@ class DataManager(metaclass=MetaSingleton):
 
     @dispatch
     def make_batch(self) -> None:
-        """Creates a data batch sequentially based on regime in config."""
+        """
+        Creates a data batch sequentially based on regime in config.
+        """
         self.batch_factory.create_batch()
         logger.debug("Data Batch has been created")
 
     @dispatch
     def make_batch(self, measurements: list[Element]) -> None:
-        """Creates a data batch with given measurements
+        """
+        Creates a data batch with given measurements
 
         Args:
             measurements (list[Element]): list of elements wihtout row data
