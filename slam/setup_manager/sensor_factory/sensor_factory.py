@@ -1,21 +1,19 @@
 import logging
-
 from typing import Type
-from configs.sensors.base_sensor_parameters import ParameterConfig
 
-from slam.utils.exceptions import NotSubset, SensorNotFound
-from slam.utils.meta_singleton import MetaSingleton
+from configs.sensors.base_sensor_parameters import ParameterConfig
+from configs.system.setup_manager.sensor_factory import SensorConfig
+from configs.system.setup_manager.sensor_factory import SensorFactoryConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
-
-from configs.system.setup_manager.sensor_factory import SensorFactoryConfig as Config
-from configs.system.setup_manager.sensor_factory import SensorConfig as SensorConfig
+from slam.utils.exceptions import NotSubset, SensorNotFound
 
 logger = logging.getLogger(__name__)
 
 
-class SensorFactory(metaclass=MetaSingleton):
-    """Factory class for sensors management. Defaults to MetaSingleton.
+class SensorFactory:
+    """
+    Factory class for sensors management.
 
     Class Attributes: 
         all_sensors: sensors to be used in experiments for a particluar dataset.
@@ -30,12 +28,6 @@ class SensorFactory(metaclass=MetaSingleton):
     all_sensors: set[Type[Sensor]] = set()
     used_sensors: set[Type[Sensor]] = set()
 
-    def __init__(self, cfg: Config):
-        self.__all_sensors_list: list[SensorConfig] = cfg.all_sensors
-        self.__used_sensors_list: list[SensorConfig] = cfg.used_sensors
-        self._init_sesnors()
-        self._check_used_sesnors()
-
     @classmethod
     def get_used_sensors(cls) -> set[Type[Sensor]]:
         return cls.used_sensors
@@ -46,7 +38,8 @@ class SensorFactory(metaclass=MetaSingleton):
 
     @classmethod
     def name_to_sensor(cls, name: str) -> Type[Sensor]:
-        """Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
+        """
+        Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
 
         Args:
             name (str): sensor name
@@ -65,30 +58,42 @@ class SensorFactory(metaclass=MetaSingleton):
         logger.critical(msg)
         raise SensorNotFound(msg)
 
-    def _init_sesnors(self) -> None:
-        """Initializes all sensors and used sensors from config."""
-        for s in self.__all_sensors_list:
-            sensor = self.sensor_from_config(s)
-            self.all_sensors.add(sensor)
+    @classmethod
+    def init_sensors(cls, cfg: SensorFactoryConfig) -> None:
+        """
+        Initializes all sensors and used sensors from config.
+        """
+        _all_sensors_list: list[SensorConfig] = cfg.all_sensors
+        _used_sensors_list: list[SensorConfig] = cfg.used_sensors
 
-        for s in self.__used_sensors_list:
-            sensor = self.name_to_sensor(s.name)
-            self.used_sensors.add(sensor)
+        for s in _all_sensors_list:
+            sensor = cls.sensor_from_config(s)
+            cls.all_sensors.add(sensor)
 
-    def _check_used_sesnors(self) -> None:
-        """Checks if used sensors are part of all initialized sensors.
+        for s in _used_sensors_list:
+            sensor = cls.name_to_sensor(s.name)
+            cls.used_sensors.add(sensor)
+
+        cls._check_used_sesnors()
+
+    @classmethod
+    def _check_used_sesnors(cls) -> None:
+        """
+        Checks if used sensors are part of all initialized sensors.
 
         Raises:
             NotSubset: Some of used sensor are not defined in all sensors set.
         """
-        if not self.used_sensors or not self.used_sensors.issubset(self.all_sensors):
-            msg = f'Used sensors: {self.used_sensors} are not in known sensors: {self.all_sensors} or empty'
+        if not cls.used_sensors or not cls.used_sensors.issubset(cls.all_sensors):
+            msg = f'Used sensors: {cls.used_sensors} are not in known sensors: {cls.all_sensors} or empty'
             logger.critical(msg)
             raise NotSubset(msg)
 
     @staticmethod
     def sensor_from_config(cfg: SensorConfig) -> Type[Sensor]:
-        """ Creates sensor from config item.
+        """ 
+        Creates sensor from config item.
+
         Args:
             item (SensorConfig): item from config
 

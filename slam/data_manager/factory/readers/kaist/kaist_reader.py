@@ -282,7 +282,7 @@ class KaistReader(DataReader):
     @dispatch
     def get_element(self) -> Element | None:
         """
-        Gets element from a dataset sequantially based on iterator position. 
+        Gets element from a dataset sequentially based on iterator position.
 
         Returns:
             Element | None: element with raw sensor measurement 

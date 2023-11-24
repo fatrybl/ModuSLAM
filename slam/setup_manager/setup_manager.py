@@ -1,8 +1,8 @@
 import logging
 
-from slam.utils.meta_singleton import MetaSingleton
-from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.utils.meta_singleton import MetaSingleton
 
 logger = logging.getLogger(__name__)
 
@@ -15,5 +15,5 @@ class SetupManager(metaclass=MetaSingleton):
         Args:
             cfg (SetupManagerConfig): config for setup manager.
         """
-        self.sensor_factory = SensorFactory(cfg.sensor_factory)
+        SensorFactory.init_sensors(cfg.sensor_factory)
         logger.debug("Setup Manager has been successfully configured")
