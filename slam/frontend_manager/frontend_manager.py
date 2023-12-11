@@ -1,21 +1,51 @@
 import logging
-from data_manager.factory.batch import DataBatch
+from typing import Type
+
+from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
+from slam.data_manager.factory.batch import DataBatch
+from slam.frontend_manager.elements_distributor.elements_distributor import ElementDistributor
+from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph_builders.graph_builder_ABC import GraphBuilder
+from slam.frontend_manager.graph_builders.graph_builder_factory import GraphBuilderFactory
+
+logger = logging.getLogger(__name__)
 
 
 class FrontendManager:
-    logger = logging.getLogger(__name__)
+    """
+    Manages all frontend procedures: process measurements, build graph, detect loops and anomalies...
+    """
 
-    def __init__(self):
-        self.measurements_processor = MeasurementsProcessor()
-        self.graph_builder = GraphBuilder()
-        if self.config.attributes.loop_detector:
-            self.loop_detector = LoopDetector()
-        if self.config.attributes.anomaly_detector:
-            self.anomaly_detector = AnomalyDetector()
+    def __init__(self, config: FrontendManagerConfig):
+        self.graph = Graph()
+        self.graph_builder: Type[GraphBuilder] = GraphBuilderFactory.create(config.graph_builder)
+        self.distributor = ElementDistributor()
 
-    def process(self, batch: DataBatch):
-        self.measurements_processor.distribute_data(batch)
-        self.measurements_processor.create_measurements()
-        self.graph_builder.create_factors()
-        self.graph_builder.add_factors_to_graph()
-        batch.delete_used_data()
+    def _create_graph_candidate(self, batch: DataBatch) -> None:
+        """
+        Creates graph candidate.
+
+        Args:
+            batch (DataBatch): data batch to be used for graph candidate construction.
+        """
+        while not self.graph_builder.graph_candidate_ready():
+            self.distributor.next_element(batch)
+            self.graph_builder.process_storage(self.distributor.storage)
+
+    def _merge(self) -> None:
+        """
+        Connects a pseudo-graph and a main graph with factors.
+        FLUSH measurements queue in element_distributor.
+        """
+        states = self.graph_builder.candidate_factory.states
+        self.graph_builder.merger.connect(self.graph, states)
+
+    def create_graph(self, batch: DataBatch) -> None:
+        """
+        Creates main graph by merging sub-graphs.
+
+        Args:
+            batch (DataBatch): data batch with elements.
+        """
+        self._create_graph_candidate(batch)
+        self._merge()

@@ -1,6 +1,10 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from configs.system.backend_manager.backend_manager import BackendManagerConfig
 from configs.system.data_manager.data_manager import DataManagerConfig
+from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
+from configs.system.map_manager.map_manager import MapManagerConfig
+from slam import frontend_manager, map_manager
 
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
@@ -152,5 +156,13 @@ class DM(DataManagerConfig):
 
 @dataclass
 class Config:
-    setup_manager: SetupManagerConfig = field(default_factory=SM)
-    data_manager: DataManagerConfig = field(default_factory=DM)
+    setup_manager: SetupManagerConfig = field(
+        default_factory=SM)
+    data_manager: DataManagerConfig = field(
+        default_factory=DM)
+    frontend_manager: FrontendManagerConfig = field(
+        default_factory=FrontendManagerConfig)
+    backend_manager: BackendManagerConfig = field(
+        default_factory=BackendManagerConfig)
+    map_manager: MapManagerConfig = field(
+        default_factory=MapManagerConfig)

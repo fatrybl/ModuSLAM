@@ -14,7 +14,7 @@ class DataReaderFactory():
         """
         Creates DataReader object based on dataset type.
 
-        TODO: Remove string comparison.
+        TODO: Remove string comparison and make normal factory.
 
         Args:
             dataset_type (str): Unique name of the dataset`s type.

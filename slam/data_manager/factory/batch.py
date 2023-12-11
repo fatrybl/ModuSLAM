@@ -67,5 +67,13 @@ class DataBatch:
         return self._deque
 
     @property
+    def first_element(self):
+        return self.data[0]
+
+    @property
     def size_bytes(self) -> int:
         raise NotImplementedError
+
+    @data.deleter
+    def data(self):
+        del self._data

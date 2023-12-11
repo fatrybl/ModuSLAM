@@ -1,14 +1,30 @@
 import logging
-from .solver import Solver
-from .metrics_factory import MetricsFactory
 
-class BackendManager():
-    logger = logging.getLogger(__name__)
+import gtsam
+from hydra.core.hydra_config import HydraConfig
 
-    def __init__(self):
-        self.solver = Solver()
-        if self.config.compute_metrics:
-            self.metrics = MetricsFactory()
+from slam.frontend_manager.graph.graph import Graph
 
-    def solve(self):
-        pass
+logger = logging.getLogger(__name__)
+
+
+class GraphSolver:
+    def __init__(self, params) -> None:
+        self.optimizer = gtsam.LevenbergMarquardtOptimizer
+        self.params = gtsam.LevenbergMarquardtParams()
+        self.init_values = gtsam.Values()
+
+    def compute(self, graph: Graph):
+        self.optimizer(graph.factor_graph, self.init_values, self.params)
+        result = self.optimizer.optimizeSafely()
+        return result
+
+
+class BackendManager:
+
+    def __init__(self, config: HydraConfig):
+        self.solver = GraphSolver(config.solver)
+
+    def solve(self, graph: Graph):
+        result = self.solver.compute(graph)
+        return result
