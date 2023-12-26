@@ -8,14 +8,14 @@ from slam.setup_manager.sensor_factory.sensors import Sensor
 @dataclass(frozen=True)
 class Location(ABC):
     """
-    Abstract location for inheritence of
+    Abstract location to be inherited from.
     """
 
 
 @dataclass(frozen=True)
 class Measurement:
     sensor: Type[Sensor]
-    values: tuple[Any]
+    values: tuple[Any, ...]
 
     def __hash__(self) -> int:
         return hash(self.sensor)

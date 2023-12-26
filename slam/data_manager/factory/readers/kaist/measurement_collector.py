@@ -1,11 +1,12 @@
 import logging
-
 from collections.abc import Iterator
 from csv import reader as csv_reader
 from pathlib import Path
 from typing import Callable, Type
 
-from cv2 import imread, IMREAD_COLOR
+import numpy as np
+import numpy.typing as npt
+from cv2 import imread, IMREAD_UNCHANGED
 from plum import dispatch
 
 from slam.data_manager.factory.readers.element_factory import Location
@@ -18,7 +19,7 @@ from slam.setup_manager.sensor_factory.sensors import (
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ExternalModuleException
 
-from configs.paths.kaist_dataset import KaistDataset
+from configs.paths.kaist_dataset import KaistDatasetPath
 from configs.system.data_manager.datasets.kaist import Pair
 
 logger = logging.getLogger(__name__)
@@ -39,12 +40,11 @@ class MeasurementCollector():
             data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
                 which corresponds to unique sensor name and its data directory.
         """
-        iterable_files: tuple[Pair] = tuple(iterable_files)
-        data_dirs: tuple[Pair] = tuple(data_dirs)
-        self._iterable_data_files: tuple[Pair] = iterable_files
-        self._sensor_data_storages = DataStorage(data_dirs)
+        dirs: tuple[Pair, ...] = tuple(data_dirs)
+        self._iterable_data_files: tuple[Pair, ...] = tuple(iterable_files)
+        self._sensor_data_storages = DataStorage(dirs)
         self._sensor_data_iterators = SensorIterators(
-            iterable_files,
+            self._iterable_data_files,
             self._init_iterator)
 
     @property
@@ -62,14 +62,14 @@ class MeasurementCollector():
             self._iterable_data_files,
             self._init_iterator)
 
-    def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str]]]:
+    def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
         """Initializes an iterator for a given file.
 
         Args:
             file (Path): file to be iterated.
 
         Yields:
-            Iterator[tuple[int, tuple[str]]]: line number and tuple of string for each line in the file.
+            Iterator[tuple[int, tuple[str]]]: line number, tuple of string for each line in the file.
         """
         with open(file, "r") as f:
             reader = csv_reader(f)
@@ -77,34 +77,31 @@ class MeasurementCollector():
                 line = tuple(line)
                 yield position, line
 
-    def __read_bin(self, file: Path) -> Message:
-        """Reads a binary file which name contains timestamp information.
+    def __read_bin(self, file: Path) -> npt.NDArray[np.float32]:
+        """Reads a binary file with Single-precision floating-point data (float32).
 
         Args:
             file (Path): binary file to be read.
 
         Returns:
-            Message: with raw binary data and a timestamp (as string).
+            numpy.NDArray[np.float32]: array of single-precision floating-point data.
         """
         with open(file, 'rb') as f:
-            line = f.read()
-            line = tuple(line)
-            timestamp: str = file.stem
-            message = Message(timestamp, line)
-            return message
+            data = np.fromfile(f, np.float32)
+            return data
 
-    def __find_in_file(self, iter: Iterator[tuple[int, tuple[str]]], timestamp: int) -> tuple[int, tuple[str]]:
+    def __find_in_file(self, iter: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> tuple[int, tuple[str, ...]]:
         """ Iterates over file and finds the line with the given timestamp.
 
         Args:
-            iter (Iterator[tuple[int, tuple[str]]]): iterator of tuple. 
+            iter (Iterator[tuple[int, tuple[float]]]): iterator of tuple. 
             timestamp (int): timestamp.
 
         Raises:
             StopIteration: if no line with the given timestamp in a file.
 
         Returns:
-            tuple[int, tuple[str]]: line number and line as tuple of strings.
+            tuple[int, tuple[float]]: line number and line as tuple of strings.
         """
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         while current_timestamp != timestamp:
@@ -115,7 +112,8 @@ class MeasurementCollector():
                 logger.error(msg)
                 raise StopIteration(msg)
             else:
-                current_timestamp = as_int(line[0], logger)
+                timestamp_str: str = line[0]
+                current_timestamp = as_int(timestamp_str, logger)
         return position, line
 
     def __iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
@@ -128,16 +126,18 @@ class MeasurementCollector():
             tuple[Message, CsvDataLocation]: message and location in CSV data file.
         """
         position, line = next(it.iterator)
-        message = Message(line[0], line[1:])
+        timestamp: str = line[0]
+        data: tuple[str, ...] = line[1:]
+        message = Message(timestamp, data)
         location = CsvDataLocation(it.file, position)
         return message, location
 
-    def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str]]], timestamp: int) -> None:
+    def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> None:
         """ Wrapper method to iterate over a file.
             Only for dummy iterations until given timestamp is reached.
 
         Args:
-            iterator (Iterator[tuple[int, tuple[str]]]): _description_
+            iterator (Iterator[tuple[int, tuple[float]]]): _description_
             timestamp (int): _description_
         """
         __, __ = self.__find_in_file(iterator, timestamp)
@@ -153,22 +153,22 @@ class MeasurementCollector():
 
         Returns:
             tuple[Message, StereoImgDataLocation]: message with raw stereo images and timestamp;
-                                                   location of imgages
+                                                   location of images
         """
-
-        timestamp_path: Path = Path(str(timestamp))
+        timestamp_str: str = str(timestamp)
+        timestamp_path: Path = Path(timestamp_str)
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor_name)
 
-        left_camera_dir: Path = storage.path / KaistDataset.stereo_left_data_dir
-        right_camera_dir: Path = storage.path / KaistDataset.stereo_right_data_dir
+        left_camera_dir: Path = storage.path / KaistDatasetPath.stereo_left_data_dir
+        right_camera_dir: Path = storage.path / KaistDatasetPath.stereo_right_data_dir
 
         left_img_file = left_camera_dir / timestamp_path
         right_img_file = right_camera_dir / timestamp_path
         left_img_file = left_img_file.with_suffix(self.IMAGE_EXTENSION)
         right_img_file = right_img_file.with_suffix(self.IMAGE_EXTENSION)
-        left_img = imread(left_img_file.as_posix(), IMREAD_COLOR)
-        right_img = imread(right_img_file.as_posix(), IMREAD_COLOR)
+        left_img = imread(left_img_file.as_posix(), IMREAD_UNCHANGED)
+        right_img = imread(right_img_file.as_posix(), IMREAD_UNCHANGED)
 
         for img, path in zip([left_img, right_img], [left_img_file, right_img_file]):
             if img is None:
@@ -176,7 +176,7 @@ class MeasurementCollector():
                 logger.critical(msg)
                 raise ExternalModuleException(msg)
 
-        message = Message(timestamp, (left_img, right_img))
+        message = Message(timestamp_str, (left_img, right_img))
         location = StereoImgDataLocation((left_img_file, right_img_file))
         return message, location
 
@@ -231,15 +231,19 @@ class MeasurementCollector():
             tuple[Message, BinaryDataLocation]: message with data and timestamp; 
                                                 measurement location.
         """
+
         it: FileIterator = self._sensor_data_iterators.get_file_iterator(
             sensor.name)
         __, line = next(it.iterator)
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
-        timestamp: Path = Path(line[0])
-        file: Path = storage.path / timestamp
+        timestamp: str = str(line[0])
+        timestamp_path: Path = Path(timestamp)
+        file: Path = storage.path / timestamp_path
         file = file.with_suffix(self.BINARY_EXTENSION)
-        message = self.__read_bin(file)
+        raw_data: npt.NDArray[np.float32] = self.__read_bin(file)
+        raw_data_tuple: tuple[float, ...] = tuple(raw_data)
+        message = Message(timestamp, raw_data_tuple)
         location = BinaryDataLocation(file)
         return message, location
 
@@ -262,9 +266,12 @@ class MeasurementCollector():
         self.__update_iterator(it.iterator, timestamp)
         storage: Storage = self._sensor_data_storages.get_data_location(
             sensor.name)
-        file: Path = storage.path / str(timestamp)
+        timestamp_str: str = str(timestamp)
+        file: Path = storage.path / timestamp_str
         file = file.with_suffix(self.BINARY_EXTENSION)
-        message = self.__read_bin(file)
+        raw_data = self.__read_bin(file)
+        raw_data = tuple(raw_data)
+        message = Message(timestamp_str, raw_data)
         location = BinaryDataLocation(file)
         return message, location
 
@@ -272,7 +279,7 @@ class MeasurementCollector():
     def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
         """
         Overloaded method.
-        Gets sensor`s measurement from png file for the given sensor sequantially with iterator.
+        Gets sensor`s measurement from a png file for the given sensor with the iterator sequantially.
 
         Args:
             sensor (StereoCamera): sensor to get measurement for.

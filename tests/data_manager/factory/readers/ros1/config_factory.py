@@ -79,21 +79,20 @@ class SM(SetupManager):
     sensor_factory: SensorFactory = field(default_factory=SF)
 
 
-imu_ros = RosSensorConfig(imu, '/imu_data')
+imu_ros = RosSensorConfig(imu, '/imu_topic')
 
-gps_ros = RosSensorConfig(gps, '/position_gps')
+gps_ros = RosSensorConfig(gps, '/gps_topic')
 
-stereo_ros = RosSensorConfig(stereo, "/camera")
+stereo_ros = RosSensorConfig(stereo, "/camera_topic")
 
-lidar_2D_middle_ros = RosSensorConfig(lidar_2D_middle, '/scan')
+lidar_2D_middle_ros = RosSensorConfig(lidar_2D_middle, '/scan_topic')
 
-    
       
 @dataclass
 class Ros1DS(Ros1):
-    deserialize_raw_data: bool = True
-    used_sensors: list[RosSensorConfig] = field(default_factory= lambda: [imu_ros, gps_ros, lidar_2D_middle_ros])
-    directory: str = field(default_factory=lambda: "/home/ilia/mySLAM/data/rosbag")
+    deserialize_raw_data: bool = False
+    used_sensors: list[RosSensorConfig] = field(default_factory= lambda: [imu_ros, gps_ros, lidar_2D_middle_ros, stereo_ros])
+    directory: str = field(default_factory=lambda: Path(__file__).parent)
 
 @dataclass
 class Memory(MemoryAnalyzer):
@@ -115,3 +114,4 @@ class Ros1DM(DataManager):
 class ConfigRos1:
     setup_manager: SetupManager = field(default_factory=SM)
     data_manager: DataManager = field(default_factory=Ros1DM)
+

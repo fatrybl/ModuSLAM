@@ -5,14 +5,14 @@ from typing import Type
 
 from slam.data_manager.factory.readers.ros1.ros1_reader import Ros1BagReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
-from tests.data_manager.Ros1Reader.data_factory import TestDataFactory
+from tests.data_manager.factory.readers.ros1.data_factory import TestDataFactory
 from slam.utils.exceptions import FileNotValid, TopicNotFound, NotSubset
 from slam.data_manager.factory.readers.ros1.dataset_iterator import RosElementLocation
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
-from configs.system.data_manager.manager import Regime, Stream
+from configs.system.data_manager.regime import Regime, Stream
 from configs.experiments.ros1.config import Ros1DS
 
 def test_unknown_file_scenario():
@@ -33,23 +33,22 @@ def test_unknown_topic_scenario():
 
 
 
-def test_ros_get_elements_in_time():
-    cfg: Ros1DS  = TestDataFactory.get_default_config()
-    regime: Regime = Stream()
 
-    reader = Ros1BagReader(cfg, regime)
-    sensor_imu: Imu = SensorFactory.name_to_sensor(TestDataFactory.imu.name)
-    sensor_lidar: Lidar2D = SensorFactory.name_to_sensor(TestDataFactory.lidar_2D_middle.name)
-    sensor_gps: Gps = SensorFactory.name_to_sensor(TestDataFactory.gps.name)
+
+def test_ros_get_elements_in_time(sensor_factory: SensorFactory, data_reader: Ros1BagReader):
+    sensor_imu: Type[Sensor] = sensor_factory.name_to_sensor(TestDataFactory.imu_ros.sensor.name)
+    sensor_lidar: Type[Sensor] = sensor_factory.name_to_sensor(TestDataFactory.lidar_2D_middle_ros.sensor.name)
+    sensor_gps: Type[Sensor] = sensor_factory.name_to_sensor(TestDataFactory.gps_ros.sensor.name)
+    
     
     time_range = TimeRange(start = 2, stop = 6)
     element_list = []
     
-    element: Element = reader.get_element(sensor_imu, time_range.start)
+    element: Element = data_reader.get_element(sensor_imu, time_range.start)
     element_list.append(element)
 
     while(element.timestamp < time_range.stop):
-        element: Element = reader.get_element(sensor_imu, None)
+        element: Element = data_reader.get_element(sensor_imu, None)
         if(element is None):
             break
         else:
@@ -57,15 +56,14 @@ def test_ros_get_elements_in_time():
 
     assert len(element_list) == 2
 
-
     time_range = TimeRange(4, 20)
     element_list = []
-    element: Element = reader.get_element(sensor_gps, time_range.start)
+    element: Element = data_reader.get_element(sensor_gps, time_range.start)
     current_timestamp = element.timestamp
     element_list.append(element)
 
     while 1:
-        element: Element = reader.get_element(sensor_gps, None)
+        element: Element = data_reader.get_element(sensor_gps, None)
         current_timestamp = element.timestamp
         if(current_timestamp > time_range.stop):
             break
@@ -76,12 +74,12 @@ def test_ros_get_elements_in_time():
     time_range = TimeRange(4, 20)
     element_list = []
 
-    element: Element = reader.get_element(sensor_lidar, time_range.start)
+    element: Element = data_reader.get_element(sensor_lidar, time_range.start)
     current_timestamp = element.timestamp
     element_list.append(element)
 
     while 1:
-        element: Element = reader.get_element(sensor_lidar, None)
+        element: Element = data_reader.get_element(sensor_lidar, None)
         current_timestamp = element.timestamp
         if(current_timestamp > time_range.stop):
             break
@@ -91,8 +89,9 @@ def test_ros_get_elements_in_time():
 
 
 
-scenario_all_sensors = ([TestDataFactory.imu, TestDataFactory.stereo, TestDataFactory.gps, TestDataFactory.lidar_2D_middle], 20)   
-scenario_half_sensors = ([TestDataFactory.imu, TestDataFactory.stereo], 10)
+
+scenario_all_sensors = ([TestDataFactory.imu_ros, TestDataFactory.stereo_ros, TestDataFactory.gps_ros, TestDataFactory.lidar_2D_middle_ros], 20)   
+scenario_half_sensors = ([TestDataFactory.imu_ros, TestDataFactory.stereo_ros], 10)
 
 success_scenarios = [scenario_all_sensors, scenario_half_sensors]
 @pytest.mark.parametrize(

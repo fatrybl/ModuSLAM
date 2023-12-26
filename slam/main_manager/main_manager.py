@@ -1,8 +1,5 @@
 import logging
 
-from configs.main_config import Config
-
-from slam.data_manager.factory.batch import DataBatch
 from slam.logger import logging_config
 from configs.main_config import Config
 from slam.setup_manager.setup_manager import SetupManager

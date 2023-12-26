@@ -12,9 +12,9 @@ from slam.data_manager.factory.readers.ros1.ros_manager import RosManager
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
 from slam.utils.auxiliary_dataclasses import TimeRange
-from configs.system.data_manager.manager import TimeLimit
-from configs.experiments.ros1.config import  SensorConfig
-from configs.system.data_manager.manager import Regime
+from configs.experiments.ros1.config import  RosSensorConfig
+
+from configs.system.data_manager.regime import Regime, TimeLimit
 from configs.system.data_manager.datasets.ros1 import Ros1
 
 from slam.setup_manager.sensor_factory.sensors import (
@@ -26,14 +26,14 @@ class Ros1BagReader(DataReader):
     def __init__(self, cfg : Ros1, regime_params: type[Regime]):
         super().__init__()
         self.deserialize_raw_data: bool = cfg.deserialize_raw_data
-        used_sensors: list[SensorConfig] = cfg.used_sensors
+        used_sensors_info: list[RosSensorConfig] = cfg.used_sensors
         self.__topic_sensor_dict: dict[str, Sensor] = dict()
-        self.__sensor_topic_dict: dict[Sensor, str] = dict()
-        for sensor_cfg in used_sensors:
-            sensor: Type[Sensor] = SensorFactory.name_to_sensor(sensor_cfg.name)
+        self.__sensor_topic_dict: dict[str, str] = dict()
+        for sensor_cfg in used_sensors_info:
+            sensor: Type[Sensor] = sensor_cfg.sensor
             topic: str = sensor_cfg.topic
             self.__topic_sensor_dict[topic] = sensor
-            self.__sensor_topic_dict[sensor] = topic
+            self.__sensor_topic_dict[sensor.name] = topic
         msg = f"available topics in RosReader: {self.__topic_sensor_dict.keys()}"  
         logger.debug(msg)
         master_file_dir: Path = Path(cfg.directory)
@@ -97,7 +97,7 @@ class Ros1BagReader(DataReader):
 
 
     @dispatch
-    def get_element(self, sensor: Sensor, init_time: Optional[int]) -> Element | None:
+    def get_element(self, q1: int, timestamp: int | None = None) -> None:
         """get elements from given locations
 
         Args:
@@ -105,9 +105,22 @@ class Ros1BagReader(DataReader):
         Returns:
             list[Element]: list of elements
         """
-        if(init_time):
-            topic: str = self.__sensor_topic_dict[sensor]
-            data_range = RosDataRange(topics=[topic], start = init_time)
+        print("here  I am")
+ 
+    
+    @dispatch
+    def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
+        """get elements from given locations
+
+        Args:
+            time_range (SensorData): sensor time
+        Returns:
+            list[Element]: list of elements
+        """
+        #print("here  I am")
+        if(timestamp):
+            topic: str = self.__sensor_topic_dict[sensor.name]
+            data_range = RosDataRange(topics=[topic], start = timestamp)
             self.__temp_dataset_iterator: RosDatasetIterator = self.__ros_manager.get_iterator(data_range)
 
         return self.__get_next_element(self.__temp_dataset_iterator)

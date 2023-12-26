@@ -1,29 +1,60 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+
 from slam.setup_manager.sensor_factory.sensors import (
     Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
 
 from configs.paths.kaist_dataset import KaistDatasetPath as KaistPaths
-from configs.system.data_manager.datasets.base_dataset import Dataset
-from configs.system.data_manager.memory import MemoryAnalyzer
-from configs.system.data_manager.regime import TimeLimit, Stream
-from configs.system.setup_manager.sensor_factory import Sensor, SensorFactory
-from configs.system.setup_manager.setup_manager import SetupManager
-from configs.system.data_manager.data_manager import DataManager, Regime
 from configs.system.data_manager.datasets.kaist import Kaist, Pair
+from configs.system.setup_manager.sensor_factory import Sensor, SensorFactory
+from configs.sensors.base_sensor_parameters import Parameter
 
-from configs.sensors.imu import ImuParameter
-from configs.sensors.fog import FogParameter
-from configs.sensors.encoder import EncoderParameter
-from configs.sensors.altimeter import AltimeterParameter
-from configs.sensors.gps import GpsParameter
-from configs.sensors.sick_back import SickBackParameter
-from configs.sensors.sick_middle import SickMiddleParameter
-from configs.sensors.stereo import StereoParameter
-from configs.sensors.velodyne_left import VelodyneLeftParameter
-from configs.sensors.velodyne_right import VelodyneRightParameter
-from configs.sensors.vrs_gps import VrsGpsParameter
+from .data_factory import DataFactory
+
+
+class ImuParameter(Parameter):
+    "some parameters"
+
+
+class FogParameter(Parameter):
+    "some parameters"
+
+
+class EncoderParameter(Parameter):
+    "some parameters"
+
+
+class AltimeterParameter(Parameter):
+    "some parameters"
+
+
+class GpsParameter(Parameter):
+    "some parameters"
+
+
+class VrsGpsParameter(Parameter):
+    "some parameters"
+
+
+class StereoParameter(Parameter):
+    "some parameters"
+
+
+class VelodyneLeftParameter(Parameter):
+    "some parameters"
+
+
+class VelodyneRightParameter(Parameter):
+    "some parameters"
+
+
+class SickBackParameter(Parameter):
+    "some parameters"
+
+
+class SickMiddleParameter(Parameter):
+    "some parameters"
 
 
 imu = Sensor('imu', Imu.__name__, ImuParameter())
@@ -44,19 +75,18 @@ lidar_2D_middle = Sensor(
 
 
 all_sensors: list[Sensor] = field(
-    default_factory=lambda: [
-        imu,
-        fog,
-        encoder,
-        stereo,
-        altimeter,
-        gps,
-        vrs_gps,
-        lidar_3D_right,
-        lidar_3D_left,
-        lidar_2D_middle,
-        lidar_2D_back
-    ])
+    default_factory=lambda: [imu,
+                             fog,
+                             encoder,
+                             stereo,
+                             altimeter,
+                             gps,
+                             vrs_gps,
+                             lidar_3D_right,
+                             lidar_3D_left,
+                             lidar_2D_middle,
+                             lidar_2D_back
+                             ])
 
 used_sensors: list[Sensor] = field(
     default_factory=lambda: [imu,
@@ -71,9 +101,7 @@ used_sensors: list[Sensor] = field(
                              lidar_2D_middle,
                              lidar_2D_back])
 
-
-dataset_directory: Path = Path("/home/oem/Downloads/urban18-highway/")
-
+dataset_directory: Path = DataFactory.TEST_DATA_DIR
 
 iterable_data_files: list[Pair] = field(default_factory=lambda: [
     Pair(imu.name, dataset_directory / KaistPaths.imu_data_file),
@@ -94,56 +122,24 @@ iterable_data_files: list[Pair] = field(default_factory=lambda: [
 ])
 
 data_dirs: list[Pair] = field(default_factory=lambda: [
-    Pair(stereo.name,
-         dataset_directory / KaistPaths.image_data_dir),
-    Pair(lidar_2D_back.name,
-         dataset_directory / KaistPaths.lidar_2D_back_dir),
-    Pair(lidar_2D_middle.name,
-         dataset_directory / KaistPaths.lidar_2D_middle_dir),
-    Pair(lidar_3D_left.name,
-         dataset_directory / KaistPaths.lidar_3D_left_dir),
-    Pair(lidar_3D_right.name,
-         dataset_directory / KaistPaths.lidar_3D_right_dir),
+    Pair(stereo.name, dataset_directory / KaistPaths.image_data_dir),
+    Pair(lidar_2D_back.name, dataset_directory / KaistPaths.lidar_2D_back_dir),
+    Pair(lidar_2D_middle.name, dataset_directory /
+         KaistPaths.lidar_2D_middle_dir),
+    Pair(lidar_3D_left.name, dataset_directory / KaistPaths.lidar_3D_left_dir),
+    Pair(lidar_3D_right.name, dataset_directory / KaistPaths.lidar_3D_right_dir),
 ])
 
 
 @dataclass
-class KaistDS(Kaist):
-    directory: Path = dataset_directory
-    iterable_data_files: list[Pair] = iterable_data_files
-    data_dirs: list[Pair] = data_dirs
-
-
-@dataclass
-class Memory(MemoryAnalyzer):
-    graph_memory: float = 30.0
-
-
-@dataclass
-class Range(TimeLimit):
-    start: int = 1544578498418802396
-    stop: int = 1544578498428802229
-
-
-@dataclass
-class SF(SensorFactory):
+class SensorFactoryConfig(SensorFactory):
     all_sensors: list[Sensor] = all_sensors
     used_sensors: list[Sensor] = used_sensors
 
 
 @dataclass
-class SM(SetupManager):
-    sensor_factory: SensorFactory = field(default_factory=SF)
+class KaistReaderConfig(Kaist):
+    directory: Path = DataFactory.TEST_DATA_DIR
+    iterable_data_files: list[Pair] = iterable_data_files
+    data_dirs: list[Pair] = data_dirs
 
-
-@dataclass
-class DM(DataManager):
-    dataset: Dataset = field(default_factory=KaistDS)
-    memory: MemoryAnalyzer = field(default_factory=Memory)
-    regime: Regime = field(default_factory=Stream)
-
-
-@dataclass
-class Config:
-    setup_manager: SetupManager = field(default_factory=SM)
-    data_manager: DataManager = field(default_factory=DM)

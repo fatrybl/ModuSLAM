@@ -1,13 +1,15 @@
 import logging
 
 from typing import Type
-from pathlib import Path
+from configs.sensors.base_sensor_parameters import Parameter
 
 from slam.utils.exceptions import NotSubset, SensorNotFound
 from slam.utils.meta_singleton import MetaSingleton
-from configs.system.setup_manager.setup import SensorConfig, SetupManager as SetupManagerConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
+
+from configs.system.setup_manager.sensor_factory import SensorFactory as Config
+from configs.system.setup_manager.sensor_factory import Sensor as SensorConfig
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +30,9 @@ class SensorFactory(metaclass=MetaSingleton):
     all_sensors: set[Type[Sensor]] = set()
     used_sensors: set[Type[Sensor]] = set()
 
-    def __init__(self, cfg: SetupManagerConfig):
+    def __init__(self, cfg: Config):
         self.__all_sensors_list: list[SensorConfig] = cfg.all_sensors
         self.__used_sensors_list: list[SensorConfig] = cfg.used_sensors
-        self.__sensor_config_dir: Path = cfg.sensor_config_dir
         self._init_sesnors()
         self._check_used_sesnors()
 
@@ -100,34 +101,34 @@ class SensorFactory(metaclass=MetaSingleton):
         """
         name: str = item.name
         sensor_type: str = item.type
-        config_file: Path = self.__sensor_config_dir / item.config_name
+        cfg: Parameter = item.config
 
         if sensor_type == Imu.__name__:
-            return Imu(name, config_file)
+            return Imu(name, cfg)
 
         elif sensor_type == Fog.__name__:
-            return Fog(name, config_file)
+            return Fog(name, cfg)
 
         elif sensor_type == Altimeter.__name__:
-            return Altimeter(name, config_file)
+            return Altimeter(name, cfg)
 
         elif sensor_type == Lidar2D.__name__:
-            return Lidar2D(name, config_file)
+            return Lidar2D(name, cfg)
 
         elif sensor_type == Lidar3D.__name__:
-            return Lidar3D(name, config_file)
+            return Lidar3D(name, cfg)
 
         elif sensor_type == Encoder.__name__:
-            return Encoder(name, config_file)
+            return Encoder(name, cfg)
 
         elif sensor_type == StereoCamera.__name__:
-            return StereoCamera(name, config_file)
+            return StereoCamera(name, cfg)
 
         elif sensor_type == Gps.__name__:
-            return Gps(name, config_file)
+            return Gps(name, cfg)
 
         elif sensor_type == VrsGps.__name__:
-            return VrsGps(name, config_file)
+            return VrsGps(name, cfg)
 
         else:
             msg = f'unsupported sensor type: {sensor_type}'
