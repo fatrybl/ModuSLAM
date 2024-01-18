@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
-from configs.system.setup_manager.setup_manager import SetupManagerConfig
-from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
 from configs.system.backend_manager.backend_manager import BackendManagerConfig
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
+from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
 from configs.system.map_manager.map_manager import MapManagerConfig
+from configs.system.setup_manager.setup_manager import SetupManagerConfig
 
 
 @dataclass
