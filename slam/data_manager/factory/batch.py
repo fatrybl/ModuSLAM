@@ -24,7 +24,7 @@ class DataBatch:
             self._set.add(new_element)
             self._deque.append(new_element)
         else:
-            msg = f"Skipping duplicate element!"
+            msg = "Skipping duplicate element!"
             logger.info(msg)
 
     def delete_first(self) -> None:
@@ -42,9 +42,7 @@ class DataBatch:
         self._set.remove(el)
 
     def sort(self) -> None:
-        self._deque = deque(sorted(
-            self._deque,
-            key=lambda element: element.timestamp))
+        self._deque = deque(sorted(self._deque, key=lambda element: element.timestamp))
 
     def empty(self) -> bool:
         """
@@ -73,7 +71,3 @@ class DataBatch:
     @property
     def size_bytes(self) -> int:
         raise NotImplementedError
-
-    @data.deleter
-    def data(self):
-        del self._data
