@@ -1,5 +1,6 @@
-from typing import Type
 from dataclasses import dataclass
+from typing import Type
+
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
