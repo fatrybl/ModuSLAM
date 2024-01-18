@@ -14,15 +14,26 @@ from configs.sensors.velodyne_left import VelodyneLeftParameter
 from configs.sensors.velodyne_right import VelodyneRightParameter
 from configs.sensors.vrs_gps import VrsGpsParameter
 from configs.system.backend_manager.backend_manager import BackendManagerConfig
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig, RegimeConfig
-from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
+from configs.system.data_manager.batch_factory.batch_factory import (
+    BatchFactoryConfig,
+    RegimeConfig,
+)
+from configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
+from configs.system.data_manager.batch_factory.datasets.kaist import (
+    KaistConfig,
+    PairConfig,
+)
 from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
 from configs.system.data_manager.batch_factory.regime import TimeLimitConfig
 from configs.system.data_manager.data_manager import DataManagerConfig
 from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
 from configs.system.map_manager.map_manager import MapManagerConfig
-from configs.system.setup_manager.sensor_factory import SensorConfig, SensorFactoryConfig
+from configs.system.setup_manager.sensor_factory import (
+    SensorConfig,
+    SensorFactoryConfig,
+)
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
 from slam.setup_manager.sensor_factory.sensors import (
     Altimeter,

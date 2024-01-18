@@ -4,7 +4,9 @@ from pathlib import Path
 from omegaconf import MISSING
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
-from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
+from configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
 
 
 @dataclass

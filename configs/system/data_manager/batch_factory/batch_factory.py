@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 
-from configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
+from configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
 from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
 
