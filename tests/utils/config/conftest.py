@@ -1,9 +1,11 @@
-import pytest
 from pathlib import Path
+
+import pytest
+
 from .test_config import PATHS
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def clean():
     # Will be executed before the first test
     yield

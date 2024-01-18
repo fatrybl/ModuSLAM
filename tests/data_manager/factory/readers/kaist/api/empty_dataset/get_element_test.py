@@ -1,24 +1,23 @@
 from typing import Type
+
+from hydra.core.config_store import ConfigStore
+from omegaconf import DictConfig
 from pytest import fixture, raises
 
-from omegaconf import DictConfig
-from hydra.core.config_store import ConfigStore
-
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensor_factory.sensors import Encoder
 from slam.utils.exceptions import FileNotValid
-
-from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.readers.kaist.conftest import (
-    DATASET_CONFIG_NAME, REGIME_CONFIG_NAME, Fixture)
-
-from .data import el1, DatasetStructure
+    DATASET_CONFIG_NAME,
+    Fixture,
+    REGIME_CONFIG_NAME,
+)
 from .config import KaistReaderConfig
-
+from .data import DatasetStructure, el1
 
 """
 Tests description:
@@ -34,7 +33,7 @@ Tests description:
 """
 
 
-@fixture(scope='class')
+@fixture(scope="class")
 def register_configs() -> None:
     cs = ConfigStore.instance()
     cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
@@ -49,16 +48,21 @@ def generate_dataset():
 
 class TestGetElement:
     """
-    All test should raise FileNotValidException as KaistReader object cannot be initialized properly 
+    All test should raise FileNotValidException as KaistReader object cannot be initialized properly
     with empty '.csv' files. The Reader checks file validity before initializing files` iterators.
     """
 
     timestamp: int = 1
-    sensor = Encoder('encoder', DictConfig({"params": ()}))
+    sensor = Encoder("encoder", DictConfig({"params": ()}))
     element: Element = el1
 
-    def test_get_element_1(self, register_configs: Fixture, generate_dataset: Fixture,
-                           dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_get_element_1(
+        self,
+        register_configs: Fixture,
+        generate_dataset: Fixture,
+        dataset_cfg: Type[KaistConfig],
+        regime_cfg: Type[RegimeConfig],
+    ):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
             reader.get_element()

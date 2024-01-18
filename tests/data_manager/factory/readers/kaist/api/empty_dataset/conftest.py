@@ -1,19 +1,19 @@
 from shutil import rmtree
-from pytest import fixture
 
 from hydra.core.config_store import ConfigStore
-
-from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
+from pytest import fixture
 
 from configs.system.data_manager.batch_factory.regime import StreamConfig
-
-from tests.data_manager.factory.readers.kaist.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
-
-from .data import DatasetStructure
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.conftest import (
+    DATASET_CONFIG_NAME,
+    REGIME_CONFIG_NAME,
+)
 from .config import KaistReaderConfig
+from .data import DatasetStructure
 
 
-@fixture(scope='class')
+@fixture(scope="class")
 def register_configs() -> None:
     cs = ConfigStore.instance()
     cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
@@ -26,7 +26,7 @@ def generate_dataset():
     data_factory.create_dataset_structure()
 
 
-@fixture(scope='class', autouse=True)
+@fixture(scope="class", autouse=True)
 def clean():
     yield
     rmtree(DatasetStructure.dataset_directory)

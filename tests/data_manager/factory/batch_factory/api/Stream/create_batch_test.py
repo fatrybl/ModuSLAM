@@ -1,26 +1,28 @@
 from collections import deque
-from pytest import mark
 
 from PIL.Image import Image
+from pytest import mark
 
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
-
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-
 from tests.data_manager.factory.batch_factory.conftest import Fixture
-from .data import elements_batch, kaist_dataset_deque_scenario, kaist_dataset_requests_scenarios
+from .data import (
+    elements_batch,
+    kaist_dataset_deque_scenario,
+    kaist_dataset_requests_scenarios,
+)
 
 
 class TestBatchFactoryKaistDataset:
     """
     Tests create_batch() method of a BatchFactory with Kaist Urban based dataset.
 
-    Args: 
+    Args:
         kaist_batch_factory (BatchFactory): BatchFactory for particular Kaist Urban Dataset.
-        scenario (tuple[set[PeriodicData], DataBatch]):test scenario: set of PeriodicData requests and 
+        scenario (tuple[set[PeriodicData], DataBatch]):test scenario: set of PeriodicData requests and
             resulting DataBatch.
     """
 
@@ -33,8 +35,7 @@ class TestBatchFactoryKaistDataset:
         assert len(result_batch.data) == len(reference_batch.data)
 
         for el1, el2 in zip(result_batch.data, reference_batch.data):
-            if (isinstance(el1.measurement.values[0], Image) and
-                    isinstance(el2.measurement.values[0], Image)):
+            if isinstance(el1.measurement.values[0], Image) and isinstance(el2.measurement.values[0], Image):
                 assert DataFactory.equal_images(el1, el2) is True
             else:
                 assert el1 == el2
@@ -49,18 +50,17 @@ class TestBatchFactoryKaistDataset:
         assert len(result_batch.data) == len(reference_batch.data)
 
         for el1, el2 in zip(result_batch.data, reference_batch.data):
-            if (isinstance(el1.measurement.values[0], Image) and
-                    isinstance(el2.measurement.values[0], Image)):
+            if isinstance(el1.measurement.values[0], Image) and isinstance(el2.measurement.values[0], Image):
                 assert DataFactory.equal_images(el1, el2) is True
             else:
                 assert el1 == el2
 
-    @mark.parametrize("scenario",
-                      (kaist_dataset_requests_scenarios))
-    def test_create_batch_3(self,
-                            kaist_batch_factory: BatchFactory,
-                            scenario: tuple[set[PeriodicData], DataBatch]):
-
+    @mark.parametrize("scenario", (kaist_dataset_requests_scenarios))
+    def test_create_batch_3(
+        self,
+        kaist_batch_factory: BatchFactory,
+        scenario: tuple[set[PeriodicData], DataBatch],
+    ):
         requests: set[PeriodicData] = scenario[0]
         reference_batch: DataBatch = scenario[1]
         reference_batch.sort()
@@ -71,8 +71,7 @@ class TestBatchFactoryKaistDataset:
         assert len(result_batch.data) == len(reference_batch.data)
 
         for el1, el2 in zip(result_batch.data, reference_batch.data):
-            if (isinstance(el1.measurement.values[0], Image) and
-                    isinstance(el2.measurement.values[0], Image)):
+            if isinstance(el1.measurement.values[0], Image) and isinstance(el2.measurement.values[0], Image):
                 assert DataFactory.equal_images(el1, el2) is True
             else:
                 assert el1 == el2

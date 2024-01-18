@@ -1,26 +1,26 @@
 from shutil import rmtree
-from pytest import fixture
 
 from hydra.core.config_store import ConfigStore
-
-from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
+from pytest import fixture
 
 from configs.system.data_manager.batch_factory.regime import StreamConfig
-
-from tests.data_manager.factory.readers.kaist.conftest import DATASET_CONFIG_NAME, REGIME_CONFIG_NAME
-
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
+from tests.data_manager.factory.readers.kaist.conftest import (
+    DATASET_CONFIG_NAME,
+    REGIME_CONFIG_NAME,
+)
+from .config import KaistReaderConfig
 from .data import (
     DatasetStructure,
-    data_stamp,
-    stamp_files,
-    csv_data,
     binary_data,
-    image_data)
+    csv_data,
+    data_stamp,
+    image_data,
+    stamp_files,
+)
 
-from .config import KaistReaderConfig
 
-
-@fixture(scope='class', autouse=True)
+@fixture(scope="class", autouse=True)
 def register_configs() -> None:
     cs = ConfigStore.instance()
     cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
@@ -31,15 +31,10 @@ def register_configs() -> None:
 def generate_dataset():
     data_factory = DataFactory(DatasetStructure())
     data_factory.create_dataset_structure()
-    data_factory.generate_data(
-        data_stamp,
-        stamp_files,
-        csv_data,
-        binary_data,
-        image_data)
+    data_factory.generate_data(data_stamp, stamp_files, csv_data, binary_data, image_data)
 
 
-@fixture(scope='class', autouse=True)
+@fixture(scope="class", autouse=True)
 def clean():
     yield
     rmtree(DatasetStructure.dataset_directory)
