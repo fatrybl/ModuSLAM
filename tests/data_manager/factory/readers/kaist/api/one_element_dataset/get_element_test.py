@@ -11,6 +11,7 @@ from tests.data_manager.auxiliary_utils.kaist_data_factory import (
     DataFactory,
     SensorElementPair,
 )
+
 from .data import elements, sensor_element_pairs
 
 """

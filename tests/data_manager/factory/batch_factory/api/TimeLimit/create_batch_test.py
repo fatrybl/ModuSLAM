@@ -1,8 +1,8 @@
 from collections import deque
 
-from PIL.Image import Image
 from hydra import compose, initialize_config_module
 from hydra.core.config_store import ConfigStore
+from PIL.Image import Image
 from pytest import mark
 
 from slam.data_manager.factory.batch import DataBatch
@@ -15,6 +15,7 @@ from tests.data_manager.factory.batch_factory.conftest import (
     CONFIG_MODULE_DIR,
     Fixture,
 )
+
 from .config import BFConfig
 from .data import incorrect_scenario, periodic_request_scenarios, scenarios
 

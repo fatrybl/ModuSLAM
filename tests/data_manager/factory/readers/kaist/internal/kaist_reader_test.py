@@ -1,16 +1,15 @@
 from pathlib import Path
 from typing import Type
+
 from pytest import raises
 
-from slam.utils.exceptions import FileNotValid
-from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-
-from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import (
     KaistConfig,
     PairConfig,
 )
-
+from configs.system.data_manager.batch_factory.regime import RegimeConfig
+from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from slam.utils.exceptions import FileNotValid
 from tests.data_manager.factory.readers.kaist.conftest import Fixture
 
 

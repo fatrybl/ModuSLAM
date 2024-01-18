@@ -2,10 +2,10 @@ from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image
 from hydra import compose, initialize_config_module
 from hydra.core.config_store import ConfigStore
 from numpy import ones, uint8
+from PIL import Image
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig

@@ -13,6 +13,7 @@ from tests.data_manager.factory.batch_factory.conftest import (
     CONFIG_MODULE_DIR,
     SENSOR_FACTORY_CONFIG_NAME,
 )
+
 from .config import BFConfig, SFConfig
 from .data import (
     DatasetStructure,

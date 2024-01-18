@@ -13,9 +13,10 @@ from slam.utils.exceptions import FileNotValid
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.readers.kaist.conftest import (
     DATASET_CONFIG_NAME,
-    Fixture,
     REGIME_CONFIG_NAME,
+    Fixture,
 )
+
 from .config import KaistReaderConfig
 from .data import DatasetStructure, el1
 

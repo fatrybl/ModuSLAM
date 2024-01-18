@@ -9,6 +9,7 @@ from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.batch_factory.conftest import Fixture
+
 from .data import (
     elements_batch,
     kaist_dataset_deque_scenario,

@@ -9,6 +9,7 @@ from tests.data_manager.factory.readers.kaist.conftest import (
     DATASET_CONFIG_NAME,
     REGIME_CONFIG_NAME,
 )
+
 from .config import KaistReaderConfig
 from .data import (
     DatasetStructure,

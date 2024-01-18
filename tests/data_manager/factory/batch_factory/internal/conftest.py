@@ -11,6 +11,7 @@ from tests.data_manager.factory.batch_factory.conftest import (
     BATCH_FACTORY_CONFIG_NAME,
     CONFIG_MODULE_DIR,
 )
+
 from .config import BFConfig
 from .data import (
     DatasetStructure,

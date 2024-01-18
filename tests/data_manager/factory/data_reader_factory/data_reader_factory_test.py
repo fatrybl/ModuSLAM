@@ -1,11 +1,11 @@
-import pytest
-from pytest import mark
 from typing import Type
 
+import pytest
 from hydra import compose, initialize_config_module
+from pytest import mark
 
-from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 """

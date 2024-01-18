@@ -3,8 +3,8 @@ from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Type
 
-import numpy.typing as npt
 import numpy as np
+import numpy.typing as npt
 from PIL import Image
 
 from slam.data_manager.factory.readers.element_factory import Element
