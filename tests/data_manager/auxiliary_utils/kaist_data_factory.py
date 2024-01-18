@@ -51,10 +51,7 @@ class DataFactory:
         el1_array_img2 = np.asarray(el1.measurement.values[1])
         el2_array_img1 = np.asarray(el2.measurement.values[0])
         el2_array_img2 = np.asarray(el2.measurement.values[1])
-        result = (np.array_equal(el1_array_img1,
-                                 el2_array_img1)
-                  and np.array_equal(el1_array_img2,
-                                     el2_array_img2))
+        result = np.array_equal(el1_array_img1, el2_array_img1) and np.array_equal(el1_array_img2, el2_array_img2)
         return result
 
     @staticmethod
@@ -76,41 +73,41 @@ class DataFactory:
 
     def to_binary_file(self, data: tuple[float, ...], path: Path) -> None:
         """
-        Writes data to a binary file with floating point representation (float32) 
+        Writes data to a binary file with floating point representation (float32)
         due to lidar measurements format in Kaist Urban Dataset.
 
         Args:
             data (tuple[float]): data to be written.
             path (Path): binary file path.
         """
-        with open(path, 'wb') as output_file:
+        with open(path, "wb") as output_file:
             numpy_array = np.asarray(data, dtype=np.float32)
             numpy_array.tofile(output_file)
 
-    def to_csv_file(self,
-                    data: Iterable[Iterable[int | str]] | Iterable[float | int],
-                    path: Path,
-                    multilines: bool = False) -> None:
+    def to_csv_file(
+        self,
+        data: Iterable[Iterable[int | str]] | Iterable[float | int],
+        path: Path,
+        multilines: bool = False,
+    ) -> None:
         """
         Writes data to a CSV file.
 
         Args:
-            data (Iterable[Iterable[int | str]] | Iterable[float | int]): 
+            data (Iterable[Iterable[int | str]] | Iterable[float | int]):
                 data to be written to a CSV file.
             path (Path): file path.
-            multilines (bool, optional): If True: writes list[list[str]] to the file. 
+            multilines (bool, optional): If True: writes list[list[str]] to the file.
             Defaults to False.
         """
-        with open(path, 'a', encoding='UTF8', newline='') as outfile:
+        with open(path, "a", encoding="UTF8", newline="") as outfile:
             writer = csv.writer(outfile)
             if multilines:
                 writer.writerows(data)
             else:
                 writer.writerow(data)
 
-    def to_img_file(self,
-                    data: tuple[int, npt.NDArray[np.uint8]],
-                    path: Path) -> None:
+    def to_img_file(self, data: tuple[int, npt.NDArray[np.uint8]], path: Path) -> None:
         """
         Writes image to the given file path with OpenCV module.
 
@@ -126,24 +123,23 @@ class DataFactory:
         Creates Kaist Urban dataset empty directories & files structure.
         """
         for field in fields(self.dataset_structure):
-
             field_name: str = field.name
-            field_value: Path | str = getattr(
-                self.dataset_structure, field_name)
+            field_value: Path | str = getattr(self.dataset_structure, field_name)
 
             if isinstance(field_value, Path):
-
-                if field_value.suffix == '':
+                if field_value.suffix == "":
                     Path.mkdir(field_value, parents=True, exist_ok=True)
                 else:
                     Path.touch(field_value)
 
-    def generate_data(self,
-                      data_stamp: list[list[int | str]],
-                      stamp_files: list[tuple[list[int], Path]],
-                      csv_data: list[tuple[tuple[float, ...], Path]],
-                      binary_data: list[tuple[tuple[float, ...], Path]],
-                      image_data: list[tuple[tuple[int, npt.NDArray[np.uint8]], Path]]) -> None:
+    def generate_data(
+        self,
+        data_stamp: list[list[int | str]],
+        stamp_files: list[tuple[list[int], Path]],
+        csv_data: list[tuple[tuple[float, ...], Path]],
+        binary_data: list[tuple[tuple[float, ...], Path]],
+        image_data: list[tuple[tuple[int, npt.NDArray[np.uint8]], Path]],
+    ) -> None:
         """
         Writes data to the directories & files.
 
@@ -155,8 +151,7 @@ class DataFactory:
             image_data (list[tuple[tuple[int, npt.NDArray[np.float32]], Path]]): sensor data in image-based format.
         """
 
-        self.to_csv_file(
-            data_stamp, self.dataset_structure.data_stamp, multilines=True)
+        self.to_csv_file(data_stamp, self.dataset_structure.data_stamp, multilines=True)
 
         for element, path in stamp_files:
             self.to_csv_file(element, path)

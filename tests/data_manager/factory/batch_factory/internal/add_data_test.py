@@ -24,29 +24,34 @@ each sensor request:
 
 
 class TestBatchFactoryKaistDataset:
-
     @mark.parametrize("scenario", (encoder_scenarios))
-    def test_add_data_csv(self,
-                          kaist_batch_factory: BatchFactory,
-                          scenario: tuple[PeriodicData, DataBatch]):
+    def test_add_data_csv(
+        self,
+        kaist_batch_factory: BatchFactory,
+        scenario: tuple[PeriodicData, DataBatch],
+    ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
         kaist_batch_factory._add_data(request)
         assert kaist_batch_factory.batch.data == reference_batch.data
 
     @mark.parametrize("scenario", (lidar2D_scenarios))
-    def test_add_data_bin(self,
-                          kaist_batch_factory: BatchFactory,
-                          scenario: tuple[PeriodicData, DataBatch]):
+    def test_add_data_bin(
+        self,
+        kaist_batch_factory: BatchFactory,
+        scenario: tuple[PeriodicData, DataBatch],
+    ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
         kaist_batch_factory._add_data(request)
         assert kaist_batch_factory.batch.data == reference_batch.data
 
     @mark.parametrize("scenario", (stereo_scenarios))
-    def test_add_data_imgs(self,
-                           kaist_batch_factory: BatchFactory,
-                           scenario: tuple[PeriodicData, DataBatch]):
+    def test_add_data_imgs(
+        self,
+        kaist_batch_factory: BatchFactory,
+        scenario: tuple[PeriodicData, DataBatch],
+    ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
 

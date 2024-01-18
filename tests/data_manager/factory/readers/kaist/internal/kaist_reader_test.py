@@ -6,7 +6,10 @@ from slam.utils.exceptions import FileNotValid
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig, PairConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import (
+    KaistConfig,
+    PairConfig,
+)
 
 from tests.data_manager.factory.readers.kaist.conftest import Fixture
 
@@ -16,8 +19,13 @@ class TestKaistReader:
     Tests for KaistReader constructor.
     """
 
-    def test_kaist_reader(self, generate_dataset: Fixture, register_configs: Fixture,
-                          dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_kaist_reader(
+        self,
+        generate_dataset: Fixture,
+        register_configs: Fixture,
+        dataset_cfg: Type[KaistConfig],
+        regime_cfg: Type[RegimeConfig],
+    ):
         """
         Successfull KaistReader creation with proper configuration when the dataset exists and not empty.
         """
@@ -30,7 +38,7 @@ class TestKaistReader:
         Unsuccessfull KaistReader creation with improper configuration: dataset path.
         """
 
-        dataset_cfg.directory = Path('some/invalid/dataset/path')
+        dataset_cfg.directory = Path("some/invalid/dataset/path")
 
         with raises(FileNotValid):
             KaistReader(dataset_cfg, regime_cfg)
@@ -41,8 +49,7 @@ class TestKaistReader:
         """
 
         dataset_cfg.iterable_data_files: list[PairConfig] = [
-            PairConfig(sensor_name='some_sensor',
-                       location=Path('some/invalid/sensor_data.csv'))
+            PairConfig(sensor_name="some_sensor", location=Path("some/invalid/sensor_data.csv"))
         ]
 
         with raises(FileNotValid):

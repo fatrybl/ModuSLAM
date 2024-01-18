@@ -14,11 +14,7 @@ Test description:
 """
 
 
-@mark.parametrize(
-    ("overrides", "result"),
-    [(["type=Kaist"],
-     KaistReader)]
-)
+@mark.parametrize(("overrides", "result"), [(["type=Kaist"], KaistReader)])
 def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader]):
     with initialize_config_module(config_module="data_reader_factory.conf"):
         cfg = compose(config_name="config", overrides=overrides)
@@ -28,11 +24,7 @@ def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader
         assert reader == result
 
 
-@mark.parametrize(
-    ("overrides", "exception"),
-    [(["type=SomeUnsupportedType"],
-      NotImplementedError)]
-)
+@mark.parametrize(("overrides", "exception"), [(["type=SomeUnsupportedType"], NotImplementedError)])
 def test_DataReaderFactory_exception(overrides: list[str], exception: Type[Exception]):
     with initialize_config_module(config_module="data_reader_factory.conf"):
         cfg = compose(config_name="config", overrides=overrides)
