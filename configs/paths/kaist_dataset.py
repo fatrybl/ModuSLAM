@@ -5,9 +5,10 @@ from pathlib import Path
 @dataclass(frozen=True)
 class KaistDatasetPathConfig:
     """
-    dataset format from 
+    dataset format from
     https://sites.google.com/view/complex-urban-dataset/format"
     """
+
     sensor_data_dir = Path("sensor_data")
     image_data_dir = Path("image")
     calibration_data_dir = Path("calibration")

@@ -13,13 +13,9 @@ class BaseConfig:
     Base configuration of the system. Cannot be used directly.
     To be overridden by other configs only.
     """
-    setup_manager: SetupManagerConfig = field(
-        default_factory=SetupManagerConfig)
-    data_manager: BatchFactoryConfig = field(
-        default_factory=BatchFactoryConfig)
-    frontend_manager: FrontendManagerConfig = field(
-        default_factory=FrontendManagerConfig)
-    backend_manager: BackendManagerConfig = field(
-        default_factory=BackendManagerConfig)
-    map_manager: MapManagerConfig = field(
-        default_factory=MapManagerConfig)
+
+    setup_manager: SetupManagerConfig = field(default_factory=SetupManagerConfig)
+    data_manager: BatchFactoryConfig = field(default_factory=BatchFactoryConfig)
+    frontend_manager: FrontendManagerConfig = field(default_factory=FrontendManagerConfig)
+    backend_manager: BackendManagerConfig = field(default_factory=BackendManagerConfig)
+    map_manager: MapManagerConfig = field(default_factory=MapManagerConfig)

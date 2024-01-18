@@ -1,4 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
 from omegaconf import MISSING
 
 
@@ -7,4 +8,5 @@ class MapManagerConfig:
     """
     Config for MapManager.
     """
+
     params = MISSING

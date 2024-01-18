@@ -10,4 +10,5 @@ class Ros1Config(DatasetConfig):
     """
     Base parameters for any Ros 1 dataset.
     """
+
     some_params: str = MISSING

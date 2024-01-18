@@ -5,5 +5,4 @@ from configs.system.data_manager.batch_factory.batch_factory import BatchFactory
 
 @dataclass
 class DataManagerConfig:
-    batch_factory: BatchFactoryConfig = field(
-        default_factory=BatchFactoryConfig)
+    batch_factory: BatchFactoryConfig = field(default_factory=BatchFactoryConfig)

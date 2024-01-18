@@ -8,4 +8,5 @@ class MemoryAnalyzerConfig:
     """
     Configures MemoryAnalyzer
     """
-    graph_memory: float = field(default=MISSING, metadata={'units': 'percent'})
+
+    graph_memory: float = field(default=MISSING, metadata={"units": "percent"})

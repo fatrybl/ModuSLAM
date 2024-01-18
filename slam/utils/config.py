@@ -46,8 +46,7 @@ class Config:
             return False
 
         if self._file_type != ".yaml":
-            logger.critical(
-                f"The type of config file {self._file_type} is not valid")
+            logger.critical(f"The type of config file {self._file_type} is not valid")
             return False
 
         if self.file_path.stat().st_size == 0:
@@ -62,8 +61,7 @@ class Config:
                 self._attributes = safe_load(f)
 
         except OSError:
-            logger.critical(
-                f"Config file {self.file_path} is corrupted and has not been loaded properly")
+            logger.critical(f"Config file {self.file_path} is corrupted and has not been loaded properly")
             sys.exit(1)
 
     @classmethod
@@ -78,7 +76,7 @@ class Config:
 
     def to_file(self, file_path: Path) -> None:
         try:
-            with open(file_path, 'w') as outfile:
+            with open(file_path, "w") as outfile:
                 safe_dump(self._attributes, outfile)
         except OSError:
-            logger.exception(f'can not save config to file: {file_path}')
+            logger.exception(f"can not save config to file: {file_path}")

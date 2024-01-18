@@ -8,5 +8,5 @@ class SetupManagerConfig:
     """
     Config for SetupManager.
     """
-    sensor_factory: SensorFactoryConfig = field(
-        default_factory=SensorFactoryConfig)
+
+    sensor_factory: SensorFactoryConfig = field(default_factory=SensorFactoryConfig)

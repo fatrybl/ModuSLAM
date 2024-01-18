@@ -10,6 +10,7 @@ class SensorConfig:
     """
     Configures the sensor.
     """
+
     name: str = MISSING
     type: str = MISSING
     config: ParameterConfig = MISSING

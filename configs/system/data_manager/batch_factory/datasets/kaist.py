@@ -12,6 +12,7 @@ class PairConfig:
     """
     Pair of unique sensor name and sensor data location.
     """
+
     sensor_name: str
     location: Path
 
@@ -22,18 +23,22 @@ class KaistConfig(DatasetConfig):
     Kaist Urban Dataset parameters.
     """
 
-    type: str = 'Kaist'
+    type: str = "Kaist"
 
-    name: str = 'Kaist Urban Dataset'
+    name: str = "Kaist Urban Dataset"
 
-    url: str = 'https://sites.google.com/view/complex-urban-dataset'
+    url: str = "https://sites.google.com/view/complex-urban-dataset"
 
     paths: KaistDatasetPathConfig = field(
         default_factory=KaistDatasetPathConfig,
-        metadata={'description': 'relative paths of Kaist Urban Dataset files & directories'})
+        metadata={"description": "relative paths of Kaist Urban Dataset files & directories"},
+    )
 
-    iterable_data_files: list[PairConfig] = field(metadata={
-        'description': 'iterable data files: pairs of (<SENSOR_NAME>, <DATA_PATH>)'}, default_factory=MISSING)
+    iterable_data_files: list[PairConfig] = field(
+        metadata={"description": "iterable data files: pairs of (<SENSOR_NAME>, <DATA_PATH>)"},
+        default_factory=MISSING,
+    )
 
-    data_dirs: list[PairConfig] = field(metadata={
-        'description': 'directories containing data files'}, default_factory=MISSING)
+    data_dirs: list[PairConfig] = field(
+        metadata={"description": "directories containing data files"}, default_factory=MISSING
+    )

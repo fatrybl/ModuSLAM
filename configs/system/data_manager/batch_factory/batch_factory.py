@@ -10,6 +10,7 @@ class BatchFactoryConfig:
     """
     Configures DataManager.
     """
+
     regime: RegimeConfig = field(default_factory=RegimeConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)
     memory: MemoryAnalyzerConfig = field(default_factory=MemoryAnalyzerConfig)

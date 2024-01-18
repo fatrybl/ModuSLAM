@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from omegaconf import MISSING
 
@@ -8,4 +8,5 @@ class FrontendManagerConfig:
     """
     Config for SetupManager.
     """
+
     params = MISSING
