@@ -2,12 +2,11 @@ import logging
 
 from plum import dispatch
 
+from configs.system.data_manager.data_manager import DataManagerConfig
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.meta_singleton import MetaSingleton
-
-from configs.system.data_manager.data_manager import DataManagerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +43,7 @@ class DataManager(metaclass=MetaSingleton):
 
     @dispatch
     def make_batch(self, requests: set[PeriodicData]) -> None:
-        """Creates a data batch from requests. 
+        """Creates a data batch from requests.
 
         Args:
             requests (set[PeriodicData]): set of requests.

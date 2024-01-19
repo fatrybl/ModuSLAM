@@ -2,10 +2,22 @@ import logging
 from typing import Type
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
-from configs.system.setup_manager.sensor_factory import SensorConfig
-from configs.system.setup_manager.sensor_factory import SensorFactoryConfig
+from configs.system.setup_manager.sensor_factory import (
+    SensorConfig,
+    SensorFactoryConfig,
+)
 from slam.setup_manager.sensor_factory.sensors import (
-    Sensor, Imu, Fog, Encoder, StereoCamera, Altimeter, Gps, VrsGps, Lidar2D, Lidar3D)
+    Altimeter,
+    Encoder,
+    Fog,
+    Gps,
+    Imu,
+    Lidar2D,
+    Lidar3D,
+    Sensor,
+    StereoCamera,
+    VrsGps,
+)
 from slam.utils.exceptions import NotSubset, SensorNotFound
 
 logger = logging.getLogger(__name__)
@@ -15,7 +27,7 @@ class SensorFactory:
     """
     Factory class for sensors management.
 
-    Class Attributes: 
+    Class Attributes:
         all_sensors: sensors to be used in experiments for a particluar dataset.
         used_sensors: sensors to be used in the experiment for a particluar dataset. Must be a subset of all_sensors.
 
@@ -85,13 +97,13 @@ class SensorFactory:
             NotSubset: Some of used sensor are not defined in all sensors set.
         """
         if not cls.used_sensors or not cls.used_sensors.issubset(cls.all_sensors):
-            msg = f'Used sensors: {cls.used_sensors} are not in known sensors: {cls.all_sensors} or empty'
+            msg = f"Used sensors: {cls.used_sensors} are not in known sensors: {cls.all_sensors} or empty"
             logger.critical(msg)
             raise NotSubset(msg)
 
     @staticmethod
     def sensor_from_config(cfg: SensorConfig) -> Type[Sensor]:
-        """ 
+        """
         Creates sensor from config item.
 
         Args:
@@ -134,6 +146,6 @@ class SensorFactory:
             return VrsGps(name, params)
 
         else:
-            msg = f'unsupported sensor type: {sensor_type}'
+            msg = f"unsupported sensor type: {sensor_type}"
             logger.error(msg)
             raise ValueError(msg)

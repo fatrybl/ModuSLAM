@@ -4,33 +4,32 @@ from typing import Type
 
 from plum import dispatch
 
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.readers.data_reader import DataReader
 from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
+from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterionSingleton
-from slam.data_manager.factory.readers.element_factory import Element
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 
 logger = logging.getLogger(__name__)
 
 
-class BatchFactory():
+class BatchFactory:
     """Creates and manages Data Batch."""
 
     def __init__(self, cfg: BatchFactoryConfig) -> None:
         """
         Args:
-            cfg (DataManagerConfig): config with parameters 
+            cfg (DataManagerConfig): config with parameters
         """
         self._break_point = StoppingCriterionSingleton()
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
         self._batch = DataBatch()
         self.__factory = DataReaderFactory(cfg.dataset.type)
-        self._data_reader: Type[DataReader] = self.__factory.data_reader(
-            cfg.dataset, cfg.regime)
+        self._data_reader: Type[DataReader] = self.__factory.data_reader(cfg.dataset, cfg.regime)
 
     @property
     def batch(self) -> DataBatch:
@@ -65,7 +64,7 @@ class BatchFactory():
 
     def __limitation(self) -> bool:
         """
-        Checks if any limitation has been reached to stop the creation of a new element for the Data Batch. 
+        Checks if any limitation has been reached to stop the creation of a new element for the Data Batch.
 
         Returns:
             bool: state of the Stopping Criterion singleton
@@ -92,14 +91,13 @@ class BatchFactory():
     @dispatch
     def _add_data(self, no_data_element: Element) -> None:
         """
-        Adds a new element to the Data Batch based on the requested Element 
+        Adds a new element to the Data Batch based on the requested Element
         w/o raw sensor measurement.
 
         Args:
             no_data_element (Element): element w/o raw sensor measurement.
         """
-        element_with_data: Element = self._data_reader.get_element(
-            no_data_element)
+        element_with_data: Element = self._data_reader.get_element(no_data_element)
         self._batch.add(element_with_data)
 
     @dispatch
@@ -109,7 +107,7 @@ class BatchFactory():
         Assumption: start/stop timestamps must be valid, exist in a dataset and correspond to real measurements.
 
         Args:
-            request (PeriodicData): contains sensor and time range (start, stop) 
+            request (PeriodicData): contains sensor and time range (start, stop)
             of measurements to be added to the Data Batch.
         """
         start: int = request.period.start
@@ -154,7 +152,7 @@ class BatchFactory():
         Creates a new Data Batch from the set of requests.
 
         Args:
-            requests (set[PeriodicData]): each request contains sensor and time range (start, stop) 
+            requests (set[PeriodicData]): each request contains sensor and time range (start, stop)
             of measurements to be added to the Data Batch
         """
         self.batch.clear()

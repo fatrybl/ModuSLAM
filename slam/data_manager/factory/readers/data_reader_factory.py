@@ -5,7 +5,7 @@ from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 logger = logging.getLogger(__name__)
 
 
-class DataReaderFactory():
+class DataReaderFactory:
     """
     Factory for creating DataReader instance based on dataset type.
     """
@@ -22,7 +22,7 @@ class DataReaderFactory():
         Raises:
             NotImplementedError: No DataReader for the specified dataset type.
         """
-        if dataset_type == 'Kaist':
+        if dataset_type == "Kaist":
             self.data_reader = KaistReader
         else:
             msg = f"No DataReader exists for dataset type {dataset_type}."

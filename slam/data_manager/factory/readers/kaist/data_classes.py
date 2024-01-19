@@ -1,12 +1,10 @@
 import logging
-
-from dataclasses import dataclass, field, InitVar
+from dataclasses import InitVar, dataclass, field
 from pathlib import Path
-from typing import Any, Iterator, Callable
+from typing import Any, Callable, Iterator
+
 from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
-
 from slam.data_manager.factory.readers.element_factory import Location
-
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +14,7 @@ class Message:
     """
     Message with a timestamp and any data.
     """
+
     timestamp: str
     data: tuple[Any, ...]
 
@@ -25,6 +24,7 @@ class FileIterator:
     """
     Iterator for sensor`s stamp file.
     """
+
     sensor_name: str
     file: Path
     iterator: Iterator[tuple[int, tuple[str, ...]]]
@@ -35,6 +35,7 @@ class Storage:
     """
     Storage for sensor`s data. For a directory with bin / png / ...
     """
+
     sensor_name: str
     path: Path
 
@@ -44,6 +45,7 @@ class BinaryDataLocation(Location):
     """
     Binary data location.
     """
+
     file: Path
 
 
@@ -52,7 +54,8 @@ class StereoImgDataLocation(Location):
     """
     Stereo data location. Stores paths as a tuple.
     """
-    files: tuple[Path, ...] = field(metadata={'unit': 'tuple of img paths'})
+
+    files: tuple[Path, ...] = field(metadata={"unit": "tuple of img paths"})
 
 
 @dataclass(frozen=True)
@@ -60,6 +63,7 @@ class CsvDataLocation(Location):
     """
     Csv data location: a file and position (line number) in a file.
     """
+
     file: Path
     position: int
 
@@ -72,28 +76,29 @@ class SensorIterators:
     Raises:
         ValueError: No FileIterator found for the given sensor name.
     """
+
     iterable_locations: InitVar[tuple[PairConfig, ...]]
-    init_method: InitVar[Callable[[Path],
-                                  Iterator[tuple[int, tuple[str, ...]]]]]
+    init_method: InitVar[Callable[[Path], Iterator[tuple[int, tuple[str, ...]]]]]
 
     iterators: set[FileIterator] = field(default_factory=lambda: set())
 
-    def __post_init__(self, iterable_locations: tuple[PairConfig, ...], init_method: Callable[[Path], Iterator[tuple[int, tuple[str, ...]]]]):
+    def __post_init__(
+        self,
+        iterable_locations: tuple[PairConfig, ...],
+        init_method: Callable[[Path], Iterator[tuple[int, tuple[str, ...]]]],
+    ):
         for pair in iterable_locations:
             name: str = pair.sensor_name
             location: Path = pair.location
-            iterator: Iterator[tuple[int, tuple[str, ...]]
-                               ] = init_method(location)
-            file_iter = FileIterator(name,
-                                     location,
-                                     iterator)
+            iterator: Iterator[tuple[int, tuple[str, ...]]] = init_method(location)
+            file_iter = FileIterator(name, location, iterator)
             self.iterators.add(file_iter)
 
     def get_file_iterator(self, sensor_name: str):
         for it in self.iterators:
             if it.sensor_name == sensor_name:
                 return it
-        msg = f'No FileIterator for {sensor_name} in set of {self.iterators}'
+        msg = f"No FileIterator for {sensor_name} in set of {self.iterators}"
         logger.critical(msg)
         raise ValueError(msg)
 
@@ -101,7 +106,7 @@ class SensorIterators:
 @dataclass(frozen=True, eq=True)
 class DataStorage:
     """
-    Data storages for sensors` data of type .bin / .png / etc. 
+    Data storages for sensors` data of type .bin / .png / etc.
 
     Raises:
         ValueError: _description_
@@ -109,6 +114,7 @@ class DataStorage:
     Returns:
         _type_: _description_
     """
+
     sensors_locations: InitVar[tuple[PairConfig, ...]]
 
     storages: set[Storage] = field(default_factory=lambda: set())
@@ -122,6 +128,6 @@ class DataStorage:
         for s in self.storages:
             if s.sensor_name == sensor_name:
                 return s
-        msg = f'No Storage for {sensor_name} in set of {self.storages}'
+        msg = f"No Storage for {sensor_name} in set of {self.storages}"
         logger.critical(msg)
         raise ValueError(msg)

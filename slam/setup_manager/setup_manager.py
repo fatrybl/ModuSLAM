@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class SetupManager(metaclass=MetaSingleton):
-    """ Main class for system setup. Defaults to MetaSingleton."""
+    """Main class for system setup. Defaults to MetaSingleton."""
 
     def __init__(self, cfg: SetupManagerConfig) -> None:
         """

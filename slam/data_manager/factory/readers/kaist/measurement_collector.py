@@ -1,27 +1,42 @@
 import logging
 from collections.abc import Iterator
 from csv import reader as csv_reader
-from PIL import Image
 from pathlib import Path
 from typing import Callable, Type
 
 import numpy as np
 import numpy.typing as npt
+from PIL import Image
 from plum import dispatch
-from slam.data_manager.factory.readers.data_reader import DataReader
-
-from slam.data_manager.factory.readers.element_factory import Location
-from slam.data_manager.factory.readers.kaist.data_classes import (
-    BinaryDataLocation, CsvDataLocation, DataStorage, FileIterator,
-    Message, SensorIterators, StereoImgDataLocation, Storage)
-from slam.setup_manager.sensor_factory.sensors import (
-    Altimeter, Encoder, Fog, Gps, Imu,
-    Lidar2D, Lidar3D, Sensor, StereoCamera, VrsGps)
-from slam.utils.auxiliary_methods import as_int
-from slam.utils.exceptions import ExternalModuleException, FileNotValid
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
+from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.element_factory import Location
+from slam.data_manager.factory.readers.kaist.data_classes import (
+    BinaryDataLocation,
+    CsvDataLocation,
+    DataStorage,
+    FileIterator,
+    Message,
+    SensorIterators,
+    StereoImgDataLocation,
+    Storage,
+)
+from slam.setup_manager.sensor_factory.sensors import (
+    Altimeter,
+    Encoder,
+    Fog,
+    Gps,
+    Imu,
+    Lidar2D,
+    Lidar3D,
+    Sensor,
+    StereoCamera,
+    VrsGps,
+)
+from slam.utils.auxiliary_methods import as_int
+from slam.utils.exceptions import ExternalModuleException, FileNotValid
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +47,7 @@ class CsvFileGenerator:
     """
 
     def __init__(self, file_path: Path):
-        self.__file = open(file_path, 'r')
+        self.__file = open(file_path, "r")
         self.__reader = csv_reader(self.__file)
         self.__count = -1
 
@@ -42,7 +57,7 @@ class CsvFileGenerator:
 
         except StopIteration:
             self.__file.close()
-            msg = f'File {self.__file} has been exhausted.'
+            msg = f"File {self.__file} has been exhausted."
             logger.critical(msg)
             raise
         else:
@@ -54,34 +69,31 @@ class CsvFileGenerator:
         return self
 
 
-class MeasurementCollector():
-    """ 
+class MeasurementCollector:
+    """
     Collects sensors` measurements from Kaist Urban Dataset.
     """
 
     INCORRECT_TIMESTAMP: int = -1
-    IMAGE_EXTENSION: str = '.png'
-    BINARY_EXTENSION: str = '.bin'
+    IMAGE_EXTENSION: str = ".png"
+    BINARY_EXTENSION: str = ".bin"
 
     def __init__(self, iterable_files: list[PairConfig], data_dirs: list[PairConfig]):
         """
         Args:
-            iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
+            iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>,
                 which corresponds to unique sensor name and its stamp file path.
-            data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>, 
+            data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>,
                 which corresponds to unique sensor name and its data directory.
         """
         dirs: tuple[PairConfig, ...] = tuple(data_dirs)
-        self._iterable_data_files: tuple[PairConfig, ...] = tuple(
-            iterable_files)
+        self._iterable_data_files: tuple[PairConfig, ...] = tuple(iterable_files)
         self._sensor_data_storages = DataStorage(dirs)
-        self._sensor_data_iterators = SensorIterators(
-            self._iterable_data_files,
-            self._init_iterator)
+        self._sensor_data_iterators = SensorIterators(self._iterable_data_files, self._init_iterator)
 
     @property
     def iterators(self) -> set[FileIterator]:
-        """ 
+        """
         Set of iterators for sensors` stamp files.
         """
         return self._sensor_data_iterators.iterators
@@ -94,9 +106,7 @@ class MeasurementCollector():
         """
         Re-initialize all iterators
         """
-        self._sensor_data_iterators = SensorIterators(
-            self._iterable_data_files,
-            self._init_iterator)
+        self._sensor_data_iterators = SensorIterators(self._iterable_data_files, self._init_iterator)
 
     def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
         """
@@ -125,16 +135,18 @@ class MeasurementCollector():
         Returns:
             numpy.NDArray[np.float32]: array of single-precision floating-point data.
         """
-        with open(file, 'rb') as f:
+        with open(file, "rb") as f:
             data = np.fromfile(f, np.float32)
             return data
 
-    def __find_in_file(self, iter: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> tuple[int, tuple[str, ...]]:
+    def __find_in_file(
+        self, iter: Iterator[tuple[int, tuple[str, ...]]], timestamp: int
+    ) -> tuple[int, tuple[str, ...]]:
         """
         Iterates over file and finds the line with the given timestamp.
 
         Args:
-            iter (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple. 
+            iter (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple.
             timestamp (int): timestamp.
 
         Raises:
@@ -169,7 +181,7 @@ class MeasurementCollector():
         try:
             position, line = next(it.iterator)
         except StopIteration:
-            msg = f'File: {it.file} has been exhausted.'
+            msg = f"File: {it.file} has been exhausted."
             logger.critical(msg)
             raise
         else:
@@ -180,7 +192,7 @@ class MeasurementCollector():
             return message, location
 
     def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> None:
-        """ 
+        """
         Sets the iterator to the position of the given timestamp.
 
         Args:
@@ -190,7 +202,7 @@ class MeasurementCollector():
         __, __ = self.__find_in_file(iterator, timestamp)
 
     def _get_image(self, sensor_name: str, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
-        """ 
+        """
         Gets an image for a sensor with the given name and the timestamp.
 
         Args:
@@ -205,13 +217,10 @@ class MeasurementCollector():
         """
         timestamp_str: str = str(timestamp)
         timestamp_path: Path = Path(timestamp_str)
-        storage: Storage = self._sensor_data_storages.get_data_location(
-            sensor_name)
+        storage: Storage = self._sensor_data_storages.get_data_location(sensor_name)
 
-        left_camera_dir: Path = storage.path / \
-            KaistDatasetPathConfig.stereo_left_data_dir
-        right_camera_dir: Path = storage.path / \
-            KaistDatasetPathConfig.stereo_right_data_dir
+        left_camera_dir: Path = storage.path / KaistDatasetPathConfig.stereo_left_data_dir
+        right_camera_dir: Path = storage.path / KaistDatasetPathConfig.stereo_right_data_dir
 
         left_img_file = left_camera_dir / timestamp_path
         right_img_file = right_camera_dir / timestamp_path
@@ -220,7 +229,7 @@ class MeasurementCollector():
         try:
             left_img = Image.open(left_img_file)
             right_img = Image.open(right_img_file)
-        except:
+        except Exception:
             msg = f"Can not read images: {left_img_file}, {right_img_file}"
             logger.critical(msg)
             raise ExternalModuleException(msg)
@@ -231,7 +240,7 @@ class MeasurementCollector():
 
     @dispatch
     def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
-        """ 
+        """
         Overloaded method.
         Gets sensor`s measurement from csv file for the given sensor sequantially with iterator.
 
@@ -239,11 +248,10 @@ class MeasurementCollector():
             sensor (Sensor): sensor to get measurement for.
 
         Returns:
-            tuple[Message, CsvDataLocation]: message with data and timestamp; 
+            tuple[Message, CsvDataLocation]: message with data and timestamp;
                                              measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         message, location = self.__iterate(it)
         return message, location
 
@@ -257,11 +265,10 @@ class MeasurementCollector():
             sensor (Sensor): sensor to get measurement for.
             timestamp (int): timestamp of a measurement.
         Returns:
-            tuple[Message, CsvDataLocation]: message with data and timestamp; 
+            tuple[Message, CsvDataLocation]: message with data and timestamp;
                                              measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         position, line = self.__find_in_file(it.iterator, timestamp)
         message = Message(line[0], line[1:])
         location = CsvDataLocation(it.file, position)
@@ -277,21 +284,19 @@ class MeasurementCollector():
             sensor (Sensor): sensor to get measurement for.
 
         Returns:
-            tuple[Message, BinaryDataLocation]: message with data and timestamp; 
+            tuple[Message, BinaryDataLocation]: message with data and timestamp;
                                                 measurement location.
         """
 
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         try:
             __, line = next(it.iterator)
         except StopIteration:
-            msg = f'File {it.file} has been exhausted'
+            msg = f"File {it.file} has been exhausted"
             logger.critical(msg)
             raise
         else:
-            storage: Storage = self._sensor_data_storages.get_data_location(
-                sensor.name)
+            storage: Storage = self._sensor_data_storages.get_data_location(sensor.name)
             timestamp: str = str(line[0])
             timestamp_path: Path = Path(timestamp)
             file: Path = storage.path / timestamp_path
@@ -313,14 +318,12 @@ class MeasurementCollector():
             timestamp (int): timestamp of a measurement.
 
         Returns:
-            tuple[Message, BinaryDataLocation]: message with data and timestamp; 
+            tuple[Message, BinaryDataLocation]: message with data and timestamp;
                                                 measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         self.__update_iterator(it.iterator, timestamp)
-        storage: Storage = self._sensor_data_storages.get_data_location(
-            sensor.name)
+        storage: Storage = self._sensor_data_storages.get_data_location(sensor.name)
         timestamp_str: str = str(timestamp)
         file: Path = storage.path / timestamp_str
         file = file.with_suffix(self.BINARY_EXTENSION)
@@ -340,15 +343,14 @@ class MeasurementCollector():
             sensor (StereoCamera): sensor to get measurement for.
 
         Returns:
-            tuple[Message, StereoImgDataLocation]: message with data and timestamp; 
+            tuple[Message, StereoImgDataLocation]: message with data and timestamp;
                                                    measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         try:
             __, line = next(it.iterator)
         except StopIteration:
-            msg = f'File {it.file} has been exhausted'
+            msg = f"File {it.file} has been exhausted"
             logger.critical(msg)
             raise
         else:
@@ -367,11 +369,10 @@ class MeasurementCollector():
             timestamp (int): timestamp of a measurement.
 
         Returns:
-            tuple[Message, StereoImgDataLocation]: message with data and timestamp; 
+            tuple[Message, StereoImgDataLocation]: message with data and timestamp;
                                                    measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(
-            sensor.name)
+        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         self.__update_iterator(it.iterator, timestamp)
         message, location = self._get_image(sensor.name, timestamp)
         return message, location
@@ -410,7 +411,7 @@ class MeasurementCollector():
             sensor (Sensor): sensor to get method for.
 
         Returns:
-            tuple[Message, Type[Location]]: message with data and timestamp; 
+            tuple[Message, Type[Location]]: message with data and timestamp;
                                             measurement location.
         """
         method = self.__get_sensor_method(sensor)
@@ -428,7 +429,7 @@ class MeasurementCollector():
             timestamp (int): timestamp of a measurement.
 
         Returns:
-            tuple[Message, Type[Location]]: message with data and timestamp; 
+            tuple[Message, Type[Location]]: message with data and timestamp;
                                             measurement location.
         """
         self.reset_iterators()

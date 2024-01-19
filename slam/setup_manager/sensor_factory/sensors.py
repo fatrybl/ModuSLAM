@@ -5,7 +5,7 @@ from configs.sensors.base_sensor_parameters import ParameterConfig
 
 class Sensor:
 
-    """Base class for any Sensor. 
+    """Base class for any Sensor.
     __Hash__(), __eq__() are overridden for hashability purposes.
     """
 

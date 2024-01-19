@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 import logging
 import sys
-
 from pathlib import Path
-from yaml import safe_load, safe_dump
+
+from yaml import safe_dump, safe_load
+
 from slam.utils.exceptions import ConfigFileNotValid
 
 logger = logging.getLogger(__name__)

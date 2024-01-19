@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class MainManager(metaclass=MetaSingleton):
-
     def __init__(self, cfg: Config) -> None:
         """Initializes all managers
 
@@ -28,7 +27,9 @@ class MainManager(metaclass=MetaSingleton):
         self.backend_manager = BackendManager(cfg.backend_manager)
         logger.info("The system has been successfully configured")
 
-    def process(self, ) -> None:
+    def process(
+        self,
+    ) -> None:
         batch: DataBatch = self.data_manager.batch_factory.batch
         graph: Graph = self.frontend_manager.graph
         while not batch.empty():
@@ -39,7 +40,7 @@ class MainManager(metaclass=MetaSingleton):
 
     def build_map(self) -> None:
         """
-        TODO: check if break_point is still valid: 
+        TODO: check if break_point is still valid:
         batch might be deleted but Memory Criterion is still active.
         """
         while not self.break_point.ON:

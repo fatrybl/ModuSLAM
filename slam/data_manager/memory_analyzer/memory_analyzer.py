@@ -1,13 +1,11 @@
-import logging
 import psutil
 
-from slam import logger
-from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig as MemoryAnalyzerConfig
+from configs.system.data_manager.batch_factory.memory import (
+    MemoryAnalyzerConfig as MemoryAnalyzerConfig,
+)
 
-logger = logging.getLogger(__name__)
 
-
-class MemoryAnalyzer():
+class MemoryAnalyzer:
     """Analyzes current memory usage."""
 
     def __init__(self, cfg: MemoryAnalyzerConfig) -> None:
@@ -19,7 +17,7 @@ class MemoryAnalyzer():
         """
 
         if cfg.graph_memory not in range(0, 100):
-            msg = f"Incorrect percentage of memory for the graph: out of range"
+            msg = "Incorrect percentage of memory for the graph: out of range"
             logger.critical(msg)
             raise ValueError(msg)
         else:
@@ -41,8 +39,7 @@ class MemoryAnalyzer():
         Returns:
             float: _description_
         """
-        available_percent: float = (
-            psutil.virtual_memory().available / self.total_memory) * 100
+        available_percent: float = (psutil.virtual_memory().available / self.total_memory) * 100
         return available_percent
 
     @property

@@ -1,8 +1,6 @@
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Type
-import logging
-
 from pathlib import Path
 
 from plum import dispatch
@@ -33,10 +31,10 @@ class DataReader(ABC):
     @dispatch
     def get_element(self) -> Element | None:
         """
-        Gets element from a dataset sequantially based on iterator position. 
+        Gets element from a dataset sequentially based on iterator position.
 
         Returns:
-            Element | None: element with raw sensor measurement 
+            Element | None: element with raw sensor measurement
                             or None if all measurements from a dataset has already been processed
         """
 
@@ -44,22 +42,22 @@ class DataReader(ABC):
     @dispatch
     def get_element(self, element: Element) -> Element:
         """
-        Gets an element with raw sensor measurement from a dataset for 
+        Gets an element with raw sensor measurement from a dataset for
             a given element without raw sensor measurement.
 
         Args:
             element (Element): without raw sensor measurement.
 
         Returns:
-            Element: with raw sensor measurement.
+            (Element): with raw sensor measurement.
         """
 
     @abstractmethod
     @dispatch
     def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
         """
-        Gets an element with raw sensor measurement from a dataset for 
-            a given sensor and timestamp. If timestamp is None, 
+        Gets an element with raw sensor measurement from a dataset for
+            a given sensor and timestamp. If timestamp is None,
             gets the element sequantally based on iterator position.
 
         Args:
@@ -67,11 +65,11 @@ class DataReader(ABC):
             timestamp (int | None, optional): timestamp of sensor`s measurement. Defaults to None.
 
         Returns:
-            Element: with raw sensor measurement.
+            (Element): with raw sensor measurement.
         """
 
 
 @dataclass
 class DataFlowState(ABC):
-    """Keeps up-to-date state of iterators for a data reader. 
+    """Keeps up-to-date state of iterators for a data reader.
     Should be implemented for each reader."""
