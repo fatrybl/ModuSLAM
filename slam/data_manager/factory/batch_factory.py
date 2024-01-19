@@ -80,6 +80,7 @@ class BatchFactory:
     @dispatch
     def _add_data(self) -> None:
         """
+        @overload.
         Adds new element to the DataBatch.
         """
         new_element: Element = self._data_reader.get_element()
@@ -91,6 +92,7 @@ class BatchFactory:
     @dispatch
     def _add_data(self, no_data_element: Element) -> None:
         """
+        @overload.
         Adds a new element to the Data Batch based on the requested Element
         w/o raw sensor measurement.
 
@@ -103,6 +105,7 @@ class BatchFactory:
     @dispatch
     def _add_data(self, request: PeriodicData) -> None:
         """
+        @overload.
         Adds a new element to the Data Batch based on the request.
         Assumption: start/stop timestamps must be valid, exist in a dataset and correspond to real measurements.
 
@@ -126,6 +129,7 @@ class BatchFactory:
     @dispatch
     def create_batch(self) -> None:
         """
+        @overload.
         Creates a new Data Batch from the dataset.
         """
         self.batch.clear()
@@ -136,6 +140,7 @@ class BatchFactory:
     @dispatch
     def create_batch(self, elements: deque[Element]) -> None:
         """
+        @overload.
         Creates a new Data Batch from the deque of elements.
 
         Args:
@@ -149,6 +154,7 @@ class BatchFactory:
     @dispatch
     def create_batch(self, requests: set[PeriodicData]) -> None:
         """
+        @overload.
         Creates a new Data Batch from the set of requests.
 
         Args:

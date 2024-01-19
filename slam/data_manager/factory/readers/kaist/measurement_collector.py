@@ -241,7 +241,7 @@ class MeasurementCollector:
     @dispatch
     def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from csv file for the given sensor sequantially with iterator.
 
         Args:
@@ -258,7 +258,7 @@ class MeasurementCollector:
     @dispatch
     def _get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from csv file for the given sensor and the timestamp.
 
         Args:
@@ -277,7 +277,7 @@ class MeasurementCollector:
     @dispatch
     def _get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from binary file for the given sensor sequantially with iterator.
 
         Args:
@@ -310,7 +310,7 @@ class MeasurementCollector:
     @dispatch
     def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from binary file for the given sensor and the timestamp.
 
         Args:
@@ -336,7 +336,7 @@ class MeasurementCollector:
     @dispatch
     def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from a png file for the given sensor with the iterator sequantially.
 
         Args:
@@ -361,7 +361,7 @@ class MeasurementCollector:
     @dispatch
     def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
         """
-        Overloaded method.
+        @overload.
         Gets sensor`s measurement from png file for the given sensor and the timestamp.
 
         Args:
@@ -404,7 +404,7 @@ class MeasurementCollector:
     @dispatch
     def get_data(self, sensor: Sensor) -> tuple[Message, Type[Location]]:
         """
-        Overloaded method.
+        @overload.
         Gets data for the given sensor sequantially based on its iterator.
 
         Args:
@@ -421,7 +421,7 @@ class MeasurementCollector:
     @dispatch
     def get_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, Type[Location]]:
         """
-        Overloaded method.
+        @overload.
         Gets data for the given sensor and the timestamp.
 
         Args:

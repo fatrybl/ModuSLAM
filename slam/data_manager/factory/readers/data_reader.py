@@ -31,6 +31,7 @@ class DataReader(ABC):
     @dispatch
     def get_element(self) -> Element | None:
         """
+        @overload.
         Gets element from a dataset sequentially based on iterator position.
 
         Returns:
@@ -42,6 +43,7 @@ class DataReader(ABC):
     @dispatch
     def get_element(self, element: Element) -> Element:
         """
+        @overload.
         Gets an element with raw sensor measurement from a dataset for
             a given element without raw sensor measurement.
 
@@ -56,6 +58,7 @@ class DataReader(ABC):
     @dispatch
     def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
         """
+        @overload.
         Gets an element with raw sensor measurement from a dataset for
             a given sensor and timestamp. If timestamp is None,
             gets the element sequantally based on iterator position.

@@ -25,6 +25,7 @@ class DataManager(metaclass=MetaSingleton):
     @dispatch
     def make_batch(self) -> None:
         """
+        @overload.
         Creates a data batch sequentially based on regime in config.
         """
         self.batch_factory.create_batch()
@@ -33,6 +34,7 @@ class DataManager(metaclass=MetaSingleton):
     @dispatch
     def make_batch(self, measurements: list[Element]) -> None:
         """
+        @overload.
         Creates a data batch with given measurements
 
         Args:
@@ -43,7 +45,9 @@ class DataManager(metaclass=MetaSingleton):
 
     @dispatch
     def make_batch(self, requests: set[PeriodicData]) -> None:
-        """Creates a data batch from requests.
+        """
+        @overload.
+        Creates a data batch from requests.
 
         Args:
             requests (set[PeriodicData]): set of requests.
