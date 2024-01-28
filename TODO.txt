@@ -1,9 +1,23 @@
-Что должно быть сделано до релиза DataManager v 0.0.1:
-    1) Описания к функциями - ПРОВЕРИТЬ, все ли есть.
-    2) Обновить диаграммы.
-    3) Тест-случай, когда used_sensors < all_sensors.
+What should be done for DataManager v 0.0.1:
+    1) Description for all methods/classes.
+    2) Update drawio diagrams.
+    3) Test cases when number of used_sensors < all_sensors.
 
-Что должно быть сделано для DataManager:
-1) Тесты :
+What should be done for DataManager:
+1) Tests :
     а. MemoryAnalyzer
-    в. Интеграционные (на последовательность разных режимов работы)
+    в. Integration tests (different regimes: stream -> time_limit -> stream etc.)
+
+2) Remove StoppingCriterionSingleton
+
+
+What should be done for FrontendManager:
+ 1) Update drawio diagrams.
+ 2) Add tests
+
+ What should be done for the Framework:
+    1) Rewrite docstring for @overload methods s.t. each method indicates all possible param types
+    2) Rewrite Type(s) s.t. MyPy wont blame and use TypeVar
+    3) Update Sphinx docs
+    4) Change all typing.Iterable to collections.abc.Iterable
+    5) Add slots=True to dataclasses and use multiple inheritance where its possible.

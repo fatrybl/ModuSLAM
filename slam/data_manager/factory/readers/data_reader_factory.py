@@ -1,5 +1,6 @@
 import logging
 
+from slam.data_manager.factory.readers.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 logger = logging.getLogger(__name__)
@@ -10,21 +11,26 @@ class DataReaderFactory:
     Factory for creating DataReader instance based on dataset type.
     """
 
-    def __init__(self, dataset_type: str) -> None:
+    @staticmethod
+    def get_reader(data_reader_name: str) -> type[DataReader]:
         """
-        Creates DataReader object based on dataset type.
+        Creates Data Reader based on dataset type.
 
-        TODO: Remove string comparison and make normal factory.
+        TODO:
+            1) Remove string comparison of Reader type.
+            2) Refactor type annotations for configs.
+
 
         Args:
-            dataset_type (str): Unique name of the dataset`s type.
+            data_reader_name (str): name of the DataReader class.
 
         Raises:
-            NotImplementedError: No DataReader for the specified dataset type.
+            NotImplementedError: No DataReader exists for the given dataset type.
         """
-        if dataset_type == "Kaist":
-            self.data_reader = KaistReader
-        else:
-            msg = f"No DataReader exists for dataset type {dataset_type}."
-            logger.critical(msg)
-            raise NotImplementedError(msg)
+        match data_reader_name:
+            case "KaistReader":
+                return KaistReader
+            case _:
+                msg = f"No DataReader exists for dataset type {data_reader_name!r}."
+                logger.critical(msg)
+                raise NotImplementedError(msg)

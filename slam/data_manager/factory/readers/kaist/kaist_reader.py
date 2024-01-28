@@ -4,14 +4,16 @@ from collections.abc import Iterator
 from csv import DictReader
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Type
+from typing import cast, overload
 
 from plum import dispatch
 
-from configs.system.data_manager.batch_factory.batch_factory import RegimeConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import TimeLimitConfig
-from slam.data_manager.factory.readers.data_reader import DataFlowState, DataReader
+from configs.system.data_manager.batch_factory.regime import (
+    RegimeConfig,
+    TimeLimitConfig,
+)
+from slam.data_manager.factory.readers.data_reader_ABC import DataFlowState, DataReader
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     FileIterator,
@@ -69,9 +71,6 @@ class KaistReader(DataReader):
 
     TODO: Synchronize sensors` iterators for data_stamp.csv and <SENSOR>_stamp.csv:
     TODO: check if a timestamp from data_stamp.csv exists in  <SENSOR>_stamp.csv
-
-    Args:
-        DataReader (_type_): Base abstract class.
     """
 
     __EMPTY_STRING: str = ""
@@ -79,7 +78,10 @@ class KaistReader(DataReader):
     __TIMESTAMP: str = "timestamp"
     __SENSOR_NAME: str = "sensor_name"
 
-    def __init__(self, dataset_params: Type[KaistConfig], regime_params: type[RegimeConfig]):
+    def __init__(self, dataset_params: KaistConfig, regime_params: RegimeConfig):
+        """
+        TODO: add better regime_params type validation.
+        """
         self._dataset_params = dataset_params
         self._regime_params = regime_params
         self._data_stamp_file: Path = dataset_params.directory / dataset_params.paths.data_stamp
@@ -88,6 +90,7 @@ class KaistReader(DataReader):
         self.__current_state = KaistReaderState(data_stamp_iterator, self._collector.iterators)
 
         if regime_params.name == TimeLimitConfig.name:
+            regime_params = cast(TimeLimitConfig, regime_params)
             self.__time_range = TimeRange(regime_params.start, regime_params.stop)
             self._set_initial_state(self.__time_range)
 
@@ -136,11 +139,14 @@ class KaistReader(DataReader):
             senor_name (str): name of sensor to look up in the file iterator collection.
 
         Returns:
-            FileIterator | None: for sensor with the given sensor name.
+            FileIterator | None: iterator for sensor with the given sensor name.
         """
+        iterator: FileIterator | None = None
         for it in self.__current_state.sensors_iterators:
             if it.sensor_name == senor_name:
-                return it
+                iterator = it
+                break
+        return iterator
 
     def __get_sensor_name(self, timestamp: int) -> tuple[str, Counter]:
         """
@@ -156,7 +162,7 @@ class KaistReader(DataReader):
         """
         current_timestamp: int = self.__INCORRECT_TIMESTAMP
         sensor_name: str = self.__EMPTY_STRING
-        occurrence = Counter()
+        occurrence: Counter = Counter()
 
         while current_timestamp != timestamp:
             try:
@@ -166,63 +172,69 @@ class KaistReader(DataReader):
                 logger.critical(msg)
                 raise
             else:
-                current_timestamp: int = as_int(current_line[self.__TIMESTAMP], logger)
+                current_timestamp = as_int(current_line[self.__TIMESTAMP], logger)
                 sensor_name = current_line[self.__SENSOR_NAME]
                 occurrence.update({sensor_name})
 
         return sensor_name, occurrence
 
-    @dispatch
-    def __iterate_N_times(self, N: int, it: FileIterator) -> None:
+    @overload
+    def __iterate_n_times(self, n: int, it: FileIterator) -> None:
         """
         @overload.
         Overloaded method to iterate N times with the given iterator.
 
         Args:
-            N (int): a number of iterations.
+            n (int): a number of iterations.
             it (FileIterator): an iterator for a file with sensor timestamps.
 
         Raises:
             ValueError: amount of iterations is negative.
         """
-        if N >= 0:
-            for _ in range(N):
+        if n >= 0:
+            for _ in range(n):
                 try:
                     next(it.iterator)
                 except StopIteration:
-                    msg = f"can not iterate N={N} times for file: {it.file}"
+                    msg = f"can not iterate N={n} times for file: {it.file}"
                     logger.critical(msg)
                     raise
         else:
-            msg = f"N must be non-negative, but N = {N}"
+            msg = f"N must be non-negative, but N = {n}"
             logger.critical(msg)
             raise ValueError(msg)
 
-    @dispatch
-    def __iterate_N_times(self, N: int, it: Iterator[dict[str, str]]) -> None:
+    @overload
+    def __iterate_n_times(self, n: int, it: Iterator[dict[str, str]]) -> None:
         """
         @overload.
         Overloaded method to iterate N times with the given iterator.
 
         Args:
-            N (int): a number of iterations.
+            n (int): a number of iterations.
             it (Iterator[dict[str, str]]): an iterator for data_stamp.csv file.
 
         Raises:
             ValueError: amount of iterations is negative.
         """
-        if N >= 0:
-            for _ in range(N):
+        if n >= 0:
+            for _ in range(n):
                 try:
                     next(it)
                 except StopIteration:
-                    msg = f"can not iterate N={N} times with iterator: {it}"
+                    msg = f"can not iterate N={n} times with iterator: {it}"
                     logger.critical(msg)
                     raise
         else:
-            msg = f"N must be non-negative, but N = {N}"
+            msg = f"N must be non-negative, but N = {n}"
             logger.critical(msg)
             raise ValueError(msg)
+
+    @dispatch
+    def __iterate_n_times(self, n=None, it=None):
+        """
+        @overload.
+        """
 
     def _set_initial_state(self, time_range: TimeRange):
         """
@@ -243,8 +255,8 @@ class KaistReader(DataReader):
         first_sensor_name, occurrences = self.__get_sensor_name(time_range.start)
         self.__reset_current_state()
         last_sensor_name, __ = self.__get_sensor_name(time_range.stop)
-        first_sensor: Type[Sensor] = SensorFactory.name_to_sensor(first_sensor_name)
-        last_sensor: Type[Sensor] = SensorFactory.name_to_sensor(last_sensor_name)
+        first_sensor: Sensor = SensorFactory.name_to_sensor(first_sensor_name)
+        last_sensor: Sensor = SensorFactory.name_to_sensor(last_sensor_name)
 
         for sensor in [first_sensor, last_sensor]:
             if sensor not in SensorFactory.used_sensors:
@@ -258,15 +270,19 @@ class KaistReader(DataReader):
             sensor_name = item
             count = occurrences[item]
             iterator = self.__get_file_iterator(sensor_name)
+            if iterator is None:
+                msg = f"iterator for sensor {sensor_name} has not been found"
+                logger.critical(msg)
+                raise ValueError(msg)
             if sensor_name == first_sensor_name:
-                self.__iterate_N_times(count - 1, iterator)
+                self.__iterate_n_times(count - 1, iterator)
             else:
-                self.__iterate_N_times(count, iterator)
+                self.__iterate_n_times(count, iterator)
 
-        N: int = sum(occurrences.values())
-        self.__iterate_N_times(N - 1, self.__current_state.data_stamp_iterator)
+        n: int = sum(occurrences.values())
+        self.__iterate_n_times(n - 1, self.__current_state.data_stamp_iterator)
 
-    @dispatch
+    @overload
     def get_element(self) -> Element | None:
         """
         @overload.
@@ -290,18 +306,18 @@ class KaistReader(DataReader):
 
         else:
             if self._regime_params.name == TimeLimitConfig.name:
-                timestamp = line[self.__TIMESTAMP]
-                timestamp = as_int(timestamp, logger)
-                if timestamp > self.__time_range.stop:
+                timestamp: str = line[self.__TIMESTAMP]
+                timestamp_int: int = as_int(timestamp, logger)
+                if timestamp_int > self.__time_range.stop:
                     return None
 
             message, location = self._collector.get_data(sensor)
-            timestamp: int = as_int(message.timestamp, logger)
+            timestamp_int = as_int(message.timestamp, logger)
             measurement = Measurement(sensor, message.data)
-            element = Element(timestamp, measurement, location)
+            element = Element(timestamp_int, measurement, location)
             return element
 
-    @dispatch
+    @overload
     def get_element(self, element: Element) -> Element:
         """
         @overload.
@@ -314,7 +330,7 @@ class KaistReader(DataReader):
         Returns:
             Element: with raw sensor measurement.
         """
-        sensor: Type[Sensor] = element.measurement.sensor
+        sensor: Sensor = element.measurement.sensor
         message, location = self._collector.get_data(sensor, element.timestamp)
 
         timestamp: int = as_int(message.timestamp, logger)
@@ -322,7 +338,7 @@ class KaistReader(DataReader):
         element = Element(timestamp, measurement, location)
         return element
 
-    @dispatch
+    @overload
     def get_element(self, sensor: Sensor, timestamp: int | None = None) -> Element:
         """
         @overload.
@@ -332,7 +348,7 @@ class KaistReader(DataReader):
 
         Args:
             sensor (Sensor): a sensor to get measurement of.
-            init_time (int | None, optional): timestamp of sensor`s measurement.
+            timestamp (int | None, optional): timestamp of sensor`s measurement.
                                                 Defaults to None.
 
         Returns:
@@ -348,3 +364,9 @@ class KaistReader(DataReader):
         measurement = Measurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
+
+    @dispatch
+    def get_element(self, element=None, timestamp=None):
+        """
+        @overload.
+        """

@@ -7,6 +7,11 @@ logger = logging.getLogger(__name__)
 
 
 class DataBatch:
+    """
+    DataBatch is a container for data.
+        TODO: integrate this class into DataManager->Batch
+    """
+
     def __init__(self):
         self._deque: deque[Element] = deque()
         self._set: set[Element] = set()

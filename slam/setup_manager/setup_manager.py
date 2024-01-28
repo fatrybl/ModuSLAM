@@ -2,12 +2,11 @@ import logging
 
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
 from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
-from slam.utils.meta_singleton import MetaSingleton
 
 logger = logging.getLogger(__name__)
 
 
-class SetupManager(metaclass=MetaSingleton):
+class SetupManager:
     """Main class for system setup. Defaults to MetaSingleton."""
 
     def __init__(self, cfg: SetupManagerConfig) -> None:

@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from typing import Type
 
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
 
 @dataclass
 class TimeRange:
+    """
+    Represents time range with start/stop timestamps.
+    """
+
     start: int
     stop: int
 
@@ -20,7 +23,11 @@ class TimeRange:
 
 @dataclass
 class PeriodicData:
-    sensor: Type[Sensor]
+    """
+    Represents a periodic data request of a sensor.
+    """
+
+    sensor: Sensor
     period: TimeRange
 
     def __hash__(self) -> int:

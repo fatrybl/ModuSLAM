@@ -1,28 +1,33 @@
-from slam.utils.meta_singleton import MetaSingleton
+from dataclasses import dataclass
 
 
-class StoppingCriterionSingleton(metaclass=MetaSingleton):
+@dataclass
+class State:
+    is_memory_limit: bool = False
+    is_data_processed: bool = False
+    is_time_finished: bool = False
+    is_map_diverged: bool = False
+    is_solver_error: bool = False
+
+
+class StoppingCriterion:
     """
-    High level criteria to stop mapping process. Defaults to MetaSingleton.
+    High level criteria to stop mapping process.
     """
 
-    def __init__(self) -> None:
-        self.is_memory_limit: bool = False
-        self.is_data_processed: bool = False
-        self.is_time_finished: bool = False
-        self.is_map_diverged: bool = False
-        self.is_solver_error: bool = False
+    state: State = State()
 
-    @property
-    def ON(self) -> bool:
+    @classmethod
+    def is_active(cls) -> bool:
         """
         Checks if any of stopping criteria is active.
         """
-        return any(self.__dict__.values())
+        return any(cls.state.__dict__.values())
 
-    def reset(self):
+    @classmethod
+    def reset(cls):
         """
         Resets all criteria to default values.
         """
-        for key in self.__dict__.keys():
-            self.__dict__[key] = False
+        for key in cls.state.__dict__.keys():
+            cls.state.__dict__[key] = False

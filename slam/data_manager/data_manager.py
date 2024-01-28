@@ -1,4 +1,6 @@
 import logging
+from collections import deque
+from typing import overload
 
 from plum import dispatch
 
@@ -6,12 +8,11 @@ from configs.system.data_manager.data_manager import DataManagerConfig
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
-from slam.utils.meta_singleton import MetaSingleton
 
 logger = logging.getLogger(__name__)
 
 
-class DataManager(metaclass=MetaSingleton):
+class DataManager:
     """Manages all data processes. Defaults to MetaSingleton."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
@@ -22,7 +23,7 @@ class DataManager(metaclass=MetaSingleton):
         self.batch_factory = BatchFactory(cfg.batch_factory)
         logger.debug("Data Manager has been configured")
 
-    @dispatch
+    @overload
     def make_batch(self) -> None:
         """
         @overload.
@@ -31,19 +32,19 @@ class DataManager(metaclass=MetaSingleton):
         self.batch_factory.create_batch()
         logger.debug("Data Batch has been created")
 
-    @dispatch
-    def make_batch(self, measurements: list[Element]) -> None:
+    @overload
+    def make_batch(self, measurements: deque[Element]) -> None:
         """
         @overload.
         Creates a data batch with given measurements
 
         Args:
-            measurements (list[Element]): list of elements wihtout row data
+            measurements (deque[Element]): list of elements without row data
         """
         self.batch_factory.create_batch(measurements)
         logger.debug("Data Batch has been created")
 
-    @dispatch
+    @overload
     def make_batch(self, requests: set[PeriodicData]) -> None:
         """
         @overload.
@@ -55,3 +56,9 @@ class DataManager(metaclass=MetaSingleton):
         """
         self.batch_factory.create_batch(requests)
         logger.debug("Data Batch has been created")
+
+    @dispatch
+    def make_batch(self, measurements=None):
+        """
+        @overload.
+        """

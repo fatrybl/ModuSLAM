@@ -13,4 +13,4 @@ class DatasetConfig:
     name: str = MISSING
     url: str = MISSING
     directory: Path = field(default=MISSING, metadata={"description": "dataset directory"})
-    type: str = field(default=MISSING, metadata={"description": "type of a supported dataset"})
+    reader: str = field(default=MISSING, metadata={"description": "Name of the data reader class"})

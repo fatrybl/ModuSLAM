@@ -1,6 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Any, Type
+from typing import Any
 
 from slam.setup_manager.sensor_factory.sensors import Sensor
 
@@ -14,7 +14,11 @@ class Location(ABC):
 
 @dataclass(frozen=True)
 class Measurement:
-    sensor: Type[Sensor]
+    """
+    Sensor and its raw measurement.
+    """
+
+    sensor: Sensor
     values: tuple[Any, ...]
 
     def __hash__(self) -> int:
@@ -23,6 +27,10 @@ class Measurement:
 
 @dataclass(frozen=True)
 class Element:
+    """
+    Element of a data batch.
+    """
+
     timestamp: int
     measurement: Measurement
-    location: Type[Location]
+    location: Location

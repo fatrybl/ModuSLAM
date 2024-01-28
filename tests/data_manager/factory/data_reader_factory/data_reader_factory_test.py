@@ -1,33 +1,25 @@
 from typing import Type
 
 import pytest
-from hydra import compose, initialize_config_module
 from pytest import mark
 
-from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 """
 Test description:
-    checks if DataReaderFactory creates data reader object of correct type based on input dataset type.
+    checks if DataReaderFactory creates class object of correct type based on input dataset type.
 """
 
 
-@mark.parametrize(("overrides", "result"), [(["type=Kaist"], KaistReader)])
-def test_DataReaderFactory_success(overrides: list[str], result: Type[DataReader]):
-    with initialize_config_module(config_module="data_reader_factory.conf"):
-        cfg = compose(config_name="config", overrides=overrides)
-        dataset_type: str = cfg.type
-        factory = DataReaderFactory(dataset_type)
-        reader = factory.data_reader
-        assert reader == result
+@mark.parametrize(("reader_name", "result"), [("KaistReader", KaistReader)])
+def test_get_reader_success(reader_name: str, result: type[DataReader]):
+    reader: type[DataReader] = DataReaderFactory.get_reader(reader_name)
+    assert reader == result
 
 
-@mark.parametrize(("overrides", "exception"), [(["type=SomeUnsupportedType"], NotImplementedError)])
-def test_DataReaderFactory_exception(overrides: list[str], exception: Type[Exception]):
-    with initialize_config_module(config_module="data_reader_factory.conf"):
-        cfg = compose(config_name="config", overrides=overrides)
-        dataset_type: str = cfg.type
-        with pytest.raises(exception):
-            DataReaderFactory(dataset_type)
+@mark.parametrize(("reader_name", "exception"), [("UnknownReader", NotImplementedError)])
+def test_get_reader_fail(reader_name: str, exception: Type[Exception]):
+    with pytest.raises(exception):
+        DataReaderFactory.get_reader(reader_name)

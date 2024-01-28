@@ -1,11 +1,10 @@
-from abc import ABC
 from dataclasses import dataclass
 
 from omegaconf import MISSING
 
 
 @dataclass
-class RegimeConfig(ABC):
+class RegimeConfig:
     """
     Abstract regime of data flow.
     """

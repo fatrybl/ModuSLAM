@@ -1,5 +1,4 @@
 import logging
-from typing import Type
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
 from configs.system.setup_manager.sensor_factory import (
@@ -37,19 +36,29 @@ class SensorFactory:
         ValueError: there is no available sensor type for the item from config.
     """
 
-    all_sensors: set[Type[Sensor]] = set()
-    used_sensors: set[Type[Sensor]] = set()
+    all_sensors: set[Sensor] = set()
+    used_sensors: set[Sensor] = set()
 
     @classmethod
-    def get_used_sensors(cls) -> set[Type[Sensor]]:
+    def get_used_sensors(cls) -> set[Sensor]:
+        """
+        Get sensors which have been used in experiment.
+        Returns:
+            (set[Sensor]): used sensors which have been used in experiment.
+        """
         return cls.used_sensors
 
     @classmethod
-    def get_all_sensors(cls) -> set[Type[Sensor]]:
+    def get_all_sensors(cls) -> set[Sensor]:
+        """
+        Get all sensors which have been initialized.
+        Returns:
+            (set[Sensor]): all sensors which have been initialized
+        """
         return cls.all_sensors
 
     @classmethod
-    def name_to_sensor(cls, name: str) -> Type[Sensor]:
+    def name_to_sensor(cls, name: str) -> Sensor:
         """
         Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
 
@@ -102,21 +111,21 @@ class SensorFactory:
             raise NotSubset(msg)
 
     @staticmethod
-    def sensor_from_config(cfg: SensorConfig) -> Type[Sensor]:
+    def sensor_from_config(cfg: SensorConfig) -> Sensor:
         """
         Creates sensor from config item.
 
         Args:
-            item (SensorConfig): item from config
+            cfg (SensorConfig): config to define sensor.
 
         Raises:
             ValueError: there is no available sensor type for the item from config.
         Returns:
-            Type[Sensor]: sensor
+            (Sensor): sensor created from config.
         """
         name: str = cfg.name
         sensor_type: str = cfg.type
-        params: Type[ParameterConfig] = cfg.config
+        params: ParameterConfig = cfg.config
 
         if sensor_type == Imu.__name__:
             return Imu(name, params)

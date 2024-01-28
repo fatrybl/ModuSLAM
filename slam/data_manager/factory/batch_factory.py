@@ -1,18 +1,18 @@
 import logging
 from collections import deque
-from typing import Type
+from typing import overload
 
 from plum import dispatch
 
 from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
-from slam.utils.stopping_criterion import StoppingCriterionSingleton
+from slam.utils.stopping_criterion import StoppingCriterion
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +25,11 @@ class BatchFactory:
         Args:
             cfg (DataManagerConfig): config with parameters
         """
-        self._break_point = StoppingCriterionSingleton()
+        self._break_point = StoppingCriterion
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
         self._batch = DataBatch()
-        self.__factory = DataReaderFactory(cfg.dataset.type)
-        self._data_reader: Type[DataReader] = self.__factory.data_reader(cfg.dataset, cfg.regime)
+        reader: type[DataReader] = DataReaderFactory.get_reader(cfg.dataset.reader)
+        self._data_reader: DataReader = reader(cfg.dataset, cfg.regime)
 
     @property
     def batch(self) -> DataBatch:
@@ -51,7 +51,7 @@ class BatchFactory:
 
         msg = "All data has been processed"
         logger.info(msg)
-        self._break_point.is_data_processed = True
+        self._break_point.state.is_data_processed = True
 
     def __memory_limit_reached(self) -> None:
         """
@@ -60,7 +60,7 @@ class BatchFactory:
 
         msg = "Memory limit for Data Batch has been reached"
         logger.info(msg)
-        self._break_point.is_memory_limit = True
+        self._break_point.state.is_memory_limit = True
 
     def __limitation(self) -> bool:
         """
@@ -75,21 +75,21 @@ class BatchFactory:
         if used_memory > permissible_memory:
             self.__memory_limit_reached()
 
-        return self._break_point.ON
+        return self._break_point.is_active()
 
-    @dispatch
+    @overload
     def _add_data(self) -> None:
         """
         @overload.
         Adds new element to the DataBatch.
         """
-        new_element: Element = self._data_reader.get_element()
+        new_element: Element | None = self._data_reader.get_element()
         if new_element:
             self._batch.add(new_element)
         else:
             self.__data_processed()
 
-    @dispatch
+    @overload
     def _add_data(self, no_data_element: Element) -> None:
         """
         @overload.
@@ -102,7 +102,7 @@ class BatchFactory:
         element_with_data: Element = self._data_reader.get_element(no_data_element)
         self._batch.add(element_with_data)
 
-    @dispatch
+    @overload
     def _add_data(self, request: PeriodicData) -> None:
         """
         @overload.
@@ -115,7 +115,7 @@ class BatchFactory:
         """
         start: int = request.period.start
         stop: int = request.period.stop
-        sensor: Type[Sensor] = request.sensor
+        sensor: Sensor = request.sensor
 
         first_element: Element = self._data_reader.get_element(sensor, start)
         self._batch.add(first_element)
@@ -127,17 +127,23 @@ class BatchFactory:
                 current_timestamp = element.timestamp
 
     @dispatch
+    def _add_data(self, element=None):
+        """
+        @overload.
+        """
+
+    @overload
     def create_batch(self) -> None:
         """
         @overload.
         Creates a new Data Batch from the dataset.
         """
         self.batch.clear()
-        self._break_point.is_data_processed = False
+        self._break_point.state.is_data_processed = False
         while not self.__limitation():
             self._add_data()
 
-    @dispatch
+    @overload
     def create_batch(self, elements: deque[Element]) -> None:
         """
         @overload.
@@ -147,11 +153,11 @@ class BatchFactory:
             elements (deque[Element]): deque of elements w/o raw sensor measurements.
         """
         self.batch.clear()
-        self._break_point.is_data_processed = False
+        self._break_point.state.is_data_processed = False
         for element in elements:
             self._add_data(element)
 
-    @dispatch
+    @overload
     def create_batch(self, requests: set[PeriodicData]) -> None:
         """
         @overload.
@@ -162,9 +168,15 @@ class BatchFactory:
             of measurements to be added to the Data Batch
         """
         self.batch.clear()
-        self._break_point.is_data_processed = False
+        self._break_point.state.is_data_processed = False
         for request in requests:
             self._add_data(request)
+
+    @dispatch
+    def create_batch(self, elements=None):
+        """
+        @overload.
+        """
 
     def save_batch(self) -> None:
         raise NotImplementedError

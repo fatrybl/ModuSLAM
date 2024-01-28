@@ -23,3 +23,5 @@ repos:
 #    rev: 'v1.8.0'
 #    hooks:
 #      - id: mypy
+#        args: [ "--check-untyped-defs", "--ignore-missing-imports" ]
+#        types: [ python ]

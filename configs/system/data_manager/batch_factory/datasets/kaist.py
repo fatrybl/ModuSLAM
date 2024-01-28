@@ -25,7 +25,7 @@ class KaistConfig(DatasetConfig):
     Kaist Urban Dataset parameters.
     """
 
-    type: str = "Kaist"
+    reader: str = "KaistReader"
 
     name: str = "Kaist Urban Dataset"
 
@@ -42,5 +42,6 @@ class KaistConfig(DatasetConfig):
     )
 
     data_dirs: list[PairConfig] = field(
-        metadata={"description": "directories containing data files"}, default_factory=MISSING
+        metadata={"description": "directories containing data files"},
+        default_factory=MISSING,
     )

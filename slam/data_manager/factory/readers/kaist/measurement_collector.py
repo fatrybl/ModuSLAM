@@ -2,7 +2,7 @@ import logging
 from collections.abc import Iterator
 from csv import reader as csv_reader
 from pathlib import Path
-from typing import Callable, Type
+from typing import Callable, overload
 
 import numpy as np
 import numpy.typing as npt
@@ -11,7 +11,7 @@ from plum import dispatch
 
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
-from slam.data_manager.factory.readers.data_reader import DataReader
+from slam.data_manager.factory.readers.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.element_factory import Location
 from slam.data_manager.factory.readers.kaist.data_classes import (
     BinaryDataLocation,
@@ -61,9 +61,9 @@ class CsvFileGenerator:
             logger.critical(msg)
             raise
         else:
-            line = tuple(line)
+            line_tuple = tuple(line)
             self.__count += 1
-            return self.__count, line
+            return self.__count, line_tuple
 
     def __iter__(self):
         return self
@@ -108,7 +108,8 @@ class MeasurementCollector:
         """
         self._sensor_data_iterators = SensorIterators(self._iterable_data_files, self._init_iterator)
 
-    def _init_iterator(self, file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
+    @staticmethod
+    def _init_iterator(file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
         """
         Initializes an iterator for a given file.
 
@@ -125,7 +126,8 @@ class MeasurementCollector:
             logger.critical(msg)
             raise FileNotValid(msg)
 
-    def __read_bin(self, file: Path) -> npt.NDArray[np.float32]:
+    @staticmethod
+    def __read_bin(file: Path) -> npt.NDArray[np.float32]:
         """
         Reads a binary file with Single-precision floating-point data (float32).
 
@@ -140,13 +142,13 @@ class MeasurementCollector:
             return data
 
     def __find_in_file(
-        self, iter: Iterator[tuple[int, tuple[str, ...]]], timestamp: int
+        self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int
     ) -> tuple[int, tuple[str, ...]]:
         """
         Iterates over file and finds the line with the given timestamp.
 
         Args:
-            iter (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple.
+            iterator (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple.
             timestamp (int): timestamp.
 
         Raises:
@@ -158,7 +160,7 @@ class MeasurementCollector:
         current_timestamp: int = self.INCORRECT_TIMESTAMP
         while current_timestamp != timestamp:
             try:
-                position, line = next(iter)
+                position, line = next(iterator)
             except StopIteration:
                 msg = f"Could not find measurement with timestamp={timestamp}"
                 logger.error(msg)
@@ -168,7 +170,8 @@ class MeasurementCollector:
                 current_timestamp = as_int(timestamp_str, logger)
         return position, line
 
-    def __iterate(self, it: FileIterator) -> tuple[Message, CsvDataLocation]:
+    @staticmethod
+    def __iterate(it: FileIterator) -> tuple[Message, CsvDataLocation]:
         """
         Iterates once with a given iterator.
 
@@ -199,7 +202,7 @@ class MeasurementCollector:
             iterator (Iterator[tuple[int, tuple[str, ...]]]): to be set to the position.
             timestamp (int): timestamp.
         """
-        __, __ = self.__find_in_file(iterator, timestamp)
+        self.__find_in_file(iterator, timestamp)
 
     def _get_image(self, sensor_name: str, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
         """
@@ -238,7 +241,7 @@ class MeasurementCollector:
         location = StereoImgDataLocation((left_img_file, right_img_file))
         return message, location
 
-    @dispatch
+    @overload
     def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
         """
         @overload.
@@ -255,7 +258,7 @@ class MeasurementCollector:
         message, location = self.__iterate(it)
         return message, location
 
-    @dispatch
+    @overload
     def _get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
         """
         @overload.
@@ -275,6 +278,12 @@ class MeasurementCollector:
         return message, location
 
     @dispatch
+    def _get_csv_data(self, sensor=None, timestamp=None):
+        """
+        @overload.
+        """
+
+    @overload
     def _get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
         """
         @overload.
@@ -307,7 +316,7 @@ class MeasurementCollector:
             location = BinaryDataLocation(file)
             return message, location
 
-    @dispatch
+    @overload
     def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
         """
         @overload.
@@ -328,12 +337,18 @@ class MeasurementCollector:
         file: Path = storage.path / timestamp_str
         file = file.with_suffix(self.BINARY_EXTENSION)
         raw_data = self.__read_bin(file)
-        raw_data = tuple(raw_data)
-        message = Message(timestamp_str, raw_data)
+        raw_data_tuple = tuple(raw_data)
+        message = Message(timestamp_str, raw_data_tuple)
         location = BinaryDataLocation(file)
         return message, location
 
     @dispatch
+    def _get_bin_data(self, sensor=None, timestamp=None):
+        """
+        @overload.
+        """
+
+    @overload
     def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
         """
         @overload.
@@ -358,7 +373,7 @@ class MeasurementCollector:
             message, location = self._get_image(sensor.name, timestamp)
             return message, location
 
-    @dispatch
+    @overload
     def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
         """
         @overload.
@@ -377,32 +392,38 @@ class MeasurementCollector:
         message, location = self._get_image(sensor.name, timestamp)
         return message, location
 
-    def __get_sensor_method(self, sensor: Type[Sensor]) -> Callable[..., tuple[Message, Type[Location]]]:
+    @dispatch
+    def _get_img_data(self, sensor=None, timestamp=None):
+        """
+        @overload.
+        """
+
+    def __get_sensor_method(self, sensor: Sensor) -> Callable[..., tuple[Message, Location]]:
         """
         Gets sensor`s specific method based on given sensor`s type
 
         Args:
-            sensor (Type[Sensor]): sensor to get method for.
+            sensor (Sensor): sensor to get method for.
 
         Raises:
             TypeError: if no method for given sensor`s type
 
         Returns:
-            Callable[..., tuple[Message, Type[Location]]]: method to get raw sensor measurement.
+            Callable[..., tuple[Message, Location]]: method to get raw sensor measurement.
         """
         if isinstance(sensor, (Imu, Fog, Altimeter, Gps, VrsGps, Encoder)):
             return self._get_csv_data
         elif isinstance(sensor, (Lidar2D, Lidar3D)):
             return self._get_bin_data
-        elif isinstance(sensor, (StereoCamera)):
+        elif isinstance(sensor, StereoCamera):
             return self._get_img_data
         else:
             msg = f"no method to parse data for sensor: {sensor} of type: {type(sensor)}"
             logger.critical(msg)
             raise TypeError(msg)
 
-    @dispatch
-    def get_data(self, sensor: Sensor) -> tuple[Message, Type[Location]]:
+    @overload
+    def get_data(self, sensor: Sensor) -> tuple[Message, Location]:
         """
         @overload.
         Gets data for the given sensor sequantially based on its iterator.
@@ -411,15 +432,15 @@ class MeasurementCollector:
             sensor (Sensor): sensor to get method for.
 
         Returns:
-            tuple[Message, Type[Location]]: message with data and timestamp;
+            tuple[Message, Location]: message with data and timestamp;
                                             measurement location.
         """
         method = self.__get_sensor_method(sensor)
         message, location = method(sensor)
         return message, location
 
-    @dispatch
-    def get_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, Type[Location]]:
+    @overload
+    def get_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, Location]:
         """
         @overload.
         Gets data for the given sensor and the timestamp.
@@ -429,10 +450,16 @@ class MeasurementCollector:
             timestamp (int): timestamp of a measurement.
 
         Returns:
-            tuple[Message, Type[Location]]: message with data and timestamp;
+            tuple[Message, Location]: message with data and timestamp;
                                             measurement location.
         """
         self.reset_iterators()
         method = self.__get_sensor_method(sensor)
         message, location = method(sensor, timestamp)
         return message, location
+
+    @dispatch
+    def get_data(self, sensor=None, timestamp=None):
+        """
+        @overload.
+        """

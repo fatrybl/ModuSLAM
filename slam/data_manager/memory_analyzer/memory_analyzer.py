@@ -1,8 +1,10 @@
+import logging
+
 import psutil
 
-from configs.system.data_manager.batch_factory.memory import (
-    MemoryAnalyzerConfig as MemoryAnalyzerConfig,
-)
+from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
+
+logger = logging.getLogger(__name__)
 
 
 class MemoryAnalyzer:
@@ -16,12 +18,7 @@ class MemoryAnalyzer:
             cfg (MemoryAnalyzerConfig): a config containing parameters.
         """
 
-        if cfg.graph_memory not in range(0, 100):
-            msg = "Incorrect percentage of memory for the graph: out of range"
-            logger.critical(msg)
-            raise ValueError(msg)
-        else:
-            self.__graph_memory_percent: float = cfg.graph_memory
+        self.__graph_memory_percent: float = cfg.graph_memory
 
     @property
     def total_memory(self) -> int:

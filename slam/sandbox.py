@@ -1,3 +1,6 @@
+import functools
+from typing import Any
+
 import gtsam
 
 graph = gtsam.NonlinearFactorGraph()
@@ -19,3 +22,44 @@ params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
 print(result)
+
+
+def multiple(func):
+    @functools.wraps(func)
+    def wrapper(self, item):
+        func(self, item)
+        for obj in self._objects:
+            getattr(obj, func.__name__)(item)
+
+    return wrapper
+
+
+class Base:
+    def __init__(
+        self,
+    ):
+        self._items = []
+
+    @property
+    def items(self):
+        return self._items
+
+    def add(self, item):
+        self._items.append(item)
+
+    def remove(self, item):
+        self._items.remove(item)
+
+
+class SubClass(Base):
+    def __init__(self, objects: tuple[Base, ...]):
+        super().__init__()
+        self._objects = objects
+
+    @multiple
+    def add(self, item: Any) -> None:
+        super().add(item)
+
+    @multiple
+    def remove(self, item: Any) -> None:
+        super().remove(item)
