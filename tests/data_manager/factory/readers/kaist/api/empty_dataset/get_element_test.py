@@ -1,5 +1,3 @@
-from typing import Type
-
 from hydra.core.config_store import ConfigStore
 from omegaconf import DictConfig
 from pytest import fixture, raises
@@ -61,24 +59,24 @@ class TestGetElement:
         self,
         register_configs: Fixture,
         generate_dataset: Fixture,
-        dataset_cfg: Type[KaistConfig],
-        regime_cfg: Type[RegimeConfig],
+        dataset_cfg: KaistConfig,
+        regime_cfg: RegimeConfig,
     ):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
             reader.get_element()
 
-    def test_get_element_2(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_get_element_2(self, dataset_cfg: KaistConfig, regime_cfg: RegimeConfig):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
             reader.get_element(self.element)
 
-    def test_get_element_3(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_get_element_3(self, dataset_cfg: KaistConfig, regime_cfg: RegimeConfig):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
             reader.get_element(self.sensor)
 
-    def test_get_element_4(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_get_element_4(self, dataset_cfg: KaistConfig, regime_cfg: RegimeConfig):
         with raises(FileNotValid):
             reader = KaistReader(dataset_cfg, regime_cfg)
             reader.get_element(self.sensor, self.timestamp)

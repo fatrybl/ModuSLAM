@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Type
 
 from pytest import raises
 
@@ -22,8 +21,8 @@ class TestKaistReader:
         self,
         generate_dataset: Fixture,
         register_configs: Fixture,
-        dataset_cfg: Type[KaistConfig],
-        regime_cfg: Type[RegimeConfig],
+        dataset_cfg: KaistConfig,
+        regime_cfg: RegimeConfig,
     ):
         """
         Successfull KaistReader creation with proper configuration when the dataset exists and not empty.
@@ -32,7 +31,7 @@ class TestKaistReader:
         reader = KaistReader(dataset_cfg, regime_cfg)
         assert reader is not None
 
-    def test_kaist_reader_invalid_confgis_1(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_kaist_reader_invalid_confgis_1(self, dataset_cfg: KaistConfig, regime_cfg: RegimeConfig):
         """
         Unsuccessfull KaistReader creation with improper configuration: dataset path.
         """
@@ -42,7 +41,7 @@ class TestKaistReader:
         with raises(FileNotValid):
             KaistReader(dataset_cfg, regime_cfg)
 
-    def test_kaist_reader_invalid_confgis_2(self, dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]):
+    def test_kaist_reader_invalid_confgis_2(self, dataset_cfg: KaistConfig, regime_cfg: RegimeConfig):
         """
         Unsuccessfull KaistReader creation with improper configuration: <SENSOR>.csv file.
         """

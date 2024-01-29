@@ -130,6 +130,18 @@ class BatchFactory:
     def _add_data(self, element=None):
         """
         @overload.
+
+        Calls:
+            1. add new element to the data batch.
+
+            2. add new element to the data batch based on the requested element.
+                Args:
+                    element (Element): element w/o raw sensor measurement.
+
+            3. add new element to the data batch based on the request.
+                Args:
+                    request (PeriodicData): contains sensor and time range (start, stop)
+                    of measurements to be added to the Data Batch.
         """
 
     @overload
@@ -176,7 +188,21 @@ class BatchFactory:
     def create_batch(self, elements=None):
         """
         @overload.
+
+        Calls:
+            1. create a new Data Batch from the dataset sequentially.
+            2. create a new Data Batch from the deque of elements.
+                Args:
+                    elements (deque[Element]): deque of elements w/o raw sensor measurements.
+            3. create a new Data Batch from the set of requests.
+                Args:
+                    requests (set[PeriodicData]): each request contains sensor and time range (start, stop)
+                    of measurements to be added to the Data Batch
         """
 
     def save_batch(self) -> None:
+        """
+        Saves the Data Batch to the disk.
+        Not implemented yet.
+        """
         raise NotImplementedError

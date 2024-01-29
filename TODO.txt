@@ -5,10 +5,8 @@ What should be done for DataManager v 0.0.1:
 
 What should be done for DataManager:
 1) Tests :
-    а. MemoryAnalyzer
-    в. Integration tests (different regimes: stream -> time_limit -> stream etc.)
+    a. Integration tests (different regimes: stream -> time_limit -> stream etc.)
 
-2) Remove StoppingCriterionSingleton
 
 
 What should be done for FrontendManager:
@@ -16,8 +14,6 @@ What should be done for FrontendManager:
  2) Add tests
 
  What should be done for the Framework:
-    1) Rewrite docstring for @overload methods s.t. each method indicates all possible param types
-    2) Rewrite Type(s) s.t. MyPy wont blame and use TypeVar
-    3) Update Sphinx docs
-    4) Change all typing.Iterable to collections.abc.Iterable
-    5) Add slots=True to dataclasses and use multiple inheritance where its possible.
+    1) Rewrite Type(s) s.t. MyPy wont blame and use TypeVar
+    2) Update Sphinx docs
+    3) Add slots=True to dataclasses and use multiple inheritance where its possible.

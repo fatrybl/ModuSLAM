@@ -1,4 +1,3 @@
-from typing import Type
 from unittest.mock import Mock, patch
 
 from PIL.Image import Image
@@ -46,7 +45,7 @@ class TestGetElement:
         data_reader: KaistReader,
         reference_element: Element,
     ):
-        sensor: Type[Sensor] = reference_element.measurement.sensor
+        sensor: Sensor = reference_element.measurement.sensor
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
@@ -69,7 +68,7 @@ class TestGetElement:
         data_reader: KaistReader,
         reference_element: Element,
     ):
-        sensor: Type[Sensor] = reference_element.measurement.sensor
+        sensor: Sensor = reference_element.measurement.sensor
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
@@ -100,7 +99,7 @@ class TestGetElementOfSensor:
         data_reader: KaistReader,
         sensor_element_pair: SensorElementPair,
     ):
-        sensor: Type[Sensor] = sensor_element_pair.sensor
+        sensor: Sensor = sensor_element_pair.sensor
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 
@@ -124,7 +123,7 @@ class TestGetElementOfSensor:
         data_reader: KaistReader,
         sensor_element_pair: SensorElementPair,
     ):
-        sensor: Type[Sensor] = sensor_element_pair.sensor
+        sensor: Sensor = sensor_element_pair.sensor
         mock_sensor_factory.used_sensors = {sensor}
         mock_sensor_factory.name_to_sensor.return_value = sensor
 

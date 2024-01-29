@@ -88,7 +88,7 @@ class DataReader(ABC):
         @overload.
         Gets an element with raw sensor measurement from a dataset for
             a given sensor and timestamp. If timestamp is None,
-            gets the element sequantally based on iterator position.
+            gets the element sequentially based on iterator position.
 
         Args:
             sensor (Sensor): a sensor to get measurement of.
@@ -102,4 +102,32 @@ class DataReader(ABC):
     def get_element(self, element=None, timestamp=None):
         """
         @overload.
+
+        Gets element from a dataset in different regimes based on arguments.
+
+        Calls:
+            1.
+                Args:
+                    __: Gets element from a dataset sequentially based on iterator position.
+
+                Returns:
+                    Element | None: element with raw sensor measurement
+                                    or None if all measurements from a dataset has already been processed.
+            2.
+                Args:
+                    element (Element): Gets an element with raw sensor measurement from a dataset for
+                                        a given element without raw sensor measurement.
+
+                Returns:
+                    element (Element): with raw sensor measurement.
+            3.
+                Args:
+                    sensor (Sensor): Gets an element with raw sensor measurement from a dataset for
+                                        a given sensor and timestamp. If timestamp is None,
+                                        gets the element sequentially based on iterator position.
+                    timestamp (int | None): timestamp of sensor`s measurement. Defaults to None.
+
+                Returns:
+                    element (Element): with raw sensor measurement.
+
         """

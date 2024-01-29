@@ -1,5 +1,3 @@
-from typing import Type
-
 import pytest
 from pytest import mark
 
@@ -20,6 +18,6 @@ def test_get_reader_success(reader_name: str, result: type[DataReader]):
 
 
 @mark.parametrize(("reader_name", "exception"), [("UnknownReader", NotImplementedError)])
-def test_get_reader_fail(reader_name: str, exception: Type[Exception]):
+def test_get_reader_fail(reader_name: str, exception: Exception):
     with pytest.raises(exception):
         DataReaderFactory.get_reader(reader_name)

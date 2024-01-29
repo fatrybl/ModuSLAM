@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class KaistReaderState(DataFlowState):
     """
-    data_stam_iterator: iterator for data_stamp.csv file, controling the order of measurements.
+    data_stamp_iterator: iterator for data_stamp.csv file, controling the order of measurements.
     sensors_iterators: set of iterators for each <SENSOR>_stamp.csv file.
     """
 
@@ -234,6 +234,16 @@ class KaistReader(DataReader):
     def __iterate_n_times(self, n=None, it=None):
         """
         @overload.
+
+        Iterates N times with the given iterator.
+
+        Calls:
+            1.  Args:
+                    n (int): a number of iterations.
+                    it (FileIterator): an iterator for a file with sensor timestamps.
+            2.  Args:
+                    n (int): a number of iterations.
+                    it (Iterator[dict[str, str]]): an iterator for data_stamp.csv file.
         """
 
     def _set_initial_state(self, time_range: TimeRange):
@@ -368,5 +378,30 @@ class KaistReader(DataReader):
     @dispatch
     def get_element(self, element=None, timestamp=None):
         """
-        @overload.
+        Gets element from a dataset in different regimes based on arguments.
+
+        Calls:
+            1.
+                Args:
+                    __: Gets element from a dataset sequentially based on iterator position.
+
+                Returns:
+                    Element | None: element with raw sensor measurement
+                                    or None if all measurements from a dataset has already been processed.
+            2.
+                Args:
+                    element (Element): Gets an element with raw sensor measurement from a dataset for
+                                        a given element without raw sensor measurement.
+
+                Returns:
+                    element (Element): with raw sensor measurement.
+            3.
+                Args:
+                    sensor (Sensor): Gets an element with raw sensor measurement from a dataset for
+                                        a given sensor and timestamp. If timestamp is None,
+                                        gets the element sequentially based on iterator position.
+                    timestamp (int | None): timestamp of sensor`s measurement. Defaults to None.
+
+                Returns:
+                    element (Element): with raw sensor measurement.
         """

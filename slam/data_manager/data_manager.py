@@ -61,4 +61,18 @@ class DataManager:
     def make_batch(self, measurements=None):
         """
         @overload.
+
+        Calls:
+            1. Sequentially: create a batch with measurements sequentially:
+                Args:
+                    None
+
+            2. With measurements: create a batch with given measurements:
+                Args:
+                    measurements (deque[Element]): deque of elements without row data.
+
+            3. With requests: create a batch with measurements from requests:
+                Args:
+                    requests (set[PeriodicData]): set of requests.
+                    Each request corresponds to sensor and time limits: (start, stop).
         """

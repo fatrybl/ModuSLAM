@@ -281,6 +281,16 @@ class MeasurementCollector:
     def _get_csv_data(self, sensor=None, timestamp=None):
         """
         @overload.
+
+        Gets sensor`s measurement from csv file.
+
+        Calls:
+            1.  Args:
+                    sensor (Sensor): sensor to get measurement for:
+                    From current iterator position.
+            2.  Args:
+                    sensor (Sensor): sensor to get measurement for.
+                    timestamp (int): timestamp of a measurement.
         """
 
     @overload
@@ -346,6 +356,16 @@ class MeasurementCollector:
     def _get_bin_data(self, sensor=None, timestamp=None):
         """
         @overload.
+
+        Gets sensor`s measurement from binary file.
+
+        Calls:
+            1.  Args:
+                    sensor (Sensor): sensor to get measurement for:
+                    From current iterator position.
+            2.  Args:
+                    sensor (Sensor): sensor to get measurement for.
+                    timestamp (int): timestamp of a measurement.
         """
 
     @overload
@@ -396,6 +416,16 @@ class MeasurementCollector:
     def _get_img_data(self, sensor=None, timestamp=None):
         """
         @overload.
+
+        Gets sensor`s measurement from .png file.
+
+        Calls:
+            1.  Args:
+                    sensor (Sensor): sensor to get measurement for:
+                    From current iterator position.
+            2.  Args:
+                    sensor (Sensor): sensor to get measurement for.
+                    timestamp (int): timestamp of a measurement.
         """
 
     def __get_sensor_method(self, sensor: Sensor) -> Callable[..., tuple[Message, Location]]:
@@ -462,4 +492,14 @@ class MeasurementCollector:
     def get_data(self, sensor=None, timestamp=None):
         """
         @overload.
+
+        Gets sensor`s measurement.
+
+        Calls:
+            1.  Args:
+                    sensor (Sensor): sensor to get measurement for:
+                    From current iterator position.
+            2.  Args:
+                    sensor (Sensor): sensor to get measurement for.
+                    timestamp (int): timestamp of a measurement.
         """
