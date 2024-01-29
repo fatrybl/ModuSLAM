@@ -1,38 +1,38 @@
 import logging
 
-from slam.frontend_manager.elements_distributor.elements_distributor import MeasurementStorage
-from slam.frontend_manager.graph.graph_candidate import GraphCandidate
-from slam.frontend_manager.graph_builders.candidate_factory.candidate_analyzer import CandidateAnalyzer
-from slam.frontend_manager.graph_builders.candidate_factory.state_analyzer import LidarStateAnalyzer
+from slam.frontend_manager.elements_distributor.elements_distributor import (
+    MeasurementStorage,
+)
+from slam.frontend_manager.graph.graph_candidate import GraphCandidate, State
+from slam.frontend_manager.graph_builders.candidate_factory.candidate_analyzer_ABC import (
+    CandidateAnalyzer,
+)
+from slam.frontend_manager.graph_builders.candidate_factory.state_analyzers.single_lidar import (
+    SingleLidarStateAnalyzer,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class CandidateFactory:
     """
-    Creates graph candidate.
+    Creates a graph candidate.
     """
 
-    def __init__(self, ):
+    def __init__(
+        self,
+    ):
         self.graph_candidate = GraphCandidate()
-        self.state_analyzer = LidarStateAnalyzer()
+        self.state_analyzer = SingleLidarStateAnalyzer()
         self.candidate_analyzer = CandidateAnalyzer()
-
-    def _create_state(self, storage: MeasurementStorage) -> None:
-        """
-        Creates a new state based on the given measurements storage.
-        Args:
-            storage: a storage with the processed measurements.
-        """
-        pass
 
     def add_state(self, storage: MeasurementStorage) -> None:
         """
         Adds new state to the graph candidate based on measurements in the storage.
         Resets state status.
         """
-        new_state = self._create_state(storage)
-        self.graph_candidate.states += new_state
+        new_state: State = State(storage)
+        self.graph_candidate.states.append(new_state)
         self.state_analyzer.new_state_status = False
 
     def get_candidate_status(self) -> bool:

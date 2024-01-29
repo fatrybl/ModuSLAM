@@ -1,20 +1,7 @@
-from abc import ABC, abstractmethod
-
 from slam.frontend_manager.graph.graph_candidate import GraphCandidate
-
-
-class CandidateAnalyzer(ABC):
-    """
-    Analyzes state candidates.
-    """
-
-    @abstractmethod
-    def check_readiness(self, graph_candidate: GraphCandidate) -> bool:
-        """
-        Evaluates existing state(s) and decides whether the criteria of a new graph candidate are satisfied.
-
-        Returns: success/failure status of a new graph candidate.
-        """
+from slam.frontend_manager.graph_builders.candidate_factory.candidate_analyzer_ABC import (
+    CandidateAnalyzer,
+)
 
 
 class PointcloudCandidateAnalyzer(CandidateAnalyzer):

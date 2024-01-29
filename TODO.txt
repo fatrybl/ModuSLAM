@@ -1,19 +1,20 @@
 What should be done for DataManager v 0.0.1:
     1) Description for all methods/classes.
     2) Update drawio diagrams.
-    3) Test cases when number of used_sensors < all_sensors.
 
 What should be done for DataManager:
 1) Tests :
     a. Integration tests (different regimes: stream -> time_limit -> stream etc.)
+    b. Test cases when number of used_sensors < all_sensors.
 
 
 
 What should be done for FrontendManager:
  1) Update drawio diagrams.
  2) Add tests
+ 3) Finish structure.
 
  What should be done for the Framework:
-    1) Rewrite Type(s) s.t. MyPy wont blame and use TypeVar
+    1) Make MyPy and Flake8 happy with all code and tests.
     2) Update Sphinx docs
     3) Add slots=True to dataclasses and use multiple inheritance where its possible.

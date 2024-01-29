@@ -1,5 +1,5 @@
 from slam.data_manager.factory.readers.element_factory import Element
-from slam.frontend_manager.handlers.ABC_module import ElementHandler
+from slam.frontend_manager.handlers.ABC_handler import ElementHandler
 
 
 class PointcloudMatcher(ElementHandler):

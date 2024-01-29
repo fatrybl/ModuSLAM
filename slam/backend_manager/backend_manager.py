@@ -21,7 +21,6 @@ class GraphSolver:
 
 
 class BackendManager:
-
     def __init__(self, config: HydraConfig):
         self.solver = GraphSolver(config.solver)
 

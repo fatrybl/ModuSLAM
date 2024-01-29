@@ -1,5 +1,6 @@
 import logging
 
+
 class MapManager:
     logger = logging.getLogger(__name__)
 

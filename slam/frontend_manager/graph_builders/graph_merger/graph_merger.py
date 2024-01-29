@@ -1,54 +1,45 @@
 import logging
-from typing import Type
 
-from slam.frontend_manager.graph.edges import Edge
+from slam.frontend_manager.elements_distributor.measurement_storage import (
+    MeasurementStorage,
+)
+from slam.frontend_manager.graph.edges.base_edge import Edge
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.graph_candidate import State
+from slam.frontend_manager.graph.graph_candidate import GraphCandidate, State
 
 logger = logging.getLogger(__name__)
 
 
 class GraphMerger:
+    def __init__(
+        self,
+    ) -> None:
+        self._handler_edgeFactory_table = None
 
-    def __init__(self, ) -> None:
-        self.edges = []
-        self._handler_edge_table = None
-
-    def __from_measurements(self, instance, measurements) -> tuple:
-        edges = tuple()
-        for m in measurements:
-            edge = instance.create(m)
-            edges += edge
+    @staticmethod
+    def _construct(graph: Graph, edges_factories, measurements) -> list[Edge]:
+        edges: list[Edge] = []
+        for factory in edges_factories:
+            new_edges = factory.create(graph, measurements)
+            edges += (new_edges,)
         return edges
 
-    def _construct(self, edge_instances, measurements) -> tuple:
-        edges = tuple()
-        for instance in edge_instances:
-            new_edges = __from_measurements(instance, measurements)
-            edges += new_edges
+    def _create_edges(self, graph: Graph, state: State) -> list[Edge]:
+        edges: list[Edge] = []
+        storage: MeasurementStorage = state.storage
+        for handler, measurements in storage.data:
+            edges_factories = self._handler_edgeFactory_table[handler]
+            new_edges = self._construct(graph, edges_factories, measurements)
+            edges += (new_edges,)
         return edges
 
-    def _create_edges(self, state: State) -> tuple[Type[Edge]]:
-        edges: tuple[Type[Edge]] = tuple()
-        for handler, measurements in state.storage.data:
-            edge_instances = self._handler_edge_table[handler]
-            new_edges = self._construct(edge_instances, measurements)
-            edges += new_edges
-        return edges
-
-    def connect(self, graph: Graph, states: list[State]):
+    def connect(self, graph: Graph, candidate: GraphCandidate) -> None:
         """
-        Iterates through candidates -> vertices per candidate -> measurements from external modules.
-        TODO: remove dummy iteration through all unnecessary handlers.
+        Connects the given graph with the given candidate.
         Args:
-            graph (Graph): main graph to be connected with new vertices (candidates)
-            states (list[states]): list of candidates to be connected with the graph.
-                Each candidate might have multiple vertices.
-            storage (MeasurementStorage): contains processed measurements for each external module.
-
-        Returns:
-
+            candidate (GraphCandidate): graph candidate to be merged into Graph.
+            graph (Graph): main graph to be connected with new vertices (candidates).
         """
-        for state in states:
-            edges = self._create_edges(state)
+        for state in candidate.states:
+            edges = self._create_edges(graph, state)
             graph.add_edge(edges)

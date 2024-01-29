@@ -1,12 +1,20 @@
 import logging
-from typing import Type
 
 from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
 from slam.data_manager.factory.batch import DataBatch
-from slam.frontend_manager.elements_distributor.elements_distributor import ElementDistributor
+from slam.frontend_manager.elements_distributor.elements_distributor import (
+    ElementDistributor,
+)
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.graph_candidate import GraphCandidate
+from slam.frontend_manager.graph_builders.candidate_factory.candidate_factory import (
+    CandidateFactory,
+)
 from slam.frontend_manager.graph_builders.graph_builder_ABC import GraphBuilder
-from slam.frontend_manager.graph_builders.graph_builder_factory import GraphBuilderFactory
+from slam.frontend_manager.graph_builders.graph_builder_factory import (
+    GraphBuilderFactory,
+)
+from slam.frontend_manager.graph_builders.graph_merger.graph_merger import GraphMerger
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +25,9 @@ class FrontendManager:
     """
 
     def __init__(self, config: FrontendManagerConfig):
-        self.graph = Graph()
-        self.graph_builder: Type[GraphBuilder] = GraphBuilderFactory.create(config.graph_builder)
-        self.distributor = ElementDistributor()
+        self.graph: Graph = Graph()
+        self.graph_builder: GraphBuilder = GraphBuilderFactory.create(config.graph_builder)
+        self.distributor: ElementDistributor = ElementDistributor()
 
     def _create_graph_candidate(self, batch: DataBatch) -> None:
         """
@@ -34,11 +42,12 @@ class FrontendManager:
 
     def _merge(self) -> None:
         """
-        Connects a pseudo-graph and a main graph with factors.
-        FLUSH measurements queue in element_distributor.
+        Connects a graph candidate with the main graph.
         """
-        states = self.graph_builder.candidate_factory.states
-        self.graph_builder.merger.connect(self.graph, states)
+        factory: CandidateFactory = self.graph_builder.candidate_factory
+        candidate: GraphCandidate = factory.graph_candidate
+        merger: GraphMerger = self.graph_builder.candidate_merger
+        merger.connect(self.graph, candidate)
 
     def create_graph(self, batch: DataBatch) -> None:
         """
