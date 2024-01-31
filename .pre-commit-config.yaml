@@ -29,5 +29,3 @@ repos:
       - id: mypy
         args: [ "--config-file", "pyproject.toml" ]
         types: [ python ]
-        additional_dependencies:
-          - slam
