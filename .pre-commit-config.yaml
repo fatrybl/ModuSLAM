@@ -1,9 +1,10 @@
 repos:
-  #  - repo: https://github.com/pycqa/flake8
-  #    rev: 7.0.0
-  #    hooks:
-  #      - id: flake8
-  #        args: [ --max-line-length=120 ]
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        args: [ --config=setup.cfg ]
+        types: [ python ]
 
   - repo: https://github.com/psf/black
     rev: 23.12.1
@@ -19,9 +20,9 @@ repos:
         name: isort (python)
         args: [ "--profile", "black" ]
 
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: 'v1.8.0'
-#    hooks:
-#      - id: mypy
-#        args: [ "--check-untyped-defs", "--ignore-missing-imports" ]
-#        types: [ python ]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.8.0'
+    hooks:
+      - id: mypy
+        args: [ --config-file=pyproject.toml ]
+        types: [ python ]

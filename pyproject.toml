@@ -1,8 +1,8 @@
 [build-system]
 requires = [
-   'setuptools',
-   'wheel',
-   'hatchling'
+    'setuptools',
+    'wheel',
+    'hatchling'
 ]
 build-backend = 'setuptools.build_meta'
 
@@ -10,3 +10,9 @@ build-backend = 'setuptools.build_meta'
 addopts = [
     "--import-mode=importlib",
 ]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = ['slam.frontend_manager']
