@@ -1,11 +1,11 @@
 repos:
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
     hooks:
-      - id: flake8
-        args: [ --config=setup.cfg ]
-        types: [ python ]
-
+      - id: isort
+        name: isort (python)
+        args: [ "--profile", "black" ]
+        
   - repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:
@@ -13,12 +13,12 @@ repos:
         args: [ --line-length=120 ]
         types: [ python ]
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
     hooks:
-      - id: isort
-        name: isort (python)
-        args: [ "--profile", "black" ]
+      - id: flake8
+        args: [ --config=setup.cfg ]
+        types: [ python ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: 'v1.8.0'
