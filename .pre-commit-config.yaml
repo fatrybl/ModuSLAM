@@ -1,4 +1,4 @@
-exclude: "slam"
+exclude: "slam.frontend_manager"
 repos:
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
