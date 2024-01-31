@@ -1,4 +1,5 @@
-exclude: "slam.frontend_manager"
+default_language_version:
+  python: python3.11
 repos:
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
