@@ -5,7 +5,7 @@ repos:
       - id: isort
         name: isort (python)
         args: [ "--profile", "black" ]
-        
+
   - repo: https://github.com/psf/black
     rev: 24.1.1
     hooks:
@@ -24,5 +24,5 @@ repos:
     rev: 'v1.8.0'
     hooks:
       - id: mypy
-        args: [ --config-file=pyproject.toml ]
+        args: [ "--config-file", "pyproject.toml" ]
         types: [ python ]
