@@ -27,5 +27,5 @@ repos:
     rev: 'v1.8.0'
     hooks:
       - id: mypy
-        args: [ "--config-file", "/home/oem/Desktop/PhD/mySLAM/pyproject.toml" ]
+        args: [ "--config-file", "pyproject.toml" ]
         types: [ python ]
