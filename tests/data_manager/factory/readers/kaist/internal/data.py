@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from hydra import compose, initialize_config_module
-from hydra.core.config_store import ConfigStore
 from numpy import ones, uint8
 from PIL import Image
 
@@ -29,13 +27,9 @@ from tests.data_manager.auxiliary_utils.kaist_data_factory import (
     SensorElementPair,
     SensorNamePath,
 )
-from tests.data_manager.factory.readers.kaist.conftest import SENSOR_FACTORY_CONFIG_NAME
 from tests.data_manager.factory.readers.kaist.internal.config import DATASET_DIR
 
-cs = ConfigStore.instance()
-cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
-    params = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
+params: ParameterConfig = ParameterConfig()
 
 
 @dataclass(frozen=True)
@@ -86,7 +80,7 @@ velodyne_right = SensorNamePath("velodyne_right", DatasetStructure.lidar_3D_righ
 stereo = SensorNamePath("stereo", DatasetStructure.stereo_stamp_file)
 
 # data_stamp.csv file content. The order of the measurements.
-data_stamp = [
+data_stamp: list[list] = [
     [1, encoder.name],
     [2, sick_back.name],
     [3, imu.name],

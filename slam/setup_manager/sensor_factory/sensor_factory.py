@@ -75,7 +75,7 @@ class SensorFactory:
             if s.name == name:
                 return s
 
-        msg = f"No sensor with name {name} in {cls.all_sensors}"
+        msg = f"No sensor with name {name!r} in {cls.all_sensors}"
         logger.critical(msg)
         raise SensorNotFound(msg)
 

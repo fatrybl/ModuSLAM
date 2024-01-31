@@ -1,18 +1,3 @@
-from unittest.mock import Mock, patch
-
-from PIL.Image import Image
-from pytest import mark
-
-from slam.data_manager.factory.readers.element_factory import Element
-from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.sensors import Sensor
-from tests.data_manager.auxiliary_utils.kaist_data_factory import (
-    DataFactory,
-    SensorElementPair,
-)
-
-from .data import elements, sensor_element_pairs
-
 """
 Tests description:
 
@@ -26,6 +11,27 @@ Tests description:
     4.4) get_element(sensor[Sensor], timestamp[int])
 """
 
+import pytest
+from PIL.Image import Image
+from pytest import mark
+
+from configs.sensors.base_sensor_parameters import ParameterConfig
+from configs.system.setup_manager.sensor_factory import (
+    SensorConfig,
+    SensorFactoryConfig,
+)
+from slam.data_manager.factory.readers.element_factory import Element
+from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.setup_manager.sensor_factory.sensors import Sensor
+from tests.data_manager.auxiliary_utils.kaist_data_factory import (
+    DataFactory,
+    SensorElementPair,
+)
+from tests.data_manager.factory.readers.kaist.api.full_dataset.data import (
+    elements,
+    sensor_element_pairs,
+)
 
 OBJECT_PATH_TO_PATCH = "slam.data_manager.factory.readers.kaist.kaist_reader.SensorFactory"
 
@@ -38,18 +44,26 @@ class TestGetElement:
     """
 
     @mark.parametrize("reference_element", (elements))
-    @patch(OBJECT_PATH_TO_PATCH)
     def test_get_element_1(
         self,
-        mock_sensor_factory: Mock,
         data_reader: KaistReader,
         reference_element: Element,
     ):
         sensor: Sensor = reference_element.measurement.sensor
-        mock_sensor_factory.used_sensors = {sensor}
-        mock_sensor_factory.name_to_sensor.return_value = sensor
 
-        element: Element = data_reader.get_element()
+        sensor_cfg: SensorConfig = SensorConfig(
+            name=sensor.name, type=sensor.__class__.__name__, config=ParameterConfig()
+        )
+        cfg: SensorFactoryConfig = SensorFactoryConfig()
+        cfg.used_sensors = [sensor_cfg]
+        cfg.all_sensors = [sensor_cfg]
+
+        SensorFactory.init_sensors(cfg)
+
+        element: Element | None = data_reader.get_element()
+
+        if element is None:
+            pytest.fail("Element is None, but should be of type Element")
 
         if isinstance(element.measurement.values[0], Image):
             assert DataFactory.equal_images(element, reference_element) is True
@@ -61,16 +75,21 @@ class TestGetElement:
         assert element.measurement.sensor == reference_element.measurement.sensor
 
     @mark.parametrize("reference_element", (elements))
-    @patch(OBJECT_PATH_TO_PATCH)
     def test_get_element_2(
         self,
-        mock_sensor_factory: Mock,
         data_reader: KaistReader,
         reference_element: Element,
     ):
         sensor: Sensor = reference_element.measurement.sensor
-        mock_sensor_factory.used_sensors = {sensor}
-        mock_sensor_factory.name_to_sensor.return_value = sensor
+
+        sensor_cfg: SensorConfig = SensorConfig(
+            name=sensor.name, type=sensor.__class__.__name__, config=ParameterConfig()
+        )
+        cfg: SensorFactoryConfig = SensorFactoryConfig()
+        cfg.used_sensors = [sensor_cfg]
+        cfg.all_sensors = [sensor_cfg]
+
+        SensorFactory.init_sensors(cfg)
 
         element: Element = data_reader.get_element(reference_element)
 
@@ -92,16 +111,21 @@ class TestGetElementOfSensor:
     """
 
     @mark.parametrize("sensor_element_pair", (sensor_element_pairs))
-    @patch(OBJECT_PATH_TO_PATCH)
     def test_get_element_3(
         self,
-        mock_sensor_factory: Mock,
         data_reader: KaistReader,
         sensor_element_pair: SensorElementPair,
     ):
         sensor: Sensor = sensor_element_pair.sensor
-        mock_sensor_factory.used_sensors = {sensor}
-        mock_sensor_factory.name_to_sensor.return_value = sensor
+
+        sensor_cfg: SensorConfig = SensorConfig(
+            name=sensor.name, type=sensor.__class__.__name__, config=ParameterConfig()
+        )
+        cfg: SensorFactoryConfig = SensorFactoryConfig()
+        cfg.used_sensors = [sensor_cfg]
+        cfg.all_sensors = [sensor_cfg]
+
+        SensorFactory.init_sensors(cfg)
 
         reference_element: Element = sensor_element_pair.element
         element: Element = data_reader.get_element(sensor)
@@ -116,16 +140,21 @@ class TestGetElementOfSensor:
         assert element.measurement.sensor == reference_element.measurement.sensor
 
     @mark.parametrize("sensor_element_pair", (sensor_element_pairs))
-    @patch(OBJECT_PATH_TO_PATCH)
     def test_get_element_4(
         self,
-        mock_sensor_factory: Mock,
         data_reader: KaistReader,
         sensor_element_pair: SensorElementPair,
     ):
         sensor: Sensor = sensor_element_pair.sensor
-        mock_sensor_factory.used_sensors = {sensor}
-        mock_sensor_factory.name_to_sensor.return_value = sensor
+
+        sensor_cfg: SensorConfig = SensorConfig(
+            name=sensor.name, type=sensor.__class__.__name__, config=ParameterConfig()
+        )
+        cfg: SensorFactoryConfig = SensorFactoryConfig()
+        cfg.used_sensors = [sensor_cfg]
+        cfg.all_sensors = [sensor_cfg]
+
+        SensorFactory.init_sensors(cfg)
 
         reference_element: Element = sensor_element_pair.element
         timestamp: int = reference_element.timestamp

@@ -1,8 +1,9 @@
+from typing import Any
+
 from configs.sensors.base_sensor_parameters import ParameterConfig
 
 
 class Sensor:
-
     """Base class for any Sensor.
     __Hash__(), __eq__() are overridden for hashability purposes.
     """
@@ -22,10 +23,10 @@ class Sensor:
         return self.name
 
     def __hash__(self) -> int:
-        return hash((self.name, self.config))
+        return hash(self.name)
 
-    def __eq__(self, value: object) -> bool:
-        return self.name == value.name and self.config == value.config
+    def __eq__(self, value: Any) -> bool:
+        return self.name == value.name
 
 
 class Imu(Sensor):

@@ -1,6 +1,7 @@
 import logging
 
-from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
+from omegaconf import DictConfig
+
 from slam.data_manager.factory.batch import DataBatch
 from slam.frontend_manager.elements_distributor.elements_distributor import (
     ElementDistributor,
@@ -24,10 +25,10 @@ class FrontendManager:
     Manages all frontend procedures: process measurements, build graph, detect loops and anomalies...
     """
 
-    def __init__(self, config: FrontendManagerConfig):
+    def __init__(self, config: DictConfig):
         self.graph: Graph = Graph()
         self.graph_builder: GraphBuilder = GraphBuilderFactory.create(config.graph_builder)
-        self.distributor: ElementDistributor = ElementDistributor()
+        self.distributor: ElementDistributor = ElementDistributor(config.element_distributor)
 
     def _create_graph_candidate(self, batch: DataBatch) -> None:
         """

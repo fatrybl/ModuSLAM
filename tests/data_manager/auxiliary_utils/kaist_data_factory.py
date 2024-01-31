@@ -1,7 +1,8 @@
 import csv
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, fields
 from pathlib import Path
-from typing import Any, Iterable, Iterator, Type
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
@@ -19,7 +20,7 @@ class SensorNamePath:
 
 @dataclass
 class SensorElementPair:
-    sensor: Type[Sensor]
+    sensor: Sensor
     element: Element
 
 
@@ -55,23 +56,25 @@ class DataFactory:
         return result
 
     @staticmethod
-    def flatten(set: tuple[Any, ...]) -> Iterator[Any]:
+    def flatten(data: Iterable[Any]) -> Iterator[Any]:
         """
-        Flattens tuple of tuples for propper comparison,
+        Flattens tuple of tuples for proper comparison,
         Args:
-            set (tuple[Any]): tuple of any-type-measurements
+            data (Iterable[Any]): tuple of any-type-measurements
 
         Yields:
             Iterator[Any]: item in set.
         """
-        for item in set:
+        for item in data:
             if isinstance(item, Iterable) and not isinstance(item, str):
-                for x in DataFactory.flatten(item):
+                items = DataFactory.flatten(item)
+                for x in items:
                     yield x
             else:
                 yield item
 
-    def to_binary_file(self, data: tuple[float, ...], path: Path) -> None:
+    @staticmethod
+    def to_binary_file(data: tuple[float, ...], path: Path) -> None:
         """
         Writes data to a binary file with floating point representation (float32)
         due to lidar measurements format in Kaist Urban Dataset.
@@ -84,9 +87,9 @@ class DataFactory:
             numpy_array = np.asarray(data, dtype=np.float32)
             numpy_array.tofile(output_file)
 
+    @staticmethod
     def to_csv_file(
-        self,
-        data: Iterable[Iterable[int | str]] | Iterable[float | int],
+        data: Iterable[Any] | Iterable[Iterable[Any]],
         path: Path,
         multilines: bool = False,
     ) -> None:
@@ -97,8 +100,7 @@ class DataFactory:
             data (Iterable[Iterable[int | str]] | Iterable[float | int]):
                 data to be written to a CSV file.
             path (Path): file path.
-            multilines (bool, optional): If True: writes list[list[str]] to the file.
-            Defaults to False.
+            multilines (bool | None): If True: writes list[list[str]] to the file. Defaults to False.
         """
         with open(path, "a", encoding="UTF8", newline="") as outfile:
             writer = csv.writer(outfile)
@@ -107,7 +109,8 @@ class DataFactory:
             else:
                 writer.writerow(data)
 
-    def to_img_file(self, data: tuple[int, npt.NDArray[np.uint8]], path: Path) -> None:
+    @staticmethod
+    def to_img_file(data: tuple[int, npt.NDArray[np.uint8]], path: Path) -> None:
         """
         Writes image to the given file path with OpenCV module.
 
@@ -134,21 +137,21 @@ class DataFactory:
 
     def generate_data(
         self,
-        data_stamp: list[list[int | str]],
-        stamp_files: list[tuple[list[int], Path]],
-        csv_data: list[tuple[tuple[float, ...], Path]],
-        binary_data: list[tuple[tuple[float, ...], Path]],
-        image_data: list[tuple[tuple[int, npt.NDArray[np.uint8]], Path]],
+        data_stamp: Iterable[list[int | str]],
+        stamp_files: Iterable[tuple],
+        csv_data: Iterable[tuple],
+        binary_data: Iterable[tuple],
+        image_data: Iterable[tuple],
     ) -> None:
         """
         Writes data to the directories & files.
 
         Args:
             data_stamp (list[list[int  |  str]]): content of data_stamp.csv
-            stamp_files (list[tuple[list[int], Path]]): content of <SENSOR>_stamp.csv
-            csv_data (list[tuple[tuple[float, ...], Path]]): sensor data in csv format.
-            binary_data (list[tuple[tuple[float, ...], Path]]): sensor data in binary format.
-            image_data (list[tuple[tuple[int, npt.NDArray[np.float32]], Path]]): sensor data in image-based format.
+            stamp_files (Iterable[tuple]): content of <SENSOR>_stamp.csv
+            csv_data (Iterable[tuple]): sensor data in csv format.
+            binary_data (Iterable[tuple]): sensor data in binary format.
+            image_data (Iterable[tuple]): sensor data in image-based format.
         """
 
         self.to_csv_file(data_stamp, self.dataset_structure.data_stamp, multilines=True)

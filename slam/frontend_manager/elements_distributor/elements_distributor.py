@@ -1,5 +1,7 @@
 import logging
 
+from omegaconf import DictConfig
+
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.frontend_manager.elements_distributor.handler_factory import HandlerFactory
@@ -16,8 +18,8 @@ class ElementDistributor:
     Distributes elements from DataBatch to corresponding external modules for preprocessing.
     """
 
-    def __init__(self, config):
-        self.handler_factory = HandlerFactory()
+    def __init__(self, config: DictConfig):
+        self.handler_factory = HandlerFactory(config.handler_factory)
         self.storage = MeasurementStorage()
 
     def _distribute(self, element: Element) -> None:

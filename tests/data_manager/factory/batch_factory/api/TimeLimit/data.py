@@ -1,9 +1,22 @@
+"""
+each sensor request:
+    1) start==stop: start of dataset
+    2) start==stop: end of dataset
+    3) start==stop: middle of dataset
+    4) start!=stop: all elements in dataset
+    5) start!=stop: some middle elements in dataset
+    6) start!=stop: from start to middle of dataset
+    7) start!=stop: from middle to end of dataset
+    8) start!=stop: from start to pre-end of dataset
+    9) start!=stop: from 2nd-start to end of dataset
+
+    In total: 9*N cases, 9 - number of test cases per sensor, N - number of sensors.
+"""
+
 import itertools
 from dataclasses import dataclass
 from pathlib import Path
 
-from hydra import compose, initialize_config_module
-from hydra.core.config_store import ConfigStore
 from numpy import ones, uint8
 from PIL import Image
 
@@ -30,28 +43,8 @@ from slam.setup_manager.sensor_factory.sensors import (
 from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 from tests.data_manager.factory.batch_factory.api.TimeLimit.config import DATASET_DIR
-from tests.data_manager.factory.batch_factory.conftest import SENSOR_FACTORY_CONFIG_NAME
 
-cs = ConfigStore.instance()
-cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module="tests.data_manager.factory.batch_factory.api.conf"):
-    params = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
-
-
-"""
-each sensor request:
-    1) start==stop: start of dataset
-    2) start==stop: end of dataset
-    3) start==stop: middle of dataset
-    4) start!=stop: all elements in dataset
-    5) start!=stop: some middle elements in dataset
-    6) start!=stop: from start to middle of dataset
-    7) start!=stop: from middle to end of dataset
-    8) start!=stop: from start to pre-end of dataset
-    9) start!=stop: from 2nd-start to end of dataset
-
-    In total: 9*N cases, 9 - number of test cases per sensor, N - number of sensors.
-"""
+params: ParameterConfig = ParameterConfig()
 
 
 @dataclass(frozen=True)
@@ -102,7 +95,7 @@ velodyne_right = SensorNamePath("velodyne_right", DatasetStructure.lidar_3D_righ
 stereo = SensorNamePath("stereo", DatasetStructure.stereo_stamp_file)
 
 # data_stamp.csv file content. The order of the measurements.
-data_stamp = [
+data_stamp: list[list] = [
     [1, encoder.name],
     [2, sick_back.name],
     [3, imu.name],

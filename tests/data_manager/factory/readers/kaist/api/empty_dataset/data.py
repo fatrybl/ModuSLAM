@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from hydra import compose, initialize_config_module
-from hydra.core.config_store import ConfigStore
-
 from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
@@ -13,12 +10,8 @@ from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 from tests.data_manager.factory.readers.kaist.api.empty_dataset.config import (
     DATASET_DIR,
 )
-from tests.data_manager.factory.readers.kaist.conftest import SENSOR_FACTORY_CONFIG_NAME
 
-cs = ConfigStore.instance()
-cs.store(name=SENSOR_FACTORY_CONFIG_NAME, node=ParameterConfig)
-with initialize_config_module(config_module="conf"):
-    params = compose(config_name=SENSOR_FACTORY_CONFIG_NAME)
+params: ParameterConfig = ParameterConfig()
 
 
 @dataclass(frozen=True)

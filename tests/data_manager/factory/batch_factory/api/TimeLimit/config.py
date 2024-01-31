@@ -48,71 +48,63 @@ lidar_3D_left = SensorConfig("velodyne_left", Lidar3D.__name__, ParameterConfig(
 lidar_2D_back = SensorConfig("sick_back", Lidar2D.__name__, ParameterConfig())
 lidar_2D_middle = SensorConfig("sick_middle", Lidar2D.__name__, ParameterConfig())
 
-iterable_data_files: list[PairConfig] = field(
-    default_factory=lambda: [
-        PairConfig(imu.name, DATASET_DIR / KaistPaths.imu_data_file),
-        PairConfig(fog.name, DATASET_DIR / KaistPaths.fog_data_file),
-        PairConfig(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
-        PairConfig(altimeter.name, DATASET_DIR / KaistPaths.altimeter_data_file),
-        PairConfig(gps.name, DATASET_DIR / KaistPaths.gps_data_file),
-        PairConfig(vrs_gps.name, DATASET_DIR / KaistPaths.vrs_gps_data_file),
-        PairConfig(stereo.name, DATASET_DIR / KaistPaths.stereo_stamp_file),
-        PairConfig(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_stamp_file),
-        PairConfig(lidar_2D_middle.name, DATASET_DIR / KaistPaths.lidar_2D_middle_stamp_file),
-        PairConfig(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_stamp_file),
-        PairConfig(lidar_3D_right.name, DATASET_DIR / KaistPaths.lidar_3D_right_stamp_file),
-    ]
-)
+iterable_data_files: list[PairConfig] = [
+    PairConfig(imu.name, DATASET_DIR / KaistPaths.imu_data_file),
+    PairConfig(fog.name, DATASET_DIR / KaistPaths.fog_data_file),
+    PairConfig(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
+    PairConfig(altimeter.name, DATASET_DIR / KaistPaths.altimeter_data_file),
+    PairConfig(gps.name, DATASET_DIR / KaistPaths.gps_data_file),
+    PairConfig(vrs_gps.name, DATASET_DIR / KaistPaths.vrs_gps_data_file),
+    PairConfig(stereo.name, DATASET_DIR / KaistPaths.stereo_stamp_file),
+    PairConfig(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_stamp_file),
+    PairConfig(lidar_2D_middle.name, DATASET_DIR / KaistPaths.lidar_2D_middle_stamp_file),
+    PairConfig(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_stamp_file),
+    PairConfig(lidar_3D_right.name, DATASET_DIR / KaistPaths.lidar_3D_right_stamp_file),
+]
 
-data_dirs: list[PairConfig] = field(
-    default_factory=lambda: [
-        PairConfig(stereo.name, DATASET_DIR / KaistPaths.image_data_dir),
-        PairConfig(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_dir),
-        PairConfig(lidar_2D_middle.name, DATASET_DIR / KaistPaths.lidar_2D_middle_dir),
-        PairConfig(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_dir),
-        PairConfig(lidar_3D_right.name, DATASET_DIR / KaistPaths.lidar_3D_right_dir),
-    ]
-)
+data_dirs: list[PairConfig] = [
+    PairConfig(stereo.name, DATASET_DIR / KaistPaths.image_data_dir),
+    PairConfig(lidar_2D_back.name, DATASET_DIR / KaistPaths.lidar_2D_back_dir),
+    PairConfig(lidar_2D_middle.name, DATASET_DIR / KaistPaths.lidar_2D_middle_dir),
+    PairConfig(lidar_3D_left.name, DATASET_DIR / KaistPaths.lidar_3D_left_dir),
+    PairConfig(lidar_3D_right.name, DATASET_DIR / KaistPaths.lidar_3D_right_dir),
+]
 
 
-all_sensors: list[SensorConfig] = field(
-    default_factory=lambda: [
-        imu,
-        fog,
-        encoder,
-        stereo,
-        altimeter,
-        gps,
-        vrs_gps,
-        lidar_3D_right,
-        lidar_3D_left,
-        lidar_2D_middle,
-        lidar_2D_back,
-    ]
-)
+all_sensors: list[SensorConfig] = [
+    imu,
+    fog,
+    encoder,
+    stereo,
+    altimeter,
+    gps,
+    vrs_gps,
+    lidar_3D_right,
+    lidar_3D_left,
+    lidar_2D_middle,
+    lidar_2D_back,
+]
 
-used_sensors: list[SensorConfig] = field(
-    default_factory=lambda: [
-        imu,
-        fog,
-        encoder,
-        stereo,
-        altimeter,
-        gps,
-        vrs_gps,
-        lidar_3D_right,
-        lidar_3D_left,
-        lidar_2D_middle,
-        lidar_2D_back,
-    ]
-)
+used_sensors: list[SensorConfig] = [
+    imu,
+    fog,
+    encoder,
+    stereo,
+    altimeter,
+    gps,
+    vrs_gps,
+    lidar_3D_right,
+    lidar_3D_left,
+    lidar_2D_middle,
+    lidar_2D_back,
+]
 
 
 @dataclass
 class KaistReaderConfig(KaistConfig):
     directory: Path = DATASET_DIR
-    iterable_data_files: list[PairConfig] = iterable_data_files
-    data_dirs: list[PairConfig] = data_dirs
+    iterable_data_files: list[PairConfig] = field(default_factory=lambda: iterable_data_files)
+    data_dirs: list[PairConfig] = field(default_factory=lambda: data_dirs)
 
 
 @dataclass
@@ -124,5 +116,5 @@ class BFConfig(BatchFactoryConfig):
 
 @dataclass
 class SFConfig(SensorFactoryConfig):
-    all_sensors: list[SensorConfig] = all_sensors
-    used_sensors: list[SensorConfig] = used_sensors
+    all_sensors: list[SensorConfig] = field(default_factory=lambda: all_sensors)
+    used_sensors: list[SensorConfig] = field(default_factory=lambda: used_sensors)

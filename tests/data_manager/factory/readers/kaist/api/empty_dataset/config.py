@@ -15,17 +15,13 @@ DATASET_DIR: Path = Path(__file__).parent / "test_data"
 
 encoder = SensorConfig("encoder", Encoder.__name__, ParameterConfig())
 
-iterable_data_files: list[PairConfig] = field(
-    default_factory=lambda: [
-        PairConfig(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
-    ]
-)
-
-data_dirs: list[PairConfig] = field(default_factory=lambda: [])
+iterable_data_files: list[PairConfig] = [
+    PairConfig(encoder.name, DATASET_DIR / KaistPaths.encoder_data_file),
+]
 
 
 @dataclass
 class KaistReaderConfig(KaistConfig):
     directory: Path = DATASET_DIR
-    iterable_data_files: list[PairConfig] = iterable_data_files
-    data_dirs: list[PairConfig] = data_dirs
+    iterable_data_files: list[PairConfig] = field(default_factory=lambda: iterable_data_files)
+    data_dirs: list[PairConfig] = field(default_factory=lambda: [])

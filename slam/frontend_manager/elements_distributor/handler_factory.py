@@ -1,6 +1,8 @@
 import logging
 from importlib import import_module
 
+from omegaconf import DictConfig
+
 from slam.frontend_manager.handlers.ABC_handler import ElementHandler
 
 logger = logging.getLogger(__name__)
@@ -11,7 +13,7 @@ class HandlerFactory:
     Manages all handlers. Configure and setup sensor <-> handlers table.
     """
 
-    def __init__(self, config) -> None:
+    def __init__(self, config: DictConfig) -> None:
         self._table = {}
         self._module_name: str = config.handlers_module
         self._package: str = config.handlers_package

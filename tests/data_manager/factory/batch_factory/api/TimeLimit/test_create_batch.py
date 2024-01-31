@@ -1,23 +1,20 @@
 from collections import deque
 
-from hydra import compose, initialize_config_module
-from hydra.core.config_store import ConfigStore
 from PIL.Image import Image
 from pytest import mark
 
+from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
+from configs.system.data_manager.batch_factory.regime import TimeLimitConfig
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-from tests.data_manager.factory.batch_factory.conftest import (
-    BATCH_FACTORY_CONFIG_NAME,
-    CONFIG_MODULE_DIR,
-    Fixture,
+from tests.data_manager.factory.batch_factory.api.TimeLimit.data import (
+    incorrect_scenario,
+    periodic_request_scenarios,
+    scenarios,
 )
-
-from .config import BFConfig
-from .data import incorrect_scenario, periodic_request_scenarios, scenarios
 
 
 class TestBatchFactoryKaistDataset:
@@ -30,19 +27,13 @@ class TestBatchFactoryKaistDataset:
     @mark.parametrize("time_limit, reference_batch", (scenarios))
     def test_create_batch_1(
         self,
-        kaist_urban_dataset: Fixture,
-        sensor_factory: Fixture,
+        batch_factory_cfg: BatchFactoryConfig,
         time_limit: TimeRange,
         reference_batch: DataBatch,
     ):
-        cs = ConfigStore.instance()
-        cs.store(name=BATCH_FACTORY_CONFIG_NAME, node=BFConfig)
-        with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-            cfg = compose(config_name=BATCH_FACTORY_CONFIG_NAME)
-            cfg.regime.start = time_limit.start
-            cfg.regime.stop = time_limit.stop
-            batch_factory = BatchFactory(cfg)
-
+        regime_cfg: TimeLimitConfig = TimeLimitConfig(start=time_limit.start, stop=time_limit.stop)
+        batch_factory_cfg.regime = regime_cfg
+        batch_factory = BatchFactory(batch_factory_cfg)
         batch_factory.create_batch()
         result_batch: DataBatch = batch_factory.batch
 
@@ -55,16 +46,18 @@ class TestBatchFactoryKaistDataset:
                 assert el1 == el2
 
     @mark.parametrize("time_limit, reference_batch", (scenarios))
-    def test_create_batch_2(self, time_limit: TimeRange, reference_batch: DataBatch):
-        cs = ConfigStore.instance()
-        cs.store(name=BATCH_FACTORY_CONFIG_NAME, node=BFConfig)
-        with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-            cfg = compose(config_name=BATCH_FACTORY_CONFIG_NAME)
-            cfg.regime.start = time_limit.start
-            cfg.regime.stop = time_limit.stop
-            batch_factory = BatchFactory(cfg)
+    def test_create_batch_2(
+        self,
+        batch_factory_cfg: BatchFactoryConfig,
+        time_limit: TimeRange,
+        reference_batch: DataBatch,
+    ):
+        regime_cfg: TimeLimitConfig = TimeLimitConfig(start=time_limit.start, stop=time_limit.stop)
+        batch_factory_cfg.regime = regime_cfg
+        batch_factory = BatchFactory(batch_factory_cfg)
 
         elements: deque[Element] = reference_batch.data
+
         batch_factory.create_batch(elements)
         result_batch: DataBatch = batch_factory.batch
 
@@ -79,17 +72,14 @@ class TestBatchFactoryKaistDataset:
     @mark.parametrize("time_limit, reference_batch, periodic_request", (periodic_request_scenarios))
     def test_create_batch_3(
         self,
+        batch_factory_cfg: BatchFactoryConfig,
         time_limit: TimeRange,
         reference_batch: DataBatch,
         periodic_request: set[PeriodicData],
     ):
-        cs = ConfigStore.instance()
-        cs.store(name=BATCH_FACTORY_CONFIG_NAME, node=BFConfig)
-        with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-            cfg = compose(config_name=BATCH_FACTORY_CONFIG_NAME)
-            cfg.regime.start = time_limit.start
-            cfg.regime.stop = time_limit.stop
-            batch_factory = BatchFactory(cfg)
+        regime_cfg: TimeLimitConfig = TimeLimitConfig(start=time_limit.start, stop=time_limit.stop)
+        batch_factory_cfg.regime = regime_cfg
+        batch_factory = BatchFactory(batch_factory_cfg)
 
         batch_factory.create_batch(periodic_request)
         result_batch: DataBatch = batch_factory.batch
@@ -106,17 +96,14 @@ class TestBatchFactoryKaistDataset:
     @mark.parametrize("time_limit, reference_batch, periodic_request", (incorrect_scenario))
     def test_create_batch_4(
         self,
+        batch_factory_cfg: BatchFactoryConfig,
         time_limit: TimeRange,
         reference_batch: DataBatch,
         periodic_request: set[PeriodicData],
     ):
-        cs = ConfigStore.instance()
-        cs.store(name=BATCH_FACTORY_CONFIG_NAME, node=BFConfig)
-        with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-            cfg = compose(config_name=BATCH_FACTORY_CONFIG_NAME)
-            cfg.regime.start = time_limit.start
-            cfg.regime.stop = time_limit.stop
-            batch_factory = BatchFactory(cfg)
+        regime_cfg: TimeLimitConfig = TimeLimitConfig(start=time_limit.start, stop=time_limit.stop)
+        batch_factory_cfg.regime = regime_cfg
+        batch_factory = BatchFactory(batch_factory_cfg)
 
         batch_factory.create_batch(periodic_request)
         result_batch: DataBatch = batch_factory.batch

@@ -5,19 +5,20 @@ from pytest import fixture
 
 from configs.system.data_manager.batch_factory.regime import StreamConfig
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-from tests.data_manager.factory.readers.kaist.conftest import (
-    DATASET_CONFIG_NAME,
-    REGIME_CONFIG_NAME,
+from tests.data_manager.factory.readers.kaist.api.one_element_dataset.config import (
+    KaistReaderConfig,
 )
-
-from .config import KaistReaderConfig
-from .data import (
+from tests.data_manager.factory.readers.kaist.api.one_element_dataset.data import (
     DatasetStructure,
     binary_data,
     csv_data,
     data_stamp,
     image_data,
     stamp_files,
+)
+from tests.data_manager.factory.readers.kaist.conftest import (
+    DATASET_CONFIG_NAME,
+    REGIME_CONFIG_NAME,
 )
 
 

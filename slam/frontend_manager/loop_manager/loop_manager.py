@@ -1,4 +1,4 @@
-from hydra.core.hydra_config import HydraConfig
+from omegaconf import DictConfig
 
 
 class LoopManager:
@@ -6,5 +6,4 @@ class LoopManager:
     Manages all loop-closing procedures.
     """
 
-    def __init__(self, config: HydraConfig) -> None:
-        pass
+    def __init__(self, config: DictConfig) -> None: ...

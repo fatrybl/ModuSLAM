@@ -1,23 +1,3 @@
-from hydra.core.config_store import ConfigStore
-from omegaconf import DictConfig
-from pytest import fixture, raises
-
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
-from slam.data_manager.factory.readers.element_factory import Element
-from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.sensors import Encoder
-from slam.utils.exceptions import FileNotValid
-from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-from tests.data_manager.factory.readers.kaist.conftest import (
-    DATASET_CONFIG_NAME,
-    REGIME_CONFIG_NAME,
-    Fixture,
-)
-
-from .config import KaistReaderConfig
-from .data import DatasetStructure, el1
-
 """
 Tests description:
 
@@ -31,18 +11,16 @@ Tests description:
     4.4) get_element(sensor[Sensor], timestamp[int])
 """
 
+from pytest import raises
 
-@fixture(scope="class")
-def register_configs() -> None:
-    cs = ConfigStore.instance()
-    cs.store(name=DATASET_CONFIG_NAME, node=KaistReaderConfig)
-    cs.store(name=REGIME_CONFIG_NAME, node=StreamConfig)
-
-
-@fixture(scope="class")
-def generate_dataset():
-    data_factory = DataFactory(DatasetStructure())
-    data_factory.create_dataset_structure()
+from configs.sensors.base_sensor_parameters import ParameterConfig
+from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
+from configs.system.data_manager.batch_factory.regime import RegimeConfig
+from slam.data_manager.factory.readers.element_factory import Element
+from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from slam.setup_manager.sensor_factory.sensors import Encoder
+from slam.utils.exceptions import FileNotValid
+from tests.data_manager.factory.readers.kaist.api.empty_dataset.data import el1
 
 
 class TestGetElement:
@@ -52,13 +30,11 @@ class TestGetElement:
     """
 
     timestamp: int = 1
-    sensor = Encoder("encoder", DictConfig({"params": ()}))
+    sensor = Encoder("encoder", ParameterConfig())
     element: Element = el1
 
     def test_get_element_1(
         self,
-        register_configs: Fixture,
-        generate_dataset: Fixture,
         dataset_cfg: KaistConfig,
         regime_cfg: RegimeConfig,
     ):

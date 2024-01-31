@@ -45,5 +45,4 @@ class MainManager:
         while not self.break_point.is_active():
             self.data_manager.make_batch()
 
-        # b = self.data_manager.batch_factory.batch
         logger.info("Map has been built")

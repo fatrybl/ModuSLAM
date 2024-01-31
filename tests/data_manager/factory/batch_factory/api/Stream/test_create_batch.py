@@ -8,13 +8,12 @@ from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-from tests.data_manager.factory.batch_factory.conftest import Fixture
-
-from .data import (
+from tests.data_manager.factory.batch_factory.api.Stream.data import (
     elements_batch,
     kaist_dataset_deque_scenario,
     kaist_dataset_requests_scenarios,
 )
+from tests.data_manager.factory.batch_factory.conftest import Fixture
 
 
 class TestBatchFactoryKaistDataset:
@@ -27,11 +26,11 @@ class TestBatchFactoryKaistDataset:
             resulting DataBatch.
     """
 
-    def test_create_batch_1(self, sensor_factory: Fixture, kaist_batch_factory: BatchFactory):
+    def test_create_batch_1(self, sensor_factory: Fixture, batch_factory: BatchFactory):
         reference_batch: DataBatch = elements_batch
 
-        kaist_batch_factory.create_batch()
-        result_batch: DataBatch = kaist_batch_factory.batch
+        batch_factory.create_batch()
+        result_batch: DataBatch = batch_factory.batch
 
         assert len(result_batch.data) == len(reference_batch.data)
 
@@ -41,12 +40,12 @@ class TestBatchFactoryKaistDataset:
             else:
                 assert el1 == el2
 
-    def test_create_batch_2(self, kaist_batch_factory: BatchFactory):
+    def test_create_batch_2(self, batch_factory: BatchFactory):
         elements: deque[Element] = kaist_dataset_deque_scenario[0]
         reference_batch: DataBatch = kaist_dataset_deque_scenario[1]
 
-        kaist_batch_factory.create_batch(elements)
-        result_batch: DataBatch = kaist_batch_factory.batch
+        batch_factory.create_batch(elements)
+        result_batch: DataBatch = batch_factory.batch
 
         assert len(result_batch.data) == len(reference_batch.data)
 
@@ -59,15 +58,15 @@ class TestBatchFactoryKaistDataset:
     @mark.parametrize("scenario", (kaist_dataset_requests_scenarios))
     def test_create_batch_3(
         self,
-        kaist_batch_factory: BatchFactory,
+        batch_factory: BatchFactory,
         scenario: tuple[set[PeriodicData], DataBatch],
     ):
         requests: set[PeriodicData] = scenario[0]
         reference_batch: DataBatch = scenario[1]
         reference_batch.sort()
 
-        kaist_batch_factory.create_batch(requests)
-        result_batch: DataBatch = kaist_batch_factory.batch
+        batch_factory.create_batch(requests)
+        result_batch: DataBatch = batch_factory.batch
 
         assert len(result_batch.data) == len(reference_batch.data)
 

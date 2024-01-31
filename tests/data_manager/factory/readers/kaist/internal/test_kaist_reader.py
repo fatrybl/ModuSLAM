@@ -9,7 +9,6 @@ from configs.system.data_manager.batch_factory.datasets.kaist import (
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.utils.exceptions import FileNotValid
-from tests.data_manager.factory.readers.kaist.conftest import Fixture
 
 
 class TestKaistReader:
@@ -19,8 +18,6 @@ class TestKaistReader:
 
     def test_kaist_reader(
         self,
-        generate_dataset: Fixture,
-        register_configs: Fixture,
         dataset_cfg: KaistConfig,
         regime_cfg: RegimeConfig,
     ):
@@ -45,9 +42,11 @@ class TestKaistReader:
         """
         Unsuccessfull KaistReader creation with improper configuration: <SENSOR>.csv file.
         """
-
-        dataset_cfg.iterable_data_files: list[PairConfig] = [
-            PairConfig(sensor_name="some_sensor", location=Path("some/invalid/sensor_data.csv"))
+        dataset_cfg.iterable_data_files = [
+            PairConfig(
+                sensor_name="some_sensor",
+                location=Path("none/existing/sensor_data.csv"),
+            )
         ]
 
         with raises(FileNotValid):

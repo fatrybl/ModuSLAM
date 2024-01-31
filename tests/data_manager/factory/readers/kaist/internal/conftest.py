@@ -9,9 +9,8 @@ from tests.data_manager.factory.readers.kaist.conftest import (
     DATASET_CONFIG_NAME,
     REGIME_CONFIG_NAME,
 )
-
-from .config import KaistReaderConfig
-from .data import (
+from tests.data_manager.factory.readers.kaist.internal.config import KaistReaderConfig
+from tests.data_manager.factory.readers.kaist.internal.data import (
     DatasetStructure,
     binary_data,
     csv_data,
@@ -29,7 +28,7 @@ def register_configs() -> None:
 
 
 @fixture(scope="class", autouse=True)
-def generate_dataset():
+def generate_dataset() -> None:
     data_factory = DataFactory(DatasetStructure())
     data_factory.create_dataset_structure()
     data_factory.generate_data(data_stamp, stamp_files, csv_data, binary_data, image_data)

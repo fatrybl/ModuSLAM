@@ -1,12 +1,3 @@
-from pytest import mark
-
-from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.batch_factory import BatchFactory
-from slam.utils.auxiliary_dataclasses import PeriodicData
-from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
-
-from .data import encoder_scenarios, lidar2D_scenarios, stereo_scenarios
-
 """
 each sensor request:
     1) start==stop: start of dataset
@@ -22,41 +13,53 @@ each sensor request:
     In total: 9*N cases, 9 - number of test cases per sensor, N - number of sensors.
 """
 
+from pytest import mark
+
+from slam.data_manager.factory.batch import DataBatch
+from slam.data_manager.factory.batch_factory import BatchFactory
+from slam.utils.auxiliary_dataclasses import PeriodicData
+from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
+from tests.data_manager.factory.batch_factory.internal.data import (
+    encoder_scenarios,
+    lidar2D_scenarios,
+    stereo_scenarios,
+)
+
 
 class TestBatchFactoryKaistDataset:
     @mark.parametrize("scenario", (encoder_scenarios))
     def test_add_data_csv(
         self,
-        kaist_batch_factory: BatchFactory,
+        batch_factory: BatchFactory,
         scenario: tuple[PeriodicData, DataBatch],
     ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
-        kaist_batch_factory._add_data(request)
-        assert kaist_batch_factory.batch.data == reference_batch.data
+        batch_factory._add_data(request)
+        assert batch_factory.batch.data == reference_batch.data
 
     @mark.parametrize("scenario", (lidar2D_scenarios))
     def test_add_data_bin(
         self,
-        kaist_batch_factory: BatchFactory,
+        batch_factory: BatchFactory,
         scenario: tuple[PeriodicData, DataBatch],
     ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
-        kaist_batch_factory._add_data(request)
-        assert kaist_batch_factory.batch.data == reference_batch.data
+        batch_factory._add_data(request)
+        assert batch_factory.batch.data == reference_batch.data
 
     @mark.parametrize("scenario", (stereo_scenarios))
     def test_add_data_imgs(
         self,
-        kaist_batch_factory: BatchFactory,
+        batch_factory: BatchFactory,
         scenario: tuple[PeriodicData, DataBatch],
     ):
         request: PeriodicData = scenario[0]
         reference_batch: DataBatch = scenario[1]
 
-        kaist_batch_factory._add_data(request)
+        batch_factory._add_data(request)
 
-        assert len(kaist_batch_factory.batch.data) == len(reference_batch.data)
-        for el1, el2 in zip(kaist_batch_factory.batch.data, reference_batch.data):
+        assert len(batch_factory.batch.data) == len(reference_batch.data)
+        for el1, el2 in zip(batch_factory.batch.data, reference_batch.data):
             assert DataFactory.equal_images(el1, el2) is True

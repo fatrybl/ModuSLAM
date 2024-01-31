@@ -1,4 +1,4 @@
-from typing import Any, Callable, Type, TypeAlias
+from typing import Any, Callable, TypeAlias, cast
 
 from hydra import compose, initialize_config_module
 from pytest import fixture
@@ -16,19 +16,19 @@ Fixture: TypeAlias = Callable[[Any], Any]
 
 
 @fixture(scope="class")
-def data_reader(dataset_cfg: Type[KaistConfig], regime_cfg: Type[RegimeConfig]) -> KaistReader:
+def dataset_cfg() -> KaistConfig:
+    with initialize_config_module(version_base=None, config_module=CONFIG_MODULE_DIR):
+        cfg: KaistConfig = cast(KaistConfig, compose(config_name=DATASET_CONFIG_NAME))
+        return cfg
+
+
+@fixture(scope="class")
+def regime_cfg() -> RegimeConfig:
+    with initialize_config_module(version_base=None, config_module=CONFIG_MODULE_DIR):
+        cfg: RegimeConfig = cast(RegimeConfig, compose(config_name=REGIME_CONFIG_NAME))
+        return cfg
+
+
+@fixture(scope="class")
+def data_reader(dataset_cfg: KaistConfig, regime_cfg: RegimeConfig) -> KaistReader:
     return KaistReader(dataset_cfg, regime_cfg)
-
-
-@fixture(scope="class")
-def dataset_cfg() -> Type[KaistConfig]:
-    with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-        cfg = compose(config_name=DATASET_CONFIG_NAME)
-        return cfg
-
-
-@fixture(scope="class")
-def regime_cfg() -> Type[RegimeConfig]:
-    with initialize_config_module(config_module=CONFIG_MODULE_DIR):
-        cfg = compose(config_name=REGIME_CONFIG_NAME)
-        return cfg
