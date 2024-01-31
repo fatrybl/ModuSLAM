@@ -1,6 +1,4 @@
-from abc import ABC, abstractmethod
-
-from slam.data_manager.factory.readers.element_factory import Element
+from abc import ABC
 
 
 class ElementHandler(ABC):
@@ -8,6 +6,4 @@ class ElementHandler(ABC):
     Base external module.
     """
 
-    @abstractmethod
-    def process(self, element: Element):
-        pass
+    def __init__(self) -> None: ...

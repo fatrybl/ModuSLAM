@@ -15,5 +15,4 @@ addopts = [
 python_version = "3.11"
 check_untyped_defs = true
 ignore_missing_imports = true
-exclude = ['slam.frontend_manager']
 follow_imports = "normal"

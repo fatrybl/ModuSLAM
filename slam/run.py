@@ -3,6 +3,7 @@ Author: Mark Griguletskii.
 
 Main runner of SLAM system.
 """
+
 from hydra import main
 from hydra.core.config_store import ConfigStore
 
