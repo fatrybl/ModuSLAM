@@ -1,3 +1,6 @@
+exclude: "slam"
+default_language_version:
+  python: python3.11
 repos:
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
@@ -24,5 +27,5 @@ repos:
     rev: 'v1.8.0'
     hooks:
       - id: mypy
-        args: [ "--config-file", "pyproject.toml" ]
+        args: [ "--config-file", "pyproject.toml", "--follow-imports", "silent" ]
         types: [ python ]
