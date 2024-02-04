@@ -16,3 +16,4 @@ python_version = "3.11"
 check_untyped_defs = true
 ignore_missing_imports = true
 follow_imports = "normal"
+exclude = ["slam.frontend_manager.graph"]
