@@ -19,7 +19,6 @@ repos:
     rev: 7.0.0
     hooks:
       - id: flake8
-        exclude: slam/frontend_manager/graph/
         args: [ --config=setup.cfg ]
         types: [ python ]
 
@@ -27,7 +26,6 @@ repos:
     rev: v1.8.0
     hooks:
       - id: mypy
-        exclude: slam/frontend_manager/
         args: [ --config-file=pyproject.toml ]
         language: system
         types: [ python ]
