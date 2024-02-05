@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, TypeVar
 import gtsam
 
 if TYPE_CHECKING:
-    from slam.frontend_manager.graph.edges.edges import Edge
+    from slam.frontend_manager.graph.edges import Edge
 
 
 @dataclass

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 
-from slam.frontend_manager.graph.graph_candidate import GraphCandidate
+from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
+    GraphCandidate,
+)
 
 
 class CandidateAnalyzer(ABC):

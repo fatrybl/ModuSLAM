@@ -40,10 +40,6 @@ class BatchFactory:
         self._batch.sort()
         return self._batch
 
-    @batch.deleter
-    def batch(self) -> None:
-        del self._batch.data
-
     def __data_processed(self) -> None:
         """
         Called when all data has been processed. Turns ON global Stopping Criterion.

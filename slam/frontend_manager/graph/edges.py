@@ -4,7 +4,7 @@ from typing import TypeVar
 import gtsam
 
 from slam.data_manager.factory.readers.element_factory import Element
-from slam.frontend_manager.graph.vertices.vertices import Vertex
+from slam.frontend_manager.graph.vertices import Vertex
 
 
 @dataclass
@@ -22,6 +22,9 @@ class Edge:
     elements: tuple[Element, ...]
     vertices: tuple[Vertex, ...]
     gtsam_factor: gtsam.Factor
+
+
+GraphEdge = TypeVar("GraphEdge", bound=Edge)
 
 
 @dataclass
@@ -63,5 +66,8 @@ class SmartStereoLandmark(Edge):
         - https://dellaert.github.io/files/Carlone14icra.pdf
     """
 
-
-GraphEdge = TypeVar("GraphEdge", bound=Edge)
+    noise_model: gtsam.noiseModel.Isotropic  # TODO: check if a model is correct
+    K: gtsam.Cal3_S2
+    params: gtsam.SmartProjectionParams
+    sensor_body: gtsam.Pose3
+    gtsam_factor: gtsam.SmartProjectionPose3Factor

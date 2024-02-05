@@ -1,9 +1,9 @@
 from collections.abc import Iterable
-from typing import Generic
+from typing import Generic, overload
 
-from plum import dispatch, overload
+from plum import dispatch
 
-from slam.frontend_manager.graph.vertices.vertices import (
+from slam.frontend_manager.graph.vertices import (
     CameraFeature,
     CameraPose,
     GraphVertex,

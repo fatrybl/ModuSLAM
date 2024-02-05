@@ -8,6 +8,10 @@ from slam.frontend_manager.elements_distributor.elements_distributor import (
 
 @dataclass
 class State:
+    """
+    State of the graph candidate.
+    """
+
     storage: MeasurementStorage
     timestamp: int = field(init=False)
 
@@ -17,4 +21,9 @@ class State:
 
 @dataclass
 class GraphCandidate:
+    """
+    Graph candidate is a sub-graph that is not connected to the main graph yet.
+    Contains state(s).
+    """
+
     states: deque[State] = deque()

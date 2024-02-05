@@ -1,14 +1,15 @@
 import logging
 from collections.abc import Iterable
+from typing import overload
 
 import gtsam
 from hydra.core.hydra_config import HydraConfig
-from plum import dispatch, overload
+from plum import dispatch
 
-from slam.frontend_manager.graph.edges.edge_storage import EdgeStorage
-from slam.frontend_manager.graph.edges.edges import Edge, GraphEdge
-from slam.frontend_manager.graph.vertices.vertex_storage import VertexStorage
-from slam.frontend_manager.graph.vertices.vertices import GraphVertex, Vertex
+from slam.frontend_manager.graph.edge_storage import EdgeStorage
+from slam.frontend_manager.graph.edges import Edge, GraphEdge
+from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from slam.frontend_manager.graph.vertices import GraphVertex, Vertex
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +76,7 @@ class Graph:
     def set_prior(self) -> None:
         """
         @overload.
-        Initialize the graph with prior vertices and edges.
+        Initialize the graph with prior vertices and edges_123.
         """
         raise NotImplementedError
 
@@ -83,7 +84,7 @@ class Graph:
     def set_prior(self, config: HydraConfig) -> None:
         """
         @overload.
-        Initialize the graph with prior vertices and edges from config.
+        Initialize the graph with prior vertices and edges_123 from config.
         """
         raise NotImplementedError
 
@@ -97,7 +98,7 @@ class Graph:
 
             2. with the config:
                 Args:
-                    config (HydraConfig): config with prior vertices and edges.
+                    config (HydraConfig): config with prior vertices and edges_123.
 
         """
         raise NotImplementedError
@@ -119,10 +120,10 @@ class Graph:
     def add_edge(self, edges: Iterable[GraphEdge]) -> None:
         """
         @overload.
-        Adds multiple edges to the graph.
+        Adds multiple edges_123 to the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): new edges to be added to the graph.
+            edges (Iterable[GraphEdge]): new edges_123 to be added to the graph.
         """
 
         for edge in edges:
@@ -138,9 +139,9 @@ class Graph:
                 Args:
                     edge (GraphEdge): new edge to be added to the graph.
 
-            2. add multiple edges:
+            2. add multiple edges_123:
                 Args:
-                    edges (Iterable[GraphEdge]): new edges to be added to the graph.
+                    edges_123 (Iterable[GraphEdge]): new edges_123 to be added to the graph.
         """
 
     @overload
@@ -157,10 +158,10 @@ class Graph:
     def delete_edge(self, edges: Iterable[GraphEdge]) -> None:
         """
         @overload.
-        Deletes multiple edges from the graph.
+        Deletes multiple edges_123 from the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+            edges (Iterable[GraphEdge]): edges_123 to be deleted from the graph.
         """
         for edge in edges:
             self.delete_edge(edge)
@@ -175,15 +176,15 @@ class Graph:
                 Args:
                     edge (GraphEdge): edge to be deleted from the graph.
 
-            2. delete multiple edges:
+            2. delete multiple edges_123:
                 Args:
-                    edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+                    edges_123 (Iterable[GraphEdge]): edges_123 to be deleted from the graph.
         """
 
     def marginalize(self, edges: Iterable[GraphEdge]) -> None:
         """
-        Marginalizes out edges.
+        Marginalizes out edges_123.
 
         Args:
-            edges (Iterable[GraphEdge]): edges to be marginalized out.
+            edges (Iterable[GraphEdge]): edges_123 to be marginalized out.
         """

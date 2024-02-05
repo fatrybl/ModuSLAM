@@ -1,16 +1,13 @@
-from typing import Generic, Iterable
+from typing import Generic, Iterable, overload
 
-from plum import dispatch, overload
+from plum import dispatch
 
-from slam.frontend_manager.graph.edges.edges import GraphEdge
+from slam.frontend_manager.graph.edges import GraphEdge
 
 
 class EdgeStorage(Generic[GraphEdge]):
     """
-    Stores edges of the Graph.
-
-    TODO: think about how to store edges: heap maybe?.
-          as it should delete edges fast.
+    Stores edges_123 of the Graph.
     """
 
     def __init__(self):
@@ -27,19 +24,26 @@ class EdgeStorage(Generic[GraphEdge]):
         self._edges.add(edge)
 
     @overload
-    def add(self, edges: Iterable[GraphEdge]):
+    def add(self, edge: Iterable[GraphEdge]):
         """
         @overload.
-        Adds new edges to the graph.
+        Adds new edges_123 to the graph.
         Args:
-            edges (Iterable[GraphEdge]): multiple edges to be added to the graph.
+            edge (Iterable[GraphEdge]): multiple edges_123 to be added to the graph.
         """
-        [self.add(e) for e in edges]
+        [self.add(e) for e in edge]
 
     @dispatch
     def add(self, edge=None):
         """
         @overload.
+
+        Calls:
+            Args:
+                edge (GraphEdge): edge to be added to the graph.
+
+            Args:
+                edge (Iterable[GraphEdge]): multiple edges_123 to be added to the graph.
         """
 
     @overload
@@ -53,14 +57,14 @@ class EdgeStorage(Generic[GraphEdge]):
         self._edges.remove(edge)
 
     @overload
-    def remove(self, edges: Iterable[GraphEdge]):
+    def remove(self, edge: Iterable[GraphEdge]):
         """
         @overload.
-        Removes multiple edges from the graph.
+        Removes multiple edges_123 from the graph.
         Args:
-            edges (Iterable[GraphEdge]): multiple edges to be removed from the graph.
+            edge (Iterable[GraphEdge]): multiple edges_123 to be removed from the graph.
         """
-        [self.remove(e) for e in edges]
+        [self.remove(e) for e in edge]
 
     @dispatch
     def remove(self, edge=None):

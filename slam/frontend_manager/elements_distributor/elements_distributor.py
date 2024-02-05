@@ -9,6 +9,8 @@ from slam.frontend_manager.elements_distributor.measurement_storage import (
     Measurement,
     MeasurementStorage,
 )
+from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.setup_manager.sensor_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 
@@ -21,24 +23,24 @@ class ElementDistributor:
     def __init__(self, config: DictConfig):
         self.handler_factory = HandlerFactory(config.handler_factory)
         self.storage = MeasurementStorage()
+        self._table: dict[Sensor, list[Handler]] = self.handler_factory.sensor_handler_table
 
     def _distribute(self, element: Element) -> None:
-        sensor_name: str = element.measurement.sensor.name
-        handlers = self.handler_factory.sensor_handler_table[sensor_name]
+        sensor: Sensor = element.measurement.sensor
+        handlers = self._table[sensor]
         for handler in handlers:
             z: Measurement | None = handler.process(element)
-            if z:
+            if z is not None:
                 self.storage.add(handler, z)
 
     def next_element(self, data_batch: DataBatch):
         """
-        API function to get next element from DataBatch and process it with external module.
+        Takes element from DataBatch and process it with external module.
 
-        TODO:
-            1) Gets last element from DataBatch.
-            2) Processes it with a corresponding handler.
-            3) Updates measurement storage.
-            4) Remove element from DataBatch.
+        1) Gets last element from DataBatch.
+        2) Processes it with a corresponding handler.
+        3) Updates measurement storage.
+        4) Remove element from DataBatch.
 
         Returns:
             measurement: processed element as measurement.
