@@ -265,12 +265,12 @@ class KaistReader(DataReader):
         first_sensor_name, occurrences = self.__get_sensor_name(time_range.start)
         self.__reset_current_state()
         last_sensor_name, __ = self.__get_sensor_name(time_range.stop)
-        first_sensor: Sensor = SensorFactory.name_to_sensor(first_sensor_name)
-        last_sensor: Sensor = SensorFactory.name_to_sensor(last_sensor_name)
-
+        first_sensor: Sensor = SensorFactory.get_sensor(first_sensor_name)
+        last_sensor: Sensor = SensorFactory.get_sensor(last_sensor_name)
+        used_sensors = SensorFactory.get_used_sensors()
         for sensor in [first_sensor, last_sensor]:
-            if sensor not in SensorFactory.used_sensors:
-                msg = f"sensor {sensor} is not in used_sensors {SensorFactory.used_sensors}"
+            if sensor not in used_sensors:
+                msg = f"sensor {sensor} is not in used_sensors {used_sensors}"
                 logger.critical(msg)
                 raise SensorNotFound(msg)
 
@@ -302,11 +302,12 @@ class KaistReader(DataReader):
             Element | None: element with raw sensor measurement
                             or None if all measurements from a dataset has already been processed
         """
+        used_sensors = SensorFactory.get_used_sensors()
         try:
             while True:
                 line = next(self.__current_state.data_stamp_iterator)
-                sensor = SensorFactory.name_to_sensor(line[self.__SENSOR_NAME])
-                if sensor in SensorFactory.used_sensors:
+                sensor = SensorFactory.get_sensor(line[self.__SENSOR_NAME])
+                if sensor in used_sensors:
                     break
 
         except StopIteration:

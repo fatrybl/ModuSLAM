@@ -36,8 +36,21 @@ class SensorFactory:
         ValueError: there is no available sensor type for the item from config.
     """
 
-    all_sensors: set[Sensor] = set()
-    used_sensors: set[Sensor] = set()
+    _all_sensors: set[Sensor] = set()
+    _used_sensors: set[Sensor] = set()
+
+    @classmethod
+    def _check_used_sensors(cls) -> None:
+        """
+        Checks if used sensors are part of all initialized sensors.
+
+        Raises:
+            NotSubset: Some of used sensor are not defined in all sensors set.
+        """
+        if not cls._used_sensors or not cls._used_sensors.issubset(cls._all_sensors):
+            msg = f"Used sensors: {cls._used_sensors} do not present in known sensors: {cls._all_sensors} or empty"
+            logger.critical(msg)
+            raise NotSubset(msg)
 
     @classmethod
     def get_used_sensors(cls) -> set[Sensor]:
@@ -46,7 +59,7 @@ class SensorFactory:
         Returns:
             (set[Sensor]): used sensors which have been used in experiment.
         """
-        return cls.used_sensors
+        return cls._used_sensors
 
     @classmethod
     def get_all_sensors(cls) -> set[Sensor]:
@@ -55,10 +68,10 @@ class SensorFactory:
         Returns:
             (set[Sensor]): all sensors which have been initialized
         """
-        return cls.all_sensors
+        return cls._all_sensors
 
     @classmethod
-    def name_to_sensor(cls, name: str) -> Sensor:
+    def get_sensor(cls, name: str) -> Sensor:
         """
         Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
 
@@ -71,11 +84,11 @@ class SensorFactory:
         Returns:
             Type[Sensor]: sensor if it exists among all sensors.
         """
-        for s in cls.all_sensors:
+        for s in cls._all_sensors:
             if s.name == name:
                 return s
 
-        msg = f"No sensor with name {name!r} in {cls.all_sensors}"
+        msg = f"No sensor with name {name!r} in {cls._all_sensors}"
         logger.critical(msg)
         raise SensorNotFound(msg)
 
@@ -89,26 +102,13 @@ class SensorFactory:
 
         for s in _all_sensors_list:
             sensor = cls.sensor_from_config(s)
-            cls.all_sensors.add(sensor)
+            cls._all_sensors.add(sensor)
 
         for s in _used_sensors_list:
-            sensor = cls.name_to_sensor(s.name)
-            cls.used_sensors.add(sensor)
+            sensor = cls.get_sensor(s.name)
+            cls._used_sensors.add(sensor)
 
-        cls._check_used_sesnors()
-
-    @classmethod
-    def _check_used_sesnors(cls) -> None:
-        """
-        Checks if used sensors are part of all initialized sensors.
-
-        Raises:
-            NotSubset: Some of used sensor are not defined in all sensors set.
-        """
-        if not cls.used_sensors or not cls.used_sensors.issubset(cls.all_sensors):
-            msg = f"Used sensors: {cls.used_sensors} are not in known sensors: {cls.all_sensors} or empty"
-            logger.critical(msg)
-            raise NotSubset(msg)
+        cls._check_used_sensors()
 
     @staticmethod
     def sensor_from_config(cfg: SensorConfig) -> Sensor:
@@ -126,35 +126,30 @@ class SensorFactory:
         name: str = cfg.name
         sensor_type: str = cfg.type
         params: ParameterConfig = cfg.config
+        sensor: Sensor
 
-        if sensor_type == Imu.__name__:
-            return Imu(name, params)
+        match sensor_type:
+            case Imu.__name__:
+                sensor = Imu(name, params)
+            case Fog.__name__:
+                sensor = Fog(name, params)
+            case Altimeter.__name__:
+                sensor = Altimeter(name, params)
+            case Lidar2D.__name__:
+                sensor = Lidar2D(name, params)
+            case Lidar3D.__name__:
+                sensor = Lidar3D(name, params)
+            case Encoder.__name__:
+                sensor = Encoder(name, params)
+            case StereoCamera.__name__:
+                sensor = StereoCamera(name, params)
+            case Gps.__name__:
+                sensor = Gps(name, params)
+            case VrsGps.__name__:
+                sensor = VrsGps(name, params)
+            case _:
+                msg = f"unsupported sensor type: {sensor_type}"
+                logger.error(msg)
+                raise ValueError(msg)
 
-        elif sensor_type == Fog.__name__:
-            return Fog(name, params)
-
-        elif sensor_type == Altimeter.__name__:
-            return Altimeter(name, params)
-
-        elif sensor_type == Lidar2D.__name__:
-            return Lidar2D(name, params)
-
-        elif sensor_type == Lidar3D.__name__:
-            return Lidar3D(name, params)
-
-        elif sensor_type == Encoder.__name__:
-            return Encoder(name, params)
-
-        elif sensor_type == StereoCamera.__name__:
-            return StereoCamera(name, params)
-
-        elif sensor_type == Gps.__name__:
-            return Gps(name, params)
-
-        elif sensor_type == VrsGps.__name__:
-            return VrsGps(name, params)
-
-        else:
-            msg = f"unsupported sensor type: {sensor_type}"
-            logger.error(msg)
-            raise ValueError(msg)
+        return sensor
