@@ -53,6 +53,7 @@ class MeasurementStorage:
         Args:
             handler (Handler): external handler.
             z (Measurement): a new measurement to be added.
+
         """
         self.data[handler].append(z)
         self._last_timestamp = z.time_range.stop

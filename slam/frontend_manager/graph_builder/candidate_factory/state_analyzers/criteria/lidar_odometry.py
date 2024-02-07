@@ -1,4 +1,4 @@
-from slam.frontend_manager.elements_distributor.measurement_storage import (
+from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.criteria.criterion_ABC import (

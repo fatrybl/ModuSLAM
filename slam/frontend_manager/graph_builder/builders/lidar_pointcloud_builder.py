@@ -1,9 +1,10 @@
 import logging
 
-from omegaconf import DictConfig
-
+from configs.system.frontend_manager.graph_builder.point_cloud_builder.config import (
+    PointCloudBuilderConfig,
+)
 from slam.data_manager.factory.batch import DataBatch
-from slam.frontend_manager.elements_distributor.elements_distributor import (
+from slam.frontend_manager.element_distributor.elements_distributor import (
     ElementDistributor,
 )
 from slam.frontend_manager.graph.graph import Graph
@@ -27,10 +28,10 @@ class PointCloudBuilder(GraphBuilder):
     Build a graph for point-cloud based map.
     """
 
-    def __init__(self, config: DictConfig) -> None:
+    def __init__(self, config: PointCloudBuilderConfig) -> None:
         self._distributor: ElementDistributor = ElementDistributor(config.element_distributor)
         self._candidate_factory: CandidateFactory = PointcloudFactory()
-        self._merger = GraphMerger()
+        self._merger = GraphMerger(config.graph_merger)
 
     @property
     def graph_candidate(self) -> GraphCandidate:
@@ -55,6 +56,8 @@ class PointCloudBuilder(GraphBuilder):
     def create_graph_candidate(self, batch: DataBatch) -> None:
         """
         Creates graph candidate.
+            1) Create graph candidate.
+            2) Synchronize states of the candidate (squeeze them).
 
         Args:
             batch (DataBatch): data batch with measurements.

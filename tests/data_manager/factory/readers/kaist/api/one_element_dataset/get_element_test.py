@@ -22,7 +22,7 @@ from configs.system.setup_manager.sensor_factory import (
 )
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.setup_manager.sensor_factory.factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from tests.data_manager.auxiliary_utils.kaist_data_factory import (
     DataFactory,

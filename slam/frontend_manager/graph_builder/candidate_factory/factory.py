@@ -1,6 +1,6 @@
 import logging
 
-from slam.frontend_manager.elements_distributor.measurement_storage import (
+from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.analyzer_ABC import (
@@ -62,6 +62,7 @@ class PointcloudFactory(CandidateFactory):
         Synchronizes states of the graph candidate.
         input: list[State] of size N
         output: list[State] of size M, N >= M
+        TODO: implement synchronization of states.
         """
         ...
 
@@ -75,6 +76,9 @@ class PointcloudFactory(CandidateFactory):
 
         Args:
             storage (MeasurementStorage): processed measurements from the Distributor.
+
+        TODO: is break really necessary?
+              One criterion == one state ?
         """
 
         for criterion in self._state_analyzer.criteria:

@@ -167,7 +167,7 @@ class MeasurementCollector:
                 raise StopIteration(msg)
             else:
                 timestamp_str: str = line[0]
-                current_timestamp = as_int(timestamp_str, logger)
+                current_timestamp = as_int(timestamp_str)
         return position, line
 
     @staticmethod
@@ -389,7 +389,7 @@ class MeasurementCollector:
             logger.critical(msg)
             raise
         else:
-            timestamp: int = as_int(line[0], logger)
+            timestamp: int = as_int(line[0])
             message, location = self._get_image(sensor.name, timestamp)
             return message, location
 

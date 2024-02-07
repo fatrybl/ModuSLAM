@@ -19,7 +19,7 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
     FileIterator,
     MeasurementCollector,
 )
-from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.setup_manager.sensor_factory.factory import SensorFactory
 from slam.setup_manager.sensor_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
@@ -172,7 +172,7 @@ class KaistReader(DataReader):
                 logger.critical(msg)
                 raise
             else:
-                current_timestamp = as_int(current_line[self.__TIMESTAMP], logger)
+                current_timestamp = as_int(current_line[self.__TIMESTAMP])
                 sensor_name = current_line[self.__SENSOR_NAME]
                 occurrence.update({sensor_name})
 
@@ -318,12 +318,12 @@ class KaistReader(DataReader):
         else:
             if self._regime_params.name == TimeLimitConfig.name:
                 timestamp: str = line[self.__TIMESTAMP]
-                timestamp_int: int = as_int(timestamp, logger)
+                timestamp_int: int = as_int(timestamp)
                 if timestamp_int > self.__time_range.stop:
                     return None
 
             message, location = self._collector.get_data(sensor)
-            timestamp_int = as_int(message.timestamp, logger)
+            timestamp_int = as_int(message.timestamp)
             measurement = Measurement(sensor, message.data)
             element = Element(timestamp_int, measurement, location)
             return element
@@ -344,7 +344,7 @@ class KaistReader(DataReader):
         sensor: Sensor = element.measurement.sensor
         message, location = self._collector.get_data(sensor, element.timestamp)
 
-        timestamp: int = as_int(message.timestamp, logger)
+        timestamp: int = as_int(message.timestamp)
         measurement = Measurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
@@ -370,7 +370,7 @@ class KaistReader(DataReader):
             message, location = self._collector.get_data(sensor, timestamp)
         else:
             message, location = self._collector.get_data(sensor)
-            timestamp = as_int(message.timestamp, logger)
+            timestamp = as_int(message.timestamp)
 
         measurement = Measurement(sensor, message.data)
         element = Element(timestamp, measurement, location)

@@ -19,5 +19,9 @@ class SensorNotFound(Exception):
     "Sensor has not been found"
 
 
+class HandlerNotFound(Exception):
+    "Handler has not been found"
+
+
 class ExternalModuleException(Exception):
     "External module failed to work properly"

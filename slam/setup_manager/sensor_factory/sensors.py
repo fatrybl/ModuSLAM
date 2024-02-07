@@ -5,12 +5,12 @@ from configs.sensors.base_sensor_parameters import ParameterConfig
 
 class Sensor:
     """Base class for any Sensor.
-    __Hash__(), __eq__() are overridden for hashability purposes.
+    __Hash__(), __eq__() are overridden for hash ability purposes.
     """
 
     def __init__(self, name: str, config: ParameterConfig):
         """
-        Base sesnsor object.
+        Base sensor object.
 
         Args:
             name (str): sensor name

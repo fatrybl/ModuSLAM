@@ -1,12 +1,14 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from omegaconf import MISSING
+from configs.system.frontend_manager.graph_builder.graph_builder import (
+    GraphBuilderConfig,
+)
 
 
 @dataclass
 class FrontendManagerConfig:
     """
-    Config for SetupManager.
+    Config for FrontendManager.
     """
 
-    params = MISSING
+    graph_builder: GraphBuilderConfig = field(default_factory=GraphBuilderConfig)

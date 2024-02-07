@@ -30,11 +30,40 @@ from configs.system.data_manager.batch_factory.regime import (
     TimeLimitConfig,
 )
 from configs.system.data_manager.data_manager import DataManagerConfig
+from configs.system.frontend_manager.edge_factories.imu_odometry import (
+    ImuOdometryFactoryConfig,
+)
+from configs.system.frontend_manager.edge_factories.smart_landmark import (
+    SmartStereoFeaturesFactoryConfig,
+)
+from configs.system.frontend_manager.element_distributor.element_distributor import (
+    ElementDistributorConfig,
+)
+from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
+from configs.system.frontend_manager.graph_builder.graph_builder import (
+    GraphBuilderConfig,
+)
+from configs.system.frontend_manager.graph_builder.graph_merger.merger import (
+    GraphMergerConfig,
+)
+from configs.system.frontend_manager.handlers.base_handler import HandlerConfig
+from configs.system.setup_manager.handler_factory import HandlerFactoryConfig
 from configs.system.setup_manager.sensor_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
+from slam.frontend_manager.graph.edges_factories.imu_odometry_factory import (
+    ImuOdometryFactory,
+)
+from slam.frontend_manager.graph.edges_factories.smart_stereo_landmark_factory import (
+    SmartStereoFeaturesFactory,
+)
+from slam.frontend_manager.graph_builder.builders.lidar_pointcloud_builder import (
+    PointCloudBuilder,
+)
+from slam.frontend_manager.handlers.imu_preintegration import ImuPreintegration
+from slam.frontend_manager.handlers.stereo_features import SmartStereoFeatures
 from slam.setup_manager.sensor_factory.sensors import (
     Altimeter,
     Encoder,
@@ -122,6 +151,38 @@ data_dirs: list[PairConfig] = [
 ]
 
 
+imu_handler = HandlerConfig(imu.name, ImuPreintegration.__name__)
+stereo_handler = HandlerConfig(stereo.name, SmartStereoFeatures.__name__)
+
+handlers: list[HandlerConfig] = [imu_handler, stereo_handler]
+
+imu_odometry_factory = ImuOdometryFactoryConfig("imu_odometry_factory", ImuOdometryFactory.__name__)
+smart_stereo_features_factory = SmartStereoFeaturesFactoryConfig(
+    "smart_stereo_features_factory", SmartStereoFeaturesFactory.__name__
+)
+
+
+@dataclass
+class MeasurementsFlowTable:
+    """
+    Sensor->Handler->EdgeFactory table.
+    """
+
+    sensor_handlers_table: dict[str, list[str]] = field(
+        default_factory=lambda: {
+            imu.name: [imu_handler.name],
+            stereo.name: [stereo_handler.name],
+        }
+    )
+
+    handler_edge_factory_table: dict[str, str] = field(
+        default_factory=lambda: {
+            imu_handler.name: imu_odometry_factory.name,
+            stereo_handler.name: smart_stereo_features_factory.name,
+        }
+    )
+
+
 @dataclass
 class KaistDS(KaistConfig):
     reader = "KaistReader"
@@ -148,8 +209,16 @@ class SF(SensorFactoryConfig):
 
 
 @dataclass
+class HF(HandlerFactoryConfig):
+    module_name: str = "all_handlers"
+    package_name: str = "slam.frontend_manager.handlers"
+    handlers: list[HandlerConfig] = field(default_factory=lambda: handlers)
+
+
+@dataclass
 class SM(SetupManagerConfig):
     sensor_factory: SensorFactoryConfig = field(default_factory=SF)
+    handler_factory: HandlerFactoryConfig = field(default_factory=HF)
 
 
 @dataclass
@@ -165,9 +234,35 @@ class DM(DataManagerConfig):
 
 
 @dataclass
+class ED(ElementDistributorConfig):
+    sensor_handlers_table: dict[str, list[str]] = field(
+        default_factory=lambda: MeasurementsFlowTable.sensor_handlers_table
+    )
+
+
+@dataclass
+class GM(GraphMergerConfig):
+    handler_edge_factory_table: dict[str, str] = field(
+        default_factory=lambda: MeasurementsFlowTable.handler_edge_factory_table
+    )
+
+
+@dataclass
+class GB(GraphBuilderConfig):
+    class_name: str = PointCloudBuilder.__name__
+    element_distributor: ElementDistributorConfig = field(default_factory=ED)
+    graph_merger: GraphMergerConfig = field(default_factory=GM)
+
+
+@dataclass
+class FM(FrontendManagerConfig):
+    graph_builder: GraphBuilderConfig = field(default_factory=GB)
+
+
+@dataclass
 class Config:
     setup_manager: SetupManagerConfig = field(default_factory=SM)
     data_manager: DataManagerConfig = field(default_factory=DM)
-    # frontend_manager: FrontendManagerConfig = field(default_factory=FrontendManagerConfig)
+    frontend_manager: FrontendManagerConfig = field(default_factory=FM)
     # backend_manager: BackendManagerConfig = field(default_factory=BackendManagerConfig)
     # map_manager: MapManagerConfig = field(default_factory=MapManagerConfig)

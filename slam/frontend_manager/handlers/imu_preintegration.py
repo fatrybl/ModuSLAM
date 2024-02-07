@@ -1,4 +1,4 @@
-from slam.frontend_manager.elements_distributor.measurement_storage import Measurement
+from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
 
 

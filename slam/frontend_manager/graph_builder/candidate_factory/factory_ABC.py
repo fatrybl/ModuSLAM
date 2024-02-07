@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from slam.frontend_manager.elements_distributor.measurement_storage import (
+from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 

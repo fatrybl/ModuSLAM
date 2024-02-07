@@ -10,6 +10,8 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 class PointcloudCandidateAnalyzer(CandidateAnalyzer):
     """
     Decides if an amount of states with point clouds is enough to be merged with main graph.
+
+    TODO: implement the logic.
     """
 
     def __init__(self):

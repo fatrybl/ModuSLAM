@@ -8,7 +8,7 @@ from pytest import fixture
 from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from configs.system.setup_manager.sensor_factory import SensorFactoryConfig
 from slam.data_manager.factory.batch_factory import BatchFactory
-from slam.setup_manager.sensor_factory.sensor_factory import SensorFactory
+from slam.setup_manager.sensor_factory.factory import SensorFactory
 from tests.data_manager.auxiliary_utils.kaist_data_factory import DataFactory
 from tests.data_manager.factory.batch_factory.api.Stream.config import (
     BFConfig,

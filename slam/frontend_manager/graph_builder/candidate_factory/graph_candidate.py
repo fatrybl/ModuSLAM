@@ -1,7 +1,7 @@
 from collections import deque
 from dataclasses import dataclass, field
 
-from slam.frontend_manager.elements_distributor.elements_distributor import (
+from slam.frontend_manager.element_distributor.elements_distributor import (
     MeasurementStorage,
 )
 

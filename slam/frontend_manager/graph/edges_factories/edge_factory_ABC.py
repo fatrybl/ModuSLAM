@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from collections import deque
 from typing import Generic, TypeVar
 
-from slam.frontend_manager.elements_distributor.measurement_storage import Measurement
+from omegaconf import DictConfig
+
+from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.edges import Edge
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.vertices import Vertex
@@ -14,6 +16,20 @@ class EdgeFactory(ABC, Generic[E]):
     """
     Abstract factory for creating edges_123.
     """
+
+    @abstractmethod
+    def __init__(self, config: DictConfig) -> None:
+        pass
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """
+        Name of the factory.
+
+        Returns:
+            (str): name of the factory.
+        """
 
     @classmethod
     @abstractmethod

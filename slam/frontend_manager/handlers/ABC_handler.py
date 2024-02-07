@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
-from omegaconf import DictConfig
-
-from slam.frontend_manager.elements_distributor.measurement_storage import Measurement
+from configs.system.frontend_manager.handlers.base_handler import HandlerConfig
+from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 
 
 class Handler(ABC):
@@ -10,7 +9,14 @@ class Handler(ABC):
     Base external module.
     """
 
-    def __init__(self, config: DictConfig) -> None: ...
+    @abstractmethod
+    def __init__(self, config: HandlerConfig) -> None:
+        self._name = config.name
+        self._parameters = config.parameters
+
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
 
     @abstractmethod
     def process(self, element) -> Measurement | None: ...
