@@ -151,8 +151,16 @@ data_dirs: list[PairConfig] = [
 ]
 
 
-imu_handler = HandlerConfig(imu.name, ImuPreintegration.__name__)
-stereo_handler = HandlerConfig(stereo.name, SmartStereoFeatures.__name__)
+imu_handler = HandlerConfig(
+    name=imu.name,
+    type_name=ImuPreintegration.__name__,
+    module_name=".imu_preintegration",
+)
+stereo_handler = HandlerConfig(
+    name=stereo.name,
+    type_name=SmartStereoFeatures.__name__,
+    module_name=".stereo_features",
+)
 
 handlers: list[HandlerConfig] = [imu_handler, stereo_handler]
 
@@ -162,25 +170,20 @@ smart_stereo_features_factory = SmartStereoFeaturesFactoryConfig(
 )
 
 
-@dataclass
 class MeasurementsFlowTable:
     """
     Sensor->Handler->EdgeFactory table.
     """
 
-    sensor_handlers_table: dict[str, list[str]] = field(
-        default_factory=lambda: {
-            imu.name: [imu_handler.name],
-            stereo.name: [stereo_handler.name],
-        }
-    )
+    sensor_handlers_table: dict[str, list[str]] = {
+        imu.name: [imu_handler.name],
+        stereo.name: [stereo_handler.name],
+    }
 
-    handler_edge_factory_table: dict[str, str] = field(
-        default_factory=lambda: {
-            imu_handler.name: imu_odometry_factory.name,
-            stereo_handler.name: smart_stereo_features_factory.name,
-        }
-    )
+    handler_edge_factory_table: dict[str, str] = {
+        imu_handler.name: imu_odometry_factory.name,
+        stereo_handler.name: smart_stereo_features_factory.name,
+    }
 
 
 @dataclass
@@ -210,7 +213,6 @@ class SF(SensorFactoryConfig):
 
 @dataclass
 class HF(HandlerFactoryConfig):
-    module_name: str = "all_handlers"
     package_name: str = "slam.frontend_manager.handlers"
     handlers: list[HandlerConfig] = field(default_factory=lambda: handlers)
 

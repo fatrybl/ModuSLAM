@@ -56,4 +56,3 @@ class MeasurementStorage:
 
         """
         self.data[handler].append(z)
-        self._last_timestamp = z.time_range.stop

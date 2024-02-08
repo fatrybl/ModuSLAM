@@ -11,6 +11,5 @@ class HandlerFactoryConfig:
     Config for HandlerFactory.
     """
 
-    module_name: str = MISSING
     package_name: str = MISSING
     handlers: list[HandlerConfig] = MISSING

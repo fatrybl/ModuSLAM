@@ -26,4 +26,4 @@ class GraphCandidate:
     Contains state(s).
     """
 
-    states: deque[State] = deque()
+    states: deque[State] = field(default_factory=deque)

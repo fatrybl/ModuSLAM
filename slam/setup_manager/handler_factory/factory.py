@@ -46,10 +46,10 @@ class HandlerFactory:
         """
         Initializes handlers with the given config.
         """
-        module_name: str = config.module_name
         package_name: str = config.package_name
 
         for handler_cfg in config.handlers:
+            module_name: str = handler_cfg.module_name
             handler_object: type[Handler] = import_object(handler_cfg.type_name, module_name, package_name)
             new_handler: Handler = handler_object(handler_cfg)
             cls._handlers.add(new_handler)

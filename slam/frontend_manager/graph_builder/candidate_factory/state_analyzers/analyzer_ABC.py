@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.single_lidar import (
+from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.criteria.criterion_ABC import (
     Criterion,
 )
 

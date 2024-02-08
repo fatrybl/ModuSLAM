@@ -11,4 +11,5 @@ class HandlerConfig:
 
     name: str = MISSING
     type_name: str = MISSING
+    module_name: str = MISSING
     parameters: dict = MISSING
