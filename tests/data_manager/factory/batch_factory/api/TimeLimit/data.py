@@ -29,7 +29,7 @@ from slam.data_manager.factory.readers.kaist.data_classes import (
     CsvDataLocation,
     StereoImgDataLocation,
 )
-from slam.setup_manager.sensor_factory.sensors import (
+from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,

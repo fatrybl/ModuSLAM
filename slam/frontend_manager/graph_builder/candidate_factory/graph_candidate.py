@@ -13,10 +13,11 @@ class State:
     """
 
     storage: MeasurementStorage
-    timestamp: int = field(init=False)
+    timestamp: int | None = field(init=False)
 
     def __post_init__(self):
-        self.timestamp = self.storage.last_timestamp
+        if self.storage.recent_measurement is not None:
+            self.timestamp = self.storage.recent_measurement.time_range.stop
 
 
 @dataclass

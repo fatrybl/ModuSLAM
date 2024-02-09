@@ -18,7 +18,7 @@ from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.sensors import Encoder
+from slam.setup_manager.sensors_factory.sensors import Encoder
 from slam.utils.exceptions import FileNotValid
 from tests.data_manager.factory.readers.kaist.api.empty_dataset.data import el1
 

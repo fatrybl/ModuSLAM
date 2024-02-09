@@ -19,8 +19,8 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
     FileIterator,
     MeasurementCollector,
 )
-from slam.setup_manager.sensor_factory.factory import SensorFactory
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import FileNotValid, SensorNotFound

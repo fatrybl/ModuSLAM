@@ -8,6 +8,7 @@ from slam.frontend_manager.element_distributor.elements_distributor import (
     ElementDistributor,
 )
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.candidate_factory.factory import (
     PointcloudFactory,
 )
@@ -17,7 +18,6 @@ from slam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
 )
-from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_merger.graph_merger import GraphMerger
 
 logger = logging.getLogger(__name__)

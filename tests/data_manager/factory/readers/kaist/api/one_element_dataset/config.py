@@ -7,8 +7,8 @@ from configs.system.data_manager.batch_factory.datasets.kaist import (
     KaistConfig,
     PairConfig,
 )
-from configs.system.setup_manager.sensor_factory import SensorConfig
-from slam.setup_manager.sensor_factory.sensors import (
+from configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,

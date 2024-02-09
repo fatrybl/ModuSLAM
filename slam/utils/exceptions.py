@@ -23,5 +23,9 @@ class HandlerNotFound(Exception):
     "Handler has not been found"
 
 
+class AnalyzerNotFound(Exception):
+    "Analyzer has not been found"
+
+
 class ExternalModuleException(Exception):
     "External module failed to work properly"

@@ -1,6 +1,6 @@
 import logging
 
-from configs.system.setup_manager.handler_factory import HandlerFactoryConfig
+from configs.system.setup_manager.handlers_factory import HandlerFactoryConfig
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import HandlerNotFound

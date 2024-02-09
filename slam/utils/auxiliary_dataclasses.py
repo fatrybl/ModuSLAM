@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.sensors import Sensor
 
 
 @dataclass

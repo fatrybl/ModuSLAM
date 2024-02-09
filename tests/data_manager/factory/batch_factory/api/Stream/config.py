@@ -14,11 +14,11 @@ from configs.system.data_manager.batch_factory.datasets.kaist import (
 )
 from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
 from configs.system.data_manager.batch_factory.regime import RegimeConfig, StreamConfig
-from configs.system.setup_manager.sensor_factory import (
+from configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
-from slam.setup_manager.sensor_factory.sensors import (
+from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,

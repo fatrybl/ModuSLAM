@@ -16,14 +16,14 @@ from PIL.Image import Image
 from pytest import mark
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
-from configs.system.setup_manager.sensor_factory import (
+from configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.setup_manager.sensor_factory.factory import SensorFactory
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.sensors import Sensor
 from tests.data_manager.auxiliary_utils.kaist_data_factory import (
     DataFactory,
     SensorElementPair,

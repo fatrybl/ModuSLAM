@@ -40,6 +40,9 @@ from configs.system.frontend_manager.element_distributor.element_distributor imp
     ElementDistributorConfig,
 )
 from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
+from configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+    StateAnalyzerConfig,
+)
 from configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
@@ -47,12 +50,15 @@ from configs.system.frontend_manager.graph_builder.graph_merger.merger import (
     GraphMergerConfig,
 )
 from configs.system.frontend_manager.handlers.base_handler import HandlerConfig
-from configs.system.setup_manager.handler_factory import HandlerFactoryConfig
-from configs.system.setup_manager.sensor_factory import (
+from configs.system.setup_manager.handlers_factory import HandlerFactoryConfig
+from configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
 from configs.system.setup_manager.setup_manager import SetupManagerConfig
+from configs.system.setup_manager.state_analyzers_factory import (
+    StateAnalyzersFactoryConfig,
+)
 from slam.frontend_manager.graph.edges_factories.imu_odometry_factory import (
     ImuOdometryFactory,
 )
@@ -62,9 +68,12 @@ from slam.frontend_manager.graph.edges_factories.smart_stereo_landmark_factory i
 from slam.frontend_manager.graph_builder.builders.lidar_pointcloud_builder import (
     PointCloudBuilder,
 )
+from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
+    SingleLidar,
+)
 from slam.frontend_manager.handlers.imu_preintegration import ImuPreintegration
 from slam.frontend_manager.handlers.stereo_features import SmartStereoFeatures
-from slam.setup_manager.sensor_factory.sensors import (
+from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,
@@ -170,6 +179,15 @@ smart_stereo_features_factory = SmartStereoFeaturesFactoryConfig(
 )
 
 
+lidar_odom_analyzer = StateAnalyzerConfig(
+    name="SingleLidarOdometry",
+    type_name=SingleLidar.__name__,
+    module_name=".lidar_odometry",
+)
+
+state_analyzers: list[StateAnalyzerConfig] = [lidar_odom_analyzer]
+
+
 class MeasurementsFlowTable:
     """
     Sensor->Handler->EdgeFactory table.
@@ -218,9 +236,16 @@ class HF(HandlerFactoryConfig):
 
 
 @dataclass
+class SAF(StateAnalyzersFactoryConfig):
+    package_name: str = "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
+    analyzers: list[StateAnalyzerConfig] = field(default_factory=lambda: state_analyzers)
+
+
+@dataclass
 class SM(SetupManagerConfig):
     sensor_factory: SensorFactoryConfig = field(default_factory=SF)
     handler_factory: HandlerFactoryConfig = field(default_factory=HF)
+    state_analyzers_factory: StateAnalyzersFactoryConfig = field(default_factory=SAF)
 
 
 @dataclass
