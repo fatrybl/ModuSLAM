@@ -1,11 +1,11 @@
 import logging
 
 from configs.sensors.base_sensor_parameters import ParameterConfig
-from configs.system.setup_manager.sensor_factory import (
+from configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
-from slam.setup_manager.sensor_factory.sensors import (
+from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,

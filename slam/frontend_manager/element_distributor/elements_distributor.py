@@ -10,9 +10,9 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.handler_factory.factory import HandlerFactory
-from slam.setup_manager.sensor_factory.factory import SensorFactory
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
+from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 

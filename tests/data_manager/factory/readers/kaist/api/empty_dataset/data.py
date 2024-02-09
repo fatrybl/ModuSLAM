@@ -5,7 +5,7 @@ from configs.paths.kaist_dataset import KaistDatasetPathConfig
 from configs.sensors.base_sensor_parameters import ParameterConfig
 from slam.data_manager.factory.readers.element_factory import Element, Measurement
 from slam.data_manager.factory.readers.kaist.data_classes import CsvDataLocation
-from slam.setup_manager.sensor_factory.sensors import Encoder
+from slam.setup_manager.sensors_factory.sensors import Encoder
 from tests.data_manager.auxiliary_utils.kaist_data_factory import SensorNamePath
 from tests.data_manager.factory.readers.kaist.api.empty_dataset.config import (
     DATASET_DIR,

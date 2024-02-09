@@ -9,7 +9,7 @@ import numpy.typing as npt
 from PIL import Image
 
 from slam.data_manager.factory.readers.element_factory import Element
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.sensors import Sensor
 
 
 @dataclass

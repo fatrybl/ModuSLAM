@@ -3,7 +3,7 @@ import logging
 from configs.system.frontend_manager.frontend_manager import FrontendManagerConfig
 from slam.data_manager.factory.batch import DataBatch
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
+from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_builder_factory import (
     GraphBuilderFactory,
 )

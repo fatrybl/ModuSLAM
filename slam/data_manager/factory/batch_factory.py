@@ -10,7 +10,7 @@ from slam.data_manager.factory.readers.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.element_factory import Element
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterion
 

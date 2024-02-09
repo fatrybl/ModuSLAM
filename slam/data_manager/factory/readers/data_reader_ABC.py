@@ -11,7 +11,7 @@ from configs.system.data_manager.batch_factory.datasets.base_dataset import (
 )
 from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.readers.element_factory import Element
-from slam.setup_manager.sensor_factory.sensors import Sensor
+from slam.setup_manager.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger(__name__)
 

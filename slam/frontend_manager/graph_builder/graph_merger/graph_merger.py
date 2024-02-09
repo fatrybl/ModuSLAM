@@ -11,8 +11,8 @@ from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.vertices import Vertex
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.edge_factory_initializer.factory import EdgeCreatorFactory
-from slam.setup_manager.handler_factory.factory import HandlerFactory
+from slam.setup_manager.edge_factories_initializer.factory import EdgeCreatorFactory
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
 
 logger = logging.getLogger(__name__)
 

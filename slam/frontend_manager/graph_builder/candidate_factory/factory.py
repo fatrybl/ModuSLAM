@@ -19,9 +19,9 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.single_lidar import (
-    SingleLidarStateAnalyzer,
-)
+from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
+from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzerFactory
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,8 @@ logger = logging.getLogger(__name__)
 class PointcloudFactory(CandidateFactory):
     """
     Creates graph candidate with lidar point cloud.
+    pre-setup:
+        1) Distributing table (dict) should be initialized.
     """
 
     def __init__(
@@ -36,7 +38,16 @@ class PointcloudFactory(CandidateFactory):
     ):
         self._graph_candidate: GraphCandidate = GraphCandidate()
         self._candidate_analyzer: CandidateAnalyzer = PointcloudCandidateAnalyzer()
-        self._state_analyzer: StateAnalyzer = SingleLidarStateAnalyzer()
+        self._handler_analyzer_table: dict[Handler, StateAnalyzer] = {}
+
+    def _fill_table(self, config) -> None:
+        """
+        Fills handler-analyzer table based on the given config.
+        """
+        for handler_name, analyzer_name in config.items():
+            handler: Handler = HandlerFactory.get_handler(handler_name)
+            analyzer: StateAnalyzer = StateAnalyzerFactory.get_analyzer(analyzer_name)
+            self._handler_analyzer_table[handler] = analyzer
 
     @property
     def graph_candidate(self) -> GraphCandidate:
@@ -71,18 +82,20 @@ class PointcloudFactory(CandidateFactory):
         Processes input measurements and adds new states to the graph candidate if a criterion is satisfied.
         Storage satisfies only 1 criterion in time.
 
-        1) Check if a criterion for a new state is met for every criteria.
-        2) If a criterion is met, add a new state to the graph candidate.
+        1) Take last measurement from the storage.
+        2) Distribute it to the corresponding state analyzer based on its handler.
+        3) The analyzer decides if a new state should be added to the graph candidate.
+        4) if new state: add it to the graph candidate.
+
 
         Args:
             storage (MeasurementStorage): processed measurements from the Distributor.
-
-        TODO: is break really necessary?
-              One criterion == one state ?
         """
 
-        for criterion in self._state_analyzer.criteria:
-            if criterion.check(storage):
-                new_state: State = State(storage)
+        measurement = storage.recent_measurement
+        if measurement is not None:
+            analyzer = self._handler_analyzer_table[measurement.handler]
+            new_state: State | None = analyzer.evaluate(storage)
+
+            if new_state is not None:
                 self._graph_candidate.states.append(new_state)
-                break

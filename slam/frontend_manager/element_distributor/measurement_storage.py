@@ -29,23 +29,7 @@ class MeasurementStorage:
 
     def __init__(self) -> None:
         self.data: dict[Handler, deque[Measurement]] = {}
-        self._last_timestamp: int | None = None
-
-    @property
-    def last_timestamp(self) -> int:
-        """
-        The timestamp of the last added measurement.
-        Returns:
-            (int): timestamp of the last added measurement.
-        Raises:
-            ValueError: if the timestamp is None.
-        """
-        if self._last_timestamp is not None:
-            return self._last_timestamp
-        else:
-            msg = "The last measurement timestamp is None."
-            logger.error(msg)
-            raise ValueError
+        self.recent_measurement: Measurement | None = None
 
     def add(self, handler: Handler, z: Measurement) -> None:
         """
@@ -56,3 +40,4 @@ class MeasurementStorage:
 
         """
         self.data[handler].append(z)
+        self.recent_measurement = z
