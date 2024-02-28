@@ -13,10 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataManager:
-    """Manages all data processes.
-
-    Defaults to MetaSingleton.
-    """
+    """Manages all data processes."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """

@@ -1,5 +1,5 @@
 lidar_odometry:
-  
+
   name: "lidar"
   type_name: "PointcloudMatcher"
   module_name: ".pointcloud_matcher"
