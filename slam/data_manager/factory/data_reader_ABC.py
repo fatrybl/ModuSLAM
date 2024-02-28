@@ -6,12 +6,12 @@ from typing import overload
 
 from plum import dispatch
 
-from configs.system.data_manager.batch_factory.datasets.base_dataset import (
-    DatasetConfig,
-)
-from configs.system.data_manager.batch_factory.regime import RegimeConfig
 from slam.data_manager.factory.element import Element
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import RegimeConfig
 
 logger = logging.getLogger(__name__)
 

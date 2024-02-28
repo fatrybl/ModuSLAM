@@ -1,4 +1,6 @@
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
 from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 from slam.utils.exceptions import ItemNotFoundError
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (

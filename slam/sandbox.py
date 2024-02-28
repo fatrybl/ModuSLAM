@@ -3,8 +3,8 @@ from typing import overload
 
 import gtsam
 from plum import dispatch
+from system_configs.system.setup_manager.sensors_factory import SensorConfig
 
-from configs.system.setup_manager.sensors_factory import SensorConfig
 from slam.data_manager.factory.element import Element
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange

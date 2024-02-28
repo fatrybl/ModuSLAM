@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from configs.paths.kaist_dataset import KaistDatasetPathConfig
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.paths import (
+    KaistDatasetPathConfig,
+)
 
 
 @dataclass

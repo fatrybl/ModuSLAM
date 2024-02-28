@@ -4,11 +4,6 @@ from typing import cast, overload
 
 from plum import dispatch
 
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import (
-    StreamConfig,
-    TimeLimitConfig,
-)
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.element import Element, Measurement
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
@@ -17,6 +12,13 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import (
+    StreamConfig,
+    TimeLimitConfig,
+)
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ItemNotFoundError

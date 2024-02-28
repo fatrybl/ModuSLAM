@@ -1,14 +1,16 @@
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import (
+from slam.data_manager.factory.element import Element
+from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import (
     StreamConfig,
     TimeLimitConfig,
 )
-from configs.system.setup_manager.sensors_factory import (
+from slam.system_configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
-from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from tests_data.kaist_urban_dataset.data import (
     DATASET_DIR,
     el2,

@@ -15,7 +15,7 @@ class DataReaderFactory:
 
         TODO:
             1) Remove string comparison of Reader type.
-            2) Refactor type annotations for configs.
+            2) Refactor type annotations for system_configs.
 
 
         Args:

@@ -2,9 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import StreamConfig
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import StreamConfig
 from slam.utils.exceptions import FileNotValid
 from tests_data.kaist_urban_dataset.data import DATASET_DIR
 

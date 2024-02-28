@@ -8,15 +8,15 @@ get_element(sensor: Sensor, timestamp: int)
 
 import pytest
 
-from configs.system.data_manager.batch_factory.datasets.base_dataset import (
-    DatasetConfig,
-)
-from configs.system.data_manager.batch_factory.regime import RegimeConfig
-from configs.system.setup_manager.sensors_factory import SensorFactoryConfig
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.element import Element
 from slam.setup_manager.sensors_factory.factory import SensorFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import RegimeConfig
+from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import kaist1
 from tests.data_manager.factory.data_reader.readers.kaist.case2 import kaist2

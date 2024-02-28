@@ -1,8 +1,9 @@
 import logging
 
-from configs.system.frontend_manager.element_distributor.element_distributor import (
+from system_configs.system.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
+
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.element_distributor.measurement_storage import (
