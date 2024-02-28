@@ -1,0 +1,3 @@
+vlp_left:
+  name: "velodyne_left"
+  type_name: "Lidar3D"

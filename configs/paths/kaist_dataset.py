@@ -29,5 +29,5 @@ class KaistDatasetPathConfig:
     stereo_stamp_file: Path = sensor_data_dir / "stereo_stamp.csv"
     vrs_gps_data_file: Path = sensor_data_dir / "vrs_gps.csv"
     gps_data_file: Path = sensor_data_dir / "gps.csv"
-    stereo_left_data_dir: Path = Path("stereo_left")
-    stereo_right_data_dir: Path = Path("stereo_right")
+    stereo_left_data_dir: Path = image_data_dir / Path("stereo_left")
+    stereo_right_data_dir: Path = image_data_dir / Path("stereo_right")

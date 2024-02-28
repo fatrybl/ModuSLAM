@@ -3,14 +3,14 @@ from typing import TypeVar
 
 import gtsam
 
-from slam.data_manager.factory.readers.element_factory import Element
+from slam.data_manager.factory.element import Element
 from slam.frontend_manager.graph.vertices import Vertex
 
 
 @dataclass
 class Edge:
-    """
-    Base Edge of the Graph.
+    """Base Edge of the Graph.
+
     Args:
         id (int): unique id of the edge.
         elements (tuple[Element, ...]): elements of DataBatch which create the edge.
@@ -29,9 +29,7 @@ GraphEdge = TypeVar("GraphEdge", bound=Edge)
 
 @dataclass
 class Odometry(Edge):
-    """
-    Edge for any odometry factor.
-    """
+    """Edge for any odometry factor."""
 
     noise_model: gtsam.noiseModel
     v1: int
@@ -40,23 +38,17 @@ class Odometry(Edge):
 
 @dataclass
 class ImuOdometry(Odometry):
-    """
-    Edge for Imu pre-integrated odometry.
-    """
+    """Edge for Imu pre-integrated odometry."""
 
 
 @dataclass
 class LidarOdometry(Odometry):
-    """
-    Edge for Lidar odometry.
-    """
+    """Edge for Lidar odometry."""
 
 
 @dataclass
 class StereoCameraOdometry(Odometry):
-    """
-    Edge for Stereo Camera odometry.
-    """
+    """Edge for Stereo Camera odometry."""
 
 
 @dataclass

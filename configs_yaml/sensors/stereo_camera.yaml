@@ -1,0 +1,3 @@
+stereo_camera:
+  name: "stereo"
+  type_name: "StereoCamera"

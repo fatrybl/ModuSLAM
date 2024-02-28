@@ -8,9 +8,7 @@ from slam.frontend_manager.element_distributor.elements_distributor import (
 
 @dataclass
 class State:
-    """
-    State of the graph candidate.
-    """
+    """State of the graph candidate."""
 
     storage: MeasurementStorage
     timestamp: int | None = field(init=False)
@@ -22,8 +20,8 @@ class State:
 
 @dataclass
 class GraphCandidate:
-    """
-    Graph candidate is a sub-graph that is not connected to the main graph yet.
+    """Graph candidate is a sub-graph that is not connected to the main graph yet.
+
     Contains state(s).
     """
 

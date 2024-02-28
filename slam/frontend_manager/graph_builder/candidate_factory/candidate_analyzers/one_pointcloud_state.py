@@ -8,8 +8,8 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 
 
 class PointcloudCandidateAnalyzer(CandidateAnalyzer):
-    """
-    Decides if an amount of states with point clouds is enough to be merged with main graph.
+    """Decides if an amount of states with point clouds is enough to be merged with main
+    graph.
 
     TODO: implement the logic.
     """
@@ -18,8 +18,8 @@ class PointcloudCandidateAnalyzer(CandidateAnalyzer):
         self._required_states: list[State] = []
 
     def check_readiness(self, graph_candidate: GraphCandidate) -> bool:
-        """
-        Check a candidate with different criteria.
+        """Check a candidate with different criteria.
+
         Returns:
             status (bool): the status of a candidate.
         """

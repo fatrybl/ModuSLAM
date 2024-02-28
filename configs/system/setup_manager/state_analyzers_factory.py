@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from omegaconf import MISSING
-
 from configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
@@ -9,9 +7,7 @@ from configs.system.frontend_manager.graph_builder.candidate_factory.state_analy
 
 @dataclass
 class StateAnalyzersFactoryConfig:
-    """
-    Config for HandlerFactory.
-    """
+    """Config for HandlerFactory."""
 
-    package_name: str = MISSING
-    analyzers: list[StateAnalyzerConfig] = MISSING
+    package_name: str
+    analyzers: dict[str, StateAnalyzerConfig]

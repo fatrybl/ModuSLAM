@@ -1,26 +1,26 @@
 """
-Author: Mark Griguletskii.
+Author: Mark Griguletskii
+e-mail: mark.griguletskii@skoltech.ru.
 
-Main runner of SLAM system.
+Main runner of the SLAM system.
 """
 
-from hydra import main
-from hydra.core.config_store import ConfigStore
+import hydra
+from omegaconf import OmegaConf
 
-from configs.experiments.kaist.config import Config
-from configs.main_config import MainConfig
 from slam.main_manager.main_manager import MainManager
-
-cs = ConfigStore.instance()
-cs.store(name="default_config", node=Config)
+from slam.setup_manager.config_validator import register_config
 
 
-@main(config_name="default_config")
-def run(cfg: MainConfig) -> None:
-    """creates Main Manager and runs SLAM based on configuration"""
+@hydra.main(version_base=None, config_name="config", config_path="../configs_yaml")
+def run(cfg) -> None:
+    """Creates Main Manager and runs SLAM based on configuration."""
+    print(OmegaConf.to_yaml(cfg))
+
     main_manager = MainManager(cfg)
     main_manager.build_map()
 
 
 if __name__ == "__main__":
+    register_config()
     run()

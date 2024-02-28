@@ -1,31 +1,37 @@
-"""
-Custom exceptions
-"""
+"""Custom exceptions."""
+
+
+class ItemNotFoundError(Exception):
+    """The given item has not been found."""
+
+
+class ItemNotExistsError(Exception):
+    """The given item has not been found."""
 
 
 class ConfigFileNotValid(OSError):
-    "config file is not valid"
+    """Config file is not valid."""
 
 
 class FileNotValid(Exception):
-    "Invalid file: not exists or empty"
+    """Invalid file: not exists or empty"""
 
 
 class NotSubset(Exception):
-    "if a set is not a subset of another set"
+    """The set is not a subset of another set."""
 
 
 class SensorNotFound(Exception):
-    "Sensor has not been found"
+    """Sensor has not been found."""
 
 
 class HandlerNotFound(Exception):
-    "Handler has not been found"
+    """Handler has not been found."""
 
 
 class AnalyzerNotFound(Exception):
-    "Analyzer has not been found"
+    """Analyzer has not been found."""
 
 
 class ExternalModuleException(Exception):
-    "External module failed to work properly"
+    """External module failed to work properly."""

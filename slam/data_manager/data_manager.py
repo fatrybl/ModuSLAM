@@ -6,14 +6,17 @@ from plum import dispatch
 
 from configs.system.data_manager.data_manager import DataManagerConfig
 from slam.data_manager.factory.batch_factory import BatchFactory
-from slam.data_manager.factory.readers.element_factory import Element
+from slam.data_manager.factory.element import Element
 from slam.utils.auxiliary_dataclasses import PeriodicData
 
 logger = logging.getLogger(__name__)
 
 
 class DataManager:
-    """Manages all data processes. Defaults to MetaSingleton."""
+    """Manages all data processes.
+
+    Defaults to MetaSingleton.
+    """
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """

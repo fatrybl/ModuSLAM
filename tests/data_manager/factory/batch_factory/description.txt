@@ -1,0 +1,55 @@
+"""
+Tests for BatchFactory.create_batch() overloaded methods.
+
+All test cases should be run on any DataReader implementation.
+Tests data and output batches are determined by a developer.
+But they must fulfill the logic of test cases.
+
+1. create_batch () -> None:
+    1.1 Dataset exists and not empty. -> DataBatch
+    1.2 Dataset exists and empty. -> Exception
+    1.3 Dataset does not exist. -> Exception
+    1.4 ...
+
+2. create_batch (elements: Collection[Element]) -> None
+    2.1 one element -> DataBatch
+    2.2 multiple valid elements of a dataset -> DataBatch
+    2.3 multiple equal elements -> DataBatch
+    2.4 multiple elements: some equal, some different -> DataBatch
+    2.5 empty collection -> Exception
+    2.6 invalid elements -> Exception
+    2.7 ...
+
+3. create_batch (requests: set[PeriodicData]) -> None:
+    3.1 one valid request -> DataBatch
+    3.2 multiple valid requests: all time margins do not intersect -> DataBatch
+    3.3 multiple valid requests: time margins intersect -> DataBatch
+    3.4 empty set -> Exception
+    3.5 invalid requests -> Exception
+    3.6 ...
+
+Checklist:
+
+| Test case | KaistReader | Ros1Reader  | Ros2Reader  |
+|-----------|-------------|-------------|-------------|
+| 1.1       |             |             |             |
+| 1.2       |             |             |             |
+| 1.3       |             |             |             |
+| 1.4       |             |             |             |
+=======================================================
+| 2.1       |             |             |             |
+| 2.2       |             |             |             |
+| 2.3       |             |             |             |
+| 2.4       |             |             |             |
+| 2.5       |             |             |             |
+| 2.6       |             |             |             |
+=======================================================
+| 3.1       |             |             |             |
+| 3.2       |             |             |             |
+| 3.3       |             |             |             |
+| 3.4       |             |             |             |
+| 3.5       |             |             |             |
+| 3.6       |             |             |             |
+=======================================================
+
+"""

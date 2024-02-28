@@ -5,9 +5,7 @@ from slam.frontend_manager.graph.graph import Graph
 
 
 class GraphSolver:
-    """
-    Factor Graph Solver.
-    """
+    """Factor Graph Solver."""
 
     def __init__(self, params: DictConfig) -> None:
         self.optimizer = gtsam.LevenbergMarquardtOptimizer

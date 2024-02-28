@@ -6,7 +6,7 @@ from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 
 @pytest.fixture
 def memory_analyzer():
-    config = MemoryAnalyzerConfig(graph_memory=50.0)
+    config = MemoryAnalyzerConfig(batch_memory=100.0)
     return MemoryAnalyzer(config)
 
 

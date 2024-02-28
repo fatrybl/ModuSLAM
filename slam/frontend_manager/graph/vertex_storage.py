@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Sequence
 from typing import Generic, overload
 
 from plum import dispatch
@@ -18,9 +18,7 @@ from slam.utils.deque_set import DequeSet
 
 
 class VertexStorage(Generic[GraphVertex]):
-    """
-    Stores vertices of the Graph.
-    """
+    """Stores vertices of the Graph."""
 
     def __init__(self):
         self.vertices = DequeSet[GraphVertex]()
@@ -37,8 +35,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def pose(self) -> DequeSet[Pose]:
-        """
-        Pose vertex in the Graph.
+        """Pose vertex in the Graph.
+
         Position and orientation (SE3).
         Returns:
             (DequeSet[Pose]): poses in the graph.
@@ -47,18 +45,17 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def velocity(self) -> DequeSet[Velocity]:
-        """
-        Linear velocity vertex in Graph.
+        """Linear velocity vertex in Graph.
+
         Returns:
             (DequeSet[Velocity]): linear velocity in the graph.
-
         """
         return self._table[Velocity]
 
     @property
     def nav_state(self) -> DequeSet[NavState]:
-        """
-        Navigation state vertex in Graph.
+        """Navigation state vertex in Graph.
+
         Returns:
             (DequeSet[NavState]): navigation state in the graph.
         """
@@ -66,8 +63,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def imu_bias(self) -> DequeSet[ImuBias]:
-        """
-        IMU bias vertex in Graph.
+        """IMU bias vertex in Graph.
+
         Returns:
             (DequeSet[ImuBias]): IMU bias in the graph.
         """
@@ -75,8 +72,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def camera_pose(self) -> DequeSet[CameraPose]:
-        """
-        The pose where an image has been taken.
+        """The pose where an image has been taken.
+
         Returns:
             (DequeSet[CameraPose]): camera pose in the graph.
         """
@@ -84,8 +81,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def lidar_pose(self) -> DequeSet[LidarPose]:
-        """
-        The pose where a point-cloud has been registered.
+        """The pose where a point-cloud has been registered.
+
         Returns:
             (DequeSet[LidarPose]): lidar pose in the graph.
         """
@@ -93,8 +90,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     @property
     def camera_feature(self) -> DequeSet[CameraFeature]:
-        """
-        Camera feature based landmark in the Graph.
+        """Camera feature based landmark in the Graph.
+
         Returns:
             (DequeSet[CameraFeature]): camera feature in the graph.
         """
@@ -113,7 +110,7 @@ class VertexStorage(Generic[GraphVertex]):
         self._table[t].add(vertex)
 
     @overload
-    def add(self, vertices: Iterable[GraphVertex]) -> None:
+    def add(self, vertices: Sequence[GraphVertex]) -> None:
         """
         @overload.
         Adds new vertices to collections based on its type.
@@ -152,12 +149,12 @@ class VertexStorage(Generic[GraphVertex]):
         self._table[t].remove(vertex)
 
     @overload
-    def remove(self, vertices: Iterable[GraphVertex]) -> None:
+    def remove(self, vertices: Sequence[GraphVertex]) -> None:
         """
         @overload.
         Removes multiple vertices from the graph.
         Args:
-            vertices (Iterable[GraphVertex]): vertices to be removed from the graph.
+            vertices (Sequence[GraphVertex]): vertices to be removed from the graph.
         """
         [self.remove(v) for v in vertices]
 
@@ -175,5 +172,5 @@ class VertexStorage(Generic[GraphVertex]):
 
             2.  remove multiple vertices from the graph.
                 Args:
-                    vertices (Iterable[GraphVertex]): vertices to be removed from the graph.
+                    vertices (Sequence[GraphVertex]): vertices to be removed from the graph.
         """

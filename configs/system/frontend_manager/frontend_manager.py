@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
@@ -7,8 +7,6 @@ from configs.system.frontend_manager.graph_builder.graph_builder import (
 
 @dataclass
 class FrontendManagerConfig:
-    """
-    Config for FrontendManager.
-    """
+    """Config for FrontendManager."""
 
-    graph_builder: GraphBuilderConfig = field(default_factory=GraphBuilderConfig)
+    graph_builder: GraphBuilderConfig

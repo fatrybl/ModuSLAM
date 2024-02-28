@@ -13,6 +13,8 @@ class LidarOdometryFactory(EdgeFactory):
     """
 
     @classmethod
-    def create(cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]) -> list[LidarOdometry]:
+    def create(
+        cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]
+    ) -> list[LidarOdometry]:
         edges: list[LidarOdometry] = []
         return edges

@@ -12,20 +12,19 @@ class MemoryAnalyzer:
 
     def __init__(self, cfg: MemoryAnalyzerConfig) -> None:
         """
-        Attributes:
-            __graph_memory_percent (float): the percentage of memory to store graph.
-        Args:
-            cfg (MemoryAnalyzerConfig): a config containing parameters.
-        """
 
-        self.__graph_memory_percent: float = cfg.graph_memory
+        Args:
+            cfg (MemoryAnalyzerConfig): config with parameters.
+        """
+        assert cfg.batch_memory > 0, "Batch memory is 0"
+        self._batch_memory_percent: float = cfg.batch_memory
 
     @property
     def total_memory(self) -> int:
-        """Computes total phisycal memory available in bytes.
+        """Computes total physical memory available in bytes.
 
         Returns:
-            int: total phisycal memory available in bytes.
+            int: total physical memory available in bytes.
         """
         return psutil.virtual_memory().total
 
@@ -36,6 +35,8 @@ class MemoryAnalyzer:
         Returns:
             float: _description_
         """
+        assert self.total_memory > 0, "Total memory is 0"
+
         available_percent: float = (psutil.virtual_memory().available / self.total_memory) * 100
         return available_percent
 
@@ -50,9 +51,10 @@ class MemoryAnalyzer:
 
     @property
     def permissible_memory_percent(self) -> float:
-        """Computes the permissible percentage of memory which is available for the user.
+        """Computes the permissible percentage of memory which is available for the
+        user.
 
         Returns:
             float: the permissible percentage of memory which is available for the user
         """
-        return 100 - self.__graph_memory_percent
+        return self._batch_memory_percent

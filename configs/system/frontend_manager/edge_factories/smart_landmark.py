@@ -7,6 +7,4 @@ from configs.system.frontend_manager.edge_factories.base_factory import (
 
 @dataclass
 class SmartStereoFeaturesFactoryConfig(EdgeFactoryConfig):
-    """
-    Config for Smart Stereo Landmark Edge Factory.
-    """
+    """Config for Smart Stereo Landmark Edge Factory."""

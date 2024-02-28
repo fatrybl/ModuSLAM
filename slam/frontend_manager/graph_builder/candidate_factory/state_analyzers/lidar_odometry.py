@@ -16,9 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class SingleLidar(StateAnalyzer):
-    """
-    Analyzer for lidar states.
-    """
+    """Analyzer for lidar states."""
 
     def __init__(self, config: StateAnalyzerConfig) -> None:
         self._name: str = config.name
@@ -27,8 +25,8 @@ class SingleLidar(StateAnalyzer):
 
     @property
     def name(self) -> str:
-        """
-        Name of the analyzer.
+        """Name of the analyzer.
+
         Returns:
             (str): name of the analyzer.
         """

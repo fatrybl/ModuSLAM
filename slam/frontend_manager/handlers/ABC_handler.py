@@ -12,9 +12,7 @@ if TYPE_CHECKING:
 
 
 class Handler(ABC):
-    """
-    Base external module.
-    """
+    """Base external module."""
 
     @abstractmethod
     def __init__(self, config: HandlerConfig) -> None:

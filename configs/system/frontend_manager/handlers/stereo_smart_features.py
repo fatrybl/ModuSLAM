@@ -5,6 +5,4 @@ from configs.system.frontend_manager.handlers.base_handler import HandlerConfig
 
 @dataclass
 class StereoSmartFeaturesConfig(HandlerConfig):
-    """
-    Config for Stereo Smart Features.
-    """
+    """Config for Stereo Smart Features."""

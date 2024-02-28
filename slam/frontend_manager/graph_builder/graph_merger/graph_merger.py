@@ -18,9 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class GraphMerger:
-    """
-    Merges the graph candidate with the main graph.
-    """
+    """Merges the graph candidate with the main graph."""
 
     def __init__(self, config: GraphMergerConfig) -> None:
         self._vertices: set[Vertex] = set()
@@ -28,8 +26,7 @@ class GraphMerger:
         self._fill_table(config.handler_edge_factory_table)
 
     def _fill_table(self, config: dict[str, str]) -> None:
-        """
-        Fills in the table which represents handler -> edge factory connections.
+        """Fills in the table which represents handler -> edge factory connections.
 
         Args:
             config (dict[str, str]): configuration.
@@ -40,20 +37,17 @@ class GraphMerger:
             self._table[handler] = edge_factory
 
     def _clear_storage(self, state: State) -> None:
-        """
-        Deletes measurements from the storage for the current state.
+        """Deletes measurements from the storage for the current state.
+
         Args:
             state (State): state with measurements.
-
         """
         ...
 
     def _init_vertices(self, state: State) -> None:
-        """
-        Determines graph vertices for the state and fills in the set.
-        1) Iterates over the state storage
-        2) Takes predefined vertices for each handler
-        3) Adds them to the set.
+        """Determines graph vertices for the state and fills in the set. 1) Iterates
+        over the state storage 2) Takes predefined vertices for each handler 3) Adds
+        them to the set.
 
         Args:
             state (State): state with measurements.
@@ -87,8 +81,7 @@ class GraphMerger:
 
     @property
     def handler_edge_factory_table(self) -> dict[Handler, EdgeFactory]:
-        """
-        A table to represent the connections between handlers & edge factories.
+        """A table to represent the connections between handlers & edge factories.
 
         Returns:
             (dict[Handler, EdgeFactory]): handler -> edge factory table.
@@ -96,8 +89,7 @@ class GraphMerger:
         return self._table
 
     def merge(self, state: State, graph: Graph) -> None:
-        """
-        Merges state with the graph.
+        """Merges state with the graph.
 
         1) Determine graph vertices for the state.
         2) Create edges for the state using determined vertices.
@@ -106,7 +98,6 @@ class GraphMerger:
         Args:
             state (State): new state to be merged with the graph.
             graph (Graph): main graph.
-
         """
         self._init_vertices(state)
         edges = self._create_edges(state, graph)

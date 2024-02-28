@@ -7,6 +7,4 @@ from configs.system.frontend_manager.graph_builder.graph_builder import (
 
 @dataclass
 class PointCloudBuilderConfig(GraphBuilderConfig):
-    """
-    Config for PointCloudBuilder.
-    """
+    """Config for PointCloudBuilder."""

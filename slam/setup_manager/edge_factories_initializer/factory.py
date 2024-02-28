@@ -9,16 +9,13 @@ logger = logging.getLogger(__name__)
 
 
 class EdgeCreatorFactory:
-    """
-    Distributes edge factories.
-    """
+    """Distributes edge factories."""
 
     _factories = set[EdgeFactory]()
 
     @classmethod
     def get_all_factories(cls) -> set[EdgeFactory]:
-        """
-        Returns all edge factories.
+        """Returns all edge factories.
 
         Returns:
             (set[EdgeFactory]): all edge factories.
@@ -27,8 +24,7 @@ class EdgeCreatorFactory:
 
     @classmethod
     def get_factory(cls, name: str) -> EdgeFactory:
-        """
-        Returns edge factory by name.
+        """Returns edge factory by name.
 
         Args:
             name (str): name of the factory.
@@ -50,6 +46,8 @@ class EdgeCreatorFactory:
         package_name: str = config.package_name
 
         for factory_cfg in config.factories:
-            factory_object: type[EdgeFactory] = import_object(factory_cfg.name, module_name, package_name)
+            factory_object: type[EdgeFactory] = import_object(
+                factory_cfg.name, module_name, package_name
+            )
             new_factory: EdgeFactory = factory_object(factory_cfg)
             cls._factories.add(new_factory)

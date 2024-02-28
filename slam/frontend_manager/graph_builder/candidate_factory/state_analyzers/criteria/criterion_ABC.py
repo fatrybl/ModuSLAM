@@ -6,9 +6,7 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
 
 
 class Criterion(ABC):
-    """
-    Abstract class for a criterion of a new state.
-    """
+    """Abstract class for a criterion of a new state."""
 
     @abstractmethod
     def check(self, storage: MeasurementStorage) -> bool:

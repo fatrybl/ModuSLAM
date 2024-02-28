@@ -1,0 +1,5 @@
+lidar_odometry:
+
+  name: 'SingleLidarOdometry'
+  type_name: 'SingleLidar'
+  module_name: '.lidar_odometry'
