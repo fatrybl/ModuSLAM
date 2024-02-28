@@ -8,10 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataBatch:
-    """DataBatch is a container for data.
-
-    TODO: integrate this class into DataManager->Batch
-    """
+    """DataBatch is a container for data."""
 
     def __init__(self):
         self._deque_set = DequeSet[Element]()
