@@ -100,7 +100,7 @@ class DataReader(ABC):
             (Element): with raw sensor measurement.
 
         Raises:
-            ItemNotExistsError: if the given element is not in the dataset.
+            ItemNotFoundError: if the given element is not in the dataset.
         """
 
     @abstractmethod
@@ -119,7 +119,7 @@ class DataReader(ABC):
             (Element): with raw sensor measurement.
 
         Raises:
-            ItemNotExistsError: if the given sensor`s measurement
+            ItemNotFoundError: if the given sensor`s measurement
                 with the timestamp is not in the dataset.
         """
 
@@ -155,7 +155,7 @@ class DataReader(ABC):
                 Returns:
                     element (Element): with raw sensor measurement.
                 Raises:
-                    ItemNotExistsError: if the given sensor`s measurement with the timestamp is not in the dataset.
+                    ItemNotFoundError: if the given sensor`s measurement with the timestamp is not in the dataset.
             4.
                 Gets an element with raw sensor`s measurement from a dataset for a given element
                 w/o raw sensor measurement.
@@ -165,6 +165,6 @@ class DataReader(ABC):
                 Returns:
                     element (Element): with raw sensor measurement.
                 Raises:
-                    ItemNotExistsError: if the given element is not in the dataset.
+                    ItemNotFoundError: if the given element is not in the dataset.
 
         """

@@ -213,11 +213,13 @@ class BatchFactory:
         @overload.
 
         Calls:
-            1. create a new Data Batch from the dataset sequentially.
-            2. create a new Data Batch from the sequence of elements.
+            1. Create a new Data Batch from the dataset sequentially.
+                Args: None.
+
+            2. Create a new Data Batch from the sequence of elements.
                 Args:
                     elements (sequence[Element]): sequence of elements w/o raw sensor measurements.
-            3. create a new Data Batch from the set of requests.
+            3. Create a new Data Batch from the set of requests.
                 Args:
                     requests (set[PeriodicData]): each request contains sensor
                     and time range (start, stop) of measurements to be added to the Data Batch
