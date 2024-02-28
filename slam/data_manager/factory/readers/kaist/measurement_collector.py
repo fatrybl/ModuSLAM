@@ -1,6 +1,4 @@
 import logging
-from collections.abc import Iterator
-from csv import reader as csv_reader
 from pathlib import Path
 from typing import Callable, overload
 
@@ -9,127 +7,154 @@ import numpy.typing as npt
 from PIL import Image
 from plum import dispatch
 
-from configs.paths.kaist_dataset import KaistDatasetPathConfig
-from configs.system.data_manager.batch_factory.datasets.kaist import PairConfig
-from slam.data_manager.factory.readers.data_reader_ABC import DataReader
-from slam.data_manager.factory.readers.element_factory import Location
-from slam.data_manager.factory.readers.kaist.data_classes import (
+from slam.data_manager.factory.element import Location
+from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     BinaryDataLocation,
     CsvDataLocation,
-    DataStorage,
-    FileIterator,
     Message,
-    SensorIterators,
     StereoImgDataLocation,
-    Storage,
 )
-from slam.setup_manager.sensors_factory.sensors import (
-    Altimeter,
-    Encoder,
-    Fog,
-    Gps,
-    Imu,
-    Lidar2D,
-    Lidar3D,
-    Sensor,
-    StereoCamera,
-    VrsGps,
-)
+from slam.data_manager.factory.readers.kaist.iterators import FileIterator
 from slam.utils.auxiliary_methods import as_int
-from slam.utils.exceptions import ExternalModuleException, FileNotValid
+from slam.utils.exceptions import ExternalModuleException, ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
-class CsvFileGenerator:
-    """
-    Generator for a ".csv" file to read a row and calculate row`s number.
-    """
-
-    def __init__(self, file_path: Path):
-        self.__file = open(file_path, "r")
-        self.__reader = csv_reader(self.__file)
-        self.__count = -1
-
-    def __next__(self) -> tuple[int, tuple[str, ...]]:
-        try:
-            line = next(self.__reader)
-
-        except StopIteration:
-            self.__file.close()
-            msg = f"File {self.__file} has been exhausted."
-            logger.critical(msg)
-            raise
-        else:
-            line_tuple = tuple(line)
-            self.__count += 1
-            return self.__count, line_tuple
-
-    def __iter__(self):
-        return self
-
-
 class MeasurementCollector:
-    """
-    Collects sensors` measurements from Kaist Urban Dataset.
-    """
+    """Collects sensors` measurements from Kaist Urban Dataset."""
 
-    INCORRECT_TIMESTAMP: int = -1
-    IMAGE_EXTENSION: str = ".png"
-    BINARY_EXTENSION: str = ".bin"
+    _INCORRECT_TIMESTAMP: int = -111111111
+    _IMAGE_EXTENSION: str = ".png"
+    _BINARY_EXTENSION: str = ".bin"
 
-    def __init__(self, iterable_files: list[PairConfig], data_dirs: list[PairConfig]):
-        """
-        Args:
-            iterable_files (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>,
-                which corresponds to unique sensor name and its stamp file path.
-            data_dirs (tuple[Pair]): each Pair has <SENSOR_NAME> and <LOCATION>,
-                which corresponds to unique sensor name and its data directory.
-        """
-        dirs: tuple[PairConfig, ...] = tuple(data_dirs)
-        self._iterable_data_files: tuple[PairConfig, ...] = tuple(iterable_files)
-        self._sensor_data_storages = DataStorage(dirs)
-        self._sensor_data_iterators = SensorIterators(self._iterable_data_files, self._init_iterator)
+    imu: str = "imu"
+    fog: str = "fog"
+    altimeter: str = "altimeter"
+    gps: str = "gps"
+    vrs: str = "vrs"
+    encoder: str = "encoder"
+    sick_back: str = "sick_back"
+    sick_middle: str = "sick_middle"
+    velodyne_left: str = "velodyne_left"
+    velodyne_right: str = "velodyne_right"
+    stereo: str = "stereo"
 
-    @property
-    def iterators(self) -> set[FileIterator]:
-        """
-        Set of iterators for sensors` stamp files.
-        """
-        return self._sensor_data_iterators.iterators
+    def __init__(
+        self,
+        lidar_data_dirs_table: dict[str, Path],
+        stereo_data_dirs_table: dict[str, Path],
+    ):
 
-    @iterators.setter
-    def iterators(self, value: set[FileIterator]):
-        self._sensor_data_iterators.iterators = value
+        self._lidars_table = lidar_data_dirs_table
+        self._stereo_left_data_dir = list(stereo_data_dirs_table.values())[0]
+        self._stereo_right_data_dir = list(stereo_data_dirs_table.values())[1]
 
-    def reset_iterators(self) -> None:
-        """
-        Re-initialize all iterators
-        """
-        self._sensor_data_iterators = SensorIterators(self._iterable_data_files, self._init_iterator)
+        self._sensors_data_getters: dict[str, Callable] = {
+            self.imu: self._get_imu_data,
+            self.fog: self._get_fog_data,
+            self.altimeter: self._get_altimeter_data,
+            self.gps: self._get_gps_data,
+            self.vrs: self._get_vrs_gps_data,
+            self.encoder: self._get_encoder_data,
+            self.sick_back: self._get_sick_back_data,
+            self.sick_middle: self._get_sick_middle_data,
+            self.velodyne_left: self._get_velodyne_left_data,
+            self.velodyne_right: self._get_velodyne_right_data,
+            self.stereo: self._get_stereo_data,
+        }
 
-    @staticmethod
-    def _init_iterator(file: Path) -> Iterator[tuple[int, tuple[str, ...]]]:
-        """
-        Initializes an iterator for a given file.
-
-        Args:
-            file (Path): file to be iterated.
-
-        Yields:
-            Iterator[tuple[int, tuple[str]]]: line number, tuple of string for each line in the file.
-        """
-        if DataReader.is_file_valid(file):
-            return CsvFileGenerator(file)
+    def _get_imu_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
         else:
-            msg = f"file: {file} is not valid to initialize the iterator"
-            logger.critical(msg)
-            raise FileNotValid(msg)
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_fog_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
+        else:
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_encoder_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
+        else:
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_altimeter_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
+        else:
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_gps_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
+        else:
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_vrs_gps_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, CsvDataLocation]:
+        if timestamp is None:
+            return self._get_csv_data(iterator)
+        else:
+            return self._get_csv_data(iterator, timestamp)
+
+    def _get_sick_back_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, BinaryDataLocation]:
+        if timestamp is None:
+            return self._get_bin_data(self.sick_back, iterator)
+        else:
+            return self._get_bin_data(self.sick_back, iterator, timestamp)
+
+    def _get_sick_middle_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, BinaryDataLocation]:
+        if timestamp is None:
+            return self._get_bin_data(self.sick_middle, iterator)
+        else:
+            return self._get_bin_data(self.sick_middle, iterator, timestamp)
+
+    def _get_velodyne_left_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, BinaryDataLocation]:
+        if timestamp is None:
+            return self._get_bin_data(self.velodyne_left, iterator)
+        else:
+            return self._get_bin_data(self.velodyne_left, iterator, timestamp)
+
+    def _get_velodyne_right_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, BinaryDataLocation]:
+        if timestamp is None:
+            return self._get_bin_data(self.velodyne_right, iterator)
+        else:
+            return self._get_bin_data(self.velodyne_right, iterator, timestamp)
+
+    def _get_stereo_data(
+        self, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, StereoImgDataLocation]:
+        if timestamp is None:
+            return self._get_img_data(iterator)
+        else:
+            return self._get_img_data(iterator, timestamp)
 
     @staticmethod
-    def __read_bin(file: Path) -> npt.NDArray[np.float32]:
-        """
-        Reads a binary file with Single-precision floating-point data (float32).
+    def _read_bin(file: Path) -> npt.NDArray[np.float32]:
+        """Reads a binary file with Single-precision floating-point data (float32).
 
         Args:
             file (Path): binary file to be read.
@@ -141,11 +166,32 @@ class MeasurementCollector:
             data = np.fromfile(f, np.float32)
             return data
 
-    def __find_in_file(
-        self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int
-    ) -> tuple[int, tuple[str, ...]]:
+    @staticmethod
+    def _get_measurement(iterator: FileIterator) -> tuple[Message, CsvDataLocation]:
+        """Iterates once with a given iterator.
+
+        Args:
+            iterator (FileIterator): iterator for sensor stamp ".csv" file.
+
+        Returns:
+            tuple[Message, CsvDataLocation]: message and location in CSV data file.
         """
-        Iterates over file and finds the line with the given timestamp.
+        try:
+            line = next(iterator)
+        except StopIteration:
+            msg = f"File: {iterator.file} has been exhausted."
+            logger.critical(msg)
+            raise
+        else:
+            position: int = iterator.position
+            timestamp: str = line[0]
+            data: tuple[str, ...] = tuple(line[1:])
+            message = Message(timestamp, data)
+            location = CsvDataLocation(iterator.file, position)
+            return message, location
+
+    def _find_measurement(self, iterator: FileIterator, timestamp: int) -> list[str]:
+        """Iterates over file and finds the line with the given timestamp.
 
         Args:
             iterator (Iterator[tuple[int, tuple[str, ...]]]): iterator of tuple.
@@ -157,59 +203,24 @@ class MeasurementCollector:
         Returns:
             tuple[int, tuple[str, ...]]: line number and line as tuple of strings.
         """
-        current_timestamp: int = self.INCORRECT_TIMESTAMP
+        current_timestamp: int = self._INCORRECT_TIMESTAMP
+        line: list[str] = []
         while current_timestamp != timestamp:
             try:
-                position, line = next(iterator)
+                line = next(iterator)
             except StopIteration:
-                msg = f"Could not find measurement with timestamp={timestamp}"
+                msg = f"Iterator {iterator} has been exhausted."
                 logger.error(msg)
                 raise StopIteration(msg)
             else:
                 timestamp_str: str = line[0]
                 current_timestamp = as_int(timestamp_str)
-        return position, line
+        return line
 
-    @staticmethod
-    def __iterate(it: FileIterator) -> tuple[Message, CsvDataLocation]:
-        """
-        Iterates once with a given iterator.
+    def _get_image(self, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
+        """Gets an image for a sensor with the given name and the timestamp.
 
         Args:
-            it (FileIterator): iterator for sensor stamp ".csv" file.
-
-        Returns:
-            tuple[Message, CsvDataLocation]: message and location in CSV data file.
-        """
-        try:
-            position, line = next(it.iterator)
-        except StopIteration:
-            msg = f"File: {it.file} has been exhausted."
-            logger.critical(msg)
-            raise
-        else:
-            timestamp: str = line[0]
-            data: tuple[str, ...] = line[1:]
-            message = Message(timestamp, data)
-            location = CsvDataLocation(it.file, position)
-            return message, location
-
-    def __update_iterator(self, iterator: Iterator[tuple[int, tuple[str, ...]]], timestamp: int) -> None:
-        """
-        Sets the iterator to the position of the given timestamp.
-
-        Args:
-            iterator (Iterator[tuple[int, tuple[str, ...]]]): to be set to the position.
-            timestamp (int): timestamp.
-        """
-        self.__find_in_file(iterator, timestamp)
-
-    def _get_image(self, sensor_name: str, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
-        """
-        Gets an image for a sensor with the given name and the timestamp.
-
-        Args:
-            sensor_name (str): name of sensor.
             timestamp (int): timestamp.
         Raises:
             ExternalModuleException: when OpenCV failed to read an image with opencv.imread() method.
@@ -220,15 +231,11 @@ class MeasurementCollector:
         """
         timestamp_str: str = str(timestamp)
         timestamp_path: Path = Path(timestamp_str)
-        storage: Storage = self._sensor_data_storages.get_data_location(sensor_name)
 
-        left_camera_dir: Path = storage.path / KaistDatasetPathConfig.stereo_left_data_dir
-        right_camera_dir: Path = storage.path / KaistDatasetPathConfig.stereo_right_data_dir
-
-        left_img_file = left_camera_dir / timestamp_path
-        right_img_file = right_camera_dir / timestamp_path
-        left_img_file = left_img_file.with_suffix(self.IMAGE_EXTENSION)
-        right_img_file = right_img_file.with_suffix(self.IMAGE_EXTENSION)
+        left_img_file = self._stereo_left_data_dir / timestamp_path
+        right_img_file = self._stereo_right_data_dir / timestamp_path
+        left_img_file = left_img_file.with_suffix(self._IMAGE_EXTENSION)
+        right_img_file = right_img_file.with_suffix(self._IMAGE_EXTENSION)
         try:
             left_img = Image.open(left_img_file)
             right_img = Image.open(right_img_file)
@@ -242,43 +249,48 @@ class MeasurementCollector:
         return message, location
 
     @overload
-    def _get_csv_data(self, sensor: Sensor) -> tuple[Message, CsvDataLocation]:
+    def _get_csv_data(self, iterator: FileIterator) -> tuple[Message, CsvDataLocation]:
         """
         @overload.
         Gets sensor`s measurement from csv file for the given sensor sequantially with iterator.
 
         Args:
-            sensor (Sensor): sensor to get measurement for.
+            iterator (FileIterator): iterator for sensor stamp ".csv" file.
 
         Returns:
             tuple[Message, CsvDataLocation]: message with data and timestamp;
                                              measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        message, location = self.__iterate(it)
+
+        message, location = self._get_measurement(iterator)
         return message, location
 
     @overload
-    def _get_csv_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, CsvDataLocation]:
+    def _get_csv_data(
+        self, iterator: FileIterator, timestamp: int
+    ) -> tuple[Message, CsvDataLocation]:
         """
         @overload.
         Gets sensor`s measurement from csv file for the given sensor and the timestamp.
 
         Args:
-            sensor (Sensor): sensor to get measurement for.
             timestamp (int): timestamp of a measurement.
         Returns:
             tuple[Message, CsvDataLocation]: message with data and timestamp;
                                              measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        position, line = self.__find_in_file(it.iterator, timestamp)
-        message = Message(line[0], line[1:])
-        location = CsvDataLocation(it.file, position)
+        try:
+            line = self._find_measurement(iterator, timestamp)
+        except StopIteration:
+            msg = f"Could not find measurement with timestamp={timestamp} in {iterator.file}"
+            logger.critical(msg)
+            raise ItemNotFoundError(msg)
+        message = Message(line[0], tuple(line[1:]))
+        location = CsvDataLocation(iterator.file, iterator.position)
         return message, location
 
     @dispatch
-    def _get_csv_data(self, sensor=None, timestamp=None):
+    def _get_csv_data(self, iterator=None, timestamp=None):
         """
         @overload.
 
@@ -294,66 +306,67 @@ class MeasurementCollector:
         """
 
     @overload
-    def _get_bin_data(self, sensor: Sensor) -> tuple[Message, BinaryDataLocation]:
+    def _get_bin_data(
+        self, sensor_name: str, iterator: FileIterator
+    ) -> tuple[Message, BinaryDataLocation]:
         """
         @overload.
         Gets sensor`s measurement from binary file for the given sensor sequantially with iterator.
 
         Args:
-            sensor (Sensor): sensor to get measurement for.
+            sensor_name (str): name of sensor to get method for.
 
         Returns:
             tuple[Message, BinaryDataLocation]: message with data and timestamp;
                                                 measurement location.
         """
 
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         try:
-            __, line = next(it.iterator)
+            line = next(iterator)
         except StopIteration:
-            msg = f"File {it.file} has been exhausted"
+            msg = f"File {iterator.file} has been exhausted"
             logger.critical(msg)
             raise
         else:
-            storage: Storage = self._sensor_data_storages.get_data_location(sensor.name)
             timestamp: str = str(line[0])
             timestamp_path: Path = Path(timestamp)
-            file: Path = storage.path / timestamp_path
-            file = file.with_suffix(self.BINARY_EXTENSION)
-            raw_data: npt.NDArray[np.float32] = self.__read_bin(file)
+            file: Path = self._lidars_table[sensor_name] / timestamp_path
+            file = file.with_suffix(self._BINARY_EXTENSION)
+            raw_data: npt.NDArray[np.float32] = self._read_bin(file)
             raw_data_tuple: tuple[float, ...] = tuple(raw_data)
             message = Message(timestamp, raw_data_tuple)
             location = BinaryDataLocation(file)
             return message, location
 
     @overload
-    def _get_bin_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, BinaryDataLocation]:
+    def _get_bin_data(
+        self, sensor_name: str, iterator: FileIterator, timestamp: int
+    ) -> tuple[Message, BinaryDataLocation]:
         """
         @overload.
         Gets sensor`s measurement from binary file for the given sensor and the timestamp.
 
         Args:
-            sensor (Sensor): sensor to get measurement for.
+            sensor_name (str): name of sensor to get method for.
             timestamp (int): timestamp of a measurement.
 
         Returns:
             tuple[Message, BinaryDataLocation]: message with data and timestamp;
                                                 measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        self.__update_iterator(it.iterator, timestamp)
-        storage: Storage = self._sensor_data_storages.get_data_location(sensor.name)
+
         timestamp_str: str = str(timestamp)
-        file: Path = storage.path / timestamp_str
-        file = file.with_suffix(self.BINARY_EXTENSION)
-        raw_data = self.__read_bin(file)
+        timestamp_path: Path = Path(timestamp_str)
+        file: Path = self._lidars_table[sensor_name] / timestamp_path
+        file = file.with_suffix(self._BINARY_EXTENSION)
+        raw_data = self._read_bin(file)
         raw_data_tuple = tuple(raw_data)
         message = Message(timestamp_str, raw_data_tuple)
         location = BinaryDataLocation(file)
         return message, location
 
     @dispatch
-    def _get_bin_data(self, sensor=None, timestamp=None):
+    def _get_bin_data(self, sensor=None, iterator=None, timestamp=None):
         """
         @overload.
 
@@ -369,51 +382,51 @@ class MeasurementCollector:
         """
 
     @overload
-    def _get_img_data(self, sensor: StereoCamera) -> tuple[Message, StereoImgDataLocation]:
+    def _get_img_data(self, iterator: FileIterator) -> tuple[Message, StereoImgDataLocation]:
         """
         @overload.
-        Gets sensor`s measurement from a png file for the given sensor with the iterator sequantially.
+        Gets sensor`s measurement from a png file for the given sensor with the iterator sequentially.
 
         Args:
-            sensor (StereoCamera): sensor to get measurement for.
+            iterator (FileIterator): iterator for sensor stamp ".csv" file.
 
         Returns:
             tuple[Message, StereoImgDataLocation]: message with data and timestamp;
                                                    measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
         try:
-            __, line = next(it.iterator)
+            line = next(iterator)
         except StopIteration:
-            msg = f"File {it.file} has been exhausted"
+            msg = f"File {iterator.file} has been exhausted"
             logger.critical(msg)
             raise
         else:
             timestamp: int = as_int(line[0])
-            message, location = self._get_image(sensor.name, timestamp)
+            message, location = self._get_image(timestamp)
             return message, location
 
     @overload
-    def _get_img_data(self, sensor: StereoCamera, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
+    def _get_img_data(
+        self, iterator: FileIterator, timestamp: int
+    ) -> tuple[Message, StereoImgDataLocation]:
         """
         @overload.
         Gets sensor`s measurement from png file for the given sensor and the timestamp.
 
         Args:
-            sensor (StereoCamera): sensor to get measurement for.
+            iterator (FileIterator): iterator for sensor stamp ".csv" file.
             timestamp (int): timestamp of a measurement.
 
         Returns:
             tuple[Message, StereoImgDataLocation]: message with data and timestamp;
                                                    measurement location.
         """
-        it: FileIterator = self._sensor_data_iterators.get_file_iterator(sensor.name)
-        self.__update_iterator(it.iterator, timestamp)
-        message, location = self._get_image(sensor.name, timestamp)
+
+        message, location = self._get_image(timestamp)
         return message, location
 
     @dispatch
-    def _get_img_data(self, sensor=None, timestamp=None):
+    def _get_img_data(self, iterator=None, timestamp=None):
         """
         @overload.
 
@@ -428,78 +441,28 @@ class MeasurementCollector:
                     timestamp (int): timestamp of a measurement.
         """
 
-    def __get_sensor_method(self, sensor: Sensor) -> Callable[..., tuple[Message, Location]]:
-        """
-        Gets sensor`s specific method based on given sensor`s type
-
-        Args:
-            sensor (Sensor): sensor to get method for.
-
-        Raises:
-            TypeError: if no method for given sensor`s type
-
-        Returns:
-            Callable[..., tuple[Message, Location]]: method to get raw sensor measurement.
-        """
-        if isinstance(sensor, (Imu, Fog, Altimeter, Gps, VrsGps, Encoder)):
-            return self._get_csv_data
-        elif isinstance(sensor, (Lidar2D, Lidar3D)):
-            return self._get_bin_data
-        elif isinstance(sensor, StereoCamera):
-            return self._get_img_data
-        else:
-            msg = f"no method to parse data for sensor: {sensor} of type: {type(sensor)}"
-            logger.critical(msg)
-            raise TypeError(msg)
-
-    @overload
-    def get_data(self, sensor: Sensor) -> tuple[Message, Location]:
+    def get_data(
+        self, sensor_name: str, iterator: FileIterator, timestamp: int | None = None
+    ) -> tuple[Message, Location]:
         """
         @overload.
-        Gets data for the given sensor sequantially based on its iterator.
+        Gets data for the given sensor sequentially based on its iterator.
 
         Args:
-            sensor (Sensor): sensor to get method for.
-
-        Returns:
-            tuple[Message, Location]: message with data and timestamp;
-                                            measurement location.
-        """
-        method = self.__get_sensor_method(sensor)
-        message, location = method(sensor)
-        return message, location
-
-    @overload
-    def get_data(self, sensor: Sensor, timestamp: int) -> tuple[Message, Location]:
-        """
-        @overload.
-        Gets data for the given sensor and the timestamp.
-
-        Args:
-            sensor (Sensor): sensor to get method for.
             timestamp (int): timestamp of a measurement.
+            iterator (FileIterator): iterator for sensor stamp ".csv" file.
+            sensor_name (str): name of sensor to get data from.
 
         Returns:
             tuple[Message, Location]: message with data and timestamp;
                                             measurement location.
         """
-        self.reset_iterators()
-        method = self.__get_sensor_method(sensor)
-        message, location = method(sensor, timestamp)
+        method: Callable = self._sensors_data_getters[sensor_name]
+        try:
+            message, location = method(iterator, timestamp)
+        except ItemNotFoundError:
+            msg = f"Could not find measurement with timestamp={timestamp} for sensor {sensor_name} in {iterator.file}"
+            logger.critical(msg)
+            raise ItemNotFoundError(msg)
+
         return message, location
-
-    @dispatch
-    def get_data(self, sensor=None, timestamp=None):
-        """
-        @overload.
-
-        Gets sensor`s measurement.
-
-        Calls:
-            1.  Args:
-                    sensor (Sensor): sensor to get measurement for:
-                    From current iterator position.
-            2.  Args:
-                    sensor (Sensor): sensor to get measurement for.
-                    timestamp (int): timestamp of a measurement.
-        """

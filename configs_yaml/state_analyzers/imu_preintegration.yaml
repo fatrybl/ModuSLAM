@@ -1,0 +1,5 @@
+imu_preintegration:
+  
+  name: 'imu_preintegration'
+  type_name: 'ImuPreintegrator'
+  module_name: '.imu_preintegration'

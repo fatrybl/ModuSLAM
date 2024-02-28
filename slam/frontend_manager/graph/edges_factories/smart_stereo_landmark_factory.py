@@ -13,6 +13,8 @@ class SmartStereoFeaturesFactory(EdgeFactory):
     """
 
     @classmethod
-    def create(cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]) -> list[SmartStereoLandmark]:
+    def create(
+        cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]
+    ) -> list[SmartStereoLandmark]:
         edges: list[SmartStereoLandmark] = []
         return edges

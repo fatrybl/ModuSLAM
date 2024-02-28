@@ -6,18 +6,18 @@ Test description:
 import pytest
 from pytest import mark
 
-from slam.data_manager.factory.readers.data_reader_ABC import DataReader
-from slam.data_manager.factory.readers.data_reader_factory import DataReaderFactory
+from slam.data_manager.factory.data_reader_ABC import DataReader
+from slam.data_manager.factory.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 
 
 @mark.parametrize(("reader_name", "result"), [("KaistReader", KaistReader)])
 def test_get_reader_success(reader_name: str, result: type[DataReader]):
-    reader: type[DataReader] = DataReaderFactory.get_reader(reader_name)
+    reader: type[DataReader] = DataReaderFactory.get_reader_object(reader_name)
     assert reader == result
 
 
 @mark.parametrize(("reader_name", "exception"), [("UnknownReader", NotImplementedError)])
 def test_get_reader_fail(reader_name: str, exception: type[Exception]):
     with pytest.raises(exception):
-        DataReaderFactory.get_reader(reader_name)
+        DataReaderFactory.get_reader_object(reader_name)

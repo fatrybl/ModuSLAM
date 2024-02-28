@@ -7,6 +7,4 @@ from configs.system.frontend_manager.edge_factories.base_factory import (
 
 @dataclass
 class ImuOdometryFactoryConfig(EdgeFactoryConfig):
-    """
-    Config for Imu Preintegrated Odometry Edge Factory.
-    """
+    """Config for Imu Preintegrated Odometry Edge Factory."""

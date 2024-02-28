@@ -24,9 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class PointCloudBuilder(GraphBuilder):
-    """
-    Build a graph for point-cloud based map.
-    """
+    """Build a graph for point-cloud based map."""
 
     def __init__(self, config: PointCloudBuilderConfig) -> None:
         self._distributor: ElementDistributor = ElementDistributor(config.element_distributor)
@@ -35,16 +33,15 @@ class PointCloudBuilder(GraphBuilder):
 
     @property
     def graph_candidate(self) -> GraphCandidate:
-        """
-        Graph candidate.
+        """Graph candidate.
+
         Returns:
             (GraphCandidate): graph candidate.
         """
         return self._candidate_factory.graph_candidate
 
     def merge(self, candidate: GraphCandidate, graph: Graph) -> None:
-        """
-        Merges the candidate with the main graph.
+        """Merges the candidate with the main graph.
 
         Args:
             candidate (GraphCandidate): a candidate to be merged.
@@ -54,10 +51,8 @@ class PointCloudBuilder(GraphBuilder):
             self._merger.merge(state, graph)
 
     def create_graph_candidate(self, batch: DataBatch) -> None:
-        """
-        Creates graph candidate.
-            1) Create graph candidate.
-            2) Synchronize states of the candidate (squeeze them).
+        """Creates graph candidate. 1) Create graph candidate. 2) Synchronize states of
+        the candidate (squeeze them).
 
         Args:
             batch (DataBatch): data batch with measurements.

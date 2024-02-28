@@ -27,8 +27,8 @@ logger = logging.getLogger(__name__)
 
 
 class PointcloudFactory(CandidateFactory):
-    """
-    Creates graph candidate with lidar point cloud.
+    """Creates graph candidate with lidar point cloud.
+
     pre-setup:
         1) Distributing table (dict) should be initialized.
     """
@@ -41,9 +41,7 @@ class PointcloudFactory(CandidateFactory):
         self._handler_analyzer_table: dict[Handler, StateAnalyzer] = {}
 
     def _fill_table(self, config) -> None:
-        """
-        Fills handler-analyzer table based on the given config.
-        """
+        """Fills handler-analyzer table based on the given config."""
         for handler_name, analyzer_name in config.items():
             handler: Handler = HandlerFactory.get_handler(handler_name)
             analyzer: StateAnalyzer = StateAnalyzerFactory.get_analyzer(analyzer_name)
@@ -51,8 +49,7 @@ class PointcloudFactory(CandidateFactory):
 
     @property
     def graph_candidate(self) -> GraphCandidate:
-        """
-        Graph candidate.
+        """Graph candidate.
 
         Returns:
             (GraphCandidate): graph candidate.
@@ -60,8 +57,7 @@ class PointcloudFactory(CandidateFactory):
         return self._graph_candidate
 
     def candidate_ready(self) -> bool:
-        """
-        Candidate readiness status.
+        """Candidate readiness status.
 
         Returns:
             (bool): graph candidate readiness status.
@@ -69,8 +65,8 @@ class PointcloudFactory(CandidateFactory):
         return self._candidate_analyzer.check_readiness(self._graph_candidate)
 
     def synchronize_states(self) -> None:
-        """
-        Synchronizes states of the graph candidate.
+        """Synchronizes states of the graph candidate.
+
         input: list[State] of size N
         output: list[State] of size M, N >= M
         TODO: implement synchronization of states.
@@ -78,9 +74,8 @@ class PointcloudFactory(CandidateFactory):
         ...
 
     def process_storage(self, storage: MeasurementStorage) -> None:
-        """
-        Processes input measurements and adds new states to the graph candidate if a criterion is satisfied.
-        Storage satisfies only 1 criterion in time.
+        """Processes input measurements and adds new states to the graph candidate if a
+        criterion is satisfied. Storage satisfies only 1 criterion in time.
 
         1) Take last measurement from the storage.
         2) Distribute it to the corresponding state analyzer based on its handler.

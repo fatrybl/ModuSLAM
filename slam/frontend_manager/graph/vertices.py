@@ -11,9 +11,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class Vertex:
-    """
-    Base vertex in Graph.
-    """
+    """Base vertex in Graph."""
 
     id: int
     timestamp: int
@@ -24,9 +22,7 @@ class Vertex:
 
 @dataclass
 class Pose(Vertex):
-    """
-    Pose vertex in Graph.
-    """
+    """Pose vertex in Graph."""
 
     position: tuple[float, ...]
     rotation: tuple[float, ...]
@@ -37,23 +33,17 @@ class Pose(Vertex):
 
 @dataclass
 class CameraPose(Pose):
-    """
-    The pose where an image has been taken.
-    """
+    """The pose where an image has been taken."""
 
 
 @dataclass
 class LidarPose(Pose):
-    """
-    The pose where a point-cloud has been registered.
-    """
+    """The pose where a point-cloud has been registered."""
 
 
 @dataclass
 class Velocity(Vertex):
-    """
-    Linear velocity vertex in Graph.
-    """
+    """Linear velocity vertex in Graph."""
 
     symbol = "V"
 
@@ -72,25 +62,19 @@ class NavState(Vertex):
 
 @dataclass
 class Landmark(Vertex):
-    """
-    Base landmark in the Graph.
-    """
+    """Base landmark in the Graph."""
 
     symbol = "L"
 
 
 @dataclass
 class CameraFeature(Landmark):
-    """
-    Camera feature based landmark in the Graph.
-    """
+    """Camera feature based landmark in the Graph."""
 
 
 @dataclass
 class ImuBias(Vertex):
-    """
-    Imu bias in the Graph.
-    """
+    """Imu bias in the Graph."""
 
     symbol = "ImuBias"
 

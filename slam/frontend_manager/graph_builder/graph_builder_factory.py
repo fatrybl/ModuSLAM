@@ -15,9 +15,7 @@ C = TypeVar("C", bound=GraphBuilderConfig)
 
 
 class GraphBuilderFactory:
-    """
-    Creates graph builder based on config.
-    """
+    """Creates graph builder based on config."""
 
     @staticmethod
     def create(config) -> GraphBuilder:

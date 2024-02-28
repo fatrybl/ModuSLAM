@@ -1,6 +1,6 @@
 import logging
 
-from configs.system.setup_manager.handlers_factory import HandlerFactoryConfig
+from configs.system.setup_manager.handlers_factory import HandlersFactoryConfig
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import HandlerNotFound
@@ -9,16 +9,14 @@ logger = logging.getLogger(__name__)
 
 
 class HandlerFactory:
-    """
-    Creates handlers.
-    """
+    """Creates handlers."""
 
     _handlers = set[Handler]()
 
     @classmethod
     def get_handlers(cls) -> set[Handler]:
-        """
-        Gets all handlers.
+        """Gets all handlers.
+
         Returns:
             (set[Handler]): set of handlers.
         """
@@ -42,14 +40,12 @@ class HandlerFactory:
         raise HandlerNotFound(msg)
 
     @classmethod
-    def init_handlers(cls, config: HandlerFactoryConfig) -> None:
-        """
-        Initializes handlers with the given config.
-        """
+    def init_handlers(cls, config: HandlersFactoryConfig) -> None:
+        """Initializes handlers with the given config."""
         package_name: str = config.package_name
 
-        for handler_cfg in config.handlers:
-            module_name: str = handler_cfg.module_name
-            handler_object: type[Handler] = import_object(handler_cfg.type_name, module_name, package_name)
-            new_handler: Handler = handler_object(handler_cfg)
+        for name, cfg in config.handlers.items():
+            module_name: str = cfg.module_name
+            handler_object: type[Handler] = import_object(cfg.type_name, module_name, package_name)
+            new_handler: Handler = handler_object(cfg)
             cls._handlers.add(new_handler)

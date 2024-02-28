@@ -6,15 +6,13 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
 
 
 class CandidateFactory(ABC):
-    """
-    Abstract class for any candidate factory.
-    """
+    """Abstract class for any candidate factory."""
 
     @property
     @abstractmethod
     def graph_candidate(self):
-        """
-        Graph candidate.
+        """Graph candidate.
+
         Returns:
             (GraphCandidate): graph candidate.
         """
@@ -22,8 +20,8 @@ class CandidateFactory(ABC):
 
     @abstractmethod
     def candidate_ready(self) -> bool:
-        """
-        Candidate readiness status.
+        """Candidate readiness status.
+
         Returns:
             (bool): graph candidate readiness status.
         """
@@ -31,15 +29,13 @@ class CandidateFactory(ABC):
 
     @abstractmethod
     def synchronize_states(self) -> None:
-        """
-        Synchronizes states of the candidate based on criteria.
-        """
+        """Synchronizes states of the candidate based on criteria."""
         ...
 
     @abstractmethod
     def process_storage(self, storage: MeasurementStorage) -> None:
-        """
-        Processes input measurements and adds new states to the graph candidate if a criterion is satisfied.
+        """Processes input measurements and adds new states to the graph candidate if a
+        criterion is satisfied.
 
         1) Check if a criterion for a new state is met for every criteria.
         2) If a criterion, add a new state to the graph candidate.

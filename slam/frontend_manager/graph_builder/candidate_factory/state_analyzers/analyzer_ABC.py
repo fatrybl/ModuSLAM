@@ -10,9 +10,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 
 
 class StateAnalyzer(ABC):
-    """
-    Analyzes processed measurements and decides whether to add a new state.
-    """
+    """Analyzes processed measurements and decides whether to add a new state."""
 
     @abstractmethod
     def __init__(self, config: StateAnalyzerConfig) -> None: ...
@@ -20,8 +18,8 @@ class StateAnalyzer(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        """
-        Name of the analyzer.
+        """Name of the analyzer.
+
         Returns:
             (str): name of the analyzer.
         """

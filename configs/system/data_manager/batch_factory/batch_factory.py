@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from configs.system.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
@@ -9,10 +9,8 @@ from configs.system.data_manager.batch_factory.regime import RegimeConfig
 
 @dataclass
 class BatchFactoryConfig:
-    """
-    Configures DataManager.
-    """
+    """Configures DataManager."""
 
-    regime: RegimeConfig = field(default_factory=RegimeConfig)
-    dataset: DatasetConfig = field(default_factory=DatasetConfig)
-    memory: MemoryAnalyzerConfig = field(default_factory=MemoryAnalyzerConfig)
+    memory: MemoryAnalyzerConfig
+    dataset: DatasetConfig
+    regime: RegimeConfig

@@ -9,14 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 class SetupManager:
-    """Main class for system setup. Defaults to MetaSingleton."""
+    """Main class for system setup.
+
+    Defaults to MetaSingleton.
+    """
 
     def __init__(self, cfg: SetupManagerConfig) -> None:
         """
         Args:
             cfg (SetupManagerConfig): config for setup manager.
         """
-        SensorFactory.init_sensors(cfg.sensor_factory)
-        HandlerFactory.init_handlers(cfg.handler_factory)
+        SensorFactory.init_sensors(cfg.sensors_factory)
+        HandlerFactory.init_handlers(cfg.handlers_factory)
         StateAnalyzerFactory.init_analyzers(cfg.state_analyzers_factory)
         logger.debug("Setup Manager has been successfully configured")

@@ -1,0 +1,6 @@
+defaults:
+  - /handlers/imu_preintegrator@handlers_factory.handlers
+  - /handlers/lidar_odometry@handlers_factory.handlers
+
+handlers_factory:
+  package_name: 'slam.frontend_manager.handlers'

@@ -1,0 +1,10 @@
+defaults:
+  - structured_schema_config # base Structured Schema Validation
+
+  - setup_manager:
+      - sensors_factory
+      - handlers_factory
+      - state_analyzers_factory
+
+  - data_manager:
+      - batch_factory

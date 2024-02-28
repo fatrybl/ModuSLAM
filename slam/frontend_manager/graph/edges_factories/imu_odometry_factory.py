@@ -38,7 +38,9 @@ class ImuOdometryFactory(EdgeFactory):
         #                    elements=elements)
 
     @classmethod
-    def create(cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]) -> list[ImuOdometry]:
+    def create(
+        cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]
+    ) -> list[ImuOdometry]:
         """
         Adds the last measurement from IMU handler.
         The last measurement includes all pre-integrated measurements.

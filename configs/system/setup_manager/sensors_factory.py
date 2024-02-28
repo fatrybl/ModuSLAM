@@ -1,22 +1,16 @@
 from dataclasses import dataclass
 
-from omegaconf import MISSING
-
-from configs.sensors.base_sensor_parameters import ParameterConfig
-
 
 @dataclass
 class SensorConfig:
-    """
-    Configures the sensor.
-    """
+    """Configures the sensor."""
 
-    name: str = MISSING
-    type: str = MISSING
-    config: ParameterConfig = MISSING
+    name: str
+    type_name: str
 
 
 @dataclass
 class SensorFactoryConfig:
-    all_sensors: list[SensorConfig] = MISSING
-    used_sensors: list[SensorConfig] = MISSING
+    """Configures the sensors factory."""
+
+    sensors: dict[str, SensorConfig]

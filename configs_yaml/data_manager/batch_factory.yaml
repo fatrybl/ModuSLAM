@@ -1,0 +1,15 @@
+defaults:
+  - /datasets/base_kaist_dataset@batch_factory.dataset
+  - /regimes/base_time_limit@batch_factory.regime
+
+batch_factory:
+  dataset:
+    directory: "/home/mark/Downloads/urban19-highway/"
+
+  regime:
+    name: "Stream"
+  #    start: 1544578682443470064
+  #    stop: 1544578682453468118
+
+  memory:
+    batch_memory: 100.0

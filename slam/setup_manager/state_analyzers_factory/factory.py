@@ -13,16 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 class StateAnalyzerFactory:
-    """
-    Creates state analyzers.
-    """
+    """Creates state analyzers."""
 
     _analyzers = set[StateAnalyzer]()
 
     @property
     def analyzers(self) -> set[StateAnalyzer]:
-        """
-        All analyzers.
+        """All analyzers.
+
         Returns:
             (set[StateAnalyzer]): set of analyzers.
         """
@@ -30,17 +28,19 @@ class StateAnalyzerFactory:
 
     @classmethod
     def init_analyzers(cls, config: StateAnalyzersFactoryConfig) -> None:
-        """
-        Initializes analyzers with the given config.
+        """Initializes analyzers with the given config.
+
         Args:
             config: configuration.
         """
         package_name: str = config.package_name
 
-        for analyzer_cfg in config.analyzers:
-            module_name: str = analyzer_cfg.module_name
-            analyzer_object: type[StateAnalyzer] = import_object(analyzer_cfg.type_name, module_name, package_name)
-            new_analyzer: StateAnalyzer = analyzer_object(analyzer_cfg)
+        for name, cfg in config.analyzers.items():
+            module_name: str = cfg.module_name
+            analyzer_object: type[StateAnalyzer] = import_object(
+                cfg.type_name, module_name, package_name
+            )
+            new_analyzer: StateAnalyzer = analyzer_object(cfg)
             cls._analyzers.add(new_analyzer)
 
     @classmethod

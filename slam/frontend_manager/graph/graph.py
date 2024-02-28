@@ -1,5 +1,5 @@
 import logging
-from collections.abc import Iterable
+from collections.abc import Sequence
 from typing import overload
 
 import gtsam
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class Graph:
-    """
-    High-level Graph.
+    """High-level Graph.
+
     Includes gtsam.NonlinearFactorGraph.
     TODO: add logic to remove detached vertices from the graph.
     """
@@ -37,13 +37,13 @@ class Graph:
         """
 
     @overload
-    def _delete_vertex(self, vertices: Iterable[GraphVertex]) -> None:
+    def _delete_vertex(self, vertices: Sequence[GraphVertex]) -> None:
         """
         @overload.
         Deletes multiple vertices from the graph.
 
         Args:
-            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
+            vertices (Sequence[GraphVertex]): vertices to be deleted from the graph.
         """
         for vertex in vertices:
             self._delete_vertex(vertex)
@@ -60,13 +60,13 @@ class Graph:
 
             2. delete multiple vertices:
                 Args:
-                    vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
+                    vertices (Sequence[GraphVertex]): vertices to be deleted from the graph.
         """
 
     @property
     def factor_graph(self) -> gtsam.NonlinearFactorGraph:
-        """
-        gtsam.NonlinearFactorGraph.
+        """gtsam.NonlinearFactorGraph.
+
         Returns:
             (gtsam.NonlinearFactorGraph): non-linear factor graph.
         """
@@ -117,13 +117,13 @@ class Graph:
         self._factor_graph.add(edge.gtsam_factor)
 
     @overload
-    def add_edge(self, edges: Iterable[GraphEdge]) -> None:
+    def add_edge(self, edges: Sequence[GraphEdge]) -> None:
         """
         @overload.
         Adds multiple edges to the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): new edges to be added to the graph.
+            edges (Sequence[GraphEdge]): new edges to be added to the graph.
         """
 
         for edge in edges:
@@ -141,7 +141,7 @@ class Graph:
 
             2. add multiple edges:
                 Args:
-                    edges (Iterable[GraphEdge]): new edges to be added to the graph.
+                    edges (Sequence[GraphEdge]): new edges to be added to the graph.
         """
 
     @overload
@@ -155,13 +155,13 @@ class Graph:
         """
 
     @overload
-    def delete_edge(self, edges: Iterable[GraphEdge]) -> None:
+    def delete_edge(self, edges: Sequence[GraphEdge]) -> None:
         """
         @overload.
         Deletes multiple edges from the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+            edges (Sequence[GraphEdge]): edges to be deleted from the graph.
         """
         for edge in edges:
             self.delete_edge(edge)
@@ -178,13 +178,12 @@ class Graph:
 
             2. delete multiple edges:
                 Args:
-                    edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+                    edges (Sequence[GraphEdge]): edges to be deleted from the graph.
         """
 
-    def marginalize(self, edges: Iterable[GraphEdge]) -> None:
-        """
-        Marginalizes out edges.
+    def marginalize(self, edges: Sequence[GraphEdge]) -> None:
+        """Marginalizes out edges.
 
         Args:
-            edges (Iterable[GraphEdge]): edges to be marginalized out.
+            edges (Sequence[GraphEdge]): edges to be marginalized out.
         """

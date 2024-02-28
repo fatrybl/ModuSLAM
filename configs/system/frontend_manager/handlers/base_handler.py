@@ -1,15 +1,11 @@
 from dataclasses import dataclass
 
-from omegaconf import MISSING
-
 
 @dataclass
 class HandlerConfig:
-    """
-    Base config for a handler.
-    """
+    """Base config for a handler."""
 
-    name: str = MISSING
-    type_name: str = MISSING
-    module_name: str = MISSING
-    parameters: dict = MISSING
+    name: str
+    type_name: str
+    module_name: str
+    parameters: dict

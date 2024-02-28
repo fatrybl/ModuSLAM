@@ -1,32 +1,25 @@
+from abc import ABC
 from dataclasses import dataclass
-
-from omegaconf import MISSING
 
 
 @dataclass
-class RegimeConfig:
-    """
-    Abstract regime of data flow.
-    """
-
-    name: str = MISSING
+class RegimeConfig(ABC):
+    """Abstract regime of data flow."""
 
 
 @dataclass
 class TimeLimitConfig(RegimeConfig):
-    """
-    Data flow is limited by time range.
-    """
+    """Data flow is limited by time range."""
 
-    start: int = MISSING
-    stop: int = MISSING
+    start: int
+    stop: int
     name: str = "TimeLimit"
 
 
 @dataclass
 class StreamConfig(RegimeConfig):
     """
-    Free data flow: each measurement is processed sequantially.
+    Free data flow: each measurement is processed sequentially.
     """
 
     name: str = "Stream"

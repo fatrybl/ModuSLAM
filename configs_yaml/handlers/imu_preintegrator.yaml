@@ -1,0 +1,6 @@
+imu_preintegrator:
+
+  name: "imu"
+  type_name: "ImuPreintegration"
+  module_name: ".imu_preintegration"
+  parameters: ???

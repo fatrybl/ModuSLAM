@@ -4,9 +4,7 @@ from slam.frontend_manager.handlers.ABC_handler import Handler
 
 
 class ImuPreintegration(Handler):
-    """
-    IMU preintegration handler.
-    """
+    """IMU preintegration handler."""
 
     def __init__(self, config: HandlerConfig) -> None:
         self._name: str = config.name

@@ -13,9 +13,7 @@ E = TypeVar("E", bound=Edge)
 
 
 class EdgeFactory(ABC, Generic[E]):
-    """
-    Abstract factory for creating edges_123.
-    """
+    """Abstract factory for creating edges_123."""
 
     @abstractmethod
     def __init__(self, config: DictConfig) -> None:
@@ -24,8 +22,7 @@ class EdgeFactory(ABC, Generic[E]):
     @property
     @abstractmethod
     def name(self) -> str:
-        """
-        Name of the factory.
+        """Name of the factory.
 
         Returns:
             (str): name of the factory.
@@ -33,7 +30,9 @@ class EdgeFactory(ABC, Generic[E]):
 
     @classmethod
     @abstractmethod
-    def create(cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]) -> list[E]:
+    def create(
+        cls, graph: Graph, vertices: set[Vertex], measurements: deque[Measurement]
+    ) -> list[E]:
         """
         Creates new edges_123 from the given measurements.
         Args:
