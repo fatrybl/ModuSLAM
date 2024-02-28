@@ -1,6 +1,6 @@
 from typing import Any
 
-from configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
 
 
 class Sensor:

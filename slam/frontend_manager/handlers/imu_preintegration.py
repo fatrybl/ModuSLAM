@@ -1,4 +1,5 @@
-from configs.system.frontend_manager.handlers.base_handler import HandlerConfig
+from system_configs.system.frontend_manager.handlers.base_handler import HandlerConfig
+
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
 

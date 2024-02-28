@@ -1,9 +1,5 @@
 import logging
 
-from configs.system.setup_manager.sensors_factory import (
-    SensorConfig,
-    SensorFactoryConfig,
-)
 from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
@@ -15,6 +11,10 @@ from slam.setup_manager.sensors_factory.sensors import (
     Sensor,
     StereoCamera,
     VrsGps,
+)
+from slam.system_configs.system.setup_manager.sensors_factory import (
+    SensorConfig,
+    SensorFactoryConfig,
 )
 from slam.utils.exceptions import SensorNotFound
 

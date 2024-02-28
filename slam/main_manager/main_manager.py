@@ -1,8 +1,8 @@
 import logging
 
-from configs.system.main_manager import MainManagerConfig
 from slam.data_manager.data_manager import DataManager
 from slam.setup_manager.setup_manager import SetupManager
+from slam.system_configs.system.main_manager import MainManagerConfig
 from slam.utils.stopping_criterion import StoppingCriterion
 
 logger = logging.getLogger(__name__)

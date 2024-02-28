@@ -1,9 +1,10 @@
 import logging
 from collections import deque
 
-from configs.system.frontend_manager.graph_builder.graph_merger.merger import (
+from system_configs.system.frontend_manager.graph_builder.graph_merger.merger import (
     GraphMergerConfig,
 )
+
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.edges import Edge
 from slam.frontend_manager.graph.edges_factories.edge_factory_ABC import EdgeFactory

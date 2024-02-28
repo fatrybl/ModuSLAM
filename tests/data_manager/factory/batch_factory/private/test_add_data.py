@@ -6,14 +6,18 @@ Other overloads of _add_data() method are too naive to be tested.
 import pytest
 from pytest import mark
 
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
-from configs.system.data_manager.batch_factory.datasets.base_dataset import (
-    DatasetConfig,
-)
-from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
-from configs.system.data_manager.batch_factory.regime import StreamConfig
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
+from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
+    BatchFactoryConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+    DatasetConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.memory import (
+    MemoryAnalyzerConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import StreamConfig
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.batch_factory.private.scenarios import sc1

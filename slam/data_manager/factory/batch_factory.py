@@ -4,13 +4,15 @@ from typing import overload
 
 from plum import dispatch
 
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.element import Element
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
+    BatchFactoryConfig,
+)
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.stopping_criterion import StoppingCriterion
 

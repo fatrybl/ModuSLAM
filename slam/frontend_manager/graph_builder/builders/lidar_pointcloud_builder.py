@@ -1,8 +1,9 @@
 import logging
 
-from configs.system.frontend_manager.graph_builder.point_cloud_builder.config import (
+from system_configs.system.frontend_manager.graph_builder.point_cloud_builder.config import (
     PointCloudBuilderConfig,
 )
+
 from slam.data_manager.factory.batch import DataBatch
 from slam.frontend_manager.element_distributor.elements_distributor import (
     ElementDistributor,

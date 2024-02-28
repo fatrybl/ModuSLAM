@@ -4,14 +4,20 @@ WARNING:
     the BatchFactory is still able to create a batch with the data that is in the TimeRange.
 """
 
-from configs.system.data_manager.batch_factory.batch_factory import BatchFactoryConfig
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
-from configs.system.data_manager.batch_factory.regime import (
+from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
+    BatchFactoryConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.memory import (
+    MemoryAnalyzerConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import (
     StreamConfig,
     TimeLimitConfig,
 )
-from configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (
     all_elements_batch,
     common_batch,

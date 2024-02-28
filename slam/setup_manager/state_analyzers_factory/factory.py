@@ -1,8 +1,9 @@
 import logging
 
-from configs.system.setup_manager.state_analyzers_factory import (
+from system_configs.system.setup_manager.state_analyzers_factory import (
     StateAnalyzersFactoryConfig,
 )
+
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )

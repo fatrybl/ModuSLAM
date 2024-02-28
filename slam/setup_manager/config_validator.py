@@ -1,8 +1,10 @@
 from hydra.core.config_store import ConfigStore
 
-from configs.system.data_manager.batch_factory.datasets.kaist import KaistConfig
-from configs.system.data_manager.batch_factory.regime import StreamConfig
-from configs.system.main_manager import MainManagerConfig
+from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
+from slam.system_configs.system.data_manager.batch_factory.regime import StreamConfig
+from slam.system_configs.system.main_manager import MainManagerConfig
 
 
 def register_config():

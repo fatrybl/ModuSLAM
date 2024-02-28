@@ -55,7 +55,7 @@ class KaistReaderState:
             try:
                 line = next(self.data_stamp_iterator)
             except StopIteration:
-                msg = f"All data in {self.data_stamp_iterator.file!r} has been processed."
+                msg = f"All data in {self.data_stamp_iterator.file.name!r} has been processed."
                 logger.info(msg)
                 raise
 

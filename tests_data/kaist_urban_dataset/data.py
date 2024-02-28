@@ -7,10 +7,6 @@ from typing import Any
 from numpy import dtype, ndarray, ones, uint8
 from PIL import Image
 
-from configs.system.setup_manager.sensors_factory import (
-    SensorConfig,
-    SensorFactoryConfig,
-)
 from slam.data_manager.factory.element import Element, Measurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     BinaryDataLocation,
@@ -28,6 +24,10 @@ from slam.setup_manager.sensors_factory.sensors import (
     Sensor,
     StereoCamera,
     VrsGps,
+)
+from slam.system_configs.system.setup_manager.sensors_factory import (
+    SensorConfig,
+    SensorFactoryConfig,
 )
 from tests_data.kaist_urban_dataset.structure import DatasetStructure
 

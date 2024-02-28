@@ -1,6 +1,7 @@
 import logging
 
-from configs.system.setup_manager.setup_manager import SetupManagerConfig
+from system_configs.system.setup_manager.setup_manager import SetupManagerConfig
+
 from slam.setup_manager.handlers_factory.factory import HandlerFactory
 from slam.setup_manager.sensors_factory.factory import SensorFactory
 from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzerFactory

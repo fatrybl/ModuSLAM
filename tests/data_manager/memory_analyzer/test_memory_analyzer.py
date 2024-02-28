@@ -1,7 +1,9 @@
 import pytest
 
-from configs.system.data_manager.batch_factory.memory import MemoryAnalyzerConfig
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
+from slam.system_configs.system.data_manager.batch_factory.memory import (
+    MemoryAnalyzerConfig,
+)
 
 
 @pytest.fixture

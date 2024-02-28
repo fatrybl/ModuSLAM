@@ -1,9 +1,10 @@
 import logging
 from typing import TypeVar
 
-from configs.system.frontend_manager.graph_builder.graph_builder import (
+from system_configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
+
 from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.builders.lidar_pointcloud_builder import (
     PointCloudBuilder,
