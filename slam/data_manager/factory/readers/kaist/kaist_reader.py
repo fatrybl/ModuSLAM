@@ -19,7 +19,7 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
-from slam.utils.exceptions import ItemNotExistsError, ItemNotFoundError
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +133,7 @@ class KaistReader(DataReader):
         except KeyError:
             msg = f"Incorrect input element: no sensor {sensor.name!r} in the dataset."
             logger.error(msg)
-            raise ItemNotExistsError(msg)
+            raise ItemNotFoundError(msg)
 
         iterator.reset()  # init fresh iterator
 
@@ -145,7 +145,7 @@ class KaistReader(DataReader):
                 f"and the timestamp {element.timestamp}."
             )
             logger.error(msg)
-            raise ItemNotExistsError(msg)
+            raise ItemNotFoundError(msg)
 
         timestamp: int = as_int(message.timestamp)
         measurement = Measurement(sensor, message.data)
@@ -173,7 +173,7 @@ class KaistReader(DataReader):
         except KeyError:
             msg = f"Incorrect input element: no sensor {sensor.name!r} in the dataset."
             logger.error(msg)
-            raise ItemNotExistsError(msg)
+            raise ItemNotFoundError(msg)
 
         iterator.reset()  # init fresh iterator not to slip the required measurement.
 
@@ -185,7 +185,7 @@ class KaistReader(DataReader):
                 f"and the timestamp {timestamp}."
             )
             logger.error(msg)
-            raise ItemNotExistsError(msg)
+            raise ItemNotFoundError(msg)
 
         timestamp = as_int(message.timestamp)
         measurement = Measurement(sensor, message.data)

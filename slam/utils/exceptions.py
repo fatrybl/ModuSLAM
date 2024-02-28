@@ -5,10 +5,6 @@ class ItemNotFoundError(Exception):
     """The given item has not been found."""
 
 
-class ItemNotExistsError(Exception):
-    """The given item has not been found."""
-
-
 class ConfigFileNotValid(OSError):
     """Config file is not valid."""
 

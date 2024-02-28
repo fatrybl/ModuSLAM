@@ -10,7 +10,7 @@ from configs.system.setup_manager.sensors_factory import (
 from slam.data_manager.factory.element import Element, Location, Measurement
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.utils.exceptions import ItemNotExistsError
+from slam.utils.exceptions import ItemNotFoundError
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import (
     generate_sensors_configs,
 )
@@ -78,7 +78,7 @@ invalid_stream_scenarios = (
         stream,
         KaistReader,
         [(el3.measurement.sensor, -1)],
-        [ItemNotExistsError()],
+        [ItemNotFoundError()],
     ),
     (
         SensorFactoryConfig(incorrect_sensors_cfg),
@@ -86,7 +86,7 @@ invalid_stream_scenarios = (
         stream,
         KaistReader,
         [(invalid_element2.measurement.sensor, el3.timestamp)],
-        [ItemNotExistsError()],
+        [ItemNotFoundError()],
     ),
 )
 
