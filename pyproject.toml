@@ -32,3 +32,4 @@ recursive = true
 
 [tool.doc8]
 max-line-length = 100
+paths = ["docs"]

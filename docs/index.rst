@@ -27,5 +27,3 @@ slam
    :maxdepth: 4
 
    slam
-
-
