@@ -14,8 +14,9 @@ from slam.system_configs.system.data_manager.batch_factory.memory import (
     MemoryAnalyzerConfig,
 )
 from slam.system_configs.system.data_manager.batch_factory.regime import (
-    StreamConfig,
-    TimeLimitConfig,
+    RegimeConfig,
+    Stream,
+    TimeLimit,
 )
 from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (
@@ -42,12 +43,14 @@ memory_cfg = MemoryAnalyzerConfig(batch_memory=100)
 
 cfg1: SensorFactoryConfig = sensor_factory_cfg
 
-cfg2_stream = BatchFactoryConfig(memory=memory_cfg, dataset=dataset_cfg, regime=StreamConfig())
+cfg2_stream = BatchFactoryConfig(
+    memory=memory_cfg, dataset=dataset_cfg, regime=RegimeConfig(name=Stream.name)
+)
 
-t_limit_1 = TimeLimitConfig(t_range_1.start, t_range_1.stop)
-t_limit_2 = TimeLimitConfig(t_range_2.start, t_range_2.stop)
-t_limit_3 = TimeLimitConfig(t_range_3.start, t_range_3.stop)
-t_limit_4 = TimeLimitConfig(t_range_4.start, t_range_4.stop)
+t_limit_1 = RegimeConfig(name=TimeLimit.name, start=t_range_1.start, stop=t_range_1.stop)
+t_limit_2 = RegimeConfig(name=TimeLimit.name, start=t_range_2.start, stop=t_range_2.stop)
+t_limit_3 = RegimeConfig(name=TimeLimit.name, start=t_range_3.start, stop=t_range_3.stop)
+t_limit_4 = RegimeConfig(name=TimeLimit.name, start=t_range_4.start, stop=t_range_4.stop)
 
 cfg2_timelimit_1 = BatchFactoryConfig(memory=memory_cfg, dataset=dataset_cfg, regime=t_limit_1)
 cfg2_timelimit_2 = BatchFactoryConfig(memory=memory_cfg, dataset=dataset_cfg, regime=t_limit_2)

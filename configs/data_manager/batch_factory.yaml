@@ -1,6 +1,6 @@
 defaults:
   - /datasets/base_kaist_dataset@batch_factory.dataset
-  - /regimes/base_time_limit@batch_factory.regime
+  - /regimes/base_regime@batch_factory.regime
 
 batch_factory:
   dataset:
