@@ -5,8 +5,8 @@ from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config
     KaistConfig,
 )
 from slam.system_configs.system.data_manager.batch_factory.regime import (
-    StreamConfig,
-    TimeLimitConfig,
+    Stream,
+    TimeLimit,
 )
 from slam.system_configs.system.setup_manager.sensors_factory import (
     SensorConfig,
@@ -35,14 +35,14 @@ from tests_data.kaist_urban_dataset.data import (
 
 dataset_cfg = KaistConfig(directory=DATASET_DIR)
 
-stream = StreamConfig()
+stream = Stream()
 
-timelimit1 = TimeLimitConfig(start=elements[0].timestamp, stop=elements[-1].timestamp)
-timelimit2 = TimeLimitConfig(start=el3.timestamp, stop=el23.timestamp)
-timelimit3 = TimeLimitConfig(start=el2.timestamp, stop=el12.timestamp)
-timelimit4 = TimeLimitConfig(start=el19.timestamp, stop=el24.timestamp)
-timelimit5 = TimeLimitConfig(start=el5.timestamp, stop=el25.timestamp)
-timelimit6 = TimeLimitConfig(start=el3.timestamp, stop=el8.timestamp)
+timelimit1 = TimeLimit(start=elements[0].timestamp, stop=elements[-1].timestamp)
+timelimit2 = TimeLimit(start=el3.timestamp, stop=el23.timestamp)
+timelimit3 = TimeLimit(start=el2.timestamp, stop=el12.timestamp)
+timelimit4 = TimeLimit(start=el19.timestamp, stop=el24.timestamp)
+timelimit5 = TimeLimit(start=el5.timestamp, stop=el25.timestamp)
+timelimit6 = TimeLimit(start=el3.timestamp, stop=el8.timestamp)
 
 sensors_cfgs1: dict[str, SensorConfig] = generate_sensors_configs(elements)
 sensors_cfgs2: dict[str, SensorConfig] = generate_sensors_configs([el3])

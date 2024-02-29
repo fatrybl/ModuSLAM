@@ -11,7 +11,10 @@ from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import RegimeConfig
+from slam.system_configs.system.data_manager.batch_factory.regime import (
+    Stream,
+    TimeLimit,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +31,12 @@ class DataReader(ABC):
     """Base abstract class for any data reader."""
 
     @abstractmethod
-    def __init__(self, dataset_params: DatasetConfig, regime_params: RegimeConfig) -> None:
+    def __init__(self, regime: Stream | TimeLimit, dataset_params: DatasetConfig) -> None:
         """Base abstract class for any data reader.
 
         Args:
+            regime (Stream | TimeLimit): data flow regime.
             dataset_params (DatasetConfig): data reader parameters.
-            regime_params (RegimeConfig): regime parameters.
         """
 
     @staticmethod

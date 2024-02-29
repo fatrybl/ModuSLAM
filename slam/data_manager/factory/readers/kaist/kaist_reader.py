@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import cast, overload
+from typing import overload
 
 from plum import dispatch
 
@@ -16,8 +16,8 @@ from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config
     KaistConfig,
 )
 from slam.system_configs.system.data_manager.batch_factory.regime import (
-    StreamConfig,
-    TimeLimitConfig,
+    Stream,
+    TimeLimit,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
@@ -29,13 +29,14 @@ logger = logging.getLogger(__name__)
 class KaistReader(DataReader):
     """Data reader for Kaist Urban Dataset."""
 
-    def __init__(self, dataset_params: KaistConfig, regime_params: TimeLimitConfig | StreamConfig):
+    def __init__(self, regime: TimeLimit | Stream, dataset_params: KaistConfig):
         data_stamp_file: Path = dataset_params.directory / dataset_params.data_stamp_file
         csv_files_table: dict[str, Path] = dataset_params.csv_files_table
         lidar_data_dirs_table: dict[str, Path] = dataset_params.lidar_data_dir_table
         stereo_data_dirs_table: dict[str, Path] = dataset_params.stereo_data_dir_table
         self._dataset_directory: Path = dataset_params.directory
-        self._regime_name: str = regime_params.name
+        self._regime = regime
+
         self._apply_dataset_dir(
             root_dir=dataset_params.directory,
             tables=(csv_files_table, lidar_data_dirs_table, stereo_data_dirs_table),
@@ -45,9 +46,8 @@ class KaistReader(DataReader):
 
         self._reader_state = KaistReaderState(data_stamp_file, csv_files_table)
 
-        if self._regime_name == TimeLimitConfig.name:
-            regime_params = cast(TimeLimitConfig, regime_params)
-            self._time_range = TimeRange(regime_params.start, regime_params.stop)
+        if isinstance(self._regime, TimeLimit):
+            self._time_range = TimeRange(self._regime.start, self._regime.stop)
             self._reader_state.init_state(self._time_range)
 
     @staticmethod
@@ -72,7 +72,7 @@ class KaistReader(DataReader):
             return None
 
         timestamp: int = as_int(t)
-        if self._regime_name == TimeLimitConfig.name and timestamp > self._time_range.stop:
+        if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
             return None
 
         message, location = self._collector.get_data(sensor.name, iterator)
@@ -108,7 +108,7 @@ class KaistReader(DataReader):
             return None
 
         timestamp = as_int(message.timestamp)
-        if self._regime_name == TimeLimitConfig.name and timestamp > self._time_range.stop:
+        if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
             return None
 
         measurement = Measurement(sensor, message.data)

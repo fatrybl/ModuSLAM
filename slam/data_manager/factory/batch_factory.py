@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class BatchFactory:
-    """Creates and manages Data Batch."""
+    """Factory for creating and managing a data batch."""
 
     def __init__(self, cfg: BatchFactoryConfig) -> None:
         """
@@ -29,15 +29,15 @@ class BatchFactory:
         """
 
         self._memory_analyzer = MemoryAnalyzer(cfg.memory)
+        self._data_reader: DataReader = DataReaderFactory.get_reader(cfg.dataset, cfg.regime)
         self._batch = DataBatch()
-        reader: type[DataReader] = DataReaderFactory.get_reader_object(cfg.dataset.reader)
-        self._data_reader: DataReader = reader(cfg.dataset, cfg.regime)
 
     @property
     def batch(self) -> DataBatch:
-        """
+        """A data batch sorted by timestamp.
+
         Returns:
-            DataBatch: Sorted Data Batch by timestamp.
+            (DataBatch): a data batch sorted by timestamp.
         """
         self._batch.sort()
         return self._batch
