@@ -10,8 +10,8 @@ defaults:
   - data_manager:
       - batch_factory
 
-  - override hydra/hydra_logging: disabled
-  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: stdout
 
 hydra:
   output_subdir: null
