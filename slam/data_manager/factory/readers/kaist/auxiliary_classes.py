@@ -8,7 +8,7 @@ from slam.data_manager.factory.element import Location
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=True)
 class Message:
     """Message with a timestamp and any data."""
 
@@ -16,14 +16,14 @@ class Message:
     data: tuple[Any, ...]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=True)
 class BinaryDataLocation(Location):
     """Binary data location."""
 
     file: Path
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=True)
 class StereoImgDataLocation(Location):
     """Stereo data location.
 
@@ -33,7 +33,7 @@ class StereoImgDataLocation(Location):
     files: tuple[Path, ...] = field(metadata={"unit": "images paths"})
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=True)
 class CsvDataLocation(Location):
     """
     Csv data location: a file and position (line number) in a file.

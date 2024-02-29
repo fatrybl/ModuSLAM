@@ -1,4 +1,5 @@
 defaults:
+  - _self_ # default hydra config to override job_logging and hydra_logging
   - structured_schema_config # base Structured Schema Validation
 
   - setup_manager:
@@ -8,3 +9,11 @@ defaults:
 
   - data_manager:
       - batch_factory
+
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: disabled
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
