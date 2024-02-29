@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from system_configs.system.data_manager.data_manager import DataManagerConfig
-from system_configs.system.setup_manager.setup_manager import SetupManagerConfig
+from slam.system_configs.system.data_manager.data_manager import DataManagerConfig
+from slam.system_configs.system.setup_manager.setup_manager import SetupManagerConfig
 
 
 @dataclass

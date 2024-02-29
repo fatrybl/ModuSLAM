@@ -1,13 +1,5 @@
-from collections.abc import Sequence
-from typing import overload
-
 import gtsam
-from plum import dispatch
 from system_configs.system.setup_manager.sensors_factory import SensorConfig
-
-from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
 
 graph = gtsam.NonlinearFactorGraph()
 pose1 = gtsam.gtsam.Pose2(0, 0, 0)
@@ -30,30 +22,4 @@ result = optimizer.optimizeSafely()
 print(result)
 
 
-@overload
-def test() -> None:
-    print("Empty")
-
-
-@overload
-def test(elements: Sequence[Element]) -> None:
-    print("Iterable:\n")
-    print(elements)
-
-
-@overload
-def test(s: set[PeriodicData]) -> None:
-    print("set:\n")
-    print(s)
-
-
-@dispatch
-def test(s=None): ...
-
-
 cfg = SensorConfig(name="test", type_name="Sensor")
-sensor = Sensor(name="test", config=cfg)
-
-data: set[PeriodicData] = {PeriodicData(sensor=sensor, period=TimeRange(0, 1))}
-
-test(data)

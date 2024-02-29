@@ -70,8 +70,13 @@ class SensorFactory:
     def init_sensors(cls, cfg: SensorFactoryConfig) -> None:
         """Initializes sensors from config.
 
-        TODO: check if cfg is empty.
+        Args:
+            cfg (SensorFactoryConfig): config to define sensors.
+        Raises:
+            AssertionError: empty sensors` config.
         """
+        assert len(cfg.sensors) > 0, "No sensors defined in the config."
+
         cls._sensors.clear()
         cls._sensors_table.clear()
 

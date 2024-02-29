@@ -6,7 +6,6 @@ Main runner of the SLAM system.
 """
 
 import hydra
-from omegaconf import OmegaConf
 
 from slam.main_manager.main_manager import MainManager
 from slam.setup_manager.config_validator import register_config
@@ -16,7 +15,7 @@ from slam.setup_manager.config_validator import register_config
 def run(cfg) -> None:
     """Creates Main Manager and runs SLAM based on configuration."""
 
-    print(OmegaConf.to_yaml(cfg))
+    # print(OmegaConf.to_yaml(cfg))
 
     main_manager = MainManager(cfg)
     main_manager.build_map()
