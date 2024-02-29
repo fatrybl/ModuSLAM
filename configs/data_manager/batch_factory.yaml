@@ -7,9 +7,9 @@ batch_factory:
     directory: "/home/mark/Downloads/urban19-highway/"
 
   regime:
-    name: "Stream"
-  #    start: 1544578682443470064
-  #    stop: 1544578682453468118
+    name: "TimeLimit"
+    start: 1544578682443470064
+    stop: 1544578682453468118
 
   memory:
     batch_memory: 100.0
