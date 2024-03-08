@@ -1,0 +1,9 @@
+defaults:
+  - /state_analyzers/base_lidar_odometry_state_analyzer@state_analyzers_factory.analyzers:
+
+lidar_odometry:
+
+  name: "LidarOdometryStateAnalyzer"
+  type_name: "LidarOdometryStateAnalyzer"
+  module_name: ".lidar_odometry"
+#  handler_name: "lidar_odometry"

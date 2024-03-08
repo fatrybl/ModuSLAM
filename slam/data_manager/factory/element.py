@@ -19,6 +19,9 @@ class Measurement:
     def __hash__(self) -> int:
         return hash(self.sensor)
 
+    def __eq__(self, other) -> bool:
+        return self.sensor == other.sensor
+
 
 @dataclass(frozen=True, eq=True)
 class Element:

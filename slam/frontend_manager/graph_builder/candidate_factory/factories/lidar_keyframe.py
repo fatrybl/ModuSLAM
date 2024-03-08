@@ -26,6 +26,7 @@ from slam.setup_manager.tables_initializer import init_handler_state_analyzer_ta
 logger = logging.getLogger(__name__)
 
 
+<<<<<<<< HEAD:slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_submap.py
 class LidarMapCandidateFactory(CandidateFactory):
     """Creates graph candidate with lidar point-cloud keyframe(s)."""
 
@@ -44,6 +45,27 @@ class LidarMapCandidateFactory(CandidateFactory):
 
         """
         self._table = init_handler_state_analyzer_table(config)
+========
+class LidarSubmapCandidateFactory(CandidateFactory):
+    """Creates graph candidate with lidar point-cloud keyframe(s)."""
+
+    def __init__(self):
+        self._graph_candidate: GraphCandidate = GraphCandidate()
+        self._candidate_analyzer: CandidateAnalyzer = LidarSubmapAnalyzer()
+        self._handler_analyzer_table: dict[Handler, StateAnalyzer] = {}
+        self._previous_measurement: Measurement | None = None
+
+    def _fill_table(self, config) -> None:
+        """Fills handler-analyzer table based on the given config.
+
+        Args:
+            config (dict[str, str]): names of handlers and corresponding analyzers.
+        """
+        for handler_name, analyzer_name in config.items():
+            handler: Handler = HandlerFactory.get_handler(handler_name)
+            analyzer: StateAnalyzer = StateAnalyzerFactory.get_analyzer(analyzer_name)
+            self._handler_analyzer_table[handler] = analyzer
+>>>>>>>> 3e68bcf (UPD: save current progress):slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_keyframe.py
 
     @property
     def graph_candidate(self) -> GraphCandidate:
@@ -92,6 +114,7 @@ class LidarMapCandidateFactory(CandidateFactory):
             logger.debug(msg)
             return
 
+<<<<<<<< HEAD:slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_submap.py
         if self._previous_measurement and self._previous_measurement == new_measurement:
             return
 
@@ -103,3 +126,13 @@ class LidarMapCandidateFactory(CandidateFactory):
                 self._graph_candidate.states.append(new_state)
 
             self._previous_measurement = new_measurement
+========
+        else:
+            if new_measurement != self._previous_measurement:
+                self._previous_measurement = new_measurement
+                analyzer = self._handler_analyzer_table[new_measurement.handler]
+                new_state: State | None = analyzer.evaluate(storage)
+
+                if new_state:
+                    self._graph_candidate.states.append(new_state)
+>>>>>>>> 3e68bcf (UPD: save current progress):slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_keyframe.py
