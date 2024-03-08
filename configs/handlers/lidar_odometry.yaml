@@ -1,6 +1,8 @@
+defaults:
+  - /handlers/base_lidar_odometry@handlers_factory
+
 lidar_odometry:
 
-  name: "lidar"
-  type_name: "PointcloudMatcher"
+  name: "lidar_odometry"
+  type_name: "ScanMatcher"
   module_name: ".pointcloud_matcher"
-  parameters: ???

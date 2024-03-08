@@ -18,7 +18,12 @@ class Graph:
     """High-level Graph.
 
     Includes gtsam.NonlinearFactorGraph.
-    TODO: add logic to remove detached vertices from the graph.
+    TODO:
+        1) add logic to remove detached vertices from the graph.
+        2) implement edges deletion with vertices deletion.
+        3) implement edges deletion w/o vertices deletion.
+        4) implement edges deletion with factors modification.
+        5) implement marginalization of vertices.
     """
 
     def __init__(self) -> None:
@@ -153,6 +158,7 @@ class Graph:
         Args:
             edge: edge to be deleted from the graph.
         """
+        raise NotImplementedError
 
     @overload
     def delete_edge(self, edges: Sequence[GraphEdge]) -> None:

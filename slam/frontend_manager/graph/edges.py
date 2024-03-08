@@ -22,6 +22,7 @@ class Edge:
     elements: tuple[Element, ...]
     vertices: tuple[Vertex, ...]
     gtsam_factor: gtsam.Factor
+    noise_model: gtsam.noiseModel
 
 
 GraphEdge = TypeVar("GraphEdge", bound=Edge)
@@ -31,7 +32,6 @@ GraphEdge = TypeVar("GraphEdge", bound=Edge)
 class Odometry(Edge):
     """Edge for any odometry factor."""
 
-    noise_model: gtsam.noiseModel
     v1: int
     v2: int
 
@@ -56,9 +56,10 @@ class SmartStereoLandmark(Edge):
     """
     Edge for smart Stereo Camera landmarks:
         - https://dellaert.github.io/files/Carlone14icra.pdf
+    TODO: check if a model is correct.
     """
 
-    noise_model: gtsam.noiseModel.Isotropic  # TODO: check if a model is correct
+    noise_model: gtsam.noiseModel.Isotropic
     K: gtsam.Cal3_S2
     params: gtsam.SmartProjectionParams
     sensor_body: gtsam.Pose3

@@ -1,5 +1,7 @@
+from collections import deque
+from dataclasses import dataclass
+
 import gtsam
-from system_configs.system.setup_manager.sensors_factory import SensorConfig
 
 graph = gtsam.NonlinearFactorGraph()
 pose1 = gtsam.gtsam.Pose2(0, 0, 0)
@@ -19,7 +21,29 @@ init_values.insert_pose2(3, gtsam.gtsam.Pose2(0, 0, 0))
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
-print(result)
+# print(result)
 
 
-cfg = SensorConfig(name="test", type_name="Sensor")
+@dataclass
+class Test:
+    start: int
+    stop: int
+
+
+t1 = Test(1, 2)
+t2 = Test(1, 2)
+t3 = Test(1, 3)
+t4 = Test(1, 4)
+t5 = Test(1, 5)
+t6 = Test(1, 6)
+
+
+def is_empty(d) -> bool:
+    """Checks if the storage is empty."""
+    return not bool(d)
+
+
+states: deque[str] = deque()
+# test = {}
+# t_max = max(max(t.stop for t in value) for key, value in test.items())
+assert states, "Empty graph candidate."

@@ -22,11 +22,11 @@ class DataBatch:
         """
         self._deque_set.add(new_element)
 
-    def delete_first(self) -> None:
+    def delete_first_element(self) -> None:
         """Deletes the first(left) element of the batch."""
         self._deque_set.remove_first()
 
-    def delete_last(self) -> None:
+    def delete_last_element(self) -> None:
         """Deletes the last(right) element of the batch."""
         self._deque_set.remove_last()
 

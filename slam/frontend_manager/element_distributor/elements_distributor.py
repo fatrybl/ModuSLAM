@@ -1,9 +1,5 @@
 import logging
 
-from system_configs.system.frontend_manager.element_distributor.element_distributor import (
-    ElementDistributorConfig,
-)
-
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.element_distributor.measurement_storage import (
@@ -14,6 +10,9 @@ from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.handlers_factory.factory import HandlerFactory
 from slam.setup_manager.sensors_factory.factory import SensorFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.frontend_manager.element_distributor.element_distributor import (
+    ElementDistributorConfig,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,11 @@ class ElementDistributor:
         self._fill_table(config.sensor_handlers_table)
 
     def _fill_table(self, config: dict[str, list[str]]) -> None:
-        """Fills sensor-handler table."""
+        """Fills sensor-handler table.
+
+        Args:
+            config (dict[str, list[str]]): sensor name -> handlers` names.
+        """
         for sensor_name, handlers_names in config.items():
             sensor: Sensor = SensorFactory.get_sensor(sensor_name)
             handlers = [HandlerFactory.get_handler(name) for name in handlers_names]
@@ -40,12 +43,11 @@ class ElementDistributor:
         Args:
             element (Element): element from DataBatch.
         """
-        sensor: Sensor = element.measurement.sensor
-        handlers = self._table[sensor]
+        handlers = self._table[element.measurement.sensor]
         for handler in handlers:
             z: Measurement | None = handler.process(element)
-            if z is not None:
-                self.storage.add(handler, z)
+            if z:
+                self.storage.add(z)
 
     @property
     def sensor_handler_table(self) -> dict[Sensor, list[Handler]]:
@@ -69,4 +71,4 @@ class ElementDistributor:
         """
         element: Element = data_batch.first_element
         self._distribute(element)
-        data_batch.delete_first()
+        data_batch.delete_first_element()

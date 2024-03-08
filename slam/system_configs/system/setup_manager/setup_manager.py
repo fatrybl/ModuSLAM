@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
-from system_configs.system.setup_manager.handlers_factory import HandlersFactoryConfig
-from system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
-from system_configs.system.setup_manager.state_analyzers_factory import (
-    StateAnalyzersFactoryConfig,
+from slam.system_configs.system.setup_manager.handlers_factory import (
+    HandlersFactoryConfig,
+)
+from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.state_analyzers_factory import (
+    StateAnalyzerFactoryConfig,
 )
 
 
@@ -13,4 +15,4 @@ class SetupManagerConfig:
 
     sensors_factory: SensorFactoryConfig
     handlers_factory: HandlersFactoryConfig
-    state_analyzers_factory: StateAnalyzersFactoryConfig
+    state_analyzers_factory: StateAnalyzerFactoryConfig

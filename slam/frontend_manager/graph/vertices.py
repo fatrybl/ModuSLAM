@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from slam.frontend_manager.graph.edges import Edge
 
 
-@dataclass
+@dataclass(init=False, kw_only=True)
 class Vertex:
     """Base vertex in Graph."""
 
@@ -17,10 +17,13 @@ class Vertex:
     timestamp: int
     symbol: str
     instance: gtsam
-    edges: set[Edge] = field(default_factory=set, kw_only=True)
+    edges: set[Edge] = field(default_factory=set)
 
 
-@dataclass
+GraphVertex = TypeVar("GraphVertex", bound=Vertex)
+
+
+@dataclass(init=False)
 class Pose(Vertex):
     """Pose vertex in Graph."""
 
@@ -31,24 +34,24 @@ class Pose(Vertex):
     instance = gtsam.Pose3()
 
 
-@dataclass
+@dataclass(init=False)
 class CameraPose(Pose):
     """The pose where an image has been taken."""
 
 
-@dataclass
+@dataclass(init=False)
 class LidarPose(Pose):
     """The pose where a point-cloud has been registered."""
 
 
-@dataclass
+@dataclass(init=False)
 class Velocity(Vertex):
     """Linear velocity vertex in Graph."""
 
     symbol = "V"
 
 
-@dataclass
+@dataclass(init=False)
 class NavState(Vertex):
     """
     Navigation state vertex in the Graph:
@@ -60,23 +63,20 @@ class NavState(Vertex):
     velocity: tuple[float, ...]
 
 
-@dataclass
+@dataclass(init=False)
 class Landmark(Vertex):
     """Base landmark in the Graph."""
 
     symbol = "L"
 
 
-@dataclass
+@dataclass(init=False)
 class CameraFeature(Landmark):
     """Camera feature based landmark in the Graph."""
 
 
-@dataclass
+@dataclass(init=False)
 class ImuBias(Vertex):
     """Imu bias in the Graph."""
 
     symbol = "ImuBias"
-
-
-GraphVertex = TypeVar("GraphVertex", bound=Vertex)

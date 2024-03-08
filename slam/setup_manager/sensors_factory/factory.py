@@ -16,22 +16,21 @@ from slam.system_configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
-from slam.utils.exceptions import SensorNotFound
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
 class SensorFactory:
-    """Factory class for sensors management.
+    """Factory class for sensors.
 
     Class Attributes:
-        parameters: sensors to be used in experiments for a particluar dataset.
-        used_sensors: sensors to be used in the experiment for a particluar dataset. Must be a subset of parameters.
+        parameters: sensors to be used in experiments for a particular dataset.
+        used_sensors: sensors to be used in the experiment for a particular dataset. Must be a subset of parameters.
 
     Raises:
-        SensorNotFound: there is no sensor with the requested sensor name among all sensors.
-        NotSubset: some of used sensor are not defined in all sensors set.
-        ValueError: there is no available sensor type for the item from config.
+        ItemNotFoundError: no sensor with the requested sensor name in all sensors.
+        ValueError: non-existing sensor`s type for the item from config.
     """
 
     _sensors: set[Sensor] = set()
@@ -54,7 +53,7 @@ class SensorFactory:
             name (str): sensor name
 
         Raises:
-            SensorNotFound: there is no sensor with the requested sensor name among all sensors.
+            ItemNotFoundError: there is no sensor with the requested sensor name among all sensors.
 
         Returns:
             Type[Sensor]: sensor if it exists among all sensors.
@@ -64,7 +63,7 @@ class SensorFactory:
         except KeyError:
             msg = f"No sensor with the name {name!r} in {cls._sensors}."
             logger.critical(msg)
-            raise SensorNotFound(msg)
+            raise ItemNotFoundError(msg)
 
     @classmethod
     def init_sensors(cls, cfg: SensorFactoryConfig) -> None:

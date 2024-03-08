@@ -1,9 +1,5 @@
 import logging
 
-from system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
-    StateAnalyzerConfig,
-)
-
 from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
@@ -11,18 +7,21 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.frontend_manager.handlers.pointcloud_matcher import PointcloudMatcher
+from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
+from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+    LidarOdometryStateAnalyzerConfig,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class SingleLidar(StateAnalyzer):
-    """Analyzer for lidar states."""
+class LidarOdometryStateAnalyzer(StateAnalyzer):
+    """Analyzer for lidar odometry measurements` handler."""
 
-    def __init__(self, config: StateAnalyzerConfig) -> None:
+    def __init__(self, config: LidarOdometryStateAnalyzerConfig) -> None:
         self._name: str = config.name
-        self._handler_type: type = PointcloudMatcher
-        self._new_state: State | None = None
+        self._handler: Handler = HandlerFactory.get_handler(config.handler_name)
 
     @property
     def name(self) -> str:
@@ -33,4 +32,17 @@ class SingleLidar(StateAnalyzer):
         """
         return self._name
 
-    def evaluate(self, storage: MeasurementStorage) -> State | None: ...
+    def evaluate(self, storage: MeasurementStorage) -> State | None:
+        """
+        Evaluates the state based on the given storage.
+        Args:
+            storage (MeasurementStorage): storage of measurements.
+
+        Returns:
+            (State | None): state of the graph candidate if it is ready,
+                            otherwise None.
+        """
+        last_measurement = storage.data[self._handler][-1]
+        new_state = State()
+        new_state.add(last_measurement)
+        return new_state

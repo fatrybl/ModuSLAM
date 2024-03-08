@@ -2,7 +2,9 @@ import logging
 
 from omegaconf import DictConfig
 
-from slam.frontend_manager.graph.edges_factories.edge_factory_ABC import EdgeFactory
+from slam.frontend_manager.graph_builder.edges_factories.edge_factory_ABC import (
+    EdgeFactory,
+)
 from slam.utils.auxiliary_methods import import_object
 
 logger = logging.getLogger(__name__)

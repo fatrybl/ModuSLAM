@@ -1,10 +1,11 @@
 import logging
 
-from system_configs.system.setup_manager.handlers_factory import HandlersFactoryConfig
-
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.system_configs.system.setup_manager.handlers_factory import (
+    HandlersFactoryConfig,
+)
 from slam.utils.auxiliary_methods import import_object
-from slam.utils.exceptions import HandlerNotFound
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class HandlerFactory:
                 return handler
         msg = f"No handler with name {handler_name!r} in {cls._handlers}"
         logger.critical(msg)
-        raise HandlerNotFound(msg)
+        raise ItemNotFoundError(msg)
 
     @classmethod
     def init_handlers(cls, config: HandlersFactoryConfig) -> None:

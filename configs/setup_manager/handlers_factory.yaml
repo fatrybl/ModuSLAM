@@ -1,5 +1,4 @@
 defaults:
-  - /handlers/imu_preintegrator@handlers_factory.handlers
   - /handlers/lidar_odometry@handlers_factory.handlers
 
 handlers_factory:

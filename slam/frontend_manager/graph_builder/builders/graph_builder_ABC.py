@@ -33,7 +33,7 @@ class GraphBuilder(ABC):
 
     @abstractmethod
     def merge(self, candidate: GraphCandidate, graph: Graph) -> None:
-        """Merges the candidate with the main graph.
+        """Merges the graph candidate with the graph.
 
         Args:
             candidate (GraphCandidate): a candidate to be merged.

@@ -1,6 +1,14 @@
 slam.backend\_manager package
 =============================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   slam.backend_manager.solvers
+
 Submodules
 ----------
 
@@ -12,18 +20,18 @@ slam.backend\_manager.backend\_manager module
    :undoc-members:
    :show-inheritance:
 
-slam.backend\_manager.metrics\_factory module
----------------------------------------------
+slam.backend\_manager.graph\_solver module
+------------------------------------------
 
-.. automodule:: slam.backend_manager.metrics_factory
+.. automodule:: slam.backend_manager.graph_solver
    :members:
    :undoc-members:
    :show-inheritance:
 
-slam.backend\_manager.solver module
------------------------------------
+slam.backend\_manager.metrics\_factory module
+---------------------------------------------
 
-.. automodule:: slam.backend_manager.solver
+.. automodule:: slam.backend_manager.metrics_factory
    :members:
    :undoc-members:
    :show-inheritance:

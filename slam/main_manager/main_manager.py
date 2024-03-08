@@ -29,13 +29,14 @@ class MainManager:
     # def process(
     #     self,
     # ) -> None:
+    #     """
+    #     TODO Check if Memory breakpoint is valid before creating new batch.
+    #     """
     #     batch: DataBatch = self.data_manager.batch_factory.yaml.batch
     #     graph: Graph = self.frontend_manager.graph
     #     while not batch.empty():
     #         self.frontend_manager.create_graph(batch)
     #         self.backend_manager.solve(graph)
-    #
-    # TODO Check if Memory breakpoint is valid before creating new batch.
 
     def build_map(self) -> None:
         """

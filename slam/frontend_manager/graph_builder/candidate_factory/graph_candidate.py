@@ -1,28 +1,63 @@
+import logging
 from collections import deque
-from dataclasses import dataclass, field
 
-from slam.frontend_manager.element_distributor.elements_distributor import (
-    MeasurementStorage,
+from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+    State,
 )
+from slam.utils.auxiliary_dataclasses import TimeRange
+
+logger = logging.getLogger(__name__)
 
 
-@dataclass
-class State:
-    """State of the graph candidate."""
-
-    storage: MeasurementStorage
-    timestamp: int | None = field(init=False)
-
-    def __post_init__(self):
-        if self.storage.recent_measurement is not None:
-            self.timestamp = self.storage.recent_measurement.time_range.stop
-
-
-@dataclass
 class GraphCandidate:
-    """Graph candidate is a sub-graph that is not connected to the main graph yet.
+    """Graph candidate with different states."""
 
-    Contains state(s).
-    """
+    def __init__(self) -> None:
+        self._states: deque[State] = deque()
+        self._time_range: TimeRange | None = None
 
-    states: deque[State] = field(default_factory=deque)
+    @property
+    def time_range(self) -> TimeRange:
+        """Time range of the graph candidate."""
+        self._time_range = self._update_time_range()
+        return self._time_range
+
+    @property
+    def states(self) -> deque[State]:
+        """States of the graph candidate."""
+        return self._states
+
+    def add(self, state: State) -> None:
+        """Adds a state to the graph candidate."""
+
+        self.states.append(state)
+
+    def remove(self, state: State) -> None:
+        """Removes the state from the graph candidate."""
+
+        self.states.remove(state)
+
+    def remove_first(self) -> None:
+        """Removes the first state from the graph candidate."""
+
+        self.states.popleft()
+
+    def remove_last(self) -> None:
+        """Removes the last state from the graph candidate."""
+
+        self.states.pop()
+
+    def clear(self) -> None:
+        """Clears the graph candidate."""
+
+        self.states.clear()
+        self._time_range = None
+
+    def _update_time_range(self) -> TimeRange:
+        """Updates the time range of the graph candidate."""
+
+        assert self.states, "Empty graph candidate: no states."
+
+        start = min(s.time_range.start for s in self.states)
+        stop = max(s.time_range.stop for s in self.states)
+        return TimeRange(start, stop)

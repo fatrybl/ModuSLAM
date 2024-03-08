@@ -8,7 +8,6 @@ Subpackages
    :maxdepth: 4
 
    slam.data_manager.factory
-   slam.data_manager.filter
    slam.data_manager.memory_analyzer
 
 Submodules
