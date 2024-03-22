@@ -1,16 +1,17 @@
 import logging
 
-from omegaconf import DictConfig
-
-from slam.frontend_manager.graph_builder.edges_factories.edge_factory_ABC import (
+from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
+)
+from slam.system_configs.system.setup_manager.edge_factories_initializer import (
+    EdgeFactoriesInitializerConfig,
 )
 from slam.utils.auxiliary_methods import import_object
 
 logger = logging.getLogger(__name__)
 
 
-class EdgeCreatorFactory:
+class EdgeFactoriesInitializer:
     """Distributes edge factories."""
 
     _factories = set[EdgeFactory]()
@@ -43,13 +44,12 @@ class EdgeCreatorFactory:
         raise ValueError(msg)
 
     @classmethod
-    def init_factories(cls, config: DictConfig) -> None:
-        module_name: str = config.module_name
+    def init_factories(cls, config: EdgeFactoriesInitializerConfig) -> None:
         package_name: str = config.package_name
 
-        for factory_cfg in config.factories:
+        for cfg in config.edge_factories.values():
             factory_object: type[EdgeFactory] = import_object(
-                factory_cfg.name, module_name, package_name
+                cfg.type_name, cfg.module_name, package_name
             )
-            new_factory: EdgeFactory = factory_object(factory_cfg)
+            new_factory: EdgeFactory = factory_object(cfg)
             cls._factories.add(new_factory)

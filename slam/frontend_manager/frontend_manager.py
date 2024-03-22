@@ -25,13 +25,9 @@ class FrontendManager:
     def create_graph(self, batch: DataBatch) -> None:
         """Creates main graph by merging sub-graphs (graph candidates).
 
-        1) create_graph_candidate(batch).
-        2) merge(candidate, graph).
-        3) Check if storage is empty after merge.
-
         Args:
             batch (DataBatch): data batch with elements.
         """
         self.graph_builder.create_graph_candidate(batch)
-        candidate = self.graph_builder.graph_candidate
-        self.graph_builder.merge(candidate, self.graph)
+        self.graph_builder.merge_graph_candidate(self.graph)
+        self.graph_builder.clear_candidate()

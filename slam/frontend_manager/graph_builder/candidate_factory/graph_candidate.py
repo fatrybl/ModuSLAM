@@ -50,7 +50,7 @@ class GraphCandidate:
     def clear(self) -> None:
         """Clears the graph candidate."""
 
-        self.states.clear()
+        self._states = deque()
         self._time_range = None
 
     def _update_time_range(self) -> TimeRange:

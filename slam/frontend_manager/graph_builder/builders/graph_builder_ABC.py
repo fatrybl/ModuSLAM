@@ -32,10 +32,13 @@ class GraphBuilder(ABC):
         """
 
     @abstractmethod
-    def merge(self, candidate: GraphCandidate, graph: Graph) -> None:
+    def merge_graph_candidate(self, graph: Graph) -> None:
         """Merges the graph candidate with the graph.
 
         Args:
-            candidate (GraphCandidate): a candidate to be merged.
-            graph (Graph): main graph.
+            graph (Graph): a graph to be merged with.
         """
+
+    @abstractmethod
+    def clear_candidate(self) -> None:
+        """Clears the graph candidate."""

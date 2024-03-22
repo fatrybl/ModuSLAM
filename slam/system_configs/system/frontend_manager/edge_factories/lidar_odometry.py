@@ -6,5 +6,5 @@ from slam.system_configs.system.frontend_manager.edge_factories.base_factory imp
 
 
 @dataclass
-class ImuOdometryFactoryConfig(EdgeFactoryConfig):
-    """Config for Imu Preintegrated Odometry Edge Factory."""
+class LidarOdometryFactoryConfig(EdgeFactoryConfig):
+    """Config for lidar odometry Edge Factory."""

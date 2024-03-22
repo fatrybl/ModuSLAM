@@ -1,4 +1,5 @@
 import logging
+from typing import Iterable
 
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
@@ -13,6 +14,7 @@ from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
+from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,11 @@ class ElementDistributor:
             (dict[Sensor, list[ElementHandler]]): table with sensor names as key and list of handlers as values.
         """
         return self._table
+
+    def clear_storage(self, data: Iterable[OrderedSet[Measurement]]) -> None:
+        for ordered_set in data:
+            for measurement in ordered_set:
+                self.storage.remove(measurement)
 
     def next_element(self, data_batch: DataBatch) -> None:
         """Takes element from DataBatch and process it with external module.

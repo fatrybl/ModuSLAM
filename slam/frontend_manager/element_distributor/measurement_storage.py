@@ -1,5 +1,4 @@
 import logging
-from collections import deque
 from dataclasses import dataclass
 from typing import Any, overload
 
@@ -8,6 +7,7 @@ from plum import dispatch
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.utils.auxiliary_dataclasses import TimeRange
+from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +33,10 @@ class MeasurementStorage:
     """Stores the measurements which have been processed by handlers."""
 
     def __init__(self) -> None:
-        self._data: dict[Handler, deque[Measurement]] = {}
+        self._data: dict[Handler, OrderedSet[Measurement]] = {}
 
     @property
-    def data(self) -> dict[Handler, deque[Measurement]]:
+    def data(self) -> dict[Handler, OrderedSet[Measurement]]:
         """Dictionary with "handler -> measurements" data."""
         return self._data
 
@@ -70,15 +70,15 @@ class MeasurementStorage:
         Args:
             measurement (Measurement): a new measurement to be added.
         """
-        self._data[measurement.handler].append(measurement)
+        self._data[measurement.handler].add(measurement)
 
     @overload
-    def add(self, data: dict[Handler, deque[Measurement]]) -> None:
+    def add(self, data: dict[Handler, OrderedSet[Measurement]]) -> None:
         """Adds a new "handler -> measurements" dict to the storage.
 
         Attention: might be slow due to the "recent_measurement" update.
         Args:
-            data (dict[Handler, deque[Measurement]]): dict to add.
+            data (dict[Handler, OrderedSet[Measurement]]): dict to add.
         """
         self._data = self._data | data
 
@@ -94,14 +94,6 @@ class MeasurementStorage:
         """Removes the measurement from the storage."""
         self._data[measurement.handler].remove(measurement)
 
-    def remove_first(self, handler: Handler) -> None:
-        """Removes the first measurement from the storage."""
-        self._data[handler].popleft()
-
-    def remove_last(self, handler: Handler) -> None:
-        """Removes the last measurement from the storage."""
-        self._data[handler].pop()
-
     def clear(self) -> None:
         """Clears the storage."""
         self._data.clear()
@@ -113,8 +105,9 @@ class MeasurementStorage:
         """
         assert self._data, "Empty storage: no measurements."
 
-        measurements: deque[Measurement] = deque()
-        [measurements + values for values in self.data.values()]
+        measurements: OrderedSet[Measurement] = OrderedSet()
+        for ord_set in self._data.values():
+            measurements.add(ord_set)
 
         m_start = min(measurements, key=lambda m: m.time_range.start)
         m_stop = max(measurements, key=lambda m: m.time_range.stop)

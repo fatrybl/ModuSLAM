@@ -62,7 +62,7 @@ class DataBatch:
         Returns:
             element (Element): first element of the batch.
         """
-        return self.data[0]
+        return self._deque_set[0]
 
     @property
     def size_bytes(self) -> int:

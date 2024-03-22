@@ -3,7 +3,7 @@ from pytest import fixture, mark
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
-from slam.system_configs.system.frontend_manager.handlers.base_handler import (
+from slam.system_configs.system.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios import scenarios

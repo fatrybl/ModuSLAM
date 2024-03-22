@@ -1,8 +1,10 @@
 from collections.abc import Sequence
 from typing import Generic, overload
 
+import gtsam
 from plum import dispatch
 
+from slam.frontend_manager.graph.index_generator import IndexStorage
 from slam.frontend_manager.graph.vertices import (
     CameraFeature,
     CameraPose,
@@ -14,14 +16,20 @@ from slam.frontend_manager.graph.vertices import (
     Velocity,
     Vertex,
 )
+from slam.frontend_manager.graph.vertices_updater import GtsamVertexUpdater
 from slam.utils.deque_set import DequeSet
 
 
 class VertexStorage(Generic[GraphVertex]):
-    """Stores vertices of the Graph."""
+    """Stores vertices of the Graph.
+
+    TODO:
+        maybe get_vertcies(type) to get all vertices of the graph of the given type ?
+    """
 
     def __init__(self):
         self.vertices = DequeSet[GraphVertex]()
+        self.index_storage = IndexStorage()
 
         self._table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
@@ -174,3 +182,12 @@ class VertexStorage(Generic[GraphVertex]):
                 Args:
                     vertices (Sequence[GraphVertex]): vertices to be removed from the graph.
         """
+
+    def update(self, new_values: gtsam.Values) -> None:
+        """Updates the vertices with new values.
+
+        Args:
+            new_values (gtsam.Values): new values for vertices.
+        """
+        updater = GtsamVertexUpdater(new_values)
+        updater.update(self.vertices)

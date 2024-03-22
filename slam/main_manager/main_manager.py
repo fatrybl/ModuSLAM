@@ -1,6 +1,7 @@
 import logging
 
 from slam.data_manager.data_manager import DataManager
+from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.setup_manager.setup_manager import SetupManager
 from slam.system_configs.system.main_manager import MainManagerConfig
 from slam.utils.stopping_criterion import StoppingCriterion
@@ -22,7 +23,7 @@ class MainManager:
         """
         self.setup_manager = SetupManager(cfg.setup_manager)
         self.data_manager = DataManager(cfg.data_manager)
-        # self.frontend_manager = FrontendManager(cfg.frontend_manager)
+        self.frontend_manager = FrontendManager(cfg.frontend_manager)
         # self.backend_manager = BackendManager(cfg.backend_manager)
         logger.info("The system has been successfully configured.")
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from system_configs.system.frontend_manager.graph_builder.graph_builder import (
+from slam.system_configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
 

@@ -3,7 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class EdgeFactoryConfig:
-    """Base class for edge factory config."""
+    """Base edge factory config."""
 
     name: str
-    class_name: str
+    type_name: str
+    module_name: str
+    noise_model: str

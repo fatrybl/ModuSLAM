@@ -8,7 +8,7 @@ from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import Measurement as RawMeasurement
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.system_configs.system.frontend_manager.handlers.base_handler import (
+from slam.system_configs.system.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange

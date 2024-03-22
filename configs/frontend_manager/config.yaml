@@ -1,0 +1,11 @@
+graph_builder:
+
+  name: 'LidarSubMapBuilder'
+
+  element_distributor:
+    sensor_handlers_table:
+      velodyne_left: [ 'kiss_icp_odometry' ]
+
+  graph_merger:
+    handler_edge_factory_table:
+      kiss_icp_odometry: 'lidar_odometry_edge_factory'

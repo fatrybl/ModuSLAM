@@ -19,10 +19,10 @@ class GraphBuilderFactory:
 
     @staticmethod
     def create(config) -> GraphBuilder:
-        match config.class_name:
+        match config.name:
             case LidarSubMapBuilder.__name__:
                 return LidarSubMapBuilder(config)
             case _:
-                msg = f"Graph builder type {config.class_name!r} is not supported."
+                msg = f"Graph builder of type {config.name!r} is not supported."
                 logger.critical(msg)
                 raise NotImplementedError

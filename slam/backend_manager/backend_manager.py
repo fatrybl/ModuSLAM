@@ -12,6 +12,12 @@ class BackendManager:
     """Manages all the backends."""
 
     def __init__(self, config: DictConfig):
-        self.solver = GraphSolver(config.graph_solver)
+        self.graph_solver = GraphSolver(config.graph_solver)
 
-    def solve(self, graph: Graph) -> None: ...
+    def solve(self, graph: Graph) -> None:
+        """Solves the optimization problem for the given graph.
+
+        Args:
+            graph (Graph): a graph with the factors to be solved.
+        """
+        self.graph_solver.solve(graph)

@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from system_configs.system.frontend_manager.element_distributor.element_distributor import (
+from slam.system_configs.system.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
-from system_configs.system.frontend_manager.graph_builder.graph_merger.merger import (
+from slam.system_configs.system.frontend_manager.graph_builder.graph_merger.merger import (
     GraphMergerConfig,
 )
 
@@ -12,6 +12,6 @@ from system_configs.system.frontend_manager.graph_builder.graph_merger.merger im
 class GraphBuilderConfig:
     """Config for GraphBuilder."""
 
-    class_name: str
+    name: str
     element_distributor: ElementDistributorConfig
     graph_merger: GraphMergerConfig

@@ -1,3 +1,10 @@
+"""Custom deque-set implementation.
+
+Complexity:
+    O(1): add(), contains(item: T), remove_first(), remove_last(), __getitem__(index: int).
+    O(N): remove(item: T)
+"""
+
 import functools
 import logging
 from collections import deque
@@ -34,9 +41,20 @@ class DequeSet(Generic[T]):
     def __contains__(self, item) -> bool:
         return item in self._set
 
+    def __len__(self) -> int:
+        return len(self._set)
+
+    def __iter__(self):
+        return iter(self._deque)
+
+    def __getitem__(self, item) -> T:
+        return self._deque[item]
+
     def add(self, item: T) -> None:
-        """Adds new item. 1) Add to set[Any] to avoid duplicates. 2) Add to deque for
-        fast front-pop().
+        """
+        Adds new item:
+            1) Add to set to avoid duplicates.
+            2) Add to deque for fast front-pop().
 
         Args:
             item (Any): new item to be added.

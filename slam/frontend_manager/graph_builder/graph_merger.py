@@ -1,20 +1,23 @@
 import logging
-from collections import deque
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.edges import Edge
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
 from slam.frontend_manager.graph.vertices import Vertex
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
-from slam.frontend_manager.graph_builder.edges_factories.edge_factory_ABC import (
+from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.edge_factories_initializer.factory import EdgeCreatorFactory
+from slam.setup_manager.edge_factories_initializer.factory import (
+    EdgeFactoriesInitializer,
+)
 from slam.setup_manager.handlers_factory.factory import HandlerFactory
 from slam.system_configs.system.frontend_manager.graph_builder.graph_merger.merger import (
     GraphMergerConfig,
 )
+from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
@@ -34,18 +37,30 @@ class GraphMerger:
         """
         for handler_name, edge_factory_name in config.items():
             handler: Handler = HandlerFactory.get_handler(handler_name)
-            edge_factory: EdgeFactory = EdgeCreatorFactory.get_factory(edge_factory_name)
+            edge_factory: EdgeFactory = EdgeFactoriesInitializer.get_factory(edge_factory_name)
             self._table[handler] = edge_factory
 
-    def _clear_storage(self, state: State) -> None:
-        """Deletes measurements from the storage for the current state.
-
-        Args:
-            state (State): state with measurements.
+    @staticmethod
+    def _create_vertex(
+        index_storage: IndexStorage, vertex_type: type[Vertex], timestamp: int
+    ) -> Vertex:
         """
-        raise NotImplementedError
+        Creates a vertex instance for the given edge factory.
+        Generates a unique index of the vertex for the given graph.
+        Args:
+            index_storage (IndexStorage): storage of unique indices.
+            vertex_type (type[Vertex]): type of the vertex.
+            timestamp (int): timestamp of the vertex.
 
-    def _create_vertex_instances(self, state: State) -> dict[EdgeFactory, Vertex]:
+        Returns:
+            (Vertex): new vertex instance.
+        """
+        vertex: Vertex = vertex_type()
+        vertex.index = generate_index(index_storage)
+        vertex.timestamp = timestamp
+        return vertex
+
+    def _create_vertex_table(self, graph: Graph, state: State) -> dict[EdgeFactory, Vertex]:
         """
         Creates vertex instances for the state.
         The instances are empty: not initialized yet.
@@ -57,12 +72,20 @@ class GraphMerger:
             (dict[EdgeFactory, Vertex]): "Edge Factory -> Vertex" table.
 
         """
-        data: dict[Handler, deque[Measurement]] = state.data
+
         vertices: dict[EdgeFactory, Vertex] = {}
-        for handler in data.keys():
+        indices = graph.vertex_storage.index_storage
+        timestamp = state.timestamp
+        handlers = state.data.keys()
+
+        for handler in handlers:
             edge_factory = self._table[handler]
-            vertex_object = edge_factory.vertex_type
-            vertices[edge_factory] = vertex_object()
+            vertex = self._create_vertex(
+                indices,
+                edge_factory.vertex_type,
+                timestamp,
+            )
+            vertices[edge_factory] = vertex
 
         return vertices
 
@@ -82,19 +105,15 @@ class GraphMerger:
 
         Returns:
             (list[Edge]): new edges.
-
-        TODO:
-            1) Sync with implementation of the State.
-            2) add logic to remove used measurements from the storage.
-            used = which have been used in edges.
         """
         edges: list[Edge] = []
-        data: dict[Handler, deque[Measurement]] = state.data
+        data: dict[Handler, OrderedSet[Measurement]] = state.data
 
         for handler, measurements in data.items():
             edge_factory = self._table[handler]
             vertex = vertex_table[edge_factory]
             new_edges = edge_factory.create(graph, vertex, measurements)
+            vertex.edges.update(new_edges)
             edges += new_edges
 
         return edges
@@ -119,7 +138,6 @@ class GraphMerger:
             state (State): new state to be merged with the graph.
             graph (Graph): main graph.
         """
-        vertices = self._create_vertex_instances(state)
-        edges = self._create_edges(graph, state, vertices)
+        vertex_table = self._create_vertex_table(graph, state)
+        edges = self._create_edges(graph, state, vertex_table)
         graph.add_edge(edges)
-        self._clear_storage(state)

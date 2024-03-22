@@ -1,0 +1,13 @@
+lidar_odometry:
+
+  name: "LidarOdometryStateAnalyzer"
+  type_name: "LidarOdometryStateAnalyzer"
+  module_name: ".lidar_odometry"
+  handler_name: "kiss_icp_odometry"
+
+#imu_preintegration:
+#
+#  name: 'imu_preintegration'
+#  type_name: 'ImuPreintegrator'
+#  module_name: '.imu_preintegration'
+#  handler_name: "imu_odometry"

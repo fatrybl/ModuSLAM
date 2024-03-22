@@ -119,7 +119,7 @@ class Graph:
         """
         self.vertex_storage.add(edge.vertices)
         self.edge_storage.add(edge)
-        self._factor_graph.add(edge.gtsam_factor)
+        self._factor_graph.add(edge.factor)
 
     @overload
     def add_edge(self, edges: Sequence[GraphEdge]) -> None:
@@ -187,9 +187,19 @@ class Graph:
                     edges (Sequence[GraphEdge]): edges to be deleted from the graph.
         """
 
+    def update(self, values: gtsam.Values) -> None:
+        """Updates the graph with new values.
+
+        Args:
+            values (gtsam.Values): new computed values.
+        """
+
+        self.vertex_storage.update(values)
+
     def marginalize(self, edges: Sequence[GraphEdge]) -> None:
         """Marginalizes out edges.
 
         Args:
             edges (Sequence[GraphEdge]): edges to be marginalized out.
         """
+        raise NotImplementedError
