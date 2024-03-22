@@ -1,41 +1,122 @@
 import logging
-from typing import Generic
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
-from slam.frontend_manager.graph.base_edges import GraphEdge
-from slam.frontend_manager.graph.base_vertices import GraphVertex
+from slam.frontend_manager.graph.edges import Edge
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
+from slam.frontend_manager.graph.vertices import Vertex
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.tables_initializer import init_handler_edge_factory_table
+from slam.setup_manager.edge_factories_initializer.factory import (
+    EdgeFactoriesInitializer,
+)
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
+from slam.system_configs.system.frontend_manager.graph_builder.graph_merger.merger import (
+    GraphMergerConfig,
+)
 from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
 
-class GraphMerger(Generic[GraphVertex, GraphEdge]):
+class GraphMerger:
     """Merges the graph candidate with the main graph."""
 
-    def __init__(self) -> None:
+    def __init__(self, config: GraphMergerConfig) -> None:
         self._table: dict[Handler, EdgeFactory] = {}
+        self._fill_table(config.handler_edge_factory_table)
 
-    def init_table(self, config: dict[str, str]) -> None:
-        """
-        Initializes the table of handler -> edge factory.
+    def _fill_table(self, config: dict[str, str]) -> None:
+        """Fills in the table which represents handler -> edge factory connections.
+
         Args:
-            config (dict[str, str]): names of handler -> edge factory.
-
-        Raises:
-            ValueError: if the config is empty.
+            config (dict[str, str]): configuration.
         """
-        if config:
-            self._table = init_handler_edge_factory_table(config)
-        else:
-            raise ValueError("Empty config: handler -> edge factory.")
+        for handler_name, edge_factory_name in config.items():
+            handler: Handler = HandlerFactory.get_handler(handler_name)
+            edge_factory: EdgeFactory = EdgeFactoriesInitializer.get_factory(edge_factory_name)
+            self._table[handler] = edge_factory
+
+    @staticmethod
+    def _create_vertex(
+        index_storage: IndexStorage, vertex_type: type[Vertex], timestamp: int
+    ) -> Vertex:
+        """
+        Creates a vertex instance for the given edge factory.
+        Generates a unique index of the vertex for the given graph.
+        Args:
+            index_storage (IndexStorage): storage of unique indices.
+            vertex_type (type[Vertex]): type of the vertex.
+            timestamp (int): timestamp of the vertex.
+
+        Returns:
+            (Vertex): new vertex instance.
+        """
+        vertex: Vertex = vertex_type()
+        vertex.index = generate_index(index_storage)
+        vertex.timestamp = timestamp
+        return vertex
+
+    def _create_vertex_table(self, graph: Graph, state: State) -> dict[EdgeFactory, Vertex]:
+        """
+        Creates vertex instances for the state.
+        The instances are empty: not initialized yet.
+
+        Args:
+            state (State): state with measurements.
+
+        Returns:
+            (dict[EdgeFactory, Vertex]): "Edge Factory -> Vertex" table.
+
+        """
+
+        vertices: dict[EdgeFactory, Vertex] = {}
+        indices = graph.vertex_storage.index_storage
+        timestamp = state.timestamp
+        handlers = state.data.keys()
+
+        for handler in handlers:
+            edge_factory = self._table[handler]
+            vertex = self._create_vertex(
+                indices,
+                edge_factory.vertex_type,
+                timestamp,
+            )
+            vertices[edge_factory] = vertex
+
+        return vertices
+
+    def _create_edges(
+        self, graph: Graph, state: State, vertex_table: dict[EdgeFactory, Vertex]
+    ) -> list[Edge]:
+        """
+        Creates edges for the state.
+        Note:
+            Each handler is being processed by the corresponding edge factory.
+            Every edge factory uses vertex of the given state.
+
+        Args:
+            graph (Graph): main graph.
+            state (State): state with measurements.
+            vertex_table (dict[EdgeFactory, Vertex]): "edge factory -> vertex" table.
+
+        Returns:
+            (list[Edge]): new edges.
+        """
+        edges: list[Edge] = []
+        data: dict[Handler, OrderedSet[Measurement]] = state.data
+
+        for handler, measurements in data.items():
+            edge_factory = self._table[handler]
+            vertex = vertex_table[edge_factory]
+            new_edges = edge_factory.create(graph, vertex, measurements)
+            vertex.edges.update(new_edges)
+            edges += new_edges
+
+        return edges
 
     @property
     def handler_edge_factory_table(self) -> dict[Handler, EdgeFactory]:
@@ -49,98 +130,14 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
     def merge(self, state: State, graph: Graph) -> None:
         """Merges state with the graph.
 
-        1) Create new vertices for the state.
-        2) Create edges for the state.
-        3) Add edges to the graph.
+        1) Determine graph vertices for the state.
+        2) Create edges for the state using determined vertices.
+        3) Remove state measurements from the storage.
 
         Args:
             state (State): new state to be merged with the graph.
             graph (Graph): main graph.
         """
-        index_storage = graph.vertex_storage.index_storage
-        factory_vertices_table = self._create_vertex_table(index_storage, state.timestamp)
-        storage: dict[Handler, OrderedSet[Measurement]] = state.data
-        for handler, measurements in storage.items():
-            edges = self._create_edges(graph, factory_vertices_table, handler, measurements)
-            graph.add_edge(edges)
-
-    @staticmethod
-    def _create_vertex(
-        index_storage: IndexStorage, vertex_type: type[GraphVertex], timestamp: int
-    ) -> GraphVertex:
-        """
-        Creates a vertex instance for the given edge factory.
-        Generates a unique index of the vertex for the given graph.
-        Args:
-            index_storage (IndexStorage): storage of unique indices.
-            vertex_type (type[GraphVertex]): types of the vertices.
-            timestamp (int): timestamp of the vertex.
-
-        Returns:
-            (GraphVertex): new vertex instance.
-        """
-        vertex = vertex_type()
-        vertex.index = generate_index(index_storage)
-        vertex.timestamp = timestamp
-        return vertex
-
-    def _create_vertex_table(
-        self, index_storage: IndexStorage, timestamp: int
-    ) -> dict[EdgeFactory, list[GraphVertex]]:
-        """Creates vertex instances for the state.
-
-        Args:
-            index_storage (IndexStorage): storage of unique indices.
-            timestamp (int): timestamp of the vertex.
-
-        Returns:
-            (dict[EdgeFactory, GraphVertex]): "Edge Factory -> Graph Vertex(s)" table.
-        """
-
-        table: dict[EdgeFactory, list[GraphVertex]] = {}
-        edge_factories = self._table.values()
-
-        vertices_types = set[type[GraphVertex]]()
-        type_instance_table = dict[type[GraphVertex], GraphVertex]()
-        vertices_types = vertices_types.union(
-            *(factory.vertices_types for factory in edge_factories)
-        )
-
-        type_instance_table = {
-            v_type: self._create_vertex(index_storage, v_type, timestamp)
-            for v_type in vertices_types
-        }
-
-        for factory in edge_factories:
-            vertices = [type_instance_table[v_type] for v_type in factory.vertices_types]
-            table[factory] = vertices
-
-        return table
-
-    def _create_edges(
-        self,
-        graph: Graph,
-        factory_vertices_table: dict[EdgeFactory, list[GraphVertex]],
-        handler: Handler,
-        measurements: OrderedSet[Measurement],
-    ) -> list[GraphEdge]:
-        """
-        Creates edges for the state.
-        Note:
-            Each handler is being processed by the corresponding edge factory.
-            Every edge factory uses vertex of the given state.
-
-        Args:
-            graph (Graph): main graph.
-            factory_vertices_table (dict[EdgeFactory, list[GraphVertex]]): "edge factory -> vertex(s)" table.
-            handler (Handler): handler of the measurements.
-            measurements (OrderedSet[Measurement]): measurements.
-
-        Returns:
-            (list[GraphEdge]): new edges.
-        """
-
-        edge_factory = self._table[handler]
-        vertices = factory_vertices_table[edge_factory]
-        edges = edge_factory.create(graph, vertices, measurements)
-        return edges
+        vertex_table = self._create_vertex_table(graph, state)
+        edges = self._create_edges(graph, state, vertex_table)
+        graph.add_edge(edges)

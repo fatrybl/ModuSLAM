@@ -1,19 +1,13 @@
-from typing import Iterable
-
 import gtsam
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
-from slam.frontend_manager.graph.base_vertices import GraphVertex
-from slam.frontend_manager.graph.custom_edges import ImuOdometry
-from slam.frontend_manager.graph.custom_vertices import Pose
-from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.edges import ImuOdometry
+from slam.frontend_manager.graph.vertices import Pose
 from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
 )
-from slam.utils.ordered_set import OrderedSet
 
 
-class ImuOdometryFactory(EdgeFactory):
+class ImuOdometryFactory(EdgeFactory[ImuOdometry, Pose]):
     """
     Creates edges of type: ImuOdometry.
     """
@@ -27,27 +21,17 @@ class ImuOdometryFactory(EdgeFactory):
         return self.__class__.__name__
 
     @property
-    def vertices_types(self) -> set[type[Pose]]:
-        return {Pose}
+    def vertex_type(self) -> type[Pose]:
+        return Pose
 
     @property
-    def base_vertices_type(self) -> set[type[gtsam.Pose3]]:
-        return {gtsam.Pose3}
+    def base_vertex_type(self) -> type[gtsam.Pose3]:
+        return gtsam.Pose3
 
-    def create(
-        self,
-        graph: Graph,
-        vertices: Iterable[GraphVertex],
-        measurements: OrderedSet[Measurement],
-    ) -> list[ImuOdometry]:
-        """
-        Creates new edges from the given measurements.
+    def create_edge(self, values: tuple) -> None:
+        """Creates an edge of type ImuOdometry.
+
         Args:
-            graph (Graph): the main graph.
-            vertices (Iterable[GraphVertex]): graph vertices to be used for new edges.
-            measurements (OrderedSet[Measurement]): measurements from different handlers.
-
-        Returns:
-            (list[GraphEdge]): new edges.
+            values (tuple): values to create the edge.
         """
-        raise NotImplementedError
+        pass

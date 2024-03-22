@@ -6,7 +6,7 @@ Complexity:
 """
 
 from collections import OrderedDict
-from typing import Any, Generic, Iterable, TypeVar, overload
+from typing import Generic, Iterable, TypeVar, overload
 
 from plum import dispatch
 
@@ -55,20 +55,6 @@ class OrderedSet(Generic[T]):
             return list(self._items.keys())[index]
         except IndexError:
             raise IndexError("OrderedSet index out of range")
-
-    def __eq__(self, other: Any) -> bool:
-        """Compares if this OrderedSet is equal to another OrderedSet. Two OrderedSets
-        are equal if they have the same elements in the same order.
-
-        Args:
-            other (Any): The other OrderedSet to compare with.
-
-        Returns:
-            bool: True if the two OrderedSets are equal, False otherwise.
-        """
-        if isinstance(other, OrderedSet):
-            return self._items == other._items
-        return False
 
     @property
     def items(self):

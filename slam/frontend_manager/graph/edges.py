@@ -12,16 +12,15 @@ class Edge:
     """Base Edge of the Graph.
 
     Args:
-        id (int): unique id of the edge.
         elements (tuple[Element, ...]): elements of DataBatch which create the edge.
-        vertices (tuple[Vertex, ...]): vertices which are connected by the edge.
-        gtsam_factor (gtsam.Factor): factor from GTSAM library.
+        vertices (tuple[GraphVertex, ...]): vertices which are connected by the edge.
+        factor (gtsam.Factor): factor from GTSAM library.
+        noise_model (gtsam.noiseModel): noise model for the factor.
     """
 
-    id: int
     elements: tuple[Element, ...]
     vertices: tuple[Vertex, ...]
-    gtsam_factor: gtsam.Factor
+    factor: gtsam.Factor
     noise_model: gtsam.noiseModel
 
 
@@ -32,8 +31,8 @@ GraphEdge = TypeVar("GraphEdge", bound=Edge)
 class Odometry(Edge):
     """Edge for any odometry factor."""
 
-    v1: int
-    v2: int
+    vertex1: int
+    vertex2: int
 
 
 @dataclass
@@ -63,4 +62,4 @@ class SmartStereoLandmark(Edge):
     K: gtsam.Cal3_S2
     params: gtsam.SmartProjectionParams
     sensor_body: gtsam.Pose3
-    gtsam_factor: gtsam.SmartProjectionPose3Factor
+    factor: gtsam.SmartProjectionPose3Factor

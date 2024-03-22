@@ -12,20 +12,21 @@ from slam.utils.ordered_set import OrderedSet
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True, eq=True)
+@dataclass(frozen=True)
 class Measurement:
-    """A measurement formed of processed element(s) by the corresponding handler.
-
-    Hash calculation ignores "values" field because not all values are hashable.
-    """
+    """A measurement formed of processed element(s) by the corresponding handler."""
 
     time_range: TimeRange
     values: Any
     handler: Handler
     elements: tuple[Element, ...]
 
-    def __hash__(self):
-        return hash((self.time_range, self.handler, self.elements))
+    def __eq__(self, other) -> bool:
+        return (
+            self.time_range == other.time_range
+            and self.handler == other.handler
+            and self.elements == other.elements
+        )
 
 
 class MeasurementStorage:
@@ -69,11 +70,7 @@ class MeasurementStorage:
         Args:
             measurement (Measurement): a new measurement to be added.
         """
-
-        if measurement.handler in self._data:
-            self._data[measurement.handler].add(measurement)
-        else:
-            self._data.update({measurement.handler: OrderedSet([measurement])})
+        self._data[measurement.handler].add(measurement)
 
     @overload
     def add(self, data: dict[Handler, OrderedSet[Measurement]]) -> None:
@@ -96,8 +93,6 @@ class MeasurementStorage:
     def remove(self, measurement: Measurement) -> None:
         """Removes the measurement from the storage."""
         self._data[measurement.handler].remove(measurement)
-        if not self._data[measurement.handler]:
-            del self._data[measurement.handler]
 
     def clear(self) -> None:
         """Clears the storage."""
@@ -112,7 +107,7 @@ class MeasurementStorage:
 
         measurements: OrderedSet[Measurement] = OrderedSet()
         for ord_set in self._data.values():
-            [measurements.add(m) for m in ord_set]
+            measurements.add(ord_set)
 
         m_start = min(measurements, key=lambda m: m.time_range.start)
         m_stop = max(measurements, key=lambda m: m.time_range.stop)

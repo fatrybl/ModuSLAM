@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
@@ -9,4 +9,3 @@ class EdgeFactoryConfig:
     type_name: str
     module_name: str
     noise_model: str
-    search_time_margin: int = field(default=0, metadata={"help": "Time margin in nanoseconds."})

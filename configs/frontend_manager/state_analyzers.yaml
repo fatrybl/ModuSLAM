@@ -1,6 +1,6 @@
-lidar_odometry_state_analyzer:
+lidar_odometry:
 
-  name: "lidar_odometry_state_analyzer"
+  name: "LidarOdometryStateAnalyzer"
   type_name: "LidarOdometryStateAnalyzer"
   module_name: ".lidar_odometry"
   handler_name: "kiss_icp_odometry"

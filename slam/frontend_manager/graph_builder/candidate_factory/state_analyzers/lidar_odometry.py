@@ -8,7 +8,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analy
     StateAnalyzer,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
 from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
@@ -20,8 +20,17 @@ class LidarOdometryStateAnalyzer(StateAnalyzer):
     """Analyzer for lidar odometry measurements` handler."""
 
     def __init__(self, config: StateAnalyzerConfig) -> None:
-        super().__init__(config)
-        self._handler: Handler = HandlersFactory.get_handler(config.handler_name)
+        self._name: str = config.name
+        self._handler: Handler = HandlerFactory.get_handler(config.handler_name)
+
+    @property
+    def name(self) -> str:
+        """Name of the analyzer.
+
+        Returns:
+            (str): name of the analyzer.
+        """
+        return self._name
 
     def evaluate(self, storage: MeasurementStorage) -> State | None:
         """
