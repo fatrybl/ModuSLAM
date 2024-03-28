@@ -1,57 +1,47 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections.abc import Callable
-from typing import TYPE_CHECKING, TypeAlias, TypeVar
+from typing import Any, TypeAlias, TypeVar
 
 import gtsam
-from gtsam.symbol_shorthand import B, C, F, L, M, N, V, X
+import numpy as np
+from gtsam.symbol_shorthand import B, L, N, P, V, X
 
-if TYPE_CHECKING:
-    from slam.frontend_manager.graph.edges import Edge
+from slam.utils.numpy_types import Matrix3x3, Matrix4x4, Vector3
 
 GtsamVertex: TypeAlias = gtsam.Rot3 | gtsam.Pose3 | gtsam.NavState
 
 
+def vector_3(x, y, z):
+    """Create 3d double numpy array."""
+    return np.array([x, y, z], dtype=np.float64)
+
+
+def vector_n(*args):
+    """Create N-dimensional double numpy array."""
+    return np.array(args, dtype=np.float64)
+
+
 class Vertex(ABC):
-    """Base absract vertex of the Graph."""
+    """Base absract vertex of the Graph.
+
+    TODO: think about numpy types for the attributes.
+    """
 
     def __init__(self):
         self.index: int = 0
         self.timestamp: int = 0
-        self.edges: set[Edge] = set()
-        self.base_vertex: GtsamVertex = gtsam.Pose3()
+        self.edges = set()
+        self.optimizable: bool = False
+        self.value: Any = None
 
     @abstractmethod
-    def update(self, values: GtsamVertex) -> None:
+    def update(self, values: Any) -> None:
         """Updates the vertex with the new values.
 
         Args:
-            values (GtsamVertex): new values.
+            values (Any): new values.
         """
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        """Interface to the gtsam.symbol_shorthand.symbol.
-
-        Returns:
-            (Callable[[int], int]): gtsam.symbol_shorthand.symbol interface.
-        """
-        raise NotImplementedError
-
-    @property
-    def gtsam_index(self) -> int:
-        """Index of the vertex of the corresponding gtsam.value.
-
-        Returns:
-            (int): index of the vertex.
-        """
-        return self._gtsam_symbol(self.index)
-
-
-GraphVertex = TypeVar("GraphVertex", bound=Vertex)
 
 
 class Pose(Vertex):
@@ -62,41 +52,29 @@ class Pose(Vertex):
 
     def __init__(self):
         super().__init__()
-        self.position: tuple[float, ...] = self.base_vertex.translation()
-        self.rotation: tuple[float, ...] = self.base_vertex.rotation()
-        self.SE3: tuple[float, ...] = self.base_vertex.matrix()
+        self.optimizable = True
+        self.value: GtsamVertex = gtsam.Pose3()
+        self.position: Vector3 = self.value.translation
+        self.rotation: Matrix3x3 = self.value.rotation
+        self.SE3: Matrix4x4 = self.value.matrix
 
     @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return X
+    def gtsam_index(self) -> int:
+        return X(self.index)
 
-    def update(self, values: gtsam.Pose3) -> None:
-        self.base_vertex = values
-        self.position = values.translation()
-        self.rotation = values.rotation()
-        self.SE3 = values.matrix()
+    def update(self, values: gtsam.Values) -> None:
+        self.value = values.atPose3(self.gtsam_index)
+        self.position = self.value.translation()
+        self.rotation = self.value.rotation()
+        self.SE3 = self.value.matrix()
 
 
 class CameraPose(Pose):
     """The pose where an image has been taken."""
 
-    def __init__(self):
-        super().__init__()
-
-    @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return C
-
 
 class LidarPose(Pose):
     """The pose where a point-cloud has been registered."""
-
-    def __init__(self):
-        super().__init__()
-
-    @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return L
 
 
 class Velocity(Vertex):
@@ -104,15 +82,15 @@ class Velocity(Vertex):
 
     def __init__(self):
         super().__init__()
-        self.base_vertex: gtsam.VectorValues = gtsam.VectorValues()
-        self.linear_velocity: tuple[float, ...] = (0, 0, 0)
-
-    def update(self, values: gtsam.VectorValues) -> None:
-        self.base_vertex = values
+        self.optimizable = True
+        self.value = vector_3(0.0, 0.0, 0.0)
 
     @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return V
+    def gtsam_index(self) -> int:
+        return V(self.index)
+
+    def update(self, values: gtsam.Values) -> None:
+        self.value = values.atVector(self.gtsam_index)
 
 
 class NavState(Vertex):
@@ -123,45 +101,54 @@ class NavState(Vertex):
 
     def __init__(self):
         super().__init__()
-        self.base_vertex: gtsam.NavState = gtsam.NavState()
-        self.velocity = self.base_vertex.velocity()
-        self.pose = self.base_vertex.pose()
-
-    def update(self, values: gtsam.NavState) -> None:
-        self.base_vertex = values
-        self.velocity = values.velocity()
-        self.pose = values.pose()
+        self.value: gtsam.NavState = gtsam.NavState()
+        self.velocity = self.value.velocity()
+        self.pose = self.value.pose()
 
     @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return N
+    def gtsam_index(self) -> int:
+        return N(self.index)
+
+    def update(self, values: gtsam.Values) -> None:
+        self.value = values.atNavState(self.gtsam_index)
+        self.velocity = self.value.velocity()
+        self.pose = self.value.pose()
 
 
-class Landmark(Vertex):
+class Point(Vertex):
+    def __init__(self):
+        super().__init__()
+        self.optimizable = True
+        self.value: gtsam.Point3 = gtsam.Point3()
+
+    @property
+    def gtsam_index(self) -> int:
+        return P(self.index)
+
+    def update(self, values: gtsam.Values) -> None:
+        self.value = values.atPoint3(self.gtsam_index)
+
+
+class PoseLandmark(Pose):
     """Base landmark in the Graph."""
 
-    def __init__(self):
-        super().__init__()
-        self.base_vertex: gtsam.Point3 = gtsam.Point3()
-        self.position: tuple[float, ...] = self.base_vertex
-
-    def update(self, values: gtsam.Point3) -> None:
-        self.base_vertex = values
-
     @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        raise M
+    def gtsam_index(self) -> int:
+        return L(self.index)
 
 
-class CameraFeature(Landmark):
-    """Camera feature based landmark in the Graph."""
+class Feature(Vertex):
+    """Non-optimizable point in 3D."""
 
     def __init__(self):
         super().__init__()
+        self.position: Vector3 = vector_3(0.0, 0.0, 0.0)
 
-    @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return F
+    def update(self, values) -> None: ...
+
+
+class CameraFeature(Feature):
+    """Feature in the Camera Frame."""
 
 
 class ImuBias(Vertex):
@@ -169,15 +156,19 @@ class ImuBias(Vertex):
 
     def __init__(self):
         super().__init__()
-        self.base_vertex: gtsam.imuBias = gtsam.imuBias.ConstantBias()
-        self.accelerometer_bias = self.base_vertex.accelerometer()
-        self.gyroscope_bias = self.base_vertex.gyroscope()
-
-    def update(self, values: gtsam.imuBias.ConstantBias) -> None:
-        self.base_vertex = values
-        self.accelerometer_bias = values.accelerometer()
-        self.gyroscope_bias = values.gyroscope()
+        self.optimizable = True
+        self.value: gtsam.imuBias = gtsam.imuBias.ConstantBias()
+        self.accelerometer_bias = self.value.accelerometer()
+        self.gyroscope_bias = self.value.gyroscope()
 
     @property
-    def _gtsam_symbol(self) -> Callable[[int], int]:
-        return B
+    def gtsam_index(self) -> int:
+        return B(self.index)
+
+    def update(self, values: gtsam.Values) -> None:
+        self.value = values.atConstantBias(self.gtsam_index)
+        self.accelerometer_bias = self.value.accelerometer()
+        self.gyroscope_bias = self.value.gyroscope()
+
+
+GraphVertex = TypeVar("GraphVertex", bound=Vertex)

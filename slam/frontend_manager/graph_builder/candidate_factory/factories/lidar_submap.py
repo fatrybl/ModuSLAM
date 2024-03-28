@@ -10,62 +10,29 @@ from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.a
 from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.lidar_submap_analyzer import (
     LidarSubmapAnalyzer,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.factories.factory_ABC import (
+from slam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
     CandidateFactory,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
     State,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
-    StateAnalyzer,
+from slam.setup_manager.tables_initializer import init_handler_analyze_table
+from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.config import (
+    CandidateFactoryConfig,
 )
-from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.tables_initializer import init_handler_state_analyzer_table
 
 logger = logging.getLogger(__name__)
 
 
-<<<<<<<< HEAD:slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_submap.py
 class LidarMapCandidateFactory(CandidateFactory):
     """Creates graph candidate with lidar point-cloud keyframe(s)."""
 
-    def __init__(self) -> None:
+    def __init__(self, config: CandidateFactoryConfig) -> None:
         self._graph_candidate: GraphCandidate = GraphCandidate()
         self._candidate_analyzer: CandidateAnalyzer = LidarSubmapAnalyzer()
         self._previous_measurement: Measurement | None = None
-        self._table: dict[Handler, StateAnalyzer] = {}
-
-    def init_table(self, config: dict[str, str]) -> None:
-        """
-        Initializes the table: handler -> state analyzer.
-
-        Args:
-            config (dict[str, str]): table with names of handlers and state analyzers.
-
-        """
-        self._table = init_handler_state_analyzer_table(config)
-========
-class LidarSubmapCandidateFactory(CandidateFactory):
-    """Creates graph candidate with lidar point-cloud keyframe(s)."""
-
-    def __init__(self):
-        self._graph_candidate: GraphCandidate = GraphCandidate()
-        self._candidate_analyzer: CandidateAnalyzer = LidarSubmapAnalyzer()
-        self._handler_analyzer_table: dict[Handler, StateAnalyzer] = {}
-        self._previous_measurement: Measurement | None = None
-
-    def _fill_table(self, config) -> None:
-        """Fills handler-analyzer table based on the given config.
-
-        Args:
-            config (dict[str, str]): names of handlers and corresponding analyzers.
-        """
-        for handler_name, analyzer_name in config.items():
-            handler: Handler = HandlerFactory.get_handler(handler_name)
-            analyzer: StateAnalyzer = StateAnalyzerFactory.get_analyzer(analyzer_name)
-            self._handler_analyzer_table[handler] = analyzer
->>>>>>>> 3e68bcf (UPD: save current progress):slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_keyframe.py
+        self._table = init_handler_analyze_table(config.handler_analyzer_table)
 
     @property
     def graph_candidate(self) -> GraphCandidate:
@@ -114,7 +81,6 @@ class LidarSubmapCandidateFactory(CandidateFactory):
             logger.debug(msg)
             return
 
-<<<<<<<< HEAD:slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_submap.py
         if self._previous_measurement and self._previous_measurement == new_measurement:
             return
 
@@ -126,13 +92,3 @@ class LidarSubmapCandidateFactory(CandidateFactory):
                 self._graph_candidate.states.append(new_state)
 
             self._previous_measurement = new_measurement
-========
-        else:
-            if new_measurement != self._previous_measurement:
-                self._previous_measurement = new_measurement
-                analyzer = self._handler_analyzer_table[new_measurement.handler]
-                new_state: State | None = analyzer.evaluate(storage)
-
-                if new_state:
-                    self._graph_candidate.states.append(new_state)
->>>>>>>> 3e68bcf (UPD: save current progress):slam/frontend_manager/graph_builder/candidate_factory/factories/lidar_keyframe.py

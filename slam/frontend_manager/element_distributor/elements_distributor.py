@@ -8,9 +8,8 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.handlers_factory.factory import HandlerFactory
-from slam.setup_manager.sensors_factory.factory import SensorFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.setup_manager.tables_initializer import init_sensor_handler_table
 from slam.system_configs.system.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
@@ -25,25 +24,17 @@ class ElementDistributor:
 
     def __init__(self, config: ElementDistributorConfig):
         self.storage = MeasurementStorage()
-        self._table: dict[Sensor, list[Handler]] = {}
-        self._fill_table(config.sensor_handlers_table)
-
-    def _fill_table(self, config: dict[str, list[str]]) -> None:
-        """Fills sensor-handler table.
-
-        Args:
-            config (dict[str, list[str]]): sensor name -> handlers` names.
-        """
-        for sensor_name, handlers_names in config.items():
-            sensor: Sensor = SensorFactory.get_sensor(sensor_name)
-            handlers = [HandlerFactory.get_handler(name) for name in handlers_names]
-            self._table[sensor] = handlers
+        self._table: dict[Sensor, list[Handler]] = init_sensor_handler_table(
+            config.sensor_handlers_table
+        )
 
     def _distribute(self, element: Element) -> None:
         """Distributes element to corresponding handler based on sensor.
 
         Args:
             element (Element): element from DataBatch.
+
+        TODO: add support for multiple args for process() method.
         """
         handlers = self._table[element.measurement.sensor]
         for handler in handlers:
@@ -76,6 +67,5 @@ class ElementDistributor:
         Returns:
             measurement: processed element as measurement.
         """
-        element: Element = data_batch.first_element
+        element: Element = data_batch.first
         self._distribute(element)
-        data_batch.delete_first_element()

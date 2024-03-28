@@ -11,7 +11,7 @@ graph_builder:
       kiss_icp_odometry: 'lidar_odometry_edge_factory'
 
   candidate_factory:
-    handler_state_analyzer_table:
+    handler_analyzer_table:
       kiss_icp_odometry: 'lidar_odometry_state_analyzer'
 
   edge_factories:

@@ -8,13 +8,13 @@ from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
+from slam.setup_manager.handlers_factory.factory import HandlerFactory
+from slam.setup_manager.sensors_factory.factory import SensorFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
+from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzerFactory
 
 
-def init_handler_state_analyzer_table(config: dict[str, str]) -> dict[Handler, StateAnalyzer]:
+def init_handler_analyze_table(config: dict[str, str]) -> dict[Handler, StateAnalyzer]:
     """Fills in the table which represents handler -> state analyzer connections.
 
     Args:
@@ -22,18 +22,14 @@ def init_handler_state_analyzer_table(config: dict[str, str]) -> dict[Handler, S
 
     Returns:
         (dict[Handler, StateAnalyzer]): table.
-
-    Raises:
-        (ValueError): if the config is empty.
     """
 
-    if not bool(config):
-        raise ValueError("Empty config")
+    assert bool(config), "Empty config"
 
     table: dict[Handler, StateAnalyzer] = {}
     for handler_name, analyzer_name in config.items():
-        handler: Handler = HandlersFactory.get_handler(handler_name)
-        analyzer: StateAnalyzer = StateAnalyzersFactory.get_analyzer(analyzer_name)
+        handler: Handler = HandlerFactory.get_handler(handler_name)
+        analyzer: StateAnalyzer = StateAnalyzerFactory.get_analyzer(analyzer_name)
         table[handler] = analyzer
     return table
 
@@ -46,16 +42,12 @@ def init_handler_edge_factory_table(config: dict[str, str]) -> dict[Handler, Edg
 
     Returns:
         (dict[Handler, EdgeFactory]): table.
-
-    Raises:
-        (ValueError): if the config is empty.
     """
-    if not bool(config):
-        raise ValueError("Empty config")
+    assert bool(config), "Empty config"
 
     table: dict[Handler, EdgeFactory] = {}
     for handler_name, edge_factory_name in config.items():
-        handler: Handler = HandlersFactory.get_handler(handler_name)
+        handler: Handler = HandlerFactory.get_handler(handler_name)
         edge_factory: EdgeFactory = EdgeFactoriesInitializer.get_factory(edge_factory_name)
         table[handler] = edge_factory
 
@@ -70,18 +62,14 @@ def init_sensor_handler_table(config: dict[str, list[str]]) -> dict[Sensor, list
 
     Returns:
         (dict[Sensor, list[Handler]]): table.
-
-    Raises:
-        (ValueError): if the config is empty.
     """
 
-    if not bool(config):
-        raise ValueError("Empty config")
+    assert bool(config), "Empty config"
 
     table: dict[Sensor, list[Handler]] = {}
     for sensor_name, handlers_names in config.items():
-        sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
-        handlers = [HandlersFactory.get_handler(name) for name in handlers_names]
+        sensor: Sensor = SensorFactory.get_sensor(sensor_name)
+        handlers = [HandlerFactory.get_handler(name) for name in handlers_names]
         table[sensor] = handlers
 
     return table
