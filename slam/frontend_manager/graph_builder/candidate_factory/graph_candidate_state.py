@@ -20,9 +20,4 @@ class State(MeasurementStorage):
         Raises:
             ValueError: if the start != stop timestamp of the time range.
         """
-        if self.time_range.stop == self.time_range.start:
-            return self.time_range.stop
-        else:
-            msg = "Exact timestamp does not exist for the state with a time range."
-            logger.error(msg)
-            raise ValueError(msg)
+        return self.time_range.stop

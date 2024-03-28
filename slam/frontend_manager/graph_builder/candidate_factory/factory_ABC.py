@@ -37,9 +37,6 @@ class CandidateFactory(ABC):
         """Processes input measurements and adds new states to the graph candidate if a
         criterion is satisfied.
 
-        1) Check if a criterion for a new state is met for every criteria.
-        2) If a criterion, add a new state to the graph candidate.
-
         Args:
             storage (MeasurementStorage): processed measurements from the Distributor.
         """

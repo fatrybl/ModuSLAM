@@ -1,8 +1,11 @@
+from collections.abc import Iterable
+
 import gtsam
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
-from slam.frontend_manager.graph.edges import LidarOdometry
+from slam.frontend_manager.graph.custom_edges import LidarOdometry
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.vertex_storage import VertexStorage
 from slam.frontend_manager.graph.vertices import LidarPose
 from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
@@ -13,15 +16,18 @@ from slam.system_configs.system.frontend_manager.edge_factories.base_factory imp
 from slam.utils.ordered_set import OrderedSet
 
 
-class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
+class LidarOdometryEdgeFactory(EdgeFactory):
     """Creates edges of type: LidarOdometry."""
 
     def __init__(self, config: EdgeFactoryConfig) -> None:
+        self._time_margin: int = config.search_time_margin
         self._name: str = config.name
-        self._noise_model: gtsam.noiseModel = self._init_noise_model(config.noise_model)
+        self._noise_model: gtsam.noiseModel.Diagonal.Sigmas = self._init_noise_model(
+            config.noise_model
+        )
 
     @staticmethod
-    def _init_noise_model(cfg: str) -> gtsam.noiseModel.Diagonal:
+    def _init_noise_model(cfg: str) -> gtsam.noiseModel.Diagonal.Sigmas:
         """
         Initializes the noise model.
         Args:
@@ -32,7 +38,7 @@ class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
 
         TODO: add config parser and support of other noise models.
         """
-        return gtsam.noiseModel.Diagonal.Sigmas([1, 1, 1])
+        return gtsam.noiseModel.Diagonal.Sigmas([1] * 6)
 
     @property
     def name(self) -> str:
@@ -44,54 +50,81 @@ class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
         return self._name
 
     @property
-    def vertex_type(self) -> type[LidarPose]:
+    def vertices_types(self) -> set[type[LidarPose]]:
         """Type of the vertex used by the factory for edge creation.
 
         Returns:
             (type[LidarPose]): vertex type.
         """
-        return LidarPose
+        return {LidarPose}
 
     @property
-    def base_vertex_type(self) -> type[gtsam.Pose3]:
+    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
         """Type of the base vertex used by the factory for edge creation.
 
         Returns:
             (type[gtsam.Pose3]): base vertex type.
         """
-        return gtsam.Pose3
+        return {gtsam.Pose3}
 
     def create(
-        self, graph: Graph, vertex: LidarPose, measurements: OrderedSet[Measurement]
+        self,
+        graph: Graph,
+        vertices: Iterable[LidarPose],
+        measurements: OrderedSet[Measurement],
     ) -> list[LidarOdometry]:
         """
         Creates new edges from the given measurements.
         Args:
             graph (Graph): the graphs with factor.
-            vertex (LidarPose): lidar pose vertex.
+            vertices (Iterable[LidarPose]): lidar pose vertex.
             measurements (OrderedSet[Measurement]): measurements from the corresponding handler.
 
         Returns:
             (list[LidarOdometry]): new lidar odometry edges.
         """
-        v1: LidarPose = self._get_vertex(graph)
-        v2: LidarPose = self._init_vertex(vertex)
         m: Measurement = measurements.last
-        edge = self._create_edge(vertex1=v1, vertex2=v2, measurement=m)
+        current_vertex = list(vertices)[0]
+        previous_vertex = self._find_vertex(graph.vertex_storage, m.time_range.start)
+        if not previous_vertex:
+            index = current_vertex.index - 1
+            previous_vertex = self._create_vertex(index=index, timestamp=m.time_range.start)
+
+        edge = self._create_edge(vertex1=previous_vertex, vertex2=current_vertex, measurement=m)
         return [edge]
 
     @staticmethod
-    def _get_vertex(graph: Graph) -> LidarPose:
+    def _create_vertex(index: int, timestamp: int) -> LidarPose:
+        """
+        Creates a new vertex.
+        Args:
+            index (int): index of the vertex.
+            timestamp (int): timestamp of the vertex.
+
+        Returns:
+            (LidarPose): new vertex.
+        """
+        vertex = LidarPose()
+        vertex.index = index
+        vertex.timestamp = timestamp
+        return vertex
+
+    def _find_vertex(self, storage: VertexStorage, timestamp: int) -> LidarPose | None:
         """Gets the vertex from the graph.
 
         Returns:
             (LidarPose): vertex from the graph.
-
-        TODO: think about:
-            vertices =_graph.vertex_storage.get_vertices(LidarPose)
         """
-        v = graph.vertex_storage.lidar_pose.items[-1]
-        return v
+
+        v = storage.get_last_vertex(LidarPose)
+        if v:
+            return v
+
+        v = storage.find_closest_vertex(LidarPose, timestamp, self._time_margin)
+        if v:
+            return v
+
+        return None
 
     @staticmethod
     def _init_vertex(vertex: LidarPose) -> LidarPose:
@@ -111,7 +144,7 @@ class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
         vertex1_id: int,
         vertex2_id: int,
         measurement: Measurement,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Diagonal.Sigmas,
     ) -> gtsam.BetweenFactorPose3:
         """
         Creates a factor for the graph.
@@ -124,7 +157,7 @@ class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
         Returns:
             (gtsam.BetweenFactorPose3): lidar odometry factor.
         """
-        tf = measurement.values
+        tf = gtsam.Pose3(measurement.values)
         factor = gtsam.BetweenFactorPose3(
             key1=vertex1_id, key2=vertex2_id, relativePose=tf, noiseModel=noise_model
         )
@@ -138,13 +171,15 @@ class LidarOdometryEdgeFactory(EdgeFactory[LidarOdometry, LidarPose]):
         Returns:
             (LidarOdometry): edge instance.
         """
-        factor = self._create_factor(vertex1.index, vertex2.index, measurement, self._noise_model)
+
+        factor = self._create_factor(
+            vertex1.gtsam_index, vertex2.gtsam_index, measurement, self._noise_model
+        )
         edge = LidarOdometry(
-            elements=measurement.elements,
-            vertices=(vertex1, vertex2),
-            vertex1=vertex1.index,
-            vertex2=vertex2.index,
+            vertex1=vertex1,
+            vertex2=vertex2,
             factor=factor,
+            measurements=(measurement,),
             noise_model=self._noise_model,
         )
         return edge

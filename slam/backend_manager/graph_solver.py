@@ -1,5 +1,4 @@
 import gtsam
-from omegaconf import DictConfig
 
 from slam.frontend_manager.graph.graph import Graph
 
@@ -10,12 +9,12 @@ class GraphSolver:
     TODO: add optimize_using from GTSAM logging_optimizer.py for better debugging.
     """
 
-    def __init__(self, params: DictConfig) -> None:
-        self._optimizer = gtsam.LevenbergMarquardtOptimizer
+    def __init__(self) -> None:
         self._params = gtsam.LevenbergMarquardtParams()
-        self._init_values = gtsam.Values()
 
-    def compute(self, factor_graph: gtsam.NonlinearFactorGraph) -> gtsam.Values:
+    def compute(
+        self, factor_graph: gtsam.NonlinearFactorGraph, init_values: gtsam.Values
+    ) -> gtsam.Values:
         """Solves the optimization problem for the given non-linear factor graph.
 
         Args:
@@ -24,15 +23,19 @@ class GraphSolver:
         Returns:
             (gtsam.Values): optimized values.
         """
-        self._optimizer(factor_graph, self._init_values, self._params)
-        self._optimizer.optimizeSafely()
-        return self._optimizer.values()
+        optimizer = gtsam.LevenbergMarquardtOptimizer(factor_graph, init_values, self._params)
+        optimizer.optimizeSafely()
+        return optimizer.values()
 
-    def solve(self, graph: Graph) -> None:
+    def solve(self, graph: Graph) -> gtsam.Values:
         """Solves the optimization problem for the given graph.
 
         Args:
             graph (Graph): a graph with the factors to be solved.
         """
-        result = self.compute(graph.factor_graph)
-        graph.update(result)
+        initial_estimate = gtsam.Values()
+        vertices = graph.vertex_storage.optimizable_vertices
+        [initial_estimate.insert(v.gtsam_index, v.value) for v in vertices]
+
+        result = self.compute(graph.factor_graph, initial_estimate)
+        return result

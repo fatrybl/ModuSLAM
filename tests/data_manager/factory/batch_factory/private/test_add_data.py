@@ -51,5 +51,5 @@ class TestAddData:
                 batch_factory._add_data(periodic_data)
         else:
             batch_factory._add_data(periodic_data)
-            element = batch_factory.batch.first_element
+            element = batch_factory.batch.first
             equal_elements(element, reference_result)

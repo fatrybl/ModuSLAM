@@ -28,6 +28,9 @@ class Measurement:
             and self.elements == other.elements
         )
 
+    def __hash__(self) -> int:
+        return hash((self.time_range, self.handler, self.elements))
+
 
 class MeasurementStorage:
     """Stores the measurements which have been processed by handlers."""
@@ -70,7 +73,11 @@ class MeasurementStorage:
         Args:
             measurement (Measurement): a new measurement to be added.
         """
-        self._data[measurement.handler].add(measurement)
+
+        if measurement.handler in self._data:
+            self._data[measurement.handler].add(measurement)
+        else:
+            self._data.update({measurement.handler: OrderedSet([measurement])})
 
     @overload
     def add(self, data: dict[Handler, OrderedSet[Measurement]]) -> None:
@@ -107,7 +114,7 @@ class MeasurementStorage:
 
         measurements: OrderedSet[Measurement] = OrderedSet()
         for ord_set in self._data.values():
-            measurements.add(ord_set)
+            [measurements.add(m) for m in ord_set]
 
         m_start = min(measurements, key=lambda m: m.time_range.start)
         m_stop = max(measurements, key=lambda m: m.time_range.stop)

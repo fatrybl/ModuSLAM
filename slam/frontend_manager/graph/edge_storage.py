@@ -1,9 +1,9 @@
-from collections.abc import Sequence
+from collections.abc import Iterable
 from typing import Generic, overload
 
 from plum import dispatch
 
-from slam.frontend_manager.graph.edges import GraphEdge
+from slam.frontend_manager.graph.base_edges import GraphEdge
 
 
 class EdgeStorage(Generic[GraphEdge]):
@@ -23,12 +23,12 @@ class EdgeStorage(Generic[GraphEdge]):
         self._edges.add(edge)
 
     @overload
-    def add(self, edge: Sequence[GraphEdge]):
+    def add(self, edge: Iterable[GraphEdge]):
         """
         @overload.
-        Adds new edges_123 to the graph.
+        Adds new edges to the graph.
         Args:
-            edge (Sequence[GraphEdge]): multiple edges_123 to be added to the graph.
+            edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
         """
         [self.add(e) for e in edge]
 
@@ -42,7 +42,7 @@ class EdgeStorage(Generic[GraphEdge]):
                 edge (GraphEdge): edge to be added to the graph.
 
             Args:
-                edge (Sequence[GraphEdge]): multiple edges_123 to be added to the graph.
+                edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
         """
 
     @overload
@@ -56,12 +56,12 @@ class EdgeStorage(Generic[GraphEdge]):
         self._edges.remove(edge)
 
     @overload
-    def remove(self, edge: Sequence[GraphEdge]):
+    def remove(self, edge: Iterable[GraphEdge]):
         """
         @overload.
-        Removes multiple edges_123 from the graph.
+        Removes multiple edges from the graph.
         Args:
-            edge (Sequence[GraphEdge]): multiple edges_123 to be removed from the graph.
+            edge (Iterable[GraphEdge]): multiple edges to be removed from the graph.
         """
         [self.remove(e) for e in edge]
 

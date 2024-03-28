@@ -6,6 +6,9 @@ from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
 )
+from slam.system_configs.system.frontend_manager.graph_builder.graph_builder import (
+    GraphBuilderConfig,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +16,10 @@ logger = logging.getLogger(__name__)
 class GraphBuilder(ABC):
     """Base graph factory to create a sub-graph from the processed measurements and
     merge it with the main graph."""
+
+    @abstractmethod
+    def __init__(self, config: GraphBuilderConfig) -> None:
+        pass
 
     @property
     @abstractmethod

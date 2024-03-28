@@ -1,5 +1,5 @@
 class IndexStorage:
-    """Stores unique indices."""
+    """Storage of unique indices."""
 
     def __init__(self):
         self.min_idx: int = 0
@@ -31,4 +31,14 @@ class IndexStorage:
 
 
 def generate_index(index_storage: IndexStorage):
+    """
+    Generates a new index based on the given indices:
+    new index = max index + 1.
+
+    Args:
+        index_storage (IndexStorage): storage of indices.
+
+    Returns:
+        (int): new index.
+    """
     return index_storage.max_idx + 1

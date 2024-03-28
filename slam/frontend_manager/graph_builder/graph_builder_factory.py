@@ -3,7 +3,7 @@ from typing import TypeVar
 
 from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.builders.lidar_submap_builder import (
-    LidarSubMapBuilder,
+    LidarMapBuilder,
 )
 from slam.system_configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
@@ -20,8 +20,8 @@ class GraphBuilderFactory:
     @staticmethod
     def create(config) -> GraphBuilder:
         match config.name:
-            case LidarSubMapBuilder.__name__:
-                return LidarSubMapBuilder(config)
+            case LidarMapBuilder.__name__:
+                return LidarMapBuilder(config)
             case _:
                 msg = f"Graph builder of type {config.name!r} is not supported."
                 logger.critical(msg)

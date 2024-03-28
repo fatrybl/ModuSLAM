@@ -9,7 +9,7 @@ batch_factory:
   regime:
     name: "TimeLimit"
     start: 1544676739798931000
-    stop: 1544676739798931000
+    stop: 1544676740000631000
 
   memory:
     batch_memory: 100.0

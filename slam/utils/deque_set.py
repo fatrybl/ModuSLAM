@@ -105,10 +105,7 @@ class DequeSet(Generic[T]):
 
     def is_empty(self) -> bool:
         """Checks if deque-set is empty."""
-        if len(self._set) == 0 and len(self._deque) == 0:
-            return False
-        else:
-            return True
+        return not (bool(self._set) and bool(self._deque))
 
     def clear(self) -> None:
         """Clears deque-set."""
