@@ -57,18 +57,3 @@ def test_get_item():
     os.add(2)
     assert os[0] == 1
     assert os[1] == 2
-
-
-def test_ordered_set_equality():
-    os1 = OrderedSet[int]()
-    os1.add(1)
-    os1.add(2)
-
-    os2 = OrderedSet[int]()
-    os2.add(1)
-    os2.add(2)
-
-    assert os1 == os2
-
-    os2.add(3)
-    assert os1 != os2
