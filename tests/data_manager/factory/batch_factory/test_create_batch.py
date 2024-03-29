@@ -36,7 +36,7 @@ class TestBatchFactory:
         result_batch: DataBatch = batch_factory.batch
 
         for result, reference in zip(result_batch.data, reference_batch.data):
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @mark.parametrize("config1, config2, reference_batch", [*test_cases_2])
     def test_create_batch_2(
@@ -55,7 +55,7 @@ class TestBatchFactory:
         result_batch: DataBatch = batch_factory.batch
 
         for result, reference in zip(result_batch.data, reference_batch.data):
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @mark.parametrize("config1, config2, periodic_data_requests, reference_batch", [*test_cases_3])
     def test_create_batch_3(
@@ -74,4 +74,4 @@ class TestBatchFactory:
         result_batch: DataBatch = batch_factory.batch
 
         for result, reference in zip(result_batch.data, reference_batch.data):
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True

@@ -52,7 +52,7 @@ class TestGetElement:
 
         for reference in reference_outputs:
             result: Element | None = data_reader.get_element()
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -73,7 +73,7 @@ class TestGetElement:
 
         for sensor, reference in zip(inputs, reference_outputs):
             result: Element | None = data_reader.get_element(sensor)
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -103,7 +103,7 @@ class TestGetElement:
                     data_reader.get_element(element)
             else:
                 result: Element = data_reader.get_element(element)
-                equal_elements(result, output)
+                assert equal_elements(result, output) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -133,4 +133,4 @@ class TestGetElement:
                     data_reader.get_element(sensor, timestamp)
             else:
                 result: Element = data_reader.get_element(sensor, timestamp)
-                equal_elements(result, output)
+                assert equal_elements(result, output) is True

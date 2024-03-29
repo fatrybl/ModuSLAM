@@ -52,4 +52,4 @@ class TestAddData:
         else:
             batch_factory._add_data(periodic_data)
             element = batch_factory.batch.first
-            equal_elements(element, reference_result)
+            assert equal_elements(element, reference_result) is True

@@ -30,5 +30,4 @@ class BackendManager:
             graph (Graph): a graph to be updated.
         """
         graph.update(self.results)
-        print(self.results)
         logger.info("Graph has been updated.")
