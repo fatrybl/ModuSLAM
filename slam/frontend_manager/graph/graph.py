@@ -6,9 +6,9 @@ import gtsam
 from plum import dispatch
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
+from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
-from slam.frontend_manager.graph.vertices import GraphVertex
 
 logger = logging.getLogger(__name__)
 

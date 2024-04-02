@@ -16,12 +16,13 @@ if TYPE_CHECKING:
 class Handler(ABC):
     """Base external module."""
 
-    @abstractmethod
-    def __init__(self, config: HandlerConfig) -> None: ...
+    def __init__(self, config: HandlerConfig) -> None:
+        self._name = config.name
 
     @property
-    @abstractmethod
-    def name(self) -> str: ...
+    def name(self) -> str:
+        """Name of the handler."""
+        return self._name
 
     @abstractmethod
     def process(self, element) -> Measurement | None: ...

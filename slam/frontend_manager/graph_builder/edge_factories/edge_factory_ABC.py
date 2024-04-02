@@ -4,8 +4,8 @@ from typing import Generic
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
+from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.vertices import GraphVertex
 from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )

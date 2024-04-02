@@ -46,6 +46,10 @@ result = optimizer.optimizeSafely()
 
 print(result)
 
+
+values: gtsam.Values = gtsam.Values()
+values.insert(X(0), gtsam.Pose3())
+
 # from gtsam.gtsam import SmartProjectionPose3Factor as SmartFactor
 #
 # f = SmartFactor(gtsam.noiseModel.Diagonal.Sigmas([1, 1, 1]), gtsam.Cal3_S2())

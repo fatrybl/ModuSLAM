@@ -6,7 +6,7 @@ from slam.frontend_manager.graph.base_edges import (
     CalibrationEdge,
     MultiEdge,
 )
-from slam.frontend_manager.graph.vertices import GraphVertex
+from slam.frontend_manager.graph.base_vertices import GraphVertex
 
 
 class SmartFactorEdge(CalibrationEdge):

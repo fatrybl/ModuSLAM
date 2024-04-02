@@ -5,18 +5,21 @@ from typing import Generic, overload
 import gtsam
 from plum import dispatch
 
-from slam.frontend_manager.graph.index_generator import IndexStorage
-from slam.frontend_manager.graph.vertices import (
+from slam.frontend_manager.graph.base_vertices import (
+    GraphVertex,
+    OptimizableVertex,
+    Vertex,
+)
+from slam.frontend_manager.graph.custom_vertices import (
     CameraFeature,
     CameraPose,
-    GraphVertex,
     ImuBias,
     LidarPose,
     NavState,
     Pose,
     Velocity,
-    Vertex,
 )
+from slam.frontend_manager.graph.index_generator import IndexStorage
 from slam.utils.deque_set import DequeSet
 from slam.utils.ordered_set import OrderedSet
 
@@ -27,17 +30,17 @@ class VertexStorage(Generic[GraphVertex]):
     """Stores vertices of the Graph.
 
     TODO:
-        maybe get_vertcies(type) to get all vertices of the graph of the given type ?
+        maybe get_vertices(type) to get all vertices of the graph of the given type ?
     """
 
     def __init__(self):
-        self.vertices = DequeSet[GraphVertex]()
-        self.index_storage = IndexStorage()
+        self._vertices = DequeSet[GraphVertex]()
+        self._index_storage = IndexStorage()
 
-        self._optimizable_vertices = OrderedSet[GraphVertex]()
+        self._optimizable_vertices = OrderedSet[OptimizableVertex]()
         self._constant_vertices = OrderedSet[GraphVertex]()
 
-        self._table: dict[type[Vertex], DequeSet] = {
+        self._vertices_table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
             Velocity: DequeSet[Velocity](),
             NavState: DequeSet[NavState](),
@@ -48,7 +51,20 @@ class VertexStorage(Generic[GraphVertex]):
         }
 
     @property
-    def optimizable_vertices(self) -> OrderedSet[GraphVertex]:
+    def index_storage(self) -> IndexStorage:
+        return self._index_storage
+
+    @property
+    def vertices(self) -> DequeSet[GraphVertex]:
+        """All vertices in the Graph.
+
+        Returns:
+            (DequeSet[GraphVertex]): all vertices in the graph.
+        """
+        return self._vertices
+
+    @property
+    def optimizable_vertices(self) -> OrderedSet[OptimizableVertex]:
         """Optimizable vertices in the Graph.
 
         Returns:
@@ -57,7 +73,7 @@ class VertexStorage(Generic[GraphVertex]):
         return self._optimizable_vertices
 
     @property
-    def constant_vertices(self) -> OrderedSet[GraphVertex]:
+    def non_optimizable_vertices(self) -> OrderedSet[GraphVertex]:
         """Constant vertices in the Graph.
 
         Returns:
@@ -74,71 +90,10 @@ class VertexStorage(Generic[GraphVertex]):
         Returns:
             (DequeSet): vertices of the given type.
         """
-        return self._table[vertex_type]
-
-    @property
-    def pose(self) -> DequeSet[Pose]:
-        """Pose vertex in the Graph.
-
-        Position and orientation (SE3).
-        Returns:
-            (DequeSet[Pose]): poses in the graph.
-        """
-        return self._table[Pose]
-
-    @property
-    def velocity(self) -> DequeSet[Velocity]:
-        """Linear velocity vertex in Graph.
-
-        Returns:
-            (DequeSet[Velocity]): linear velocity in the graph.
-        """
-        return self._table[Velocity]
-
-    @property
-    def nav_state(self) -> DequeSet[NavState]:
-        """Navigation state vertex in Graph.
-
-        Returns:
-            (DequeSet[NavState]): navigation state in the graph.
-        """
-        return self._table[NavState]
-
-    @property
-    def imu_bias(self) -> DequeSet[ImuBias]:
-        """IMU bias vertex in Graph.
-
-        Returns:
-            (DequeSet[ImuBias]): IMU bias in the graph.
-        """
-        return self._table[ImuBias]
-
-    @property
-    def camera_pose(self) -> DequeSet[CameraPose]:
-        """The pose where an image has been taken.
-
-        Returns:
-            (DequeSet[CameraPose]): camera pose in the graph.
-        """
-        return self._table[CameraPose]
-
-    @property
-    def lidar_pose(self) -> DequeSet[LidarPose]:
-        """The pose where a point-cloud has been registered.
-
-        Returns:
-            (DequeSet[LidarPose]): lidar pose in the graph.
-        """
-        return self._table[LidarPose]
-
-    @property
-    def camera_feature(self) -> DequeSet[CameraFeature]:
-        """Camera feature based landmark in the Graph.
-
-        Returns:
-            (DequeSet[CameraFeature]): camera feature in the graph.
-        """
-        return self._table[CameraFeature]
+        if vertex_type not in self._vertices_table:
+            raise KeyError(f"Type {vertex_type!r} has not been defined in the vertices table.")
+        else:
+            return self._vertices_table[vertex_type]
 
     @overload
     def add(self, vertex: GraphVertex) -> None:
@@ -148,11 +103,10 @@ class VertexStorage(Generic[GraphVertex]):
         Args:
             vertex (GraphVertex): new vertex to be added to the graph.
         """
-        t = type(vertex)
-        self.index_storage.add(vertex.index)
-        self.vertices.add(vertex)
-        self._table[t].add(vertex)
-        if vertex.optimizable:
+        self._index_storage.add(vertex.index)
+        self._vertices.add(vertex)
+        self._add_to_table(vertex)
+        if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.add(vertex)
         else:
             self._constant_vertices.add(vertex)
@@ -192,11 +146,10 @@ class VertexStorage(Generic[GraphVertex]):
         Args:
             vertex (GraphVertex): a vertex to be removed from the graph.
         """
-        t = type(vertex)
-        self.index_storage.remove(vertex.index)
-        self.vertices.remove(vertex)
-        self._table[t].remove(vertex)
-        if vertex.optimizable:
+        self._index_storage.remove(vertex.index)
+        self._vertices.remove(vertex)
+        self._remove_from_table(vertex)
+        if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.remove(vertex)
         else:
             self._constant_vertices.remove(vertex)
@@ -277,3 +230,25 @@ class VertexStorage(Generic[GraphVertex]):
         except KeyError:
             logger.info(msg)
             return None
+
+    def _add_to_table(self, vertex: GraphVertex) -> None:
+        """Adds vertex to the vertices table.
+
+        Args:
+            vertex (GraphVertex): vertex to be added to the table.
+        """
+        t = type(vertex)
+        if t not in self._vertices_table:
+            raise KeyError(f"Type {t!r} has not been defined in the vertices table.")
+        self._vertices_table[t].add(vertex)
+
+    def _remove_from_table(self, vertex: GraphVertex) -> None:
+        """Removes vertex from the vertices table.
+
+        Args:
+            vertex (GraphVertex): vertex to be removed from the table.
+        """
+        t = type(vertex)
+        if t not in self._vertices_table:
+            raise KeyError(f"Type {t!r} has not been defined in the vertices table.")
+        self._vertices_table[t].remove(vertex)

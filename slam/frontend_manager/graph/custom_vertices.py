@@ -1,15 +1,13 @@
-from __future__ import annotations
-
-from abc import ABC, abstractmethod
-from typing import Any, TypeAlias, TypeVar
+from typing import TypeAlias
 
 import gtsam
 import numpy as np
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
+from slam.frontend_manager.graph.base_vertices import OptimizableVertex, Vertex
 from slam.utils.numpy_types import Matrix3x3, Matrix4x4, Vector3
 
-GtsamVertex: TypeAlias = gtsam.Rot3 | gtsam.Pose3 | gtsam.NavState
+GtsamVertex: TypeAlias = gtsam.Rot3 | gtsam.Pose3 | gtsam.NavState | gtsam.imuBias.ConstantBias
 
 
 def vector_3(x, y, z):
@@ -22,29 +20,7 @@ def vector_n(*args):
     return np.array(args, dtype=np.float64)
 
 
-class Vertex(ABC):
-    """Base absract vertex of the Graph.
-
-    TODO: think about numpy types for the attributes.
-    """
-
-    def __init__(self):
-        self.index: int = 0
-        self.timestamp: int = 0
-        self.edges = set()
-        self.optimizable: bool = False
-        self.value: Any = None
-
-    @abstractmethod
-    def update(self, values: Any) -> None:
-        """Updates the vertex with the new values.
-
-        Args:
-            values (Any): new values.
-        """
-
-
-class Pose(Vertex):
+class Pose(OptimizableVertex):
     """Pose vertex in Graph.
 
     TODO: check types of the attributes.
@@ -52,37 +28,32 @@ class Pose(Vertex):
 
     def __init__(self):
         super().__init__()
-        self.optimizable = True
-        self.value: GtsamVertex = gtsam.Pose3()
-        self.position: Vector3 = self.value.translation
-        self.rotation: Matrix3x3 = self.value.rotation
-        self.SE3: Matrix4x4 = self.value.matrix
+        self.value: gtsam.Pose3 = gtsam.Pose3()
+        self.position: Vector3 = self.value.translation()
+        self.rotation: Matrix3x3 = self.value.rotation().matrix()
+        self.SE3: Matrix4x4 = self.value.matrix()
 
     @property
     def gtsam_index(self) -> int:
+        """Index of the variable in the GTSAM Values.
+
+        Returns:
+            (int): index.
+        """
         return X(self.index)
 
     def update(self, values: gtsam.Values) -> None:
         self.value = values.atPose3(self.gtsam_index)
         self.position = self.value.translation()
-        self.rotation = self.value.rotation()
+        self.rotation = self.value.rotation().matrix()
         self.SE3 = self.value.matrix()
 
 
-class CameraPose(Pose):
-    """The pose where an image has been taken."""
-
-
-class LidarPose(Pose):
-    """The pose where a point-cloud has been registered."""
-
-
-class Velocity(Vertex):
+class Velocity(OptimizableVertex):
     """Linear velocity vertex in Graph."""
 
     def __init__(self):
         super().__init__()
-        self.optimizable = True
         self.value = vector_3(0.0, 0.0, 0.0)
 
     @property
@@ -93,7 +64,7 @@ class Velocity(Vertex):
         self.value = values.atVector(self.gtsam_index)
 
 
-class NavState(Vertex):
+class NavState(OptimizableVertex):
     """
     Navigation state vertex in the Graph:
         pose and velocity.
@@ -115,10 +86,9 @@ class NavState(Vertex):
         self.pose = self.value.pose()
 
 
-class Point(Vertex):
+class Point(OptimizableVertex):
     def __init__(self):
         super().__init__()
-        self.optimizable = True
         self.value: gtsam.Point3 = gtsam.Point3()
 
     @property
@@ -127,14 +97,6 @@ class Point(Vertex):
 
     def update(self, values: gtsam.Values) -> None:
         self.value = values.atPoint3(self.gtsam_index)
-
-
-class PoseLandmark(Pose):
-    """Base landmark in the Graph."""
-
-    @property
-    def gtsam_index(self) -> int:
-        return L(self.index)
 
 
 class Feature(Vertex):
@@ -147,17 +109,12 @@ class Feature(Vertex):
     def update(self, values) -> None: ...
 
 
-class CameraFeature(Feature):
-    """Feature in the Camera Frame."""
-
-
-class ImuBias(Vertex):
+class ImuBias(OptimizableVertex):
     """Imu bias in the Graph."""
 
     def __init__(self):
         super().__init__()
-        self.optimizable = True
-        self.value: gtsam.imuBias = gtsam.imuBias.ConstantBias()
+        self.value: gtsam.imuBias.ConstantBias = gtsam.imuBias.ConstantBias()
         self.accelerometer_bias = self.value.accelerometer()
         self.gyroscope_bias = self.value.gyroscope()
 
@@ -171,4 +128,25 @@ class ImuBias(Vertex):
         self.gyroscope_bias = self.value.gyroscope()
 
 
-GraphVertex = TypeVar("GraphVertex", bound=Vertex)
+class CameraPose(Pose):
+    """The pose where an image has been taken."""
+
+
+class LidarPose(Pose):
+    """The pose where a point-cloud has been registered."""
+
+
+class PoseLandmark(Pose):
+    """Base landmark in the Graph."""
+
+    @property
+    def gtsam_index(self) -> int:
+        return L(self.index)
+
+
+class CameraFeature(Feature):
+    """Feature in the Camera Frame."""
+
+
+p = Pose()
+print(p.position)

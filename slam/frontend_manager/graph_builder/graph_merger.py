@@ -3,9 +3,9 @@ from typing import Generic
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
+from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
-from slam.frontend_manager.graph.vertices import GraphVertex
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,

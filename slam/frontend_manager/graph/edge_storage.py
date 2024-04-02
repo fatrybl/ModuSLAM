@@ -7,7 +7,7 @@ from slam.frontend_manager.graph.base_edges import GraphEdge
 
 
 class EdgeStorage(Generic[GraphEdge]):
-    """Stores edges_123 of the Graph."""
+    """Stores edges of the Graph."""
 
     def __init__(self):
         self._edges = set[GraphEdge]()
