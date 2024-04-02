@@ -1,33 +1,62 @@
 class IndexStorage:
-    """Storage of unique indices."""
+    """Storage of unique indices.
+
+    If the storage is empty, min_idx = float(+inf) and max_idx = float(-inf)
+    """
 
     def __init__(self):
-        self.min_idx: int = 0
-        self.max_idx: int = 0
-        self.indices: set[int] = set()
-        self.num_indices: int = 0
+        self._min_idx: int | float = float("inf")
+        self._max_idx: int | float = float("-inf")
+        self._indices: set[int] = set()
 
-    def add(self, index: int):
+    @property
+    def num_indices(self) -> int:
+        return len(self._indices) if self._indices else 0
+
+    @property
+    def min_idx(self) -> int:
+        return int(self._min_idx) if self._indices else 0
+
+    @property
+    def max_idx(self) -> int:
+        return int(self._max_idx) if self._indices else 0
+
+    @property
+    def indices(self) -> set[int]:
+        return self._indices
+
+    def add(self, index: int) -> None:
         assert index >= 0, "index must be non-negative"
-        self.indices.add(index)
-        self.min_idx = index if index < self.min_idx else self.min_idx
-        self.max_idx = index if index > self.max_idx else self.max_idx
+        self._indices.add(index)
+        self._update_min_max(index)
 
-    def remove(self, index: int):
+    def remove(self, index: int) -> None:
         assert index >= 0, "index must be non-negative"
-        self.indices.remove(index)
-        if index == self.min_idx:
-            self.min_idx = min(self.indices)
-        if index == self.max_idx:
-            self.max_idx = max(self.indices)
+        if index in self._indices:
+            self._indices.remove(index)
+            if self._indices:
+                if index == self._min_idx:
+                    self._min_idx = min(self._indices)
+                if index == self._max_idx:
+                    self._max_idx = max(self._indices)
 
-    def normalize(self):
+            else:
+                self._min_idx = float("inf")
+                self._max_idx = float("-inf")
+        else:
+            raise KeyError(f"Index {index} has not been found in the storage.")
+
+    def normalize(self) -> None:
         """Normalize indices to start from 0."""
         if self.min_idx == 0:
             return
-        self.indices = {idx - self.min_idx for idx in self.indices}
-        self.max_idx -= self.min_idx
-        self.min_idx = 0
+        self._indices = {idx - self.min_idx for idx in self._indices}
+        self._max_idx -= self.min_idx
+        self._min_idx = 0
+
+    def _update_min_max(self, index: int) -> None:
+        self._min_idx = index if index < self._min_idx else self._min_idx
+        self._max_idx = index if index > self._max_idx else self._max_idx
 
 
 def generate_index(index_storage: IndexStorage):

@@ -1,11 +1,19 @@
 """Tests for EdgeStorage class."""
 
+from typing import Any
+
 import gtsam.noiseModel
 import pytest
 
 from slam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
+from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
-from tests.frontend_manager.conftest import BasicTestVertex
+
+
+# Define a simple GraphVertex subclass for testing
+class TestVertex(Vertex):
+    def update(self, values: Any) -> None:
+        pass
 
 
 @pytest.fixture
@@ -15,9 +23,9 @@ def edge_storage() -> EdgeStorage:
 
 class TestEdgeStorage:
 
-    vertex1 = BasicTestVertex()
-    vertex2 = BasicTestVertex()
-    vertex3 = BasicTestVertex()
+    vertex1 = TestVertex()
+    vertex2 = TestVertex()
+    vertex3 = TestVertex()
 
     edge1 = BinaryEdge(
         vertex1,

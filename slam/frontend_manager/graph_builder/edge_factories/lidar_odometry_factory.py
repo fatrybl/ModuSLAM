@@ -4,9 +4,9 @@ import gtsam
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.custom_edges import LidarOdometry
+from slam.frontend_manager.graph.custom_vertices import LidarPose
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
-from slam.frontend_manager.graph.vertices import LidarPose
 from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
     EdgeFactory,
 )

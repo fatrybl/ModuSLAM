@@ -6,8 +6,8 @@ from slam.frontend_manager.element_distributor.elements_distributor import (
     ElementDistributor,
 )
 from slam.frontend_manager.graph.base_edges import GraphEdge
+from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.vertices import GraphVertex
 from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.candidate_factory.factories.lidar_submap import (
     LidarMapCandidateFactory,
@@ -30,7 +30,8 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
     """Builds a graph for point-cloud based map."""
 
     def __init__(self, config: GraphBuilderConfig) -> None:
-        self._distributor: ElementDistributor = ElementDistributor(config.element_distributor)
+        self._distributor: ElementDistributor = ElementDistributor()
+        self._distributor.init_table(config.element_distributor.sensor_handlers_table)
         self._candidate_factory: CandidateFactory = LidarMapCandidateFactory(
             config.candidate_factory
         )
@@ -64,7 +65,7 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
             batch (DataBatch): data batch with measurements.
         """
         while not self._candidate_factory.candidate_ready() and not batch.empty():
-            self._distributor.next_element(batch)
+            self._distributor.distribute_next(batch)
             self._candidate_factory.process_storage(self._distributor.storage)
             batch.remove_first()
 

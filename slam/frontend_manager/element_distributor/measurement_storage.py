@@ -12,23 +12,19 @@ from slam.utils.ordered_set import OrderedSet
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=True)
 class Measurement:
-    """A measurement formed of processed element(s) by the corresponding handler."""
+    """A measurement formed of processed element(s) by the corresponding handler.
+
+    Hash calculation ignores "values" field because not all values are hashable.
+    """
 
     time_range: TimeRange
     values: Any
     handler: Handler
     elements: tuple[Element, ...]
 
-    def __eq__(self, other) -> bool:
-        return (
-            self.time_range == other.time_range
-            and self.handler == other.handler
-            and self.elements == other.elements
-        )
-
-    def __hash__(self) -> int:
+    def __hash__(self):
         return hash((self.time_range, self.handler, self.elements))
 
 
@@ -100,6 +96,8 @@ class MeasurementStorage:
     def remove(self, measurement: Measurement) -> None:
         """Removes the measurement from the storage."""
         self._data[measurement.handler].remove(measurement)
+        if not self._data[measurement.handler]:
+            del self._data[measurement.handler]
 
     def clear(self) -> None:
         """Clears the storage."""
