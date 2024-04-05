@@ -1,3 +1,5 @@
+"""Tests for VertexStorage class."""
+
 import gtsam
 import numpy as np
 import pytest
@@ -69,14 +71,28 @@ class TestVertexStorage:
             vertex_storage.get_last_vertex(type(non_optimizable_vertex)) == non_optimizable_vertex
         )
 
-    def test_update(self, vertex_storage, optimizable_vertex: Pose):
+    def test_update_optimizable_vertex(self, vertex_storage, optimizable_vertex: Pose):
         vertex_storage.add(optimizable_vertex)
         pose = gtsam.Pose3(gtsam.Rot3([10, 10, 10]), np.array([10, 10, 10]))
         values = gtsam.Values()
         values.insert(optimizable_vertex.gtsam_index, pose)
 
-        vertex_storage.update(values)
+        vertex_storage.update_optimizable_vertices(values)
         vertex: Pose = vertex_storage.get_last_vertex(Pose)
 
         assert np.array_equal(vertex.rotation, pose.rotation().matrix(), equal_nan=True) is True
         assert np.array_equal(vertex.position, pose.translation()) is True
+
+    def test_update_non_optimizable_vertex(
+        self, vertex_storage, non_optimizable_vertex: CameraFeature
+    ):
+        vertex_storage.add(non_optimizable_vertex)
+
+        new_values: dict[CameraFeature, np.ndarray] = {
+            non_optimizable_vertex: np.array([10, 10, 10])
+        }
+
+        vertex_storage.update_non_optimizable_vertices(new_values)
+        vertex = vertex_storage.get_last_vertex(CameraFeature)
+
+        assert np.array_equal(vertex.position, new_values[non_optimizable_vertex]) is True

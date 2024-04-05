@@ -16,10 +16,10 @@ from slam.utils.auxiliary_methods import equal_elements
 class TestEqualElements:
 
     sensor_config = SensorConfig(name="test_camera", type_name="StereoCamera")
-    sensor = StereoCamera("test_camera", sensor_config)
+    sensor = StereoCamera(sensor_config)
 
     other_sensor_config = SensorConfig(name="other_sensor", type_name="Sensor")
-    other_sensor = Sensor("other_sensor", other_sensor_config)
+    other_sensor = Sensor(other_sensor_config)
 
     def test_equal_elements_identical(self):
         loc = Location()

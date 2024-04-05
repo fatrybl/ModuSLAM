@@ -10,17 +10,18 @@ from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.a
 from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.lidar_submap_analyzer import (
     LidarSubmapAnalyzer,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
+from slam.frontend_manager.graph_builder.candidate_factory.factories.factory_ABC import (
     CandidateFactory,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
     State,
 )
-from slam.setup_manager.tables_initializer import init_handler_analyze_table
-from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.config import (
-    CandidateFactoryConfig,
+from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
+    StateAnalyzer,
 )
+from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.setup_manager.tables_initializer import init_handler_state_analyzer_table
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +29,21 @@ logger = logging.getLogger(__name__)
 class LidarMapCandidateFactory(CandidateFactory):
     """Creates graph candidate with lidar point-cloud keyframe(s)."""
 
-    def __init__(self, config: CandidateFactoryConfig) -> None:
+    def __init__(self) -> None:
         self._graph_candidate: GraphCandidate = GraphCandidate()
         self._candidate_analyzer: CandidateAnalyzer = LidarSubmapAnalyzer()
         self._previous_measurement: Measurement | None = None
-        self._table = init_handler_analyze_table(config.handler_analyzer_table)
+        self._table: dict[Handler, StateAnalyzer] = {}
+
+    def init_table(self, config: dict[str, str]) -> None:
+        """
+        Initializes the table: handler -> state analyzer.
+
+        Args:
+            config (dict[str, str]): table with names of handlers and state analyzers.
+
+        """
+        self._table = init_handler_state_analyzer_table(config)
 
     @property
     def graph_candidate(self) -> GraphCandidate:

@@ -10,7 +10,6 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state
     State,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange
-from tests.frontend_manager.conftest import element, handler
 
 
 @pytest.fixture

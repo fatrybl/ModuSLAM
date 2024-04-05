@@ -99,16 +99,6 @@ class Point(OptimizableVertex):
         self.value = values.atPoint3(self.gtsam_index)
 
 
-class Feature(Vertex):
-    """Non-optimizable point in 3D."""
-
-    def __init__(self):
-        super().__init__()
-        self.position: Vector3 = vector_3(0.0, 0.0, 0.0)
-
-    def update(self, values) -> None: ...
-
-
 class ImuBias(OptimizableVertex):
     """Imu bias in the Graph."""
 
@@ -142,6 +132,17 @@ class PoseLandmark(Pose):
     @property
     def gtsam_index(self) -> int:
         return L(self.index)
+
+
+class Feature(Vertex):
+    """Non-optimizable point in 3D."""
+
+    def __init__(self):
+        super().__init__()
+        self.position: Vector3 = vector_3(0.0, 0.0, 0.0)
+
+    def update(self, values: Vector3) -> None:
+        self.position = values
 
 
 class CameraFeature(Feature):

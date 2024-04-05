@@ -12,10 +12,6 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar
     LidarOdometryStateAnalyzer,
 )
 from slam.setup_manager.handlers_factory.factory import HandlersFactory
-from tests.frontend_manager.conftest import handler, measurement
-from tests.frontend_manager.graph_builder.candidate_factory.conftest import (
-    state_analyzer_config,
-)
 
 
 def test_lidar_map_candidate_factory_process_storage():
@@ -40,4 +36,4 @@ def test_lidar_map_candidate_factory_process_storage_with_measurement(
         factory.process_storage(storage)
 
         value = list(factory._graph_candidate.states[0].data.values())[0].first
-        assert value == measurement
+        assert value == measurement, "Value in factory does not match the measurement"
