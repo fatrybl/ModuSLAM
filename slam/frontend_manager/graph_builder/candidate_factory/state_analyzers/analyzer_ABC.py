@@ -12,17 +12,17 @@ from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory
 class StateAnalyzer(ABC):
     """Analyzes measurements` storage and decides whether to add a new state."""
 
-    @abstractmethod
-    def __init__(self, config: StateAnalyzerConfig) -> None: ...
+    def __init__(self, config: StateAnalyzerConfig) -> None:
+        self._name = config.name
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """Name of the analyzer.
 
         Returns:
             (str): name of the analyzer.
         """
+        return self._name
 
     @abstractmethod
     def evaluate(self, storage: MeasurementStorage) -> State | None:

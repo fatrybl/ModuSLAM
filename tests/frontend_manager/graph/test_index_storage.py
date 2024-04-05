@@ -1,3 +1,5 @@
+"""Tests for IndexStorage class."""
+
 import pytest
 
 from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index

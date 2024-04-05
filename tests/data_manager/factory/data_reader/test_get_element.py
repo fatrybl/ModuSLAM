@@ -10,7 +10,7 @@ import pytest
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
@@ -46,7 +46,7 @@ class TestGetElement:
         data_reader_object: type[DataReader],
         reference_outputs: list[Element | None],
     ):
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
@@ -67,7 +67,7 @@ class TestGetElement:
         inputs: list[Sensor],
         reference_outputs: list[Element | None],
     ):
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
@@ -93,7 +93,7 @@ class TestGetElement:
         It seeks for the element with the given sensor name and timestamp in the whole
         dataset.
         """
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
@@ -123,7 +123,7 @@ class TestGetElement:
         It seeks for the element with the given sensor name and timestamp in the whole
         dataset.
         """
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 

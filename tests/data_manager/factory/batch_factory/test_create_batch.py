@@ -5,7 +5,7 @@ from pytest import mark
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
 )
@@ -28,7 +28,7 @@ class TestBatchFactory:
         config2: BatchFactoryConfig,
         reference_batch: DataBatch,
     ):
-        SensorFactory.init_sensors(config1)
+        SensorsFactory.init_sensors(config1)
 
         batch_factory = BatchFactory(config2)
 
@@ -45,7 +45,7 @@ class TestBatchFactory:
         config2: BatchFactoryConfig,
         reference_batch: DataBatch,
     ):
-        SensorFactory.init_sensors(config1)
+        SensorsFactory.init_sensors(config1)
 
         batch_factory = BatchFactory(config2)
 
@@ -66,7 +66,7 @@ class TestBatchFactory:
         reference_batch: DataBatch,
     ):
 
-        SensorFactory.init_sensors(config1)
+        SensorsFactory.init_sensors(config1)
         batch_factory = BatchFactory(config2)
 
         batch_factory.create_batch(periodic_data_requests)

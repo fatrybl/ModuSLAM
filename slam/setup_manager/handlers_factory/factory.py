@@ -10,7 +10,7 @@ from slam.utils.exceptions import ItemNotFoundError
 logger = logging.getLogger(__name__)
 
 
-class HandlerFactory:
+class HandlersFactory:
     """Creates handlers."""
 
     _handlers = set[Handler]()

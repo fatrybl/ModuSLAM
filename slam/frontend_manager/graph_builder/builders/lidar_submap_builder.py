@@ -8,16 +8,16 @@ from slam.frontend_manager.element_distributor.elements_distributor import (
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph_builder.builders.graph_builder_ABC import GraphBuilder
+from slam.frontend_manager.graph_builder.candidate_factory.factories.factory_ABC import (
+    CandidateFactory,
+)
 from slam.frontend_manager.graph_builder.candidate_factory.factories.lidar_submap import (
     LidarMapCandidateFactory,
-)
-from slam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
-    CandidateFactory,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
 )
+from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_merger import GraphMerger
 from slam.system_configs.system.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
@@ -31,11 +31,10 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
 
     def __init__(self, config: GraphBuilderConfig) -> None:
         self._distributor: ElementDistributor = ElementDistributor()
-        self._distributor.init_table(config.element_distributor.sensor_handlers_table)
-        self._candidate_factory: CandidateFactory = LidarMapCandidateFactory(
-            config.candidate_factory
-        )
+        self._candidate_factory: CandidateFactory = LidarMapCandidateFactory()
         self._merger = GraphMerger[GraphVertex, GraphEdge](config.graph_merger)
+        self._distributor.init_table(config.element_distributor.sensor_handlers_table)
+        self._candidate_factory.init_table(config.candidate_factory.handler_state_analyzer_table)
 
     @property
     def graph_candidate(self) -> GraphCandidate:

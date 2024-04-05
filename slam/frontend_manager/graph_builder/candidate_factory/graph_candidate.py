@@ -56,7 +56,8 @@ class GraphCandidate:
     def _update_time_range(self) -> TimeRange:
         """Updates the time range of the graph candidate."""
 
-        assert self.states, "Empty graph candidate: no states."
+        if not self.states:
+            raise ValueError("Empty graph candidate: no states.")
 
         start = min(s.time_range.start for s in self.states)
         stop = max(s.time_range.stop for s in self.states)

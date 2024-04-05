@@ -12,7 +12,7 @@ from slam.utils.exceptions import ItemNotFoundError
 logger = logging.getLogger(__name__)
 
 
-class StateAnalyzerFactory:
+class StateAnalyzersFactory:
     """Creates state analyzers."""
 
     _analyzers = set[StateAnalyzer]()

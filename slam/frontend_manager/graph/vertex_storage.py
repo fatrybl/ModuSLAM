@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Iterable
-from typing import Generic, overload
+from typing import Any, Generic, overload
 
 import gtsam
 from plum import dispatch
@@ -38,7 +38,7 @@ class VertexStorage(Generic[GraphVertex]):
         self._index_storage = IndexStorage()
 
         self._optimizable_vertices = OrderedSet[OptimizableVertex]()
-        self._constant_vertices = OrderedSet[GraphVertex]()
+        self._non_optimizable_vertices = OrderedSet[GraphVertex]()
 
         self._vertices_table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
@@ -79,7 +79,7 @@ class VertexStorage(Generic[GraphVertex]):
         Returns:
             (DequeSet[GraphVertex]): constant vertices in the graph.
         """
-        return self._constant_vertices
+        return self._non_optimizable_vertices
 
     def get_vertices(self, vertex_type: type[Vertex]) -> DequeSet:
         """Returns vertices of the given type.
@@ -109,7 +109,7 @@ class VertexStorage(Generic[GraphVertex]):
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.add(vertex)
         else:
-            self._constant_vertices.add(vertex)
+            self._non_optimizable_vertices.add(vertex)
 
     @overload
     def add(self, vertices: Iterable[GraphVertex]) -> None:
@@ -152,7 +152,7 @@ class VertexStorage(Generic[GraphVertex]):
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.remove(vertex)
         else:
-            self._constant_vertices.remove(vertex)
+            self._non_optimizable_vertices.remove(vertex)
 
     @overload
     def remove(self, vertices: Iterable[GraphVertex]) -> None:
@@ -181,7 +181,7 @@ class VertexStorage(Generic[GraphVertex]):
                     vertices (Iterable[GraphVertex]): vertices to be removed from the graph.
         """
 
-    def update(self, new_values: gtsam.Values) -> None:
+    def update_optimizable_vertices(self, new_values: gtsam.Values) -> None:
         """Updates the vertices with new values.
 
         Args:
@@ -189,7 +189,12 @@ class VertexStorage(Generic[GraphVertex]):
         """
 
         [vertex.update(new_values) for vertex in self._optimizable_vertices]
-        [vertex.update() for vertex in self._constant_vertices]
+
+    def update_non_optimizable_vertices(self, new_values: dict[GraphVertex, Any]) -> None:
+        """Updates the non-optimizable vertices."""
+        for vertex in self._non_optimizable_vertices:
+            if vertex in new_values:
+                vertex.update(new_values[vertex])
 
     @staticmethod
     def find_closest_vertex(

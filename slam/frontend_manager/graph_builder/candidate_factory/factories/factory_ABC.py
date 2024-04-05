@@ -41,3 +41,11 @@ class CandidateFactory(ABC):
             storage (MeasurementStorage): processed measurements from the Distributor.
         """
         ...
+
+    @abstractmethod
+    def init_table(self, config: dict[str, str]) -> None:
+        """Initializes the table: handler -> state analyzer.
+
+        Args:
+            config (dict[str, str]): table with names of handlers and state analyzers.
+        """

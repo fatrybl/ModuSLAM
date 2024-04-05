@@ -184,9 +184,12 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
         Args:
             values (gtsam.Values): new computed values.
+
+        TODO: add update of non-optimizable vertices.
         """
 
-        self.vertex_storage.update(values)
+        self.vertex_storage.update_optimizable_vertices(values)
+        # self.vertex_storage.update_non_optimizable_vertices()
 
     def marginalize(self, edges: Iterable[GraphEdge]) -> None:
         """Marginalizes out edges.

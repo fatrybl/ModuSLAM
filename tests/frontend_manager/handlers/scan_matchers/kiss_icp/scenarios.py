@@ -37,7 +37,7 @@ pc9: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f9)
 pc10: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f10)
 
 
-s1 = Sensor(name="vlp_left", config=SensorConfig(name="vlp_left", type_name="Lidar3D"))
+s1 = Sensor(config=SensorConfig(name="vlp_left", type_name="Lidar3D"))
 m1 = RawMeasurement(sensor=s1, values=tuple(pc1))
 loc1 = BinaryDataLocation(f1)
 el1 = Element(timestamp=1544676739798931000, measurement=m1, location=loc1)

@@ -60,7 +60,7 @@ invalid_sensor_cfg = SensorConfig(
 
 incorrect_sensors_cfg: dict[str, SensorConfig] = {"none_existent_camera": invalid_sensor_cfg}
 
-invalid_sensor = Sensor(name="none_existent_camera", config=invalid_sensor_cfg)
+invalid_sensor = Sensor(config=invalid_sensor_cfg)
 
 invalid_measurement = Measurement(sensor=invalid_sensor, values=el3.measurement.values)
 

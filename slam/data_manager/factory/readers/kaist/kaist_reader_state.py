@@ -3,7 +3,7 @@ from collections import Counter
 from pathlib import Path
 
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
-from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
@@ -62,7 +62,7 @@ class KaistReaderState:
             timestamp: str = line[0]
             sensor_name: str = line[1]
             try:
-                sensor: Sensor = SensorFactory.get_sensor(sensor_name)
+                sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
             except ItemNotFoundError:
                 continue
 

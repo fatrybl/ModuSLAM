@@ -15,22 +15,22 @@ from slam.utils.ordered_set import OrderedSet
 class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     """Abstract factory for creating edges."""
 
-    @abstractmethod
-    def __init__(self, config: EdgeFactoryConfig) -> None: ...
+    def __init__(self, config: EdgeFactoryConfig):
+        self._name = config.name
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """Name of the factory.
 
         Returns:
             (str): name of the factory.
         """
+        return self._name
 
     @property
     @abstractmethod
     def vertices_types(self) -> set[type[GraphVertex]]:
-        """Type of the vertices used by the factory for edge creation.
+        """Types of the vertices used by the factory for edge creation.
 
         Returns:
             (set[type[GraphVertex]]): type(s) of vertex(s).
@@ -39,7 +39,8 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     @property
     @abstractmethod
     def base_vertices_types(self) -> set[type[GraphVertex]]:
-        """Type of the base vertex used by the factory for edge creation.
+        """Types of the base vertices (aka GTSAM types) used by the factory for edge
+        creation.
 
         Returns:
             (type[GraphVertex]): type(s) of base vertex(s).

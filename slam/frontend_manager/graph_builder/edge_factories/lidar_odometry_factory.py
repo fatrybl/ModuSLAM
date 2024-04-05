@@ -20,8 +20,8 @@ class LidarOdometryEdgeFactory(EdgeFactory):
     """Creates edges of type: LidarOdometry."""
 
     def __init__(self, config: EdgeFactoryConfig) -> None:
+        super().__init__(config)
         self._time_margin: int = config.search_time_margin
-        self._name: str = config.name
         self._noise_model: gtsam.noiseModel.Diagonal.Sigmas = self._init_noise_model(
             config.noise_model
         )
@@ -39,15 +39,6 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         TODO: add config parser and support of other noise models.
         """
         return gtsam.noiseModel.Diagonal.Sigmas([1] * 6)
-
-    @property
-    def name(self) -> str:
-        """Name of the factory.
-
-        Returns:
-            (str): name of the factory.
-        """
-        return self._name
 
     @property
     def vertices_types(self) -> set[type[LidarPose]]:

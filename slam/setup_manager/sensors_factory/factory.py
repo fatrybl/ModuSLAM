@@ -21,7 +21,7 @@ from slam.utils.exceptions import ItemNotFoundError
 logger = logging.getLogger(__name__)
 
 
-class SensorFactory:
+class SensorsFactory:
     """Factory class for sensors.
 
     Class Attributes:
@@ -72,16 +72,17 @@ class SensorFactory:
         Args:
             cfg (SensorFactoryConfig): config to define sensors.
         Raises:
-            AssertionError: empty sensors` config.
+            ValueError: empty sensors` config.
         """
-        assert len(cfg.sensors) > 0, "No sensors defined in the config."
+        if not cfg.sensors:
+            msg = "Empty sensors config."
+            logger.error(msg)
+            raise ValueError(msg)
 
         cls._sensors.clear()
         cls._sensors_table.clear()
 
-        sensors_dict: dict[str, SensorConfig] = cfg.sensors
-
-        for config in sensors_dict.values():
+        for config in cfg.sensors.values():
             sensor = cls.sensor_from_config(config)
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
@@ -98,29 +99,32 @@ class SensorFactory:
         Returns:
             (Sensor): sensor created from config.
         """
-        name: str = cfg.name
+
         sensor_type: str = cfg.type_name
         sensor: Sensor
 
         match sensor_type:
+
+            case Sensor.__name__:
+                sensor = Sensor(cfg)
             case Imu.__name__:
-                sensor = Imu(name, cfg)
+                sensor = Imu(cfg)
             case Fog.__name__:
-                sensor = Fog(name, cfg)
+                sensor = Fog(cfg)
             case Altimeter.__name__:
-                sensor = Altimeter(name, cfg)
+                sensor = Altimeter(cfg)
             case Lidar2D.__name__:
-                sensor = Lidar2D(name, cfg)
+                sensor = Lidar2D(cfg)
             case Lidar3D.__name__:
-                sensor = Lidar3D(name, cfg)
+                sensor = Lidar3D(cfg)
             case Encoder.__name__:
-                sensor = Encoder(name, cfg)
+                sensor = Encoder(cfg)
             case StereoCamera.__name__:
-                sensor = StereoCamera(name, cfg)
+                sensor = StereoCamera(cfg)
             case Gps.__name__:
-                sensor = Gps(name, cfg)
+                sensor = Gps(cfg)
             case VrsGps.__name__:
-                sensor = VrsGps(name, cfg)
+                sensor = VrsGps(cfg)
             case _:
                 msg = f"unsupported sensor type: {sensor_type}"
                 logger.error(msg)

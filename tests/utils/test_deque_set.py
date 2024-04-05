@@ -57,3 +57,21 @@ def test_clear():
     ds.add(1)
     ds.clear()
     assert len(ds) == 0
+
+
+def test_dequeset_equality():
+    ds1 = DequeSet[int]()
+    ds2 = DequeSet[int]()
+    for i in range(5):
+        ds1.add(i)
+        ds2.add(i)
+
+    assert ds1 == ds2
+
+    ds3 = DequeSet[int]()
+    ds4 = DequeSet[int]()
+    for i in range(5, 10):
+        ds3.add(i)
+        ds4.add(i - 1)
+
+    assert ds3 != ds4
