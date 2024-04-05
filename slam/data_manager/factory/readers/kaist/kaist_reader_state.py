@@ -64,6 +64,7 @@ class KaistReaderState:
             try:
                 sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
             except ItemNotFoundError:
+                logger.warning(f"Sensor {sensor_name!r} has not been found.")
                 continue
 
             iterator = self.sensors_iterators[sensor.name]

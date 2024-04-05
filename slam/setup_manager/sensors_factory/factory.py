@@ -62,7 +62,6 @@ class SensorsFactory:
             return cls._sensors_table[name]
         except KeyError:
             msg = f"No sensor with the name {name!r} in {cls._sensors}."
-            logger.critical(msg)
             raise ItemNotFoundError(msg)
 
     @classmethod
