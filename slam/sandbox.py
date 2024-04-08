@@ -44,11 +44,7 @@ params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
 
-print(result)
-
-
-values: gtsam.Values = gtsam.Values()
-values.insert(X(0), gtsam.Pose3())
+gtsam.writeG2o(graph, result, "graph_g2o")
 
 # from gtsam.gtsam import SmartProjectionPose3Factor as SmartFactor
 #

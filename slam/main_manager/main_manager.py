@@ -3,6 +3,7 @@ import logging
 from slam.backend_manager.backend_manager import BackendManager
 from slam.data_manager.data_manager import DataManager
 from slam.frontend_manager.frontend_manager import FrontendManager
+from slam.map_manager.map_manager import MapManager
 from slam.setup_manager.setup_manager import SetupManager
 from slam.system_configs.system.main_manager import MainManagerConfig
 from slam.utils.stopping_criterion import StoppingCriterion
@@ -26,6 +27,7 @@ class MainManager:
         self.data_manager = DataManager(cfg.data_manager)
         self.frontend_manager = FrontendManager(cfg.frontend_manager)
         self.backend_manager = BackendManager()
+        self.map_manager = MapManager()
         logger.info("The system has been successfully configured.")
 
     def process(
@@ -38,6 +40,7 @@ class MainManager:
             self.frontend_manager.create_graph(batch)
             self.backend_manager.solve(graph)
             self.backend_manager.update(graph)
+        print(self.frontend_manager.graph.factor_graph.print())
 
     def build_map(self) -> None:
         """
