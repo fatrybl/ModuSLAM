@@ -1,22 +1,22 @@
 import logging
 
-from system_configs.system.setup_manager.state_analyzers_factory import (
-    StateAnalyzersFactoryConfig,
-)
-
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
+from slam.system_configs.system.setup_manager.state_analyzers_factory import (
+    StateAnalyzerFactoryConfig,
+)
 from slam.utils.auxiliary_methods import import_object
-from slam.utils.exceptions import AnalyzerNotFound
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
-class StateAnalyzerFactory:
+class StateAnalyzersFactory:
     """Creates state analyzers."""
 
     _analyzers = set[StateAnalyzer]()
+    _analyzers_dict = dict[str, StateAnalyzer]()
 
     @property
     def analyzers(self) -> set[StateAnalyzer]:
@@ -28,7 +28,7 @@ class StateAnalyzerFactory:
         return self._analyzers
 
     @classmethod
-    def init_analyzers(cls, config: StateAnalyzersFactoryConfig) -> None:
+    def init_analyzers(cls, config: StateAnalyzerFactoryConfig) -> None:
         """Initializes analyzers with the given config.
 
         Args:
@@ -43,20 +43,21 @@ class StateAnalyzerFactory:
             )
             new_analyzer: StateAnalyzer = analyzer_object(cfg)
             cls._analyzers.add(new_analyzer)
+            cls._analyzers_dict[name] = new_analyzer
 
     @classmethod
     def get_analyzer(cls, analyzer_name: str) -> StateAnalyzer:
         """
-        Returns an analyzer with the given name.
+        The analyzer with the given name.
         Args:
             analyzer_name (str): name of analyzer.
 
         Returns:
             (StateAnalyzer): analyzer.
         """
-        for analyzer in cls._analyzers:
-            if analyzer.name == analyzer_name:
-                return analyzer
-        msg = f"No analyzer with name {analyzer_name!r} in {cls._analyzers}"
-        logger.critical(msg)
-        raise AnalyzerNotFound(msg)
+        try:
+            return cls._analyzers_dict[analyzer_name]
+        except KeyError:
+            msg = f"No analyzer with name {analyzer_name!r} in {cls._analyzers}"
+            logger.critical(msg)
+            raise ItemNotFoundError(msg)

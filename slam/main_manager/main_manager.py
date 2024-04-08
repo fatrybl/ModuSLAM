@@ -1,6 +1,8 @@
 import logging
 
+from slam.backend_manager.backend_manager import BackendManager
 from slam.data_manager.data_manager import DataManager
+from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.setup_manager.setup_manager import SetupManager
 from slam.system_configs.system.main_manager import MainManagerConfig
 from slam.utils.stopping_criterion import StoppingCriterion
@@ -22,20 +24,20 @@ class MainManager:
         """
         self.setup_manager = SetupManager(cfg.setup_manager)
         self.data_manager = DataManager(cfg.data_manager)
-        # self.frontend_manager = FrontendManager(cfg.frontend_manager)
-        # self.backend_manager = BackendManager(cfg.backend_manager)
+        self.frontend_manager = FrontendManager(cfg.frontend_manager)
+        self.backend_manager = BackendManager()
         logger.info("The system has been successfully configured.")
 
-    # def process(
-    #     self,
-    # ) -> None:
-    #     batch: DataBatch = self.data_manager.batch_factory.yaml.batch
-    #     graph: Graph = self.frontend_manager.graph
-    #     while not batch.empty():
-    #         self.frontend_manager.create_graph(batch)
-    #         self.backend_manager.solve(graph)
-    #
-    # TODO Check if Memory breakpoint is valid before creating new batch.
+    def process(
+        self,
+    ) -> None:
+        """TODO Check if Memory breakpoint is valid before creating new batch."""
+        batch = self.data_manager.batch_factory.batch
+        graph = self.frontend_manager.graph
+        while not batch.empty():
+            self.frontend_manager.create_graph(batch)
+            self.backend_manager.solve(graph)
+            self.backend_manager.update(graph)
 
     def build_map(self) -> None:
         """
@@ -43,5 +45,6 @@ class MainManager:
         """
         while not StoppingCriterion.is_active():
             self.data_manager.make_batch()
+            self.process()
 
         logger.info("Map has been built")

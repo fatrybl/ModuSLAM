@@ -28,6 +28,30 @@ slam.data\_manager.factory.batch\_factory module
    :undoc-members:
    :show-inheritance:
 
+slam.data\_manager.factory.data\_reader\_ABC module
+---------------------------------------------------
+
+.. automodule:: slam.data_manager.factory.data_reader_ABC
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+slam.data\_manager.factory.data\_reader\_factory module
+-------------------------------------------------------
+
+.. automodule:: slam.data_manager.factory.data_reader_factory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+slam.data\_manager.factory.element module
+-----------------------------------------
+
+.. automodule:: slam.data_manager.factory.element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

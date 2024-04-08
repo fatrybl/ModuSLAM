@@ -16,22 +16,21 @@ from slam.system_configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,
 )
-from slam.utils.exceptions import SensorNotFound
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
-class SensorFactory:
-    """Factory class for sensors management.
+class SensorsFactory:
+    """Factory class for sensors.
 
     Class Attributes:
-        parameters: sensors to be used in experiments for a particluar dataset.
-        used_sensors: sensors to be used in the experiment for a particluar dataset. Must be a subset of parameters.
+        parameters: sensors to be used in experiments for a particular dataset.
+        used_sensors: sensors to be used in the experiment for a particular dataset. Must be a subset of parameters.
 
     Raises:
-        SensorNotFound: there is no sensor with the requested sensor name among all sensors.
-        NotSubset: some of used sensor are not defined in all sensors set.
-        ValueError: there is no available sensor type for the item from config.
+        ItemNotFoundError: no sensor with the requested sensor name in all sensors.
+        ValueError: non-existing sensor`s type for the item from config.
     """
 
     _sensors: set[Sensor] = set()
@@ -54,7 +53,7 @@ class SensorFactory:
             name (str): sensor name
 
         Raises:
-            SensorNotFound: there is no sensor with the requested sensor name among all sensors.
+            ItemNotFoundError: there is no sensor with the requested sensor name among all sensors.
 
         Returns:
             Type[Sensor]: sensor if it exists among all sensors.
@@ -63,8 +62,7 @@ class SensorFactory:
             return cls._sensors_table[name]
         except KeyError:
             msg = f"No sensor with the name {name!r} in {cls._sensors}."
-            logger.critical(msg)
-            raise SensorNotFound(msg)
+            raise ItemNotFoundError(msg)
 
     @classmethod
     def init_sensors(cls, cfg: SensorFactoryConfig) -> None:
@@ -73,16 +71,17 @@ class SensorFactory:
         Args:
             cfg (SensorFactoryConfig): config to define sensors.
         Raises:
-            AssertionError: empty sensors` config.
+            ValueError: empty sensors` config.
         """
-        assert len(cfg.sensors) > 0, "No sensors defined in the config."
+        if not cfg.sensors:
+            msg = "Empty sensors config."
+            logger.error(msg)
+            raise ValueError(msg)
 
         cls._sensors.clear()
         cls._sensors_table.clear()
 
-        sensors_dict: dict[str, SensorConfig] = cfg.sensors
-
-        for config in sensors_dict.values():
+        for config in cfg.sensors.values():
             sensor = cls.sensor_from_config(config)
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
@@ -99,29 +98,32 @@ class SensorFactory:
         Returns:
             (Sensor): sensor created from config.
         """
-        name: str = cfg.name
+
         sensor_type: str = cfg.type_name
         sensor: Sensor
 
         match sensor_type:
+
+            case Sensor.__name__:
+                sensor = Sensor(cfg)
             case Imu.__name__:
-                sensor = Imu(name, cfg)
+                sensor = Imu(cfg)
             case Fog.__name__:
-                sensor = Fog(name, cfg)
+                sensor = Fog(cfg)
             case Altimeter.__name__:
-                sensor = Altimeter(name, cfg)
+                sensor = Altimeter(cfg)
             case Lidar2D.__name__:
-                sensor = Lidar2D(name, cfg)
+                sensor = Lidar2D(cfg)
             case Lidar3D.__name__:
-                sensor = Lidar3D(name, cfg)
+                sensor = Lidar3D(cfg)
             case Encoder.__name__:
-                sensor = Encoder(name, cfg)
+                sensor = Encoder(cfg)
             case StereoCamera.__name__:
-                sensor = StereoCamera(name, cfg)
+                sensor = StereoCamera(cfg)
             case Gps.__name__:
-                sensor = Gps(name, cfg)
+                sensor = Gps(cfg)
             case VrsGps.__name__:
-                sensor = VrsGps(name, cfg)
+                sensor = VrsGps(cfg)
             case _:
                 msg = f"unsupported sensor type: {sensor_type}"
                 logger.error(msg)

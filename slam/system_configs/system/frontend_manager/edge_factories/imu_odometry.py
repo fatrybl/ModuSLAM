@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from system_configs.system.frontend_manager.edge_factories.base_factory import (
+from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
 

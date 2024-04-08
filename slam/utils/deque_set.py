@@ -1,7 +1,14 @@
+"""Custom deque-set implementation.
+
+Complexity:
+    O(1): add(), contains(item: T), remove_first(), remove_last(), __getitem__(index: int).
+    O(N): remove(item: T)
+"""
+
 import functools
 import logging
 from collections import deque
-from typing import Callable, Generic, TypeVar
+from typing import Any, Callable, Generic, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -34,9 +41,34 @@ class DequeSet(Generic[T]):
     def __contains__(self, item) -> bool:
         return item in self._set
 
+    def __len__(self) -> int:
+        return len(self._set)
+
+    def __iter__(self):
+        return iter(self._deque)
+
+    def __getitem__(self, item) -> T:
+        return self._deque[item]
+
+    def __eq__(self, other: Any) -> bool:
+        """Compares if this DequeSet is equal to another DequeSet. Two DequeSets are
+        equal if they have the same elements in the same order.
+
+        Args:
+            other (Any): The other DequeSet to compare with.
+
+        Returns:
+            bool: True if the two DequeSets are equal, False otherwise.
+        """
+        if isinstance(other, DequeSet):
+            return self._deque == other._deque and self._set == other._set
+        return False
+
     def add(self, item: T) -> None:
-        """Adds new item. 1) Add to set[Any] to avoid duplicates. 2) Add to deque for
-        fast front-pop().
+        """
+        Adds new item:
+            1) Add to set to avoid duplicates.
+            2) Add to deque for fast front-pop().
 
         Args:
             item (Any): new item to be added.
@@ -87,10 +119,7 @@ class DequeSet(Generic[T]):
 
     def is_empty(self) -> bool:
         """Checks if deque-set is empty."""
-        if len(self._set) == 0 and len(self._deque) == 0:
-            return False
-        else:
-            return True
+        return not (bool(self._set) and bool(self._deque))
 
     def clear(self) -> None:
         """Clears deque-set."""

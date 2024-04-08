@@ -1,0 +1,23 @@
+graph_builder:
+
+  name: 'LidarMapBuilder'
+
+  element_distributor:
+    sensor_handlers_table:
+      velodyne_left: [ 'kiss_icp_odometry' ]
+
+  graph_merger:
+    handler_edge_factory_table:
+      kiss_icp_odometry: 'lidar_odometry_edge_factory'
+
+  candidate_factory:
+    handler_state_analyzer_table:
+      kiss_icp_odometry: 'lidar_odometry_state_analyzer'
+
+  edge_factories:
+    lidar_odometry_edge_factory:
+      name: 'lidar_odometry_edge_factory'
+      type_name: 'LidarOdometryEdgeFactory'
+      module_name: '.lidar_odometry_factory'
+      noise_model: 'Diagonal'
+      search_time_margin: 0

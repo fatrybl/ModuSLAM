@@ -9,7 +9,7 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: check-added-large-files
-        args: [ '--maxkb=123' ]
+        args: [ '--maxkb=250' ]
 
   - repo: https://github.com/psf/black
     rev: 24.2.0
@@ -32,7 +32,7 @@ repos:
     rev: v1.1.1
     hooks:
       - id: doc8
-        language: system
+        args: [ --config=pyproject.toml ]
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.0.0

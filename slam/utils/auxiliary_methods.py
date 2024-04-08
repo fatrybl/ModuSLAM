@@ -27,7 +27,7 @@ def as_int(value: str) -> int:
         raise
 
 
-def equal_images(el1: Element, el2: Element) -> bool:
+def equal_images(imgs_1: tuple[Image, ...], imgs_2: tuple[Image, ...]) -> bool:
     """Compares two elements with Image data.
 
     PIL images can not be compared directly because of different subclasses.
@@ -35,18 +35,16 @@ def equal_images(el1: Element, el2: Element) -> bool:
     but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.
 
     Args:
-        el1 (Element): 1-st element to be compared.
-        el2 (Element): 2-nd element to be compared.
+        imgs_1 (tuple[Image, ...]): 1-st tuple with images.
+        imgs_2 (tuple[Image, ...]): 2-nd tuple with images.
 
     Returns:
         bool: comparison result
     """
 
-    assert len(el1.measurement.values) == len(
-        el2.measurement.values
-    ), "Elements have different number of images."
+    assert len(imgs_1) == len(imgs_2), "Tuples have different number of images."
 
-    for img1, img2 in zip(el1.measurement.values, el2.measurement.values):
+    for img1, img2 in zip(imgs_1, imgs_2):
         array_img1 = np.asarray(img1)
         array_img2 = np.asarray(img2)
         if np.array_equal(array_img1, array_img2) is False:
@@ -54,22 +52,45 @@ def equal_images(el1: Element, el2: Element) -> bool:
     return True
 
 
-def equal_elements(el1: Element | None, el2: Element | None):
+def equal_elements(el1: Element | None, el2: Element | None) -> bool:
+    """
+    Compares two elements by the following fields:
+    - timestamp
+    - location
+    - measurement.sensor
+    - measurement.values
+
+    If the values are of type Image, they are compared separately with equal_images() method.
+
+    Args:
+        el1 (Element): 1-st element.
+        el2 (Element): 2-nd element.
+
+    Returns:
+        bool: comparison result.
+    """
     if el1 is None and el2 is None:
-        assert True
+        return True
 
     elif el1 is not None and el2 is not None:
         if isinstance(el1.measurement.values[0], Image):
-            assert equal_images(el1, el2) is True
+            if equal_images(el1.measurement.values, el2.measurement.values) is False:
+                return False
         else:
-            assert el1.measurement.values == el2.measurement.values
+            if el1.measurement.values != el2.measurement.values:
+                return False
 
-        assert el1.timestamp == el2.timestamp
-        assert el1.location == el2.location
-        assert el1.measurement.sensor == el2.measurement.sensor
+        if el1.timestamp != el2.timestamp:
+            return False
+        if el1.location != el2.location:
+            return False
+        if el1.measurement.sensor != el2.measurement.sensor:
+            return False
 
     else:
-        assert False, "Either element 1 or element 2 is None."
+        return False
+
+    return True
 
 
 def import_object(object_name: str, module_name: str, package_name: str) -> type:

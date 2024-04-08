@@ -1,6 +1,7 @@
-lidar_odometry:
+defaults:
+  - /handlers/base_kiss_icp_odometry@kiss_icp_odometry
 
-  name: "lidar"
-  type_name: "PointcloudMatcher"
+kiss_icp_odometry:
+  name: "kiss_icp_odometry"
+  type_name: "ScanMatcher"
   module_name: ".pointcloud_matcher"
-  parameters: ???

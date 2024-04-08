@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
-from system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
 
 
 @dataclass
-class StateAnalyzersFactoryConfig:
+class StateAnalyzerFactoryConfig:
     """Config for HandlerFactory."""
 
     package_name: str

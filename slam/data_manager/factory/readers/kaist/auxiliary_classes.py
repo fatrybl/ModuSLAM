@@ -1,9 +1,6 @@
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
-
-from slam.data_manager.factory.element import Location
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +10,12 @@ class Message:
     """Message with a timestamp and any data."""
 
     timestamp: str
-    data: tuple[Any, ...]
+    data: tuple
+
+
+@dataclass(frozen=True, eq=True)
+class Location:
+    """Abstract location to be inherited from."""
 
 
 @dataclass(frozen=True, eq=True)

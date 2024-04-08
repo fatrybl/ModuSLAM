@@ -1,29 +1,28 @@
 from abc import ABC, abstractmethod
 
-from system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
-    StateAnalyzerConfig,
-)
-
 from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
+from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+    StateAnalyzerConfig,
+)
 
 
 class StateAnalyzer(ABC):
-    """Analyzes processed measurements and decides whether to add a new state."""
+    """Analyzes measurements` storage and decides whether to add a new state."""
 
-    @abstractmethod
-    def __init__(self, config: StateAnalyzerConfig) -> None: ...
+    def __init__(self, config: StateAnalyzerConfig) -> None:
+        self._name = config.name
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """Name of the analyzer.
 
         Returns:
             (str): name of the analyzer.
         """
+        return self._name
 
     @abstractmethod
     def evaluate(self, storage: MeasurementStorage) -> State | None:

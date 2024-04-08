@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from system_configs.system.frontend_manager.handlers.base_handler import HandlerConfig
+from slam.system_configs.system.frontend_manager.handlers.base_handler import (
+    HandlerConfig,
+)
 
 
 @dataclass

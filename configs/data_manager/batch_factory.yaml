@@ -4,12 +4,12 @@ defaults:
 
 batch_factory:
   dataset:
-    directory: "/home/mark/Downloads/urban19-highway/"
+    directory: "/home/mark/Downloads/urban30-gangnam/"
 
   regime:
     name: "TimeLimit"
-    start: 1544578682443470064
-    stop: 1544578682453468118
+    start: 1544676739798931000
+    stop: 1544676740605762000
 
   memory:
     batch_memory: 100.0

@@ -1,0 +1,10 @@
+edge_factories_initializer:
+  package_name: 'slam.frontend_manager.graph_builder.edge_factories'
+
+  edge_factories:
+
+    lidar_odometry_edge_factory:
+      module_name: '.lidar_odometry_factory'
+      name: 'lidar_odometry_edge_factory'
+      type_name: 'LidarOdometryEdgeFactory'
+      noise_model: 'Diagonal'
