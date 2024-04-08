@@ -1,30 +1,28 @@
-from dataclasses import dataclass
-from unittest.mock import patch
+"""Tests for the GraphBuilderFactory class."""
 
 import pytest
 
-from slam.frontend_manager.graph_builder.builders.lidar_submap_builder import (
+from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
+from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_builder_factory import (
     GraphBuilderFactory,
 )
 
 
-@dataclass
-class TestConfig:
-    name: str = LidarMapBuilder.__name__
+@pytest.mark.parametrize(
+    "name, graph_builder_type",
+    [
+        (LidarMapBuilder.__name__, LidarMapBuilder),
+        # Add more tuples for additional test cases
+    ],
+)
+def test_create(name: str, graph_builder_type: type[GraphBuilder]) -> None:
+    result = GraphBuilderFactory.create(name)
+    assert result == graph_builder_type
 
 
-def test_create_lidar_map_builder():
-    with patch.object(LidarMapBuilder, "__init__", return_value=None) as mock_init:
-        config = TestConfig()
-        builder = GraphBuilderFactory.create(config)
-        assert isinstance(builder, LidarMapBuilder)
-        mock_init.assert_called_once_with(config)
-
-
-def test_create_not_supported():
-    config = TestConfig(name="SomeFakeBuilder")
+def test_create_invalid_builder():
     with pytest.raises(NotImplementedError):
-        GraphBuilderFactory.create(config)
+        GraphBuilderFactory.create("InvalidBuilder")

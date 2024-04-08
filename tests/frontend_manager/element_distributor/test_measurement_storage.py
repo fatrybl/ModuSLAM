@@ -1,41 +1,25 @@
 """Tests for MeasurementStorage class."""
 
-import numpy as np
 import pytest
 
 from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import Measurement as RawMeasurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
 from slam.frontend_manager.element_distributor.measurement_storage import (
-    Measurement,
     MeasurementStorage,
 )
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
-from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.ordered_set import OrderedSet
+from tests.frontend_manager.conftest import measurement, sensor  # noqa: F401, F811
 
 
 @pytest.fixture
-def elements() -> tuple[Element, ...]:
+def elements(sensor) -> tuple[Element, ...]:
     loc = Location()
-    cfg = SensorConfig(name="test_sensor", type_name="Sensor")
-    s = Sensor(config=cfg)
-    m1 = RawMeasurement(sensor=s, values=(1, 2, 3))
-    m2 = RawMeasurement(sensor=s, values=(4, 5, 6))
+    m1 = RawMeasurement(sensor=sensor, values=(1, 2, 3))
+    m2 = RawMeasurement(sensor=sensor, values=(4, 5, 6))
     el1 = Element(timestamp=0, location=loc, measurement=m1)
     el2 = Element(timestamp=1, location=loc, measurement=m2)
     return el1, el2
-
-
-@pytest.fixture
-def measurement(handler, elements):
-    return Measurement(
-        time_range=TimeRange(0, 1),
-        values=np.array([1, 2, 3, 4, 5, 6]),
-        handler=handler,
-        elements=elements,
-    )
 
 
 class TestMeasurementStorage:

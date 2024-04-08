@@ -20,7 +20,8 @@ class FrontendManager:
 
     def __init__(self, config: FrontendManagerConfig):
         self.graph: Graph = Graph()
-        self.graph_builder: GraphBuilder = GraphBuilderFactory.create(config.graph_builder)
+        builder_object: type[GraphBuilder] = GraphBuilderFactory.create(config.graph_builder.name)
+        self.graph_builder: GraphBuilder = builder_object(config.graph_builder)
 
     def create_graph(self, batch: DataBatch) -> None:
         """Creates main graph by merging sub-graphs (graph candidates).

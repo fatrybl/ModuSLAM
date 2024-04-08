@@ -9,16 +9,13 @@ from slam.data_manager.factory.element import Element
 from slam.frontend_manager.element_distributor.elements_distributor import (
     ElementDistributor,
 )
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
 from slam.utils.ordered_set import OrderedSet
-from tests.frontend_manager.element_distributor.conftest import create_measurement
-
-
-@pytest.fixture
-def sensor():
-    cfg = SensorConfig(name="test_sensor", type_name="Sensor")
-    return Sensor(config=cfg)
+from tests.frontend_manager.conftest import (  # noqa: F401, F811
+    create_measurement,
+    element,
+    handler,
+    sensor,
+)
 
 
 @pytest.fixture
@@ -41,11 +38,11 @@ def test_distribute_next(data_batch, sensor, handler):
 
 def test_clear_storage(handler, element):
     element_distributor = ElementDistributor()
-    measurement = create_measurement(handler, element)
-    element_distributor.storage.add(measurement)
+    z = create_measurement(handler, element)
+    element_distributor.storage.add(z)
 
-    assert measurement in element_distributor.storage.data[handler]
+    assert z in element_distributor.storage.data[handler]
 
-    element_distributor.clear_storage([OrderedSet([measurement])])
+    element_distributor.clear_storage([OrderedSet([z])])
 
     assert element_distributor.storage.is_empty

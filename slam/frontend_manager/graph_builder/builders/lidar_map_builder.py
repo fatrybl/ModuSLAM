@@ -32,7 +32,8 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
     def __init__(self, config: GraphBuilderConfig) -> None:
         self._distributor: ElementDistributor = ElementDistributor()
         self._candidate_factory: CandidateFactory = LidarMapCandidateFactory()
-        self._merger = GraphMerger[GraphVertex, GraphEdge](config.graph_merger)
+        self._merger = GraphMerger[GraphVertex, GraphEdge]()
+        self._merger.init_table(config.graph_merger.handler_edge_factory_table)
         self._distributor.init_table(config.element_distributor.sensor_handlers_table)
         self._candidate_factory.init_table(config.candidate_factory.handler_state_analyzer_table)
 
