@@ -4,7 +4,7 @@ graph_builder:
 
   element_distributor:
     sensor_handlers_table:
-      velodyne_left: [ 'kiss_icp_odometry' ]
+      velodyne_right: [ 'kiss_icp_odometry' ]
 
   graph_merger:
     handler_edge_factory_table:

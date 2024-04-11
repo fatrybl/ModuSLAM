@@ -9,7 +9,7 @@ from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors import SensorFactoryConfig
 from slam.utils.auxiliary_dataclasses import PeriodicData
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.batch_factory.scenarios import sc1, sc2, sc3

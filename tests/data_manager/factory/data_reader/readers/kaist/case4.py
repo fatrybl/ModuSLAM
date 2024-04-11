@@ -8,7 +8,7 @@ from slam.system_configs.system.data_manager.batch_factory.regime import (
     Stream,
     TimeLimit,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import (
+from slam.system_configs.system.setup_manager.sensors import (
     SensorConfig,
     SensorFactoryConfig,
 )

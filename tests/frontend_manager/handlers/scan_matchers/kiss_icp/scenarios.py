@@ -8,7 +8,7 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.system_configs.system.setup_manager.sensors import SensorConfig
 from tests_data import current_directory
 
 tests_data_dir = current_directory

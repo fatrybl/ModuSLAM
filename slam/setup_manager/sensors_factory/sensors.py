@@ -1,6 +1,14 @@
-from typing import Any
+from __future__ import annotations
 
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
+from typing import TYPE_CHECKING, Any
+
+import numpy as np
+
+if TYPE_CHECKING:
+    from slam.system_configs.system.setup_manager.sensors import (
+        Lidar3DConfig,
+        SensorConfig,
+    )
 
 
 class Sensor:
@@ -100,7 +108,21 @@ class Lidar2D(Sensor):
 
 
 class Lidar3D(Sensor):
-    """Base class for any 3D lidar."""
+    """Base class for 3D lidar."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: Lidar3DConfig):
         super().__init__(config)
+        self._tf_base_sensor: np.ndarray = (
+            np.eye(4)
+            if config.tf_base_sensor is None
+            else np.array(config.tf_base_sensor, dtype=np.float32)
+        )
+
+    @property
+    def tf_base_sensor(self) -> np.ndarray:
+        """Transformation matrix from the base to the sensor.
+
+        Returns:
+            (np.ndarray[4x4]): SE(3) transformation matrix.
+        """
+        return self._tf_base_sensor

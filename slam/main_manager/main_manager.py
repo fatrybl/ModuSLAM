@@ -40,7 +40,6 @@ class MainManager:
             self.frontend_manager.create_graph(batch)
             self.backend_manager.solve(graph)
             self.backend_manager.update(graph)
-        print(self.frontend_manager.graph.factor_graph.print())
 
     def build_map(self) -> None:
         """
@@ -49,5 +48,9 @@ class MainManager:
         while not StoppingCriterion.is_active():
             self.data_manager.make_batch()
             self.process()
+
+        self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
+        # self.map_manager.visualize_map()
+        # self.map_manager.save_map()
 
         logger.info("Map has been built")

@@ -1,5 +1,4 @@
 import logging
-from collections import deque
 
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
@@ -19,12 +18,27 @@ logger = logging.getLogger(__name__)
 class ScanMatcher(Handler):
 
     _elements_queue_size: int = 2
+    _num_channels: int = 4
 
     def __init__(self, config: KissIcpScanMatcherConfig) -> None:
         cfg: KISSConfig = self.to_kiss_icp_config(config)
         self._scan_matcher = KissICP(cfg)
         self._name: str = config.name
-        self._elements_queue: deque[Element] = deque()
+        self._elements_queue: list[Element] = []
+
+        self._tf_extrinsic: np.ndarray = np.array(
+            [
+                [-0.514521, 0.701075, -0.493723, -0.333596],
+                [-0.492472, -0.712956, -0.499164, -0.373928],
+                [-0.701954, -0.0136853, 0.712091, 1.94377],
+                [0, 0, 0, 1],
+            ]
+        )
+
+        self._tf_extrinsic_inv = np.linalg.inv(self._tf_extrinsic)
+
+        # self._visualizer = RegistrationVisualizer()
+        # self._visualizer.global_view = True
 
     @property
     def name(self) -> str:
@@ -50,23 +64,18 @@ class ScanMatcher(Handler):
         kiss_cfg.data.preprocess = cfg.preprocess
         return kiss_cfg
 
-    @staticmethod
-    def tuple_to_array(values: tuple[float, ...]) -> np.ndarray:
+    def tuple_to_array(self, values: tuple[float, ...]) -> np.ndarray:
         """
-        Converts raw sensor data to numpy array.
+        Converts raw lidar data to numpy array of shape [Nx3].
         Args:
             values (tuple[float,...]): raw lidar scan data.
 
         Returns:
-            (np.ndarray): raw values as numpy array.
+            (np.ndarray[Nx3]): raw values as a numpy array.
 
-        TODO: remove constants for different datasets (pointclouds with different number of channels).
         """
-        n = len(values) // 4
-        m = 4
-        arr = np.empty(shape=(n, m), dtype=np.float64)
-        for i in range(0, len(values), m):
-            arr[i // m] = values[i : i + m]
+        arr = np.array(values)
+        arr = arr.reshape(-1, self._num_channels)
         return arr[:, :3]
 
     @staticmethod
@@ -81,11 +90,20 @@ class ScanMatcher(Handler):
         Returns:
             (np.ndarray): transformation matrix SE(3).
         """
-        return np.linalg.inv(pose_i) @ pose_j
+        tf = np.linalg.inv(pose_i) @ pose_j
+        return tf
 
     def _create_measurement(self, tf: np.ndarray) -> Measurement:
-        last_el = self._elements_queue[0]
-        pre_last_el = self._elements_queue[1]
+        """
+        Creates a Measurement object with the computed transformation matrix.
+        Args:
+            tf (np.ndarray[4x4]): transformation matrix SE(3).
+
+        Returns:
+            (Measurement): measurement with the computed transformation matrix SE(3).
+        """
+        last_el = self._elements_queue[-1]
+        pre_last_el = self._elements_queue[-2]
         empty_m = RawMeasurement(sensor=last_el.measurement.sensor, values=())
         empty_pre_last_element = Element(
             timestamp=pre_last_el.timestamp, measurement=empty_m, location=pre_last_el.location
@@ -107,12 +125,12 @@ class ScanMatcher(Handler):
     def _update_queues(self):
         """Remove the oldest element and pose."""
         self._scan_matcher.poses.pop(0)
-        self._elements_queue.pop()
+        self._elements_queue.pop(0)
 
     def process(self, element: Element) -> Measurement | None:
         """Computes the transformation as SE(3) matrix between 2 point clouds. Always
         returns None for the very first element, as the transformation can not be
-        computed for single point cloud.
+        computed for a single point cloud.
 
         Args:
             element (Element): element with raw pointcloud data.
@@ -123,21 +141,28 @@ class ScanMatcher(Handler):
         """
         new_measurement: Measurement | None = None
 
-        self._elements_queue.appendleft(element)
+        self._elements_queue.append(element)
 
         point_cloud: np.ndarray = self.tuple_to_array(element.measurement.values)
+
         timestamp = element.timestamp
 
         source, keypoints = self._scan_matcher.register_frame(
             frame=point_cloud, timestamps=[timestamp]
         )
 
+        # self._visualizer.update(
+        #     source, keypoints, self._scan_matcher.local_map, self._scan_matcher.poses[-1]
+        # )
+
         if len(self._elements_queue) == self._elements_queue_size:
             prev_pose = self._scan_matcher.poses[-2]
             cur_pose = self._scan_matcher.poses[-1]
 
-            tf = self._transformation(prev_pose, cur_pose)
-            new_measurement = self._create_measurement(tf)
+            tf_local = self._transformation(prev_pose, cur_pose)
+            tf_base = self._tf_extrinsic @ tf_local @ self._tf_extrinsic_inv
+
+            new_measurement = self._create_measurement(tf_base)
 
             self._update_queues()
 

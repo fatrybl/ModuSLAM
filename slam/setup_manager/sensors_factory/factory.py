@@ -12,7 +12,8 @@ from slam.setup_manager.sensors_factory.sensors import (
     StereoCamera,
     VrsGps,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import (
+from slam.system_configs.system.setup_manager.sensors import (
+    Lidar3DConfig,
     SensorConfig,
     SensorFactoryConfig,
 )
@@ -22,11 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class SensorsFactory:
-    """Factory class for sensors.
-
-    Class Attributes:
-        parameters: sensors to be used in experiments for a particular dataset.
-        used_sensors: sensors to be used in the experiment for a particular dataset. Must be a subset of parameters.
+    """Factory class to initialize and store sensors.
 
     Raises:
         ItemNotFoundError: no sensor with the requested sensor name in all sensors.
@@ -70,6 +67,7 @@ class SensorsFactory:
 
         Args:
             cfg (SensorFactoryConfig): config to define sensors.
+
         Raises:
             ValueError: empty sensors` config.
         """
@@ -95,12 +93,14 @@ class SensorsFactory:
 
         Raises:
             ValueError: there is no available sensor type for the item from config.
+
         Returns:
             (Sensor): sensor created from config.
         """
 
         sensor_type: str = cfg.type_name
-        sensor: Sensor
+
+        msg = f"Invalid config type {type(cfg).__name__!r} for sensor of type: {sensor_type!r}"
 
         match sensor_type:
 
@@ -115,6 +115,7 @@ class SensorsFactory:
             case Lidar2D.__name__:
                 sensor = Lidar2D(cfg)
             case Lidar3D.__name__:
+                assert isinstance(cfg, Lidar3DConfig), msg
                 sensor = Lidar3D(cfg)
             case Encoder.__name__:
                 sensor = Encoder(cfg)
@@ -125,8 +126,8 @@ class SensorsFactory:
             case VrsGps.__name__:
                 sensor = VrsGps(cfg)
             case _:
-                msg = f"unsupported sensor type: {sensor_type}"
-                logger.error(msg)
+                msg = f"Unsupported sensor type: {sensor_type}"
+                logger.critical(msg)
                 raise ValueError(msg)
 
         return sensor

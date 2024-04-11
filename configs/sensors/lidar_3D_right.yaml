@@ -1,3 +1,7 @@
 vlp_right:
   name: "velodyne_right"
   type_name: "Lidar3D"
+  tf_base_sensor: [ [ 1, 0, 0, 0 ],
+                    [ 0, 1, 0, 0 ],
+                    [ 0, 0, 1, 0 ],
+                    [ 0, 0, 0, 1 ] ]

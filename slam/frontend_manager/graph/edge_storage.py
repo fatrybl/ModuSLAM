@@ -12,6 +12,15 @@ class EdgeStorage(Generic[GraphEdge]):
     def __init__(self):
         self._edges = set[GraphEdge]()
 
+    @property
+    def edges(self) -> set[GraphEdge]:
+        """Edges in the storage.
+
+        Returns:
+            set[GraphEdge]: edges in the storage.
+        """
+        return self._edges
+
     @overload
     def add(self, edge: GraphEdge):
         """

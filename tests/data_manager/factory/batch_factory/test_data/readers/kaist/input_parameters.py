@@ -18,7 +18,7 @@ from slam.system_configs.system.data_manager.batch_factory.regime import (
     Stream,
     TimeLimit,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors import SensorFactoryConfig
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (
     all_elements_batch,
     common_batch,

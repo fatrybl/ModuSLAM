@@ -147,7 +147,3 @@ class Feature(Vertex):
 
 class CameraFeature(Feature):
     """Feature in the Camera Frame."""
-
-
-p = Pose()
-print(p.position)
