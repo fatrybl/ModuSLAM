@@ -14,6 +14,9 @@ defaults:
   - frontend_manager:
       - config
 
+  - map_manager:
+      - config
+
   - override hydra/hydra_logging: none
   - override hydra/job_logging: stdout
 

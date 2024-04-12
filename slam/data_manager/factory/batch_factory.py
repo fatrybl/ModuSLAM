@@ -222,6 +222,7 @@ class BatchFactory:
             2. Create a new Data Batch from the collection of elements.
                 Args:
                     elements (collection[Element]): collection of elements w/o raw sensor measurements.
+
             3. Create a new Data Batch from the set of requests.
                 Args:
                     requests (set[PeriodicData]): each request contains sensor

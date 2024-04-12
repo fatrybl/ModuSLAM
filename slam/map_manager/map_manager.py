@@ -4,18 +4,23 @@ from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.frontend_manager.graph.graph import Graph
 from slam.map_manager.graph_saver import GraphSaver
 from slam.map_manager.map_factories.lidar_map_factory import LidarMapFactory
+from slam.map_manager.map_factories.lidar_map_utils import (
+    LidarMapLoader,
+    PointcloudVisualizer,
+)
 from slam.map_manager.maps.lidar_map import LidarMap
-from slam.map_manager.pointcloud_visualizer import PointcloudVisualizer
+from slam.system_configs.system.map_manager.map_manager import MapManagerConfig
 
 logger = logging.getLogger(__name__)
 
 
 class MapManager:
-    """Manages the map."""
+    """Manages all map manipulations."""
 
-    def __init__(self) -> None:
+    def __init__(self, config: MapManagerConfig) -> None:
+        self._map_factory = LidarMapFactory(config.map_factory)
+        self._map_loader = LidarMapLoader(config.map_loader)
         self._graph_saver = GraphSaver()
-        self._map_factory = LidarMapFactory()
         self._visualizer = PointcloudVisualizer()
 
     @property
@@ -23,7 +28,7 @@ class MapManager:
         """Map instance.
 
         Returns:
-            (LidarMap): pointcloud-based map.
+            Map instance (LidarMap).
         """
         return self._map_factory.map
 
@@ -38,10 +43,17 @@ class MapManager:
         self._map_factory.create(graph.vertex_storage, batch_factory)
 
     def visualize_map(self) -> None:
+        """Visualizes the map."""
         self._visualizer.visualize(self.map.pointcloud)
 
     def save_map(self) -> None:
-        self._map_factory.map.save()
+        """Saves the map."""
+        self._map_loader.save(self.map)
 
     def save_graph(self, graph: Graph) -> None:
+        """Saves the graph.
+
+        Args:
+            graph (Graph): graph to save.
+        """
         self._graph_saver.save_to_file(graph)

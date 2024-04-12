@@ -1,4 +1,5 @@
 import logging
+from typing import cast
 
 from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
@@ -100,8 +101,6 @@ class SensorsFactory:
 
         sensor_type: str = cfg.type_name
 
-        msg = f"Invalid config type {type(cfg).__name__!r} for sensor of type: {sensor_type!r}"
-
         match sensor_type:
 
             case Sensor.__name__:
@@ -115,7 +114,7 @@ class SensorsFactory:
             case Lidar2D.__name__:
                 sensor = Lidar2D(cfg)
             case Lidar3D.__name__:
-                assert isinstance(cfg, Lidar3DConfig), msg
+                cfg = cast(Lidar3DConfig, cfg)
                 sensor = Lidar3D(cfg)
             case Encoder.__name__:
                 sensor = Encoder(cfg)

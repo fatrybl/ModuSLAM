@@ -17,17 +17,17 @@ class MainManager:
     Initializes other managers.
     """
 
-    def __init__(self, cfg: MainManagerConfig) -> None:
+    def __init__(self, config: MainManagerConfig) -> None:
         """Main Manager of the system.
 
         Args:
-            cfg (MainManagerConfig): main config for all managers.
+            config (MainManagerConfig): main config for all managers.
         """
-        self.setup_manager = SetupManager(cfg.setup_manager)
-        self.data_manager = DataManager(cfg.data_manager)
-        self.frontend_manager = FrontendManager(cfg.frontend_manager)
+        self.setup_manager = SetupManager(config.setup_manager)
+        self.data_manager = DataManager(config.data_manager)
+        self.frontend_manager = FrontendManager(config.frontend_manager)
+        self.map_manager = MapManager(config.map_manager)
         self.backend_manager = BackendManager()
-        self.map_manager = MapManager()
         logger.info("The system has been successfully configured.")
 
     def process(
@@ -50,7 +50,6 @@ class MainManager:
             self.process()
 
         self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
-        # self.map_manager.visualize_map()
-        # self.map_manager.save_map()
+        self.map_manager.visualize_map()
 
         logger.info("Map has been built")

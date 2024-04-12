@@ -19,3 +19,7 @@ class NotSubset(Exception):
 
 class ExternalModuleException(Exception):
     """External module failed to work properly."""
+
+
+class DimensionalityError(Exception):
+    """Invalid dimensions of an array."""

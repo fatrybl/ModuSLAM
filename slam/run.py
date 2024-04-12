@@ -3,6 +3,10 @@ Author: Mark Griguletskii
 e-mail: mark.griguletskii@skoltech.ru.
 
 Main runner of the SLAM system.
+
+TODO: in all functions doc string change "return" field s.t.
+      the type of the return value is specified.
+
 """
 
 import hydra
@@ -16,7 +20,7 @@ from slam.setup_manager.config_validator import register_config
 def run(cfg) -> None:
     """Creates Main Manager and runs SLAM based on configuration."""
 
-    print(OmegaConf.to_yaml(cfg.data_manager))
+    print(OmegaConf.to_yaml(cfg.map_manager))
 
     main_manager = MainManager(cfg)
     main_manager.build_map()

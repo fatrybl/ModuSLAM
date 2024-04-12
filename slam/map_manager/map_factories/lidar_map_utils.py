@@ -1,76 +1,87 @@
-import numpy as np
+import logging
+from pathlib import Path
+
 import open3d as o3d
 
+from slam.map_manager.maps.lidar_map import LidarMap
+from slam.system_configs.system.map_manager.map_manager import LidarMapLoaderConfig
+from slam.utils.exceptions import ExternalModuleException
 
-def visualize_pointcloud(pointcloud: o3d.geometry.PointCloud):
-    """Visualize a point cloud using open3d library.
-
-    Args:
-        pointcloud (o3d.geometry.PointCloud): The point cloud object to visualize.
-    """
-
-    o3d.visualization.draw_geometries([pointcloud])
+logger = logging.getLogger(__name__)
 
 
-def pointcloud_to_file(
-    file_name: str,
-    pointcloud_data: np.ndarray,
-    file_format: str = "auto",
-    write_ascii: bool = False,
-    compress: bool = False,
-    print_progress: bool = True,
-) -> None:
-    """Save a numpy array of shape Nx4 with points [x, y, z, intensity] to a point cloud
-    file using open3d.
+class LidarMapLoader:
+    """Class to load and save the lidar map."""
 
-    Args:
-        file_name (str): The name of the file to save the point cloud to.
-        pointcloud_data (np.ndarray): A numpy array of shape Nx4 with points [x, y, z, intensity].
-        file_format (str): The format of the file to save the point cloud to. Default is "auto".
-        print_progress (bool): Print progress bar.
-        compress (bool): Compress the file.
-        write_ascii (bool): Write the file in ASCII format.
-    """
-    dimensions: int = 3
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(pointcloud_data[:, :dimensions])
-    o3d.io.write_point_cloud(
-        file_name,
-        pcd,
-        format=file_format,
-        write_ascii=write_ascii,
-        compressed=compress,
-        print_progress=print_progress,
-    )
+    def __init__(self, config: LidarMapLoaderConfig) -> None:
+        self._dir_path: Path = Path(config.directory)
+        self._file_extension: str = config.file_extension
+        self._file_name: str = config.name
+        self._compress: bool = config.compress
+        self._write_ascii: bool = config.write_ascii
+        self._progress_bar: bool = config.progress_bar
+        self._remove_nan: bool = config.remove_nan
+        self._remove_infinity: bool = config.remove_infinity
+
+    def save(self, lidar_map: LidarMap) -> None:
+        """Saves lidar map to the file.
+
+        Args:
+            lidar_map (LidarMap): map to save.
+        """
+        file_path = self._dir_path / f"{self._file_name}.{self._file_extension}"
+        try:
+            o3d.io.write_point_cloud(
+                filename=file_path.as_posix(),
+                pointcloud=lidar_map.pointcloud,
+                format=self._file_extension,
+                write_ascii=self._write_ascii,
+                compressed=self._compress,
+                print_progress=self._progress_bar,
+            )
+        except Exception as e:
+            msg = f"Failed to save the map to {file_path}. Error: {e}"
+            logger.critical(msg)
+            raise ExternalModuleException(msg)
+
+    def load(self) -> LidarMap:
+        """Loads the map.
+
+        Returns:
+            lidar map instance (LidarMap).
+        """
+        file_path = self._dir_path / f"{self._file_name}.{self._file_extension}"
+        try:
+            pointcloud = o3d.io.read_point_cloud(
+                filename=file_path.as_posix(),
+                format=self._file_extension,
+                print_progress=self._progress_bar,
+                remove_nan_points=self._remove_nan,
+                remove_infinite_points=self._remove_infinity,
+            )
+            logger.info(f"Map has been successfully loaded from {file_path}")
+
+        except Exception as e:
+            msg = f"Failed to load the map from {file_path}. Error: {e}"
+            logger.critical(msg)
+            raise ExternalModuleException(msg)
+        else:
+            lidar_map = LidarMap()
+            lidar_map.pointcloud = pointcloud
+            return lidar_map
 
 
-def pointcloud_from_file(
-    file_name: str,
-    file_format: str | None = "auto",
-    remove_nan: bool = True,
-    remove_infinity: bool = True,
-    print_progress: bool = True,
-) -> o3d.geometry.PointCloud:
-    """Read a point cloud from a binary file using open3d.
+class PointcloudVisualizer:
+    """Class to visualize the pointcloud."""
 
-    Args:
-        file_name (str): The name of the file to read the point cloud from.
-        file_format (str): The format of the file to read the point cloud from.
-                If None, the format is inferred from the file extension.
-        remove_nan (bool): Remove NaN points.
-        remove_infinity (bool): Remove infinite points.
-        print_progress (bool): Print progress bar.
+    @staticmethod
+    def visualize(pointcloud: o3d.geometry.PointCloud) -> None:
+        """Visualizes the pointcloud.
 
-
-    Returns:
-        o3d.geometry.PointCloud: The point cloud object.
-    """
-    pcd = o3d.io.read_point_cloud(
-        file_name,
-        format=file_format,
-        print_progress=print_progress,
-        remove_nan_points=remove_nan,
-        remove_infinite_points=remove_infinity,
-    )
-
-    return pcd
+        Args:
+            pointcloud (np.ndarray[N,3]): pointcloud to visualize.
+        """
+        vis = o3d.visualization.Visualizer()
+        vis.create_window()
+        vis.add_geometry(pointcloud)
+        vis.run()

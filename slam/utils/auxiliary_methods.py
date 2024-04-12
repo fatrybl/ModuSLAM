@@ -5,6 +5,7 @@ import numpy as np
 from PIL.Image import Image
 
 from slam.data_manager.factory.element import Element
+from slam.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,24 @@ def as_int(value: str) -> int:
         msg = f"Could not convert value {value} of type {type(value)} to string"
         logger.error(msg)
         raise
+
+
+def check_dimensionality(array: np.ndarray, shape: tuple[int, ...]) -> None:
+    """Checks if the array has the required shape.
+
+    Args:
+        array (np.ndarray): array to check.
+        shape (tuple[int, ...]): required shape.
+
+    Raises:
+        DimensionalityError: if the array has a wrong shape.
+
+    TODO: add tests.
+    """
+    if array.shape != shape:
+        msg = f"Array must have shape {shape}, got {array.shape}"
+        logger.critical(msg)
+        raise DimensionalityError(msg)
 
 
 def equal_images(imgs_1: tuple[Image, ...], imgs_2: tuple[Image, ...]) -> bool:

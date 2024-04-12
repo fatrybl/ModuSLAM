@@ -7,6 +7,7 @@ from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import Measurement as RawMeasurement
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.setup_manager.sensors_factory.sensors import Lidar3D
 from slam.system_configs.system.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
@@ -25,17 +26,6 @@ class ScanMatcher(Handler):
         self._scan_matcher = KissICP(cfg)
         self._name: str = config.name
         self._elements_queue: list[Element] = []
-
-        self._tf_extrinsic: np.ndarray = np.array(
-            [
-                [-0.514521, 0.701075, -0.493723, -0.333596],
-                [-0.492472, -0.712956, -0.499164, -0.373928],
-                [-0.701954, -0.0136853, 0.712091, 1.94377],
-                [0, 0, 0, 1],
-            ]
-        )
-
-        self._tf_extrinsic_inv = np.linalg.inv(self._tf_extrinsic)
 
         # self._visualizer = RegistrationVisualizer()
         # self._visualizer.global_view = True
@@ -138,8 +128,21 @@ class ScanMatcher(Handler):
         Returns:
             measurement (Measurement): measurement with the computed transformation matrix SE(3).
             (None): if the transformation can not be computed.
+
+        Raises:
+            TypeError: if the sensor is not an instance of Lidar3D.
         """
+        if isinstance(element.measurement.sensor, Lidar3D):
+            sensor: Lidar3D = element.measurement.sensor
+        else:
+            msg = f"ScanMatcher can not process data from sensor {element.measurement.sensor!r}."
+            logger.error(msg)
+            raise TypeError(msg)
+
         new_measurement: Measurement | None = None
+
+        tf_base_sensor = sensor.tf_base_sensor
+        tf_base_sensor_inv = np.linalg.inv(tf_base_sensor)
 
         self._elements_queue.append(element)
 
@@ -160,7 +163,7 @@ class ScanMatcher(Handler):
             cur_pose = self._scan_matcher.poses[-1]
 
             tf_local = self._transformation(prev_pose, cur_pose)
-            tf_base = self._tf_extrinsic @ tf_local @ self._tf_extrinsic_inv
+            tf_base = tf_base_sensor @ tf_local @ tf_base_sensor_inv
 
             new_measurement = self._create_measurement(tf_base)
 
