@@ -225,7 +225,7 @@ class VertexStorage(Generic[GraphVertex]):
         Returns:
             (GraphVertex): previous vertex.
         """
-        msg = f"No previous vertex of type {vertex_type!r} found."
+        msg = f"No previous vertex of type {vertex_type.__name__!r} found."
         try:
             v = self.get_vertices(vertex_type)[-1]
             return v

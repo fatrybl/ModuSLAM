@@ -1,3 +1,9 @@
+"""Tests for the Kiss ICP scan matcher.
+
+TODO: add more tests scenarios for KissICP Scan Matcher.
+        Now it process only 1 element and returns None.
+"""
+
 from pytest import fixture, mark
 
 from slam.data_manager.factory.element import Element
@@ -16,10 +22,6 @@ def matcher() -> ScanMatcher:
 
 
 class TestScanMatcher:
-    """
-    TODO: add more tests scenarios for KissICP Scan Matcher.
-    """
-
     @mark.parametrize("element, reference", [*scenarios])
     def test_process(
         self, element: Element, reference: Measurement | None, matcher: ScanMatcher

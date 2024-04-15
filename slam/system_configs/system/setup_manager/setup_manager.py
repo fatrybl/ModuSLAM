@@ -6,7 +6,7 @@ from slam.system_configs.system.setup_manager.edge_factories_initializer import 
 from slam.system_configs.system.setup_manager.handlers_factory import (
     HandlersFactoryConfig,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors import SensorFactoryConfig
 from slam.system_configs.system.setup_manager.state_analyzers_factory import (
     StateAnalyzerFactoryConfig,
 )

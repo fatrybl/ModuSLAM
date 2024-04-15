@@ -19,7 +19,7 @@ from slam.system_configs.system.data_manager.batch_factory.regime import (
     Stream,
     TimeLimit,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors import SensorFactoryConfig
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import kaist1
 from tests.data_manager.factory.data_reader.readers.kaist.case2 import kaist2

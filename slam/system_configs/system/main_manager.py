@@ -4,6 +4,7 @@ from slam.system_configs.system.data_manager.data_manager import DataManagerConf
 from slam.system_configs.system.frontend_manager.frontend_manager import (
     FrontendManagerConfig,
 )
+from slam.system_configs.system.map_manager.map_manager import MapManagerConfig
 from slam.system_configs.system.setup_manager.setup_manager import SetupManagerConfig
 
 
@@ -17,3 +18,4 @@ class MainManagerConfig:
     setup_manager: SetupManagerConfig
     data_manager: DataManagerConfig
     frontend_manager: FrontendManagerConfig
+    map_manager: MapManagerConfig

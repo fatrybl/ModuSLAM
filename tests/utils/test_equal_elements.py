@@ -9,7 +9,7 @@ from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     Location,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.system_configs.system.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_methods import equal_elements
 
 

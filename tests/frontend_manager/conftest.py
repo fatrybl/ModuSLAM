@@ -26,7 +26,7 @@ from slam.system_configs.system.frontend_manager.edge_factories.base_factory imp
 from slam.system_configs.system.frontend_manager.handlers.base_handler import (
     HandlerConfig,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.system_configs.system.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 
 

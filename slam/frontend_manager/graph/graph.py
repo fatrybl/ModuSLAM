@@ -191,6 +191,18 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         self.vertex_storage.update_optimizable_vertices(values)
         # self.vertex_storage.update_non_optimizable_vertices()
 
+    @property
+    def initial_values(self) -> gtsam.Values:
+        """GTSAM Initial values of the graph.
+
+        Returns:
+            (gtsam.Values): initial values.
+        """
+        vertices = self.vertex_storage.optimizable_vertices
+        initial_values = gtsam.Values()
+        [initial_values.insert(v.gtsam_index, v.value) for v in vertices]
+        return initial_values
+
     def marginalize(self, edges: Iterable[GraphEdge]) -> None:
         """Marginalizes out edges.
 

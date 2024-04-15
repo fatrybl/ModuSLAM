@@ -4,12 +4,15 @@ defaults:
 
 batch_factory:
   dataset:
-    directory: "/home/mark/Downloads/urban30-gangnam/"
+    directory: "/media/mark/New Volume/datasets/kaist/urban-26/"
 
   regime:
     name: "TimeLimit"
-    start: 1544676739798931000
-    stop: 1544676740605762000
-
+    start: 1544581174277398000
+    stop: 1544581194348085000
   memory:
     batch_memory: 100.0
+
+# for urban-30
+#    start: 1544677010043554000
+#    stop: 1544677020028534000

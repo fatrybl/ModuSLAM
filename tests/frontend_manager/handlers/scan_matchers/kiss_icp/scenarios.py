@@ -7,8 +7,8 @@ from slam.data_manager.factory.readers.kaist.auxiliary_classes import BinaryData
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.setup_manager.sensors_factory import SensorConfig
+from slam.setup_manager.sensors_factory.sensors import Lidar3D
+from slam.system_configs.system.setup_manager.sensors import Lidar3DConfig
 from tests_data import current_directory
 
 tests_data_dir = current_directory
@@ -37,7 +37,7 @@ pc9: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f9)
 pc10: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f10)
 
 
-s1 = Sensor(config=SensorConfig(name="vlp_left", type_name="Lidar3D"))
+s1 = Lidar3D(config=Lidar3DConfig(name="vlp_left"))
 m1 = RawMeasurement(sensor=s1, values=tuple(pc1))
 loc1 = BinaryDataLocation(f1)
 el1 = Element(timestamp=1544676739798931000, measurement=m1, location=loc1)

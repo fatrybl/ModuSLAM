@@ -13,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 class DataManager:
-    """Manages all data processes."""
+    """Manages all data processes.
+
+    TODO: remove public access to the batch_factory.
+    """
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """

@@ -10,10 +10,10 @@ class KissIcpScanMatcherConfig(HandlerConfig):
     type_name: str = "ScanMatcher"
     module_name: str = ".pointcloud_matcher"
     name: str = "kiss_icp_odometry"
-    max_points_per_voxel: int = 20
-    voxel_size: float = 1.0
+    max_points_per_voxel: int = 10
+    voxel_size: float = 1.5
     adaptive_initial_threshold: float = 3.0
-    min_range: float = 20
-    max_range: float = 120
+    min_range: float = 10
+    max_range: float = 100
     deskew: bool = False
-    preprocess: bool = True
+    preprocess: bool = False
