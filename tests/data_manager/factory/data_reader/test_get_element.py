@@ -10,7 +10,7 @@ import pytest
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
@@ -19,7 +19,7 @@ from slam.system_configs.system.data_manager.batch_factory.regime import (
     Stream,
     TimeLimit,
 )
-from slam.system_configs.system.setup_manager.sensors_factory import SensorFactoryConfig
+from slam.system_configs.system.setup_manager.sensors import SensorFactoryConfig
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import kaist1
 from tests.data_manager.factory.data_reader.readers.kaist.case2 import kaist2
@@ -46,13 +46,13 @@ class TestGetElement:
         data_reader_object: type[DataReader],
         reference_outputs: list[Element | None],
     ):
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
         for reference in reference_outputs:
             result: Element | None = data_reader.get_element()
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -67,13 +67,13 @@ class TestGetElement:
         inputs: list[Sensor],
         reference_outputs: list[Element | None],
     ):
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
         for sensor, reference in zip(inputs, reference_outputs):
             result: Element | None = data_reader.get_element(sensor)
-            equal_elements(result, reference)
+            assert equal_elements(result, reference) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -93,7 +93,7 @@ class TestGetElement:
         It seeks for the element with the given sensor name and timestamp in the whole
         dataset.
         """
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
@@ -103,7 +103,7 @@ class TestGetElement:
                     data_reader.get_element(element)
             else:
                 result: Element = data_reader.get_element(element)
-                equal_elements(result, output)
+                assert equal_elements(result, output) is True
 
     @pytest.mark.parametrize(
         "sensor_factory_cfg, dataset_cfg, regime, data_reader_object, inputs, reference_outputs",
@@ -123,7 +123,7 @@ class TestGetElement:
         It seeks for the element with the given sensor name and timestamp in the whole
         dataset.
         """
-        SensorFactory.init_sensors(sensor_factory_cfg)
+        SensorsFactory.init_sensors(sensor_factory_cfg)
 
         data_reader = data_reader_object(regime=regime, dataset_params=dataset_cfg)
 
@@ -133,4 +133,4 @@ class TestGetElement:
                     data_reader.get_element(sensor, timestamp)
             else:
                 result: Element = data_reader.get_element(sensor, timestamp)
-                equal_elements(result, output)
+                assert equal_elements(result, output) is True

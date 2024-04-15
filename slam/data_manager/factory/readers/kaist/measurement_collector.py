@@ -153,7 +153,7 @@ class MeasurementCollector:
             return self._get_img_data(iterator, timestamp)
 
     @staticmethod
-    def _read_bin(file: Path) -> npt.NDArray[np.float32]:
+    def read_bin(file: Path) -> npt.NDArray[np.float32]:
         """Reads a binary file with Single-precision floating-point data (float32).
 
         Args:
@@ -332,7 +332,7 @@ class MeasurementCollector:
             timestamp_path: Path = Path(timestamp)
             file: Path = self._lidars_table[sensor_name] / timestamp_path
             file = file.with_suffix(self._BINARY_EXTENSION)
-            raw_data: npt.NDArray[np.float32] = self._read_bin(file)
+            raw_data: npt.NDArray[np.float32] = self.read_bin(file)
             raw_data_tuple: tuple[float, ...] = tuple(raw_data)
             message = Message(timestamp, raw_data_tuple)
             location = BinaryDataLocation(file)
@@ -359,7 +359,7 @@ class MeasurementCollector:
         timestamp_path: Path = Path(timestamp_str)
         file: Path = self._lidars_table[sensor_name] / timestamp_path
         file = file.with_suffix(self._BINARY_EXTENSION)
-        raw_data = self._read_bin(file)
+        raw_data = self.read_bin(file)
         raw_data_tuple = tuple(raw_data)
         message = Message(timestamp_str, raw_data_tuple)
         location = BinaryDataLocation(file)

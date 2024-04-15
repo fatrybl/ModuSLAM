@@ -8,4 +8,3 @@ class HandlerConfig:
     name: str
     type_name: str
     module_name: str
-    parameters: dict

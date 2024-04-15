@@ -17,17 +17,9 @@ class NotSubset(Exception):
     """The set is not a subset of another set."""
 
 
-class SensorNotFound(Exception):
-    """Sensor has not been found."""
-
-
-class HandlerNotFound(Exception):
-    """Handler has not been found."""
-
-
-class AnalyzerNotFound(Exception):
-    """Analyzer has not been found."""
-
-
 class ExternalModuleException(Exception):
     """External module failed to work properly."""
+
+
+class DimensionalityError(Exception):
+    """Invalid dimensions of an array."""

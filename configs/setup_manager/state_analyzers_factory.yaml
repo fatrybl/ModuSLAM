@@ -1,6 +1,5 @@
 defaults:
-  - /state_analyzers/imu_preintegration@state_analyzers_factory.analyzers
-  - /state_analyzers/lidar_odometry@state_analyzers_factory.analyzers
+  - /frontend_manager/state_analyzers@state_analyzers_factory.analyzers
 
 state_analyzers_factory:
   package_name: "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"

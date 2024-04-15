@@ -3,17 +3,20 @@ from collections import deque
 from typing import overload
 
 from plum import dispatch
-from system_configs.system.data_manager.data_manager import DataManagerConfig
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
+from slam.system_configs.system.data_manager.data_manager import DataManagerConfig
 from slam.utils.auxiliary_dataclasses import PeriodicData
 
 logger = logging.getLogger(__name__)
 
 
 class DataManager:
-    """Manages all data processes."""
+    """Manages all data processes.
+
+    TODO: remove public access to the batch_factory.
+    """
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """

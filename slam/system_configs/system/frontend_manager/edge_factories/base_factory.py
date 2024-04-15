@@ -1,9 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class EdgeFactoryConfig:
-    """Base class for edge factory config."""
+    """Base edge factory config."""
 
     name: str
-    class_name: str
+    type_name: str
+    module_name: str
+    noise_model: str
+    search_time_margin: int = field(default=0, metadata={"help": "Time margin in nanoseconds."})

@@ -4,10 +4,34 @@ slam.utils package
 Submodules
 ----------
 
-slam.utils.config module
-------------------------
+slam.utils.auxiliary\_dataclasses module
+----------------------------------------
 
-.. automodule:: slam.utils.config
+.. automodule:: slam.utils.auxiliary_dataclasses
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+slam.utils.auxiliary\_methods module
+------------------------------------
+
+.. automodule:: slam.utils.auxiliary_methods
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+slam.utils.deque\_set module
+----------------------------
+
+.. automodule:: slam.utils.deque_set
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+slam.utils.exceptions module
+----------------------------
+
+.. automodule:: slam.utils.exceptions
    :members:
    :undoc-members:
    :show-inheritance:

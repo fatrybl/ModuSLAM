@@ -6,9 +6,16 @@ defaults:
       - sensors_factory
       - handlers_factory
       - state_analyzers_factory
+      - edge_factories_initializer
 
   - data_manager:
       - batch_factory
+
+  - frontend_manager:
+      - config
+
+  - map_manager:
+      - config
 
   - override hydra/hydra_logging: none
   - override hydra/job_logging: stdout

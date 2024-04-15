@@ -22,11 +22,11 @@ class DataBatch:
         """
         self._deque_set.add(new_element)
 
-    def delete_first(self) -> None:
+    def remove_first(self) -> None:
         """Deletes the first(left) element of the batch."""
         self._deque_set.remove_first()
 
-    def delete_last(self) -> None:
+    def remove_last(self) -> None:
         """Deletes the last(right) element of the batch."""
         self._deque_set.remove_last()
 
@@ -56,13 +56,13 @@ class DataBatch:
         return self._deque_set.items
 
     @property
-    def first_element(self):
+    def first(self):
         """Returns the first element of the batch.
 
         Returns:
             element (Element): first element of the batch.
         """
-        return self.data[0]
+        return self._deque_set[0]
 
     @property
     def size_bytes(self) -> int:

@@ -13,19 +13,8 @@ from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     CsvDataLocation,
     StereoImgDataLocation,
 )
-from slam.setup_manager.sensors_factory.sensors import (
-    Altimeter,
-    Encoder,
-    Fog,
-    Gps,
-    Imu,
-    Lidar2D,
-    Lidar3D,
-    Sensor,
-    StereoCamera,
-    VrsGps,
-)
-from slam.system_configs.system.setup_manager.sensors_factory import (
+from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.system.setup_manager.sensors import (
     SensorConfig,
     SensorFactoryConfig,
 )
@@ -62,17 +51,17 @@ velodyne_left = SensorNamePath("velodyne_left", ds.lidar_3D_left_stamp_file)
 velodyne_right = SensorNamePath("velodyne_right", ds.lidar_3D_right_stamp_file)
 stereo = SensorNamePath("stereo", ds.stereo_stamp_file)
 
-imu_params = SensorConfig(name=imu.name, type_name=Imu.__name__)
-fog_params = SensorConfig(name=fog.name, type_name=Fog.__name__)
-encoder_params = SensorConfig(name=encoder.name, type_name=Encoder.__name__)
-altimeter_params = SensorConfig(name=altimeter.name, type_name=Altimeter.__name__)
-gps_params = SensorConfig(name=gps.name, type_name=Gps.__name__)
-vrs_gps_params = SensorConfig(name=vrs_gps.name, type_name=VrsGps.__name__)
-sick_back_params = SensorConfig(name=sick_back.name, type_name=Lidar2D.__name__)
-sick_middle_params = SensorConfig(name=sick_middle.name, type_name=Lidar2D.__name__)
-velodyne_left_params = SensorConfig(name=velodyne_left.name, type_name=Lidar3D.__name__)
-velodyne_right_params = SensorConfig(name=velodyne_right.name, type_name=Lidar3D.__name__)
-stereo_params = SensorConfig(name=stereo.name, type_name=StereoCamera.__name__)
+imu_params = SensorConfig(name=imu.name)
+fog_params = SensorConfig(name=fog.name)
+encoder_params = SensorConfig(name=encoder.name)
+altimeter_params = SensorConfig(name=altimeter.name)
+gps_params = SensorConfig(name=gps.name)
+vrs_gps_params = SensorConfig(name=vrs_gps.name)
+sick_back_params = SensorConfig(name=sick_back.name)
+sick_middle_params = SensorConfig(name=sick_middle.name)
+velodyne_left_params = SensorConfig(name=velodyne_left.name)
+velodyne_right_params = SensorConfig(name=velodyne_right.name)
+stereo_params = SensorConfig(name=stereo.name)
 
 
 sensor_factory_cfg = SensorFactoryConfig(
@@ -250,7 +239,7 @@ stamp_files: list[tuple[int, Path]] = [
 el1 = Element(
     timestamp=z_encoder_1[0],
     measurement=Measurement(
-        sensor=Encoder(encoder.name, encoder_params),
+        sensor=Sensor(encoder_params),
         values=tuple(str(i) for i in z_encoder_1[1:]),
     ),
     location=CsvDataLocation(file=encoder.file_path, position=1),
@@ -258,9 +247,7 @@ el1 = Element(
 
 el2 = Element(
     timestamp=z_sick_back_1[0],
-    measurement=Measurement(
-        sensor=Lidar2D(sick_back.name, sick_back_params), values=z_sick_back_1[1:]
-    ),
+    measurement=Measurement(sensor=Sensor(sick_back_params), values=z_sick_back_1[1:]),
     location=BinaryDataLocation(
         file=(ds.lidar_2D_back_dir / str(z_sick_back_1[0])).with_suffix(ds.binary_file_extension)
     ),
@@ -268,25 +255,19 @@ el2 = Element(
 
 el3 = Element(
     timestamp=z_imu_1[0],
-    measurement=Measurement(
-        sensor=Imu(imu.name, imu_params), values=tuple(str(i) for i in z_imu_1[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(imu_params), values=tuple(str(i) for i in z_imu_1[1:])),
     location=CsvDataLocation(file=imu.file_path, position=1),
 )
 
 el4 = Element(
     timestamp=z_fog_1[0],
-    measurement=Measurement(
-        sensor=Fog(fog.name, fog_params), values=tuple(str(i) for i in z_fog_1[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(fog_params), values=tuple(str(i) for i in z_fog_1[1:])),
     location=CsvDataLocation(file=fog.file_path, position=1),
 )
 
 el5 = Element(
     timestamp=z_sick_middle_1[0],
-    measurement=Measurement(
-        sensor=Lidar2D(sick_middle.name, sick_middle_params), values=z_sick_middle_1[1:]
-    ),
+    measurement=Measurement(sensor=Sensor(sick_middle_params), values=z_sick_middle_1[1:]),
     location=BinaryDataLocation(
         file=(ds.lidar_2D_middle_dir / str(z_sick_middle_1[0])).with_suffix(
             ds.binary_file_extension
@@ -296,16 +277,14 @@ el5 = Element(
 
 el6 = Element(
     timestamp=z_gps_1[0],
-    measurement=Measurement(
-        sensor=Gps(gps.name, gps_params), values=tuple(str(i) for i in z_gps_1[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(gps_params), values=tuple(str(i) for i in z_gps_1[1:])),
     location=CsvDataLocation(file=gps.file_path, position=1),
 )
 
 el7 = Element(
     timestamp=z_vrs_gps_1[0],
     measurement=Measurement(
-        sensor=VrsGps(vrs_gps.name, vrs_gps_params),
+        sensor=Sensor(vrs_gps_params),
         values=tuple(str(i) for i in z_vrs_gps_1[1:]),
     ),
     location=CsvDataLocation(file=vrs_gps.file_path, position=1),
@@ -314,7 +293,7 @@ el7 = Element(
 el8 = Element(
     timestamp=z_altimeter_1[0],
     measurement=Measurement(
-        sensor=Altimeter(altimeter.name, altimeter_params),
+        sensor=Sensor(altimeter_params),
         values=tuple(str(i) for i in z_altimeter_1[1:]),
     ),
     location=CsvDataLocation(file=altimeter.file_path, position=1),
@@ -323,7 +302,7 @@ el8 = Element(
 el9 = Element(
     timestamp=z_altimeter_2[0],
     measurement=Measurement(
-        sensor=Altimeter(altimeter.name, altimeter_params),
+        sensor=Sensor(altimeter_params),
         values=tuple(str(i) for i in z_altimeter_2[1:]),
     ),
     location=CsvDataLocation(file=altimeter.file_path, position=2),
@@ -331,16 +310,14 @@ el9 = Element(
 
 el10 = Element(
     timestamp=z_imu_2[0],
-    measurement=Measurement(
-        sensor=Imu(imu.name, imu_params), values=tuple(str(i) for i in z_imu_2[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(imu_params), values=tuple(str(i) for i in z_imu_2[1:])),
     location=CsvDataLocation(file=imu.file_path, position=2),
 )
 
 el11 = Element(
     timestamp=z_encoder_2[0],
     measurement=Measurement(
-        sensor=Encoder(encoder.name, encoder_params),
+        sensor=Sensor(encoder_params),
         values=tuple(str(i) for i in z_encoder_2[1:]),
     ),
     location=CsvDataLocation(file=encoder.file_path, position=2),
@@ -348,9 +325,7 @@ el11 = Element(
 
 el12 = Element(
     timestamp=z_sick_back_2[0],
-    measurement=Measurement(
-        sensor=Lidar2D(sick_back.name, sick_back_params), values=z_sick_back_2[1:]
-    ),
+    measurement=Measurement(sensor=Sensor(sick_back_params), values=z_sick_back_2[1:]),
     location=BinaryDataLocation(
         file=(ds.lidar_2D_back_dir / str(z_sick_back_2[0])).with_suffix(ds.binary_file_extension)
     ),
@@ -358,17 +333,13 @@ el12 = Element(
 
 el13 = Element(
     timestamp=z_gps_2[0],
-    measurement=Measurement(
-        sensor=Gps(gps.name, gps_params), values=tuple(str(i) for i in z_gps_2[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(gps_params), values=tuple(str(i) for i in z_gps_2[1:])),
     location=CsvDataLocation(file=gps.file_path, position=2),
 )
 
 el14 = Element(
     timestamp=z_sick_middle_2[0],
-    measurement=Measurement(
-        sensor=Lidar2D(sick_middle.name, sick_middle_params), values=z_sick_middle_2[1:]
-    ),
+    measurement=Measurement(sensor=Sensor(sick_middle_params), values=z_sick_middle_2[1:]),
     location=BinaryDataLocation(
         file=(ds.lidar_2D_middle_dir / str(z_sick_middle_2[0])).with_suffix(
             ds.binary_file_extension
@@ -379,7 +350,7 @@ el14 = Element(
 el15 = Element(
     timestamp=z_velodyne_left_1[0],
     measurement=Measurement(
-        sensor=Lidar3D(velodyne_left.name, velodyne_left_params),
+        sensor=Sensor(velodyne_left_params),
         values=z_velodyne_left_1[1:],
     ),
     location=BinaryDataLocation(
@@ -392,7 +363,7 @@ el15 = Element(
 el16 = Element(
     timestamp=z_velodyne_right_1[0],
     measurement=Measurement(
-        sensor=Lidar3D(velodyne_right.name, velodyne_right_params),
+        sensor=Sensor(velodyne_right_params),
         values=z_velodyne_right_1[1:],
     ),
     location=BinaryDataLocation(
@@ -405,7 +376,7 @@ el16 = Element(
 el17 = Element(
     timestamp=z_velodyne_left_2[0],
     measurement=Measurement(
-        sensor=Lidar3D(velodyne_left.name, velodyne_left_params),
+        sensor=Sensor(velodyne_left_params),
         values=z_velodyne_left_2[1:],
     ),
     location=BinaryDataLocation(
@@ -418,7 +389,7 @@ el17 = Element(
 el18 = Element(
     timestamp=z_vrs_gps_2[0],
     measurement=Measurement(
-        sensor=VrsGps(vrs_gps.name, vrs_gps_params),
+        sensor=Sensor(vrs_gps_params),
         values=tuple(str(i) for i in z_vrs_gps_2[1:]),
     ),
     location=CsvDataLocation(file=vrs_gps.file_path, position=2),
@@ -427,7 +398,7 @@ el18 = Element(
 el19 = Element(
     timestamp=z_stereo_left_1[0],
     measurement=Measurement(
-        sensor=StereoCamera(stereo.name, stereo_params),
+        sensor=Sensor(stereo_params),
         values=(
             Image.fromarray(z_stereo_left_1[1]),
             Image.fromarray(z_stereo_right_1[1]),
@@ -448,7 +419,7 @@ el19 = Element(
 el20 = Element(
     timestamp=z_velodyne_right_2[0],
     measurement=Measurement(
-        sensor=Lidar3D(velodyne_right.name, velodyne_right_params),
+        sensor=Sensor(velodyne_right_params),
         values=z_velodyne_right_2[1:],
     ),
     location=BinaryDataLocation(
@@ -460,16 +431,14 @@ el20 = Element(
 
 el21 = Element(
     timestamp=z_fog_2[0],
-    measurement=Measurement(
-        sensor=Fog(fog.name, fog_params), values=tuple(str(i) for i in z_fog_2[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(fog_params), values=tuple(str(i) for i in z_fog_2[1:])),
     location=CsvDataLocation(file=fog.file_path, position=2),
 )
 
 el22 = Element(
     timestamp=z_stereo_left_2[0],
     measurement=Measurement(
-        sensor=StereoCamera(stereo.name, stereo_params),
+        sensor=Sensor(stereo_params),
         values=(
             Image.fromarray(z_stereo_left_2[1]),
             Image.fromarray(z_stereo_right_2[1]),
@@ -489,16 +458,14 @@ el22 = Element(
 
 el23 = Element(
     timestamp=z_imu_3[0],
-    measurement=Measurement(
-        sensor=Encoder(imu.name, imu_params), values=tuple(str(i) for i in z_imu_3[1:])
-    ),
+    measurement=Measurement(sensor=Sensor(imu_params), values=tuple(str(i) for i in z_imu_3[1:])),
     location=CsvDataLocation(file=imu.file_path, position=3),
 )
 
 el24 = Element(
     timestamp=z_stereo_left_3[0],
     measurement=Measurement(
-        sensor=StereoCamera(stereo.name, stereo_params),
+        sensor=Sensor(stereo_params),
         values=(
             Image.fromarray(z_stereo_left_3[1]),
             Image.fromarray(z_stereo_right_3[1]),
@@ -518,9 +485,7 @@ el24 = Element(
 
 el25 = Element(
     timestamp=z_sick_middle_3[0],
-    measurement=Measurement(
-        sensor=Lidar2D(sick_middle.name, sick_middle_params), values=z_sick_middle_3[1:]
-    ),
+    measurement=Measurement(sensor=Sensor(sick_middle_params), values=z_sick_middle_3[1:]),
     location=BinaryDataLocation(
         file=(ds.lidar_2D_middle_dir / str(z_sick_middle_3[0])).with_suffix(
             ds.binary_file_extension

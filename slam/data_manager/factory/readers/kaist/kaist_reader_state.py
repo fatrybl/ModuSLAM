@@ -3,11 +3,11 @@ from collections import Counter
 from pathlib import Path
 
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
-from slam.setup_manager.sensors_factory.factory import SensorFactory
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
-from slam.utils.exceptions import SensorNotFound
+from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -62,31 +62,13 @@ class KaistReaderState:
             timestamp: str = line[0]
             sensor_name: str = line[1]
             try:
-                sensor: Sensor = SensorFactory.get_sensor(sensor_name)
-            except SensorNotFound:
+                sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
+            except ItemNotFoundError:
+                logger.warning(f"Sensor {sensor_name!r} has not been found.")
                 continue
 
             iterator = self.sensors_iterators[sensor.name]
             return sensor, iterator, timestamp
-
-    # @staticmethod
-    # def _check_sensors(sensors_names: Sequence[str]) -> None:
-    #     """
-    #     Checks if sensors with given names are initialized in SensorFactory.
-    #
-    #     Args:
-    #         sensors_names (Sequence[str]): sensors` names to check.
-    #
-    #     Raises:
-    #         SensorNotFound: raises when a sensor is not initialized in SensorFactory.
-    #     """
-    #     for name in sensors_names:
-    #         try:
-    #             SensorFactory.get_sensor(name)
-    #         except SensorNotFound:
-    #             msg = f"Sensor with the name {name!r} has not been initialized in Sensor Factory."
-    #             logger.critical(msg)
-    #             raise
 
     @staticmethod
     def _iterate_n_times(n: int, iterator: FileIterator) -> None:

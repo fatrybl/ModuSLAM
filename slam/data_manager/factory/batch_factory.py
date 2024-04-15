@@ -184,10 +184,10 @@ class BatchFactory:
     def create_batch(self, elements: Sequence[Element]) -> None:
         """
         @overload.
-        Creates a new Data Batch from the sequence of elements.
+        Creates a new Data Batch from the collections of elements.
 
         Args:
-            elements (Sequence[Element]): collection of elements w/o raw sensor measurements.
+            elements (Sequence[Element]): sequence of elements w/o raw sensor measurements.
         """
         self.batch.clear()
         StoppingCriterion.state.is_data_processed = False
@@ -216,11 +216,13 @@ class BatchFactory:
 
         Calls:
             1. Create a new Data Batch from the dataset sequentially.
-                Args: None.
-
-            2. Create a new Data Batch from the sequence of elements.
                 Args:
-                    elements (sequence[Element]): sequence of elements w/o raw sensor measurements.
+                    None.
+
+            2. Create a new Data Batch from the collection of elements.
+                Args:
+                    elements (collection[Element]): collection of elements w/o raw sensor measurements.
+
             3. Create a new Data Batch from the set of requests.
                 Args:
                     requests (set[PeriodicData]): each request contains sensor
