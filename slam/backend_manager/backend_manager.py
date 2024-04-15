@@ -1,6 +1,6 @@
 import logging
 
-from omegaconf import DictConfig
+import gtsam
 
 from slam.backend_manager.graph_solver import GraphSolver
 from slam.frontend_manager.graph.graph import Graph
