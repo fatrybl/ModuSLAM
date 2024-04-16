@@ -25,9 +25,7 @@ class Ros2ReaderState:
 
 
 if __name__ == "__main__":
-    from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
-        Ros2Config,
-    )
+    from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import Ros2Config
 
     print("testing")
     my_path = Path()
