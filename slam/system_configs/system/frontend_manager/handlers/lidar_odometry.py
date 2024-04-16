@@ -17,3 +17,4 @@ class KissIcpScanMatcherConfig(HandlerConfig):
     max_range: float = 100
     deskew: bool = False
     preprocess: bool = False
+    measurement_noise_covariance: tuple[float, ...] = (1, 1, 1, 1, 1, 1)

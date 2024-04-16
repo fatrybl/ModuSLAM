@@ -1,6 +1,6 @@
 """Fixtures and classes for frontend_manager tests."""
 
-from typing import Any
+from typing import Any, Callable, Iterable
 
 import gtsam
 import pytest
@@ -49,6 +49,10 @@ class BasicTestEdgeFactory(EdgeFactory):
     def __init__(self, config: EdgeFactoryConfig):
         super().__init__(config)
 
+    @staticmethod
+    def noise_model(values: Iterable[float]) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
+        return gtsam.noiseModel.Diagonal.Sigmas
+
     @property
     def vertices_types(self) -> set[type[Pose]]:
         return {Pose}
@@ -72,6 +76,7 @@ def create_measurement(handler: Handler, element: Element):
         values=element.measurement.values,
         handler=handler,
         elements=(element,),
+        noise_covariance=(1, 1, 1),
     )
 
 
@@ -105,6 +110,7 @@ def measurement(element, handler):
         values=(1, 2, 3),
         handler=handler,
         elements=(element,),
+        noise_covariance=(1, 1, 1),
     )
 
 
@@ -121,7 +127,6 @@ def edge_factory():
         name="test_edge_factory",
         type_name=BasicTestEdgeFactory.__name__,
         module_name=__name__,
-        noise_model="test_model",
         search_time_margin=1,
     )
     return BasicTestEdgeFactory(cfg)

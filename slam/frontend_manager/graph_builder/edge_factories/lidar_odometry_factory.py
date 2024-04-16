@@ -1,6 +1,7 @@
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 import gtsam
+import numpy as np
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.custom_edges import LidarOdometry
@@ -17,28 +18,23 @@ from slam.utils.ordered_set import OrderedSet
 
 
 class LidarOdometryEdgeFactory(EdgeFactory):
-    """Creates edges of type: LidarOdometry."""
+    """Creates edge of type: LidarOdometry."""
 
     def __init__(self, config: EdgeFactoryConfig) -> None:
         super().__init__(config)
         self._time_margin: int = config.search_time_margin
-        self._noise_model: gtsam.noiseModel.Diagonal.Sigmas = self._init_noise_model(
-            config.noise_model
-        )
 
     @staticmethod
-    def _init_noise_model(cfg: str) -> gtsam.noiseModel.Diagonal.Sigmas:
-        """
-        Initializes the noise model.
-        Args:
-            cfg (str): configuration.
+    def noise_model(
+        values: Iterable[float],
+    ) -> Callable[[Iterable[float]], gtsam.noiseModel.Diagonal.Sigmas]:
+        """Measurement noise model method.
 
         Returns:
-            (gtsam.noiseModel.Diagonal): noise model.
-
-        TODO: add config parser and support of other noise models.
+            noise model (gtsam.noiseModel.Diagonal.Sigmas).
         """
-        return gtsam.noiseModel.Diagonal.Sigmas([1] * 6)
+        values = np.array(values, dtype=float)
+        return gtsam.noiseModel.Diagonal.Sigmas(values)
 
     @property
     def vertices_types(self) -> set[type[LidarPose]]:
@@ -59,10 +55,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         return {gtsam.Pose3}
 
     def create(
-        self,
-        graph: Graph,
-        vertices: Iterable[LidarPose],
-        measurements: OrderedSet[Measurement],
+        self, graph: Graph, vertices: Iterable[LidarPose], measurements: OrderedSet[Measurement]
     ) -> list[LidarOdometry]:
         """
         Creates new edges from the given measurements.
@@ -143,10 +136,10 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             vertex1_id (int): id of the first vertex.
             vertex2_id (int): id of the second vertex.
             measurement (Measurement): transformation matrix SE(3).
-            noise_model (gtsam.noiseModel): noise model.
+            noise_model (gtsam.noiseModel.Diagonal.Sigmas): noise model.
 
         Returns:
-            (gtsam.BetweenFactorPose3): lidar odometry factor.
+            lidar odometry factor (gtsam.BetweenFactorPose3).
         """
         tf = gtsam.Pose3(measurement.values)
         factor = gtsam.BetweenFactorPose3(
@@ -162,15 +155,13 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Returns:
             (LidarOdometry): edge instance.
         """
-
-        factor = self._create_factor(
-            vertex1.gtsam_index, vertex2.gtsam_index, measurement, self._noise_model
-        )
+        noise = self.noise_model(measurement.noise_covariance)
+        factor = self._create_factor(vertex1.gtsam_index, vertex2.gtsam_index, measurement, noise)
         edge = LidarOdometry(
             vertex1=vertex1,
             vertex2=vertex2,
             factor=factor,
             measurements=(measurement,),
-            noise_model=self._noise_model,
+            noise_model=noise,
         )
         return edge

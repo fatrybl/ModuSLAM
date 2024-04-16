@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from typing import Generic
+
+import gtsam
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
@@ -44,6 +46,15 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
 
         Returns:
             (type[GraphVertex]): type(s) of base vertex(s).
+        """
+
+    @staticmethod
+    @abstractmethod
+    def noise_model(values: Iterable[float]) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
+        """Measurement noise model method.
+
+        Returns:
+            noise model (gtsam.noiseModel.Base).
         """
 
     @abstractmethod

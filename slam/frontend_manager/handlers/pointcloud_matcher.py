@@ -26,6 +26,7 @@ class ScanMatcher(Handler):
         self._scan_matcher = KissICP(cfg)
         self._name: str = config.name
         self._elements_queue: list[Element] = []
+        self._measurement_noise_covariance = config.measurement_noise_covariance
 
         # self._visualizer = RegistrationVisualizer()
         # self._visualizer.global_view = True
@@ -104,11 +105,13 @@ class ScanMatcher(Handler):
         start = pre_last_el.timestamp
         stop = last_el.timestamp
         t_range = TimeRange(start, stop)
+
         m = Measurement(
             handler=self,
             elements=(empty_pre_last_element, empty_last_element),
             time_range=t_range,
             values=tf,
+            noise_covariance=self._measurement_noise_covariance,
         )
         return m
 

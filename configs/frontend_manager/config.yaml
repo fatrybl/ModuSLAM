@@ -19,5 +19,4 @@ graph_builder:
       name: 'lidar_odometry_edge_factory'
       type_name: 'LidarOdometryEdgeFactory'
       module_name: '.lidar_odometry_factory'
-      noise_model: 'Diagonal'
       search_time_margin: 0

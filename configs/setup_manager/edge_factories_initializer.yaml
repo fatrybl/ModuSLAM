@@ -7,4 +7,3 @@ edge_factories_initializer:
       module_name: '.lidar_odometry_factory'
       name: 'lidar_odometry_edge_factory'
       type_name: 'LidarOdometryEdgeFactory'
-      noise_model: 'Diagonal'
