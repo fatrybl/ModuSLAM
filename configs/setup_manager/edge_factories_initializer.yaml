@@ -1,5 +1,5 @@
 edge_factories_initializer:
-  package_name: 'slam.frontend_manager.graph_builder.edge_factories'
+  package_name: 'slam.frontend_manager.edge_factories'
 
   edge_factories:
 
