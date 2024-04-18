@@ -43,3 +43,8 @@ class CsvDataLocation(Location):
 
     file: Path
     position: int
+
+
+@dataclass(frozen=True, eq=True)
+class ConfigFileLocation(Location):
+    file: Path

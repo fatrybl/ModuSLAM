@@ -73,4 +73,4 @@ pcd.points = o3d.utility.Vector3dVector(points_xyz)
 # )  # Assigning colors based on intensity
 
 # Visualize the point cloud using Open3D's visualization module
-o3d.visualization.draw_geometries([pcd])
+# o3d.visualization.draw_geometries([pcd])

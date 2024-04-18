@@ -1,6 +1,7 @@
 import logging
 from importlib import import_module
 
+import gtsam
 import numpy as np
 from PIL.Image import Image
 
@@ -8,6 +9,32 @@ from slam.data_manager.factory.element import Element
 from slam.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(__name__)
+
+
+def vector_3(x, y, z):
+    """Creates 3D float64 numpy array."""
+    return np.array([x, y, z], dtype=np.float64)
+
+
+def vector_n(*args):
+    """Create N-dimensional float64 numpy array."""
+    return np.array(args, dtype=np.float64)
+
+
+def tuple_to_gtsam_pose3(values: tuple[float, float, float, float, float, float]) -> gtsam.Pose3:
+    """Converts a tuple of (x, y, z, roll, pitch, yaw) to a gtsam.Pose3 object.
+
+    Args:
+        values (tuple[float, float, float, float, float, float]:
+                tuple with values [x, y, z, roll, pitch, yaw].
+
+    Returns:
+        gtsam.Pose3.
+    """
+    rotation = gtsam.Rot3.Ypr(values[5], values[4], values[3])
+    position = values[:3]
+    pose = gtsam.Pose3(rotation, position)
+    return pose
 
 
 def as_int(value: str) -> int:

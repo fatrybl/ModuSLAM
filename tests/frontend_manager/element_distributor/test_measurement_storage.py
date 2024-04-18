@@ -3,7 +3,7 @@
 import pytest
 
 from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.element import Measurement as RawMeasurement
+from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
 from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,

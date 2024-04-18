@@ -20,7 +20,7 @@ class GraphSolver:
             (gtsam.Values): calculated values.
         """
         optimizer = gtsam.LevenbergMarquardtOptimizer(
-            graph.factor_graph, graph.initial_values, self._params
+            graph.factor_graph, graph.gtsam_values, self._params
         )
         optimizer.optimizeSafely()
         result = optimizer.values()

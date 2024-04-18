@@ -75,6 +75,7 @@ class TestVertexStorage:
         vertex_storage.add(optimizable_vertex)
         pose = gtsam.Pose3(gtsam.Rot3([10, 10, 10]), np.array([10, 10, 10]))
         values = gtsam.Values()
+
         values.insert(optimizable_vertex.gtsam_index, pose)
 
         vertex_storage.update_optimizable_vertices(values)

@@ -2,7 +2,7 @@ import numpy as np
 import numpy.typing as npt
 
 from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.element import Measurement as RawMeasurement
+from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import BinaryDataLocation
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,

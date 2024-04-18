@@ -22,15 +22,15 @@ class GraphSaver:
             graph (Graph): graph to save.
         """
 
-        graph.factor_graph.saveGraph(self._path.as_posix(), graph.initial_values)
+        graph.factor_graph.saveGraph(self._path.as_posix(), graph.gtsam_values)
 
     def save_to_pdf(self, graph: Graph) -> None:
-        dot = graph.factor_graph.dot(graph.initial_values, writer=self._graphviz_formatting)
+        dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
         viz = Source(dot)
         viz.render("graph", format="pdf", cleanup=True)
         viz.view(cleanup=True)
 
     def view(self, graph: Graph) -> None:
-        dot = graph.factor_graph.dot(graph.initial_values, writer=self._graphviz_formatting)
+        dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
         viz = Source(dot)
         viz.view(cleanup=True)

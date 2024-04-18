@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
+from collections.abc import Collection
 from typing import Generic
+
+import gtsam
 
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
@@ -23,7 +25,7 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
         """Name of the factory.
 
         Returns:
-            (str): name of the factory.
+            name of the factory (str).
         """
         return self._name
 
@@ -33,7 +35,7 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
         """Types of the vertices used by the factory for edge creation.
 
         Returns:
-            (set[type[GraphVertex]]): type(s) of vertex(s).
+            type(s) of vertex(s) (set[type[GraphVertex]]).
         """
 
     @property
@@ -43,23 +45,37 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
         creation.
 
         Returns:
-            (type[GraphVertex]): type(s) of base vertex(s).
+            type(s) of base vertex(s) (type[GraphVertex]).
+        """
+
+    @staticmethod
+    @abstractmethod
+    def noise_model(
+        values: Collection[float],
+    ) -> gtsam.noiseModel.Base:
+        """Measurement noise model method.
+
+        Args:
+            values (Collection[float]): measurement noise covariance.
+
+        Returns:
+            noise model (gtsam.noiseModel.Base).
         """
 
     @abstractmethod
     def create(
         self,
         graph: Graph,
-        vertices: Iterable[GraphVertex],
+        vertices: Collection[GraphVertex],
         measurements: OrderedSet[Measurement],
     ) -> list[GraphEdge]:
         """
         Creates new edges from the given measurements.
         Args:
             graph (Graph): the main graph.
-            vertices (Iterable[GraphVertex]): graph vertices to be used for new edges.
+            vertices (Collection[GraphVertex]): graph vertices to be used for new edges.
             measurements (OrderedSet[Measurement]): measurements from different handlers.
 
         Returns:
-            (list[GraphEdge]): new edges.
+            new edges (list[GraphEdge]).
         """
