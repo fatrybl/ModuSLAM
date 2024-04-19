@@ -22,23 +22,19 @@ class ScanMatcher(Handler):
     _num_channels: int = 4
 
     def __init__(self, config: KissIcpScanMatcherConfig) -> None:
+        super().__init__(config)
         cfg: KISSConfig = self.to_kiss_icp_config(config)
         self._scan_matcher = KissICP(cfg)
-        self._name: str = config.name
         self._elements_queue: list[Element] = []
         self._measurement_noise_covariance = config.measurement_noise_covariance
 
         # self._visualizer = RegistrationVisualizer()
         # self._visualizer.global_view = True
 
-    @property
-    def name(self) -> str:
-        return self._name
-
     @staticmethod
     def to_kiss_icp_config(cfg: KissIcpScanMatcherConfig) -> KISSConfig:
-        """
-        Creates KissICP config with parameters from the handler config.
+        """Creates KissICP config with parameters from the handler config.
+
         Args:
             cfg (KissIcpScanMatcherConfig): handler config.
 
@@ -56,14 +52,13 @@ class ScanMatcher(Handler):
         return kiss_cfg
 
     def tuple_to_array(self, values: tuple[float, ...]) -> np.ndarray:
-        """
-        Converts raw lidar data to numpy array of shape [Nx3].
+        """Converts raw lidar data to numpy array of shape [Nx3].
+
         Args:
             values (tuple[float,...]): raw lidar scan data.
 
         Returns:
             (np.ndarray[Nx3]): raw values as a numpy array.
-
         """
         arr = np.array(values)
         arr = arr.reshape(-1, self._num_channels)
@@ -71,9 +66,9 @@ class ScanMatcher(Handler):
 
     @staticmethod
     def _transformation(pose_i: np.ndarray, pose_j: np.ndarray) -> np.ndarray:
-        """
-        Compute the transformation between two poses as SE(3) matrices:
-            T = inv(Pi) @ Pj
+        """Compute the transformation between two poses as SE(3) matrices: T = inv(Pi) @
+        Pj.
+
         Args:
             pose_i (np.ndarray): SE(3) matrix.
             pose_j (np.ndarray): SE(3) matrix.
@@ -85,8 +80,8 @@ class ScanMatcher(Handler):
         return tf
 
     def _create_measurement(self, tf: np.ndarray) -> Measurement:
-        """
-        Creates a Measurement object with the computed transformation matrix.
+        """Creates a Measurement object with the computed transformation matrix.
+
         Args:
             tf (np.ndarray[4x4]): transformation matrix SE(3).
 

@@ -42,7 +42,7 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
         """Graph candidate.
 
         Returns:
-            (GraphCandidate): graph candidate.
+            graph candidate (GraphCandidate).
         """
         return self._candidate_factory.graph_candidate
 
@@ -65,7 +65,8 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
             batch (DataBatch): data batch with measurements.
         """
         while not self._candidate_factory.candidate_ready() and not batch.empty():
-            self._distributor.distribute_next(batch)
+            element = batch.first
+            self._distributor.distribute_element(element)
             self._candidate_factory.process_storage(self._distributor.storage)
             batch.remove_first()
 

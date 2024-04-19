@@ -57,3 +57,4 @@ class MapManager:
             graph (Graph): graph to save.
         """
         self._graph_saver.save_to_pdf(graph)
+        self._graph_saver.save_to_file(graph)

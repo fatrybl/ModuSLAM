@@ -1,14 +1,8 @@
 import functools
 import time
-from pathlib import Path
 
 import gtsam
-import open3d as o3d
 from gtsam.symbol_shorthand import X
-
-from slam.data_manager.factory.readers.kaist.measurement_collector import (
-    MeasurementCollector,
-)
 
 
 def timer(func):
@@ -51,23 +45,12 @@ optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
 
 
-data = MeasurementCollector.read_bin(
-    Path(
-        "/home/mark/Desktop/PhD/mySLAM/tests_data/kaist_urban30_gangnam/VLP_left/1544676777116478000.bin"
-    )
-)
-
-K = len(data) // 4  # Calculate the number of rows in the resulting matrix
-matrix = data.reshape((K, 4))
-
 # Convert NumPy array to Open3D point cloud object
 # Extracting the (x, y, z) coordinates and intensity values
-points_xyz = matrix[:, :3]
-intensity = matrix[:, 3]
+
 
 # Convert the NumPy array to an Open3D point cloud object
-pcd = o3d.geometry.PointCloud()
-pcd.points = o3d.utility.Vector3dVector(points_xyz)
+
 # pcd.colors = o3d.utility.Vector3dVector(
 #     np.tile(intensity[:, np.newaxis], (1, 3))
 # )  # Assigning colors based on intensity

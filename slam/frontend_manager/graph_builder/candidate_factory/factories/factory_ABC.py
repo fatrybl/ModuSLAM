@@ -16,21 +16,18 @@ class CandidateFactory(ABC):
         Returns:
             (GraphCandidate): graph candidate.
         """
-        ...
 
     @abstractmethod
     def candidate_ready(self) -> bool:
         """Candidate readiness status.
 
         Returns:
-            (bool): graph candidate readiness status.
+            graph candidate readiness status (bool).
         """
-        ...
 
     @abstractmethod
     def synchronize_states(self) -> None:
         """Synchronizes states of the candidate based on criteria."""
-        ...
 
     @abstractmethod
     def process_storage(self, storage: MeasurementStorage) -> None:
@@ -40,7 +37,6 @@ class CandidateFactory(ABC):
         Args:
             storage (MeasurementStorage): processed measurements from the Distributor.
         """
-        ...
 
     @abstractmethod
     def init_table(self, config: dict[str, str]) -> None:

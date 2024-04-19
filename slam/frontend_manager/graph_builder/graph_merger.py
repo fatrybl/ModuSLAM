@@ -47,8 +47,8 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
     def merge(self, state: State, graph: Graph) -> None:
         """Merges state with the graph.
 
-        1) Create new vertices for the state and set index.
-        2) for edge factory:
+        1) Create new vertices for the state and set the same index.
+        2) for every edge factory:
             - create edges.
             - add edges to the graph.
 

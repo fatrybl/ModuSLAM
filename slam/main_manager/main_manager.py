@@ -15,8 +15,7 @@ class MainManager:
     """Main Manager of the system."""
 
     def __init__(self, config: MainManagerConfig) -> None:
-        """Main Manager of the system.
-
+        """
         Args:
             config (MainManagerConfig): main config for all managers.
         """

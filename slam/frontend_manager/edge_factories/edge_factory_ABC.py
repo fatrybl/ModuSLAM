@@ -32,7 +32,7 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     @property
     @abstractmethod
     def vertices_types(self) -> set[type[GraphVertex]]:
-        """Types of the vertices used by the factory for edge creation.
+        """Types of the vertices used for the create() method.
 
         Returns:
             type(s) of vertex(s) (set[type[GraphVertex]]).
@@ -41,8 +41,7 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     @property
     @abstractmethod
     def base_vertices_types(self) -> set[type[GraphVertex]]:
-        """Types of the base vertices (aka GTSAM types) used by the factory for edge
-        creation.
+        """Types of the base vertices (GTSAM types) used for create() method.
 
         Returns:
             type(s) of base vertex(s) (type[GraphVertex]).

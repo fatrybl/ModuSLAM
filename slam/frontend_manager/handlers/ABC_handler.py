@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from slam.data_manager.factory.element import Element
 from slam.system_configs.system.frontend_manager.handlers.base_handler import (
     HandlerConfig,
 )
@@ -25,4 +26,12 @@ class Handler(ABC):
         return self._name
 
     @abstractmethod
-    def process(self, element) -> Measurement | None: ...
+    def process(self, element: Element) -> Measurement | None:
+        """Processes the element.
+
+        Args:
+            element (Element): element to be processed.
+
+        Returns:
+            Measurement | None: processed measurement.
+        """

@@ -88,6 +88,7 @@ class MeasurementStorage:
         """Adds a new "handler -> measurements" dict to the storage.
 
         Attention: might be slow due to the "recent_measurement" update.
+
         Args:
             data (dict[Handler, OrderedSet[Measurement]]): dict to add.
         """
@@ -97,8 +98,13 @@ class MeasurementStorage:
     def add(self, measurement=None):
         """
         @overload.
-        Args:
-            measurement (Measurement): a new measurement to be added.
+
+        Adds measurement(s) to the storage.
+
+        Calls:
+            add(measurement: Measurement) -> None.
+
+            add(data: dict[Handler, OrderedSet[Measurement]]) -> None.
         """
 
     def remove(self, measurement: Measurement) -> None:
