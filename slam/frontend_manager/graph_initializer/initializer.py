@@ -16,6 +16,7 @@ from slam.frontend_manager.graph.custom_vertices import (
     Velocity,
 )
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.handlers.prior import PriorHandler
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
@@ -31,12 +32,14 @@ from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
+FAKE_SENSOR_NAME = "Prior sensor"
+
 
 class GraphInitializer:
     """Initializes the graph with prior factors."""
 
     def __init__(self, config: GraphInitializerConfig):
-        self._sensor = Sensor(SensorConfig(name="Prior"))
+        self._sensor = Sensor(SensorConfig(name=FAKE_SENSOR_NAME))
         self._handler = PriorHandler()
         self._priors: Iterable[PriorConfig] = config.priors.values()
 
@@ -44,15 +47,12 @@ class GraphInitializer:
         """Initializes the graph with prior factors.
 
         Args:
-            graph (Graph): graph to add priors at.
+            graph (Graph): graph to add prior factors in.
         """
-        edges: list[Edge] = []
 
         for prior in self._priors:
-            edge = self._create_edge(graph, prior)
-            edges.extend(edge)
-
-        graph.add_edge(edges)
+            edges = self._create_edge(graph, prior)
+            graph.add_edge(edges)
 
     def _create_edge(self, graph: Graph, prior: PriorConfig) -> list[Edge]:
         """Creates an edge with a prior factor.
@@ -65,7 +65,7 @@ class GraphInitializer:
             edge (Edge).
         """
         vertex_type = self._get_vertex_type(prior.vertex_type)
-        vertex = vertex_type()
+        vertex = self._get_new_vertex(graph, vertex_type, prior.timestamp)
 
         measurement = self._init_measurement(
             prior.measurement,
@@ -82,32 +82,27 @@ class GraphInitializer:
         return edge
 
     @staticmethod
-    def _get_vertex_type(type_name: str) -> type[Vertex]:
-        """
-        Returns the vertex type by its name.
+    def _get_new_vertex(graph: Graph, vertex_type: type[Vertex], timestamp: int) -> Vertex:
+        """Gets the vertex from the graph by its type and timestamp if exists, otherwise
+        creates a new one.
+
         Args:
-            type_name (str): vertex type name.
+            graph (Graph): graph to get vertex from.
+            vertex_type (type[Vertex]): vertex type.
+            timestamp (int): vertex timestamp.
 
         Returns:
-            vertex type (type[Vertex]).
+            vertex (Vertex).
         """
-        match type_name:
-            case LidarPose.__name__:
-                return LidarPose
+        vertices = graph.vertex_storage.get_vertices(vertex_type)
+        for v in vertices:
+            if v.timestamp == timestamp:
+                return v
 
-            case Pose.__name__:
-                return Pose
-
-            case Velocity.__name__:
-                return Velocity
-
-            case NavState.__name__:
-                return NavState
-
-            case _:
-                msg = f"Vertex type {type_name} is not supported."
-                logger.critical(msg)
-                raise ValueError(msg)
+        new_vertex = vertex_type()
+        new_vertex.timestamp = timestamp
+        new_vertex.index = generate_index(graph.vertex_storage.index_storage)
+        return new_vertex
 
     @staticmethod
     def _get_edge_factory(factory_name: str) -> EdgeFactory:
@@ -129,8 +124,8 @@ class GraphInitializer:
         timestamp: int,
         file_path: Path,
     ) -> Measurement:
-        """
-        Initializes the measurement.
+        """Initializes the measurement.
+
         Args:
             values (tuple[Any, ...]): measurement values.
             noise_covariance (tuple[float, ...]): noise covariance.
@@ -154,3 +149,31 @@ class GraphInitializer:
             elements=(element,),
         )
         return m
+
+    @staticmethod
+    def _get_vertex_type(type_name: str) -> type[Vertex]:
+        """Returns the vertex type by its name.
+
+        Args:
+            type_name (str): vertex type name.
+
+        Returns:
+            vertex type (type[Vertex]).
+        """
+        match type_name:
+            case LidarPose.__name__:
+                return LidarPose
+
+            case Pose.__name__:
+                return Pose
+
+            case Velocity.__name__:
+                return Velocity
+
+            case NavState.__name__:
+                return NavState
+
+            case _:
+                msg = f"Vertex type {type_name} is not supported."
+                logger.critical(msg)
+                raise ValueError(msg)

@@ -8,7 +8,6 @@ from slam.frontend_manager.element_distributor.measurement_storage import Measur
 from slam.frontend_manager.graph.custom_edges import PriorPose
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.noise_models import pose_diagonal_noise_model
 from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
@@ -50,8 +49,6 @@ class PriorPoseEdgeFactory(EdgeFactory):
     ) -> list[PriorPose]:
         measurement: Measurement = measurements.last
         vertex = tuple(vertices)[0]
-        vertex.index = generate_index(graph.vertex_storage.index_storage)
-        vertex.timestamp = measurement.time_range.start
         edge = self._create_edge(vertex, measurement)
         return [edge]
 

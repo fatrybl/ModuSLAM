@@ -29,7 +29,7 @@ graph_builder:
 
 graph_initializer:
   priors:
-    first_lidar_pose:
+    initial_pose:
       timestamp: 1544581174277398000 # timestamp of first VLP_right scan from batch_factory.yaml
       vertex_type: "Pose"
       edge_factory_name: "prior_pose_edge_factory"

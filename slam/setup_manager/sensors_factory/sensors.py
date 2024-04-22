@@ -39,7 +39,7 @@ class Sensor:
         """Name of the sensor.
 
         Returns:
-            (str): name of the sensor.
+            name of the sensor (str).
         """
         return self._name
 
@@ -123,6 +123,6 @@ class Lidar3D(Sensor):
         """Transformation matrix from the base to the sensor.
 
         Returns:
-            (np.ndarray[4x4]): SE(3) transformation matrix.
+            SE(3) transformation matrix (np.ndarray[4x4]).
         """
         return self._tf_base_sensor

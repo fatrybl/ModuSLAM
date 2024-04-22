@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Iterable
-from typing import Any, Generic, overload
+from typing import Generic, overload
 
 import gtsam
 from plum import dispatch
@@ -67,36 +67,6 @@ class Graph(Generic[GraphVertex, GraphEdge]):
                 Args:
                     vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
         """
-
-    @overload
-    def set_prior(self) -> None:
-        """
-        @overload.
-        Initialize the graph with prior vertices and edges.
-        """
-        raise NotImplementedError
-
-    @overload
-    def set_prior(self, config: Any) -> None:
-        """
-        @overload.
-        Initialize the graph with prior vertices and edges from config.
-        """
-        raise NotImplementedError
-
-    @dispatch
-    def set_prior(self, config=None):
-        """
-        @overload.
-
-        Calls:
-            1. __.
-
-            2. Args:
-                config (Any): config with prior vertices and edges.
-
-        """
-        raise NotImplementedError
 
     @overload
     def add_edge(self, edge: GraphEdge) -> None:

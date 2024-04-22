@@ -24,12 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class SensorsFactory:
-    """Factory class to initialize and store sensors.
-
-    Raises:
-        ItemNotFoundError: no sensor with the requested sensor name in all sensors.
-        ValueError: non-existing sensor`s type for the item from config.
-    """
+    """Factory class to initialize and store sensors."""
 
     _sensors: set[Sensor] = set()
     _sensors_table: dict[str, Sensor] = {}
@@ -39,7 +34,7 @@ class SensorsFactory:
         """All sensors which have been used in experiment.
 
         Returns:
-            (set[Sensor]): used sensors which have been used in experiment.
+            all sensors (set[Sensor]).
         """
         return cls._sensors
 
@@ -50,11 +45,11 @@ class SensorsFactory:
         Args:
             name (str): sensor name
 
-        Raises:
-            ItemNotFoundError: there is no sensor with the requested sensor name among all sensors.
-
         Returns:
             Type[Sensor]: sensor if it exists among all sensors.
+
+        Raises:
+            ItemNotFoundError: there is no sensor with the requested sensor name among all sensors.
         """
         try:
             return cls._sensors_table[name]
@@ -92,11 +87,11 @@ class SensorsFactory:
         Args:
             cfg (SensorConfig): config to define sensor.
 
+        Returns:
+            sensor (Sensor).
+
         Raises:
             ValueError: there is no available sensor type for the item from config.
-
-        Returns:
-            (Sensor): sensor created from config.
         """
 
         sensor_type: str = cfg.type_name
