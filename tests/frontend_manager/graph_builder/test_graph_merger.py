@@ -30,7 +30,7 @@ def test_create_vertex_table(handler, edge_factory):
     # add new key-value pair to the protected table. Only for testing purposes.
     merger._table = {handler: edge_factory}
 
-    table = merger._create_vertex_table(index_storage, timestamp)
+    table = merger._create_factory_vertices_table(index_storage, timestamp)
 
     assert len(table) == 1
 

@@ -1,13 +1,14 @@
 """Fixtures and classes for frontend_manager tests."""
 
-from typing import Any
+from typing import Any, Callable, Iterable
 
 import gtsam
 import pytest
 
 from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.element import Measurement as RawMeasurement
+from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
+from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from slam.frontend_manager.element_distributor.measurement_storage import (
     Measurement,
     MeasurementStorage,
@@ -15,9 +16,6 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
 from slam.frontend_manager.graph.base_edges import UnaryEdge
 from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.custom_vertices import Pose
-from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
-    EdgeFactory,
-)
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
@@ -49,6 +47,10 @@ class BasicTestEdgeFactory(EdgeFactory):
     def __init__(self, config: EdgeFactoryConfig):
         super().__init__(config)
 
+    @staticmethod
+    def noise_model(values: Iterable[float]) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
+        return gtsam.noiseModel.Diagonal.Sigmas
+
     @property
     def vertices_types(self) -> set[type[Pose]]:
         return {Pose}
@@ -72,6 +74,7 @@ def create_measurement(handler: Handler, element: Element):
         values=element.measurement.values,
         handler=handler,
         elements=(element,),
+        noise_covariance=(1, 1, 1),
     )
 
 
@@ -105,6 +108,7 @@ def measurement(element, handler):
         values=(1, 2, 3),
         handler=handler,
         elements=(element,),
+        noise_covariance=(1, 1, 1),
     )
 
 
@@ -121,7 +125,6 @@ def edge_factory():
         name="test_edge_factory",
         type_name=BasicTestEdgeFactory.__name__,
         module_name=__name__,
-        noise_model="test_model",
         search_time_margin=1,
     )
     return BasicTestEdgeFactory(cfg)

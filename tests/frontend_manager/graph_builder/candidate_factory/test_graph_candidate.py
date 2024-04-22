@@ -17,13 +17,25 @@ from tests.frontend_manager.conftest import element, handler
 def measurements(handler, element):
     return [
         Measurement(
-            time_range=TimeRange(1, 1), values=(1, 2, 3), handler=handler, elements=(element,)
+            time_range=TimeRange(1, 1),
+            values=(1, 2, 3),
+            handler=handler,
+            elements=(element,),
+            noise_covariance=(1, 1, 1),
         ),
         Measurement(
-            time_range=TimeRange(2, 2), values=(4, 5, 6), handler=handler, elements=(element,)
+            time_range=TimeRange(2, 2),
+            values=(4, 5, 6),
+            handler=handler,
+            elements=(element,),
+            noise_covariance=(2, 2, 2),
         ),
         Measurement(
-            time_range=TimeRange(3, 3), values=(7, 8, 9), handler=handler, elements=(element,)
+            time_range=TimeRange(3, 3),
+            values=(7, 8, 9),
+            handler=handler,
+            elements=(element,),
+            noise_covariance=(3, 3, 3),
         ),
     ]
 

@@ -51,12 +51,12 @@ class DataBatch:
         """Elements in the data batch.
 
         Returns:
-            deque[Element]: elements in the batch.
+            elements in the batch deque[Element].
         """
         return self._deque_set.items
 
     @property
-    def first(self):
+    def first(self) -> Element:
         """Returns the first element of the batch.
 
         Returns:

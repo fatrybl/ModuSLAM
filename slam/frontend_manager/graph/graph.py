@@ -6,7 +6,7 @@ import gtsam
 from plum import dispatch
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
-from slam.frontend_manager.graph.base_vertices import GraphVertex
+from slam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
 
@@ -189,18 +189,29 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """
 
         self.vertex_storage.update_optimizable_vertices(values)
-        # self.vertex_storage.update_non_optimizable_vertices()
 
     @property
-    def initial_values(self) -> gtsam.Values:
+    def gtsam_values(self) -> gtsam.Values:
         """GTSAM Initial values of the graph.
 
+        TODO: add tests for initial_values.
+
         Returns:
-            (gtsam.Values): initial values.
+            initial values (gtsam.Values).
         """
         vertices = self.vertex_storage.optimizable_vertices
         initial_values = gtsam.Values()
-        [initial_values.insert(v.gtsam_index, v.value) for v in vertices]
+        unique_vertices: dict[int, OptimizableVertex] = {}
+
+        for vertex in vertices:
+            if vertex.gtsam_index not in unique_vertices:
+                unique_vertices[vertex.gtsam_index] = vertex
+
+        [
+            initial_values.insert(vertex.gtsam_index, vertex.gtsam_value)
+            for vertex in unique_vertices.values()
+        ]
+
         return initial_values
 
     def marginalize(self, edges: Iterable[GraphEdge]) -> None:

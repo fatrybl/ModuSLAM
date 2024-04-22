@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from slam.frontend_manager.graph_builder.edge_factories.lidar_odometry_factory import (
+from slam.frontend_manager.edge_factories.lidar_odometry_factory import (
     LidarOdometryEdgeFactory,
 )
 from slam.setup_manager.edge_factories_initializer import factory as factory_module

@@ -202,6 +202,8 @@ class VertexStorage(Generic[GraphVertex]):
     ) -> GraphVertex | None:
         """Finds the closest vertex with the given timestamp, time margin and type.
 
+        TODO: add implementation.
+
         algorithm:
             1.  from vertices storage get all ve.
             2.  if not found, find the closest vertex with the given time margin.
@@ -214,7 +216,7 @@ class VertexStorage(Generic[GraphVertex]):
         Returns:
             (GraphVertex | None): closest vertex if found, None otherwise.
         """
-        return None
+        raise NotImplementedError
 
     def get_last_vertex(self, vertex_type: type[GraphVertex]) -> GraphVertex | None:
         """

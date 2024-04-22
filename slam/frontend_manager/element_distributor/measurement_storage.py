@@ -16,16 +16,24 @@ logger = logging.getLogger(__name__)
 class Measurement:
     """A measurement formed of processed element(s) by the corresponding handler.
 
-    Hash calculation ignores "values" field because not all values are hashable.
+    Hash calculation ignores "values" attribute as not all values are hashable.
     """
 
     time_range: TimeRange
     values: Any
     handler: Handler
     elements: tuple[Element, ...]
+    noise_covariance: tuple[float, ...]
 
     def __hash__(self):
-        return hash((self.time_range, self.handler, self.elements))
+        return hash(
+            (
+                self.time_range,
+                self.handler,
+                self.elements,
+                self.noise_covariance,
+            )
+        )
 
 
 class MeasurementStorage:
@@ -80,6 +88,7 @@ class MeasurementStorage:
         """Adds a new "handler -> measurements" dict to the storage.
 
         Attention: might be slow due to the "recent_measurement" update.
+
         Args:
             data (dict[Handler, OrderedSet[Measurement]]): dict to add.
         """
@@ -89,8 +98,13 @@ class MeasurementStorage:
     def add(self, measurement=None):
         """
         @overload.
-        Args:
-            measurement (Measurement): a new measurement to be added.
+
+        Adds measurement(s) to the storage.
+
+        Calls:
+            add(measurement: Measurement) -> None.
+
+            add(data: dict[Handler, OrderedSet[Measurement]]) -> None.
         """
 
     def remove(self, measurement: Measurement) -> None:

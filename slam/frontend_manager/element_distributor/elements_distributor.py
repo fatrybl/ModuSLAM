@@ -1,7 +1,6 @@
 import logging
 from typing import Iterable
 
-from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.element_distributor.measurement_storage import (
     Measurement,
@@ -20,8 +19,17 @@ class ElementDistributor:
     preprocessing."""
 
     def __init__(self):
-        self.storage = MeasurementStorage()
+        self._storage = MeasurementStorage()
         self._table: dict[Sensor, list[Handler]] = {}
+
+    @property
+    def storage(self) -> MeasurementStorage:
+        """Storage of measurements.
+
+        Returns:
+            storage of measurements (MeasurementStorage).
+        """
+        return self._storage
 
     def init_table(self, table_config: dict[str, list[str]]) -> None:
         """Initializes sensor-handler table.
@@ -33,33 +41,33 @@ class ElementDistributor:
 
     @property
     def sensor_handler_table(self) -> dict[Sensor, list[Handler]]:
-        """Represents connections between sensors and handlers.
+        """Table with connections between sensors and handlers.
 
         Returns:
-            (dict[Sensor, list[ElementHandler]]): table with sensor names as key and list of handlers as values.
+            Sensor -> handlers table (dict[Sensor, list[Handler]]).
         """
         return self._table
 
     def clear_storage(self, data: Iterable[OrderedSet[Measurement]]) -> None:
+        """Clears the storage from measurements.
+
+        Args:
+            data (Iterable[OrderedSet[Measurement]]): data to be removed from storage.
+        """
         for ordered_set in data:
             for measurement in ordered_set:
                 self.storage.remove(measurement)
 
-    def distribute_next(self, data_batch: DataBatch) -> None:
-        """Takes element from the data batch and process it with external module.
-
-        1) Gets recent element from DataBatch.
-        2) Distributes it to the corresponding handler.
-        3) Updates measurement storage if a new measurement has been created by the handler.
+    def distribute_element(self, element: Element) -> None:
+        """Distributes an element to the handler for processing.
 
         TODO: add support for multiple args for process() method.
         Returns:
             measurement: processed element as measurement.
         """
-        element: Element = data_batch.first
         handlers = self.sensor_handler_table[element.measurement.sensor]
 
         for handler in handlers:
-            z: Measurement | None = handler.process(element)
-            if z:
-                self.storage.add(z)
+            m: Measurement | None = handler.process(element)
+            if m:
+                self.storage.add(m)

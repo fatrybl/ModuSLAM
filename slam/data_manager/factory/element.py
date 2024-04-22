@@ -6,7 +6,7 @@ from slam.setup_manager.sensors_factory.sensors import Sensor
 
 
 @dataclass(frozen=True, eq=True)
-class Measurement:
+class RawMeasurement:
     """Sensor and its raw measurement.
 
     Hash() calculation ignores values because some of them might not be hashable, i.e.
@@ -25,5 +25,5 @@ class Element:
     """Element of a data batch."""
 
     timestamp: int
-    measurement: Measurement
+    measurement: RawMeasurement
     location: Location

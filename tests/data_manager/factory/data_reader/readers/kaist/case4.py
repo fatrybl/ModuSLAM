@@ -1,4 +1,4 @@
-from slam.data_manager.factory.element import Element, Location, Measurement
+from slam.data_manager.factory.element import Element, Location, RawMeasurement
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
@@ -63,7 +63,7 @@ incorrect_sensors_cfg: dict[str, SensorConfig] = {"none_existent_camera": invali
 
 invalid_sensor = Sensor(config=invalid_sensor_cfg)
 
-invalid_measurement = Measurement(sensor=invalid_sensor, values=el3.measurement.values)
+invalid_measurement = RawMeasurement(sensor=invalid_sensor, values=el3.measurement.values)
 
 invalid_element1 = Element(timestamp=-1, measurement=el3.measurement, location=el3.location)
 invalid_element2 = Element(
