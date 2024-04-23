@@ -32,7 +32,7 @@ def test_distribute_next(data_batch, sensor, handler):
 
     with patch.object(ElementDistributor, "sensor_handler_table", table):
 
-        element_distributor.distribute_next(data_batch)
+        element_distributor.distribute_element(data_batch.first)
         assert measurement in element_distributor.storage.data[handler]
 
 

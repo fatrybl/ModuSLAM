@@ -1,8 +1,6 @@
 import logging
 
-from slam.frontend_manager.graph_builder.edge_factories.edge_factory_ABC import (
-    EdgeFactory,
-)
+from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from slam.system_configs.system.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )

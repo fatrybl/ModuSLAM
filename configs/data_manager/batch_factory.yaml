@@ -4,12 +4,12 @@ defaults:
 
 batch_factory:
   dataset:
-    directory: "/media/mark/New Volume/datasets/kaist/urban-26/"
+    directory: "/media/mark/New Volume/datasets/kaist/urban-26"
 
   regime:
     name: "TimeLimit"
     start: 1544581174277398000
-    stop: 1544581194348085000
+    stop: 1544581174479101000
   memory:
     batch_memory: 100.0
 

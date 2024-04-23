@@ -1,7 +1,8 @@
 """Tests for EdgeStorage class."""
 
-import gtsam.noiseModel
 import pytest
+from gtsam import PriorFactorPoint2
+from gtsam.noiseModel import Diagonal
 
 from slam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
@@ -23,38 +24,30 @@ class TestEdgeStorage:
         vertex1,
         vertex2,
         measurements=(),
-        noise_model=gtsam.noiseModel.Diagonal.Sigmas([1, 1]),
-        factor=gtsam.PriorFactorPoint2(
-            key=0, prior=[0, 0], noiseModel=gtsam.noiseModel.Diagonal.Sigmas([1, 1])
-        ),
+        noise_model=Diagonal.Sigmas([1, 1]),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
     )
 
     edge2 = UnaryEdge(
         vertex1,
         measurements=(),
-        noise_model=gtsam.noiseModel.Diagonal.Sigmas([1, 1]),
-        factor=gtsam.PriorFactorPoint2(
-            key=0, prior=[0, 0], noiseModel=gtsam.noiseModel.Diagonal.Sigmas([1, 1])
-        ),
+        noise_model=Diagonal.Sigmas([1, 1]),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
     )
 
     edge3 = UnaryEdge(
         vertex3,
         measurements=(),
-        noise_model=gtsam.noiseModel.Diagonal.Sigmas([1, 1]),
-        factor=gtsam.PriorFactorPoint2(
-            key=0, prior=[0, 0], noiseModel=gtsam.noiseModel.Diagonal.Sigmas([1, 1])
-        ),
+        noise_model=Diagonal.Sigmas([1, 1]),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
     )
 
     edge4 = MultiEdge(
         vertex_set_1={vertex1, vertex2},
         vertex_set_2={vertex3},
         measurements=(),
-        noise_model=gtsam.noiseModel.Diagonal.Sigmas([1, 1]),
-        factor=gtsam.PriorFactorPoint2(
-            key=0, prior=[0, 0], noiseModel=gtsam.noiseModel.Diagonal.Sigmas([1, 1])
-        ),
+        noise_model=Diagonal.Sigmas([1, 1]),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
     )
 
     def test_add(self, edge_storage):

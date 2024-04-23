@@ -12,14 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 class MainManager:
-    """Main Manager of the system.
-
-    Initializes other managers.
-    """
+    """Main Manager of the system."""
 
     def __init__(self, config: MainManagerConfig) -> None:
-        """Main Manager of the system.
-
+        """
         Args:
             config (MainManagerConfig): main config for all managers.
         """
@@ -30,12 +26,15 @@ class MainManager:
         self.backend_manager = BackendManager()
         logger.info("The system has been successfully configured.")
 
-    def process(
+    def _process(
         self,
     ) -> None:
         """TODO Check if Memory breakpoint is valid before creating new batch."""
         batch = self.data_manager.batch_factory.batch
         graph = self.frontend_manager.graph
+
+        self.frontend_manager.set_prior()
+
         while not batch.empty():
             self.frontend_manager.create_graph(batch)
             self.backend_manager.solve(graph)
@@ -45,11 +44,14 @@ class MainManager:
         """
         TODO: check if break_point is still valid: batch might be deleted but Memory Criterion is still active.
         """
+
         while not StoppingCriterion.is_active():
             self.data_manager.make_batch()
-            self.process()
+            self._process()
 
         self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
+        print(self.frontend_manager.graph.gtsam_values)
         self.map_manager.visualize_map()
+        self.map_manager.save_graph(self.frontend_manager.graph)
 
         logger.info("Map has been built")

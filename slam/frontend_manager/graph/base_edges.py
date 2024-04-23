@@ -14,7 +14,7 @@ class Edge(ABC, Generic[GraphVertex]):
         self,
         measurements: tuple[Measurement, ...],
         factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         self.measurements = measurements
         self.factor = factor
@@ -39,7 +39,7 @@ class MultiEdge(Edge):
         vertex_set_2 (set[GraphVertex]): second set of vertices.
         measurements (tuple[Element, ...]): elements of DataBatch which create the edge.
         factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel): noise model for the factor.
+        noise_model (gtsam.noiseModel.Base): noise model for the factor.
     """
 
     def __init__(
@@ -48,7 +48,7 @@ class MultiEdge(Edge):
         vertex_set_2: set[GraphVertex],
         measurements: tuple[Measurement, ...],
         factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         super().__init__(measurements, factor, noise_model)
         self.vertex_set_1 = vertex_set_1
@@ -66,7 +66,7 @@ class UnaryEdge(Edge):
         measurements (tuple[Measurement, ...]): element of DataBatch which create the edge.
         vertex (GraphVertex): vertex which is connected by the edge.
         factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel): noise model for the factor.
+        noise_model (gtsam.noiseModel.Base): noise model for the factor.
     """
 
     def __init__(
@@ -74,7 +74,7 @@ class UnaryEdge(Edge):
         vertex: GraphVertex,
         measurements: tuple[Measurement, ...],
         factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         super().__init__(measurements, factor, noise_model)
         self.vertex = vertex
@@ -92,7 +92,7 @@ class BinaryEdge(Edge):
         vertex1 (GraphVertex): first vertex which is connected by the edge.
         vertex2 (GraphVertex): second vertex which is connected by the edge.
         factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel): noise model for the factor.
+        noise_model (gtsam.noiseModel.Base): noise model for the factor.
     """
 
     def __init__(
@@ -101,7 +101,7 @@ class BinaryEdge(Edge):
         vertex2: GraphVertex,
         measurements: tuple[Measurement, ...],
         factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         super().__init__(measurements, factor, noise_model)
         self.vertex1 = vertex1
@@ -121,7 +121,7 @@ class CalibrationEdge(Edge):
         vertex: GraphVertex,
         vertices: set[GraphVertex],
         factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         super().__init__(measurements, factor, noise_model)
         self.vertex = vertex

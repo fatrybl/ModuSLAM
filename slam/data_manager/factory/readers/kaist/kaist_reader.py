@@ -5,7 +5,7 @@ from typing import overload
 from plum import dispatch
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
-from slam.data_manager.factory.element import Element, Measurement
+from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
 from slam.data_manager.factory.readers.kaist.kaist_reader_state import KaistReaderState
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
@@ -77,7 +77,7 @@ class KaistReader(DataReader):
 
         message, location = self._collector.get_data(sensor.name, iterator)
         timestamp_int = as_int(message.timestamp)
-        measurement = Measurement(sensor, message.data)
+        measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp_int, measurement, location)
         return element
 
@@ -111,7 +111,7 @@ class KaistReader(DataReader):
         if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
             return None
 
-        measurement = Measurement(sensor, message.data)
+        measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
 
@@ -150,7 +150,7 @@ class KaistReader(DataReader):
             raise ItemNotFoundError(msg)
 
         timestamp: int = as_int(message.timestamp)
-        measurement = Measurement(sensor, message.data)
+        measurement = RawMeasurement(sensor, message.data)
         element_with_data = Element(timestamp, measurement, location)
         return element_with_data
 
@@ -190,7 +190,7 @@ class KaistReader(DataReader):
             raise ItemNotFoundError(msg)
 
         timestamp = as_int(message.timestamp)
-        measurement = Measurement(sensor, message.data)
+        measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import PIL.Image as Image
 
-from slam.data_manager.factory.element import Element, Measurement
+from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     CsvDataLocation,
     Location,
@@ -26,7 +26,7 @@ class TestEqualElements:
         data = np.uint8(np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]]))
         img = Image.fromarray(data)
 
-        m = Measurement(values=(img,), sensor=self.sensor)
+        m = RawMeasurement(values=(img,), sensor=self.sensor)
 
         element1 = Element(timestamp=123, location=loc, measurement=m)
         element2 = Element(timestamp=123, location=loc, measurement=m)
@@ -41,7 +41,7 @@ class TestEqualElements:
         data = np.uint8(np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]]))
         img = Image.fromarray(data)
 
-        m = Measurement(values=(img,), sensor=self.sensor)
+        m = RawMeasurement(values=(img,), sensor=self.sensor)
 
         element = Element(timestamp=123, location=loc, measurement=m)
 
@@ -54,7 +54,7 @@ class TestEqualElements:
         data = np.uint8(np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]]))
         img = Image.fromarray(data)
 
-        m = Measurement(values=(img,), sensor=self.sensor)
+        m = RawMeasurement(values=(img,), sensor=self.sensor)
 
         element1 = Element(timestamp=123, location=loc1, measurement=m)
         element2 = Element(timestamp=123, location=loc2, measurement=m)
@@ -66,8 +66,8 @@ class TestEqualElements:
         values1 = (1, 2, 3)
         values2 = (4, 5, 6)
 
-        m1 = Measurement(values=(values1,), sensor=self.sensor)
-        m2 = Measurement(values=(values2,), sensor=self.sensor)
+        m1 = RawMeasurement(values=(values1,), sensor=self.sensor)
+        m2 = RawMeasurement(values=(values2,), sensor=self.sensor)
 
         element1 = Element(timestamp=123, location=loc, measurement=m1)
         element2 = Element(timestamp=123, location=loc, measurement=m2)
@@ -79,7 +79,7 @@ class TestEqualElements:
         data = np.uint8(np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]]))
         img = Image.fromarray(data)
 
-        m = Measurement(values=(img,), sensor=self.sensor)
+        m = RawMeasurement(values=(img,), sensor=self.sensor)
 
         element1 = Element(timestamp=123, location=loc, measurement=m)
         element2 = Element(timestamp=456, location=loc, measurement=m)
@@ -91,8 +91,8 @@ class TestEqualElements:
         data = np.uint8(np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]]))
         img = Image.fromarray(data)
 
-        m1 = Measurement(values=(img,), sensor=self.sensor)
-        m2 = Measurement(values=(img,), sensor=self.other_sensor)
+        m1 = RawMeasurement(values=(img,), sensor=self.sensor)
+        m2 = RawMeasurement(values=(img,), sensor=self.other_sensor)
 
         element1 = Element(timestamp=123, location=loc, measurement=m1)
         element2 = Element(timestamp=123, location=loc, measurement=m2)

@@ -5,6 +5,7 @@ from slam.frontend_manager.graph.base_edges import (
     BinaryEdge,
     CalibrationEdge,
     MultiEdge,
+    UnaryEdge,
 )
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 
@@ -17,7 +18,7 @@ class SmartFactorEdge(CalibrationEdge):
         support_vertices (set[GraphVertex]): support vertices.
         measurements (tuple[Measurement, ...]): elements of DataBatch which create the edge.
         factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel): noise model for the factor.
+        noise_model (gtsam.noiseModel.Base): noise model for the factor.
     """
 
     def __init__(
@@ -26,7 +27,7 @@ class SmartFactorEdge(CalibrationEdge):
         support_vertices: set[GraphVertex],
         measurements: tuple[Measurement, ...],
         factor: gtsam.SmartProjectionPose3Factor,
-        noise_model: gtsam.noiseModel,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         super().__init__(measurements, vertex, support_vertices, factor, noise_model)
 
@@ -67,3 +68,15 @@ class LidarOdometry(BinaryEdge):
 
 class StereoCameraOdometry(BinaryEdge):
     """Edge for Stereo Camera odometry."""
+
+
+class PriorPose(UnaryEdge):
+    """Edge for prior pose."""
+
+
+class PriorVelocity(UnaryEdge):
+    """Edge for prior velocity."""
+
+
+class PriorNavState(UnaryEdge):
+    """Edge for prior nav state."""
