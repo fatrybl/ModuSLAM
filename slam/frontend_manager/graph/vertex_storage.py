@@ -1,18 +1,18 @@
 import logging
 from collections.abc import Iterable
-from typing import Any, Generic, overload
+from typing import Generic, overload
 
 import gtsam
 from plum import dispatch
 
 from slam.frontend_manager.graph.base_vertices import (
     GraphVertex,
+    NotOptimizableVertex,
     OptimizableVertex,
     Vertex,
 )
 from slam.frontend_manager.graph.custom_vertices import (
     CameraFeature,
-    CameraPose,
     ImuBias,
     LidarPose,
     NavState,
@@ -27,25 +27,20 @@ logger = logging.getLogger(__name__)
 
 
 class VertexStorage(Generic[GraphVertex]):
-    """Stores vertices of the Graph.
-
-    TODO:
-        maybe get_vertices(type) to get all vertices of the graph of the given type ?
-    """
+    """Stores vertices of the Graph."""
 
     def __init__(self):
         self._vertices = DequeSet[GraphVertex]()
         self._index_storage = IndexStorage()
 
         self._optimizable_vertices = OrderedSet[OptimizableVertex]()
-        self._non_optimizable_vertices = OrderedSet[GraphVertex]()
+        self._not_optimizable_vertices = OrderedSet[NotOptimizableVertex]()
 
         self._vertices_table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
             Velocity: DequeSet[Velocity](),
             NavState: DequeSet[NavState](),
             ImuBias: DequeSet[ImuBias](),
-            CameraPose: DequeSet[CameraPose](),
             LidarPose: DequeSet[LidarPose](),
             CameraFeature: DequeSet[CameraFeature](),
         }
@@ -59,7 +54,7 @@ class VertexStorage(Generic[GraphVertex]):
         """All vertices in the Graph.
 
         Returns:
-            (DequeSet[GraphVertex]): all vertices in the graph.
+            all vertices in the graph (DequeSet[GraphVertex]).
         """
         return self._vertices
 
@@ -68,18 +63,19 @@ class VertexStorage(Generic[GraphVertex]):
         """Optimizable vertices in the Graph.
 
         Returns:
-            (DequeSet[GraphVertex]): optimizable vertices in the graph.
+            optimizable vertices in the graph (OrderedSet[OptimizableVertex]).
         """
         return self._optimizable_vertices
 
     @property
-    def non_optimizable_vertices(self) -> OrderedSet[GraphVertex]:
-        """Constant vertices in the Graph.
+    def not_optimizable_vertices(self) -> OrderedSet[NotOptimizableVertex]:
+        """Vertices which are not being optimized in the graph. They are not variables
+        and are not being included in GTSAM factors directly.
 
         Returns:
-            (DequeSet[GraphVertex]): constant vertices in the graph.
+            constant vertices in the graph (OrderedSet[NotOptimizableVertex]).
         """
-        return self._non_optimizable_vertices
+        return self._not_optimizable_vertices
 
     def get_vertices(self, vertex_type: type[Vertex]) -> DequeSet:
         """Returns vertices of the given type.
@@ -108,8 +104,12 @@ class VertexStorage(Generic[GraphVertex]):
         self._add_to_table(vertex)
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.add(vertex)
+        elif isinstance(vertex, NotOptimizableVertex):
+            self._not_optimizable_vertices.add(vertex)
         else:
-            self._non_optimizable_vertices.add(vertex)
+            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
+            logger.critical(msg)
+            raise TypeError(msg)
 
     @overload
     def add(self, vertices: Iterable[GraphVertex]) -> None:
@@ -151,8 +151,12 @@ class VertexStorage(Generic[GraphVertex]):
         self._remove_from_table(vertex)
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.remove(vertex)
+        elif isinstance(vertex, NotOptimizableVertex):
+            self._not_optimizable_vertices.remove(vertex)
         else:
-            self._non_optimizable_vertices.remove(vertex)
+            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
+            logger.critical(msg)
+            raise TypeError(msg)
 
     @overload
     def remove(self, vertices: Iterable[GraphVertex]) -> None:
@@ -182,19 +186,17 @@ class VertexStorage(Generic[GraphVertex]):
         """
 
     def update_optimizable_vertices(self, new_values: gtsam.Values) -> None:
-        """Updates the vertices with new values.
+        """Updates optimizable vertices with new values.
 
         Args:
-            new_values (gtsam.Values): new values for vertices.
+            new_values (gtsam.Values).
         """
 
         [vertex.update(new_values) for vertex in self._optimizable_vertices]
 
-    def update_non_optimizable_vertices(self, new_values: dict[GraphVertex, Any]) -> None:
-        """Updates the non-optimizable vertices."""
-        for vertex in self._non_optimizable_vertices:
-            if vertex in new_values:
-                vertex.update(new_values[vertex])
+    def update_non_optimizable_vertices(self) -> None:
+        """Updates non-optimizable vertices."""
+        [vertex.update() for vertex in self._not_optimizable_vertices]
 
     @staticmethod
     def find_closest_vertex(

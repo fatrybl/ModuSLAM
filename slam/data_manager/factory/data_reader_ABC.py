@@ -43,19 +43,20 @@ class DataReader(ABC):
     def is_file_valid(file_path: Path) -> bool:
         """
         Checks if a file is valid: exists and not empty.
+
         Args:
             file_path (Path): path to a file.
 
         Returns:
             bool: True if file is valid, False otherwise.
         """
-        if not Path.is_file(file_path):
+        if not file_path.is_file():
             msg = f"File {file_path} does not exist."
-            logger.error(msg)
+            logger.critical(msg)
             return False
         elif file_path.stat().st_size == 0:
             msg = f"File {file_path} is empty."
-            logger.error(msg)
+            logger.critical(msg)
             return False
         else:
             return True

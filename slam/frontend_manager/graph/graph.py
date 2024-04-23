@@ -159,6 +159,7 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """
 
         self.vertex_storage.update_optimizable_vertices(values)
+        self.vertex_storage.update_non_optimizable_vertices()
 
     @property
     def gtsam_values(self) -> gtsam.Values:

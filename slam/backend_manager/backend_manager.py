@@ -9,11 +9,11 @@ logger = logging.getLogger(__name__)
 
 
 class BackendManager:
-    """Manages all the backends."""
+    """Manages the backend."""
 
     def __init__(self):
-        self.graph_solver = GraphSolver()
-        self.result_values = gtsam.Values()
+        self._graph_solver = GraphSolver()
+        self._result_values = gtsam.Values()
 
     def solve(self, graph: Graph) -> None:
         """Solves the optimization problem for the given graph.
@@ -21,7 +21,7 @@ class BackendManager:
         Args:
             graph (Graph): a graph with the factors to be solved.
         """
-        self.result_values = self.graph_solver.solve(graph)
+        self._result_values = self._graph_solver.solve(graph)
 
     def update(self, graph: Graph) -> None:
         """Updates the graph with the optimized values.
@@ -29,4 +29,4 @@ class BackendManager:
         Args:
             graph (Graph): a graph to be updated.
         """
-        graph.update(self.result_values)
+        graph.update(self._result_values)

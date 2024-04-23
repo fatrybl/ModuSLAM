@@ -14,7 +14,7 @@ from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
 from slam.frontend_manager.graph.base_edges import UnaryEdge
-from slam.frontend_manager.graph.base_vertices import Vertex
+from slam.frontend_manager.graph.base_vertices import NotOptimizableVertex
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.sensors_factory.sensors import Sensor
@@ -38,8 +38,8 @@ class BasicTestHandler(Handler):
         return m
 
 
-class BasicTestVertex(Vertex):
-    def update(self, values: Any) -> None:
+class BasicTestVertex(NotOptimizableVertex):
+    def update(self, value: Any) -> None:
         pass
 
 

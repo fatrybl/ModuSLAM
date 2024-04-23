@@ -6,6 +6,7 @@ import gtsam
 from slam.utils.numpy_types import Vector3
 
 GtsamValue = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.imuBias.ConstantBias]
+"""Type alias for GTSAM vertices."""
 
 
 class Vertex(ABC):
@@ -18,15 +19,31 @@ class Vertex(ABC):
         self.value: Any = None
 
     @abstractmethod
-    def update(self, values: Any) -> None:
+    def update(self, value: Any) -> None:
         """Updates the vertex with the new values.
 
         Args:
-            values (Any): new values.
+            value (Any): new values.
         """
 
 
+class NotOptimizableVertex(Vertex):
+    """Vertices which are not being optimized in the graph.
+
+    They do not have a GTSAM index & value, and are not being included in GTSAM factors
+    directly.
+    """
+
+    @abstractmethod
+    def update(self, value: Any) -> None: ...
+
+
 class OptimizableVertex(Vertex):
+    """Base abstract optimizable vertex of the Graph.
+
+    Optimizable means that it is used in Backend optimization.
+    """
+
     def __init__(self):
         super().__init__()
 

@@ -1,13 +1,12 @@
-from typing import TypeAlias
-
 import gtsam
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
-from slam.frontend_manager.graph.base_vertices import OptimizableVertex, Vertex
+from slam.frontend_manager.graph.base_vertices import (
+    NotOptimizableVertex,
+    OptimizableVertex,
+)
 from slam.utils.auxiliary_methods import vector_3
 from slam.utils.numpy_types import Matrix3x3, Matrix4x4, Vector3
-
-GtsamVertex: TypeAlias = gtsam.Rot3 | gtsam.Pose3 | gtsam.NavState | gtsam.imuBias.ConstantBias
 
 
 class Pose(OptimizableVertex):
@@ -62,8 +61,8 @@ class Pose(OptimizableVertex):
         """
         return self._value
 
-    def update(self, values: gtsam.Values) -> None:
-        self._value = values.atPose3(self.gtsam_index)
+    def update(self, value: gtsam.Values) -> None:
+        self._value = value.atPose3(self.gtsam_index)
 
 
 class Velocity(OptimizableVertex):
@@ -91,8 +90,8 @@ class Velocity(OptimizableVertex):
     def gtsam_index(self) -> int:
         return V(self.index)
 
-    def update(self, values: gtsam.Values) -> None:
-        self._value = values.atVector(self.gtsam_index)
+    def update(self, value: gtsam.Values) -> None:
+        self._value = value.atVector(self.gtsam_index)
 
 
 class NavState(OptimizableVertex):
@@ -130,8 +129,8 @@ class NavState(OptimizableVertex):
     def gtsam_index(self) -> int:
         return N(self.index)
 
-    def update(self, values: gtsam.Values) -> None:
-        self._value = values.atNavState(self.gtsam_index)
+    def update(self, value: gtsam.Values) -> None:
+        self._value = value.atNavState(self.gtsam_index)
 
 
 class Point(OptimizableVertex):
@@ -157,8 +156,8 @@ class Point(OptimizableVertex):
     def gtsam_index(self) -> int:
         return P(self.index)
 
-    def update(self, values: gtsam.Values) -> None:
-        self._value = values.atPoint3(self.gtsam_index)
+    def update(self, value: gtsam.Values) -> None:
+        self._value = value.atPoint3(self.gtsam_index)
 
 
 class ImuBias(OptimizableVertex):
@@ -196,8 +195,8 @@ class ImuBias(OptimizableVertex):
     def gtsam_index(self) -> int:
         return B(self.index)
 
-    def update(self, values: gtsam.Values) -> None:
-        self._value = values.atConstantBias(self.gtsam_index)
+    def update(self, value: gtsam.Values) -> None:
+        self._value = value.atConstantBias(self.gtsam_index)
 
 
 class CameraPose(Pose):
@@ -216,7 +215,7 @@ class PoseLandmark(Pose):
         return L(self.index)
 
 
-class Feature(Vertex):
+class Feature(NotOptimizableVertex):
     """Non-optimizable point in 3D."""
 
     def __init__(self):
@@ -233,8 +232,8 @@ class Feature(Vertex):
         """
         return self._value
 
-    def update(self, values: Vector3) -> None:
-        self._value = values
+    def update(self, value: Vector3) -> None:
+        self._value = value
 
 
 class CameraFeature(Feature):

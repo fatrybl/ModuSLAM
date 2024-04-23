@@ -72,16 +72,31 @@ class OrderedSet(Generic[T]):
 
     @property
     def items(self):
+        """All items in the OrderedSet.
+
+        Returns:
+            items (Iterable[T]).
+        """
         return self._items.keys()
 
     @property
     def first(self) -> T:
+        """First item in the OrderedSet.
+
+        Returns:
+            item (T).
+        """
         if len(self._items) == 0:
             raise KeyError("OrderedSet is empty")
         return next(iter(self._items))
 
     @property
     def last(self) -> T:
+        """Last item in the OrderedSet.
+
+        Returns:
+            item (T).
+        """
         if len(self._items) == 0:
             raise KeyError("OrderedSet is empty")
         return next(reversed(self._items))
@@ -98,6 +113,11 @@ class OrderedSet(Generic[T]):
 
     @overload
     def add(self, item: T) -> None:
+        """Adds an item to the OrderedSet.
+
+        Args:
+            item (T): item to be added.
+        """
         if self._is_hashable(item):
             self._items[item] = None
         else:
@@ -109,12 +129,17 @@ class OrderedSet(Generic[T]):
         Calls:
             1.  add single item.
                 Args:
-                    item (T): item to be added.
+                    single item (T).
 
             2.  add multiple items.
                 Args:
-                    items (Iterable[T]): items to be added.
+                    multiple items (Iterable[T]).
         """
 
     def remove(self, item: T) -> None:
+        """Removes an item from the OrderedSet.
+
+        Args:
+            item (T): item to be removed.
+        """
         self._items.pop(item, None)
