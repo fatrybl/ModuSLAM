@@ -10,15 +10,17 @@ from tabulate import tabulate
 
 @dataclass
 class RosbagsManager:
-    bag_path: Path = None
+    bag_path: Path
 
     def rosbag_read(self, num_readings:int = 1) -> list:
         n = 1
+        topics_list: list = []
         table = [["number","ROS Topic","Message type","Frame ID","Message count", "Timestamp"]]
         with Reader(self.bag_path) as reader:
             print("The following topics exist in the actual rosbag file")
             for connection in reader.connections:
-                print(f" topic: {connection.topic} and type: {connection.msgtype}")
+                # print(f" topic: {connection.topic} and type: {connection.msgtype}")
+                topics_list.append(connection.topic)
 
             for connection, timestamp, rawdata in reader.messages():
                 if n <= num_readings:
@@ -32,7 +34,9 @@ class RosbagsManager:
 
                 else:
                     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-                    return table
+                    return topics_list, table
+
+            return topics_list, table
 
 
     def rosbag_write(self, new_path: Path = '', msg_limit: int = 1):
@@ -55,6 +59,8 @@ class RosbagsManager:
 
                         break
 
+    def sensor_manager(self, bag_path: Path, num_readings: int = -1):
+        pass
 
 if __name__ == "__main__":
 
@@ -64,9 +70,9 @@ if __name__ == "__main__":
     new_bag_path = Path('{0}/rosbag2_2024_{1:2d}'.format(folder_path, now_time))
 
 
-    rb_manager = RosbagsManager(bag_path)
+    rb_manager = RosbagsManager(bag_path)   
 
-    rb_manager.rosbag_write(new_bag_path, msg_limit=2000)
+    # rb_manager.rosbag_write(new_bag_path, msg_limit=100)
 
     rb_manager2 = RosbagsManager(new_bag_path)
     messages: list = rb_manager2.rosbag_read(num_readings=10)
