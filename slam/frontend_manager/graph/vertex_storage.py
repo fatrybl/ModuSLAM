@@ -36,6 +36,8 @@ class VertexStorage(Generic[GraphVertex]):
         self._optimizable_vertices = OrderedSet[OptimizableVertex]()
         self._not_optimizable_vertices = OrderedSet[NotOptimizableVertex]()
 
+        self._index_vertices_table: dict[int, set[GraphVertex]] = {}
+
         self._vertices_table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
             Velocity: DequeSet[Velocity](),
@@ -95,13 +97,21 @@ class VertexStorage(Generic[GraphVertex]):
     def add(self, vertex: GraphVertex) -> None:
         """
         @overload.
+
         Adds new vertex based on its type.
+
         Args:
             vertex (GraphVertex): new vertex to be added to the graph.
+
+        Raises:
+            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
+
+        TODO: add tests.
         """
         self._index_storage.add(vertex.index)
         self._vertices.add(vertex)
-        self._add_to_table(vertex)
+        self._add_to_tables(vertex)
+
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.add(vertex)
         elif isinstance(vertex, NotOptimizableVertex):
@@ -115,7 +125,9 @@ class VertexStorage(Generic[GraphVertex]):
     def add(self, vertices: Iterable[GraphVertex]) -> None:
         """
         @overload.
+
         Adds new vertices to collections based on its type.
+
         Args:
             vertices (Iterable[GraphVertex]): new vertices to be added to the graph.
         """
@@ -136,19 +148,25 @@ class VertexStorage(Generic[GraphVertex]):
             2.  add multiple vertices to the graph.
                 Args:
                     vertices (Iterable[GraphVertex]): new vertices to be added to the graph.
+        Raises:
+            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
         """
 
     @overload
     def remove(self, vertex: GraphVertex) -> None:
         """
         @overload.
+
         Removes vertex from the graph.
+
         Args:
             vertex (GraphVertex): a vertex to be removed from the graph.
+
+        TODO: add tests.
         """
-        self._index_storage.remove(vertex.index)
         self._vertices.remove(vertex)
-        self._remove_from_table(vertex)
+        self._remove_from_tables(vertex)
+
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.remove(vertex)
         elif isinstance(vertex, NotOptimizableVertex):
@@ -240,24 +258,71 @@ class VertexStorage(Generic[GraphVertex]):
             logger.info(msg)
             return None
 
-    def _add_to_table(self, vertex: GraphVertex) -> None:
-        """Adds vertex to the vertices table.
+    def get_vertices_with_index(self, index: int) -> list[GraphVertex]:
+        """
+        Gets the vertices with the given index.
+        Args:
+            index (int): index of the vertex to find.
+
+        Returns:
+            vertices with the given index (list[GraphVertex]).
+        """
+        return [v for v in self._vertices if v.index == index]
+
+    def get_vertices_with_gtsam_index(self, index: int) -> list[GraphVertex]:
+        """
+        Gets the vertices with the given gtsam index.
+        Args:
+            index (int): gtsam index of the vertex to find.
+
+        Returns:
+            vertices with the given gtsam index (list[GraphVertex]).
+        """
+        return [v for v in self._optimizable_vertices if v.gtsam_index == index]
+
+    def _add_to_tables(self, vertex: GraphVertex) -> None:
+        """Adds vertex to the tables.
 
         Args:
-            vertex (GraphVertex): vertex to be added to the table.
+            vertex (GraphVertex).
         """
         t = type(vertex)
         if t not in self._vertices_table:
             raise KeyError(f"Type {t!r} has not been defined in the vertices table.")
         self._vertices_table[t].add(vertex)
 
-    def _remove_from_table(self, vertex: GraphVertex) -> None:
-        """Removes vertex from the vertices table.
+        if vertex.index not in self._index_vertices_table:
+            self._index_vertices_table[vertex.index] = set()
+        self._index_vertices_table[vertex.index].add(vertex)
+
+    def _remove_from_tables(self, vertex: GraphVertex) -> None:
+        """Removes vertex from the tables.
 
         Args:
-            vertex (GraphVertex): vertex to be removed from the table.
+            vertex (GraphVertex).
+
+        Raises:
+            KeyError:
+                1. Vertex is not present in the tables.
         """
+        msg = f"Vertex {vertex} is not present in the table."
+
         t = type(vertex)
-        if t not in self._vertices_table:
-            raise KeyError(f"Type {t!r} has not been defined in the vertices table.")
-        self._vertices_table[t].remove(vertex)
+
+        if t in self._vertices_table and vertex in self._vertices_table[t]:
+            self._vertices_table[t].remove(vertex)
+        else:
+            logger.critical(msg)
+            raise KeyError(msg)
+
+        if (
+            vertex.index in self._index_vertices_table
+            and vertex in self._index_vertices_table[vertex.index]
+        ):
+            self._index_vertices_table[vertex.index].remove(vertex)
+            if not self._index_vertices_table[vertex.index]:
+                self._index_storage.remove(vertex.index)
+                del self._index_vertices_table[vertex.index]
+        else:
+            logger.critical(msg)
+            raise KeyError(msg)

@@ -64,9 +64,6 @@ class PriorPoseEdgeFactory(EdgeFactory):
         )
 
         edge = PriorPose(
-            vertex=vertex,
-            measurements=(measurement,),
-            factor=gtsam_factor,
-            noise_model=noise,
+            vertex=vertex, measurements=(measurement,), factor=gtsam_factor, noise_model=noise
         )
         return edge

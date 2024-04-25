@@ -19,37 +19,42 @@ def timer(func):
 
 
 graph = gtsam.NonlinearFactorGraph()
+
 pose1 = gtsam.gtsam.Pose3()
 pose2 = gtsam.gtsam.Pose3()
 prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
 odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
 # graph.addPriorPose3(X(0), pose1, prior_noise)
-graph.add(
-    gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
-)
-# graph.add(
-#     gtsam.BetweenFactorPose3(X(1), X(2), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
+# graph.push_back(
+#     gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
 # )
-# graph.add(
-#     gtsam.BetweenFactorPose3(X(2), X(3), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
-# )
-# graph.addPriorPose2(X(3), gtsam.gtsam.Pose2(3, 0.05, 0.05), prior_noise)
 
 init_values = gtsam.Values()
 init_values.insert_pose3(X(0), gtsam.gtsam.Pose3())
 init_values.insert_pose3(X(1), gtsam.gtsam.Pose3())
-# init_values.insert_pose3(X(2), gtsam.gtsam.Pose3())
-# init_values.insert_pose3(X(3), gtsam.gtsam.Pose3())
+
+# k = gtsam.gtsam.Cal3_S2()
+# smart_f = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+# smart_f.add(np.array([1, 1]), X(0))
+# smart_f.add(np.array([1, 1]), X(1))
+# graph.push_back(smart_f)
+
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
 
+for i in range(5):
+    graph.addPriorPose3(X(i), pose1, prior_noise)
+    graph.remove(i)
 
-# Convert NumPy array to Open3D point cloud object
-# Extracting the (x, y, z) coordinates and intensity values
+graph.addPriorPose3(X(0), pose1, prior_noise)
 
 
-# Convert the NumPy array to an Open3D point cloud object
+print(graph)
+print(graph.keys())
+print(graph.size())
+print(graph.nrFactors())
+
 
 # pcd.colors = o3d.utility.Vector3dVector(
 #     np.tile(intensity[:, np.newaxis], (1, 3))

@@ -30,55 +30,35 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         self.edge_storage = EdgeStorage[GraphEdge]()
         self.factor_graph = gtsam.NonlinearFactorGraph()
 
-    @overload
-    def _delete_vertex(self, vertex: GraphVertex) -> None:
-        """
-        @overload.
-        Deletes vertex from the graph.
+    def _set_index(self) -> int:
+        """Sets unique index for the new edge base on the size of the factor graph.
+        Gtsam factor graph sets index to the factor by exploiting the size of the factor
+        graph. This guarantees the uniqueness of the index. However, the size of the
+        factor graph is not equal to the number of factors in the graph, because the
+        factor graph may contain empty slots (null ptr objects). When the factor is
+        removed, the size of the factor graph does not change. To reduce the size of the
+        factor graph, the resize() method should be called.
 
-        Args:
-            vertex (GraphVertex): vertex to be deleted from the graph.
+        Returns:
+            unique index (int).
         """
-        raise NotImplementedError
-
-    @overload
-    def _delete_vertex(self, vertices: Iterable[GraphVertex]) -> None:
-        """
-        @overload.
-        Deletes multiple vertices from the graph.
-
-        Args:
-            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
-        """
-        for vertex in vertices:
-            self._delete_vertex(vertex)
-
-    @dispatch
-    def _delete_vertex(self, vertex=None):
-        """
-        @overload.
-
-        Calls:
-            1. delete 1 vertex:
-                Args:
-                    vertex (GraphVertex): vertex to be deleted from the graph.
-
-            2. delete multiple vertices:
-                Args:
-                    vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
-        """
+        return self.factor_graph.size()
 
     @overload
     def add_edge(self, edge: GraphEdge) -> None:
         """
         @overload.
+
         Adds edge to the graph.
 
         Args:
             edge (GraphEdge): new edge to be added to the graph.
         """
+        edge.index = self._set_index()
+
         vertices = sorted(edge.all_vertices, key=lambda v: v.timestamp)
         [vertex.edges.add(edge) for vertex in vertices]
+
         self.vertex_storage.add(vertices)
         self.edge_storage.add(edge)
         self.factor_graph.add(edge.factor)
@@ -87,6 +67,7 @@ class Graph(Generic[GraphVertex, GraphEdge]):
     def add_edge(self, edges: Iterable[GraphEdge]) -> None:
         """
         @overload.
+
         Adds multiple edges to the graph.
 
         Args:
@@ -112,41 +93,94 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """
 
     @overload
-    def delete_edge(self, edge: GraphEdge) -> None:
+    def remove_edge(self, edge: GraphEdge) -> None:
         """
         @overload.
-        Deletes edge from the graph.
+
+        Removes edge from the graph.
 
         Args:
-            edge: edge to be deleted from the graph.
+            edge (GraphEdge): edge to be deleted from the graph.
         """
-        raise NotImplementedError
+
+        self.factor_graph.remove(edge.index)
+        self.edge_storage.remove(edge)
+        for vertex in edge.all_vertices:
+            vertex.edges.remove(edge)
+            if not vertex.edges:
+                self.vertex_storage.remove(vertex)
 
     @overload
-    def delete_edge(self, edges: Iterable[GraphEdge]) -> None:
+    def remove_edge(self, edges: Iterable[GraphEdge]) -> None:
         """
         @overload.
-        Deletes multiple edges from the graph.
+
+        Removes multiple edges from the graph.
 
         Args:
             edges (Iterable[GraphEdge]): edges to be deleted from the graph.
         """
-        for edge in edges:
-            self.delete_edge(edge)
+        while edges:
+            edge = next(iter(edges))
+            self.remove_edge(edge)
 
     @dispatch
-    def delete_edge(self, edge=None):
+    def remove_edge(self, edge=None):
         """
         @overload.
+        TODO: add tests.
 
         Calls:
-            1. delete single edge:
+            1. Removes single edge:
                 Args:
                     edge (GraphEdge): edge to be deleted from the graph.
 
-            2. delete multiple edges:
+            2. Removes multiple edges:
                 Args:
                     edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+        """
+
+    @overload
+    def remove_vertex(self, vertex: GraphVertex) -> None:
+        """
+        @overload.
+
+        Removes vertex from the graph.
+
+        Args:
+            vertex (GraphVertex): vertex to be deleted from the graph.
+        """
+        self.remove_edge(vertex.edges)
+
+    @overload
+    def remove_vertex(self, vertices: Iterable[GraphVertex]) -> None:
+        """
+        @overload.
+
+        Removes multiple vertices from the graph.
+
+        Args:
+            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
+        """
+        while vertices:
+            vertex = next(iter(vertices))
+            self.remove_vertex(vertex)
+
+    @dispatch
+    def remove_vertex(self, vertex=None):
+        """
+        @overload.
+
+        TODO: add tests.
+
+        Calls:
+            1. Removes 1 vertex:
+                Args:
+                    vertex (GraphVertex): vertex to be deleted from the graph.
+
+            2. Removes multiple vertices:
+                Args:
+                    vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
         """
 
     def update(self, values: gtsam.Values) -> None:
@@ -154,8 +188,6 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
         Args:
             values (gtsam.Values): new computed values.
-
-        TODO: add update of non-optimizable vertices.
         """
 
         self.vertex_storage.update_optimizable_vertices(values)

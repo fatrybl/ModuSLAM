@@ -131,7 +131,7 @@ class DequeSet(Generic[T]):
         """Returns deque of elements.
 
         Returns:
-            (deque[T]): deque of elements of type T.
+            deque of items (deque[T]).
         """
         return self._deque
 

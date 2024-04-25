@@ -19,6 +19,31 @@ class Edge(ABC, Generic[GraphVertex]):
         self.measurements = measurements
         self.factor = factor
         self.noise_model = noise_model
+        self._index: int = 0
+
+    @property
+    def index(self) -> int:
+        """Unique index of the edge. Corresponds to the index of the factor in the
+        factor graph.
+
+        Returns:
+            index (int).
+        """
+        return self._index
+
+    @index.setter
+    def index(self, value: int) -> None:
+        """
+        ATTENTION: Set index only when you really need it.
+        Index is being set automatically when the edge is added to the graph.
+
+        Args:
+            value (int): new index.
+        """
+        if value < 0:
+            raise ValueError("Index should be non-negative.")
+
+        self._index = value
 
     @property
     @abstractmethod
@@ -26,7 +51,7 @@ class Edge(ABC, Generic[GraphVertex]):
         """All vertices used by the edge.
 
         Returns:
-            (set[GraphVertex]): vertices.
+            vertices (set[GraphVertex]).
         """
 
 
