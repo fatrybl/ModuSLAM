@@ -59,7 +59,7 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
             vertices = table[edge_factory]
 
             edges = edge_factory.create(graph, vertices, measurements)
-            graph.add_edge(edges)
+            graph.add_edges(edges)
 
     @staticmethod
     def _create_vertex(vertex_type: type[GraphVertex], index: int, timestamp: int) -> GraphVertex:

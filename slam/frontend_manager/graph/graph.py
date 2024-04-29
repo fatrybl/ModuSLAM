@@ -1,9 +1,8 @@
 import logging
 from collections.abc import Iterable
-from typing import Generic, overload
+from typing import Generic
 
 import gtsam
-from plum import dispatch
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
@@ -29,15 +28,11 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
     @property
     def gtsam_values(self) -> gtsam.Values:
-        """GTSAM values of the graph.
-
-        TODO: add tests.
-        """
-        vertices = self.vertex_storage.optimizable_vertices
+        """GTSAM values of the graph."""
         values = gtsam.Values()
         unique_vertices: dict[int, OptimizableVertex] = {}
 
-        for vertex in vertices:
+        for vertex in self.vertex_storage.optimizable_vertices:
             if vertex.gtsam_index not in unique_vertices:
                 unique_vertices[vertex.gtsam_index] = vertex
 
@@ -48,12 +43,8 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
         return values
 
-    @overload
     def add_edge(self, edge: GraphEdge) -> None:
-        """
-        @overload.
-
-        Adds edge to the graph.
+        """Adds edge to the graph.
 
         Args:
             edge (GraphEdge): new edge to be added to the graph.
@@ -67,43 +58,17 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         self.edge_storage.add(edge)
         self.factor_graph.add(edge.factor)
 
-    @overload
-    def add_edge(self, edges: Iterable[GraphEdge]) -> None:
-        """
-        @overload.
-
-        Adds multiple edges to the graph.
+    def add_edges(self, edges: Iterable[GraphEdge]) -> None:
+        """Adds multiple edges to the graph.
 
         Args:
             edges (Iterable[GraphEdge]): new edges to be added to the graph.
         """
-
         for edge in edges:
             self.add_edge(edge)
 
-    @dispatch
-    def add_edge(self, edge=None):
-        """
-        @overload.
-
-        Calls:
-            1.  Adds edge to the graph:
-
-                Args:
-                    edge (GraphEdge): new edge to be added to the graph.
-
-            2.  Adds multiple edges to the graph:
-
-                Args:
-                    edges (Iterable[GraphEdge]): new edges to be added to the graph.
-        """
-
-    @overload
     def remove_edge(self, edge: GraphEdge) -> None:
-        """
-        @overload.
-
-        Removes edge from the graph.
+        """Removes edge from the graph.
 
         Args:
             edge (GraphEdge): edge to be deleted from the graph.
@@ -116,83 +81,32 @@ class Graph(Generic[GraphVertex, GraphEdge]):
             if not vertex.edges:
                 self.vertex_storage.remove(vertex)
 
-    @overload
-    def remove_edge(self, edges: Iterable[GraphEdge]) -> None:
-        """
-        @overload.
-
-        Removes multiple edges from the graph.
+    def remove_edges(self, edges: Iterable[GraphEdge]) -> None:
+        """Removes multiple edges from the graph.
 
         Args:
             edges (Iterable[GraphEdge]): edges to be deleted from the graph.
         """
-        while edges:
-            edge = next(iter(edges))
+        for edge in edges:
             self.remove_edge(edge)
 
-    @dispatch
-    def remove_edge(self, edge=None):
-        """
-        @overload.
-
-        TODO: add tests.
-
-        Calls:
-            1.  Removes single edge:
-
-                Args:
-                    edge (GraphEdge): edge to be deleted from the graph.
-
-            2.  Removes multiple edges:
-
-                Args:
-                    edges (Iterable[GraphEdge]): edges to be deleted from the graph.
-        """
-
-    @overload
     def remove_vertex(self, vertex: GraphVertex) -> None:
-        """
-        @overload.
-
-        Removes vertex from the graph.
+        """Removes vertex from the graph.
 
         Args:
             vertex (GraphVertex): vertex to be deleted from the graph.
         """
-        self.remove_edge(vertex.edges)
+        edges = vertex.edges.copy()  # to avoid RuntimeError: Set changed size during iteration
+        self.remove_edges(edges)
 
-    @overload
-    def remove_vertex(self, vertices: Iterable[GraphVertex]) -> None:
-        """
-        @overload.
-
-        Removes multiple vertices from the graph.
+    def remove_vertices(self, vertices: Iterable[GraphVertex]) -> None:
+        """Removes multiple vertices from the graph.
 
         Args:
             vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
         """
-        while vertices:
-            vertex = next(iter(vertices))
+        for vertex in vertices:
             self.remove_vertex(vertex)
-
-    @dispatch
-    def remove_vertex(self, vertex=None):
-        """
-        @overload.
-
-        TODO: add tests.
-
-        Calls:
-            1.  Removes 1 vertex:
-
-                Args:
-                    vertex (GraphVertex): vertex to be deleted from the graph.
-
-            2.  Removes multiple vertices:
-
-                Args:
-                    vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
-        """
 
     def update(self, values: gtsam.Values) -> None:
         """Updates the graph with new values.
