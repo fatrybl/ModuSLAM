@@ -6,15 +6,19 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 
 
 class CandidateAnalyzer(ABC):
-    """Analyzes states.
+    """Base abstract class for candidate analyzers.
 
-    Checks if a graph candidate is ready to be merged with Graph.
+    Analyzes a graph candidate if it is ready to be merged with Graph.
     """
 
     @abstractmethod
     def check_readiness(self, graph_candidate: GraphCandidate) -> bool:
-        """Evaluates existing state(s) and decides whether the criteria of a new graph
-        candidate are satisfied.
+        """Evaluates existing state(s) of a candidate and decides if it is ready to be
+        merged with the graph.
 
-        Returns: success/failure status of a new graph candidate.
+        Args:
+            graph_candidate: GraphCandidate instance to be analyzed.
+
+        Returns:
+            success/failure status of a new graph candidate.
         """

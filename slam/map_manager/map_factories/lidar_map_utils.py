@@ -4,16 +4,20 @@ from pathlib import Path
 import open3d as o3d
 
 from slam.map_manager.maps.lidar_map import LidarMap
-from slam.system_configs.system.map_manager.map_manager import LidarMapLoaderConfig
+from slam.system_configs.map_manager.map_manager import LidarMapLoaderConfig
 from slam.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(__name__)
 
 
 class LidarMapLoader:
-    """Class to load and save the lidar map."""
+    """Lidar pointcloud map loader."""
 
     def __init__(self, config: LidarMapLoaderConfig) -> None:
+        """
+        Args:
+            config: configuration for the loader.
+        """
         self._dir_path: Path = Path(config.directory)
         self._file_extension: str = config.file_extension
         self._file_name: str = config.name
@@ -24,10 +28,13 @@ class LidarMapLoader:
         self._remove_infinity: bool = config.remove_infinity
 
     def save(self, lidar_map: LidarMap) -> None:
-        """Saves lidar map to the file.
+        """Saves lidar pointcloud map to the file.
 
         Args:
-            lidar_map (LidarMap): map to save.
+            lidar_map: lidar pointcloud map to save.
+
+        Raises:
+            ExternalModuleException: if failed to save the map using Open3D lib.
         """
         file_path = self._dir_path / f"{self._file_name}.{self._file_extension}"
         try:
@@ -48,7 +55,10 @@ class LidarMapLoader:
         """Loads the map.
 
         Returns:
-            lidar map instance (LidarMap).
+            lidar pointcloud map instance.
+
+        Raises:
+            ExternalModuleException: if failed to load the map using Open3D lib.
         """
         file_path = self._dir_path / f"{self._file_name}.{self._file_extension}"
         try:
@@ -72,14 +82,14 @@ class LidarMapLoader:
 
 
 class PointcloudVisualizer:
-    """Class to visualize the pointcloud."""
+    """Visualizer for the lidar pointcloud."""
 
     @staticmethod
     def visualize(pointcloud: o3d.geometry.PointCloud) -> None:
         """Visualizes the pointcloud.
 
         Args:
-            pointcloud (np.ndarray[N,3]): pointcloud to visualize.
+            pointcloud: pointcloud array [N, 3].
         """
         vis = o3d.visualization.Visualizer()
         vis.create_window()

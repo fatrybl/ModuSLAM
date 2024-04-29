@@ -11,19 +11,11 @@ class CandidateFactory(ABC):
     @property
     @abstractmethod
     def graph_candidate(self):
-        """Graph candidate.
-
-        Returns:
-            (GraphCandidate): graph candidate.
-        """
+        """Graph candidate to be merged with the graph."""
 
     @abstractmethod
     def candidate_ready(self) -> bool:
-        """Candidate readiness status.
-
-        Returns:
-            graph candidate readiness status (bool).
-        """
+        """Candidate readiness status."""
 
     @abstractmethod
     def synchronize_states(self) -> None:
@@ -31,17 +23,17 @@ class CandidateFactory(ABC):
 
     @abstractmethod
     def process_storage(self, storage: MeasurementStorage) -> None:
-        """Processes input measurements and adds new states to the graph candidate if a
-        criterion is satisfied.
+        """Processes the storage with measurements and adds new states to the graph
+        candidate if needed.
 
         Args:
-            storage (MeasurementStorage): processed measurements from the Distributor.
+            storage: storage with measurements.
         """
 
     @abstractmethod
     def init_table(self, config: dict[str, str]) -> None:
-        """Initializes the table: handler -> state analyzer.
+        """Initializes "handler -> state analyzer" table.
 
         Args:
-            config (dict[str, str]): table with names of handlers and state analyzers.
+            config: config with "handler name -> state analyzer name" table.
         """

@@ -4,20 +4,19 @@ from slam.frontend_manager.graph.graph import Graph
 
 
 class GraphSolver:
-    """Graph Solver."""
+    """Factor graph solver."""
 
     def __init__(self) -> None:
         self._params = gtsam.LevenbergMarquardtParams()
 
     def solve(self, graph: Graph) -> gtsam.Values:
-        """Solves the optimization problem for the given non-linear factor graph and
-        initial values.
+        """Solves the optimization problem for the given graph.
 
         Args:
-            graph (Graph): a graph with the factors to be solved.
+            graph: contains factor graph to be solved.
 
         Returns:
-            (gtsam.Values): calculated values.
+            calculated GTSAM values.
         """
         optimizer = gtsam.LevenbergMarquardtOptimizer(
             graph.factor_graph, graph.gtsam_values, self._params

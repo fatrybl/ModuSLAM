@@ -10,10 +10,10 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar
 from slam.setup_manager.handlers_factory.factory import HandlersFactory
 from slam.setup_manager.state_analyzers_factory import factory as factory_module
 from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
-from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-from slam.system_configs.system.setup_manager.state_analyzers_factory import (
+from slam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzerFactoryConfig,
 )
 from slam.utils.exceptions import ItemNotFoundError

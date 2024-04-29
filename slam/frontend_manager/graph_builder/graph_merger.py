@@ -16,16 +16,21 @@ logger = logging.getLogger(__name__)
 
 
 class GraphMerger(Generic[GraphVertex, GraphEdge]):
-    """Merges the graph candidate with the main graph."""
+    """Merges the graph candidate with the graph."""
 
     def __init__(self) -> None:
         self._table: dict[Handler, EdgeFactory] = {}
 
+    @property
+    def handler_edge_factory_table(self) -> dict[Handler, EdgeFactory]:
+        """ "handler -> edge factory" table."""
+        return self._table
+
     def init_table(self, config: dict[str, str]) -> None:
-        """
-        Initializes the table of handler -> edge factory.
+        """Initializes "handler -> edge factory" table.
+
         Args:
-            config (dict[str, str]): names of handler -> edge factory.
+            config: "handler name -> edge factory name" pairs.
 
         Raises:
             ValueError: if the config is empty.
@@ -33,28 +38,17 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
         if config:
             self._table = init_handler_edge_factory_table(config)
         else:
-            raise ValueError("Empty config: handler -> edge factory.")
-
-    @property
-    def handler_edge_factory_table(self) -> dict[Handler, EdgeFactory]:
-        """A table to represent the connections between handlers & edge factories.
-
-        Returns:
-            handler -> edge factory table (dict[Handler, EdgeFactory]).
-        """
-        return self._table
+            msg = "Empty config."
+            logger.critical(msg)
+            raise ValueError(msg)
 
     def merge(self, state: State, graph: Graph) -> None:
-        """Merges state with the graph.
-
-        1) Create new vertices for the state and set the same index.
-        2) for every edge factory:
-            - create edges.
-            - add edges to the graph.
+        """Merges the state with the graph.
 
         Args:
-            state (State): new state to be merged with the graph.
-            graph (Graph)graph.
+            state: a state to be merged with the graph.
+
+            graph: a graph to merge the state with.
         """
         index_storage = graph.vertex_storage.index_storage
         storage: dict[Handler, OrderedSet[Measurement]] = state.data
@@ -72,12 +66,14 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
         """Creates vertex instances for the state.
 
         Args:
-            vertex_type (type[GraphVertex]): type of the vertex.
-            index (int): index of the vertex.
-            timestamp (int): timestamp of the vertex.
+            vertex_type: type of the vertex.
+
+            index: index of the vertex.
+
+            timestamp: timestamp of the vertex.
 
         Returns:
-            (GraphVertex): new vertex.
+            vertex.
         """
         vertex = vertex_type()
         vertex.index = index
@@ -87,14 +83,15 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
     def _create_factory_vertices_table(
         self, index_storage: IndexStorage, timestamp: int
     ) -> dict[EdgeFactory, list[GraphVertex]]:
-        """Creates vertex instances for the state.
+        """Creates "edge factory -> vertices" table.
 
         Args:
-            index_storage (IndexStorage): storage of unique indices.
-            timestamp (int): timestamp of the vertex.
+            index_storage: storage with vertices` indices.
+
+            timestamp: timestamp.
 
         Returns:
-            Edge Factory -> Graph Vertices table (dict[EdgeFactory, list[GraphVertex]]).
+            "edge factory -> vertices" table.
         """
 
         table: dict[EdgeFactory, list[GraphVertex]] = {}

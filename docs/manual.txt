@@ -1,3 +1,0 @@
-update sphinx docs:
-1) sphinx-apidoc -o docs slam/
-2) inside "docs" dir: make html

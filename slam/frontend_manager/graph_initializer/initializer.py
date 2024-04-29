@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import ConfigFileLocation
+from slam.data_manager.factory.locations import ConfigFileLocation
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import Edge
@@ -22,11 +22,11 @@ from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.frontend_manager.graph_initializer.prior import (
+from slam.system_configs.frontend_manager.graph_initializer.prior import (
     GraphInitializerConfig,
     PriorConfig,
 )
-from slam.system_configs.system.setup_manager.sensors import SensorConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.ordered_set import OrderedSet
 
@@ -39,6 +39,10 @@ class GraphInitializer:
     """Initializes the graph with prior factors."""
 
     def __init__(self, config: GraphInitializerConfig):
+        """
+        Args:
+            config: graph initializer configuration.
+        """
         self._sensor = Sensor(SensorConfig(name=FAKE_SENSOR_NAME))
         self._handler = PriorHandler()
         self._priors: Iterable[PriorConfig] = config.priors.values()
@@ -47,7 +51,7 @@ class GraphInitializer:
         """Initializes the graph with prior factors.
 
         Args:
-            graph (Graph): graph to add prior factors in.
+            graph: a graph to add prior factors in.
         """
 
         for prior in self._priors:
@@ -58,11 +62,12 @@ class GraphInitializer:
         """Creates an edge with a prior factor.
 
         Args:
-            graph (Graph): graph to add the edge at.
-            prior (PriorConfig): prior configuration.
+            graph: a graph to add the edge at.
+
+            prior: a prior configuration.
 
         Returns:
-            edge (Edge).
+            list with 1 edge.
         """
         vertex_type = self._get_vertex_type(prior.vertex_type)
         vertex = self._get_new_vertex(graph, vertex_type, prior.timestamp)
@@ -88,11 +93,13 @@ class GraphInitializer:
 
         Args:
             graph (Graph): graph to get vertex from.
+
             vertex_type (type[Vertex]): vertex type.
+
             timestamp (int): vertex timestamp.
 
         Returns:
-            vertex (Vertex).
+            vertex.
         """
         vertices = graph.vertex_storage.get_vertices(vertex_type)
         for v in vertices:
@@ -106,13 +113,13 @@ class GraphInitializer:
 
     @staticmethod
     def _get_edge_factory(factory_name: str) -> EdgeFactory:
-        """Returns the edge factory by its name.
+        """Gets edge factory with the given name.
 
         Args:
-            factory_name (str): edge factory name.
+            factory_name: edge factory name.
 
         Returns:
-            edge factory (EdgeFactory).
+            edge factory.
         """
         factory = EdgeFactoriesInitializer.get_factory(factory_name)
         return factory
@@ -127,13 +134,16 @@ class GraphInitializer:
         """Initializes the measurement.
 
         Args:
-            values (tuple[Any, ...]): measurement values.
-            noise_covariance (tuple[float, ...]): noise covariance.
-            timestamp (int): timestamp of the measurement.
-            file_path (Path): file path of the measurement.
+            values: measurement values.
+
+            noise_covariance: covariance of the noise.
+
+            timestamp: timestamp of the measurement.
+
+            file_path: path of the file with the measurement.
 
         Returns:
-            measurement (Measurement).
+            measurement.
         """
         raw_measurement = RawMeasurement(sensor=self._sensor, values=values)
 
@@ -155,10 +165,13 @@ class GraphInitializer:
         """Returns the vertex type by its name.
 
         Args:
-            type_name (str): vertex type name.
+            type_name: name of vertex type.
 
         Returns:
-            vertex type (type[Vertex]).
+            vertex type.
+
+        Raises:
+            ValueError: if the vertex type is not supported.
         """
         match type_name:
             case LidarPose.__name__:

@@ -14,18 +14,16 @@ class EdgeStorage(Generic[GraphEdge]):
 
     @property
     def edges(self) -> set[GraphEdge]:
-        """Edges in the storage.
-
-        Returns:
-            set[GraphEdge]: edges in the storage.
-        """
+        """Edges in the storage."""
         return self._edges
 
     @overload
     def add(self, edge: GraphEdge):
         """
         @overload.
+
         Adds new edge to the graph.
+
         Args:
             edge (GraphEdge): edge to be added to the graph.
         """
@@ -35,7 +33,9 @@ class EdgeStorage(Generic[GraphEdge]):
     def add(self, edge: Iterable[GraphEdge]):
         """
         @overload.
+
         Adds new edges to the graph.
+
         Args:
             edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
         """
@@ -47,18 +47,24 @@ class EdgeStorage(Generic[GraphEdge]):
         @overload.
 
         Calls:
-            Args:
-                edge (GraphEdge): edge to be added to the graph.
+            1.  Adds new edge to the graph.
 
-            Args:
-                edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
+                Args:
+                    edge (GraphEdge): edge to be added to the graph.
+
+            2.  Adds new edges to the graph.
+
+                Args:
+                    edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
         """
 
     @overload
     def remove(self, edge: GraphEdge):
         """
         @overload.
+
         Removes edge from the graph.
+
         Args:
             edge (GraphEdge): edge to be removed from the graph.
         """
@@ -68,7 +74,9 @@ class EdgeStorage(Generic[GraphEdge]):
     def remove(self, edge: Iterable[GraphEdge]):
         """
         @overload.
+
         Removes multiple edges from the graph.
+
         Args:
             edge (Iterable[GraphEdge]): multiple edges to be removed from the graph.
         """
@@ -78,4 +86,15 @@ class EdgeStorage(Generic[GraphEdge]):
     def remove(self, edge=None):
         """
         @overload.
+
+        Calls:
+            1.  Removes edge from the graph.
+
+                Args:
+                    edge (GraphEdge): edge to be removed from the graph.
+
+            2.  Removes multiple edges from the graph.
+
+                Args:
+                    edge (Iterable[GraphEdge]): multiple edges to be removed from the graph.
         """

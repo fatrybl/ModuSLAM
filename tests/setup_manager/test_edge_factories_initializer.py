@@ -9,7 +9,7 @@ from slam.setup_manager.edge_factories_initializer import factory as factory_mod
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
-from slam.system_configs.system.setup_manager.edge_factories_initializer import (
+from slam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
 

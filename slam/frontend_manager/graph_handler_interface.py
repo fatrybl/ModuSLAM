@@ -28,7 +28,7 @@ class Request:
 
 
 class GraphHandlerInterface:
-    """Interface for classes that need to interact with the graph."""
+    """Interface for handlers that need to interact with the graph."""
 
     _graph: Graph | None = None
 

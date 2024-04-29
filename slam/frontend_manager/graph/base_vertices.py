@@ -5,8 +5,7 @@ import gtsam
 
 from slam.utils.numpy_types import Vector3
 
-GtsamValue = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.imuBias.ConstantBias]
-"""Type alias for GTSAM vertices."""
+GtsamInstance = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.imuBias.ConstantBias]
 
 
 class Vertex(ABC):
@@ -20,50 +19,45 @@ class Vertex(ABC):
 
     @abstractmethod
     def update(self, value: Any) -> None:
-        """Updates the vertex with the new values.
+        """Updates the vertex with the new value.
 
         Args:
-            value (Any): new values.
+            value (Any): new value.
         """
 
 
-class NotOptimizableVertex(Vertex):
-    """Vertices which are not being optimized in the graph.
+GraphVertex = TypeVar("GraphVertex", bound=Vertex)
+"""TypeVar for the Graph vertices."""
 
-    They do not have a GTSAM index & value, and are not being included in GTSAM factors
-    directly.
+
+class NotOptimizableVertex(Vertex):
+    """
+    Base abstract non-optimizable vertex: does not have a GTSAM index & value,
+    and is not included in GTSAM factor graph directly.
     """
 
     @abstractmethod
-    def update(self, value: Any) -> None: ...
+    def update(self, value: Any) -> None:
+        """Updates the vertex with the new value.
+
+        Args:
+            value (Any): new value.
+        """
 
 
 class OptimizableVertex(Vertex):
-    """Base abstract optimizable vertex of the Graph.
-
-    Optimizable means that it is used in Backend optimization.
-    """
+    """Base abstract optimizable vertex of the Graph: has a GTSAM index & value,
+    and is included in GTSAM factor graph."""
 
     def __init__(self):
         super().__init__()
 
     @property
     @abstractmethod
-    def gtsam_value(self) -> GtsamValue:
-        """GTSAM value of the vertex.
-
-        Returns:
-            value (GtsamValue).
-        """
+    def gtsam_instance(self) -> GtsamInstance:
+        """GTSAM instance of the vertex."""
 
     @property
     @abstractmethod
     def gtsam_index(self) -> int:
-        """Unique index of the variable in the GTSAM Values.
-
-        Returns:
-            index (int).
-        """
-
-
-GraphVertex = TypeVar("GraphVertex", bound=Vertex)
+        """Unique index of GTSAM instance."""

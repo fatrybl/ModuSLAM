@@ -1,7 +1,7 @@
-from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
+from slam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 from slam.utils.exceptions import ItemNotFoundError
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (
     request1,
@@ -16,7 +16,9 @@ sc1 = (
     (cfg, request2, el25),
     (
         cfg,
-        PeriodicData(sensor=el1.measurement.sensor, period=TimeRange(start=100500, stop=100500)),
+        PeriodicDataRequest(
+            sensor=el1.measurement.sensor, period=TimeRange(start=100500, stop=100500)
+        ),
         ItemNotFoundError(),
     ),
 )

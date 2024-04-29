@@ -8,7 +8,7 @@ from slam.frontend_manager.handlers.ABC_handler import Handler
 
 
 class PriorHandler(Handler):
-    """Handler for prior measurements."""
+    """Empty (fake) handler for prior measurements."""
 
     def __init__(self) -> None:
         self._name = "Prior Handler"

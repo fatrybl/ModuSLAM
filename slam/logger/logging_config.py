@@ -1,3 +1,5 @@
+"""This module contains the logging configuration for the project."""
+
 from logging.config import dictConfig
 from pathlib import Path
 

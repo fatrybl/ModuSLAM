@@ -6,8 +6,8 @@ from plum import dispatch
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
-from slam.system_configs.system.data_manager.data_manager import DataManagerConfig
-from slam.utils.auxiliary_dataclasses import PeriodicData
+from slam.system_configs.data_manager.data_manager import DataManagerConfig
+from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
 logger = logging.getLogger(__name__)
 
@@ -48,13 +48,13 @@ class DataManager:
         logger.debug("Data Batch has been created")
 
     @overload
-    def make_batch(self, requests: set[PeriodicData]) -> None:
+    def make_batch(self, requests: set[PeriodicDataRequest]) -> None:
         """
         @overload.
         Creates a data batch from requests.
 
         Args:
-            requests (set[PeriodicData]): set of requests.
+            requests (set[PeriodicDataRequest]): set of requests.
             Each request corresponds to sensor and time limits: (start, stop)
         """
         self.batch_factory.create_batch(requests)
@@ -76,6 +76,6 @@ class DataManager:
 
             3. With requests: create a batch with measurements from requests:
                 Args:
-                    requests (set[PeriodicData]): set of requests.
+                    requests (set[PeriodicDataRequest]): set of requests.
                     Each request corresponds to sensor and time limits: (start, stop).
         """

@@ -13,43 +13,36 @@ from slam.setup_manager.sensors_factory.sensors import (
     StereoCamera,
     VrsGps,
 )
-from slam.system_configs.system.setup_manager.sensors import (
-    Lidar3DConfig,
-    SensorConfig,
-    SensorFactoryConfig,
-)
+from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
 from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
 class SensorsFactory:
-    """Factory class to initialize and store sensors."""
+    """Creates and stores sensors."""
 
     _sensors: set[Sensor] = set()
     _sensors_table: dict[str, Sensor] = {}
 
     @classmethod
-    def all_sensors(cls) -> set[Sensor]:
-        """All sensors which have been used in experiment.
-
-        Returns:
-            all sensors (set[Sensor]).
-        """
+    def get_sensors(cls) -> set[Sensor]:
+        """Gets all sensors."""
         return cls._sensors
 
     @classmethod
     def get_sensor(cls, name: str) -> Sensor:
-        """Maps sensor name to Sensor (if exists) and returns the corresponding sensor.
+        """Gets sensor with the given name.
 
         Args:
-            name (str): sensor name
+            name: name of a sensor.
 
         Returns:
-            Type[Sensor]: sensor if it exists among all sensors.
+            sensor.
 
         Raises:
-            ItemNotFoundError: there is no sensor with the requested sensor name among all sensors.
+            ItemNotFoundError: if no sensor with the given name.
         """
         try:
             return cls._sensors_table[name]
@@ -58,67 +51,67 @@ class SensorsFactory:
             raise ItemNotFoundError(msg)
 
     @classmethod
-    def init_sensors(cls, cfg: SensorFactoryConfig) -> None:
-        """Initializes sensors from config.
+    def init_sensors(cls, config: SensorFactoryConfig) -> None:
+        """Initializes sensors for the given configuration.
 
         Args:
-            cfg (SensorFactoryConfig): config to define sensors.
+            config: sensors` configuration.
 
         Raises:
-            ValueError: empty sensors` config.
+            ValueError: if sensors config is empty.
         """
-        if not cfg.sensors:
+        if not config.sensors:
             msg = "Empty sensors config."
-            logger.error(msg)
+            logger.critical(msg)
             raise ValueError(msg)
 
         cls._sensors.clear()
         cls._sensors_table.clear()
 
-        for config in cfg.sensors.values():
-            sensor = cls.sensor_from_config(config)
+        for cfg in config.sensors.values():
+            sensor = cls.sensor_from_config(cfg)
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
 
     @staticmethod
-    def sensor_from_config(cfg: SensorConfig) -> Sensor:
-        """Creates sensor from config item.
+    def sensor_from_config(config: SensorConfig) -> Sensor:
+        """Creates sensor with the given configuration.
 
         Args:
-            cfg (SensorConfig): config to define sensor.
+            config: sensor configuration.
 
         Returns:
-            sensor (Sensor).
+            sensor.
 
         Raises:
-            ValueError: there is no available sensor type for the item from config.
+            ValueError: if sensor type is not supported.
         """
 
-        sensor_type: str = cfg.type_name
+        sensor_type: str = config.type_name
 
         match sensor_type:
 
             case Sensor.__name__:
-                sensor = Sensor(cfg)
+                sensor = Sensor(config)
             case Imu.__name__:
-                sensor = Imu(cfg)
+                sensor = Imu(config)
             case Fog.__name__:
-                sensor = Fog(cfg)
+                sensor = Fog(config)
             case Altimeter.__name__:
-                sensor = Altimeter(cfg)
+                sensor = Altimeter(config)
             case Lidar2D.__name__:
-                sensor = Lidar2D(cfg)
+                sensor = Lidar2D(config)
             case Lidar3D.__name__:
-                cfg = cast(Lidar3DConfig, cfg)
-                sensor = Lidar3D(cfg)
+                config = cast(Lidar3DConfig, config)
+                sensor = Lidar3D(config)
             case Encoder.__name__:
-                sensor = Encoder(cfg)
+                sensor = Encoder(config)
             case StereoCamera.__name__:
-                sensor = StereoCamera(cfg)
+                sensor = StereoCamera(config)
             case Gps.__name__:
-                sensor = Gps(cfg)
+                sensor = Gps(config)
             case VrsGps.__name__:
-                sensor = VrsGps(cfg)
+                sensor = VrsGps(config)
             case _:
                 msg = f"Unsupported sensor type: {sensor_type}"
                 logger.critical(msg)

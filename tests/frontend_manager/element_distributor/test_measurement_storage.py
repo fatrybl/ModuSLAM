@@ -4,7 +4,7 @@ import pytest
 
 from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
+from slam.data_manager.factory.locations import Location
 from slam.frontend_manager.element_distributor.measurement_storage import (
     MeasurementStorage,
 )
@@ -46,13 +46,13 @@ class TestMeasurementStorage:
         storage = MeasurementStorage()
         storage.add(measurement)
         storage.remove(measurement)
-        assert storage.is_empty
+        assert storage.empty
 
     def test_clear(self, measurement):
         storage = MeasurementStorage()
         storage.add(measurement)
         storage.clear()
-        assert storage.is_empty
+        assert storage.empty
 
     def test_recent_measurement(self, measurement):
         storage = MeasurementStorage()

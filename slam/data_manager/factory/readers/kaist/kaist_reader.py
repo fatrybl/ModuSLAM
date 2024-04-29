@@ -12,13 +12,10 @@ from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import (
-    Stream,
-    TimeLimit,
-)
+from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ItemNotFoundError
@@ -50,20 +47,15 @@ class KaistReader(DataReader):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
             self._reader_state.init_state(self._time_range)
 
-    @staticmethod
-    def _apply_dataset_dir(root_dir: Path, tables: tuple[dict[str, Path], ...]) -> None:
-        for table in tables:
-            [table.update({sensor_name: root_dir / path}) for sensor_name, path in table.items()]
-
     @overload
     def get_element(self) -> Element | None:
         """
         @overload.
+
         Gets element from a dataset sequentially based on iterator position.
 
         Returns:
-            Element | None: element with raw sensor measurement
-                            or None if all measurements from a dataset has already been processed
+            element with raw measurement or None if all measurements from a dataset has already been processed.
         """
         try:
             sensor, iterator, t = self._reader_state.next_sensor()
@@ -85,15 +77,14 @@ class KaistReader(DataReader):
     def get_element(self, sensor: Sensor) -> Element | None:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset for
-            a given sensor sequentially based on iterator position.
+
+        Gets element from a dataset sequentially based on iterator position for the specific sensor.
 
         Args:
-            sensor (Sensor): a sensor to get measurement of.
+            sensor: a sensor to get measurement of.
 
         Returns:
-            Element | None: element with raw sensor measurement
-                            or None if all measurements of the given sensor has already been processed.
+            element with raw measurement or None if all measurements from a dataset has already been processed.
         """
         try:
             iterator: FileIterator = self._reader_state.sensors_iterators[sensor.name]
@@ -119,14 +110,17 @@ class KaistReader(DataReader):
     def get_element(self, element: Element) -> Element:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset for
-            a given element without raw sensor measurement.
+
+        Gets the element with raw measurement from a dataset for the given element without raw measurement.
 
         Args:
-            element (Element): without raw sensor measurement.
+            element (Element): without raw measurement.
 
         Returns:
-            Element: with raw sensor measurement.
+            element with raw measurement.
+
+        Raises:
+            ItemNotFoundError: the given element is not in the dataset.
         """
 
         sensor: Sensor = element.measurement.sensor
@@ -158,16 +152,19 @@ class KaistReader(DataReader):
     def get_element(self, sensor: Sensor, timestamp: int) -> Element:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset for
-            a given sensor and timestamp. If timestamp is None,
-            gets the element sequentially based on iterator position.
+
+        Gets an element with raw sensor measurement from a dataset for the given sensor and timestamp.
 
         Args:
             sensor (Sensor): a sensor to get measurement of.
+
             timestamp (int): timestamp of sensor`s measurement.
 
         Returns:
-            Element: with raw sensor measurement with the given timestamp.
+            element with raw measurement.
+
+        Raises:
+            ItemNotFoundError: the element of the given sensor and timestamp is not in the dataset.
         """
 
         try:
@@ -196,38 +193,60 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_element(self, element=None, timestamp=None):
-        """Gets element from a dataset in different regimes based on arguments.
+        """
+        @overload.
+
+        Gets element from a dataset in different regimes based on arguments.
 
         Calls:
-            1.
+            1.  Gets element from a dataset sequentially based on iterator position for the specific sensor.
+
                 Args:
-                    __: Gets element from a dataset sequentially based on iterator position.
+                    __.
 
                 Returns:
-                    Element | None: element with raw sensor measurement
-                                    or None if all measurements from a dataset has already been processed.
-            2.
+                    element (Element) with raw measurement or None if all measurements from a dataset has already been processed.
+
+            2.  Gets the element with raw measurement from a dataset for the given element without raw measurement.
+
                 Args:
-                    element (Element): Gets an element with raw sensor measurement from a dataset for
-                                        a given element without raw sensor measurement.
+                    sensor (Sensor): sensor to get measurement of.
 
                 Returns:
-                    element (Element): with raw sensor measurement.
-            3.
-                Args:
-                    sensor (Sensor): Gets an element with raw sensor measurement from a dataset for
-                                        a given sensor sequentially based on iterator position.
-                Returns:
-                    Element | None: element with raw sensor measurement
-                                    or None if all measurements of the given sensor has already been processed.
+                    element (Element) with raw measurement.
 
-            4.
+            3.  Gets the element with raw measurement from a dataset for the given element without raw measurement.
+
                 Args:
-                    sensor (Sensor): Gets an element with raw sensor measurement from a dataset for
-                                        a given sensor and timestamp. If timestamp is None,
-                                        gets the element sequentially based on iterator position.
+                    element (Element): without raw measurement.
+
+                Returns:
+                    element with raw measurement.
+
+                Raises:
+                    ItemNotFoundError: the given element is not in the dataset.
+
+            4.  Gets an element with raw sensor measurement from a dataset for the given sensor and timestamp.
+
+                Args:
+                    sensor (Sensor): sensor to get measurement of.
+
                     timestamp (int): timestamp of sensor`s measurement.
 
                 Returns:
-                    element (Element): with raw sensor measurement of the given timestamp.
+                    element (Element) with raw measurement.
+
+                Raises:
+                    ItemNotFoundError: the element of the given sensor and timestamp is not in the dataset.
         """
+
+    @staticmethod
+    def _apply_dataset_dir(root_dir: Path, tables: tuple[dict[str, Path], ...]) -> None:
+        """Updates the paths in the tables with the root directory.
+
+        Args:
+            root_dir: root directory to be added to the paths in the tables.
+            tables: tables with the paths to be updated.
+        """
+        for table in tables:
+            [table.update({sensor_name: root_dir / path}) for sensor_name, path in table.items()]

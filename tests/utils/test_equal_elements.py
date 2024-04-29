@@ -4,12 +4,9 @@ import numpy as np
 import PIL.Image as Image
 
 from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
-    CsvDataLocation,
-    Location,
-)
+from slam.data_manager.factory.locations import CsvDataLocation, Location
 from slam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
-from slam.system_configs.system.setup_manager.sensors import SensorConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_methods import equal_elements
 
 

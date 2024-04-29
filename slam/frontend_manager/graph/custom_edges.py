@@ -11,15 +11,7 @@ from slam.frontend_manager.graph.base_vertices import GraphVertex
 
 
 class SmartFactorEdge(CalibrationEdge):
-    """Edge for Smart Factor in the Graph.
-
-    Args:
-        vertex (GraphVertex): main vertex.
-        support_vertices (set[GraphVertex]): support vertices.
-        measurements (tuple[Measurement, ...]): elements of DataBatch which create the edge.
-        factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel.Base): noise model for the factor.
-    """
+    """Edge for Smart Factor in the Graph: https://dellaert.github.io/files/Carlone14icra.pdf"""
 
     def __init__(
         self,
@@ -29,17 +21,29 @@ class SmartFactorEdge(CalibrationEdge):
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
+        """
+        Args:
+            vertex: target vertex.
+
+            support_vertices: support vertices
+
+            measurements: measurements to be used in the factor.
+
+            factor: GTSAM factor.
+
+            noise_model: GTSAM noise model of the factor.
+        """
         super().__init__(measurements, vertex, support_vertices, factor, noise_model)
 
     @property
     def all_vertices(self) -> set[GraphVertex]:
+        """Vertices of the edge."""
         return {self.vertex}.union(self.vertices)
 
 
 class SmartStereoFeature(SmartFactorEdge):
-    """
-    Edge for smart Stereo Camera features:
-        - https://dellaert.github.io/files/Carlone14icra.pdf
+    """Edge for smart Stereo Camera features.
+
     TODO: check if a noise model is correct.
     """
 
@@ -51,6 +55,19 @@ class SmartStereoFeature(SmartFactorEdge):
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Isotropic,
     ) -> None:
+        """
+
+        Args:
+            vertex: target vertex (camera pose).
+
+            support_vertices: camera feature vertices.
+
+            measurements: from pose to features.
+
+            factor: GTSAM factor.
+
+            noise_model: GTSAM noise model of the factor.
+        """
         super().__init__(vertex, support_vertices, measurements, factor, noise_model)
 
         self.K: gtsam.Cal3_S2 = gtsam.Cal3_S2()

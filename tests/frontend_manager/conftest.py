@@ -7,7 +7,7 @@ import pytest
 
 from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
+from slam.data_manager.factory.locations import Location
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from slam.frontend_manager.element_distributor.measurement_storage import (
     Measurement,
@@ -18,13 +18,11 @@ from slam.frontend_manager.graph.base_vertices import NotOptimizableVertex
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
+from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
-from slam.system_configs.system.frontend_manager.handlers.base_handler import (
-    HandlerConfig,
-)
-from slam.system_configs.system.setup_manager.sensors import SensorConfig
+from slam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 
 
@@ -48,7 +46,9 @@ class BasicTestEdgeFactory(EdgeFactory):
         super().__init__(config)
 
     @staticmethod
-    def noise_model(values: Iterable[float]) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
+    def noise_model(
+        noise_covariance: Iterable[float],
+    ) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
         return gtsam.noiseModel.Diagonal.Sigmas
 
     @property

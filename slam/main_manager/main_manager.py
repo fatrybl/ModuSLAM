@@ -5,7 +5,7 @@ from slam.data_manager.data_manager import DataManager
 from slam.frontend_manager.frontend_manager import FrontendManager
 from slam.map_manager.map_manager import MapManager
 from slam.setup_manager.setup_manager import SetupManager
-from slam.system_configs.system.main_manager import MainManagerConfig
+from slam.system_configs.main_manager import MainManagerConfig
 from slam.utils.stopping_criterion import StoppingCriterion
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class MainManager:
     def __init__(self, config: MainManagerConfig) -> None:
         """
         Args:
-            config (MainManagerConfig): main config for all managers.
+            config: main config for all managers.
         """
         self.setup_manager = SetupManager(config.setup_manager)
         self.data_manager = DataManager(config.data_manager)
@@ -29,7 +29,10 @@ class MainManager:
     def _process(
         self,
     ) -> None:
-        """TODO Check if Memory breakpoint is valid before creating new batch."""
+        """Creates graph and solves it.
+
+        TODO Check if Memory breakpoint is valid before creating new batch.
+        """
         batch = self.data_manager.batch_factory.batch
         graph = self.frontend_manager.graph
 
@@ -41,7 +44,8 @@ class MainManager:
             self.backend_manager.update(graph)
 
     def build_map(self) -> None:
-        """
+        """Builds the map using the data from the data manager.
+
         TODO: check if break_point is still valid: batch might be deleted but Memory Criterion is still active.
         """
 

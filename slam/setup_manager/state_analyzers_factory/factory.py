@@ -3,7 +3,7 @@ import logging
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.system_configs.system.setup_manager.state_analyzers_factory import (
+from slam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzerFactoryConfig,
 )
 from slam.utils.auxiliary_methods import import_object
@@ -13,26 +13,23 @@ logger = logging.getLogger(__name__)
 
 
 class StateAnalyzersFactory:
-    """Creates state analyzers."""
+    """Creates and stores state analyzers."""
 
     _analyzers = set[StateAnalyzer]()
     _analyzers_dict = dict[str, StateAnalyzer]()
 
-    @property
-    def analyzers(self) -> set[StateAnalyzer]:
-        """All analyzers.
-
-        Returns:
-            (set[StateAnalyzer]): set of analyzers.
-        """
-        return self._analyzers
+    @classmethod
+    def get_analyzers(cls) -> set[StateAnalyzer]:
+        """Gets all state analyzers."""
+        return cls._analyzers
 
     @classmethod
     def init_analyzers(cls, config: StateAnalyzerFactoryConfig) -> None:
-        """Initializes analyzers with the given config.
+        """Initializes state analyzers for the given configuration by importing
+        corresponding modules, objects and creating instances.
 
         Args:
-            config: configuration.
+            config: configuration for state analyzers.
         """
         package_name: str = config.package_name
 
@@ -47,13 +44,16 @@ class StateAnalyzersFactory:
 
     @classmethod
     def get_analyzer(cls, analyzer_name: str) -> StateAnalyzer:
-        """
-        The analyzer with the given name.
+        """Gets state analyzer with the given name.
+
         Args:
-            analyzer_name (str): name of analyzer.
+            analyzer_name: name of a state analyzer.
 
         Returns:
-            (StateAnalyzer): analyzer.
+            state analyzer.
+
+        Raises:
+            ItemNotFoundError: if no analyzer with the given name is found.
         """
         try:
             return cls._analyzers_dict[analyzer_name]

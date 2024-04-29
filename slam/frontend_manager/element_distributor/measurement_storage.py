@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class Measurement:
     """A measurement formed of processed element(s) by the corresponding handler.
 
-    Hash calculation ignores "values" attribute as not all values are hashable.
+    Hash calculation ignores "values" attribute because not all values are hashable.
     """
 
     time_range: TimeRange
@@ -37,19 +37,23 @@ class Measurement:
 
 
 class MeasurementStorage:
-    """Stores the measurements which have been processed by handlers."""
+    """Storage for measurements."""
 
     def __init__(self) -> None:
         self._data: dict[Handler, OrderedSet[Measurement]] = {}
 
     @property
     def data(self) -> dict[Handler, OrderedSet[Measurement]]:
-        """Dictionary with "handler -> measurements" data."""
+        """Dictionary with "handler -> measurements" pairs."""
         return self._data
 
     @property
     def recent_measurement(self) -> Measurement:
-        """A measurement with latest "stop" timestamp in the storage."""
+        """A measurement with latest "stop" timestamp in the storage.
+
+        Raises:
+            IndexError: if the storage is empty.
+        """
         try:
             __, measurement = self._update_state()
             return measurement
@@ -58,7 +62,11 @@ class MeasurementStorage:
 
     @property
     def time_range(self) -> TimeRange:
-        """Time range of the storage."""
+        """Start & stop time margins to cover all measurements in the storage.
+
+        Raises:
+            IndexError: time range does not exists for empty storage.
+        """
         try:
             time_range, __ = self._update_state()
             return time_range
@@ -66,16 +74,16 @@ class MeasurementStorage:
             raise IndexError("Empty storage: time range does not exist.")
 
     @property
-    def is_empty(self) -> bool:
+    def empty(self) -> bool:
         """Checks if the storage is empty."""
         return not bool(self._data)
 
     @overload
     def add(self, measurement: Measurement) -> None:
-        """Adds a new measurement to the storage.
+        """Adds new measurement to the storage.
 
         Args:
-            measurement (Measurement): a new measurement to be added.
+            measurement: the measurement to add.
         """
 
         if measurement.handler in self._data:
@@ -85,12 +93,16 @@ class MeasurementStorage:
 
     @overload
     def add(self, data: dict[Handler, OrderedSet[Measurement]]) -> None:
-        """Adds a new "handler -> measurements" dict to the storage.
+        """
+        @overload.
 
-        Attention: might be slow due to the "recent_measurement" update.
+        Adds multiple measurements to the storage in "handler -> measurements" table format.
+
+        Attention:
+            might be slow due to the "recent_measurement" update.
 
         Args:
-            data (dict[Handler, OrderedSet[Measurement]]): dict to add.
+            data: measurements to add.
         """
         self._data = self._data | data
 
@@ -102,13 +114,27 @@ class MeasurementStorage:
         Adds measurement(s) to the storage.
 
         Calls:
-            add(measurement: Measurement) -> None.
+            1. Adds new measurement to the storage.
 
-            add(data: dict[Handler, OrderedSet[Measurement]]) -> None.
+                Args:
+                    measurement (Measurement): the measurement to add.
+
+            2.  Adds multiple measurements to the storage in "handler -> measurements" table format.
+
+                Args:
+                    data (dict[Handler, OrderedSet[Measurement]]): measurements to add.
+
+                Attention:
+                    might be slow due to the "recent_measurement" update.
+
         """
 
     def remove(self, measurement: Measurement) -> None:
-        """Removes the measurement from the storage."""
+        """Removes the measurement from the storage.
+
+        Args:
+            measurement: the measurement to remove.
+        """
         self._data[measurement.handler].remove(measurement)
         if not self._data[measurement.handler]:
             del self._data[measurement.handler]
@@ -121,12 +147,15 @@ class MeasurementStorage:
         """Updates the time range of the storage.
 
         TODO: the time range might be updated quicker then O(N).
+
+        Returns:
+            time range, recent measurement with latest "stop" timestamp.
         """
         assert self._data, "Empty storage: no measurements."
 
-        measurements: OrderedSet[Measurement] = OrderedSet()
-        for ord_set in self._data.values():
-            [measurements.add(m) for m in ord_set]
+        measurements = OrderedSet[Measurement]()
+        for ordered_set in self._data.values():
+            measurements.add(ordered_set)
 
         m_start = min(measurements, key=lambda m: m.time_range.start)
         m_stop = max(measurements, key=lambda m: m.time_range.stop)

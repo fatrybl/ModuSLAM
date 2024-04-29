@@ -1,9 +1,7 @@
 import logging
 
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.system_configs.system.setup_manager.handlers_factory import (
-    HandlersFactoryConfig,
-)
+from slam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import ItemNotFoundError
 
@@ -11,28 +9,27 @@ logger = logging.getLogger(__name__)
 
 
 class HandlersFactory:
-    """Creates handlers."""
+    """Creates and stores handlers."""
 
     _handlers = set[Handler]()
 
     @classmethod
     def get_handlers(cls) -> set[Handler]:
-        """Gets all handlers.
-
-        Returns:
-            (set[Handler]): set of handlers.
-        """
+        """Gets all handlers."""
         return cls._handlers
 
     @classmethod
     def get_handler(cls, handler_name: str) -> Handler:
-        """
-        Returns a handler with the given name.
+        """Gets handler with the given name.
+
         Args:
-            handler_name (str): name of handler.
+            handler_name: name of a handler.
 
         Returns:
-            (Handler): handler.
+            handler.
+
+        Raises:
+            ItemNotFoundError: if no handler with the given name is found.
         """
         for handler in cls._handlers:
             if handler.name == handler_name:
@@ -43,7 +40,12 @@ class HandlersFactory:
 
     @classmethod
     def init_handlers(cls, config: HandlersFactoryConfig) -> None:
-        """Initializes handlers with the given config."""
+        """Initializes handlers for the given configuration by importing corresponding
+        modules, objects and creating instances.
+
+        Args:
+            config: configuration of handlers.
+        """
         package_name: str = config.package_name
 
         for name, cfg in config.handlers.items():

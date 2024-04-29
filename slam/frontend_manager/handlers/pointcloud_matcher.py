@@ -8,7 +8,7 @@ from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
 from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
-from slam.system_configs.system.frontend_manager.handlers.lidar_odometry import (
+from slam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange
@@ -17,11 +17,19 @@ logger = logging.getLogger(__name__)
 
 
 class ScanMatcher(Handler):
+    """
+    Handler computes the transformation between two point clouds based on Kiss-ICP method:
+    https://github.com/PRBonn/kiss-icp.
+    """
 
-    _elements_queue_size: int = 2
-    _num_channels: int = 4
+    _elements_queue_size: int = 2  # number of elements to compute the transformation
+    _num_channels: int = 4  # x, y, z, intensity
 
     def __init__(self, config: KissIcpScanMatcherConfig) -> None:
+        """
+        Args:
+            config: handler configuration with parameters for Kiss-ICP scan matcher.
+        """
         super().__init__(config)
         cfg: KISSConfig = self.to_kiss_icp_config(config)
         self._scan_matcher = KissICP(cfg)
@@ -32,33 +40,33 @@ class ScanMatcher(Handler):
         # self._visualizer.global_view = True
 
     @staticmethod
-    def to_kiss_icp_config(cfg: KissIcpScanMatcherConfig) -> KISSConfig:
+    def to_kiss_icp_config(config: KissIcpScanMatcherConfig) -> KISSConfig:
         """Creates KissICP config with parameters from the handler config.
 
         Args:
-            cfg (KissIcpScanMatcherConfig): handler config.
+            config: handler config.
 
         Returns:
-            (KISSConfig): KissICP config.
+            KissICP config.
         """
         kiss_cfg = KISSConfig()
-        kiss_cfg.mapping.max_points_per_voxel = cfg.max_points_per_voxel
-        kiss_cfg.mapping.voxel_size = cfg.voxel_size
-        kiss_cfg.adaptive_threshold.initial_threshold = cfg.adaptive_initial_threshold
-        kiss_cfg.data.min_range = cfg.min_range
-        kiss_cfg.data.max_range = cfg.max_range
-        kiss_cfg.data.deskew = cfg.deskew
-        kiss_cfg.data.preprocess = cfg.preprocess
+        kiss_cfg.mapping.max_points_per_voxel = config.max_points_per_voxel
+        kiss_cfg.mapping.voxel_size = config.voxel_size
+        kiss_cfg.adaptive_threshold.initial_threshold = config.adaptive_initial_threshold
+        kiss_cfg.data.min_range = config.min_range
+        kiss_cfg.data.max_range = config.max_range
+        kiss_cfg.data.deskew = config.deskew
+        kiss_cfg.data.preprocess = config.preprocess
         return kiss_cfg
 
     def tuple_to_array(self, values: tuple[float, ...]) -> np.ndarray:
-        """Converts raw lidar data to numpy array of shape [Nx3].
+        """Converts raw lidar data to numpy array of shape [N,3].
 
         Args:
-            values (tuple[float,...]): raw lidar scan data.
+            values: raw lidar scan data.
 
         Returns:
-            (np.ndarray[Nx3]): raw values as a numpy array.
+            raw values as a numpy array [N,3].
         """
         arr = np.array(values)
         arr = arr.reshape(-1, self._num_channels)
@@ -66,27 +74,27 @@ class ScanMatcher(Handler):
 
     @staticmethod
     def _transformation(pose_i: np.ndarray, pose_j: np.ndarray) -> np.ndarray:
-        """Compute the transformation between two poses as SE(3) matrices: T = inv(Pi) @
-        Pj.
+        """Computes the transformation between two poses: T = inv(Pi) @ Pj.
 
         Args:
             pose_i (np.ndarray): SE(3) matrix.
+
             pose_j (np.ndarray): SE(3) matrix.
 
         Returns:
-            (np.ndarray): transformation matrix SE(3).
+            transformation matrix SE(3).
         """
         tf = np.linalg.inv(pose_i) @ pose_j
         return tf
 
     def _create_measurement(self, tf: np.ndarray) -> Measurement:
-        """Creates a Measurement object with the computed transformation matrix.
+        """Creates the measurement with the computed transformation matrix.
 
         Args:
-            tf (np.ndarray[4x4]): transformation matrix SE(3).
+            tf: transformation matrix SE(3).
 
         Returns:
-            (Measurement): measurement with the computed transformation matrix SE(3).
+            measurement with the transformation matrix.
         """
         last_el = self._elements_queue[-1]
         pre_last_el = self._elements_queue[-2]
@@ -111,21 +119,20 @@ class ScanMatcher(Handler):
         return m
 
     def _update_queues(self):
-        """Remove the oldest element and pose."""
+        """Remove the oldest element and pose from the queue."""
         self._scan_matcher.poses.pop(0)
         self._elements_queue.pop(0)
 
     def process(self, element: Element) -> Measurement | None:
-        """Computes the transformation as SE(3) matrix between 2 point clouds. Always
+        """Computes the transformation SE(3) matrix between 2 point clouds. Always
         returns None for the very first element, as the transformation can not be
         computed for a single point cloud.
 
         Args:
-            element (Element): element with raw pointcloud data.
+            element: element with raw pointcloud data.
 
         Returns:
-            measurement (Measurement): measurement with the computed transformation matrix SE(3).
-            (None): if the transformation can not be computed.
+            measurement or None.
 
         Raises:
             TypeError: if the sensor is not an instance of Lidar3D.

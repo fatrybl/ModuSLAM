@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from typing import Iterable
 
 import gtsam
@@ -8,6 +9,9 @@ from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.custom_edges import ImuOdometry
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.graph.graph import Graph
+from slam.system_configs.frontend_manager.edge_factories.base_factory import (
+    EdgeFactoryConfig,
+)
 from slam.utils.ordered_set import OrderedSet
 
 
@@ -16,13 +20,9 @@ class ImuOdometryFactory(EdgeFactory):
     Creates edges of type: ImuOdometry.
     """
 
-    def __init__(self) -> None:
-        self.noise_model: gtsam.noiseModel.Diagonal
-        self.gtsam_factor: gtsam.ImuFactor
-
-    @property
-    def name(self) -> str:
-        return self.__class__.__name__
+    def __init__(self, config: EdgeFactoryConfig) -> None:
+        super().__init__(config)
+        self._time_margin: int = config.search_time_margin
 
     @property
     def vertices_types(self) -> set[type[Pose]]:
@@ -35,7 +35,7 @@ class ImuOdometryFactory(EdgeFactory):
     def create(
         self,
         graph: Graph,
-        vertices: Iterable[GraphVertex],
+        vertices: Collection[GraphVertex],
         measurements: OrderedSet[Measurement],
     ) -> list[ImuOdometry]:
         """

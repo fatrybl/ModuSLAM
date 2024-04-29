@@ -3,12 +3,12 @@ import numpy.typing as npt
 
 from slam.data_manager.factory.element import Element
 from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import BinaryDataLocation
+from slam.data_manager.factory.locations import BinaryDataLocation
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
-from slam.system_configs.system.setup_manager.sensors import Lidar3DConfig
+from slam.system_configs.setup_manager.sensors import Lidar3DConfig
 from tests_data import current_directory
 
 tests_data_dir = current_directory

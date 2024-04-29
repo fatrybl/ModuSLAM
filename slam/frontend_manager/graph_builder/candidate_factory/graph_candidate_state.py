@@ -8,16 +8,15 @@ logger = logging.getLogger(__name__)
 
 
 class State(MeasurementStorage):
-    """State of the graph candidate."""
+    """State of the storage with measurements in exact time moment.
+
+    Used for the graph candidate.
+    """
 
     def __init__(self) -> None:
         super().__init__()
 
     @property
     def timestamp(self) -> int:
-        """Time of the state.
-
-        Raises:
-            ValueError: if the start != stop timestamp of the time range.
-        """
+        """Time stamp of the state."""
         return self.time_range.stop

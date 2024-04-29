@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class ElementDistributor:
-    """Distributes elements from DataBatch to corresponding handlers for
-    preprocessing."""
+    """Distributes elements from DataBatch to corresponding handlers for further
+    processing."""
 
     def __init__(self):
         self._storage = MeasurementStorage()
@@ -24,46 +24,36 @@ class ElementDistributor:
 
     @property
     def storage(self) -> MeasurementStorage:
-        """Storage of measurements.
-
-        Returns:
-            storage of measurements (MeasurementStorage).
-        """
+        """Storage of measurements."""
         return self._storage
-
-    def init_table(self, table_config: dict[str, list[str]]) -> None:
-        """Initializes sensor-handler table.
-
-        Args:
-            table_config (dict[str, list[str]]): table with sensor names as key and list of handler names as values.
-        """
-        self._table = init_sensor_handler_table(table_config)
 
     @property
     def sensor_handler_table(self) -> dict[Sensor, list[Handler]]:
-        """Table with connections between sensors and handlers.
-
-        Returns:
-            Sensor -> handlers table (dict[Sensor, list[Handler]]).
-        """
+        """ "Sensor -> handlers" tables."""
         return self._table
 
-    def clear_storage(self, data: Iterable[OrderedSet[Measurement]]) -> None:
-        """Clears the storage from measurements.
+    def init_table(self, table_config: dict[str, list[str]]) -> None:
+        """Initializes "sensor -> handlers" table.
 
         Args:
-            data (Iterable[OrderedSet[Measurement]]): data to be removed from storage.
+            table_config: table with "sensor name -> handlers names" pairs.
+        """
+        self._table = init_sensor_handler_table(table_config)
+
+    def clear_storage(self, data: Iterable[OrderedSet[Measurement]]) -> None:
+        """Removes the given data from the measurements storage.
+
+        Args:
+            data: data to be removed from storage.
         """
         for ordered_set in data:
             for measurement in ordered_set:
                 self.storage.remove(measurement)
 
     def distribute_element(self, element: Element) -> None:
-        """Distributes an element to the handler for processing.
+        """Distributes the element to the handler for further processing.
 
         TODO: add support for multiple args for process() method.
-        Returns:
-            measurement: processed element as measurement.
         """
         handlers = self.sensor_handler_table[element.measurement.sensor]
 

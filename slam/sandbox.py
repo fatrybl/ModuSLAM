@@ -50,10 +50,10 @@ for i in range(5):
 graph.addPriorPose3(X(0), pose1, prior_noise)
 
 
-print(graph)
-print(graph.keys())
-print(graph.size())
-print(graph.nrFactors())
+# print(graph)
+# print(graph.keys())
+# print(graph.size())
+# print(graph.nrFactors())
 
 
 # pcd.colors = o3d.utility.Vector3dVector(

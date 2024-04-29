@@ -9,10 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 class GraphBuilderFactory:
-    """Creates graph builder based on config."""
-
     @staticmethod
     def create(name: str) -> type[GraphBuilder]:
+        """Matches the given name with the graph builder type and returns the type of
+        graph builder.
+
+        Args:
+            name: name of the graph builder to create.
+
+        Returns:
+            type of graph builder.
+        """
         match name:
             case LidarMapBuilder.__name__:
                 return LidarMapBuilder

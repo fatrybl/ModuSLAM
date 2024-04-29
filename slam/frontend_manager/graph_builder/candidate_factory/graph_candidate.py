@@ -10,7 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class GraphCandidate:
-    """Graph candidate with different states."""
+    """Graph candidate.
+
+    Contains a sequence of states and the time range of the graph candidate.
+    """
 
     def __init__(self) -> None:
         self._states: deque[State] = deque()
@@ -54,10 +57,19 @@ class GraphCandidate:
         self._time_range = None
 
     def _update_time_range(self) -> TimeRange:
-        """Updates the time range of the graph candidate."""
+        """Updates the time range of the graph candidate.
+
+        Returns:
+            time range of the graph candidate.
+
+        Raises:
+            ValueError: if the graph candidate is empty.
+        """
 
         if not self.states:
-            raise ValueError("Empty graph candidate: no states.")
+            msg = "Empty graph candidate."
+            logger.critical(msg)
+            raise ValueError(msg)
 
         start = min(s.time_range.start for s in self.states)
         stop = max(s.time_range.stop for s in self.states)

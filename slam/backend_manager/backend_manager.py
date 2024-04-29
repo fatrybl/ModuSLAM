@@ -16,15 +16,15 @@ class BackendManager:
         self._result_values = gtsam.Values()
 
     def solve(self, graph: Graph) -> None:
-        """Solves the optimization problem for the given graph.
+        """Solves the optimization problem for the graph.
 
         Args:
-            graph (Graph): a graph with the factors to be solved.
+            graph: contains factor graph to be solved.
         """
         self._result_values = self._graph_solver.solve(graph)
 
     def update(self, graph: Graph) -> None:
-        """Updates the graph with the optimized values.
+        """Updates the graph with the calculated values.
 
         Args:
             graph (Graph): a graph to be updated.

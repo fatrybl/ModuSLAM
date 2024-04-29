@@ -45,4 +45,4 @@ def test_clear_storage(handler, element):
 
     element_distributor.clear_storage([OrderedSet([z])])
 
-    assert element_distributor.storage.is_empty
+    assert element_distributor.storage.empty

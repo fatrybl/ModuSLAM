@@ -8,16 +8,14 @@ from numpy import dtype, ndarray, ones, uint8
 from PIL import Image
 
 from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
+from slam.data_manager.factory.locations import (
     BinaryDataLocation,
     CsvDataLocation,
     StereoImgDataLocation,
 )
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.setup_manager.sensors import (
-    SensorConfig,
-    SensorFactoryConfig,
-)
+from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig
 from tests_data.kaist_urban_dataset.structure import DatasetStructure
 
 

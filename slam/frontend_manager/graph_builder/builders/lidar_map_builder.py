@@ -19,7 +19,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 )
 from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_merger import GraphMerger
-from slam.system_configs.system.frontend_manager.graph_builder.graph_builder import (
+from slam.system_configs.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
 
@@ -39,18 +39,14 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
 
     @property
     def graph_candidate(self) -> GraphCandidate:
-        """Graph candidate.
-
-        Returns:
-            graph candidate (GraphCandidate).
-        """
+        """Graph candidate to be merged with the graph."""
         return self._candidate_factory.graph_candidate
 
     def merge_graph_candidate(self, graph: Graph) -> None:
         """Merges the graph candidate with the graph.
 
         Args:
-            graph (Graph): a graph to be merged with.
+            graph: a graph to be merged with.
         """
         if self._candidate_factory.candidate_ready():
             for state in self.graph_candidate.states:
@@ -62,7 +58,7 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
         """Creates graph candidate.
 
         Args:
-            batch (DataBatch): data batch with measurements.
+            batch: a data batch with measurements.
         """
         while not self._candidate_factory.candidate_ready() and not batch.empty():
             element = batch.first

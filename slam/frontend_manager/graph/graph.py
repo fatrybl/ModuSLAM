@@ -18,11 +18,8 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
     Includes gtsam.NonlinearFactorGraph.
     TODO:
-        1) add logic to remove detached vertices from the graph.
-        2) implement edges deletion with vertices deletion.
-        3) implement edges deletion w/o vertices deletion.
-        4) implement edges deletion with factors modification.
-        5) implement marginalization of vertices.
+        1) implement edges deletion with factors modification.
+        2) implement marginalization of vertices.
     """
 
     def __init__(self) -> None:
@@ -30,19 +27,26 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         self.edge_storage = EdgeStorage[GraphEdge]()
         self.factor_graph = gtsam.NonlinearFactorGraph()
 
-    def _set_index(self) -> int:
-        """Sets unique index for the new edge base on the size of the factor graph.
-        Gtsam factor graph sets index to the factor by exploiting the size of the factor
-        graph. This guarantees the uniqueness of the index. However, the size of the
-        factor graph is not equal to the number of factors in the graph, because the
-        factor graph may contain empty slots (null ptr objects). When the factor is
-        removed, the size of the factor graph does not change. To reduce the size of the
-        factor graph, the resize() method should be called.
+    @property
+    def gtsam_values(self) -> gtsam.Values:
+        """GTSAM values of the graph.
 
-        Returns:
-            unique index (int).
+        TODO: add tests.
         """
-        return self.factor_graph.size()
+        vertices = self.vertex_storage.optimizable_vertices
+        values = gtsam.Values()
+        unique_vertices: dict[int, OptimizableVertex] = {}
+
+        for vertex in vertices:
+            if vertex.gtsam_index not in unique_vertices:
+                unique_vertices[vertex.gtsam_index] = vertex
+
+        [
+            values.insert(vertex.gtsam_index, vertex.gtsam_instance)
+            for vertex in unique_vertices.values()
+        ]
+
+        return values
 
     @overload
     def add_edge(self, edge: GraphEdge) -> None:
@@ -83,11 +87,13 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         @overload.
 
         Calls:
-            1. add single edge:
+            1.  Adds edge to the graph:
+
                 Args:
                     edge (GraphEdge): new edge to be added to the graph.
 
-            2. add multiple edges:
+            2.  Adds multiple edges to the graph:
+
                 Args:
                     edges (Iterable[GraphEdge]): new edges to be added to the graph.
         """
@@ -128,14 +134,17 @@ class Graph(Generic[GraphVertex, GraphEdge]):
     def remove_edge(self, edge=None):
         """
         @overload.
+
         TODO: add tests.
 
         Calls:
-            1. Removes single edge:
+            1.  Removes single edge:
+
                 Args:
                     edge (GraphEdge): edge to be deleted from the graph.
 
-            2. Removes multiple edges:
+            2.  Removes multiple edges:
+
                 Args:
                     edges (Iterable[GraphEdge]): edges to be deleted from the graph.
         """
@@ -174,11 +183,13 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         TODO: add tests.
 
         Calls:
-            1. Removes 1 vertex:
+            1.  Removes 1 vertex:
+
                 Args:
                     vertex (GraphVertex): vertex to be deleted from the graph.
 
-            2. Removes multiple vertices:
+            2.  Removes multiple vertices:
+
                 Args:
                     vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
         """
@@ -187,40 +198,29 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """Updates the graph with new values.
 
         Args:
-            values (gtsam.Values): new computed values.
+            values: GTSAM values.
         """
 
         self.vertex_storage.update_optimizable_vertices(values)
         self.vertex_storage.update_non_optimizable_vertices()
 
-    @property
-    def gtsam_values(self) -> gtsam.Values:
-        """GTSAM Initial values of the graph.
+    def marginalize(self, vertices: Iterable[GraphVertex]) -> None:
+        """Marginalizes out vertices.
 
-        TODO: add tests for initial_values.
-
-        Returns:
-            initial values (gtsam.Values).
-        """
-        vertices = self.vertex_storage.optimizable_vertices
-        initial_values = gtsam.Values()
-        unique_vertices: dict[int, OptimizableVertex] = {}
-
-        for vertex in vertices:
-            if vertex.gtsam_index not in unique_vertices:
-                unique_vertices[vertex.gtsam_index] = vertex
-
-        [
-            initial_values.insert(vertex.gtsam_index, vertex.gtsam_value)
-            for vertex in unique_vertices.values()
-        ]
-
-        return initial_values
-
-    def marginalize(self, edges: Iterable[GraphEdge]) -> None:
-        """Marginalizes out edges.
-
-        Args:
-            edges (Iterable[GraphEdge]): edges to be marginalized out.
+        Not implemented.
         """
         raise NotImplementedError
+
+    def _set_index(self) -> int:
+        """Sets unique index for the new edge base on the size of the factor graph.
+        Gtsam factor graph sets index to the factor by exploiting the size of the factor
+        graph. This guarantees the uniqueness of the index. However, the size of the
+        factor graph is not equal to the number of factors in the graph, because the
+        factor graph may contain empty slots (null ptr objects). When the factor is
+        removed, the size of the factor graph does not change. To reduce the size of the
+        factor graph, the resize() method should be called.
+
+        Returns:
+            unique index.
+        """
+        return self.factor_graph.size()

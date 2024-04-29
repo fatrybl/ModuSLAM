@@ -15,6 +15,5 @@ What should be done for FrontendManager:
  3) Finish structure.
 
  What should be done for the Framework:
-    1) Make MyPy and Flake8 happy with all code and tests.
     2) Update Sphinx docs
     3) Add slots=True to dataclasses and use multiple inheritance where its possible.

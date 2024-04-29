@@ -1,13 +1,14 @@
 import logging
-from collections.abc import Collection
 
 import gtsam
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 def get_noise_model_method(noise_model_name: str):
+    """
+    TODO: maybe remove ?
+    """
     noise_models: list[str] = [
         gtsam.noiseModel.Diagonal.__name__,
         gtsam.noiseModel.Isotropic.__name__,
@@ -32,22 +33,30 @@ def get_noise_model_method(noise_model_name: str):
             raise ValueError(msg)
 
 
+def pose_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:
+    """Isotropic Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
+
+    Args:
+        variance: float representing the standard deviation of the noise.
+
+    Returns:
+        gtsam noise model.
+    """
+    noise = gtsam.noiseModel.Isotropic.Variance(6, variance)
+    return noise
+
+
 def pose_diagonal_noise_model(
-    values: Collection[float],
-) -> gtsam.noiseModel.Diagonal.Sigmas:
+    noise_variance: tuple[float, float, float, float, float, float],
+) -> gtsam.noiseModel.Diagonal.Variances:
     """Diagonal Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
 
     Args:
-        values (Collection[float]): measurement noise sigmas: [x, y, z, roll, pitch, yaw].
+        noise_variance: tuple of 6 floats representing the variances of the noise.
 
     Returns:
-        noise model (gtsam.noiseModel.Diagonal.Sigmas).
+        gtsam noise model.
     """
-    num_values: int = len(values)
-    if num_values != 6:
-        msg = f"Expected 6 values: [x, y, z, roll, pitch, yaw]. Got: {num_values}"
-        logger.critical(msg)
-        raise ValueError(msg)
-    else:
-        values = np.array(values, dtype=float)
-        return gtsam.noiseModel.Diagonal.Sigmas(values)
+
+    noise = gtsam.noiseModel.Diagonal.Variances(noise_variance)
+    return noise

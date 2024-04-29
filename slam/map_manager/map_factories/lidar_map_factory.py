@@ -14,19 +14,24 @@ from slam.frontend_manager.graph.custom_vertices import LidarPose
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
 from slam.map_manager.maps.lidar_map import LidarMap
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
-from slam.system_configs.system.map_manager.map_factories.lidar_map_factory import (
+from slam.system_configs.map_manager.map_factories.lidar_map_factory import (
     LidarMapFactoryConfig,
 )
 from slam.utils.auxiliary_methods import check_dimensionality
 from slam.utils.deque_set import DequeSet
+from slam.utils.numpy_types import Matrix4x4
 
 logger = logging.getLogger(__name__)
 
 
 class LidarMapFactory:
-    """Class to create a lidar map."""
+    """Factory for a lidar map."""
 
     def __init__(self, config: LidarMapFactoryConfig) -> None:
+        """
+        Args:
+            config: configuration of the factory.
+        """
         self._map = LidarMap()
         self._required_vertex_type = LidarPose
         self._num_channels: int = config.num_channels
@@ -35,28 +40,21 @@ class LidarMapFactory:
 
     @property
     def map(self) -> LidarMap:
-        """Lidar map.
-
-        Returns:
-            Map instance (LidarMap).
-        """
+        """Lidar pointcloud map instance."""
         return self._map
 
     @property
     def vertices_types(self) -> tuple[type[Vertex], ...]:
-        """Required vertices types to create a map.
-
-        Returns:
-            Vertices types (tuple[type[Vertex], ...]).
-        """
+        """Required vertices types to create a lidar pointcloud map."""
         return (self._required_vertex_type,)
 
     def create(self, vertex_storage: VertexStorage, batch_factory: BatchFactory) -> None:
-        """Creates a Lidar Map.
+        """Creates a lidar pointcloud map.
 
         Args:
-            vertex_storage (VertexStorage): storage of the vertices.
-            batch_factory (BatchFactory): factory to create a batch.
+            vertex_storage: storage of graph vertices.
+
+            batch_factory: factory to create a data batch.
         """
         table = self._create_requests_table(vertex_storage)
         table_with_data = self._get_elements(table, batch_factory)
@@ -66,13 +64,13 @@ class LidarMapFactory:
     def _create_requests_table(
         self, vertex_storage: VertexStorage
     ) -> dict[LidarPose, set[Element]]:
-        """Creates a table of vertices -> elements.
+        """Creates "vertices -> elements" table.
 
         Args:
-            vertex_storage (VertexStorage): storage of the vertices of type LidarPose.
+            vertex_storage: storage of graph vertices.
 
         Returns:
-            Table of vertices -> elements (dict[Vertex, set[Element]]).
+            "vertices -> elements" table.
         """
         vertices: DequeSet[LidarPose] = vertex_storage.get_vertices(self._required_vertex_type)
         vertex_edges_table: dict[LidarPose, set[Edge]] = {v: v.edges for v in vertices}
@@ -84,16 +82,17 @@ class LidarMapFactory:
     def _get_elements(
         vertex_elements_table: dict[LidarPose, set[Element]], batch_factory: BatchFactory
     ) -> dict[LidarPose, deque[Element]]:
-        """Gets elements with raw lidar measurements and assign to the corresponding
-        vertices of the given table.
+        """Gets elements with raw lidar pointcloud measurements and assign to the
+        corresponding vertices.
 
         Args:
-            vertex_elements_table (dict[Vertex, set[Element]]): table of vertices -> elements
-                                                                without raw lidar measurements.
+            vertex_elements_table: "vertices -> elements" table.
+                Elements do not contain raw lidar pointcloud measurements.
+
             batch_factory (BatchFactory): factory to create a batch.
 
         Returns:
-            Table of vertices -> elements with raw lidar measurements (dict[Vertex, deque[Element]]).
+            "vertices -> elements" table. Each element contains raw lidar pointcloud measurement.
         """
         table: dict[LidarPose, deque[Element]] = defaultdict(deque)
         for vertex, elements in vertex_elements_table.items():
@@ -106,13 +105,13 @@ class LidarMapFactory:
     def _create_vertex_measurements_table(
         vertex_edges_table: dict[LidarPose, set[Edge]]
     ) -> dict[LidarPose, list[Measurement]]:
-        """Creates a table of vertices -> measurements.
+        """Creates "vertex -> measurements" table.
 
         Args:
-            vertex_edges_table (dict[LidarPose, set[Edge]]): table of vertices -> edges.
+            vertex_edges_table: "vertex -> edges" table.
 
         Returns:
-            Table of vertices -> measurements (dict[LidarPose, list[Measurement]]).
+            "vertex -> measurements" table.
         """
 
         table: dict[LidarPose, list[Measurement]] = defaultdict(list)
@@ -126,13 +125,13 @@ class LidarMapFactory:
 
     @staticmethod
     def _get_unique_elements(measurements: Iterable[Measurement]) -> set[Element]:
-        """Returns set of unique elements from the given collections of measurements.
+        """Gets set of unique elements from the given collections of measurements.
 
         Args:
-            measurements (Iterable[Measurement]): collections of measurements.
+            measurements: collections of measurements.
 
         Returns:
-            Unique elements (set[Element]).
+            set of elements.
         """
         unique_elements = set(
             element for measurement in measurements for element in measurement.elements
@@ -143,13 +142,13 @@ class LidarMapFactory:
     def _create_vertex_elements_table(
         vertex_measurements_table: dict[LidarPose, list[Measurement]]
     ) -> dict[LidarPose, set[Element]]:
-        """Creates a table of vertices and their elements.
+        """Creates "vertex -> elements" table.
 
         Args:
-            vertex_measurements_table (dict[LidarPose, list[Measurement]]): table of vertices -> measurements.
+            vertex_measurements_table: "vertices -> measurements" table.
 
         Returns:
-            Table of vertices -> elements (dict[Vertex, list[Element]]).
+            "vertex -> elements" table.
         """
 
         table: dict[LidarPose, set[Element]] = defaultdict(set)
@@ -168,29 +167,28 @@ class LidarMapFactory:
         """Converts values to pointcloud np.ndarray [num_channels, N].
 
         Args:
-            values (tuple[float,...]): values to convert.
+            values: values to convert.
 
         Returns:
-            Values as numpy array (np.ndarray[num_channels, N]).
+            Values as array [num_channels, N].
         """
         array = np.array(values).reshape((-1, num_channels)).T
         return array
 
     @staticmethod
     def _filter_array(array: np.ndarray, lower_bound: float, upper_bound: float) -> np.ndarray:
-        """Filters 2D array [4,N] with lower/upper bounds. If a column has at least one
+        """Filters 2D array [4, N] with lower/upper bounds. If a column has at least one
         value outside the bounds, the whole column is removed.
 
         Args:
-            array (np.ndarray[4,N]): array of points to filter.
-            lower_bound (float): lower bound.
-            upper_bound (float): upper bound.
+            array: array [4, N] of points to filter.
+
+            lower_bound: lower bound value.
+
+            upper_bound: upper bound value.
 
         Returns:
-            Filtered array (np.ndarray[4,K]).
-
-        Raises:
-            DimensionalityError: if the array has a wrong shape.
+            filtered array [4, K].
         """
         check_dimensionality(array, shape=(4, array.shape[1]))
 
@@ -199,36 +197,38 @@ class LidarMapFactory:
         return filtered_arr
 
     @staticmethod
-    def _transform_pointcloud(
-        tf1: np.ndarray, tf2: np.ndarray, pointcloud: np.ndarray
-    ) -> np.ndarray:
+    def _transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, pointcloud: np.ndarray) -> np.ndarray:
         """Transforms points` coordinates to the global coordinate frame based
-            on the given vertex pose and transformation: base->sensor.
+            on the given vertex pose and transformation: base -> sensor.
 
         Args:
-            tf1 (np.ndarray[4,4]): transformation matrix SE(3).
-            tf2 (np.ndarray[4,4]): transformation matrix SE(3).
-            pointcloud (np.ndarray[4,N]): pointcloud to transform.
+            tf1: transformation matrix SE(3).
+
+            tf2: transformation matrix SE(3).
+
+            pointcloud: pointcloud array [4, N] to transform.
 
         Returns:
-            Transformed pointcloud (np.ndarray[4,N]).
+            Transformed pointcloud array [4, N].
         """
         result = tf1 @ tf2 @ pointcloud
         return result
 
     def _build_pointcloud(
-        self, pose: np.ndarray, tf: np.ndarray, values: tuple[float, ...]
+        self, pose: Matrix4x4, tf: Matrix4x4, values: tuple[float, ...]
     ) -> np.ndarray:
         """Builds a pointcloud from the given values and transforms it according to the
-        vertex pose and tf between base and lidar. Ignores intensity values.
+        vertex pose and base -> lidar transformation. Ignores intensity values.
 
         Args:
-            pose (np.ndarray[4,4]): pose of the vertex.
-            tf (np.ndarray[4,4]): transformation matrix between base and lidar.
-            values (tuple[float, ...]): lidar measurements.
+            pose: pose SE(3).
+
+            tf: base -> lidar transformation SE(3).
+
+            values: raw lidar pointcloud data.
 
         Returns:
-            Pointcloud (np.ndarray[4,N]).
+            Pointcloud array [4, N].
         """
         pointcloud = self._values_to_array(values, self._num_channels)
         pointcloud = self._filter_array(pointcloud, self._min_range, self._max_range)
@@ -239,13 +239,16 @@ class LidarMapFactory:
     def _build_pointcloud_map(
         self, vertex_elements_table: dict[LidarPose, deque[Element]]
     ) -> np.ndarray:
-        """Builds a pointcloud map from the given table of vertices and their elements.
+        """Builds a pointcloud map from the given "vertex -> elements" table.
 
         Args:
-            vertex_elements_table (dict[LidarPose, deque[Element]]): table of vertices and their elements.
+            vertex_elements_table: "vertex -> elements" table.
 
         Returns:
-            Pointcloud map (np.ndarray[N,3]).
+            Pointcloud map array [N,3].
+
+        Raises:
+            TypeError: if the sensor is not of type Lidar3D.
         """
         pointcloud_map = np.empty((4, 0))
 
