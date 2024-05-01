@@ -104,9 +104,8 @@ class BatchFactory:
         raise NotImplementedError
 
     @staticmethod
-    def _data_processed() -> None:
-        """Changes the stopping criterion when all data has been processed and logs the
-        message."""
+    def _set_stopping_criterion() -> None:
+        """Sets the stopping criterion = True, when all data has been processed."""
 
         msg = "All data has been processed"
         logger.info(msg)
@@ -143,7 +142,7 @@ class BatchFactory:
         if new_element:
             self._batch.add(new_element)
         else:
-            self._data_processed()
+            self._set_stopping_criterion()
 
     @overload
     def _add_data(self, no_data_element: Element) -> None:

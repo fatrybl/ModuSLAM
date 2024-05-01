@@ -6,7 +6,6 @@ from typing import Any
 from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.data_manager.factory.locations import ConfigFileLocation
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import Edge
 from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.custom_vertices import (
@@ -18,6 +17,7 @@ from slam.frontend_manager.graph.custom_vertices import (
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.handlers.prior import PriorHandler
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
@@ -56,7 +56,7 @@ class GraphInitializer:
 
         for prior in self._priors:
             edges = self._create_edge(graph, prior)
-            graph.add_edge(edges)
+            graph.add_edges(edges)
 
     def _create_edge(self, graph: Graph, prior: PriorConfig) -> list[Edge]:
         """Creates an edge with a prior factor.

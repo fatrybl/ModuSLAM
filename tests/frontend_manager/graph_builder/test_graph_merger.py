@@ -4,7 +4,6 @@
 merge() method.
 """
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import UnaryEdge
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import IndexStorage
@@ -12,6 +11,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state
     State,
 )
 from slam.frontend_manager.graph_builder.graph_merger import GraphMerger
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.utils.deque_set import DequeSet
 from tests.frontend_manager.conftest import (
     BasicTestVertex,

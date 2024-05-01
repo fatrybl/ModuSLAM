@@ -1,9 +1,8 @@
 import logging
 from collections.abc import Iterable
-from typing import Generic, overload
+from typing import Generic
 
 import gtsam
-from plum import dispatch
 
 from slam.frontend_manager.graph.base_vertices import (
     GraphVertex,
@@ -66,6 +65,16 @@ class VertexStorage(Generic[GraphVertex]):
         """Not optimizable vertices in the Graph."""
         return self._not_optimizable_vertices
 
+    @staticmethod
+    def find_closest_vertex(
+        vertex_type: type[GraphVertex], timestamp: int, margin: int
+    ) -> GraphVertex | None:
+        """Finds the closest vertex with the given timestamp, time margin and type.
+
+        Not implemented.
+        """
+        raise NotImplementedError
+
     def get_vertices(self, vertex_type: type[Vertex]) -> DequeSet:
         """Gets vertices of the given type.
 
@@ -83,126 +92,29 @@ class VertexStorage(Generic[GraphVertex]):
         else:
             return self._vertices_table[vertex_type]
 
-    @overload
-    def add(self, vertex: GraphVertex) -> None:
-        """
-        @overload.
-
-        TODO: add tests.
-
-        Adds one vertex based on its type.
+    def add(self, vertex: GraphVertex | Iterable[GraphVertex]) -> None:
+        """Adds vertex(s).
 
         Args:
-            vertex (GraphVertex): new vertex to be added to the graph.
-
-        Raises:
-            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
+            vertex: new vertex(s) to be added to the graph.
         """
-        self._index_storage.add(vertex.index)
-        self._vertices.add(vertex)
-        self._add_to_tables(vertex)
-
-        if isinstance(vertex, OptimizableVertex):
-            self._optimizable_vertices.add(vertex)
-        elif isinstance(vertex, NotOptimizableVertex):
-            self._not_optimizable_vertices.add(vertex)
+        if isinstance(vertex, Iterable):
+            for v in vertex:
+                self._add(v)
         else:
-            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
-            logger.critical(msg)
-            raise TypeError(msg)
+            self._add(vertex)
 
-    @overload
-    def add(self, vertices: Iterable[GraphVertex]) -> None:
-        """
-        @overload.
-
-        Adds multiple vertices based on its type.
+    def remove(self, vertex: GraphVertex | Iterable[GraphVertex]) -> None:
+        """Removes vertex(s).
 
         Args:
-            vertices (Iterable[GraphVertex]): new vertices to be added to the graph.
+            vertex: vertex(s) to be removed from the graph.
         """
-        [self.add(v) for v in vertices]
-
-    @dispatch
-    def add(self, vertex=None):
-        """
-        @overload.
-
-        Adds new vertex(s) to the graph.
-
-        Calls:
-            1.  Adds one vertex based on its type.
-
-                Args:
-                    vertex (GraphVertex): new vertex to be added to the graph.
-
-                Raises:
-                    TypeError: if the vertex is neither Optimizable nor NotOptimizable.
-
-            2.  Adds multiple vertices to collections based on its type.
-
-                Args:
-                    vertices (Iterable[GraphVertex]): new vertices to be added to the graph.
-        """
-
-    @overload
-    def remove(self, vertex: GraphVertex) -> None:
-        """
-        @overload.
-
-        Removes one vertex from the graph.
-
-        Args:
-            vertex (GraphVertex): vertex to be removed.
-
-        Raises:
-            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
-
-        TODO: add tests.
-        """
-        self._vertices.remove(vertex)
-        self._remove_from_tables(vertex)
-
-        if isinstance(vertex, OptimizableVertex):
-            self._optimizable_vertices.remove(vertex)
-        elif isinstance(vertex, NotOptimizableVertex):
-            self._not_optimizable_vertices.remove(vertex)
+        if isinstance(vertex, Iterable):
+            for v in vertex:
+                self._remove(v)
         else:
-            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
-            logger.critical(msg)
-            raise TypeError(msg)
-
-    @overload
-    def remove(self, vertices: Iterable[GraphVertex]) -> None:
-        """
-        @overload.
-
-        Removes multiple vertices from the graph.
-
-        Args:
-            vertices (Iterable[GraphVertex]): vertices to be removed from the graph.
-        """
-        [self.remove(v) for v in vertices]
-
-    @dispatch
-    def remove(self, vertex=None):
-        """
-        @overload.
-
-        Calls:
-            1.  Removes one vertex from the graph.
-
-                Args:
-                    vertex (GraphVertex): vertex to be removed.
-
-                Raises:
-                    TypeError: if the vertex is neither Optimizable nor NotOptimizable.
-
-            2.  Removes multiple vertices from the graph.
-
-                Args:
-                    vertices (Iterable[GraphVertex]): vertices to be removed from the graph.
-        """
+            self._remove(vertex)
 
     def update_optimizable_vertices(self, values: gtsam.Values) -> None:
         """Updates optimizable vertices with new values.
@@ -216,17 +128,6 @@ class VertexStorage(Generic[GraphVertex]):
     def update_non_optimizable_vertices(self) -> None:
         """Updates non-optimizable vertices."""
         [vertex.update() for vertex in self._not_optimizable_vertices]
-
-    @staticmethod
-    def find_closest_vertex(
-        vertex_type: type[GraphVertex], timestamp: int, margin: int
-    ) -> GraphVertex | None:
-        """Finds the closest vertex with the given timestamp, time margin and type.
-
-        Not implemented.
-        TODO: check if needed.
-        """
-        raise NotImplementedError
 
     def get_last_vertex(self, vertex_type: type[GraphVertex]) -> GraphVertex | None:
         """Gets the vertex with the latest timestamp.
@@ -321,3 +222,46 @@ class VertexStorage(Generic[GraphVertex]):
             msg = f"Vertex {vertex} is not present in 'Vertex index -> vertices' table."
             logger.critical(msg)
             raise KeyError(msg)
+
+    def _add(self, vertex: GraphVertex) -> None:
+        """Adds vertex(s).
+
+        Args:
+            vertex: new vertex(s) to be added to the graph.
+
+        Raises:
+            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
+        """
+        self._index_storage.add(vertex.index)
+        self._vertices.add(vertex)
+        self._add_to_tables(vertex)
+
+        if isinstance(vertex, OptimizableVertex):
+            self._optimizable_vertices.add(vertex)
+        elif isinstance(vertex, NotOptimizableVertex):
+            self._not_optimizable_vertices.add(vertex)
+        else:
+            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
+            logger.critical(msg)
+            raise TypeError(msg)
+
+    def _remove(self, vertex: GraphVertex) -> None:
+        """Removes one vertex from the graph.
+
+        Args:
+            vertex (GraphVertex): vertex to be removed.
+
+        Raises:
+            TypeError: if the vertex is neither Optimizable nor NotOptimizable.
+        """
+        self._vertices.remove(vertex)
+        self._remove_from_tables(vertex)
+
+        if isinstance(vertex, OptimizableVertex):
+            self._optimizable_vertices.remove(vertex)
+        elif isinstance(vertex, NotOptimizableVertex):
+            self._not_optimizable_vertices.remove(vertex)
+        else:
+            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
+            logger.critical(msg)
+            raise TypeError(msg)

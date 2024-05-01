@@ -3,8 +3,8 @@
 Is used only for instantiation of the Measurement object.
 """
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import Measurement
 
 
 class PriorHandler(Handler):

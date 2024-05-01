@@ -13,10 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataManager:
-    """Manages all data processes.
-
-    TODO: remove public access to the batch_factory.
-    """
+    """Manages all data processes."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """
@@ -39,6 +36,7 @@ class DataManager:
     def make_batch(self, measurements: deque[Element]) -> None:
         """
         @overload.
+
         Creates a data batch with given measurements
 
         Args:
@@ -51,10 +49,12 @@ class DataManager:
     def make_batch(self, requests: set[PeriodicDataRequest]) -> None:
         """
         @overload.
+
         Creates a data batch from requests.
 
         Args:
             requests (set[PeriodicDataRequest]): set of requests.
+
             Each request corresponds to sensor and time limits: (start, stop)
         """
         self.batch_factory.create_batch(requests)
@@ -66,9 +66,7 @@ class DataManager:
         @overload.
 
         Calls:
-            1. Sequentially: create a batch with measurements sequentially:
-                Args:
-                    None
+            1. Sequentially: create a batch with measurements sequentially.
 
             2. With measurements: create a batch with given measurements:
                 Args:
@@ -77,5 +75,6 @@ class DataManager:
             3. With requests: create a batch with measurements from requests:
                 Args:
                     requests (set[PeriodicDataRequest]): set of requests.
+
                     Each request corresponds to sensor and time limits: (start, stop).
         """

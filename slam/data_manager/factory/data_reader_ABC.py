@@ -133,7 +133,8 @@ class DataReader(ABC):
                     __.
 
                 Returns:
-                    element (Element) with raw measurement or None if all measurements from a dataset has already been processed.
+                    element (Element) with raw measurement or None if all measurements from a dataset
+                    has already been processed.
 
             2.  Gets the element with raw measurement from a dataset for the given element without raw measurement.
 

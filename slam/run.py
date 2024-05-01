@@ -15,8 +15,6 @@ from slam.setup_manager.config_validator import register_config
 def run(cfg) -> None:
     """Runs SLAM based on the given configuration."""
 
-    # print(OmegaConf.to_yaml(cfg.frontend_manager.graph_initializer))
-
     main_manager = MainManager(cfg)
     main_manager.build_map()
 

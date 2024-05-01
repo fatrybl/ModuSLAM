@@ -59,6 +59,14 @@ class TestEdgeStorage:
         assert self.edge2 in edge_storage._edges
         assert self.edge4 in edge_storage._edges
 
+    def test_add_multiple(self, edge_storage):
+
+        edge_storage.add([self.edge1, self.edge2, self.edge3, self.edge4])
+        assert self.edge1 in edge_storage._edges
+        assert self.edge2 in edge_storage._edges
+        assert self.edge3 in edge_storage._edges
+        assert self.edge4 in edge_storage._edges
+
     def test_remove(self, edge_storage):
 
         edge_storage.add(self.edge1)
@@ -69,3 +77,13 @@ class TestEdgeStorage:
         edge_storage.remove([self.edge2, self.edge3])
         assert self.edge2 not in edge_storage._edges
         assert self.edge3 not in edge_storage._edges
+
+    def test_remove_multiple(self, edge_storage):
+
+        edge_storage.add([self.edge1, self.edge2, self.edge3, self.edge4])
+        edge_storage.remove([self.edge1, self.edge2, self.edge3, self.edge4])
+        assert self.edge1 not in edge_storage._edges
+        assert self.edge2 not in edge_storage._edges
+        assert self.edge3 not in edge_storage._edges
+        assert self.edge4 not in edge_storage._edges
+        assert len(edge_storage.edges) == 0

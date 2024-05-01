@@ -6,7 +6,7 @@ from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_
 
 
 @dataclass
-class StateAnalyzerFactoryConfig:
+class StateAnalyzersFactoryConfig:
     """State analyzer factory configuration."""
 
     package_name: str

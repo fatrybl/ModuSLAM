@@ -48,6 +48,8 @@ class EdgeFactoriesInitializer:
         Args:
             config: configuration of edge factories.
         """
+        cls._factories.clear()
+
         package_name: str = config.package_name
 
         for cfg in config.edge_factories.values():

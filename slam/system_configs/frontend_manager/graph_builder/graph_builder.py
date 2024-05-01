@@ -1,8 +1,5 @@
 from dataclasses import dataclass
 
-from slam.system_configs.frontend_manager.edge_factories.base_factory import (
-    EdgeFactoryConfig,
-)
 from slam.system_configs.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
@@ -22,4 +19,3 @@ class GraphBuilderConfig:
     candidate_factory: CandidateFactoryConfig
     element_distributor: ElementDistributorConfig
     graph_merger: GraphMergerConfig
-    edge_factories: dict[str, EdgeFactoryConfig]

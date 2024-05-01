@@ -7,9 +7,7 @@ from slam.data_manager.factory.element import Element
 from slam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
 
 if TYPE_CHECKING:
-    from slam.frontend_manager.element_distributor.measurement_storage import (
-        Measurement,
-    )
+    from slam.frontend_manager.measurement_storage import Measurement
 
 
 class Handler(ABC):

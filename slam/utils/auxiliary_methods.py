@@ -74,8 +74,6 @@ def check_dimensionality(array: np.ndarray, shape: tuple[int, ...]) -> None:
 
     Raises:
         DimensionalityError: if the array has wrong shape.
-
-    TODO: add tests.
     """
     if array.shape != shape:
         msg = f"Array must have shape {shape}, got {array.shape}"

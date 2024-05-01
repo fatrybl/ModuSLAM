@@ -4,7 +4,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analy
     StateAnalyzer,
 )
 from slam.system_configs.setup_manager.state_analyzers_factory import (
-    StateAnalyzerFactoryConfig,
+    StateAnalyzersFactoryConfig,
 )
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import ItemNotFoundError
@@ -24,13 +24,16 @@ class StateAnalyzersFactory:
         return cls._analyzers
 
     @classmethod
-    def init_analyzers(cls, config: StateAnalyzerFactoryConfig) -> None:
+    def init_analyzers(cls, config: StateAnalyzersFactoryConfig) -> None:
         """Initializes state analyzers for the given configuration by importing
         corresponding modules, objects and creating instances.
 
         Args:
             config: configuration for state analyzers.
         """
+        cls._analyzers.clear()
+        cls._analyzers_dict.clear()
+
         package_name: str = config.package_name
 
         for name, cfg in config.analyzers.items():

@@ -17,7 +17,7 @@ class MainManager:
     def __init__(self, config: MainManagerConfig) -> None:
         """
         Args:
-            config: main config for all managers.
+            config: configuration for all managers.
         """
         self.setup_manager = SetupManager(config.setup_manager)
         self.data_manager = DataManager(config.data_manager)
@@ -29,25 +29,20 @@ class MainManager:
     def _process(
         self,
     ) -> None:
-        """Creates graph and solves it.
-
-        TODO Check if Memory breakpoint is valid before creating new batch.
-        """
-        batch = self.data_manager.batch_factory.batch
+        """Creates graph and solves it."""
+        data_batch = self.data_manager.batch_factory.batch
         graph = self.frontend_manager.graph
 
         self.frontend_manager.set_prior()
 
-        while not batch.empty():
-            self.frontend_manager.create_graph(batch)
+        while not data_batch.empty:
+            self.frontend_manager.create_graph(data_batch)
             self.backend_manager.solve(graph)
             self.backend_manager.update(graph)
+            logger.info("Graph has been updated")
 
     def build_map(self) -> None:
-        """Builds the map using the data from the data manager.
-
-        TODO: check if break_point is still valid: batch might be deleted but Memory Criterion is still active.
-        """
+        """Builds the map using the data from the data manager."""
 
         while not StoppingCriterion.is_active():
             self.data_manager.make_batch()

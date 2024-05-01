@@ -49,7 +49,6 @@ for i in range(5):
 
 graph.addPriorPose3(X(0), pose1, prior_noise)
 
-
 # print(graph)
 # print(graph.keys())
 # print(graph.size())

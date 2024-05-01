@@ -2,13 +2,13 @@ import logging
 from typing import Generic
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.setup_manager.tables_initializer import init_handler_edge_factory_table
 from slam.utils.ordered_set import OrderedSet
 

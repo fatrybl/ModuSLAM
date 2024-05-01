@@ -23,3 +23,7 @@ class ExternalModuleException(Exception):
 
 class DimensionalityError(Exception):
     """Invalid dimensions of an array."""
+
+
+class EmptyStorageError(Exception):
+    """Raised when attempting to access an element of an empty storage."""

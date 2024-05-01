@@ -1,6 +1,5 @@
 import gtsam
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import (
     BinaryEdge,
     CalibrationEdge,
@@ -8,9 +7,10 @@ from slam.frontend_manager.graph.base_edges import (
     UnaryEdge,
 )
 from slam.frontend_manager.graph.base_vertices import GraphVertex
+from slam.frontend_manager.measurement_storage import Measurement
 
 
-class SmartFactorEdge(CalibrationEdge):
+class SmartFactor(CalibrationEdge):
     """Edge for Smart Factor in the Graph: https://dellaert.github.io/files/Carlone14icra.pdf"""
 
     def __init__(
@@ -41,11 +41,8 @@ class SmartFactorEdge(CalibrationEdge):
         return {self.vertex}.union(self.vertices)
 
 
-class SmartStereoFeature(SmartFactorEdge):
-    """Edge for smart Stereo Camera features.
-
-    TODO: check if a noise model is correct.
-    """
+class SmartStereoFeature(SmartFactor):
+    """Edge for smart Stereo Camera features."""
 
     def __init__(
         self,
@@ -53,7 +50,7 @@ class SmartStereoFeature(SmartFactorEdge):
         support_vertices: set[GraphVertex],
         measurements: tuple[Measurement, ...],
         factor: gtsam.SmartProjectionPose3Factor,
-        noise_model: gtsam.noiseModel.Isotropic,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
         """
 

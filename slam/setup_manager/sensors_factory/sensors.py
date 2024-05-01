@@ -12,10 +12,7 @@ import numpy as np
 from slam.utils.numpy_types import Matrix4x4
 
 if TYPE_CHECKING:
-    from slam.system_configs.system.setup_manager.sensors import (
-        Lidar3DConfig,
-        SensorConfig,
-    )
+    from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
 
 
 class Sensor:

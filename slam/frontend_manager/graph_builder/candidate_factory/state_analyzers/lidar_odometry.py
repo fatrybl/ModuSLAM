@@ -1,13 +1,11 @@
 import logging
 
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    MeasurementStorage,
-)
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import MeasurementStorage
 from slam.setup_manager.handlers_factory.factory import HandlersFactory
 from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,

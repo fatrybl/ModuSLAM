@@ -19,6 +19,11 @@ class DataBatch:
         return self._deque_set.items
 
     @property
+    def empty(self) -> bool:
+        """Data batch emptiness status."""
+        return self._deque_set.empty
+
+    @property
     def first(self) -> Element:
         """The first element of the batch."""
         return self._deque_set[0]
@@ -51,10 +56,6 @@ class DataBatch:
             reverse: if True, sorts in descending order.
         """
         self._deque_set.sort(key=lambda element: element.timestamp, reverse=reverse)
-
-    def empty(self) -> bool:
-        """Checks if the batch is empty."""
-        return self._deque_set.empty
 
     def clear(self) -> None:
         """Deletes all elements of the batch."""

@@ -2,11 +2,8 @@ import logging
 from typing import Iterable
 
 from slam.data_manager.factory.element import Element
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    Measurement,
-    MeasurementStorage,
-)
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.setup_manager.tables_initializer import init_sensor_handler_table
 from slam.utils.ordered_set import OrderedSet
@@ -51,10 +48,7 @@ class ElementDistributor:
                 self.storage.remove(measurement)
 
     def distribute_element(self, element: Element) -> None:
-        """Distributes the element to the handler for further processing.
-
-        TODO: add support for multiple args for process() method.
-        """
+        """Distributes the element to the handler for further processing."""
         handlers = self.sensor_handler_table[element.measurement.sensor]
 
         for handler in handlers:

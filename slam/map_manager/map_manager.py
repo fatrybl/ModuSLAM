@@ -42,6 +42,7 @@ class MapManager:
         """
         logger.info("Creating a map from the graph.")
         self._map_factory.create(graph.vertex_storage, batch_factory)
+        logger.info("Map has been created.")
 
     def visualize_map(self) -> None:
         """Visualizes the map."""
@@ -50,6 +51,7 @@ class MapManager:
     def save_map(self) -> None:
         """Saves the map."""
         self._map_loader.save(self.map)
+        logger.info("Map has been saved.")
 
     def save_graph(self, graph: Graph) -> None:
         """Saves the graph.
@@ -58,3 +60,4 @@ class MapManager:
             graph: a graph to save.
         """
         self._graph_saver.save_to_pdf(graph)
+        logger.info("Graph has been saved.")

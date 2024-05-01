@@ -4,10 +4,10 @@ from collections.abc import Collection
 import gtsam
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.custom_edges import PriorPose
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.frontend_manager.noise_models import pose_diagonal_noise_model
 from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,

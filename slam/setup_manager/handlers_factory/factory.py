@@ -46,6 +46,8 @@ class HandlersFactory:
         Args:
             config: configuration of handlers.
         """
+        cls._handlers.clear()
+
         package_name: str = config.package_name
 
         for name, cfg in config.handlers.items():

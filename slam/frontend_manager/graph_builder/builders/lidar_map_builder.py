@@ -2,9 +2,7 @@ import logging
 from typing import Generic
 
 from slam.data_manager.factory.batch import DataBatch
-from slam.frontend_manager.element_distributor.elements_distributor import (
-    ElementDistributor,
-)
+from slam.frontend_manager.elements_distributor import ElementDistributor
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
@@ -42,6 +40,18 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
         """Graph candidate to be merged with the graph."""
         return self._candidate_factory.graph_candidate
 
+    def create_graph_candidate(self, data_batch: DataBatch) -> None:
+        """Creates graph candidate.
+
+        Args:
+            data_batch: a data batch with measurements.
+        """
+        while not self._candidate_factory.candidate_ready() and not data_batch.empty:
+            element = data_batch.first
+            self._distributor.distribute_element(element)
+            self._candidate_factory.process_storage(self._distributor.storage)
+            data_batch.remove_first()
+
     def merge_graph_candidate(self, graph: Graph) -> None:
         """Merges the graph candidate with the graph.
 
@@ -54,18 +64,6 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
         else:
             logger.info("No candidate to merge")
 
-    def create_graph_candidate(self, batch: DataBatch) -> None:
-        """Creates graph candidate.
-
-        Args:
-            batch: a data batch with measurements.
-        """
-        while not self._candidate_factory.candidate_ready() and not batch.empty():
-            element = batch.first
-            self._distributor.distribute_element(element)
-            self._candidate_factory.process_storage(self._distributor.storage)
-            batch.remove_first()
-
     def clear_candidate(self) -> None:
         """Clears the graph candidate."""
 
@@ -75,3 +73,6 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
                 self._distributor.clear_storage(measurements)
 
             self.graph_candidate.clear()
+
+        else:
+            logger.info("No candidate to clear")

@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    MeasurementStorage,
-)
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
+from slam.frontend_manager.measurement_storage import MeasurementStorage
 from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )

@@ -16,9 +16,6 @@ class Graph(Generic[GraphVertex, GraphEdge]):
     """High-level Graph.
 
     Includes gtsam.NonlinearFactorGraph.
-    TODO:
-        1) implement edges deletion with factors modification.
-        2) implement marginalization of vertices.
     """
 
     def __init__(self) -> None:

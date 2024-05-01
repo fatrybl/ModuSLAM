@@ -56,15 +56,7 @@ class SensorsFactory:
 
         Args:
             config: sensors` configuration.
-
-        Raises:
-            ValueError: if sensors config is empty.
         """
-        if not config.sensors:
-            msg = "Empty sensors config."
-            logger.critical(msg)
-            raise ValueError(msg)
-
         cls._sensors.clear()
         cls._sensors_table.clear()
 

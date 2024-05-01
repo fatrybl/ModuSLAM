@@ -14,7 +14,7 @@ from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_
     StateAnalyzerConfig,
 )
 from slam.system_configs.setup_manager.state_analyzers_factory import (
-    StateAnalyzerFactoryConfig,
+    StateAnalyzersFactoryConfig,
 )
 from slam.utils.exceptions import ItemNotFoundError
 
@@ -31,7 +31,7 @@ def state_analyzer_config():
 
 @pytest.fixture
 def factory_config(state_analyzer_config):
-    return StateAnalyzerFactoryConfig(
+    return StateAnalyzersFactoryConfig(
         package_name="test_package",
         analyzers={state_analyzer_config.name: state_analyzer_config},
     )

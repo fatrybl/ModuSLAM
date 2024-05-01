@@ -1,8 +1,6 @@
 import logging
 
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    MeasurementStorage,
-)
+from slam.frontend_manager.measurement_storage import MeasurementStorage
 
 logger = logging.getLogger(__name__)
 

@@ -20,12 +20,6 @@ class TestSensorsFactory:
         assert any(isinstance(sensor, Sensor) for sensor in SensorsFactory.get_sensors())
         assert isinstance(SensorsFactory.get_sensor(sensor_config.name), Sensor)
 
-    def test_init_sensors_empty_config(self):
-        factory_config = SensorFactoryConfig(sensors={})
-
-        with pytest.raises(ValueError):
-            SensorsFactory.init_sensors(factory_config)
-
     def test_get_sensor_not_found(self):
         sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
 

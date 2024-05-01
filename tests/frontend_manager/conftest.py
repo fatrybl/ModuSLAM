@@ -5,18 +5,14 @@ from typing import Any, Callable, Iterable
 import gtsam
 import pytest
 
-from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
+from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.data_manager.factory.locations import Location
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    Measurement,
-    MeasurementStorage,
-)
 from slam.frontend_manager.graph.base_edges import UnaryEdge
 from slam.frontend_manager.graph.base_vertices import NotOptimizableVertex
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
@@ -46,9 +42,7 @@ class BasicTestEdgeFactory(EdgeFactory):
         super().__init__(config)
 
     @staticmethod
-    def noise_model(
-        noise_covariance: Iterable[float],
-    ) -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
+    def noise_model() -> Callable[[Iterable[float]], gtsam.noiseModel.Base]:
         return gtsam.noiseModel.Diagonal.Sigmas
 
     @property
@@ -102,7 +96,7 @@ def element(sensor) -> Element:
 
 
 @pytest.fixture
-def measurement(element, handler):
+def measurement(element, handler) -> Measurement:
     return Measurement(
         time_range=TimeRange(element.timestamp, element.timestamp),
         values=(1, 2, 3),

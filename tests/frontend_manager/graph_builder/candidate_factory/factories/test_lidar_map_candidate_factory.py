@@ -2,15 +2,13 @@
 
 from unittest.mock import patch
 
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    MeasurementStorage,
-)
 from slam.frontend_manager.graph_builder.candidate_factory.factories.lidar_submap import (
     LidarMapCandidateFactory,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
+from slam.frontend_manager.measurement_storage import MeasurementStorage
 from slam.setup_manager.handlers_factory.factory import HandlersFactory
 from tests.frontend_manager.conftest import handler, measurement
 from tests.frontend_manager.graph_builder.candidate_factory.conftest import (

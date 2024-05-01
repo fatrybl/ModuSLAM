@@ -4,11 +4,11 @@ from typing import Iterable
 import gtsam
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.custom_edges import ImuOdometry
 from slam.frontend_manager.graph.custom_vertices import Pose
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )

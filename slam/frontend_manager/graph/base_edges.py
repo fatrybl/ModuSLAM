@@ -3,8 +3,8 @@ from typing import Generic, TypeVar
 
 import gtsam
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_vertices import GraphVertex
+from slam.frontend_manager.measurement_storage import Measurement
 
 
 class Edge(ABC, Generic[GraphVertex]):

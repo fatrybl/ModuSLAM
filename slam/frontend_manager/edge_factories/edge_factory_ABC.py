@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from collections.abc import Collection
 from typing import Generic
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex, GtsamInstance
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
