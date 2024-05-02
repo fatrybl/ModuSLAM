@@ -3,13 +3,14 @@ import logging
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
+from slam.logger.logging_config import setup_manager_logger
 from slam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzersFactoryConfig,
 )
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager_logger)
 
 
 class StateAnalyzersFactory:

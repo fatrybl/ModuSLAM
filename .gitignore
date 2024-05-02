@@ -8,3 +8,4 @@ dist
 outputs
 *.pdf
 *.txt
+*.log

@@ -1,11 +1,12 @@
 import logging
 
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.logger.logging_config import setup_manager_logger
 from slam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
 from slam.utils.auxiliary_methods import import_object
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager_logger)
 
 
 class HandlersFactory:

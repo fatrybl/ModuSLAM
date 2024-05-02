@@ -5,11 +5,12 @@ from typing import Any
 
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.logger.logging_config import frontend_manager_logger
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.exceptions import EmptyStorageError
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 @dataclass(frozen=True, eq=True)

@@ -2,9 +2,10 @@ import logging
 from collections import deque
 
 from slam.data_manager.factory.element import Element
+from slam.logger.logging_config import data_manager_logger
 from slam.utils.deque_set import DequeSet
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager_logger)
 
 
 class DataBatch:
@@ -30,7 +31,10 @@ class DataBatch:
 
     @property
     def size_bytes(self) -> int:
-        """The size of the batch in bytes.\n Not implemented."""
+        """The size of the batch in bytes.
+
+        Not implemented.
+        """
         raise NotImplementedError
 
     def add(self, new_element: Element) -> None:

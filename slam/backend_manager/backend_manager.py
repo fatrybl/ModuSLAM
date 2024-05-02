@@ -4,8 +4,9 @@ import gtsam
 
 from slam.backend_manager.graph_solver import GraphSolver
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import backend_manager_logger
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(backend_manager_logger)
 
 
 class BackendManager:
@@ -22,6 +23,7 @@ class BackendManager:
             graph: contains factor graph to be solved.
         """
         self._result_values = self._graph_solver.solve(graph)
+        logger.debug("Graph has been solved.")
 
     def update(self, graph: Graph) -> None:
         """Updates the graph with the calculated values.
@@ -30,3 +32,4 @@ class BackendManager:
             graph (Graph): a graph to be updated.
         """
         graph.update(self._result_values)
+        logger.debug("Graph has been updated.")

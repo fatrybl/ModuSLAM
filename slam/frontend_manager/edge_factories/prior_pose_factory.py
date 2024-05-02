@@ -1,4 +1,3 @@
-import logging
 from collections.abc import Collection
 
 import gtsam
@@ -14,8 +13,6 @@ from slam.system_configs.frontend_manager.edge_factories.base_factory import (
 )
 from slam.utils.auxiliary_methods import tuple_to_gtsam_pose3
 from slam.utils.ordered_set import OrderedSet
-
-logger = logging.getLogger(__name__)
 
 
 class PriorPoseEdgeFactory(EdgeFactory):

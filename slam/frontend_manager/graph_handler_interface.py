@@ -1,8 +1,12 @@
+import logging
 from collections.abc import Iterable
 from dataclasses import dataclass
 
 from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import frontend_manager_logger
+
+logger = logging.getLogger(frontend_manager_logger)
 
 
 @dataclass

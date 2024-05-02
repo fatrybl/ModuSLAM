@@ -1,8 +1,4 @@
-import logging
-
 from slam.frontend_manager.measurement_storage import MeasurementStorage
-
-logger = logging.getLogger(__name__)
 
 
 class State(MeasurementStorage):

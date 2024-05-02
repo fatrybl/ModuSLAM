@@ -2,7 +2,9 @@ import logging
 
 import gtsam
 
-logger = logging.getLogger(__name__)
+from slam.logger.logging_config import frontend_manager_logger
+
+logger = logging.getLogger(frontend_manager_logger)
 
 
 def pose_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:

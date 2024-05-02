@@ -18,7 +18,7 @@ defaults:
       - config
 
   - override hydra/hydra_logging: none
-  - override hydra/job_logging: stdout
+  - override hydra/job_logging: colorlog
 
 hydra:
   output_subdir: null

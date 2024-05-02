@@ -3,13 +3,14 @@ from collections import Counter
 from pathlib import Path
 
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
+from slam.logger.logging_config import data_manager_logger
 from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager_logger)
 
 
 class KaistReaderState:

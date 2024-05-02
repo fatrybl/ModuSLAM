@@ -1,9 +1,5 @@
-import logging
-
 import numpy as np
 import open3d as o3d
-
-logger = logging.getLogger(__name__)
 
 
 class LidarMap:

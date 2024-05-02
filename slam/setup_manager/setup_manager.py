@@ -1,5 +1,6 @@
 import logging
 
+from slam.logger.logging_config import setup_manager_logger
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
@@ -8,7 +9,7 @@ from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
 from slam.system_configs.setup_manager.setup_manager import SetupManagerConfig
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager_logger)
 
 
 class SetupManager:

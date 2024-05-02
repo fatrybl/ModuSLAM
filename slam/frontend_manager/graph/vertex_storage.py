@@ -19,10 +19,11 @@ from slam.frontend_manager.graph.custom_vertices import (
     Velocity,
 )
 from slam.frontend_manager.graph.index_generator import IndexStorage
+from slam.logger.logging_config import frontend_manager_logger
 from slam.utils.deque_set import DequeSet
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 class VertexStorage(Generic[GraphVertex]):

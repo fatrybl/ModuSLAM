@@ -9,10 +9,11 @@ from slam.frontend_manager.graph.index_generator import IndexStorage, generate_i
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.frontend_manager.measurement_storage import Measurement
+from slam.logger.logging_config import frontend_manager_logger
 from slam.setup_manager.tables_initializer import init_handler_edge_factory_table
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 class GraphMerger(Generic[GraphVertex, GraphEdge]):

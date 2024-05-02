@@ -1,6 +1,7 @@
 import logging
 from typing import cast
 
+from slam.logger.logging_config import setup_manager_logger
 from slam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
@@ -17,7 +18,7 @@ from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
 from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager_logger)
 
 
 class SensorsFactory:

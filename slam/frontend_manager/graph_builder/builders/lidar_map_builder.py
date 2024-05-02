@@ -17,11 +17,12 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 )
 from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from slam.frontend_manager.graph_builder.graph_merger import GraphMerger
+from slam.logger.logging_config import frontend_manager_logger
 from slam.system_configs.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):

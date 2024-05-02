@@ -4,9 +4,10 @@ from collections import deque
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
+from slam.logger.logging_config import frontend_manager_logger
 from slam.utils.auxiliary_dataclasses import TimeRange
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 class GraphCandidate:

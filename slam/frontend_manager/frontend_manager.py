@@ -7,9 +7,10 @@ from slam.frontend_manager.graph_builder.graph_builder_factory import (
     GraphBuilderFactory,
 )
 from slam.frontend_manager.graph_initializer.initializer import GraphInitializer
+from slam.logger.logging_config import frontend_manager_logger
 from slam.system_configs.frontend_manager.frontend_manager import FrontendManagerConfig
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 
 class FrontendManager:

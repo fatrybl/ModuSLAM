@@ -1,4 +1,3 @@
-import logging
 from abc import ABC, abstractmethod
 
 from slam.data_manager.factory.batch import DataBatch
@@ -9,8 +8,6 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 from slam.system_configs.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
-
-logger = logging.getLogger(__name__)
 
 
 class GraphBuilder(ABC):

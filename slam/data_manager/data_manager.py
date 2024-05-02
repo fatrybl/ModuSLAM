@@ -6,10 +6,11 @@ from plum import dispatch
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
+from slam.logger.logging_config import data_manager_logger
 from slam.system_configs.data_manager.data_manager import DataManagerConfig
 from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager_logger)
 
 
 class DataManager:

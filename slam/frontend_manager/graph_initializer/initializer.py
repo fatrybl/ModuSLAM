@@ -18,6 +18,7 @@ from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.handlers.prior import PriorHandler
 from slam.frontend_manager.measurement_storage import Measurement
+from slam.logger.logging_config import frontend_manager_logger
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
@@ -30,7 +31,7 @@ from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager_logger)
 
 FAKE_SENSOR_NAME = "Prior sensor"
 
@@ -38,12 +39,14 @@ FAKE_SENSOR_NAME = "Prior sensor"
 class GraphInitializer:
     """Initializes the graph with prior factors."""
 
+    _FAKE_SENSOR_NAME = "Prior sensor"
+
     def __init__(self, config: GraphInitializerConfig):
         """
         Args:
             config: graph initializer configuration.
         """
-        self._sensor = Sensor(SensorConfig(name=FAKE_SENSOR_NAME))
+        self._sensor = Sensor(SensorConfig(name=self._FAKE_SENSOR_NAME))
         self._handler = PriorHandler()
         self._priors: Iterable[PriorConfig] = config.priors.values()
 

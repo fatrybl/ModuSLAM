@@ -1,4 +1,3 @@
-import logging
 from typing import Iterable
 
 from slam.data_manager.factory.element import Element
@@ -7,8 +6,6 @@ from slam.frontend_manager.measurement_storage import Measurement, MeasurementSt
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.setup_manager.tables_initializer import init_sensor_handler_table
 from slam.utils.ordered_set import OrderedSet
-
-logger = logging.getLogger(__name__)
 
 
 class ElementDistributor:

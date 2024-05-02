@@ -1,12 +1,13 @@
 import logging
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from slam.logger.logging_config import setup_manager_logger
 from slam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
 from slam.utils.auxiliary_methods import import_object
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager_logger)
 
 
 class EdgeFactoriesInitializer:

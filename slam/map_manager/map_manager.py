@@ -2,6 +2,7 @@ import logging
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import map_manager_logger
 from slam.map_manager.graph_saver import GraphSaver
 from slam.map_manager.map_factories.lidar_map_factory import LidarMapFactory
 from slam.map_manager.map_factories.lidar_map_utils import (
@@ -11,7 +12,7 @@ from slam.map_manager.map_factories.lidar_map_utils import (
 from slam.map_manager.maps.lidar_map import LidarMap
 from slam.system_configs.map_manager.map_manager import MapManagerConfig
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(map_manager_logger)
 
 
 class MapManager:

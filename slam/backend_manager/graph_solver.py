@@ -3,8 +3,9 @@ import logging
 import gtsam
 
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import backend_manager_logger
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(backend_manager_logger)
 
 
 class GraphSolver:
@@ -31,5 +32,5 @@ class GraphSolver:
             f"Optimization finished with error: {optimizer.error()}, iterations: {optimizer.iterations()}, "
             f"graph size: {graph.factor_graph.size()}"
         )
-        logger.info(msg)
+        logger.debug(msg)
         return result

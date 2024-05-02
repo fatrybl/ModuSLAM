@@ -1,5 +1,3 @@
-import logging
-
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
@@ -10,8 +8,6 @@ from slam.setup_manager.handlers_factory.factory import HandlersFactory
 from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-
-logger = logging.getLogger(__name__)
 
 
 class LidarOdometryStateAnalyzer(StateAnalyzer):
