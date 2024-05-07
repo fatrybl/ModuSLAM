@@ -7,7 +7,7 @@ from slam.frontend_manager.graph.graph import Graph
 
 
 class GraphSaver:
-    """Saves the graph to the disk."""
+    """Saves the graph."""
 
     def __init__(self) -> None:
         self._path: Path = Path("graph.txt")
@@ -16,33 +16,30 @@ class GraphSaver:
         self._graphviz_formatting.paperVerticalAxis = gtsam.GraphvizFormatting.Axis.Y
 
     def save_to_file(self, graph: Graph) -> None:
-        """Saves the graph to the disk.
+        """Saves graph to the file.
 
         Args:
-            graph (Graph): graph to save.
+            graph: a graph to save.
         """
 
         graph.factor_graph.saveGraph(self._path.as_posix(), graph.gtsam_values)
 
-    def save_to_pdf(self, graph: Graph, visualize: bool = False) -> None:
-        """Saves to pdf.
+    def save_to_pdf(self, graph: Graph) -> None:
+        """Saves graph to .pdf file.
 
         Args:
-            graph (Graph): graph to save.
-            visualize (bool): visualize the pdf file.
+            graph: a graph to save.
         """
         dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
-        viz = Source(dot)
-        viz.render("graph", format="pdf", cleanup=True)
-        if visualize:
-            viz.view(cleanup=True)
+        source = Source(dot)
+        source.render("graph", format="pdf", cleanup=True)
 
     def view(self, graph: Graph) -> None:
-        """Visualizes the graph.
+        """Visualizes the .pdf file with the graph.
 
         Args:
-            graph (Graph): graph to visualize.
+            graph: a graph to visualize.
         """
         dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
-        viz = Source(dot)
-        viz.view(cleanup=True)
+        source = Source(dot)
+        source.view("graph", cleanup=True)

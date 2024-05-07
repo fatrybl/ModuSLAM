@@ -11,26 +11,40 @@ class IndexStorage:
 
     @property
     def num_indices(self) -> int:
+        """Number of indices in the storage."""
         return len(self._indices) if self._indices else 0
 
     @property
     def min_idx(self) -> int:
+        """Minimum index in the storage."""
         return int(self._min_idx) if self._indices else 0
 
     @property
     def max_idx(self) -> int:
+        """Maximum index in the storage."""
         return int(self._max_idx) if self._indices else 0
 
     @property
     def indices(self) -> set[int]:
+        """Indices in the storage."""
         return self._indices
 
     def add(self, index: int) -> None:
+        """Adds index to the storage.
+
+        Args:
+            index: index to add.
+        """
         assert index >= 0, "index must be non-negative"
         self._indices.add(index)
         self._update_min_max(index)
 
     def remove(self, index: int) -> None:
+        """Removes index from the storage.
+
+        Args:
+            index: index to remove.
+        """
         assert index >= 0, "index must be non-negative"
         if index in self._indices:
             self._indices.remove(index)
@@ -55,19 +69,24 @@ class IndexStorage:
         self._min_idx = 0
 
     def _update_min_max(self, index: int) -> None:
+        """Updates min and max indices.
+
+        Args:
+            index: new index to update min and max indices.
+        """
         self._min_idx = index if index < self._min_idx else self._min_idx
         self._max_idx = index if index > self._max_idx else self._max_idx
 
 
-def generate_index(index_storage: IndexStorage):
+def generate_index(index_storage: IndexStorage) -> int:
     """
-    Generates a new index based on the given indices:
-    new index = max index + 1.
+    Generates new index for the given indices with the rule:
+        new index = max index + 1.
 
     Args:
-        index_storage (IndexStorage): storage of indices.
+        index_storage: storage of indices.
 
     Returns:
-        (int): new index.
+        new index.
     """
     return index_storage.max_idx + 1

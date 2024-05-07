@@ -7,16 +7,14 @@ from typing import overload
 from plum import dispatch
 
 from slam.data_manager.factory.element import Element
+from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import (
-    Stream,
-    TimeLimit,
-)
+from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager)
 
 
 @dataclass
@@ -32,30 +30,27 @@ class DataReader(ABC):
 
     @abstractmethod
     def __init__(self, regime: Stream | TimeLimit, dataset_params: DatasetConfig) -> None:
-        """Base abstract class for any data reader.
-
+        """
         Args:
-            regime (Stream | TimeLimit): data flow regime.
-            dataset_params (DatasetConfig): data reader parameters.
+            regime: data flow regime.
+            dataset_params: parameters of the dataset.
         """
 
     @staticmethod
     def is_file_valid(file_path: Path) -> bool:
         """
-        Checks if a file is valid: exists and not empty.
-        Args:
-            file_path (Path): path to a file.
+        Checks if the file is valid: exists and not empty.
 
-        Returns:
-            bool: True if file is valid, False otherwise.
+        Args:
+            file_path: path to the file.
         """
-        if not Path.is_file(file_path):
-            msg = f"File {file_path} does not exist."
-            logger.error(msg)
+        if not file_path.is_file():
+            msg = f"File {file_path!r} does not exist."
+            logger.critical(msg)
             return False
         elif file_path.stat().st_size == 0:
-            msg = f"File {file_path} is empty."
-            logger.error(msg)
+            msg = f"File {file_path!r} is empty."
+            logger.critical(msg)
             return False
         else:
             return True
@@ -65,11 +60,11 @@ class DataReader(ABC):
     def get_element(self) -> Element | None:
         """
         @overload.
+
         Gets element from a dataset sequentially based on iterator position.
 
         Returns:
-            Element | None: element with raw sensor measurement
-                            or None if all measurements from a dataset has already been processed
+            element with raw measurement or None if all measurements from a dataset has already been processed.
         """
 
     @abstractmethod
@@ -77,15 +72,14 @@ class DataReader(ABC):
     def get_element(self, sensor: Sensor) -> Element | None:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset for
-            a given sensor sequentially based on iterator position.
+
+        Gets element from a dataset sequentially based on iterator position for the specific sensor.
 
         Args:
-            sensor (Sensor): a sensor to get measurement of.
+            sensor: a sensor to get measurement of.
 
         Returns:
-            Element | None: element with raw sensor measurement
-                or None if all measurements of the given sensor has already been processed.
+            element with raw measurement or None if all measurements from a dataset has already been processed.
         """
 
     @abstractmethod
@@ -93,17 +87,17 @@ class DataReader(ABC):
     def get_element(self, element: Element) -> Element:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset for
-            a given element without raw sensor measurement.
+
+        Gets the element with raw measurement from a dataset for the given element without raw measurement.
 
         Args:
-            element (Element): without raw sensor measurement.
+            element (Element): without raw measurement.
 
         Returns:
-            (Element): with raw sensor measurement.
+            element with raw measurement.
 
         Raises:
-            ItemNotFoundError: if the given element is not in the dataset.
+            ItemNotFoundError: the given element is not in the dataset.
         """
 
     @abstractmethod
@@ -111,19 +105,19 @@ class DataReader(ABC):
     def get_element(self, sensor: Sensor, timestamp: int) -> Element:
         """
         @overload.
-        Gets an element with raw sensor measurement from a dataset
-        for the given sensor and timestamp.
+
+        Gets an element with raw sensor measurement from a dataset for the given sensor and timestamp.
 
         Args:
             sensor (Sensor): a sensor to get measurement of.
+
             timestamp (int): timestamp of sensor`s measurement.
 
         Returns:
-            (Element): with raw sensor measurement.
+            element with raw measurement.
 
         Raises:
-            ItemNotFoundError: if the given sensor`s measurement
-                with the timestamp is not in the dataset.
+            ItemNotFoundError: the element of the given sensor and timestamp is not in the dataset.
         """
 
     @dispatch
@@ -134,40 +128,44 @@ class DataReader(ABC):
         Gets element from a dataset in different regimes based on arguments.
 
         Calls:
-            1.
-                Gets an element from a dataset sequentially based on iterator position.
+            1.  Gets element from a dataset sequentially based on iterator position for the specific sensor.
+
                 Args:
-                    ___: None
+                    __.
+
                 Returns:
-                    Element | None: element with raw sensor measurement
-                            or None if all measurements from a dataset has already been processed.
-            2.
-                Gets an element with raw sensor measurement from a dataset for
-                                        a given sensor sequentially based on iterator position.
+                    element (Element) with raw measurement or None if all measurements from a dataset
+                    has already been processed.
+
+            2.  Gets the element with raw measurement from a dataset for the given element without raw measurement.
+
                 Args:
                     sensor (Sensor): sensor to get measurement of.
+
                 Returns:
-                    Element | None: element with raw sensor measurement
-                                    or None if any error.
-            3.
-                Gets an element with raw sensor measurement from a dataset for a given sensor and timestamp.
+                    element (Element) with raw measurement.
+
+            3.  Gets the element with raw measurement from a dataset for the given element without raw measurement.
+
+                Args:
+                    element (Element): without raw measurement.
+
+                Returns:
+                    element with raw measurement.
+
+                Raises:
+                    ItemNotFoundError: the given element is not in the dataset.
+
+            4.  Gets an element with raw sensor measurement from a dataset for the given sensor and timestamp.
+
                 Args:
                     sensor (Sensor): sensor to get measurement of.
-                    timestamp (int | None): timestamp of sensor`s measurement.
+
+                    timestamp (int): timestamp of sensor`s measurement.
 
                 Returns:
-                    element (Element): with raw sensor measurement.
-                Raises:
-                    ItemNotFoundError: if the given sensor`s measurement with the timestamp is not in the dataset.
-            4.
-                Gets an element with raw sensor`s measurement from a dataset for a given element
-                w/o raw sensor measurement.
-                Args:
-                    element (Element): an element w/o raw sensor measurement.
+                    element (Element) with raw measurement.
 
-                Returns:
-                    element (Element): with raw sensor measurement.
                 Raises:
-                    ItemNotFoundError: if the given element is not in the dataset.
-
+                    ItemNotFoundError: the element of the given sensor and timestamp is not in the dataset.
         """

@@ -1,24 +1,33 @@
-import logging
-
-from slam.frontend_manager.element_distributor.measurement_storage import (
-    MeasurementStorage,
-)
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from slam.frontend_manager.handlers.ABC_handler import Handler
+from slam.frontend_manager.measurement_storage import MeasurementStorage
+from slam.setup_manager.handlers_factory.factory import HandlersFactory
+from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
 
-logger = logging.getLogger(__name__)
-
 
 class ImuPreintegrator(StateAnalyzer):
-    """Analyzer for lidar states."""
+    """Analyzer for IMU measurements` handler.
+
+    Adds new state if the storage contains a measurement with IMU odometry.
+    """
 
     def __init__(self, config: StateAnalyzerConfig) -> None:
         super().__init__(config)
+        self._handler: Handler = HandlersFactory.get_handler(config.handler_name)
 
     def evaluate(self, storage: MeasurementStorage) -> State | None:
+        """Evaluates the storage and decides whether to add a new state. Not
+        implemented.
+
+        Args:
+            storage: a storage with measurements.
+
+        Returns:
+            new state or None.
+        """
         raise NotImplementedError

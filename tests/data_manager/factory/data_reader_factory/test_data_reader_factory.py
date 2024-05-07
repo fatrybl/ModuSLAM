@@ -2,10 +2,10 @@ from pytest import mark, raises
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.data_reader_factory import DataReaderFactory
-from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import RegimeConfig
+from slam.system_configs.data_manager.batch_factory.regime import RegimeConfig
 from tests.data_manager.factory.data_reader_factory.scenarios import (
     scenario1,
     scenario2,
@@ -29,7 +29,7 @@ class TestDataReaderFactory:
         regime_config: RegimeConfig,
         reference_reader: type[DataReader],
     ):
-        reader = DataReaderFactory.get_reader(dataset_config, regime_config)
+        reader = DataReaderFactory.create_reader(dataset_config, regime_config)
         assert isinstance(reader, reference_reader)
 
     @mark.parametrize(
@@ -40,7 +40,7 @@ class TestDataReaderFactory:
         self, dataset_config: DatasetConfig, regime_config: RegimeConfig
     ):
         with raises(ValueError):
-            DataReaderFactory.get_reader(dataset_config, regime_config)
+            DataReaderFactory.create_reader(dataset_config, regime_config)
 
     @mark.parametrize(
         "dataset_config, regime_config",
@@ -50,4 +50,4 @@ class TestDataReaderFactory:
         self, dataset_config: DatasetConfig, regime_config: RegimeConfig
     ):
         with raises(NotImplementedError):
-            DataReaderFactory.get_reader(dataset_config, regime_config)
+            DataReaderFactory.create_reader(dataset_config, regime_config)

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.frontend_manager.element_distributor package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.frontend_manager.element_distributor package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.element_distributor.elements_distributor">slam.frontend_manager.element_distributor.elements_distributor module</a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor"><code class="docutils literal notranslate"><span class="pre">ElementDistributor</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.storage"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.storage</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.sensor_handler_table"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.sensor_handler_table</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.init_table"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.init_table()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.clear_storage"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.clear_storage()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.distribute_element"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.distribute_element()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.element_distributor.measurement_storage">slam.frontend_manager.element_distributor.measurement_storage module</a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement"><code class="docutils literal notranslate"><span class="pre">Measurement</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.time_range"><code class="docutils literal notranslate"><span class="pre">Measurement.time_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.values"><code class="docutils literal notranslate"><span class="pre">Measurement.values</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.handler"><code class="docutils literal notranslate"><span class="pre">Measurement.handler</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.elements"><code class="docutils literal notranslate"><span class="pre">Measurement.elements</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.noise_covariance"><code class="docutils literal notranslate"><span class="pre">Measurement.noise_covariance</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.data"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.data</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.recent_measurement"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.recent_measurement</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.time_range"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.time_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.empty"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.empty</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.add"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.add()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.remove"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.remove()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.clear"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.clear()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage._update_state"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._update_state()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.element_distributor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.frontend_manager.element_distributor package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.frontend_manager.element_distributor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-frontend-manager-element-distributor-package">
+<h1>slam.frontend_manager.element_distributor package<a class="headerlink" href="#slam-frontend-manager-element-distributor-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.frontend_manager.element_distributor.elements_distributor">
+<span id="slam-frontend-manager-element-distributor-elements-distributor-module"></span><h2>slam.frontend_manager.element_distributor.elements_distributor module<a class="headerlink" href="#module-slam.frontend_manager.element_distributor.elements_distributor" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.element_distributor.elements_distributor.</span></span><span class="sig-name descname"><span class="pre">ElementDistributor</span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/elements_distributor.html#ElementDistributor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Distributes elements from DataBatch to corresponding handlers for further
+processing.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.storage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">storage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage" title="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage"><span class="pre">MeasurementStorage</span></a></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.storage" title="Link to this definition"></a></dt>
+<dd><p>Storage of measurements.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.sensor_handler_table">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sensor_handler_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.setup_manager.sensors_factory.html#slam.setup_manager.sensors_factory.sensors.Sensor" title="slam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">Sensor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">Handler</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.sensor_handler_table" title="Link to this definition"></a></dt>
+<dd><p>“Sensor -&gt; handlers” tables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.init_table">
+<span class="sig-name descname"><span class="pre">init_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/elements_distributor.html#ElementDistributor.init_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.init_table" title="Link to this definition"></a></dt>
+<dd><p>Initializes “sensor -&gt; handlers” table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table_config</strong> – table with “sensor name -&gt; handlers names” pairs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.clear_storage">
+<span class="sig-name descname"><span class="pre">clear_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.utils.html#slam.utils.ordered_set.OrderedSet" title="slam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/elements_distributor.html#ElementDistributor.clear_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.clear_storage" title="Link to this definition"></a></dt>
+<dd><p>Removes the given data from the measurements storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – data to be removed from storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.distribute_element">
+<span class="sig-name descname"><span class="pre">distribute_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.element.Element" title="slam.data_manager.factory.element.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/elements_distributor.html#ElementDistributor.distribute_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.elements_distributor.ElementDistributor.distribute_element" title="Link to this definition"></a></dt>
+<dd><p>Distributes the element to the handler for further processing.</p>
+<p>TODO: add support for multiple args for process() method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.frontend_manager.element_distributor.measurement_storage">
+<span id="slam-frontend-manager-element-distributor-measurement-storage-module"></span><h2>slam.frontend_manager.element_distributor.measurement_storage module<a class="headerlink" href="#module-slam.frontend_manager.element_distributor.measurement_storage" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.element_distributor.measurement_storage.</span></span><span class="sig-name descname"><span class="pre">Measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.utils.html#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">Handler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.element.Element" title="slam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_covariance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#Measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A measurement formed of processed element(s) by the corresponding handler.</p>
+<p>Hash calculation ignores “values” attribute because not all values are hashable.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement.time_range">
+<span class="sig-name descname"><span class="pre">time_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slam.utils.html#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.time_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement.values">
+<span class="sig-name descname"><span class="pre">values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement.handler">
+<span class="sig-name descname"><span class="pre">handler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">Handler</span></a></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.handler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement.elements">
+<span class="sig-name descname"><span class="pre">elements</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.element.Element" title="slam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.elements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.Measurement.noise_covariance">
+<span class="sig-name descname"><span class="pre">noise_covariance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement.noise_covariance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.element_distributor.measurement_storage.</span></span><span class="sig-name descname"><span class="pre">MeasurementStorage</span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Storage for measurements.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">Handler</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.utils.html#slam.utils.ordered_set.OrderedSet" title="slam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.data" title="Link to this definition"></a></dt>
+<dd><p>Dictionary with “handler -&gt; measurements” pairs.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.recent_measurement">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recent_measurement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.recent_measurement" title="Link to this definition"></a></dt>
+<dd><p>A measurement with latest “stop” timestamp in the storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IndexError</strong> – if the storage is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.time_range">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slam.utils.html#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.time_range" title="Link to this definition"></a></dt>
+<dd><p>Start &amp; stop time margins to cover all measurements in the storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IndexError</strong> – time range does not exists for empty storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.empty">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">empty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.empty" title="Link to this definition"></a></dt>
+<dd><p>Checks if the storage is empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.add" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">Handler</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.utils.html#slam.utils.ordered_set.OrderedSet" title="slam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span></dt>
+<dd><p>Adds new measurement to the storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurement</strong> – the measurement to add.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.frontend_manager.handlers.html#slam.frontend_manager.handlers.ABC_handler.Handler" title="slam.frontend_manager.handlers.ABC_handler.Handler"><span class="pre">slam.frontend_manager.handlers.ABC_handler.Handler</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.utils.html#slam.utils.ordered_set.OrderedSet" title="slam.utils.ordered_set.OrderedSet"><span class="pre">slam.utils.ordered_set.OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">slam.frontend_manager.element_distributor.measurement_storage.Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NoneType</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<p>&#64;overload.</p>
+<p>Adds multiple measurements to the storage in “handler -&gt; measurements” table format.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>might be slow due to the “recent_measurement” update.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – measurements to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.remove" title="Link to this definition"></a></dt>
+<dd><p>Removes the measurement from the storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurement</strong> – the measurement to remove.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage.clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the storage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage._update_state">
+<span class="sig-name descname"><span class="pre">_update_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="slam.utils.html#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#slam.frontend_manager.element_distributor.measurement_storage.Measurement" title="slam.frontend_manager.element_distributor.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/element_distributor/measurement_storage.html#MeasurementStorage._update_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage._update_state" title="Link to this definition"></a></dt>
+<dd><p>Updates the time range of the storage.</p>
+<p>TODO: the time range might be updated quicker then O(N).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>time range, recent measurement with latest “stop” timestamp.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.frontend_manager.element_distributor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.frontend_manager.element_distributor" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

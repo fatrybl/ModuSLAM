@@ -3,7 +3,7 @@ import pytest
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
-from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
 

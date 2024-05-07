@@ -10,11 +10,11 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar
 from slam.setup_manager.handlers_factory.factory import HandlersFactory
 from slam.setup_manager.state_analyzers_factory import factory as factory_module
 from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
-from slam.system_configs.system.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-from slam.system_configs.system.setup_manager.state_analyzers_factory import (
-    StateAnalyzerFactoryConfig,
+from slam.system_configs.setup_manager.state_analyzers_factory import (
+    StateAnalyzersFactoryConfig,
 )
 from slam.utils.exceptions import ItemNotFoundError
 
@@ -31,7 +31,7 @@ def state_analyzer_config():
 
 @pytest.fixture
 def factory_config(state_analyzer_config):
-    return StateAnalyzerFactoryConfig(
+    return StateAnalyzersFactoryConfig(
         package_name="test_package",
         analyzers={state_analyzer_config.name: state_analyzer_config},
     )

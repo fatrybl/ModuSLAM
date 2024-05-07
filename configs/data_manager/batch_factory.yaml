@@ -13,6 +13,9 @@ batch_factory:
   memory:
     batch_memory: 100.0
 
+#    start: 1544581174277398000
+#    stop: 1544581174479101000
+
 # for urban-30
 #    start: 1544677010043554000
 #    stop: 1544677020028534000

@@ -1,28 +1,22 @@
 import logging
 from collections.abc import Iterable
-from typing import Any, Generic, overload
+from typing import Generic
 
 import gtsam
-from plum import dispatch
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from slam.logger.logging_config import frontend_manager
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager)
 
 
 class Graph(Generic[GraphVertex, GraphEdge]):
     """High-level Graph.
 
     Includes gtsam.NonlinearFactorGraph.
-    TODO:
-        1) add logic to remove detached vertices from the graph.
-        2) implement edges deletion with vertices deletion.
-        3) implement edges deletion w/o vertices deletion.
-        4) implement edges deletion with factors modification.
-        5) implement marginalization of vertices.
     """
 
     def __init__(self) -> None:
@@ -30,194 +24,115 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         self.edge_storage = EdgeStorage[GraphEdge]()
         self.factor_graph = gtsam.NonlinearFactorGraph()
 
-    @overload
-    def _delete_vertex(self, vertex: GraphVertex) -> None:
-        """
-        @overload.
-        Deletes vertex from the graph.
+    @property
+    def gtsam_values(self) -> gtsam.Values:
+        """GTSAM values of the graph."""
+        values = gtsam.Values()
+        unique_vertices: dict[int, OptimizableVertex] = {}
 
-        Args:
-            vertex (GraphVertex): vertex to be deleted from the graph.
-        """
-        raise NotImplementedError
+        for vertex in self.vertex_storage.optimizable_vertices:
+            if vertex.gtsam_index not in unique_vertices:
+                unique_vertices[vertex.gtsam_index] = vertex
 
-    @overload
-    def _delete_vertex(self, vertices: Iterable[GraphVertex]) -> None:
-        """
-        @overload.
-        Deletes multiple vertices from the graph.
+        [
+            values.insert(vertex.gtsam_index, vertex.gtsam_instance)
+            for vertex in unique_vertices.values()
+        ]
 
-        Args:
-            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
-        """
-        for vertex in vertices:
-            self._delete_vertex(vertex)
+        return values
 
-    @dispatch
-    def _delete_vertex(self, vertex=None):
-        """
-        @overload.
-
-        Calls:
-            1. delete 1 vertex:
-                Args:
-                    vertex (GraphVertex): vertex to be deleted from the graph.
-
-            2. delete multiple vertices:
-                Args:
-                    vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
-        """
-
-    @overload
-    def set_prior(self) -> None:
-        """
-        @overload.
-        Initialize the graph with prior vertices and edges.
-        """
-        raise NotImplementedError
-
-    @overload
-    def set_prior(self, config: Any) -> None:
-        """
-        @overload.
-        Initialize the graph with prior vertices and edges from config.
-        """
-        raise NotImplementedError
-
-    @dispatch
-    def set_prior(self, config=None):
-        """
-        @overload.
-
-        Calls:
-            1. __.
-
-            2. Args:
-                config (Any): config with prior vertices and edges.
-
-        """
-        raise NotImplementedError
-
-    @overload
     def add_edge(self, edge: GraphEdge) -> None:
-        """
-        @overload.
-        Adds edge to the graph.
+        """Adds edge to the graph.
 
         Args:
             edge (GraphEdge): new edge to be added to the graph.
         """
+        edge.index = self._set_index()
+
         vertices = sorted(edge.all_vertices, key=lambda v: v.timestamp)
         [vertex.edges.add(edge) for vertex in vertices]
+
         self.vertex_storage.add(vertices)
         self.edge_storage.add(edge)
         self.factor_graph.add(edge.factor)
 
-    @overload
-    def add_edge(self, edges: Iterable[GraphEdge]) -> None:
-        """
-        @overload.
-        Adds multiple edges to the graph.
+    def add_edges(self, edges: Iterable[GraphEdge]) -> None:
+        """Adds multiple edges to the graph.
 
         Args:
             edges (Iterable[GraphEdge]): new edges to be added to the graph.
         """
-
         for edge in edges:
             self.add_edge(edge)
 
-    @dispatch
-    def add_edge(self, edge=None):
-        """
-        @overload.
-
-        Calls:
-            1. add single edge:
-                Args:
-                    edge (GraphEdge): new edge to be added to the graph.
-
-            2. add multiple edges:
-                Args:
-                    edges (Iterable[GraphEdge]): new edges to be added to the graph.
-        """
-
-    @overload
-    def delete_edge(self, edge: GraphEdge) -> None:
-        """
-        @overload.
-        Deletes edge from the graph.
+    def remove_edge(self, edge: GraphEdge) -> None:
+        """Removes edge from the graph.
 
         Args:
-            edge: edge to be deleted from the graph.
+            edge (GraphEdge): edge to be deleted from the graph.
         """
-        raise NotImplementedError
 
-    @overload
-    def delete_edge(self, edges: Iterable[GraphEdge]) -> None:
-        """
-        @overload.
-        Deletes multiple edges from the graph.
+        self.factor_graph.remove(edge.index)
+        self.edge_storage.remove(edge)
+        for vertex in edge.all_vertices:
+            vertex.edges.remove(edge)
+            if not vertex.edges:
+                self.vertex_storage.remove(vertex)
+
+    def remove_edges(self, edges: Iterable[GraphEdge]) -> None:
+        """Removes multiple edges from the graph.
 
         Args:
             edges (Iterable[GraphEdge]): edges to be deleted from the graph.
         """
         for edge in edges:
-            self.delete_edge(edge)
+            self.remove_edge(edge)
 
-    @dispatch
-    def delete_edge(self, edge=None):
+    def remove_vertex(self, vertex: GraphVertex) -> None:
+        """Removes vertex from the graph.
+
+        Args:
+            vertex (GraphVertex): vertex to be deleted from the graph.
         """
-        @overload.
+        edges = vertex.edges.copy()  # to avoid RuntimeError: Set changed size during iteration
+        self.remove_edges(edges)
 
-        Calls:
-            1. delete single edge:
-                Args:
-                    edge (GraphEdge): edge to be deleted from the graph.
+    def remove_vertices(self, vertices: Iterable[GraphVertex]) -> None:
+        """Removes multiple vertices from the graph.
 
-            2. delete multiple edges:
-                Args:
-                    edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+        Args:
+            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
         """
+        for vertex in vertices:
+            self.remove_vertex(vertex)
 
     def update(self, values: gtsam.Values) -> None:
         """Updates the graph with new values.
 
         Args:
-            values (gtsam.Values): new computed values.
-
-        TODO: add update of non-optimizable vertices.
+            values: GTSAM values.
         """
 
         self.vertex_storage.update_optimizable_vertices(values)
+        self.vertex_storage.update_non_optimizable_vertices()
 
-    @property
-    def gtsam_values(self) -> gtsam.Values:
-        """GTSAM Initial values of the graph.
+    def marginalize(self, vertices: Iterable[GraphVertex]) -> None:
+        """Marginalizes out vertices.
 
-        TODO: add tests for initial_values.
-
-        Returns:
-            initial values (gtsam.Values).
-        """
-        vertices = self.vertex_storage.optimizable_vertices
-        initial_values = gtsam.Values()
-        unique_vertices: dict[int, OptimizableVertex] = {}
-
-        for vertex in vertices:
-            if vertex.gtsam_index not in unique_vertices:
-                unique_vertices[vertex.gtsam_index] = vertex
-
-        [
-            initial_values.insert(vertex.gtsam_index, vertex.gtsam_value)
-            for vertex in unique_vertices.values()
-        ]
-
-        return initial_values
-
-    def marginalize(self, edges: Iterable[GraphEdge]) -> None:
-        """Marginalizes out edges.
-
-        Args:
-            edges (Iterable[GraphEdge]): edges to be marginalized out.
+        Not implemented.
         """
         raise NotImplementedError
+
+    def _set_index(self) -> int:
+        """Sets unique index for the new edge base on the size of the factor graph.
+        Gtsam factor graph sets index to the factor by exploiting the size of the factor
+        graph. This guarantees the uniqueness of the index. However, the size of the
+        factor graph is not equal to the number of factors in the graph, because the
+        factor graph may contain empty slots (null ptr objects). When the factor is
+        removed, the size of the factor graph does not change. To reduce the size of the
+        factor graph, the resize() method should be called.
+
+        Returns:
+            unique index.
+        """
+        return self.factor_graph.size()

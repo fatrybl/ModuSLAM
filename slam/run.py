@@ -3,26 +3,23 @@ Author: Mark Griguletskii
 e-mail: mark.griguletskii@skoltech.ru.
 
 Main runner of the SLAM system.
-
-TODO: in all functions doc string change "return" field s.t.
-      the type of the return value is specified.
-
 """
 
 import hydra
-from omegaconf import OmegaConf
 
+from slam.logger.logging_config import setup_logger
 from slam.main_manager.main_manager import MainManager
 from slam.setup_manager.config_validator import register_config
+from slam.system_configs.main_manager import MainManagerConfig
 
 
 @hydra.main(version_base=None, config_name="config", config_path="../configs")
-def run(cfg) -> None:
-    """Creates Main Manager and runs SLAM based on configuration."""
+def run(config: MainManagerConfig) -> None:
+    """Runs SLAM based on the given configuration."""
 
-    print(OmegaConf.to_yaml(cfg.frontend_manager.graph_initializer))
+    setup_logger(config.logger)
 
-    main_manager = MainManager(cfg)
+    main_manager = MainManager(config)
     main_manager.build_map()
 
 

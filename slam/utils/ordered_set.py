@@ -1,19 +1,19 @@
-"""Custom ordered-set implementation.
+"""Ordered-set data structure implementation.
 
 Complexity:
-    O(1): add(), contains(item: T), remove(item: T), first, last.
+    O(1): add(), contains(item: T), remove(item), remove_first, remove_last.
     O(N): __getitem__(index: int).
 """
 
 from collections import OrderedDict
-from typing import Any, Generic, Iterable, TypeVar, overload
-
-from plum import dispatch
+from typing import Any, Generic, Iterable, TypeVar
 
 T = TypeVar("T")
 
 
 class OrderedSet(Generic[T]):
+    """OrderedSet is a combination of set and OrderedDict."""
+
     def __init__(self, iterable: Iterable[T] | None = None):
         self._items: OrderedDict[T, None] = OrderedDict()
 
@@ -30,14 +30,6 @@ class OrderedSet(Generic[T]):
     def __len__(self) -> int:
         return len(self._items.keys())
 
-    @staticmethod
-    def _is_hashable(item: T) -> bool:
-        try:
-            hash(item)
-            return True
-        except TypeError:
-            return False
-
     def __repr__(self) -> str:
         return f"OrderedSet({set(self._items.keys())})"
 
@@ -46,25 +38,29 @@ class OrderedSet(Generic[T]):
         Attention: This method requires O(n) time complexity.
 
         Args:
-            index (int): index of the item.
+            index: index of an item.
 
         Returns:
-            (T): item at the given index.
+            item.
+
+        Raises:
+            IndexError: if index is out of range.
         """
         try:
             return list(self._items.keys())[index]
+
         except IndexError:
             raise IndexError("OrderedSet index out of range")
 
     def __eq__(self, other: Any) -> bool:
-        """Compares if this OrderedSet is equal to another OrderedSet. Two OrderedSets
-        are equal if they have the same elements in the same order.
+        """Compares if an OrderedSet is equal to another OrderedSet. Two OrderedSets are
+        equal if they have the same elements in the same order.
 
         Args:
-            other (Any): The other OrderedSet to compare with.
+            other: OrderedSet to compare with.
 
         Returns:
-            bool: True if the two OrderedSets are equal, False otherwise.
+            equality status.
         """
         if isinstance(other, OrderedSet):
             return self._items == other._items
@@ -72,49 +68,90 @@ class OrderedSet(Generic[T]):
 
     @property
     def items(self):
+        """All items in OrderedSet."""
         return self._items.keys()
 
     @property
     def first(self) -> T:
+        """First item in OrderedSet.
+
+        Raises:
+            KeyError: if OrderedSet is empty.
+        """
         if len(self._items) == 0:
             raise KeyError("OrderedSet is empty")
         return next(iter(self._items))
 
     @property
     def last(self) -> T:
+        """Last item in OrderedSet.
+
+        Raises:
+            KeyError: if OrderedSet is empty.
+        """
         if len(self._items) == 0:
             raise KeyError("OrderedSet is empty")
         return next(reversed(self._items))
 
-    @overload
-    def add(self, items: Iterable[T]) -> None:
-        """Adds items from the given iterable.
+    def add(self, item: T | Iterable[T]) -> None:
+        """Adds an item to the OrderedSet.
 
         Args:
-            items (Iterable[T]): items to be added.
-        """
-        for item in items:
-            self.add(item)
+            item (T): item(s) to be added.
 
-    @overload
-    def add(self, item: T) -> None:
-        if self._is_hashable(item):
-            self._items[item] = None
+        Raises:
+            TypeError: if an item is not hashable.
+        """
+        msg = "Item is not hashable and cannot be used as a key in the OrderedDict."
+
+        if isinstance(item, Iterable):
+            for i in item:
+                if self._is_hashable(i):
+                    self._items[i] = None
+                else:
+                    raise TypeError(msg)
+
         else:
-            raise TypeError("Item is not hashable and cannot be used as a key in the OrderedDict.")
+            if self._is_hashable(item):
+                self._items[item] = None
+            else:
+                raise TypeError(msg)
 
-    @dispatch
-    def add(self, item=None):
+    def remove(self, item: T | Iterable[T]) -> None:
+        """Removes an item or items from the OrderedSet.
+
+        Args:
+            item: item(s) to be removed.
+
+        Raises:
+            KeyError: if an item is not in the OrderedSet.
         """
-        Calls:
-            1.  add single item.
-                Args:
-                    item (T): item to be added.
+        msg = "Item not found in OrderedSet:"
 
-            2.  add multiple items.
-                Args:
-                    items (Iterable[T]): items to be added.
+        if isinstance(item, Iterable):
+            for i in item:
+                if i in self._items:
+                    self._items.pop(i)
+                else:
+                    raise KeyError(msg + f" {i}")
+        else:
+            if item in self._items:
+                self._items.pop(item)
+            else:
+                raise KeyError(msg + f" {item}")
+
+    @staticmethod
+    def _is_hashable(item: T) -> bool:
+        """Checks if an item is hashable.
+
+        Args:
+            item: item to check.
+
+        Returns:
+            hash ability status.
         """
-
-    def remove(self, item: T) -> None:
-        self._items.pop(item, None)
+        try:
+            hash(item)
+            return True
+        except TypeError:
+            return False

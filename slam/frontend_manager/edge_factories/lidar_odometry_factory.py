@@ -3,69 +3,61 @@ from collections.abc import Collection
 import gtsam
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.custom_edges import LidarOdometry
 from slam.frontend_manager.graph.custom_vertices import LidarPose, Pose
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.frontend_manager.noise_models import pose_diagonal_noise_model
-from slam.system_configs.system.frontend_manager.edge_factories.base_factory import (
+from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
 from slam.utils.ordered_set import OrderedSet
 
 
 class LidarOdometryEdgeFactory(EdgeFactory):
-    """Creates edge of type: LidarOdometry."""
+    """Creates edges of type LidarOdometry."""
 
     def __init__(self, config: EdgeFactoryConfig) -> None:
+        """
+        Args:
+            config: configuration of the factory.
+        """
         super().__init__(config)
         self._time_margin: int = config.search_time_margin
 
-    @staticmethod
-    def noise_model(
-        values: Collection[float],
-    ) -> gtsam.noiseModel.Diagonal.Sigmas:
-        """Diagonal Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
-
-        Args:
-            values (Collection[float]): measurement noise sigmas: [x, y, z, roll, pitch, yaw].
-
-        Returns:
-            noise model (gtsam.noiseModel.Diagonal.Sigmas).
-        """
-        return pose_diagonal_noise_model(values)
-
     @property
     def vertices_types(self) -> set[type[LidarPose]]:
-        """Type of the vertex used by the factory for edge creation.
+        """Types of the used vertices.
 
         Returns:
-            vertex type (type[LidarPose]).
+            set with 1 type (LidarPose).
         """
         return {LidarPose}
 
     @property
     def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Type of the base vertex used by the factory for edge creation.
+        """Types of the used base (GTSAM) instances.
 
         Returns:
-            base vertex type (type[gtsam.Pose3]).
+            set with 1 type (gtsam.Pose3).
         """
         return {gtsam.Pose3}
 
     def create(
         self, graph: Graph, vertices: Collection[LidarPose], measurements: OrderedSet[Measurement]
     ) -> list[LidarOdometry]:
-        """
-        Creates new edges from the given measurements.
+        """Creates 1 edge (LidarOdometry) with the given measurements.
+
         Args:
-            graph (Graph): the graphs with factor.
-            vertices (Collection[LidarPose]): lidar pose vertex.
-            measurements (OrderedSet[Measurement]): measurements from the corresponding handler.
+            graph: the graph to create the edge for.
+
+            vertices: graph vertices to be used for the new edge.
+
+            measurements: contains SE(3) transformation matrix.
 
         Returns:
-            new lidar odometry edges (list[LidarOdometry]).
+            list with 1 edge.
         """
         m: Measurement = measurements.last
         current_vertex = tuple(vertices)[0]
@@ -76,14 +68,15 @@ class LidarOdometryEdgeFactory(EdgeFactory):
 
     @staticmethod
     def _create_vertex(index: int, timestamp: int) -> LidarPose:
-        """
-        Creates a new vertex.
+        """Creates the graph vertex.
+
         Args:
-            index (int): index of the vertex.
-            timestamp (int): timestamp of the vertex.
+            index: index of the vertex.
+
+            timestamp: timestamp of the vertex.
 
         Returns:
-            new vertex (LidarPose).
+            vertex.
         """
         vertex = LidarPose()
         vertex.index = index
@@ -97,33 +90,41 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         measurement: Measurement,
         noise_model: gtsam.noiseModel.Diagonal.Sigmas,
     ) -> gtsam.BetweenFactorPose3:
-        """
-        Creates a factor for the graph.
+        """Creates the GTSAM factor for the factor graph.
+
         Args:
-            vertex1_id (int): id of the first vertex.
-            vertex2_id (int): id of the second vertex.
-            measurement (Measurement): transformation matrix SE(3).
-            noise_model (gtsam.noiseModel.Diagonal.Sigmas): noise model.
+            vertex1_id: id of the first vertex.
+
+            vertex2_id: id of the second vertex.
+
+            measurement: a measurement with values: transformation matrix SE(3).
+
+            noise_model: GTSAM noise model.
 
         Returns:
-            lidar odometry factor (gtsam.BetweenFactorPose3).
+            GTSAM factor.
         """
         tf = gtsam.Pose3(measurement.values)
         factor = gtsam.BetweenFactorPose3(
-            key1=vertex1_id, key2=vertex2_id, relativePose=tf, noiseModel=noise_model
+            key1=vertex1_id,
+            key2=vertex2_id,
+            relativePose=tf,
+            noiseModel=noise_model,
         )
         return factor
 
     def _get_previous_vertex(self, storage: VertexStorage, timestamp: int, index: int) -> LidarPose:
-        """Get previous vertex by finding or creating.
+        """Gets previous vertex if found or creates a new one.
 
         Args:
-            storage (VertexStorage): storage of vertices.
-            timestamp (int): timestamp of the vertex.
-            index (int): vertex index.
+            storage: storage of vertices.
+
+            timestamp: timestamp of the vertex.
+
+            index: index of the vertex.
 
         Returns:
-            (LidarPose): previous vertex.
+            vertex.
         """
         vertex = storage.get_last_vertex(LidarPose)
         if vertex:
@@ -141,17 +142,27 @@ class LidarOdometryEdgeFactory(EdgeFactory):
     def _create_edge(
         self, vertex1: LidarPose, vertex2: LidarPose, measurement: Measurement
     ) -> LidarOdometry:
-        """Creates an edge instance.
+        """Creates an edge.
 
         Args:
-            vertex1 (LidarPose): first vertex.
-            vertex2 (LidarPose): second vertex.
-            measurement (Measurement).
+            vertex1: first vertex.
+
+            vertex2: second vertex.
+
+            measurement: a measurement with the transformation matrix SE(3).
 
         Returns:
-            edge instance (LidarOdometry).
+            new edge.
         """
-        noise = self.noise_model(measurement.noise_covariance)
+        variance: tuple[float, float, float, float, float, float] = (
+            measurement.noise_covariance[0],
+            measurement.noise_covariance[1],
+            measurement.noise_covariance[2],
+            measurement.noise_covariance[3],
+            measurement.noise_covariance[4],
+            measurement.noise_covariance[5],
+        )
+        noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variance)
         factor = self._create_factor(vertex1.gtsam_index, vertex2.gtsam_index, measurement, noise)
         edge = LidarOdometry(
             vertex1=vertex1,

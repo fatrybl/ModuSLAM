@@ -3,17 +3,16 @@ from dataclasses import dataclass
 
 @dataclass
 class State:
-    is_memory_limit: bool = False
-    is_data_processed: bool = False
-    is_time_finished: bool = False
-    is_map_diverged: bool = False
-    is_solver_error: bool = False
+    memory_limit: bool = False
+    data_processed: bool = False
+    time_finished: bool = False
+    solver_error: bool = False
 
 
 class StoppingCriterion:
     """High level criteria to stop mapping process."""
 
-    state: State = State()
+    state = State()
 
     @classmethod
     def is_active(cls) -> bool:

@@ -3,33 +3,37 @@ from typing import cast
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+from slam.logger.logging_config import data_manager
+from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import (
+from slam.system_configs.data_manager.batch_factory.regime import (
     RegimeConfig,
     Stream,
     TimeLimit,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager)
 
 
 class DataReaderFactory:
     """Factory for creating DataReader instance based on a dataset type."""
 
     @staticmethod
-    def get_reader(dataset_cfg: DatasetConfig, regime_cfg: RegimeConfig) -> DataReader:
+    def create_reader(dataset_cfg: DatasetConfig, regime_cfg: RegimeConfig) -> DataReader:
         """Creates Data Reader based on dataset type.
 
         Args:
-            regime_cfg (RegimeConfig): configuration of the data flow regime.
             dataset_cfg (DatasetConfig): configuration of the dataset.
+
+            regime_cfg (RegimeConfig): configuration of the data flow regime.
+
         Raises:
             ValueError: Invalid regime name.
+
             NotImplementedError: No DataReader exists for the given dataset type.
         """
         regime: Stream | TimeLimit

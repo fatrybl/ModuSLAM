@@ -5,9 +5,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
+from slam.logger.logging_config import data_manager
 from slam.utils.exceptions import FileNotValid
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager)
 
 
 @dataclass
@@ -17,10 +18,6 @@ class FileIterator:
     file: Path
     position: int = 0
     iterator: Iterator = field(init=False)
-
-    def reset(self):
-        self.position = 0
-        self.__post_init__()
 
     def __post_init__(self):
         if DataReader.is_file_valid(self.file):
@@ -42,15 +39,20 @@ class FileIterator:
     def __iter__(self):
         return self.iterator
 
+    def reset(self):
+        """Reset the iterator to the beginning of the file."""
+        self.position = 0
+        self.__post_init__()
+
 
 class CsvFileGenerator:
-    """Generator for a file to read each row of "data_stamp.csv" as a dictionary."""
+    """File generator to read each row of "data_stamp.csv" as a dictionary."""
 
     def __init__(self, file_path: Path, names: list[str]):
         """
         Args:
-            file_path (Path): file to read.
-            names (list[str]): dictionary keys` names.
+            file_path: path of the file.
+            names: dictionary keys` names.
         """
         self.__file = open(file_path, "r")
         self.__reader = DictReader(self.__file, fieldnames=names)
