@@ -18,11 +18,11 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analy
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.tables_initializer import init_handler_state_analyzer_table
 from slam.utils.exceptions import EmptyStorageError
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 class LidarMapCandidateFactory(CandidateFactory):

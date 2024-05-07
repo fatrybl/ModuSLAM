@@ -8,9 +8,9 @@ from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
 from slam.frontend_manager.graph.edge_storage import EdgeStorage
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 class Graph(Generic[GraphVertex, GraphEdge]):

@@ -6,14 +6,14 @@ from kiss_icp.kiss_icp import KISSConfig, KissICP
 from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.frontend_manager.measurement_storage import Measurement
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
 from slam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 class ScanMatcher(Handler):

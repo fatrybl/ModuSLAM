@@ -15,11 +15,11 @@ from slam.data_manager.factory.locations import (
     StereoImgDataLocation,
 )
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ExternalModuleException, ItemNotFoundError
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 @dataclass(frozen=True, eq=True)

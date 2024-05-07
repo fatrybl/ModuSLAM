@@ -13,11 +13,11 @@ from natsort import natsorted
 from PIL.Image import Image
 
 from slam.data_manager.factory.element import Element
-from slam.logger.logging_config import utils_logger
+from slam.logger.logging_config import utils
 from slam.utils.exceptions import DimensionalityError
 from slam.utils.numpy_types import Vector3, VectorN
 
-logger = logging.getLogger(utils_logger)
+logger = logging.getLogger(utils)
 
 
 def create_vector_3(x, y, z) -> Vector3:

@@ -11,9 +11,9 @@ from collections import deque
 from collections.abc import Iterable
 from typing import Any, Callable, Generic, TypeVar
 
-from slam.logger.logging_config import utils_logger
+from slam.logger.logging_config import utils
 
-logger = logging.getLogger(utils_logger)
+logger = logging.getLogger(utils)
 
 T = TypeVar("T")
 

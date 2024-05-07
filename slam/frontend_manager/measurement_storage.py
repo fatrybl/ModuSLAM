@@ -5,12 +5,12 @@ from typing import Any
 
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.exceptions import EmptyStorageError
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 @dataclass(frozen=True, eq=True)
@@ -64,7 +64,7 @@ class MeasurementStorage:
             return self._recent_measurement
         else:
             msg = "Recent measurement does not exist in empty storage."
-            logger.critical(msg)
+            logger.debug(msg)
             raise EmptyStorageError(msg)
 
     @property

@@ -18,7 +18,7 @@ from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.handlers.prior import PriorHandler
 from slam.frontend_manager.measurement_storage import Measurement
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
@@ -31,7 +31,7 @@ from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 FAKE_SENSOR_NAME = "Prior sensor"
 

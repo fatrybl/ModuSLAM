@@ -3,12 +3,12 @@ from pathlib import Path
 
 import open3d as o3d
 
-from slam.logger.logging_config import map_manager_logger
+from slam.logger.logging_config import map_manager
 from slam.map_manager.maps.lidar_map import LidarMap
 from slam.system_configs.map_manager.map_manager import LidarMapLoaderConfig
 from slam.utils.exceptions import ExternalModuleException
 
-logger = logging.getLogger(map_manager_logger)
+logger = logging.getLogger(map_manager)
 
 
 class LidarMapLoader:

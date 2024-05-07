@@ -3,14 +3,14 @@ from collections import Counter
 from pathlib import Path
 
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class KaistReaderState:
@@ -39,25 +39,26 @@ class KaistReaderState:
         )
 
     def next_sensor(self) -> tuple[Sensor, FileIterator, str]:
-        """Gets the next sensor, its iterator and the timestamp.
+        """Reads the next line for the given file iterator and gets sensor & timestamp.
 
         Raises:
-            StopIteration: all data has been processed.
+            StopIteration: file iterator has been exhausted.
         """
         while True:
             try:
                 line = next(self.data_stamp_iterator)
             except StopIteration:
                 msg = f"All data in {self.data_stamp_iterator.file.name!r} has been processed."
-                logger.info(msg)
+                logger.debug(msg)
                 raise
 
             timestamp: str = line[0]
             sensor_name: str = line[1]
+
             try:
                 sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
             except ItemNotFoundError:
-                logger.warning(f"Sensor {sensor_name!r} has not been found.")
+                logger.debug(f"Sensor {sensor_name!r} has not been found.")
                 continue
 
             iterator = self.sensors_iterators[sensor.name]

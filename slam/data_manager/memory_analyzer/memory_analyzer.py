@@ -2,10 +2,10 @@ import logging
 
 import psutil
 
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.system_configs.data_manager.batch_factory.memory import MemoryAnalyzerConfig
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class MemoryAnalyzer:

@@ -7,14 +7,14 @@ from typing import overload
 from plum import dispatch
 
 from slam.data_manager.factory.element import Element
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
 from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 @dataclass

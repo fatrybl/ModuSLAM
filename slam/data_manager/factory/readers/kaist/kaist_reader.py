@@ -11,7 +11,7 @@ from slam.data_manager.factory.readers.kaist.kaist_reader_state import KaistRead
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
@@ -21,7 +21,7 @@ from slam.utils.auxiliary_dataclasses import TimeRange
 from slam.utils.auxiliary_methods import as_int
 from slam.utils.exceptions import ItemNotFoundError
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class KaistReader(DataReader):

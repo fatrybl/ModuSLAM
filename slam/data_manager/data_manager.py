@@ -6,11 +6,11 @@ from plum import dispatch
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.system_configs.data_manager.data_manager import DataManagerConfig
 from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class DataManager:
@@ -22,7 +22,7 @@ class DataManager:
             cfg (DataManagerConfig): config for DataManager.
         """
         self.batch_factory = BatchFactory(cfg.batch_factory)
-        logger.debug("Data Manager has been configured")
+        logger.debug("Data Manager has been configured.")
 
     @overload
     def make_batch(self) -> None:

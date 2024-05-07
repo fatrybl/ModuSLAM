@@ -12,7 +12,7 @@ from slam.frontend_manager.graph.custom_edges import LidarOdometry
 from slam.frontend_manager.graph.custom_vertices import LidarPose
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
 from slam.frontend_manager.measurement_storage import Measurement
-from slam.logger.logging_config import map_manager_logger
+from slam.logger.logging_config import map_manager
 from slam.map_manager.maps.lidar_map import LidarMap
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
 from slam.system_configs.map_manager.map_factories.lidar_map_factory import (
@@ -22,7 +22,7 @@ from slam.utils.auxiliary_methods import check_dimensionality
 from slam.utils.deque_set import DequeSet
 from slam.utils.numpy_types import Matrix4x4
 
-logger = logging.getLogger(map_manager_logger)
+logger = logging.getLogger(map_manager)
 
 
 class LidarMapFactory:

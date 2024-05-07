@@ -3,9 +3,9 @@ import logging
 import gtsam
 
 from slam.frontend_manager.graph.graph import Graph
-from slam.logger.logging_config import backend_manager_logger
+from slam.logger.logging_config import backend_manager
 
-logger = logging.getLogger(backend_manager_logger)
+logger = logging.getLogger(backend_manager)
 
 
 class GraphSolver:

@@ -4,9 +4,9 @@ import gtsam
 
 from slam.backend_manager.graph_solver import GraphSolver
 from slam.frontend_manager.graph.graph import Graph
-from slam.logger.logging_config import backend_manager_logger
+from slam.logger.logging_config import backend_manager
 
-logger = logging.getLogger(backend_manager_logger)
+logger = logging.getLogger(backend_manager)
 
 
 class BackendManager:
@@ -15,6 +15,7 @@ class BackendManager:
     def __init__(self):
         self._graph_solver = GraphSolver()
         self._result_values = gtsam.Values()
+        logger.debug("Backend Manager has been configured.")
 
     def solve(self, graph: Graph) -> None:
         """Solves the optimization problem for the graph.

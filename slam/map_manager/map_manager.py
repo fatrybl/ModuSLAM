@@ -2,7 +2,7 @@ import logging
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.frontend_manager.graph.graph import Graph
-from slam.logger.logging_config import map_manager_logger
+from slam.logger.logging_config import map_manager
 from slam.map_manager.graph_saver import GraphSaver
 from slam.map_manager.map_factories.lidar_map_factory import LidarMapFactory
 from slam.map_manager.map_factories.lidar_map_utils import (
@@ -12,7 +12,7 @@ from slam.map_manager.map_factories.lidar_map_utils import (
 from slam.map_manager.maps.lidar_map import LidarMap
 from slam.system_configs.map_manager.map_manager import MapManagerConfig
 
-logger = logging.getLogger(map_manager_logger)
+logger = logging.getLogger(map_manager)
 
 
 class MapManager:
@@ -27,6 +27,7 @@ class MapManager:
         self._map_loader = LidarMapLoader(config.map_loader)
         self._graph_saver = GraphSaver()
         self._visualizer = PointcloudVisualizer()
+        logger.debug("Map Manager has been configured.")
 
     @property
     def map(self) -> LidarMap:
@@ -41,7 +42,7 @@ class MapManager:
 
             batch_factory: batch factory to create a data batch with map elements.
         """
-        logger.info("Creating a map from the graph.")
+        logger.info("Creating a map from the graph...")
         self._map_factory.create(graph.vertex_storage, batch_factory)
         logger.info("Map has been created.")
 

@@ -4,9 +4,9 @@ from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
 from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 class GraphBuilderFactory:

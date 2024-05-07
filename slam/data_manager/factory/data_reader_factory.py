@@ -3,7 +3,7 @@ from typing import cast
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
@@ -16,7 +16,7 @@ from slam.system_configs.data_manager.batch_factory.regime import (
     TimeLimit,
 )
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class DataReaderFactory:

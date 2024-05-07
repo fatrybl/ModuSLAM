@@ -19,11 +19,11 @@ from slam.frontend_manager.graph.custom_vertices import (
     Velocity,
 )
 from slam.frontend_manager.graph.index_generator import IndexStorage
-from slam.logger.logging_config import frontend_manager_logger
+from slam.logger.logging_config import frontend_manager
 from slam.utils.deque_set import DequeSet
 from slam.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(frontend_manager_logger)
+logger = logging.getLogger(frontend_manager)
 
 
 class VertexStorage(Generic[GraphVertex]):
@@ -144,10 +144,10 @@ class VertexStorage(Generic[GraphVertex]):
             v = self.get_vertices(vertex_type)[-1]
             return v
         except IndexError:
-            logger.info(msg)
+            logger.debug(msg)
             return None
         except KeyError:
-            logger.info(msg)
+            logger.debug(msg)
             return None
 
     def get_vertices_with_index(self, index: int) -> list[GraphVertex]:

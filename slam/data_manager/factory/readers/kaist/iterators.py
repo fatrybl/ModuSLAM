@@ -5,10 +5,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from slam.data_manager.factory.data_reader_ABC import DataReader
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.utils.exceptions import FileNotValid
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 @dataclass

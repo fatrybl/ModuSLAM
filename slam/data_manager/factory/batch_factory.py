@@ -9,7 +9,7 @@ from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.data_reader_factory import DataReaderFactory
 from slam.data_manager.factory.element import Element
 from slam.data_manager.memory_analyzer.memory_analyzer import MemoryAnalyzer
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
@@ -17,7 +17,7 @@ from slam.system_configs.data_manager.batch_factory.batch_factory import (
 from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 from slam.utils.stopping_criterion import StoppingCriterion
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class BatchFactory:

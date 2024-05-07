@@ -2,10 +2,10 @@ import logging
 from collections import deque
 
 from slam.data_manager.factory.element import Element
-from slam.logger.logging_config import data_manager_logger
+from slam.logger.logging_config import data_manager
 from slam.utils.deque_set import DequeSet
 
-logger = logging.getLogger(data_manager_logger)
+logger = logging.getLogger(data_manager)
 
 
 class DataBatch:
