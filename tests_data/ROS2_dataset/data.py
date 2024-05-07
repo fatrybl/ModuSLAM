@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from PIL import Image
 from numpy import dtype, ndarray, ones, uint8
+from PIL import Image
 
 from slam.data_manager.factory.element import Element, Measurement
 from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
@@ -13,7 +13,7 @@ from slam.data_manager.factory.readers.kaist.auxiliary_classes import (
     CsvDataLocation,
     StereoImgDataLocation,
 )
-from slam.setup_manager.sensors_factory.sensors import Sensor, Imu
+from slam.setup_manager.sensors_factory.sensors import Imu, Sensor
 from slam.system_configs.system.setup_manager.sensors_factory import (
     SensorConfig,
     SensorFactoryConfig,

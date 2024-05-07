@@ -4,8 +4,6 @@ from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.system.setup_manager.sensors import SensorConfig
 
-
-
 SensorsFactory.get_sensor("Imu")
 
 
