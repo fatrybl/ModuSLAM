@@ -7,19 +7,16 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 
 
 class LidarSubmapAnalyzer(CandidateAnalyzer):
-    """Decides if an amount of states with point clouds is enough to be form a
-    candidate.
-
-    For simplicity, the analyzer checks if the only 1 state is present in the candidate.
-    """
+    """Simple analyzer for lidar pointcloud sub-map candidate."""
 
     def __init__(self):
-        self.num_required_states: int = 1
+        self._num_required_states: int = 1
 
     def check_readiness(self, graph_candidate: GraphCandidate) -> bool:
-        """Checks graph candidate if readiness criteria are satisfied.
+        """Checks graph candidate if readiness criterion is satisfied.
+        Criterion: 1 state with lidar pointcloud is present in the candidate.
 
         Returns:
-            status (bool): the status of a candidate.
+            status: the readiness status.
         """
-        return len(graph_candidate.states) == self.num_required_states
+        return len(graph_candidate.states) == self._num_required_states

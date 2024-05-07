@@ -8,20 +8,15 @@ from pytest import mark
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
-from slam.system_configs.system.data_manager.batch_factory.batch_factory import (
+from slam.system_configs.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import (
+from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.memory import (
-    MemoryAnalyzerConfig,
-)
-from slam.system_configs.system.data_manager.batch_factory.regime import (
-    RegimeConfig,
-    Stream,
-)
-from slam.utils.auxiliary_dataclasses import PeriodicData
+from slam.system_configs.data_manager.batch_factory.memory import MemoryAnalyzerConfig
+from slam.system_configs.data_manager.batch_factory.regime import RegimeConfig, Stream
+from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 from slam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.batch_factory.private.scenarios import sc1
 
@@ -34,7 +29,7 @@ class TestAddData:
     def test_add_data_1(
         self,
         cfg: DatasetConfig,
-        periodic_data: PeriodicData,
+        periodic_data: PeriodicDataRequest,
         reference_result: Element | Exception,
     ):
 

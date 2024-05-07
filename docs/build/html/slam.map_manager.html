@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.map_manager package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.map_manager package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.map_manager.graph_saver">slam.map_manager.graph_saver module</a><ul>
+<li><a class="reference internal" href="#slam.map_manager.graph_saver.GraphSaver"><code class="docutils literal notranslate"><span class="pre">GraphSaver</span></code></a><ul>
+<li><a class="reference internal" href="#slam.map_manager.graph_saver.GraphSaver.save_to_file"><code class="docutils literal notranslate"><span class="pre">GraphSaver.save_to_file()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.graph_saver.GraphSaver.save_to_pdf"><code class="docutils literal notranslate"><span class="pre">GraphSaver.save_to_pdf()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.graph_saver.GraphSaver.view"><code class="docutils literal notranslate"><span class="pre">GraphSaver.view()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.map_manager.map_manager">slam.map_manager.map_manager module</a><ul>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager"><code class="docutils literal notranslate"><span class="pre">MapManager</span></code></a><ul>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.__init__"><code class="docutils literal notranslate"><span class="pre">MapManager.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.map"><code class="docutils literal notranslate"><span class="pre">MapManager.map</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.create_map"><code class="docutils literal notranslate"><span class="pre">MapManager.create_map()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.visualize_map"><code class="docutils literal notranslate"><span class="pre">MapManager.visualize_map()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.save_map"><code class="docutils literal notranslate"><span class="pre">MapManager.save_map()</span></code></a></li>
+<li><a class="reference internal" href="#slam.map_manager.map_manager.MapManager.save_graph"><code class="docutils literal notranslate"><span class="pre">MapManager.save_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.map_manager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.map_manager package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.map_manager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-map-manager-package">
+<h1>slam.map_manager package<a class="headerlink" href="#slam-map-manager-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="slam.map_manager.map_factories.html">slam.map_manager.map_factories package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.map_factories.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.map_factories.html#module-slam.map_manager.map_factories.lidar_map_factory">slam.map_manager.map_factories.lidar_map_factory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.__init__"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.map"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory.map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.vertices_types"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory.vertices_types</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.create"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._create_requests_table"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._create_requests_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._get_elements"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._get_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._create_vertex_measurements_table"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._create_vertex_measurements_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._get_unique_elements"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._get_unique_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._create_vertex_elements_table"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._create_vertex_elements_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._values_to_array"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._values_to_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._filter_array"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._filter_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._transform_pointcloud"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._transform_pointcloud()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._build_pointcloud()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud_map"><code class="docutils literal notranslate"><span class="pre">LidarMapFactory._build_pointcloud_map()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.map_factories.html#module-slam.map_manager.map_factories.lidar_map_utils">slam.map_manager.map_factories.lidar_map_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.LidarMapLoader"><code class="docutils literal notranslate"><span class="pre">LidarMapLoader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.__init__"><code class="docutils literal notranslate"><span class="pre">LidarMapLoader.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.save"><code class="docutils literal notranslate"><span class="pre">LidarMapLoader.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.load"><code class="docutils literal notranslate"><span class="pre">LidarMapLoader.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer"><code class="docutils literal notranslate"><span class="pre">PointcloudVisualizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.map_factories.html#slam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer.visualize"><code class="docutils literal notranslate"><span class="pre">PointcloudVisualizer.visualize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.map_factories.html#module-slam.map_manager.map_factories">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slam.map_manager.maps.html">slam.map_manager.maps package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.maps.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.maps.html#module-slam.map_manager.maps.lidar_map">slam.map_manager.maps.lidar_map module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="slam.map_manager.maps.html#slam.map_manager.maps.lidar_map.LidarMap"><code class="docutils literal notranslate"><span class="pre">LidarMap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.maps.html#slam.map_manager.maps.lidar_map.LidarMap.pointcloud"><code class="docutils literal notranslate"><span class="pre">LidarMap.pointcloud</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="slam.map_manager.maps.html#slam.map_manager.maps.lidar_map.LidarMap.set_points"><code class="docutils literal notranslate"><span class="pre">LidarMap.set_points()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="slam.map_manager.maps.html#module-slam.map_manager.maps">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.map_manager.graph_saver">
+<span id="slam-map-manager-graph-saver-module"></span><h2>slam.map_manager.graph_saver module<a class="headerlink" href="#module-slam.map_manager.graph_saver" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.map_manager.graph_saver.GraphSaver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.map_manager.graph_saver.</span></span><span class="sig-name descname"><span class="pre">GraphSaver</span></span><a class="reference internal" href="_modules/slam/map_manager/graph_saver.html#GraphSaver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.graph_saver.GraphSaver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Saves the graph.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.graph_saver.GraphSaver.save_to_file">
+<span class="sig-name descname"><span class="pre">save_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/graph_saver.html#GraphSaver.save_to_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.graph_saver.GraphSaver.save_to_file" title="Link to this definition"></a></dt>
+<dd><p>Saves graph to the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> – a graph to save.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.graph_saver.GraphSaver.save_to_pdf">
+<span class="sig-name descname"><span class="pre">save_to_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/graph_saver.html#GraphSaver.save_to_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.graph_saver.GraphSaver.save_to_pdf" title="Link to this definition"></a></dt>
+<dd><p>Saves graph to .pdf file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> – a graph to save.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.graph_saver.GraphSaver.view">
+<span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/graph_saver.html#GraphSaver.view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.graph_saver.GraphSaver.view" title="Link to this definition"></a></dt>
+<dd><p>Visualizes the .pdf file with the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> – a graph to visualize.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.map_manager.map_manager">
+<span id="slam-map-manager-map-manager-module"></span><h2>slam.map_manager.map_manager module<a class="headerlink" href="#module-slam.map_manager.map_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.map_manager.map_manager.</span></span><span class="sig-name descname"><span class="pre">MapManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.map_manager.html#slam.system_configs.map_manager.map_manager.MapManagerConfig" title="slam.system_configs.map_manager.map_manager.MapManagerConfig"><span class="pre">MapManagerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages all manipulations with the map.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.map_manager.html#slam.system_configs.map_manager.map_manager.MapManagerConfig" title="slam.system_configs.map_manager.map_manager.MapManagerConfig"><span class="pre">MapManagerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – map manager configuration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.map">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slam.map_manager.maps.html#slam.map_manager.maps.lidar_map.LidarMap" title="slam.map_manager.maps.lidar_map.LidarMap"><span class="pre">LidarMap</span></a></em><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.map" title="Link to this definition"></a></dt>
+<dd><p>Map instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.create_map">
+<span class="sig-name descname"><span class="pre">create_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.batch_factory.BatchFactory" title="slam.data_manager.factory.batch_factory.BatchFactory"><span class="pre">BatchFactory</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager.create_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.create_map" title="Link to this definition"></a></dt>
+<dd><p>Creates a map from the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><em>Graph</em></a>) – a graph to create a map from.</p></li>
+<li><p><strong>batch_factory</strong> – batch factory to create a data batch with map elements.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.visualize_map">
+<span class="sig-name descname"><span class="pre">visualize_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager.visualize_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.visualize_map" title="Link to this definition"></a></dt>
+<dd><p>Visualizes the map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.save_map">
+<span class="sig-name descname"><span class="pre">save_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager.save_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.save_map" title="Link to this definition"></a></dt>
+<dd><p>Saves the map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.map_manager.map_manager.MapManager.save_graph">
+<span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.graph.html#slam.frontend_manager.graph.graph.Graph" title="slam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/map_manager/map_manager.html#MapManager.save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.map_manager.map_manager.MapManager.save_graph" title="Link to this definition"></a></dt>
+<dd><p>Saves the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> – a graph to save.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.map_manager">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.map_manager" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

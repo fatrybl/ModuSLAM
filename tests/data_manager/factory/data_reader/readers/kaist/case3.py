@@ -1,17 +1,12 @@
 from slam.data_manager.factory.element import Element, Location, RawMeasurement
 from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
 from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import (
-    Stream,
-    TimeLimit,
-)
-from slam.system_configs.system.setup_manager.sensors import (
-    SensorConfig,
-    SensorFactoryConfig,
-)
+from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig
 from slam.utils.exceptions import ItemNotFoundError
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import (
     generate_sensors_configs,

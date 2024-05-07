@@ -1,5 +1,9 @@
 """Tests for the OrderedSet class."""
 
+from typing import Any
+
+import pytest
+
 from slam.utils.ordered_set import OrderedSet
 
 
@@ -10,12 +14,44 @@ def test_add():
     assert len(os) == 1
 
 
+def test_add_multiple():
+    os = OrderedSet[int]()
+    os.add([1, 2, 3])
+    assert 1 in os
+    assert 2 in os
+    assert 3 in os
+    assert len(os) == 3
+
+
+def test_add_non_hashable_exception():
+    os = OrderedSet[Any]()
+    with pytest.raises(TypeError):
+        os.add([1, 2, [3, 4]])  # [3, 4] is not hashable
+
+
 def test_remove():
     os = OrderedSet[int]()
     os.add(1)
     os.remove(1)
     assert 1 not in os
     assert len(os) == 0
+
+
+def test_remove_multiple():
+    os = OrderedSet[int]()
+    os.add([1, 2, 3])
+    os.remove([1, 2])
+    assert 1 not in os
+    assert 2 not in os
+    assert 3 in os
+    assert len(os) == 1
+
+
+def test_remove_exception():
+    os = OrderedSet[int]()
+    os.add(1)
+    with pytest.raises(KeyError):
+        os.remove(2)
 
 
 def test_first():

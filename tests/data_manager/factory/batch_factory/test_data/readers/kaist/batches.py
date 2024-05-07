@@ -4,7 +4,7 @@ import itertools
 
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
-from slam.utils.auxiliary_dataclasses import PeriodicData, TimeRange
+from slam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 from tests_data.kaist_urban_dataset.data import (
     el1,
     el2,
@@ -33,28 +33,28 @@ from tests_data.kaist_urban_dataset.data import (
     el25,
 )
 
-imu_requests: set[PeriodicData] = {
-    PeriodicData(
+imu_requests: set[PeriodicDataRequest] = {
+    PeriodicDataRequest(
         sensor=el3.measurement.sensor,
         period=TimeRange(start=el3.timestamp, stop=el3.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el10.measurement.sensor,
         period=TimeRange(start=el10.timestamp, stop=el10.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el23.measurement.sensor,
         period=TimeRange(start=el23.timestamp, stop=el23.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el3.measurement.sensor,
         period=TimeRange(start=el3.timestamp, stop=el23.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el3.measurement.sensor,
         period=TimeRange(start=el3.timestamp, stop=el10.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el10.measurement.sensor,
         period=TimeRange(start=el10.timestamp, stop=el23.timestamp),
     ),
@@ -66,28 +66,28 @@ imu_batch.add(el10)
 imu_batch.add(el23)
 
 
-lidar2D_requests: set[PeriodicData] = {
-    PeriodicData(
+lidar2D_requests: set[PeriodicDataRequest] = {
+    PeriodicDataRequest(
         sensor=el5.measurement.sensor,
         period=TimeRange(start=el5.timestamp, stop=el5.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el14.measurement.sensor,
         period=TimeRange(start=el14.timestamp, stop=el14.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el25.measurement.sensor,
         period=TimeRange(start=el25.timestamp, stop=el25.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el5.measurement.sensor,
         period=TimeRange(start=el5.timestamp, stop=el25.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el5.measurement.sensor,
         period=TimeRange(start=el5.timestamp, stop=el14.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el14.measurement.sensor,
         period=TimeRange(start=el14.timestamp, stop=el25.timestamp),
     ),
@@ -99,28 +99,28 @@ lidar2D_batch.add(el14)
 lidar2D_batch.add(el25)
 
 
-stereo_requests: set[PeriodicData] = {
-    PeriodicData(
+stereo_requests: set[PeriodicDataRequest] = {
+    PeriodicDataRequest(
         sensor=el19.measurement.sensor,
         period=TimeRange(start=el19.timestamp, stop=el19.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el22.measurement.sensor,
         period=TimeRange(start=el22.timestamp, stop=el22.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el24.measurement.sensor,
         period=TimeRange(start=el24.timestamp, stop=el24.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el19.measurement.sensor,
         period=TimeRange(start=el19.timestamp, stop=el24.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el19.measurement.sensor,
         period=TimeRange(start=el19.timestamp, stop=el22.timestamp),
     ),
-    PeriodicData(
+    PeriodicDataRequest(
         sensor=el22.measurement.sensor,
         period=TimeRange(start=el22.timestamp, stop=el24.timestamp),
     ),
@@ -137,15 +137,15 @@ for el in [el3, el5, el10, el14, el19, el22, el23, el24, el25]:
 
 common_requests = {*imu_requests, *lidar2D_requests, *stereo_requests}
 
-imu_scenario: tuple[set[PeriodicData], DataBatch] = (imu_requests, imu_batch)
-lidar2D_scenario: tuple[set[PeriodicData], DataBatch] = (
+imu_scenario: tuple[set[PeriodicDataRequest], DataBatch] = (imu_requests, imu_batch)
+lidar2D_scenario: tuple[set[PeriodicDataRequest], DataBatch] = (
     lidar2D_requests,
     lidar2D_batch,
 )
-stereo_scenario: tuple[set[PeriodicData], DataBatch] = (stereo_requests, stereo_batch)
-common_scenario: tuple[set[PeriodicData], DataBatch] = (common_requests, common_batch)
+stereo_scenario: tuple[set[PeriodicDataRequest], DataBatch] = (stereo_requests, stereo_batch)
+common_scenario: tuple[set[PeriodicDataRequest], DataBatch] = (common_requests, common_batch)
 
-kaist_dataset_requests_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
+kaist_dataset_requests_scenarios: list[tuple[set[PeriodicDataRequest], DataBatch]] = [
     imu_scenario,
     lidar2D_scenario,
     stereo_scenario,
@@ -216,13 +216,13 @@ t_range_5 = TimeRange(el3.timestamp, el23.timestamp)
 
 time_limit_batches: list[DataBatch] = [all_elements_batch, b1, b2, b3]
 
-request1 = PeriodicData(sensor=el1.measurement.sensor, period=t_range_2)
-request2 = PeriodicData(sensor=el25.measurement.sensor, period=t_range_3)
-request3 = PeriodicData(sensor=el3.measurement.sensor, period=t_range_5)
-all_requests: set[PeriodicData] = {request1, request2, request3}
+request1 = PeriodicDataRequest(sensor=el1.measurement.sensor, period=t_range_2)
+request2 = PeriodicDataRequest(sensor=el25.measurement.sensor, period=t_range_3)
+request3 = PeriodicDataRequest(sensor=el3.measurement.sensor, period=t_range_5)
+all_requests: set[PeriodicDataRequest] = {request1, request2, request3}
 
 
-time_limit_request_scenarios: list[tuple[set[PeriodicData], DataBatch]] = [
+time_limit_request_scenarios: list[tuple[set[PeriodicDataRequest], DataBatch]] = [
     ({request1}, b1),
     ({request2}, b2),
     ({request3}, b4),

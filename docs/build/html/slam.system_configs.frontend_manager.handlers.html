@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.system_configs.frontend_manager.handlers package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.system_configs.frontend_manager.handlers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.system_configs.frontend_manager.handlers.base_handler">slam.system_configs.frontend_manager.handlers.base_handler module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><code class="docutils literal notranslate"><span class="pre">HandlerConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.name"><code class="docutils literal notranslate"><span class="pre">HandlerConfig.name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.type_name"><code class="docutils literal notranslate"><span class="pre">HandlerConfig.type_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.module_name"><code class="docutils literal notranslate"><span class="pre">HandlerConfig.module_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.frontend_manager.handlers.imu">slam.system_configs.frontend_manager.handlers.imu module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.imu.ImuPreintegratorConfig"><code class="docutils literal notranslate"><span class="pre">ImuPreintegratorConfig</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.frontend_manager.handlers.lidar_odometry">slam.system_configs.frontend_manager.handlers.lidar_odometry module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.name"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.type_name"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.type_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.module_name"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.module_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_points_per_voxel"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.max_points_per_voxel</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.voxel_size"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.voxel_size</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.adaptive_initial_threshold"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.adaptive_initial_threshold</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.min_range"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.min_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_range"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.max_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.deskew"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.deskew</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.preprocess"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.preprocess</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.measurement_noise_covariance"><code class="docutils literal notranslate"><span class="pre">KissIcpScanMatcherConfig.measurement_noise_covariance</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.frontend_manager.handlers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.system_configs.frontend_manager.handlers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.system_configs.frontend_manager.handlers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-system-configs-frontend-manager-handlers-package">
+<h1>slam.system_configs.frontend_manager.handlers package<a class="headerlink" href="#slam-system-configs-frontend-manager-handlers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.system_configs.frontend_manager.handlers.base_handler">
+<span id="slam-system-configs-frontend-manager-handlers-base-handler-module"></span><h2>slam.system_configs.frontend_manager.handlers.base_handler module<a class="headerlink" href="#module-slam.system_configs.frontend_manager.handlers.base_handler" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.frontend_manager.handlers.base_handler.</span></span><span class="sig-name descname"><span class="pre">HandlerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/frontend_manager/handlers/base_handler.html#HandlerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base handler configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.type_name">
+<span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.type_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.module_name">
+<span class="sig-name descname"><span class="pre">module_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig.module_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.frontend_manager.handlers.imu">
+<span id="slam-system-configs-frontend-manager-handlers-imu-module"></span><h2>slam.system_configs.frontend_manager.handlers.imu module<a class="headerlink" href="#module-slam.system_configs.frontend_manager.handlers.imu" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.imu.ImuPreintegratorConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.frontend_manager.handlers.imu.</span></span><span class="sig-name descname"><span class="pre">ImuPreintegratorConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/frontend_manager/handlers/imu.html#ImuPreintegratorConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.imu.ImuPreintegratorConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">HandlerConfig</span></code></a></p>
+<p>IMU preintegrator configuration.</p>
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.frontend_manager.handlers.lidar_odometry">
+<span id="slam-system-configs-frontend-manager-handlers-lidar-odometry-module"></span><h2>slam.system_configs.frontend_manager.handlers.lidar_odometry module<a class="headerlink" href="#module-slam.system_configs.frontend_manager.handlers.lidar_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.frontend_manager.handlers.lidar_odometry.</span></span><span class="sig-name descname"><span class="pre">KissIcpScanMatcherConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'kiss_icp_odometry'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'ScanMatcher'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'.pointcloud_matcher'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_points_per_voxel:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_initial_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deskew:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_noise_covariance:</span> <span class="pre">tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/frontend_manager/handlers/lidar_odometry.html#KissIcpScanMatcherConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">HandlerConfig</span></code></a></p>
+<p>Configuration for the KISS ICP odometry.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'kiss_icp_odometry'</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.type_name">
+<span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ScanMatcher'</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.type_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.module_name">
+<span class="sig-name descname"><span class="pre">module_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'.pointcloud_matcher'</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.module_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_points_per_voxel">
+<span class="sig-name descname"><span class="pre">max_points_per_voxel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_points_per_voxel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.voxel_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.adaptive_initial_threshold">
+<span class="sig-name descname"><span class="pre">adaptive_initial_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3.0</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.adaptive_initial_threshold" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.min_range">
+<span class="sig-name descname"><span class="pre">min_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.min_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_range">
+<span class="sig-name descname"><span class="pre">max_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.max_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.deskew">
+<span class="sig-name descname"><span class="pre">deskew</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.deskew" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.preprocess" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.measurement_noise_covariance">
+<span class="sig-name descname"><span class="pre">measurement_noise_covariance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig.measurement_noise_covariance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.frontend_manager.handlers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.system_configs.frontend_manager.handlers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

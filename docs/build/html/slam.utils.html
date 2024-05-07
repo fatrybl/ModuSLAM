@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.utils package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.utils package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.utils.auxiliary_dataclasses">slam.utils.auxiliary_dataclasses module</a><ul>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange"><code class="docutils literal notranslate"><span class="pre">TimeRange</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange.start"><code class="docutils literal notranslate"><span class="pre">TimeRange.start</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange.stop"><code class="docutils literal notranslate"><span class="pre">TimeRange.stop</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange.__post_init__"><code class="docutils literal notranslate"><span class="pre">TimeRange.__post_init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest.sensor"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest.sensor</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest.period"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest.period</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils.auxiliary_methods">slam.utils.auxiliary_methods module</a><ul>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.create_vector_3"><code class="docutils literal notranslate"><span class="pre">create_vector_3()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.create_vector_n"><code class="docutils literal notranslate"><span class="pre">create_vector_n()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.tuple_to_gtsam_pose3"><code class="docutils literal notranslate"><span class="pre">tuple_to_gtsam_pose3()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.as_int"><code class="docutils literal notranslate"><span class="pre">as_int()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.check_dimensionality"><code class="docutils literal notranslate"><span class="pre">check_dimensionality()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.equal_images"><code class="docutils literal notranslate"><span class="pre">equal_images()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.equal_elements"><code class="docutils literal notranslate"><span class="pre">equal_elements()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.import_object"><code class="docutils literal notranslate"><span class="pre">import_object()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.auxiliary_methods.sort"><code class="docutils literal notranslate"><span class="pre">sort()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils.deque_set">slam.utils.deque_set module</a><ul>
+<li><a class="reference internal" href="#slam.utils.deque_set.multiple"><code class="docutils literal notranslate"><span class="pre">multiple()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet"><code class="docutils literal notranslate"><span class="pre">DequeSet</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.__eq__"><code class="docutils literal notranslate"><span class="pre">DequeSet.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.items"><code class="docutils literal notranslate"><span class="pre">DequeSet.items</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.empty"><code class="docutils literal notranslate"><span class="pre">DequeSet.empty</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.add"><code class="docutils literal notranslate"><span class="pre">DequeSet.add()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.remove"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.remove_first"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove_first()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.remove_last"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove_last()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.sort"><code class="docutils literal notranslate"><span class="pre">DequeSet.sort()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.DequeSet.clear"><code class="docutils literal notranslate"><span class="pre">DequeSet.clear()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slam.utils.deque_set.MultipleDequeSet"><code class="docutils literal notranslate"><span class="pre">MultipleDequeSet</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.deque_set.MultipleDequeSet.add"><code class="docutils literal notranslate"><span class="pre">MultipleDequeSet.add()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.deque_set.MultipleDequeSet.remove"><code class="docutils literal notranslate"><span class="pre">MultipleDequeSet.remove()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils.exceptions">slam.utils.exceptions module</a><ul>
+<li><a class="reference internal" href="#slam.utils.exceptions.ItemNotFoundError"><code class="docutils literal notranslate"><span class="pre">ItemNotFoundError</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.exceptions.ConfigFileNotValid"><code class="docutils literal notranslate"><span class="pre">ConfigFileNotValid</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.exceptions.FileNotValid"><code class="docutils literal notranslate"><span class="pre">FileNotValid</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.exceptions.NotSubset"><code class="docutils literal notranslate"><span class="pre">NotSubset</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.exceptions.ExternalModuleException"><code class="docutils literal notranslate"><span class="pre">ExternalModuleException</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.exceptions.DimensionalityError"><code class="docutils literal notranslate"><span class="pre">DimensionalityError</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils.numpy_types">slam.utils.numpy_types module</a></li>
+<li><a class="reference internal" href="#module-slam.utils.ordered_set">slam.utils.ordered_set module</a><ul>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet"><code class="docutils literal notranslate"><span class="pre">OrderedSet</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.__getitem__"><code class="docutils literal notranslate"><span class="pre">OrderedSet.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.__eq__"><code class="docutils literal notranslate"><span class="pre">OrderedSet.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.items"><code class="docutils literal notranslate"><span class="pre">OrderedSet.items</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.first"><code class="docutils literal notranslate"><span class="pre">OrderedSet.first</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.last"><code class="docutils literal notranslate"><span class="pre">OrderedSet.last</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.add"><code class="docutils literal notranslate"><span class="pre">OrderedSet.add()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet.remove"><code class="docutils literal notranslate"><span class="pre">OrderedSet.remove()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.ordered_set.OrderedSet._is_hashable"><code class="docutils literal notranslate"><span class="pre">OrderedSet._is_hashable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils.stopping_criterion">slam.utils.stopping_criterion module</a><ul>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.State.memory_limit"><code class="docutils literal notranslate"><span class="pre">State.memory_limit</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.State.data_processed"><code class="docutils literal notranslate"><span class="pre">State.data_processed</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.State.time_finished"><code class="docutils literal notranslate"><span class="pre">State.time_finished</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.State.solver_error"><code class="docutils literal notranslate"><span class="pre">State.solver_error</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.StoppingCriterion"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion</span></code></a><ul>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.StoppingCriterion.state"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.state</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.StoppingCriterion.is_active"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.is_active()</span></code></a></li>
+<li><a class="reference internal" href="#slam.utils.stopping_criterion.StoppingCriterion.reset"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-utils-package">
+<h1>slam.utils package<a class="headerlink" href="#slam-utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.utils.auxiliary_dataclasses">
+<span id="slam-utils-auxiliary-dataclasses-module"></span><h2>slam.utils.auxiliary_dataclasses module<a class="headerlink" href="#module-slam.utils.auxiliary_dataclasses" title="Link to this heading"></a></h2>
+<p>This module contains auxiliary dataclasses that are used in the slam package.</p>
+<p>Any dataclass that is used in multiple packages may be defined here.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.TimeRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_dataclasses.</span></span><span class="sig-name descname"><span class="pre">TimeRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/auxiliary_dataclasses.html#TimeRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.TimeRange" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents time range with start/stop timestamps.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.TimeRange.start">
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.TimeRange.start" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.TimeRange.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.TimeRange.stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.TimeRange.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_dataclasses.html#TimeRange.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.TimeRange.__post_init__" title="Link to this definition"></a></dt>
+<dd><p>Check if the start and stop timestamps are valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If start or stop timestamp is negative or if start is greater than stop.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.PeriodicDataRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_dataclasses.</span></span><span class="sig-name descname"><span class="pre">PeriodicDataRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.setup_manager.sensors_factory.html#slam.setup_manager.sensors_factory.sensors.Sensor" title="slam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">Sensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/auxiliary_dataclasses.html#PeriodicDataRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A request for periodic data from a sensor with start/stop time margins.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.PeriodicDataRequest.sensor">
+<span class="sig-name descname"><span class="pre">sensor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slam.setup_manager.sensors_factory.html#slam.setup_manager.sensors_factory.sensors.Sensor" title="slam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">Sensor</span></a></em><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest.sensor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_dataclasses.PeriodicDataRequest.period">
+<span class="sig-name descname"><span class="pre">period</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.utils.auxiliary_dataclasses.TimeRange" title="slam.utils.auxiliary_dataclasses.TimeRange"><span class="pre">TimeRange</span></a></em><a class="headerlink" href="#slam.utils.auxiliary_dataclasses.PeriodicDataRequest.period" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.utils.auxiliary_methods">
+<span id="slam-utils-auxiliary-methods-module"></span><h2>slam.utils.auxiliary_methods module<a class="headerlink" href="#module-slam.utils.auxiliary_methods" title="Link to this heading"></a></h2>
+<p>Auxiliary methods for the slam package.</p>
+<p>Any method used in multiple modules/packages may be defined here.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.create_vector_3">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#create_vector_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.create_vector_3" title="Link to this definition"></a></dt>
+<dd><p>Creates 3D float64 numpy array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.create_vector_n">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#create_vector_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.create_vector_n" title="Link to this definition"></a></dt>
+<dd><p>Creates N-dimensional float64 numpy array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.tuple_to_gtsam_pose3">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">tuple_to_gtsam_pose3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pose3</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#tuple_to_gtsam_pose3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.tuple_to_gtsam_pose3" title="Link to this definition"></a></dt>
+<dd><p>Converts a tuple of (x, y, z, roll, pitch, yaw) to gtsam.Pose3 object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>values</strong> – (x, y, z, roll, pitch, yaw).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>gtsam.Pose3.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.as_int">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">as_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#as_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.as_int" title="Link to this definition"></a></dt>
+<dd><p>Converts value to int.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – input value.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>int value.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the value can not be converted to int.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.check_dimensionality">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">check_dimensionality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#check_dimensionality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.check_dimensionality" title="Link to this definition"></a></dt>
+<dd><p>Checks if the array has the required shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> – numpy array to check.</p></li>
+<li><p><strong>shape</strong> – required shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#slam.utils.exceptions.DimensionalityError" title="slam.utils.exceptions.DimensionalityError"><strong>DimensionalityError</strong></a> – if the array has wrong shape.</p>
+</dd>
+</dl>
+<p>TODO: add tests.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.equal_images">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Image</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imgs_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Image</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#equal_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.equal_images" title="Link to this definition"></a></dt>
+<dd><p>Compares two items with Image data.</p>
+<p>PIL images can not be compared directly because of different subclasses.
+Manually created image from numpy.array is of type Image.Image,
+but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>imgs_1</strong> – 1-st tuple with images.</p></li>
+<li><p><strong>imgs_2</strong> – 2-nd tuple with images.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>equality result.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#slam.utils.exceptions.DimensionalityError" title="slam.utils.exceptions.DimensionalityError"><strong>DimensionalityError</strong></a> – if the tuples have different number of images.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.equal_elements">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.element.Element" title="slam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">el2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.data_manager.factory.html#slam.data_manager.factory.element.Element" title="slam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#equal_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.equal_elements" title="Link to this definition"></a></dt>
+<dd><p>Compares two elements.</p>
+<p>If the values are of type Image, they are compared separately with equal_images() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>el1</strong> – 1-st element.</p></li>
+<li><p><strong>el2</strong> – 2-nd element.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>comparison result.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.import_object">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">import_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">type</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#import_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.import_object" title="Link to this definition"></a></dt>
+<dd><p>Imports object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_name</strong> – class name.</p></li>
+<li><p><strong>module_name</strong> – name of the module to import from.</p></li>
+<li><p><strong>package_name</strong> – name of the package to import a module from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>imported object.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ModuleNotFoundError</strong> – if the module is not found.</p></li>
+<li><p><strong>AttributeError</strong> – if the object is not found in the module.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.auxiliary_methods.sort">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/slam/utils/auxiliary_methods.html#sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.auxiliary_methods.sort" title="Link to this definition"></a></dt>
+<dd><p>Sorts files in a directory by name, time or size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> – directory to sort.</p></li>
+<li><p><strong>key</strong> – sorting key.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>sorted list of files.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the key is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-slam.utils.deque_set">
+<span id="slam-utils-deque-set-module"></span><h2>slam.utils.deque_set module<a class="headerlink" href="#module-slam.utils.deque_set" title="Link to this heading"></a></h2>
+<p>Deque-set data structure implementation.</p>
+<dl class="simple">
+<dt>Complexity:</dt><dd><p>O(1): add(), contains(item: T), remove_first(), remove_last(), __getitem__(index: int).
+O(N): remove(item: T)</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="slam.utils.deque_set.multiple">
+<span class="sig-prename descclassname"><span class="pre">slam.utils.deque_set.</span></span><span class="sig-name descname"><span class="pre">multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/deque_set.html#multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.multiple" title="Link to this definition"></a></dt>
+<dd><p>Decorator for multiple deque-sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> – function to be decorated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.deque_set.</span></span><span class="sig-name descname"><span class="pre">DequeSet</span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>DequeSet is a combination of set and deque.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.__eq__" title="Link to this definition"></a></dt>
+<dd><p>Compares if this DequeSet is equal to another DequeSet. Two DequeSets are
+equal if they have the same elements in the same order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – DequeSet to compare with.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>equality result.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.items">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">items</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">deque</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.utils.deque_set.DequeSet.items" title="Link to this definition"></a></dt>
+<dd><p>Items in deque-set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.empty">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">empty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#slam.utils.deque_set.DequeSet.empty" title="Link to this definition"></a></dt>
+<dd><p>Empty status of deque-set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.add" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Adds new item:</dt><dd><ol class="arabic simple">
+<li><p>Add to set to avoid duplicates.</p></li>
+<li><p>Add to deque for fast front-pop().</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item(s) to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.remove" title="Link to this definition"></a></dt>
+<dd><p>Removes item from set and deque.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item to be removed.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if item is not in deque-set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.remove_first">
+<span class="sig-name descname"><span class="pre">remove_first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.remove_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.remove_first" title="Link to this definition"></a></dt>
+<dd><p>Removes first item from deque-set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – if deque is empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.remove_last">
+<span class="sig-name descname"><span class="pre">remove_last</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.remove_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.remove_last" title="Link to this definition"></a></dt>
+<dd><p>Removes last item from deque-set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – if deque-set is empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.sort" title="Link to this definition"></a></dt>
+<dd><p>Sorts deque with the given key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – key function to sort deque.</p></li>
+<li><p><strong>reverse</strong> – reverse sorting order.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.DequeSet.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#DequeSet.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.DequeSet.clear" title="Link to this definition"></a></dt>
+<dd><p>Clears deque-set.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.deque_set.MultipleDequeSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.deque_set.</span></span><span class="sig-name descname"><span class="pre">MultipleDequeSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">deque_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.utils.deque_set.DequeSet" title="slam.utils.deque_set.DequeSet"><span class="pre">DequeSet</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/deque_set.html#MultipleDequeSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.MultipleDequeSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.utils.deque_set.DequeSet" title="slam.utils.deque_set.DequeSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DequeSet</span></code></a></p>
+<p>Stores multiple deque-sets as one.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.MultipleDequeSet.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#MultipleDequeSet.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.MultipleDequeSet.add" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Adds new item:</dt><dd><ol class="arabic simple">
+<li><p>Add to set to avoid duplicates.</p></li>
+<li><p>Add to deque for fast front-pop().</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item(s) to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.deque_set.MultipleDequeSet.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/deque_set.html#MultipleDequeSet.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.deque_set.MultipleDequeSet.remove" title="Link to this definition"></a></dt>
+<dd><p>Removes item from set and deque.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item to be removed.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if item is not in deque-set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.utils.exceptions">
+<span id="slam-utils-exceptions-module"></span><h2>slam.utils.exceptions module<a class="headerlink" href="#module-slam.utils.exceptions" title="Link to this heading"></a></h2>
+<p>Custom exceptions.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.ItemNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">ItemNotFoundError</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#ItemNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.ItemNotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>The given item has not been found.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.ConfigFileNotValid">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">ConfigFileNotValid</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#ConfigFileNotValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.ConfigFileNotValid" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></p>
+<p>Config file is not valid.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.FileNotValid">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">FileNotValid</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#FileNotValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.FileNotValid" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Invalid file: not exists or empty</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.NotSubset">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotSubset</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#NotSubset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.NotSubset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>The set is not a subset of another set.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.ExternalModuleException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">ExternalModuleException</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#ExternalModuleException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.ExternalModuleException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>External module failed to work properly.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="slam.utils.exceptions.DimensionalityError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">DimensionalityError</span></span><a class="reference internal" href="_modules/slam/utils/exceptions.html#DimensionalityError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.exceptions.DimensionalityError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Invalid dimensions of an array.</p>
+</dd></dl>
+
+</section>
+<section id="module-slam.utils.numpy_types">
+<span id="slam-utils-numpy-types-module"></span><h2>slam.utils.numpy_types module<a class="headerlink" href="#module-slam.utils.numpy_types" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.utils.ordered_set">
+<span id="slam-utils-ordered-set-module"></span><h2>slam.utils.ordered_set module<a class="headerlink" href="#module-slam.utils.ordered_set" title="Link to this heading"></a></h2>
+<p>Ordered-set data structure implementation.</p>
+<dl class="simple">
+<dt>Complexity:</dt><dd><p>O(1): add(), contains(item: T), remove(item), remove_first, remove_last.
+O(N): __getitem__(index: int).</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.ordered_set.</span></span><span class="sig-name descname"><span class="pre">OrderedSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>OrderedSet is a combination of set and OrderedDict.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Attention: This method requires O(n) time complexity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> – index of an item.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>item.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IndexError</strong> – if index is out of range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.__eq__" title="Link to this definition"></a></dt>
+<dd><p>Compares if an OrderedSet is equal to another OrderedSet. Two OrderedSets are
+equal if they have the same elements in the same order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – OrderedSet to compare with.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>equality status.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.items">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">items</span></span><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.items" title="Link to this definition"></a></dt>
+<dd><p>All items in OrderedSet.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.first">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">first</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">T</span></em><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.first" title="Link to this definition"></a></dt>
+<dd><p>First item in OrderedSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – if OrderedSet is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.last">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">last</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">T</span></em><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.last" title="Link to this definition"></a></dt>
+<dd><p>Last item in OrderedSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – if OrderedSet is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.add" title="Link to this definition"></a></dt>
+<dd><p>Adds an item to the OrderedSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> (<em>T</em>) – item(s) to be added.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if an item is not hashable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet.remove" title="Link to this definition"></a></dt>
+<dd><p>Removes an item or items from the OrderedSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item(s) to be removed.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if an item is not in the OrderedSet.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.ordered_set.OrderedSet._is_hashable">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_is_hashable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/ordered_set.html#OrderedSet._is_hashable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.ordered_set.OrderedSet._is_hashable" title="Link to this definition"></a></dt>
+<dd><p>Checks if an item is hashable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>hash ability status.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.utils.stopping_criterion">
+<span id="slam-utils-stopping-criterion-module"></span><h2>slam.utils.stopping_criterion module<a class="headerlink" href="#module-slam.utils.stopping_criterion" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_processed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_finished</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/stopping_criterion.html#State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.stopping_criterion.State" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.State.memory_limit">
+<span class="sig-name descname"><span class="pre">memory_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.utils.stopping_criterion.State.memory_limit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.State.data_processed">
+<span class="sig-name descname"><span class="pre">data_processed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.utils.stopping_criterion.State.data_processed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.State.time_finished">
+<span class="sig-name descname"><span class="pre">time_finished</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.utils.stopping_criterion.State.time_finished" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.State.solver_error">
+<span class="sig-name descname"><span class="pre">solver_error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#slam.utils.stopping_criterion.State.solver_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.StoppingCriterion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.utils.stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">StoppingCriterion</span></span><a class="reference internal" href="_modules/slam/utils/stopping_criterion.html#StoppingCriterion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.stopping_criterion.StoppingCriterion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>High level criteria to stop mapping process.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.StoppingCriterion.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">State(memory_limit=False,</span> <span class="pre">data_processed=False,</span> <span class="pre">time_finished=False,</span> <span class="pre">solver_error=False)</span></em><a class="headerlink" href="#slam.utils.stopping_criterion.StoppingCriterion.state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.StoppingCriterion.is_active">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/slam/utils/stopping_criterion.html#StoppingCriterion.is_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.stopping_criterion.StoppingCriterion.is_active" title="Link to this definition"></a></dt>
+<dd><p>Checks if any of stopping criteria is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.utils.stopping_criterion.StoppingCriterion.reset">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/utils/stopping_criterion.html#StoppingCriterion.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.utils.stopping_criterion.StoppingCriterion.reset" title="Link to this definition"></a></dt>
+<dd><p>Resets all criteria to default values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

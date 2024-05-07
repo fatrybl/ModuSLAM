@@ -6,17 +6,15 @@ from plum import dispatch
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.data_manager.factory.element import Element
-from slam.system_configs.system.data_manager.data_manager import DataManagerConfig
-from slam.utils.auxiliary_dataclasses import PeriodicData
+from slam.logger.logging_config import data_manager
+from slam.system_configs.data_manager.data_manager import DataManagerConfig
+from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(data_manager)
 
 
 class DataManager:
-    """Manages all data processes.
-
-    TODO: remove public access to the batch_factory.
-    """
+    """Manages all data processes."""
 
     def __init__(self, cfg: DataManagerConfig) -> None:
         """
@@ -24,7 +22,7 @@ class DataManager:
             cfg (DataManagerConfig): config for DataManager.
         """
         self.batch_factory = BatchFactory(cfg.batch_factory)
-        logger.debug("Data Manager has been configured")
+        logger.debug("Data Manager has been configured.")
 
     @overload
     def make_batch(self) -> None:
@@ -39,6 +37,7 @@ class DataManager:
     def make_batch(self, measurements: deque[Element]) -> None:
         """
         @overload.
+
         Creates a data batch with given measurements
 
         Args:
@@ -48,13 +47,15 @@ class DataManager:
         logger.debug("Data Batch has been created")
 
     @overload
-    def make_batch(self, requests: set[PeriodicData]) -> None:
+    def make_batch(self, requests: set[PeriodicDataRequest]) -> None:
         """
         @overload.
+
         Creates a data batch from requests.
 
         Args:
-            requests (set[PeriodicData]): set of requests.
+            requests (set[PeriodicDataRequest]): set of requests.
+
             Each request corresponds to sensor and time limits: (start, stop)
         """
         self.batch_factory.create_batch(requests)
@@ -66,9 +67,7 @@ class DataManager:
         @overload.
 
         Calls:
-            1. Sequentially: create a batch with measurements sequentially:
-                Args:
-                    None
+            1. Sequentially: create a batch with measurements sequentially.
 
             2. With measurements: create a batch with given measurements:
                 Args:
@@ -76,6 +75,7 @@ class DataManager:
 
             3. With requests: create a batch with measurements from requests:
                 Args:
-                    requests (set[PeriodicData]): set of requests.
+                    requests (set[PeriodicDataRequest]): set of requests.
+
                     Each request corresponds to sensor and time limits: (start, stop).
         """

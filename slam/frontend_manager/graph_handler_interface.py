@@ -1,8 +1,12 @@
+import logging
 from collections.abc import Iterable
 from dataclasses import dataclass
 
 from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import frontend_manager
+
+logger = logging.getLogger(frontend_manager)
 
 
 @dataclass
@@ -28,7 +32,7 @@ class Request:
 
 
 class GraphHandlerInterface:
-    """Interface for classes that need to interact with the graph."""
+    """Interface for handlers that need to interact with the graph."""
 
     _graph: Graph | None = None
 

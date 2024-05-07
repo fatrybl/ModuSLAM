@@ -4,20 +4,20 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from slam.data_manager.factory.element import Element
-from slam.system_configs.system.frontend_manager.handlers.base_handler import (
-    HandlerConfig,
-)
+from slam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
 
 if TYPE_CHECKING:
-    from slam.frontend_manager.element_distributor.measurement_storage import (
-        Measurement,
-    )
+    from slam.frontend_manager.measurement_storage import Measurement
 
 
 class Handler(ABC):
-    """Base external module."""
+    """Base abstract handler for inheritance."""
 
     def __init__(self, config: HandlerConfig) -> None:
+        """
+        Args:
+            config: configuration of the handler.
+        """
         self._name = config.name
 
     @property
@@ -30,8 +30,8 @@ class Handler(ABC):
         """Processes the element.
 
         Args:
-            element (Element): element to be processed.
+            element: element of data batch to be processed.
 
         Returns:
-            Measurement | None: processed measurement.
+            measurement or None.
         """

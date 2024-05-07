@@ -2,6 +2,7 @@ import logging
 
 from slam.data_manager.factory.batch_factory import BatchFactory
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import map_manager
 from slam.map_manager.graph_saver import GraphSaver
 from slam.map_manager.map_factories.lidar_map_factory import LidarMapFactory
 from slam.map_manager.map_factories.lidar_map_utils import (
@@ -9,38 +10,41 @@ from slam.map_manager.map_factories.lidar_map_utils import (
     PointcloudVisualizer,
 )
 from slam.map_manager.maps.lidar_map import LidarMap
-from slam.system_configs.system.map_manager.map_manager import MapManagerConfig
+from slam.system_configs.map_manager.map_manager import MapManagerConfig
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(map_manager)
 
 
 class MapManager:
-    """Manages all map manipulations."""
+    """Manages all manipulations with the map."""
 
     def __init__(self, config: MapManagerConfig) -> None:
+        """
+        Args:
+            config: map manager configuration.
+        """
         self._map_factory = LidarMapFactory(config.map_factory)
         self._map_loader = LidarMapLoader(config.map_loader)
         self._graph_saver = GraphSaver()
         self._visualizer = PointcloudVisualizer()
+        logger.debug("Map Manager has been configured.")
 
     @property
     def map(self) -> LidarMap:
-        """Map instance.
-
-        Returns:
-            Map instance (LidarMap).
-        """
+        """Map instance."""
         return self._map_factory.map
 
     def create_map(self, graph: Graph, batch_factory: BatchFactory) -> None:
         """Creates a map from the graph.
 
         Args:
-            graph (Graph): graph to create the map from.
-            batch_factory (BatchFactory): batch factory to create the batch.
+            graph (Graph): a graph to create a map from.
+
+            batch_factory: batch factory to create a data batch with map elements.
         """
-        logger.info("Creating a map from the graph.")
+        logger.info("Creating a map from the graph...")
         self._map_factory.create(graph.vertex_storage, batch_factory)
+        logger.info("Map has been created.")
 
     def visualize_map(self) -> None:
         """Visualizes the map."""
@@ -49,12 +53,13 @@ class MapManager:
     def save_map(self) -> None:
         """Saves the map."""
         self._map_loader.save(self.map)
+        logger.info("Map has been saved.")
 
     def save_graph(self, graph: Graph) -> None:
         """Saves the graph.
 
         Args:
-            graph (Graph): graph to save.
+            graph: a graph to save.
         """
         self._graph_saver.save_to_pdf(graph)
-        self._graph_saver.save_to_file(graph)
+        logger.info("Graph has been saved.")

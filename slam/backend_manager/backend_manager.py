@@ -4,29 +4,33 @@ import gtsam
 
 from slam.backend_manager.graph_solver import GraphSolver
 from slam.frontend_manager.graph.graph import Graph
+from slam.logger.logging_config import backend_manager
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(backend_manager)
 
 
 class BackendManager:
-    """Manages all the backends."""
+    """Manages the backend."""
 
     def __init__(self):
-        self.graph_solver = GraphSolver()
-        self.result_values = gtsam.Values()
+        self._graph_solver = GraphSolver()
+        self._result_values = gtsam.Values()
+        logger.debug("Backend Manager has been configured.")
 
     def solve(self, graph: Graph) -> None:
-        """Solves the optimization problem for the given graph.
+        """Solves the optimization problem for the graph.
 
         Args:
-            graph (Graph): a graph with the factors to be solved.
+            graph: contains factor graph to be solved.
         """
-        self.result_values = self.graph_solver.solve(graph)
+        self._result_values = self._graph_solver.solve(graph)
+        logger.debug("Graph has been solved.")
 
     def update(self, graph: Graph) -> None:
-        """Updates the graph with the optimized values.
+        """Updates the graph with the calculated values.
 
         Args:
             graph (Graph): a graph to be updated.
         """
-        graph.update(self.result_values)
+        graph.update(self._result_values)
+        logger.debug("Graph has been updated.")

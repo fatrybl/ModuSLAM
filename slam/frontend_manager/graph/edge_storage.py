@@ -1,7 +1,5 @@
 from collections.abc import Iterable
-from typing import Generic, overload
-
-from plum import dispatch
+from typing import Generic
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
 
@@ -14,68 +12,29 @@ class EdgeStorage(Generic[GraphEdge]):
 
     @property
     def edges(self) -> set[GraphEdge]:
-        """Edges in the storage.
-
-        Returns:
-            set[GraphEdge]: edges in the storage.
-        """
+        """Edges in the storage."""
         return self._edges
 
-    @overload
-    def add(self, edge: GraphEdge):
-        """
-        @overload.
-        Adds new edge to the graph.
+    def add(self, edge: GraphEdge | Iterable[GraphEdge]):
+        """Adds new edge(s).
+
         Args:
-            edge (GraphEdge): edge to be added to the graph.
+            edge: edge(s) to be added.
         """
-        self._edges.add(edge)
+        if isinstance(edge, Iterable):
+            for e in edge:
+                self._edges.add(e)
+        else:
+            self._edges.add(edge)
 
-    @overload
-    def add(self, edge: Iterable[GraphEdge]):
-        """
-        @overload.
-        Adds new edges to the graph.
+    def remove(self, edge: GraphEdge | Iterable[GraphEdge]):
+        """Removes edge(s).
+
         Args:
-            edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
+            edge: edge(s) to be removed.
         """
-        [self.add(e) for e in edge]
-
-    @dispatch
-    def add(self, edge=None):
-        """
-        @overload.
-
-        Calls:
-            Args:
-                edge (GraphEdge): edge to be added to the graph.
-
-            Args:
-                edge (Iterable[GraphEdge]): multiple edges to be added to the graph.
-        """
-
-    @overload
-    def remove(self, edge: GraphEdge):
-        """
-        @overload.
-        Removes edge from the graph.
-        Args:
-            edge (GraphEdge): edge to be removed from the graph.
-        """
-        self._edges.remove(edge)
-
-    @overload
-    def remove(self, edge: Iterable[GraphEdge]):
-        """
-        @overload.
-        Removes multiple edges from the graph.
-        Args:
-            edge (Iterable[GraphEdge]): multiple edges to be removed from the graph.
-        """
-        [self.remove(e) for e in edge]
-
-    @dispatch
-    def remove(self, edge=None):
-        """
-        @overload.
-        """
+        if isinstance(edge, Iterable):
+            for e in edge:
+                self._edges.remove(e)
+        else:
+            self._edges.remove(edge)

@@ -1,6 +1,5 @@
 import gtsam
 
-from slam.frontend_manager.element_distributor.measurement_storage import Measurement
 from slam.frontend_manager.graph.base_edges import (
     BinaryEdge,
     CalibrationEdge,
@@ -8,18 +7,11 @@ from slam.frontend_manager.graph.base_edges import (
     UnaryEdge,
 )
 from slam.frontend_manager.graph.base_vertices import GraphVertex
+from slam.frontend_manager.measurement_storage import Measurement
 
 
-class SmartFactorEdge(CalibrationEdge):
-    """Edge for Smart Factor in the Graph.
-
-    Args:
-        vertex (GraphVertex): main vertex.
-        support_vertices (set[GraphVertex]): support vertices.
-        measurements (tuple[Measurement, ...]): elements of DataBatch which create the edge.
-        factor (gtsam.Factor): factor from GTSAM library.
-        noise_model (gtsam.noiseModel.Base): noise model for the factor.
-    """
+class SmartFactor(CalibrationEdge):
+    """Edge for Smart Factor in the Graph: https://dellaert.github.io/files/Carlone14icra.pdf"""
 
     def __init__(
         self,
@@ -29,19 +21,28 @@ class SmartFactorEdge(CalibrationEdge):
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
+        """
+        Args:
+            vertex: target vertex.
+
+            support_vertices: support vertices
+
+            measurements: measurements to be used in the factor.
+
+            factor: GTSAM factor.
+
+            noise_model: GTSAM noise model of the factor.
+        """
         super().__init__(measurements, vertex, support_vertices, factor, noise_model)
 
     @property
     def all_vertices(self) -> set[GraphVertex]:
+        """Vertices of the edge."""
         return {self.vertex}.union(self.vertices)
 
 
-class SmartStereoFeature(SmartFactorEdge):
-    """
-    Edge for smart Stereo Camera features:
-        - https://dellaert.github.io/files/Carlone14icra.pdf
-    TODO: check if a noise model is correct.
-    """
+class SmartStereoFeature(SmartFactor):
+    """Edge for smart Stereo Camera features."""
 
     def __init__(
         self,
@@ -49,8 +50,21 @@ class SmartStereoFeature(SmartFactorEdge):
         support_vertices: set[GraphVertex],
         measurements: tuple[Measurement, ...],
         factor: gtsam.SmartProjectionPose3Factor,
-        noise_model: gtsam.noiseModel.Isotropic,
+        noise_model: gtsam.noiseModel.Base,
     ) -> None:
+        """
+
+        Args:
+            vertex: target vertex (camera pose).
+
+            support_vertices: camera feature vertices.
+
+            measurements: from pose to features.
+
+            factor: GTSAM factor.
+
+            noise_model: GTSAM noise model of the factor.
+        """
         super().__init__(vertex, support_vertices, measurements, factor, noise_model)
 
         self.K: gtsam.Cal3_S2 = gtsam.Cal3_S2()

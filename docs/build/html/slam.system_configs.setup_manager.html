@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.system_configs.setup_manager package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.system_configs.setup_manager package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.edge_factories_initializer">slam.system_configs.setup_manager.edge_factories_initializer module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig"><code class="docutils literal notranslate"><span class="pre">EdgeFactoriesInitializerConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.package_name"><code class="docutils literal notranslate"><span class="pre">EdgeFactoriesInitializerConfig.package_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.edge_factories"><code class="docutils literal notranslate"><span class="pre">EdgeFactoriesInitializerConfig.edge_factories</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.handlers_factory">slam.system_configs.setup_manager.handlers_factory module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig"><code class="docutils literal notranslate"><span class="pre">HandlersFactoryConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.package_name"><code class="docutils literal notranslate"><span class="pre">HandlersFactoryConfig.package_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.handlers"><code class="docutils literal notranslate"><span class="pre">HandlersFactoryConfig.handlers</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.sensor_factory">slam.system_configs.setup_manager.sensor_factory module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig"><code class="docutils literal notranslate"><span class="pre">SensorFactoryConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig.sensors"><code class="docutils literal notranslate"><span class="pre">SensorFactoryConfig.sensors</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.sensors">slam.system_configs.setup_manager.sensors module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig"><code class="docutils literal notranslate"><span class="pre">SensorConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig.name"><code class="docutils literal notranslate"><span class="pre">SensorConfig.name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig.type_name"><code class="docutils literal notranslate"><span class="pre">SensorConfig.type_name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.type_name"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.type_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.max_range"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.max_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.min_range"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.min_range</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.fov"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.fov</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.num_channels"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.num_channels</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.tf_base_sensor"><code class="docutils literal notranslate"><span class="pre">Lidar3DConfig.tf_base_sensor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.setup_manager">slam.system_configs.setup_manager.setup_manager module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig"><code class="docutils literal notranslate"><span class="pre">SetupManagerConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.sensors_factory"><code class="docutils literal notranslate"><span class="pre">SetupManagerConfig.sensors_factory</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.handlers_factory"><code class="docutils literal notranslate"><span class="pre">SetupManagerConfig.handlers_factory</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.edge_factories_initializer"><code class="docutils literal notranslate"><span class="pre">SetupManagerConfig.edge_factories_initializer</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.state_analyzers_factory"><code class="docutils literal notranslate"><span class="pre">SetupManagerConfig.state_analyzers_factory</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager.state_analyzers_factory">slam.system_configs.setup_manager.state_analyzers_factory module</a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig"><code class="docutils literal notranslate"><span class="pre">StateAnalyzerFactoryConfig</span></code></a><ul>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.package_name"><code class="docutils literal notranslate"><span class="pre">StateAnalyzerFactoryConfig.package_name</span></code></a></li>
+<li><a class="reference internal" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.analyzers"><code class="docutils literal notranslate"><span class="pre">StateAnalyzerFactoryConfig.analyzers</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.system_configs.setup_manager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.system_configs.setup_manager package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.system_configs.setup_manager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-system-configs-setup-manager-package">
+<h1>slam.system_configs.setup_manager package<a class="headerlink" href="#slam-system-configs-setup-manager-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.system_configs.setup_manager.edge_factories_initializer">
+<span id="slam-system-configs-setup-manager-edge-factories-initializer-module"></span><h2>slam.system_configs.setup_manager.edge_factories_initializer module<a class="headerlink" href="#module-slam.system_configs.setup_manager.edge_factories_initializer" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.edge_factories_initializer.</span></span><span class="sig-name descname"><span class="pre">EdgeFactoriesInitializerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_factories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.edge_factories.html#slam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="slam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/edge_factories_initializer.html#EdgeFactoriesInitializerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Edge factories initializer configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.package_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.edge_factories">
+<span class="sig-name descname"><span class="pre">edge_factories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.edge_factories.html#slam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="slam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig.edge_factories" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager.handlers_factory">
+<span id="slam-system-configs-setup-manager-handlers-factory-module"></span><h2>slam.system_configs.setup_manager.handlers_factory module<a class="headerlink" href="#module-slam.system_configs.setup_manager.handlers_factory" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.handlers_factory.</span></span><span class="sig-name descname"><span class="pre">HandlersFactoryConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handlers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.handlers.html#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><span class="pre">HandlerConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/handlers_factory.html#HandlersFactoryConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base handlers factory configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.package_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.handlers">
+<span class="sig-name descname"><span class="pre">handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.handlers.html#slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="slam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><span class="pre">HandlerConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig.handlers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager.sensor_factory">
+<span id="slam-system-configs-setup-manager-sensor-factory-module"></span><h2>slam.system_configs.setup_manager.sensor_factory module<a class="headerlink" href="#module-slam.system_configs.setup_manager.sensor_factory" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.sensor_factory.</span></span><span class="sig-name descname"><span class="pre">SensorFactoryConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig" title="slam.system_configs.setup_manager.sensors.SensorConfig"><span class="pre">SensorConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/sensor_factory.html#SensorFactoryConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sensor factory configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig.sensors">
+<span class="sig-name descname"><span class="pre">sensors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig" title="slam.system_configs.setup_manager.sensors.SensorConfig"><span class="pre">SensorConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig.sensors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager.sensors">
+<span id="slam-system-configs-setup-manager-sensors-module"></span><h2>slam.system_configs.setup_manager.sensors module<a class="headerlink" href="#module-slam.system_configs.setup_manager.sensors" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.SensorConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.sensors.</span></span><span class="sig-name descname"><span class="pre">SensorConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Sensor'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/sensors.html#SensorConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.SensorConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base sensor configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.SensorConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.SensorConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.SensorConfig.type_name">
+<span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Sensor'</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.SensorConfig.type_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.sensors.</span></span><span class="sig-name descname"><span class="pre">Lidar3DConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Lidar3D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fov:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">360.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf_base_sensor:</span> <span class="pre">list[list[float]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/sensors.html#Lidar3DConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.system_configs.setup_manager.sensors.SensorConfig" title="slam.system_configs.setup_manager.sensors.SensorConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">SensorConfig</span></code></a></p>
+<p>Lidar 3D sensor configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.type_name">
+<span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Lidar3D'</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.type_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.max_range">
+<span class="sig-name descname"><span class="pre">max_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100.0</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.max_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.min_range">
+<span class="sig-name descname"><span class="pre">min_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.min_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.fov">
+<span class="sig-name descname"><span class="pre">fov</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">360.0</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.fov" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.num_channels">
+<span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.num_channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.sensors.Lidar3DConfig.tf_base_sensor">
+<span class="sig-name descname"><span class="pre">tf_base_sensor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.setup_manager.sensors.Lidar3DConfig.tf_base_sensor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager.setup_manager">
+<span id="slam-system-configs-setup-manager-setup-manager-module"></span><h2>slam.system_configs.setup_manager.setup_manager module<a class="headerlink" href="#module-slam.system_configs.setup_manager.setup_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.setup_manager.SetupManagerConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.setup_manager.</span></span><span class="sig-name descname"><span class="pre">SetupManagerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensors_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig" title="slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig"><span class="pre">SensorFactoryConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handlers_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig" title="slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig"><span class="pre">HandlersFactoryConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_factories_initializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig" title="slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig"><span class="pre">EdgeFactoriesInitializerConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_analyzers_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig" title="slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig"><span class="pre">StateAnalyzerFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/setup_manager.html#SetupManagerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Setup manager configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.sensors_factory">
+<span class="sig-name descname"><span class="pre">sensors_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig" title="slam.system_configs.setup_manager.sensor_factory.SensorFactoryConfig"><span class="pre">SensorFactoryConfig</span></a></em><a class="headerlink" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.sensors_factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.handlers_factory">
+<span class="sig-name descname"><span class="pre">handlers_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig" title="slam.system_configs.setup_manager.handlers_factory.HandlersFactoryConfig"><span class="pre">HandlersFactoryConfig</span></a></em><a class="headerlink" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.handlers_factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.edge_factories_initializer">
+<span class="sig-name descname"><span class="pre">edge_factories_initializer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig" title="slam.system_configs.setup_manager.edge_factories_initializer.EdgeFactoriesInitializerConfig"><span class="pre">EdgeFactoriesInitializerConfig</span></a></em><a class="headerlink" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.edge_factories_initializer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.state_analyzers_factory">
+<span class="sig-name descname"><span class="pre">state_analyzers_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig" title="slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig"><span class="pre">StateAnalyzerFactoryConfig</span></a></em><a class="headerlink" href="#slam.system_configs.setup_manager.setup_manager.SetupManagerConfig.state_analyzers_factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager.state_analyzers_factory">
+<span id="slam-system-configs-setup-manager-state-analyzers-factory-module"></span><h2>slam.system_configs.setup_manager.state_analyzers_factory module<a class="headerlink" href="#module-slam.system_configs.setup_manager.state_analyzers_factory" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.system_configs.setup_manager.state_analyzers_factory.</span></span><span class="sig-name descname"><span class="pre">StateAnalyzerFactoryConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analyzers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/system_configs/setup_manager/state_analyzers_factory.html#StateAnalyzerFactoryConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State analyzer factory configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.package_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.analyzers">
+<span class="sig-name descname"><span class="pre">analyzers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#slam.system_configs.setup_manager.state_analyzers_factory.StateAnalyzerFactoryConfig.analyzers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.system_configs.setup_manager">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.system_configs.setup_manager" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

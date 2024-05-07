@@ -14,22 +14,9 @@ graph_builder:
     handler_state_analyzer_table:
       kiss_icp_odometry: 'lidar_odometry_state_analyzer'
 
-  edge_factories:
-    lidar_odometry_edge_factory:
-      name: 'lidar_odometry_edge_factory'
-      type_name: 'LidarOdometryEdgeFactory'
-      module_name: '.lidar_odometry_factory'
-      search_time_margin: 0
-
-    prior_pose_edge_factory:
-      name: 'prior_pose_edge_factory'
-      type_name: 'PriorPoseEdgeFactory'
-      module_name: '.prior_pose_factory'
-      search_time_margin: 0
-
 graph_initializer:
   priors:
-    first_lidar_pose:
+    initial_pose:
       timestamp: 1544581174277398000 # timestamp of first VLP_right scan from batch_factory.yaml
       vertex_type: "Pose"
       edge_factory_name: "prior_pose_edge_factory"

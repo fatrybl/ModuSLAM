@@ -4,15 +4,23 @@ from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
 from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
+from slam.logger.logging_config import frontend_manager
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(frontend_manager)
 
 
 class GraphBuilderFactory:
-    """Creates graph builder based on config."""
-
     @staticmethod
     def create(name: str) -> type[GraphBuilder]:
+        """Matches the given name with the graph builder type and returns the type of
+        graph builder.
+
+        Args:
+            name: name of the graph builder to create.
+
+        Returns:
+            type of graph builder.
+        """
         match name:
             case LidarMapBuilder.__name__:
                 return LidarMapBuilder

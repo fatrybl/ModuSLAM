@@ -1,4 +1,4 @@
-"""Custom deque-set implementation.
+"""Deque-set data structure implementation.
 
 Complexity:
     O(1): add(), contains(item: T), remove_first(), remove_last(), __getitem__(index: int).
@@ -8,9 +8,12 @@ Complexity:
 import functools
 import logging
 from collections import deque
+from collections.abc import Iterable
 from typing import Any, Callable, Generic, TypeVar
 
-logger = logging.getLogger(__name__)
+from slam.logger.logging_config import utils
+
+logger = logging.getLogger(utils)
 
 T = TypeVar("T")
 
@@ -19,7 +22,7 @@ def multiple(func: Callable):
     """Decorator for multiple deque-sets.
 
     Args:
-        func (Callable): function to be decorated.
+        func: function to be decorated.
     """
 
     @functools.wraps(func)
@@ -55,85 +58,111 @@ class DequeSet(Generic[T]):
         equal if they have the same elements in the same order.
 
         Args:
-            other (Any): The other DequeSet to compare with.
+            other: DequeSet to compare with.
 
         Returns:
-            bool: True if the two DequeSets are equal, False otherwise.
+            equality result.
         """
         if isinstance(other, DequeSet):
             return self._deque == other._deque and self._set == other._set
+
         return False
 
-    def add(self, item: T) -> None:
+    @property
+    def items(self) -> deque[T]:
+        """Items in deque-set."""
+        return self._deque
+
+    @property
+    def empty(self) -> bool:
+        """Empty status of deque-set."""
+        return not (bool(self._set) and bool(self._deque))
+
+    def add(self, item: T | Iterable[T]) -> None:
         """
         Adds new item:
-            1) Add to set to avoid duplicates.
+            1) Add to set to avoid duplicates.\n
             2) Add to deque for fast front-pop().
 
         Args:
-            item (Any): new item to be added.
+            item: item(s) to be added.
         """
-        if item not in self._set:
-            self._set.add(item)
-            self._deque.append(item)
+        if isinstance(item, Iterable):
+            for i in item:
+                if i not in self._set:
+                    self._set.add(i)
+                    self._deque.append(i)
+        else:
+            if item not in self._set:
+                self._set.add(item)
+                self._deque.append(item)
 
     def remove(self, item: T) -> None:
         """Removes item from set and deque.
 
         Args:
-            item (T): item to be removed.
+            item: item to be removed.
+
+        Raises:
+            KeyError: if item is not in deque-set.
         """
-        try:
-            self._set.remove(item)
-            self._deque.remove(item)
-        except KeyError:
-            msg = f"No item {item} in set or deque"
-            logger.error(msg)
+        msg = "Item is not present in deque-set:"
+
+        if isinstance(item, Iterable):
+            for i in item:
+                try:
+                    self._set.remove(i)
+                    self._deque.remove(i)
+                except KeyError:
+                    logger.error(msg + f" {i}")
+                    raise
+        else:
+            try:
+                self._set.remove(item)
+                self._deque.remove(item)
+            except KeyError:
+                logger.error(msg + f" {item}")
+                raise
 
     def remove_first(self) -> None:
-        """Removes first item from set and deque."""
+        """Removes first item from deque-set.
+
+        Raises:
+            KeyError: if deque is empty
+        """
         try:
             item: T = self._deque.popleft()
             self._set.remove(item)
         except KeyError:
-            msg = "Empty set or deque"
-            logger.error(msg)
+            logger.error("Empty deque-set")
+            raise
 
     def remove_last(self) -> None:
-        """Removes last item from set and deque."""
+        """Removes last item from deque-set.
+
+        Raises:
+            KeyError: if deque-set is empty
+        """
         try:
             item: T = self._deque.pop()
             self._set.remove(item)
         except KeyError:
-            msg = "Empty set or deque"
-            logger.error(msg)
+            logger.error("Empty deque-set")
+            raise
 
-    def sort(self, key, reverse: bool = False) -> None:
+    def sort(self, key: Callable, reverse: bool = False) -> None:
         """Sorts deque with the given key.
 
         Args:
-            key:
-            reverse (bool):
+            key: key function to sort deque.
+            reverse: reverse sorting order.
         """
         self._deque = deque(sorted(self._deque, key=key, reverse=reverse))
-
-    def is_empty(self) -> bool:
-        """Checks if deque-set is empty."""
-        return not (bool(self._set) and bool(self._deque))
 
     def clear(self) -> None:
         """Clears deque-set."""
         self._set.clear()
         self._deque.clear()
-
-    @property
-    def items(self) -> deque[T]:
-        """Returns deque of elements.
-
-        Returns:
-            (deque[T]): deque of elements of type T.
-        """
-        return self._deque
 
 
 class MultipleDequeSet(DequeSet):

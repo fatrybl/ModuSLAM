@@ -18,9 +18,13 @@ defaults:
       - config
 
   - override hydra/hydra_logging: none
-  - override hydra/job_logging: stdout
+  - override hydra/job_logging: none
 
 hydra:
   output_subdir: null
   run:
     dir: .
+
+logger:
+  level: "INFO"
+  logs_directory: "logs"

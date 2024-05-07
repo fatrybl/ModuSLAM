@@ -1,37 +1,37 @@
 import logging
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.system_configs.system.setup_manager.edge_factories_initializer import (
+from slam.logger.logging_config import setup_manager
+from slam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
 from slam.utils.auxiliary_methods import import_object
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(setup_manager)
 
 
 class EdgeFactoriesInitializer:
-    """Distributes edge factories."""
+    """Creates and stores edge factories."""
 
     _factories = set[EdgeFactory]()
 
     @classmethod
     def get_all_factories(cls) -> set[EdgeFactory]:
-        """Returns all edge factories.
-
-        Returns:
-            (set[EdgeFactory]): all edge factories.
-        """
+        """Gets all edge factories."""
         return cls._factories
 
     @classmethod
     def get_factory(cls, name: str) -> EdgeFactory:
-        """Returns edge factory by name.
+        """Gets edge factory with the given name.
 
         Args:
-            name (str): name of the factory.
+            name: name of a factory.
 
         Returns:
-            (EdgeFactory): edge factory.
+            edge factory.
+
+        Raises:
+            ValueError: if factory with the given name has not been found.
         """
         for factory in cls._factories:
             if factory.name == name:
@@ -43,6 +43,14 @@ class EdgeFactoriesInitializer:
 
     @classmethod
     def init_factories(cls, config: EdgeFactoriesInitializerConfig) -> None:
+        """Initializes edge factories for the given configuration by importing
+        corresponding modules, objects and creating instances.
+
+        Args:
+            config: configuration of edge factories.
+        """
+        cls._factories.clear()
+
         package_name: str = config.package_name
 
         for cfg in config.edge_factories.values():

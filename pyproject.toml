@@ -1,21 +1,32 @@
+[tool.poetry]
+name = "moduslam"
+version = "0.1.0"
+description = "Modulus SLAM framework by Mark Griguletskii"
+authors = ["Mark Griguletskii <fatrybl@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gtsam = "^4.2"
+pillow = "^10.3.0"
+plum-dispatch = "^2.3.5"
+numpy = "^1.26.4"
+pytest = "^8.2.0"
+Sphinx = "^7.3.7"
+types-Pillow = "^10.2.0.20240423"
+rosbags = "^0.10.0"
+mypy = "^1.10.0"
+flake8 = "^7.0.0"
+black = "^24.4.2"
+beartype = "^0.18.5"
+hydra-core = "^1.3.2"
+antlr4-python3-runtime = "4.9.3"
+hydra-colorlog = "^1.2.0"
+
+
 [build-system]
-requires = [
-    'setuptools',
-    'wheel',
-    'hatchling'
-]
-build-backend = 'setuptools.build_meta'
-
-[tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
-
-[tool.mypy]
-python_version = "3.11"
-check_untyped_defs = true
-ignore_missing_imports = true
-follow_imports = "normal"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 100
@@ -33,3 +44,14 @@ recursive = true
 max-line-length = 100
 paths = ["docs"]
 ignore = ["D001"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+ignore_missing_imports = true
+follow_imports = "normal"

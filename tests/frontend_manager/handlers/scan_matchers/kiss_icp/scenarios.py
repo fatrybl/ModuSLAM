@@ -1,14 +1,14 @@
 import numpy as np
 import numpy.typing as npt
 
-from slam.data_manager.factory.element import Element
-from slam.data_manager.factory.element import RawMeasurement as RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import BinaryDataLocation
+from slam.data_manager.factory.element import Element, RawMeasurement
+from slam.data_manager.factory.locations import BinaryDataLocation
 from slam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.setup_manager.sensors_factory.sensors import Lidar3D
-from slam.system_configs.system.setup_manager.sensors import Lidar3DConfig
+from slam.system_configs.setup_manager.sensors import Lidar3DConfig
 from tests_data import current_directory
 
 tests_data_dir = current_directory
@@ -37,47 +37,48 @@ pc9: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f9)
 pc10: npt.NDArray[np.float32] = MeasurementCollector.read_bin(f10)
 
 
-s1 = Lidar3D(config=Lidar3DConfig(name="vlp_left"))
-m1 = RawMeasurement(sensor=s1, values=tuple(pc1))
+sensor = Lidar3D(config=Lidar3DConfig(name="vlp_left"))
+
+m1 = RawMeasurement(sensor=sensor, values=tuple(pc1))
 loc1 = BinaryDataLocation(f1)
 el1 = Element(timestamp=1544676739798931000, measurement=m1, location=loc1)
 
-m2 = RawMeasurement(sensor=s1, values=tuple(pc2))
+m2 = RawMeasurement(sensor=sensor, values=tuple(pc2))
 loc2 = BinaryDataLocation(f2)
 el2 = Element(timestamp=1544676739899753000, measurement=m2, location=loc2)
 
-m3 = RawMeasurement(sensor=s1, values=tuple(pc3))
+m3 = RawMeasurement(sensor=sensor, values=tuple(pc3))
 loc3 = BinaryDataLocation(f3)
 el3 = Element(timestamp=1544676740000631000, measurement=m3, location=loc3)
 
-m4 = RawMeasurement(sensor=s1, values=tuple(pc4))
-loc4 = BinaryDataLocation(f4)
-el4 = Element(timestamp=1544676740101488000, measurement=m4, location=loc4)
+# commented out because they are not used in the tests.
 
-m5 = RawMeasurement(sensor=s1, values=tuple(pc5))
-loc5 = BinaryDataLocation(f5)
-el5 = Element(timestamp=1544676740202342000, measurement=m5, location=loc5)
+# m4 = RawMeasurement(sensor=sensor, values=tuple(pc4))
+# loc4 = BinaryDataLocation(f4)
+# el4 = Element(timestamp=1544676740101488000, measurement=m4, location=loc4)
+#
+# m5 = RawMeasurement(sensor=sensor, values=tuple(pc5))
+# loc5 = BinaryDataLocation(f5)
+# el5 = Element(timestamp=1544676740202342000, measurement=m5, location=loc5)
+#
+# m6 = RawMeasurement(sensor=sensor, values=tuple(pc6))
+# loc6 = BinaryDataLocation(f6)
+# el6 = Element(timestamp=1544676740303223000, measurement=m6, location=loc6)
+#
+# m7 = RawMeasurement(sensor=sensor, values=tuple(pc7))
+# loc7 = BinaryDataLocation(f7)
+# el7 = Element(timestamp=1544676740404102000, measurement=m7, location=loc7)
+#
+# m8 = RawMeasurement(sensor=sensor, values=tuple(pc8))
+# loc8 = BinaryDataLocation(f8)
+# el8 = Element(timestamp=1544676740504911000, measurement=m8, location=loc8)
+#
+# m9 = RawMeasurement(sensor=sensor, values=tuple(pc9))
+# loc9 = BinaryDataLocation(f9)
+# el9 = Element(timestamp=1544676740605762000, measurement=m9, location=loc9)
+#
+# m10 = RawMeasurement(sensor=sensor, values=tuple(pc10))
+# loc10 = BinaryDataLocation(f10)
+# el10 = Element(timestamp=1544676740706642000, measurement=m10, location=loc10)
 
-m6 = RawMeasurement(sensor=s1, values=tuple(pc6))
-loc6 = BinaryDataLocation(f6)
-el6 = Element(timestamp=1544676740303223000, measurement=m6, location=loc6)
-
-m7 = RawMeasurement(sensor=s1, values=tuple(pc7))
-loc7 = BinaryDataLocation(f7)
-el7 = Element(timestamp=1544676740404102000, measurement=m7, location=loc7)
-
-m8 = RawMeasurement(sensor=s1, values=tuple(pc8))
-loc8 = BinaryDataLocation(f8)
-el8 = Element(timestamp=1544676740504911000, measurement=m8, location=loc8)
-
-m9 = RawMeasurement(sensor=s1, values=tuple(pc9))
-loc9 = BinaryDataLocation(f9)
-el9 = Element(timestamp=1544676740605762000, measurement=m9, location=loc9)
-
-m10 = RawMeasurement(sensor=s1, values=tuple(pc10))
-loc10 = BinaryDataLocation(f10)
-el10 = Element(timestamp=1544676740706642000, measurement=m10, location=loc10)
-
-res1 = None
-
-scenarios = ((el1, res1),)
+scenarios = (((el1,), None), ((el1, el2), Measurement), ((el1, el2, el3), Measurement))

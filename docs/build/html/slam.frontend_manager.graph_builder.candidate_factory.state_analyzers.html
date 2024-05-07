@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slam.frontend_manager.graph_builder.candidate_factory.state_analyzers package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC module</a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.__init__"><code class="docutils literal notranslate"><span class="pre">StateAnalyzer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.name"><code class="docutils literal notranslate"><span class="pre">StateAnalyzer.name</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.evaluate"><code class="docutils literal notranslate"><span class="pre">StateAnalyzer.evaluate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration module</a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator"><code class="docutils literal notranslate"><span class="pre">ImuPreintegrator</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator.evaluate"><code class="docutils literal notranslate"><span class="pre">ImuPreintegrator.evaluate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry module</a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer"><code class="docutils literal notranslate"><span class="pre">LidarOdometryStateAnalyzer</span></code></a><ul>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.__init__"><code class="docutils literal notranslate"><span class="pre">LidarOdometryStateAnalyzer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.evaluate"><code class="docutils literal notranslate"><span class="pre">LidarOdometryStateAnalyzer.evaluate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="slam-frontend-manager-graph-builder-candidate-factory-state-analyzers-package">
+<h1>slam.frontend_manager.graph_builder.candidate_factory.state_analyzers package<a class="headerlink" href="#slam-frontend-manager-graph-builder-candidate-factory-state-analyzers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC">
+<span id="slam-frontend-manager-graph-builder-candidate-factory-state-analyzers-analyzer-abc-module"></span><h2>slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC module<a class="headerlink" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.</span></span><span class="sig-name descname"><span class="pre">StateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/analyzer_ABC.html#StateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Analyzes measurements` storage and decides whether to add a new state.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/analyzer_ABC.html#StateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.name" title="Link to this definition"></a></dt>
+<dd><p>Unique name of the analyzer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.evaluate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.element_distributor.html#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage" title="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage"><span class="pre">MeasurementStorage</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="slam.frontend_manager.graph_builder.candidate_factory.html#slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State" title="slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/analyzer_ABC.html#StateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the storage and decides whether to add a new state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>storage</strong> – a storage with measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration">
+<span id="slam-frontend-manager-graph-builder-candidate-factory-state-analyzers-imu-preintegration-module"></span><h2>slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration module<a class="headerlink" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.</span></span><span class="sig-name descname"><span class="pre">ImuPreintegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/imu_preintegration.html#ImuPreintegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer" title="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for IMU measurements` handler.</p>
+<p>Adds new state if the storage contains a measurement with IMU odometry.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.element_distributor.html#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage" title="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage"><span class="pre">MeasurementStorage</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="slam.frontend_manager.graph_builder.candidate_factory.html#slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State" title="slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/imu_preintegration.html#ImuPreintegrator.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.imu_preintegration.ImuPreintegrator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the storage and decides whether to add a new state. Not
+implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>storage</strong> – a storage with measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry">
+<span id="slam-frontend-manager-graph-builder-candidate-factory-state-analyzers-lidar-odometry-module"></span><h2>slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry module<a class="headerlink" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.</span></span><span class="sig-name descname"><span class="pre">LidarOdometryStateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer" title="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar odometry measurements` handler.</p>
+<p>Adds new state if the storage contains a measurement with lidar pointcloud odometry.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.system_configs.frontend_manager.graph_builder.candidate_factory.html#slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="slam.frontend_manager.element_distributor.html#slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage" title="slam.frontend_manager.element_distributor.measurement_storage.MeasurementStorage"><span class="pre">MeasurementStorage</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="slam.frontend_manager.graph_builder.candidate_factory.html#slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State" title="slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/slam/frontend_manager/graph_builder/candidate_factory/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the storage and decides whether to add a new state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>storage</strong> – a storage with measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-slam.frontend_manager.graph_builder.candidate_factory.state_analyzers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>
