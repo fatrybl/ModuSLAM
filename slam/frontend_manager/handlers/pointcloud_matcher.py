@@ -117,9 +117,9 @@ class ScanMatcher(Handler):
         """Computes the transformation between two poses: T = inv(Pi) @ Pj.
 
         Args:
-            pose_i (np.ndarray): SE(3) matrix.
+            pose_i: SE(3) matrix.
 
-            pose_j (np.ndarray): SE(3) matrix.
+            pose_j: SE(3) matrix.
 
         Returns:
             transformation matrix SE(3).

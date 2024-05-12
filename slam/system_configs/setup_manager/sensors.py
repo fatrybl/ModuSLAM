@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from slam.setup_manager.sensors_factory.sensors import Lidar3D, Sensor
+from slam.setup_manager.sensors_factory.sensors import Imu, Lidar3D, Sensor
 
 
 @dataclass
@@ -9,6 +9,33 @@ class SensorConfig:
 
     name: str
     type_name: str = Sensor.__name__
+
+
+@dataclass
+class ImuConfig(SensorConfig):
+    """IMU sensor configuration."""
+
+    type_name: str = field(default=Imu.__name__, metadata={"help": "Name of sensor`s type."})
+
+    tf_base_sensor: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
+        metadata={"help": "Transformation matrix from sensor to base link."},
+    )
+    accelerometer_noise_covariance: list[float] = field(
+        default_factory=lambda: [1e-3, 1e-3, 1e-3],
+    )
+    gyroscope_noise_covariance: list[float] = field(
+        default_factory=lambda: [1e-3, 1e-3, 1e-3],
+    )
+    accelerometer_bias_noise_covariance: list[float] = field(
+        default_factory=lambda: [1e-5, 1e-5, 1e-5],
+    )
+    gyroscope_bias_noise_covariance: list[float] = field(
+        default_factory=lambda: [1e-5, 1e-5, 1e-5],
+    )
+    integration_noise_covariance: list[float] = field(
+        default_factory=lambda: [1e-7, 1e-7, 1e-7],
+    )
 
 
 @dataclass
@@ -29,5 +56,5 @@ class Lidar3DConfig(SensorConfig):
     )
     tf_base_sensor: list[list[float]] = field(
         default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
-        metadata={"help": "Transformation matrix from sensor to base link."},
+        metadata={"help": "Transformation matrix from base link to sensor."},
     )

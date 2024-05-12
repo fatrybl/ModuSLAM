@@ -1,5 +1,17 @@
-defaults:
-  - /frontend_manager/state_analyzers@state_analyzers_factory.analyzers
-
 state_analyzers_factory:
   package_name: "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
+
+  analyzers:
+    #lidar_odometry_state_analyzer:
+    #
+    #  name: "lidar_odometry_state_analyzer"
+    #  type_name: "LidarOdometryStateAnalyzer"
+    #  module_name: ".lidar_odometry"
+    #  handlers_names: [ "kiss_icp_odometry" ]
+
+    lidar_imu_state_analyzer:
+
+      name: "lidar_imu_state_analyzer"
+      type_name: "LidarInertialOdometryStateAnalyzer"
+      module_name: ".lidar_odometry"
+      handlers_names: [ "kiss_icp_odometry", "imu_preprocessor" ]

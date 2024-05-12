@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -8,4 +8,6 @@ class StateAnalyzerConfig:
     name: str
     module_name: str
     type_name: str
-    handler_name: str
+    handlers_names: list[str] = field(
+        metadata={"info": "names of handlers to be used by the analyzer"}
+    )

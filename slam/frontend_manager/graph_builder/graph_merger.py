@@ -8,10 +8,8 @@ from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.frontend_manager.measurement_storage import Measurement
 from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.tables_initializer import init_handler_edge_factory_table
-from slam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
@@ -52,7 +50,7 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
             graph: a graph to merge the state with.
         """
         index_storage = graph.vertex_storage.index_storage
-        storage: dict[Handler, OrderedSet[Measurement]] = state.data
+        storage = state.data
         table = self._create_factory_vertices_table(index_storage, state.timestamp)
 
         for handler, measurements in storage.items():

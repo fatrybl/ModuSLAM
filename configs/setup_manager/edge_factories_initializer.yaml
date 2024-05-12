@@ -3,12 +3,19 @@ edge_factories_initializer:
 
   edge_factories:
 
-    lidar_odometry_edge_factory:
-      module_name: '.lidar_odometry_factory'
-      name: 'lidar_odometry_edge_factory'
-      type_name: 'LidarOdometryEdgeFactory'
-
     prior_pose_edge_factory:
       name: 'prior_pose_edge_factory'
       type_name: 'PriorPoseEdgeFactory'
       module_name: '.prior_pose_factory'
+
+    imu_odometry_edge_factory:
+      name: 'imu_odometry_edge_factory'
+      type_name: 'ImuOdometryFactory'
+      module_name: '.imu_preintegration.imu_odometry_factory'
+      search_time_margin: 0.01
+
+    lidar_odometry_edge_factory:
+      name: 'lidar_odometry_edge_factory'
+      module_name: '.lidar_odometry_factory'
+      type_name: 'LidarOdometryEdgeFactory'
+      search_time_margin: 0.0

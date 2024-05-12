@@ -1,12 +1,3 @@
 defaults:
-  #  - /sensors/imu@sensors_factory.sensors
-  #  - /sensors/encoder@sensors_factory.sensors
-  #  - /sensors/altimeter@sensors_factory.sensors
-  #  - /sensors/gps@sensors_factory.sensors
-  #  - /sensors/vrs_gps@sensors_factory.sensors
-  #  - /sensors/fog@sensors_factory.sensors
-  #  - /sensors/lidar_2D_back@sensors_factory.sensors
-  #  - /sensors/lidar_2D_middle@sensors_factory.sensors
-  #  - /sensors/lidar_3D_left@sensors_factory.sensors
+  - /sensors/imu@sensors_factory.sensors
   - /sensors/lidar_3D_right@sensors_factory.sensors
-  #  - /sensors/stereo_camera@sensors_factory.sensors

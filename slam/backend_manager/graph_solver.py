@@ -13,6 +13,7 @@ class GraphSolver:
 
     def __init__(self) -> None:
         self._params = gtsam.LevenbergMarquardtParams()
+        self._params.setVerbosity("SUMMARY")
 
     def solve(self, graph: Graph) -> gtsam.Values:
         """Solves the optimization problem for the given graph.
@@ -23,6 +24,7 @@ class GraphSolver:
         Returns:
             calculated GTSAM values.
         """
+
         optimizer = gtsam.LevenbergMarquardtOptimizer(
             graph.factor_graph, graph.gtsam_values, self._params
         )
