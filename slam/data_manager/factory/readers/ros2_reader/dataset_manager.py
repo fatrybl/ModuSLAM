@@ -4,13 +4,10 @@ from pathlib import Path
 from rosbags.rosbag2 import Reader
 from rosbags.serde import deserialize_cdr
 
-from slam.system_configs.system.data_manager.batch_factory.datasets.base_dataset import DatasetConfig
 
-
-class DatasetManager(DatasetConfig):
+class DatasetManager():
 
     def __init__(self, dataset_path:Path, name:str="", url:str="", reader:str="Rosbag2 reader"):
-        super().__init__(name=name, url=url, directory=dataset_path, reader=reader)
         self.sensors: dict = {'Camera':['left', 'right'], 'Lidar':['vlp16r','vlp16l', 'vlp32c', 'merger'], 'Imu':['xsens']}
 
         self.dataset_path:Path = dataset_path
