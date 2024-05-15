@@ -10,11 +10,10 @@ class DataGrabber():
     _data:list = []
 
     @classmethod
-    def iter_rosbag(self, bagpath:Path, position:int, msg_limit:int )->list:
+    def iter_rosbag(self, bagpath:Path, position:int)->list:
         n=0
         with Reader(bagpath) as reader:
             for connection, timestamp, rawdata in reader.messages():
-                if n <= msg_limit:
                     if n == position:
                         msg = deserialize_cdr(rawdata, connection.msgtype)
                         dt_obj = int(str(timestamp)[0:10])
@@ -26,16 +25,15 @@ class DataGrabber():
                             connection.msgtype,
                             msg.header.frame_id,
                             connection.msgcount,
-                            timestamp
+                            timestamp,
+                            msg
                         ]
                         # print(_data)
-                        return _data
+                        return _data, timestamp
                     n += 1
-                else:
-                    return None
             return None
 
 if __name__ == "__main__":
     folder_path = Path(os.environ["DATA_DIR"])
     bag_path = Path("{}/rosbag2_2024_1713944720".format(folder_path))
-    DataGrabber.iter_rosbag(bag_path, 30, 2000)
+    DataGrabber.iter_rosbag(bag_path, 30)
