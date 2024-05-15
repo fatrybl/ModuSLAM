@@ -1,0 +1,8 @@
+package_name: "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
+
+analyzers:
+  lidar_imu_state_analyzer:
+
+    name: "lidar_imu_state_analyzer"
+    type_name: "LidarInertialOdometryStateAnalyzer"
+    module_name: ".lidar_imu_odometry"

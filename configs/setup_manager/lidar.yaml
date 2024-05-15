@@ -1,0 +1,5 @@
+defaults:
+  - /sensors/lidar_3D_right@sensors_factory.sensors
+  - edge_factories_initializers/lidar_odometry@edge_factories_initializer
+  - handlers_factories/lidar_odometry@handlers_factory
+  - state_analyzers_factories/lidar@state_analyzers_factory

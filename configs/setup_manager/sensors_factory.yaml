@@ -1,3 +1,0 @@
-defaults:
-  - /sensors/imu@sensors_factory.sensors
-  - /sensors/lidar_3D_right@sensors_factory.sensors

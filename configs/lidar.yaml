@@ -1,0 +1,20 @@
+defaults:
+  - _self_ # default hydra config to override job_logging and hydra_logging
+  - structured_schema_config # base Structured Schema Validation config
+
+  - data_manager: config
+  - map_manager: config
+  - frontend_manager: lidar
+  - setup_manager: lidar
+
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: none
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+logger:
+  level: "INFO"
+  logs_directory: "logs"

@@ -1,0 +1,14 @@
+package_name: 'slam.frontend_manager.edge_factories'
+
+edge_factories:
+
+  prior_pose_edge_factory:
+    name: 'prior_pose_edge_factory'
+    type_name: 'PriorPoseEdgeFactory'
+    module_name: '.prior_pose_factory'
+
+  lidar_odometry_edge_factory:
+    name: 'lidar_odometry_edge_factory'
+    module_name: '.lidar_odometry_factory'
+    type_name: 'LidarOdometryEdgeFactory'
+    search_time_margin: 0.0

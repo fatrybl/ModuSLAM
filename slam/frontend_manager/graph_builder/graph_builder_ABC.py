@@ -16,12 +16,17 @@ class GraphBuilder(ABC):
     Creates a sub-graph from the measurements and merges it with the main graph.
     """
 
-    @abstractmethod
     def __init__(self, config: GraphBuilderConfig) -> None:
         """
         Args:
             config: a configuration for the graph builder.
         """
+        self._name = config.name
+
+    @property
+    def name(self) -> str:
+        """Name of the graph builder."""
+        return self._name
 
     @property
     @abstractmethod

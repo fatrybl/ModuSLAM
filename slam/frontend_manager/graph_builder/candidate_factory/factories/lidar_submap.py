@@ -60,16 +60,17 @@ class LidarMapCandidateFactory(CandidateFactory):
             storage: storage with measurements.
         """
         if storage.empty:
-            return
+            return None
         else:
             new_measurement = storage.recent_measurement
 
         if self._previous_measurement and self._previous_measurement == new_measurement:
-            return
+            return None
 
         else:
             analyzer = self._table[new_measurement.handler]
-            new_state: State | None = analyzer.evaluate(storage)
+            measurements = storage.data[new_measurement.handler]
+            new_state: State | None = analyzer.evaluate(measurements)
 
             if new_state:
                 self._graph_candidate.states.append(new_state)

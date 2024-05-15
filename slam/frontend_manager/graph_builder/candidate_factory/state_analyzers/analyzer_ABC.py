@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
-from slam.frontend_manager.measurement_storage import MeasurementStorage
+from slam.frontend_manager.measurement_storage import Measurement
 from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
+from slam.utils.ordered_set import OrderedSet
 
 
 class StateAnalyzer(ABC):
@@ -23,11 +24,11 @@ class StateAnalyzer(ABC):
         return self._name
 
     @abstractmethod
-    def evaluate(self, storage: MeasurementStorage) -> State | None:
+    def evaluate(self, measurements: OrderedSet[Measurement]) -> State | None:
         """Evaluates the storage and decides whether to add a new state.
 
         Args:
-            storage: a storage with measurements.
+            measurements: an ordered set of measurements to be analyzed.
 
         Returns:
             new state or None.

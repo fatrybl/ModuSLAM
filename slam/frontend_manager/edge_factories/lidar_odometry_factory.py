@@ -163,6 +163,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             measurement.noise_covariance[5],
         )
         noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variance)
+
         factor = self._create_factor(vertex1.gtsam_index, vertex2.gtsam_index, measurement, noise)
         edge = LidarOdometry(
             vertex1=vertex1,
