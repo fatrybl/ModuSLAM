@@ -6,8 +6,11 @@ import numpy as np
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.custom_edges import ImuOdometry
 from slam.frontend_manager.graph.custom_vertices import ImuBias, Pose, Velocity
+from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from slam.frontend_manager.handlers.imu_data_preprocessor import ImuData
 from slam.frontend_manager.measurement_storage import Measurement
 from slam.utils.numpy_types import Matrix3x3, Matrix4x4
+from slam.utils.ordered_set import OrderedSet
 
 
 def create_vertex(vertex_type: type[GraphVertex], index: int, timestamp: int) -> GraphVertex:
@@ -27,6 +30,45 @@ def create_vertex(vertex_type: type[GraphVertex], index: int, timestamp: int) ->
     vertex.index = index
     vertex.timestamp = timestamp
     return vertex
+
+
+def get_previous_vertex(
+    vertex_type: type[GraphVertex],
+    storage: VertexStorage,
+    timestamp: int,
+    index: int,
+    time_margin: float,
+) -> GraphVertex:
+    """Gets previous vertex if found or creates a new one.
+
+    Args:
+        vertex_type: type of the vertex.
+
+        storage: storage of vertices.
+
+        timestamp: timestamp of the vertex.
+
+        index: index of the vertex.
+
+        time_margin: time margin for searching the closest vertex.
+
+    Returns:
+        vertex.
+    """
+
+    vertex = storage.get_last_vertex(vertex_type)
+    if vertex and vertex.timestamp == timestamp:
+        return vertex
+
+    vertex = storage.find_closest_optimizable_vertex(vertex_type, timestamp, time_margin)
+    if vertex:
+        return vertex
+    else:
+        new_index = index + 1
+        new_vertex: GraphVertex = create_vertex(
+            vertex_type=vertex_type, index=new_index, timestamp=timestamp
+        )
+        return new_vertex
 
 
 def create_edge(
@@ -108,3 +150,45 @@ def set_parameters(
     params.setIntegrationCovariance(integration_cov)
     params.setBiasAccCovariance(bias_acc_cov)
     params.setBiasOmegaCovariance(bias_omega_cov)
+
+
+def integrate(
+    pim: gtsam.PreintegratedCombinedMeasurements,
+    measurements: OrderedSet[Measurement],
+    timestamp: int,
+    time_scale: float,
+) -> gtsam.PreintegratedCombinedMeasurements:
+    """Integrates the IMU measurements.
+
+    Args:
+        pim: gtsam preintegrated measurements.
+
+        measurements: IMU measurements.
+
+        timestamp: integration time limit.
+
+        time_scale: timescale factor.
+
+    Returns:
+        preintegrated IMU measurements.
+    """
+
+    measurements_list = list(measurements)
+    num_elements = len(measurements_list)
+
+    for idx, m in enumerate(measurements):
+
+        if idx == num_elements - 1:
+            dt_nanoseconds = timestamp - measurements.last.time_range.start
+
+        else:
+            dt_nanoseconds = measurements_list[idx + 1].time_range.start - m.time_range.start
+
+        values: ImuData = m.values
+        acc = values.acceleration
+        omega = values.angular_velocity
+
+        dt_secs: float = dt_nanoseconds * time_scale
+        pim.integrateMeasurement(acc, omega, dt_secs)
+
+    return pim

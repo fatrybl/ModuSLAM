@@ -11,18 +11,16 @@ import gtsam
 
 from slam.data_manager.factory.element import Element
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.edge_factories.imu_preintegration.methods import (
+from slam.frontend_manager.edge_factories.imu_preintegration.utils import (
     compute_covariance,
     create_edge,
-    create_vertex,
+    get_previous_vertex,
+    integrate,
     set_parameters,
 )
-from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.custom_edges import ImuOdometry
 from slam.frontend_manager.graph.custom_vertices import ImuBias, Pose, Velocity
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.vertex_storage import VertexStorage
-from slam.frontend_manager.handlers.imu_data_preprocessor import ImuData
 from slam.frontend_manager.measurement_storage import Measurement
 from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.sensors_factory.sensors import Imu
@@ -100,14 +98,26 @@ class ImuOdometryFactory(EdgeFactory):
                 logger.critical(msg)
                 raise TypeError(msg)
 
-        previous_pose = self._get_previous_vertex(
-            graph.vertex_storage, m.time_range.start, current_pose.index, Pose
+        previous_pose = get_previous_vertex(
+            Pose,
+            graph.vertex_storage,
+            m.time_range.start,
+            current_pose.index,
+            self._time_margin,
         )
-        previous_velocity = self._get_previous_vertex(
-            graph.vertex_storage, m.time_range.start, current_velocity.index, Velocity
+        previous_velocity = get_previous_vertex(
+            Velocity,
+            graph.vertex_storage,
+            m.time_range.start,
+            current_velocity.index,
+            self._time_margin,
         )
-        previous_bias = self._get_previous_vertex(
-            graph.vertex_storage, m.time_range.start, current_bias.index, ImuBias
+        previous_bias = get_previous_vertex(
+            ImuBias,
+            graph.vertex_storage,
+            m.time_range.start,
+            current_bias.index,
+            self._time_margin,
         )
 
         previous_velocity.index = previous_pose.index
@@ -129,38 +139,6 @@ class ImuOdometryFactory(EdgeFactory):
         )
 
         return [edge]
-
-    def _get_previous_vertex(
-        self, storage: VertexStorage, timestamp: int, index: int, vertex_type: type[GraphVertex]
-    ) -> GraphVertex:
-        """Gets previous vertex if found or creates a new one.
-
-        Args:
-            storage: storage of vertices.
-
-            timestamp: timestamp of the vertex.
-
-            index: index of the vertex.
-
-            vertex_type: type of the vertex.
-
-        Returns:
-            vertex.
-        """
-
-        vertex = storage.get_last_vertex(vertex_type)
-        if vertex and vertex.timestamp == timestamp:
-            return vertex
-
-        vertex = storage.find_closest_optimizable_vertex(vertex_type, timestamp, self._time_margin)
-        if vertex:
-            return vertex
-        else:
-            new_index = index + 1
-            new_vertex: GraphVertex = create_vertex(
-                vertex_type=vertex_type, index=new_index, timestamp=timestamp
-            )
-            return new_vertex
 
     def _preintegrate_measurements(
         self,
@@ -204,32 +182,5 @@ class ImuOdometryFactory(EdgeFactory):
             raise TypeError(msg)
 
         pim = gtsam.PreintegratedCombinedMeasurements(self._params)
-        pim = self._integrate(pim, measurements, timestamp)
-        return pim
-
-    def _integrate(
-        self,
-        pim: gtsam.PreintegratedCombinedMeasurements,
-        measurements: OrderedSet[Measurement],
-        timestamp: int,
-    ) -> gtsam.PreintegratedCombinedMeasurements:
-
-        measurements_list = list(measurements)
-        num_elements = len(measurements_list)
-
-        for idx, m in enumerate(measurements):
-
-            if idx == num_elements - 1:
-                dt_nanoseconds = timestamp - measurements.last.time_range.start
-
-            else:
-                dt_nanoseconds = measurements_list[idx + 1].time_range.start - m.time_range.start
-
-            values: ImuData = m.values
-            acc = values.acceleration
-            omega = values.angular_velocity
-
-            dt_secs: float = dt_nanoseconds * self._nanosecond
-            pim.integrateMeasurement(acc, omega, dt_secs)
-
+        pim = integrate(pim, measurements, timestamp, self._nanosecond)
         return pim
