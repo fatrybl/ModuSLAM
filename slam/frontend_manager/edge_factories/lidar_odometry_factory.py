@@ -24,7 +24,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             config: configuration of the factory.
         """
         super().__init__(config)
-        self._time_margin: int = config.search_time_margin
+        self._time_margin: float = config.search_time_margin
 
     @property
     def vertices_types(self) -> set[type[LidarPose]]:
@@ -76,7 +76,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             timestamp: timestamp of the vertex.
 
         Returns:
-            vertex.
+            new vertex.
         """
         vertex = LidarPose()
         vertex.index = index
@@ -130,8 +130,8 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         if vertex:
             return vertex
 
-        vertex = storage.get_last_vertex(Pose)
-        if vertex and vertex.timestamp == timestamp:
+        vertex = storage.find_closest_optimizable_vertex(Pose, timestamp, self._time_margin)
+        if vertex:
             new_index = vertex.index
         else:
             new_index = index + 1
@@ -163,6 +163,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             measurement.noise_covariance[5],
         )
         noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variance)
+
         factor = self._create_factor(vertex1.gtsam_index, vertex2.gtsam_index, measurement, noise)
         edge = LidarOdometry(
             vertex1=vertex1,

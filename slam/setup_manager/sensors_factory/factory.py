@@ -15,7 +15,11 @@ from slam.setup_manager.sensors_factory.sensors import (
     VrsGps,
 )
 from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
+from slam.system_configs.setup_manager.sensors import (
+    ImuConfig,
+    Lidar3DConfig,
+    SensorConfig,
+)
 from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(setup_manager)
@@ -87,6 +91,7 @@ class SensorsFactory:
             case Sensor.__name__:
                 sensor = Sensor(config)
             case Imu.__name__:
+                config = cast(ImuConfig, config)
                 sensor = Imu(config)
             case Fog.__name__:
                 sensor = Fog(config)

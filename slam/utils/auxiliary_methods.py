@@ -20,6 +20,22 @@ from slam.utils.numpy_types import Vector3, VectorN
 logger = logging.getLogger(utils)
 
 
+def equal_numbers(n1: int | float, n2: int | float, epsilon: int | float) -> bool:
+    """Compares two numbers with a given tolerance.
+
+    Args:
+        n1: 1-st number.
+
+        n2: 2-nd number.
+
+        epsilon: tolerance (non-negative).
+
+    Returns:
+        comparison result.
+    """
+    return abs(n1 - n2) <= abs(epsilon)
+
+
 def create_vector_3(x, y, z) -> Vector3:
     """Creates 3D float64 numpy array."""
     return np.array([x, y, z], dtype=np.float64)

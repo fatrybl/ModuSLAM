@@ -117,7 +117,6 @@ def state_analyzers_factory_cfg():
         name=state_analyzer_name,
         type_name=LidarOdometryStateAnalyzer.__name__,
         module_name=state_analyzer_module_name,
-        handler_name=handler_name,
     )
     return StateAnalyzersFactoryConfig(
         package_name=state_analyzer_package_name,

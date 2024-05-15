@@ -53,6 +53,8 @@ class MainManager:
             self.data_manager.make_batch()
             self._process()
 
+        print(self.frontend_manager.graph.gtsam_values)
+
         self.map_manager.save_graph(self.frontend_manager.graph)
         self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
         self.map_manager.visualize_map()

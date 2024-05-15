@@ -1,3 +1,16 @@
+defaults:
+  - /sensors/base_imu@imu
+
 imu:
   name: "imu"
-  type_name: "Imu"
+  tf_base_sensor: [
+    [ 1.0, 0.0, 0.0, -0.07 ],
+    [ 0.0, 1.0, 0.0, 0.0 ],
+    [ 0.0, 0.0, 1.0, 1.7 ],
+    [ 0.0, 0.0, 0.0, 1.0 ]
+  ]
+  accelerometer_noise_covariance: [ 1e-3, 1e-3, 1e-3 ]
+  gyroscope_noise_covariance: [ 1e-3, 1e-3, 1e-3 ]
+  accelerometer_bias_noise_covariance: [ 1e-5, 1e-5, 1e-5 ]
+  gyroscope_bias_noise_covariance: [ 1e-5, 1e-5, 1e-5 ]
+  integration_noise_covariance: [ 1e-7, 1e-7, 1e-7 ]
