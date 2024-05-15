@@ -1,31 +1,25 @@
 import os
 from pathlib import Path
 
-from slam.data_manager.factory.data_reader_ABC import DataReader
 from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.readers.kaist.auxiliary_classes import Location
-from slam.data_manager.factory.readers.ros2_reader.rosbags_reader import RosbagsManager
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.system.data_manager.batch_factory.datasets.kaist.config import (
+from slam.data_manager.factory.readers.ros2_reader.data_iterator import Iterator
+from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     Ros2Config,
 )
-from slam.system_configs.system.data_manager.batch_factory.regime import (
-    Stream,
-    TimeLimit,
-)
-from slam.system_configs.system.setup_manager.sensors import (
-    SensorConfig,
-    SensorFactoryConfig,
-)
+from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from slam.utils.auxiliary_dataclasses import TimeRange
 
 
-class Ros2DataReader(DataReader):
+class Ros2DataReader():
     """Data reader for ROS2 in test."""
 
     def __init__(self, regime: TimeLimit | Stream, dataset_params: Ros2Config):
         self._dataset_directory: Path = dataset_params.directory
         self._regime = regime
+        self.iterator = Iterator(bagpath=self._dataset_directory)
+
+        if isinstance(self._regime, TimeLimit):
+            self._time_range = TimeRange(self._regime.start, self._regime.stop)
 
 
     def get_element(self) -> Element | None:
@@ -55,10 +49,22 @@ class Ros2DataReader(DataReader):
         """
 
         try:
-            sensor, iterator, t = self._reader_state.next_sensor()
+            (sensor, t), iterator = self.iterator.next()
 
-        except:
-            print("Could not read the data")
+        except StopIteration:
+
+            return None
+
+        print(type(t))
+        # timestamp: int = as_int(t)
+        if isinstance(self._regime, TimeLimit) and t > self._time_range.stop:
+            return None
+
+        message, location = (sensor[-1], iterator)
+        measurement = RawMeasurement(sensor, message.data)
+        element = Element(t, measurement, location)
+
+        return element
 
 
 if __name__ == "__main__":
@@ -67,23 +73,10 @@ if __name__ == "__main__":
     folder_path = Path(os.environ["DATA_DIR"])
     bag_path = Path("{}/rosbag2_2024_1713944720".format(folder_path))
 
-    sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
-    factory_config = SensorFactoryConfig(sensors={sensor_config.name: sensor_config})
-    SensorsFactory.init_sensors(factory_config)
-
-    first_sensor = SensorsFactory.get_sensor("imu")
-    first_sensor_loc = Location()
-    test_measurement = RawMeasurement(sensor=first_sensor, values=10)
-
-    rb_manager = RosbagsManager(bag_path)
-    topic_list, data_table = rb_manager.rosbag_read(num_readings=20)
-
-    for topic in topic_list:
-        print(topic.split("/"))
-
-    for element in data_table:
-        topic = element[1].split("/")[-1]
-
-    timelimit = TimeLimit(start=10, stop=20)
+    timelimit1 = TimeLimit(start=10, stop=20)
+    timelimit2 = Stream()
     ros2_config = Ros2Config(directory=bag_path)
-    Ros2DataReader(regime=timelimit, dataset_params=ros2_config)
+
+    reader = Ros2DataReader(regime=timelimit1, dataset_params=ros2_config)
+
+    reader.get_element()
