@@ -25,7 +25,6 @@ def state_analyzer_config():
         name="test_state_analyzer",
         module_name="test_module",
         type_name=LidarOdometryStateAnalyzer.__name__,
-        handler_name="test_handler",
     )
 
 

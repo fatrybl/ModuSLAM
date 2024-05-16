@@ -10,6 +10,7 @@ batch_factory:
     name: "TimeLimit"
     start: 1544581174277398000
     stop: 1544581174479101000
+
   memory:
     batch_memory: 100.0
 

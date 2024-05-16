@@ -9,10 +9,14 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from slam.utils.numpy_types import Matrix4x4
+from slam.utils.numpy_types import Matrix3x3, Matrix4x4
 
 if TYPE_CHECKING:
-    from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
+    from slam.system_configs.setup_manager.sensors import (
+        ImuConfig,
+        Lidar3DConfig,
+        SensorConfig,
+    )
 
 
 class Sensor:
@@ -47,12 +51,59 @@ class Sensor:
 class Imu(Sensor):
     """Base class for any Inertial Measurement Unit."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: ImuConfig):
         """
         Args:
             config: Sensor configuration.
         """
         super().__init__(config)
+        self._tf_base_sensor: Matrix4x4 = np.array(config.tf_base_sensor)
+        self._accelerometer_noise_covariance: Matrix3x3 = np.diag(
+            config.accelerometer_noise_covariance,
+        )
+        self._gyroscope_noise_covariance: Matrix3x3 = np.diag(
+            config.gyroscope_noise_covariance,
+        )
+        self._integration_noise_covariance: Matrix3x3 = np.diag(
+            config.integration_noise_covariance,
+        )
+
+        self._accelerometer_bias_noise_covariance: Matrix3x3 = np.diag(
+            config.accelerometer_bias_noise_covariance
+        )
+        self._gyroscope_bias_noise_covariance: Matrix3x3 = np.diag(
+            config.gyroscope_bias_noise_covariance
+        )
+
+    @property
+    def tf_base_sensor(self) -> Matrix4x4:
+        """Base -> sensor transformation SE(3)."""
+        return self._tf_base_sensor
+
+    @property
+    def accelerometer_noise_covariance(self) -> Matrix3x3:
+        """Accelerometer noise covariance diagonal matrix [3, 3]."""
+        return self._accelerometer_noise_covariance
+
+    @property
+    def gyroscope_noise_covariance(self) -> Matrix3x3:
+        """Gyroscope noise covariance diagonal matrix [3, 3]."""
+        return self._gyroscope_noise_covariance
+
+    @property
+    def integration_noise_covariance(self) -> Matrix3x3:
+        """Integration noise covariance diagonal matrix [3, 3]."""
+        return self._integration_noise_covariance
+
+    @property
+    def accelerometer_bias_noise_covariance(self) -> Matrix3x3:
+        """Accelerometer bias noise covariance diagonal matrix [3, 3]."""
+        return self._accelerometer_bias_noise_covariance
+
+    @property
+    def gyroscope_bias_noise_covariance(self) -> Matrix3x3:
+        """Gyroscope bias noise covariance diagonal matrix [3, 3]."""
+        return self._gyroscope_bias_noise_covariance
 
 
 class StereoCamera(Sensor):

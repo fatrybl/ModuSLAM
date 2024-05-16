@@ -22,6 +22,7 @@ def test_init(handler, state_analyzer_config):
 def test_evaluate(handler, state_analyzer_config, measurement_storage):
     with patch.object(HandlersFactory, "get_handler", return_value=handler):
         analyzer = LidarOdometryStateAnalyzer(state_analyzer_config)
-        state = analyzer.evaluate(measurement_storage)
+        measurements = measurement_storage.data[handler]
+        state = analyzer.evaluate(measurements)
         assert isinstance(state, State)
         assert state.data == measurement_storage.data

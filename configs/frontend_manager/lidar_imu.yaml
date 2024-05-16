@@ -1,0 +1,20 @@
+defaults:
+  - lidar
+
+graph_builder:
+
+  element_distributor:
+    sensor_handlers_table:
+      imu: [ 'imu_preprocessor' ]
+
+  candidate_factory:
+
+    handler_state_analyzer_table:
+      kiss_icp_odometry: 'lidar_imu_state_analyzer'
+      imu_preprocessor: 'lidar_imu_state_analyzer'
+
+
+  graph_merger:
+
+    handler_edge_factory_table:
+      imu_preprocessor: 'imu_odometry_edge_factory'

@@ -7,9 +7,6 @@ from slam.system_configs.frontend_manager.handlers.base_handler import HandlerCo
 class KissIcpScanMatcherConfig(HandlerConfig):
     """Configuration for the KISS ICP odometry."""
 
-    name: str = "kiss_icp_odometry"
-    type_name: str = "ScanMatcher"
-    module_name: str = ".pointcloud_matcher"
     max_points_per_voxel: int = 10
     voxel_size: float = 1.5
     adaptive_initial_threshold: float = 3.0

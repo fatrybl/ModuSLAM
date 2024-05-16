@@ -29,6 +29,7 @@ class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
     """Builds a graph for point-cloud based map."""
 
     def __init__(self, config: GraphBuilderConfig) -> None:
+        super().__init__(config)
         self._distributor: ElementDistributor = ElementDistributor()
         self._candidate_factory: CandidateFactory = LidarMapCandidateFactory()
         self._merger = GraphMerger[GraphVertex, GraphEdge]()

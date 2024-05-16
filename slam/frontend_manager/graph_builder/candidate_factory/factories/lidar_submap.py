@@ -1,5 +1,3 @@
-import logging
-
 from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.analyzer_ABC import (
     CandidateAnalyzer,
 )
@@ -18,11 +16,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analy
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
-from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.tables_initializer import init_handler_state_analyzer_table
-from slam.utils.exceptions import EmptyStorageError
-
-logger = logging.getLogger(frontend_manager)
 
 
 class LidarMapCandidateFactory(CandidateFactory):
@@ -65,19 +59,18 @@ class LidarMapCandidateFactory(CandidateFactory):
         Args:
             storage: storage with measurements.
         """
-        try:
+        if storage.empty:
+            return None
+        else:
             new_measurement = storage.recent_measurement
-        except EmptyStorageError:
-            msg = "Empty storage: no measurements to process."
-            logger.debug(msg)
-            return
 
         if self._previous_measurement and self._previous_measurement == new_measurement:
-            return
+            return None
 
         else:
             analyzer = self._table[new_measurement.handler]
-            new_state: State | None = analyzer.evaluate(storage)
+            measurements = storage.data[new_measurement.handler]
+            new_state: State | None = analyzer.evaluate(measurements)
 
             if new_state:
                 self._graph_candidate.states.append(new_state)

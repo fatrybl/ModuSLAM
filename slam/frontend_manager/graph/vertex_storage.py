@@ -20,6 +20,7 @@ from slam.frontend_manager.graph.custom_vertices import (
 )
 from slam.frontend_manager.graph.index_generator import IndexStorage
 from slam.logger.logging_config import frontend_manager
+from slam.utils.auxiliary_methods import equal_numbers
 from slam.utils.deque_set import DequeSet
 from slam.utils.ordered_set import OrderedSet
 
@@ -66,15 +67,31 @@ class VertexStorage(Generic[GraphVertex]):
         """Not optimizable vertices in the Graph."""
         return self._not_optimizable_vertices
 
-    @staticmethod
-    def find_closest_vertex(
-        vertex_type: type[GraphVertex], timestamp: int, margin: int
+    def find_closest_optimizable_vertex(
+        self, vertex_type: type[GraphVertex], timestamp: float, margin: float
     ) -> GraphVertex | None:
-        """Finds the closest vertex with the given timestamp, time margin and type.
+        """Finds the closest optimizable vertex with the given timestamp, time margin and type.
+        Start searching from the latest vertex to reduce complexity.
+        Complexity: O(N).
 
-        Not implemented.
+        TODO: Implement a more efficient search algorithm.
+              Add tests.
+
+        Args:
+            vertex_type: type of the vertex.
+
+            timestamp: timestamp of the vertex.
+
+            margin: time margin.
+
+        Returns:
+            vertex if found, None otherwise.
         """
-        raise NotImplementedError
+        for v in reversed(self._optimizable_vertices):
+            if equal_numbers(v.timestamp, timestamp, margin) and isinstance(v, vertex_type):
+                return v
+
+        return None
 
     def get_vertices(self, vertex_type: type[Vertex]) -> DequeSet:
         """Gets vertices of the given type.

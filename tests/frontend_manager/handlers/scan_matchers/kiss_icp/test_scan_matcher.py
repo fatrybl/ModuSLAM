@@ -23,7 +23,11 @@ def scan_matcher() -> ScanMatcher:
     Returns:
         ScanMatcher handler.
     """
-    matcher_cfg = KissIcpScanMatcherConfig()
+    matcher_cfg = KissIcpScanMatcherConfig(
+        name="tests_matcher",
+        type_name=ScanMatcher.__name__,
+        module_name="test_module",
+    )
     return ScanMatcher(matcher_cfg)
 
 

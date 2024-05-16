@@ -12,7 +12,6 @@ from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_
 def state_analyzer_config():
     return StateAnalyzerConfig(
         name="test_state_analyzer",
-        handler_name="test_handler",
         type_name="test_type",
         module_name="test_module",
     )
