@@ -54,6 +54,7 @@ class MainManager:
             self._process()
 
         print(self.frontend_manager.graph.gtsam_values)
+        self.frontend_manager.graph.factor_graph.print()
 
         self.map_manager.save_graph(self.frontend_manager.graph)
         self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)

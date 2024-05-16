@@ -43,7 +43,7 @@ class MapManager:
             batch_factory: batch factory to create a data batch with map elements.
         """
         logger.info("Creating a map from the graph...")
-        self._map_factory.create(graph.vertex_storage, batch_factory)
+        self._map_factory.create(graph.vertex_storage, graph.edge_storage, batch_factory)
         logger.info("Map has been created.")
 
     def visualize_map(self) -> None:

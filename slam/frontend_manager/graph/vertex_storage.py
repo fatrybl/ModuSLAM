@@ -68,7 +68,7 @@ class VertexStorage(Generic[GraphVertex]):
         return self._not_optimizable_vertices
 
     def find_closest_optimizable_vertex(
-        self, vertex_type: type[GraphVertex], timestamp: float, margin: float
+        self, vertex_type: type[GraphVertex], timestamp: int, margin: int
     ) -> GraphVertex | None:
         """Finds the closest optimizable vertex with the given timestamp, time margin and type.
         Start searching from the latest vertex to reduce complexity.

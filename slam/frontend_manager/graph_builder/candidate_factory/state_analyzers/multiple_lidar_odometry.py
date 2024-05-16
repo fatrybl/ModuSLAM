@@ -2,7 +2,6 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
 from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
 from slam.frontend_manager.measurement_storage import Measurement
 from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
@@ -10,8 +9,8 @@ from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_
 from slam.utils.ordered_set import OrderedSet
 
 
-class LidarInertialOdometryStateAnalyzer(StateAnalyzer):
-    """Analyzer for lidar & IMU odometry measurements` handlers."""
+class MultipleLidarOdometryStateAnalyzer(StateAnalyzer):
+    """Analyzer for odometry measurements` handler for multiple lidars."""
 
     def __init__(self, config: StateAnalyzerConfig) -> None:
         """
@@ -24,7 +23,7 @@ class LidarInertialOdometryStateAnalyzer(StateAnalyzer):
 
     def evaluate(self, measurements: OrderedSet[Measurement]) -> State | None:
         """Evaluates the storage and adds a new state if a lidar odometry measurement is
-        present. If IMU odometry is present, it is added to the state.
+        present.
 
         Args:
             measurements: an ordered set of measurements.
@@ -39,7 +38,7 @@ class LidarInertialOdometryStateAnalyzer(StateAnalyzer):
         m = measurements.last
         self._state.add(m)
 
-        if isinstance(m.handler, ScanMatcher):
+        if len(self._state.data) == 2:
             self._update_state = True
             return self._state
         else:

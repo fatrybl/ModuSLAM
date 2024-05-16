@@ -12,6 +12,7 @@ from slam.frontend_manager.noise_models import pose_diagonal_noise_model
 from slam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
+from slam.utils.auxiliary_methods import to_nanoseconds
 from slam.utils.ordered_set import OrderedSet
 
 
@@ -24,7 +25,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             config: configuration of the factory.
         """
         super().__init__(config)
-        self._time_margin: float = config.search_time_margin
+        self._time_margin: int = to_nanoseconds(config.search_time_margin)
 
     @property
     def vertices_types(self) -> set[type[LidarPose]]:
@@ -62,7 +63,8 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         m: Measurement = measurements.last
         current_vertex = tuple(vertices)[0]
         index = current_vertex.index
-        previous_vertex = self._get_previous_vertex(graph.vertex_storage, m.time_range.start, index)
+        t = m.time_range.start
+        previous_vertex = self._get_previous_vertex(graph.vertex_storage, t, index)
         edge = self._create_edge(vertex1=previous_vertex, vertex2=current_vertex, measurement=m)
         return [edge]
 
@@ -126,18 +128,18 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Returns:
             vertex.
         """
-        vertex = storage.get_last_vertex(LidarPose)
+        vertex = storage.find_closest_optimizable_vertex(LidarPose, timestamp, self._time_margin)
         if vertex:
             return vertex
-
-        vertex = storage.find_closest_optimizable_vertex(Pose, timestamp, self._time_margin)
-        if vertex:
-            new_index = vertex.index
         else:
-            new_index = index + 1
+            vertex = storage.find_closest_optimizable_vertex(Pose, timestamp, self._time_margin)
+            if vertex:
+                new_index = vertex.index
+            else:
+                new_index = index + 1
 
-        new_vertex: LidarPose = self._create_vertex(index=new_index, timestamp=timestamp)
-        return new_vertex
+            new_vertex: LidarPose = self._create_vertex(index=new_index, timestamp=timestamp)
+            return new_vertex
 
     def _create_edge(
         self, vertex1: LidarPose, vertex2: LidarPose, measurement: Measurement

@@ -11,4 +11,4 @@ edge_factories:
     name: 'lidar_odometry_edge_factory'
     module_name: '.lidar_odometry_factory'
     type_name: 'LidarOdometryEdgeFactory'
-    search_time_margin: 0.0
+    search_time_margin: 0.05

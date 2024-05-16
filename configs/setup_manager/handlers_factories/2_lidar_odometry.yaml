@@ -1,0 +1,18 @@
+defaults:
+  - /handlers/base_kiss_icp_odometry@handlers.kiss_icp_odometry_1
+  - /handlers/base_kiss_icp_odometry@handlers.kiss_icp_odometry_2
+
+handlers:
+  kiss_icp_odometry_1:
+    name: "kiss_icp_odometry_1"
+    type_name: "ScanMatcher"
+    module_name: ".pointcloud_matcher"
+    measurement_noise_covariance: [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]
+
+  kiss_icp_odometry_2:
+    name: "kiss_icp_odometry_2"
+    type_name: "ScanMatcher"
+    module_name: ".pointcloud_matcher"
+    measurement_noise_covariance: [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]
+
+package_name: 'slam.frontend_manager.handlers'

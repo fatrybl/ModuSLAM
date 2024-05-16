@@ -20,6 +20,30 @@ from slam.utils.numpy_types import Vector3, VectorN
 logger = logging.getLogger(utils)
 
 
+def to_nanoseconds(seconds: float) -> int:
+    """Converts seconds to nanoseconds.
+
+    Args:
+        seconds: time in seconds.
+
+    Returns:
+        time in nanoseconds.
+    """
+    return int(seconds * 1e9)
+
+
+def to_seconds(nanoseconds: int) -> float:
+    """Converts nanoseconds to seconds.
+
+    Args:
+        nanoseconds: time in nanoseconds.
+
+    Returns:
+        time in seconds.
+    """
+    return nanoseconds * 1e-9
+
+
 def equal_numbers(n1: int | float, n2: int | float, epsilon: int | float) -> bool:
     """Compares two numbers with a given tolerance.
 

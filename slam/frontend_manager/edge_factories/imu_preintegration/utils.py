@@ -37,7 +37,7 @@ def get_previous_vertex(
     storage: VertexStorage,
     timestamp: int,
     index: int,
-    time_margin: float,
+    time_margin: int,
 ) -> GraphVertex:
     """Gets previous vertex if found or creates a new one.
 
