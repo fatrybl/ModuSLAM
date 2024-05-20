@@ -30,32 +30,15 @@ class Ros2DataReader():
         Returns:
             Element | None: element with raw sensor measurement
                             or None if all measurements from a dataset has already been processed
-
-        try:
-            sensor, iterator, t = self._reader_state.next_sensor()
-
-        except StopIteration:
-            return None
-
-        timestamp: int = as_int(t)
-        if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
-            return None
-
-        message, location = self._collector.get_data(sensor.name, iterator)
-        timestamp_int = as_int(message.timestamp)
-        measurement = Measurement(sensor, message.data)
-        element = Element(timestamp_int, measurement, location)
-        return element
         """
 
         try:
-            (sensor, t), iterator = self.iterator.next()
+            sensor, t, iterator = self.iterator.next()
 
         except StopIteration:
 
             return None
 
-        print(type(t))
         # timestamp: int = as_int(t)
         if isinstance(self._regime, TimeLimit) and t > self._time_range.stop:
             return None
