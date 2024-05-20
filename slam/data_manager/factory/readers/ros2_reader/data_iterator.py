@@ -1,8 +1,11 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from slam.data_manager.factory.readers.ros2_reader.get_data import DataGrabber
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
+from slam.setup_manager.sensors_factory.sensors import Sensor
+from slam.system_configs.setup_manager.sensors import SensorConfig
 
 
 @dataclass
@@ -13,6 +16,20 @@ class Iterator:
     # msg_limit:int = 10000
     position: int = 0
     data: list = None
+    sensors: dict = field(default_factory=lambda: {'Camera':['left', 'right'], 'Lidar':['vlp16r','vlp16l', 'vlp32c', 'merger'], 'Imu':['xsens']} )
+
+
+    def sensor_config_setup(self):
+        configs: dict[str, SensorConfig] = {}
+        for sensor_type, sensor_names in self.sensors.items():
+            for sensor in sensor_names:
+                print(sensor_type, sensor)
+                sensor_cfg = SensorConfig(
+                    name=sensor_type,
+                    type_name=sensor)
+                configs[sensor_type] = sensor_cfg
+
+        SensorsFactory.init_sensors(config=configs)
 
 
     def reset(self):
@@ -25,7 +42,20 @@ class Iterator:
 
     def next(self):
         self.position += 1
-        return self._get_data(self.position), self.position
+        try:
+            data_read, timestamp = self._get_data(self.position)
+            sensor_device = data_read[1].split('/')[1]
+            for sensor in self.sensors.keys():
+                if(sensor_device in self.sensors[sensor]):
+                    sensor_name = sensor
+
+
+            sensor: Sensor = SensorsFactory.get_sensor(sensor_name)
+            # sensor = data_read, iter_pos
+            return sensor, timestamp, self.position
+
+        except StopIteration:
+            print("Sensor not found")
 
 
 
@@ -33,9 +63,9 @@ if __name__ == "__main__":
 
     folder_path = Path(os.environ["DATA_DIR"])
     bag_path = Path("{}/rosbag2_2023_11_02-12_18_16".format(folder_path))
+
+
+
+
     my_iterator = Iterator(bag_path)
     (sensor, t), iterator = my_iterator.next()
-
-    print(sensor)
-    print(iterator)
-    print(t)
