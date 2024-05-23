@@ -2,7 +2,7 @@ defaults:
   - /map_manager/base_map_manager@_here_
 
 map_factory:
-  min_range: 5
+  min_range: 3
   max_range: 100
 
 map_loader:

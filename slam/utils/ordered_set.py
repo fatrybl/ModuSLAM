@@ -6,7 +6,8 @@ Complexity:
 """
 
 from collections import OrderedDict
-from typing import Any, Generic, Iterable, TypeVar
+from collections.abc import Iterable, Iterator
+from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
 
@@ -24,7 +25,7 @@ class OrderedSet(Generic[T]):
     def __contains__(self, item: T) -> bool:
         return item in self._items
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[T]:
         return iter(self._items.keys())
 
     def __len__(self) -> int:

@@ -1,12 +1,7 @@
-"""Tests for the GraphMerger class.
-
-1) tests for the protected _create_vertex_table() method. 2) tests for the public
-merge() method.
-"""
+"""Tests for the GraphMerger class."""
 
 from slam.frontend_manager.graph.base_edges import UnaryEdge
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.index_generator import IndexStorage
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
@@ -20,24 +15,6 @@ from tests.frontend_manager.conftest import (
     element,
     handler,
 )
-
-
-def test_create_vertex_table(handler, edge_factory):
-    index_storage = IndexStorage()
-    timestamp = 1
-
-    merger = GraphMerger[BasicTestVertex, UnaryEdge]()
-    # add new key-value pair to the protected table. Only for testing purposes.
-    merger._table = {handler: edge_factory}
-
-    table = merger._create_factory_vertices_table(index_storage, timestamp)
-
-    assert len(table) == 1
-
-    result_edge_factory, vertices = list(table.items())[0]
-
-    assert result_edge_factory == edge_factory
-    assert vertices[0].timestamp == timestamp
 
 
 def test_merge(element, handler, edge_factory):

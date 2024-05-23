@@ -1,6 +1,6 @@
 import logging
 
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
+from slam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
 from slam.logger.logging_config import setup_manager

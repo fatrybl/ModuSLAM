@@ -11,11 +11,31 @@ GtsamInstance = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.im
 class Vertex(ABC):
     """Base absract vertex of the Graph."""
 
-    def __init__(self):
-        self.index: int = 0
-        self.timestamp: int = 0
-        self.edges = set()
-        self.value: Any = None
+    def __init__(self, index: int = 0, timestamp: int = 0, value: Any = None):
+        self._index = index
+        self._timestamp = timestamp
+        self._edges: set = set()
+        self._value = value
+
+    @property
+    def timestamp(self) -> int:
+        """Timestamp of the vertex."""
+        return self._timestamp
+
+    @property
+    def index(self) -> int:
+        """Index of the vertex."""
+        return self._index
+
+    @property
+    def edges(self) -> set:
+        """Edges of the vertex."""
+        return self._edges
+
+    @property
+    def value(self) -> Any:
+        """Value of the vertex."""
+        return self._value
 
     @abstractmethod
     def update(self, value: Any) -> None:
@@ -32,8 +52,8 @@ GraphVertex = TypeVar("GraphVertex", bound=Vertex)
 
 class NotOptimizableVertex(Vertex):
     """
-    Base abstract non-optimizable vertex: does not have a GTSAM index & value,
-    and is not included in GTSAM factor graph directly.
+    Base abstract non-optimizable vertex: does not have GTSAM properties
+    and is not included in GTSAM factor graph as a variable.
     """
 
     @abstractmethod
@@ -46,11 +66,8 @@ class NotOptimizableVertex(Vertex):
 
 
 class OptimizableVertex(Vertex):
-    """Base abstract optimizable vertex of the Graph: has a GTSAM index & value,
-    and is included in GTSAM factor graph."""
-
-    def __init__(self):
-        super().__init__()
+    """Base abstract optimizable vertex of the Graph with GTSAM properties and is
+    included in GTSAM factor graph as a variable."""
 
     @property
     @abstractmethod

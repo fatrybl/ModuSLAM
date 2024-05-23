@@ -31,6 +31,9 @@ class BasicTestHandler(Handler):
         m = create_measurement(self, element)
         return m
 
+    def _create_empty_element(self, element: Element) -> Element:
+        return element
+
 
 class BasicTestVertex(NotOptimizableVertex):
     def update(self, value: Any) -> None:
@@ -53,7 +56,7 @@ class BasicTestEdgeFactory(EdgeFactory):
     def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
         return {gtsam.Pose3}
 
-    def create(self, graph, vertices, measurements) -> list[UnaryEdge]:
+    def create(self, graph, measurements, timestamp: int) -> list[UnaryEdge]:
         f = gtsam.PriorFactorPoint2(
             key=0, prior=[0, 0], noiseModel=gtsam.noiseModel.Diagonal.Sigmas([1, 1])
         )

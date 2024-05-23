@@ -30,10 +30,7 @@ def edge():
 
 @pytest.fixture
 def edges():
-    v1, v2, v3 = Pose(), Pose(), Pose()
-    v1.index = 0
-    v2.index = 1
-    v3.index = 2
+    v1, v2, v3 = Pose(index=0), Pose(index=1), Pose(index=2)
 
     e1 = UnaryEdge(
         v1,
@@ -105,7 +102,7 @@ class TestGraph:
         values.insert(vertex.gtsam_index, new_pose)
         graph.update(values)
 
-        assert np.array_equal(vertex.pose, new_pose.matrix())
+        assert np.array_equal(vertex.value, new_pose.matrix())
 
     def test_gtsam_values(self, graph: Graph, edge: UnaryEdge):
         new_pose = gtsam.Pose3(gtsam.Rot3((10, 10, 10)), (10, 10, 10))

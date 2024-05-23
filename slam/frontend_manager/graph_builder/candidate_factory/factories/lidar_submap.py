@@ -1,7 +1,7 @@
-from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.analyzer_ABC import (
+from slam.frontend_manager.graph_builder.candidate_analyzers.analyzer_ABC import (
     CandidateAnalyzer,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.lidar_submap_analyzer import (
+from slam.frontend_manager.graph_builder.candidate_analyzers.lidar_submap_analyzer import (
     LidarSubmapAnalyzer,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.factories.factory_ABC import (
@@ -11,7 +11,7 @@ from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate impor
     GraphCandidate,
     State,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
+from slam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler
@@ -73,6 +73,6 @@ class LidarMapCandidateFactory(CandidateFactory):
             new_state: State | None = analyzer.evaluate(measurements)
 
             if new_state:
-                self._graph_candidate.states.append(new_state)
+                self._graph_candidate.add(new_state)
 
             self._previous_measurement = new_measurement

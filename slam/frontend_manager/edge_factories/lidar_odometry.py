@@ -1,11 +1,11 @@
-from collections.abc import Collection
-
 import gtsam
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from slam.frontend_manager.edge_factories.utils import find_vertex
 from slam.frontend_manager.graph.custom_edges import LidarOdometry
 from slam.frontend_manager.graph.custom_vertices import LidarPose, Pose
 from slam.frontend_manager.graph.graph import Graph
+from slam.frontend_manager.graph.index_generator import generate_index
 from slam.frontend_manager.graph.vertex_storage import VertexStorage
 from slam.frontend_manager.measurement_storage import Measurement
 from slam.frontend_manager.noise_models import pose_diagonal_noise_model
@@ -46,44 +46,30 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         return {gtsam.Pose3}
 
     def create(
-        self, graph: Graph, vertices: Collection[LidarPose], measurements: OrderedSet[Measurement]
+        self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[LidarOdometry]:
         """Creates 1 edge (LidarOdometry) with the given measurements.
 
         Args:
             graph: the graph to create the edge for.
 
-            vertices: graph vertices to be used for the new edge.
-
             measurements: contains SE(3) transformation matrix.
+
+            timestamp: timestamp of the j-th lidar pose.
 
         Returns:
             list with 1 edge.
         """
-        m: Measurement = measurements.last
-        current_vertex = tuple(vertices)[0]
-        index = current_vertex.index
-        t = m.time_range.start
-        previous_vertex = self._get_previous_vertex(graph.vertex_storage, t, index)
-        edge = self._create_edge(vertex1=previous_vertex, vertex2=current_vertex, measurement=m)
+        m = measurements.last
+        t_start = m.time_range.start
+        t_stop = timestamp
+
+        pose_i, pose_j = self._get_vertices(
+            graph.vertex_storage, t_start, t_stop, self._time_margin
+        )
+
+        edge = self._create_edge(vertex1=pose_i, vertex2=pose_j, measurement=m)
         return [edge]
-
-    @staticmethod
-    def _create_vertex(index: int, timestamp: int) -> LidarPose:
-        """Creates the graph vertex.
-
-        Args:
-            index: index of the vertex.
-
-            timestamp: timestamp of the vertex.
-
-        Returns:
-            new vertex.
-        """
-        vertex = LidarPose()
-        vertex.index = index
-        vertex.timestamp = timestamp
-        return vertex
 
     @staticmethod
     def _create_factor(
@@ -114,32 +100,6 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             noiseModel=noise_model,
         )
         return factor
-
-    def _get_previous_vertex(self, storage: VertexStorage, timestamp: int, index: int) -> LidarPose:
-        """Gets previous vertex if found or creates a new one.
-
-        Args:
-            storage: storage of vertices.
-
-            timestamp: timestamp of the vertex.
-
-            index: index of the vertex.
-
-        Returns:
-            vertex.
-        """
-        vertex = storage.find_closest_optimizable_vertex(LidarPose, timestamp, self._time_margin)
-        if vertex:
-            return vertex
-        else:
-            vertex = storage.find_closest_optimizable_vertex(Pose, timestamp, self._time_margin)
-            if vertex:
-                new_index = vertex.index
-            else:
-                new_index = index + 1
-
-            new_vertex: LidarPose = self._create_vertex(index=new_index, timestamp=timestamp)
-            return new_vertex
 
     def _create_edge(
         self, vertex1: LidarPose, vertex2: LidarPose, measurement: Measurement
@@ -175,3 +135,54 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             noise_model=noise,
         )
         return edge
+
+    @staticmethod
+    def _get_vertices(
+        storage: VertexStorage,
+        t1: int,
+        t2: int,
+        time_margin: int,
+    ) -> tuple[LidarPose, LidarPose]:
+        """Gets vertices with the given timestamps.
+
+        Args:
+            storage: storage of vertices.
+
+            t1: timestamp of the 1-st vertex.
+
+            t2: timestamp of the 2-nd vertex.
+
+            time_margin: time margin for the search.
+
+        Returns:
+            2 vertices.
+        """
+        v1 = find_vertex(LidarPose, storage, t1, time_margin)
+        if not v1:
+            p = find_vertex(Pose, storage, t1, time_margin)
+            if p:
+                v1 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
+
+        v2 = find_vertex(LidarPose, storage, t2, time_margin)
+        if not v2:
+            p = find_vertex(Pose, storage, t2, time_margin)
+            if p:
+                v2 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
+
+        if v1 and v2:
+            return v1, v2
+
+        new_index = generate_index(storage.index_storage)
+
+        if v1 and not v2:
+            v2 = LidarPose(timestamp=t2, index=new_index, value=v1.value)
+            return v1, v2
+
+        elif v2 and not v1:
+            v1 = LidarPose(timestamp=t1, index=new_index, value=v2.value)
+            return v1, v2
+
+        else:
+            v1 = LidarPose(timestamp=t1, index=new_index)
+            v2 = LidarPose(timestamp=t2, index=new_index + 1)
+            return v1, v2

@@ -8,13 +8,13 @@ batch_factory:
 
   regime:
     name: "TimeLimit"
-    start: 1544581174277398000
-    stop: 1544581194384387000
+    start: 1544581174111995000
+    stop: 1544581195292098000
 
   memory:
     batch_memory: 100.0
 
-#    start: 1544581174277398000
+#    start: 1544581174111995000
 #    stop: 1544581174479101000
 
 # for urban-30

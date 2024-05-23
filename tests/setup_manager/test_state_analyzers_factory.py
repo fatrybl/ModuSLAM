@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
+from slam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
 from slam.setup_manager.handlers_factory.factory import HandlersFactory

@@ -94,3 +94,7 @@ class PriorVelocity(UnaryEdge):
 
 class PriorNavState(UnaryEdge):
     """Edge for prior nav state."""
+
+
+class GpsPosition(UnaryEdge):
+    """Edge for GPS position."""

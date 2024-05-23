@@ -1,0 +1,8 @@
+package_name: "slam.frontend_manager.graph_builder.state_analyzers"
+
+analyzers:
+
+  imu_gps_state_analyzer:
+    name: "imu_gps_state_analyzer"
+    type_name: "ImuGpsAnalyzer"
+    module_name: ".imu_gps"

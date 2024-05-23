@@ -18,7 +18,7 @@ from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import
 )
 from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 from slam.utils.auxiliary_dataclasses import TimeRange
-from slam.utils.auxiliary_methods import as_int
+from slam.utils.auxiliary_methods import to_int
 from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
@@ -64,12 +64,12 @@ class KaistReader(DataReader):
         except StopIteration:
             return None
 
-        timestamp: int = as_int(t)
+        timestamp: int = to_int(t)
         if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
             return None
 
         message, location = self._collector.get_data(sensor.name, iterator)
-        timestamp_int = as_int(message.timestamp)
+        timestamp_int = to_int(message.timestamp)
         measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp_int, measurement, location)
         return element
@@ -99,7 +99,7 @@ class KaistReader(DataReader):
         except StopIteration:
             return None
 
-        timestamp = as_int(message.timestamp)
+        timestamp = to_int(message.timestamp)
         if isinstance(self._regime, TimeLimit) and timestamp > self._time_range.stop:
             return None
 
@@ -144,7 +144,7 @@ class KaistReader(DataReader):
             logger.error(msg)
             raise ItemNotFoundError(msg)
 
-        timestamp: int = as_int(message.timestamp)
+        timestamp: int = to_int(message.timestamp)
         measurement = RawMeasurement(sensor, message.data)
         element_with_data = Element(timestamp, measurement, location)
         return element_with_data
@@ -187,7 +187,7 @@ class KaistReader(DataReader):
             logger.error(msg)
             raise ItemNotFoundError(msg)
 
-        timestamp = as_int(message.timestamp)
+        timestamp = to_int(message.timestamp)
         measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element

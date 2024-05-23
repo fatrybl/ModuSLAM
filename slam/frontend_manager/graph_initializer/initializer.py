@@ -10,9 +10,9 @@ from slam.frontend_manager.graph.base_edges import Edge
 from slam.frontend_manager.graph.base_vertices import Vertex
 from slam.frontend_manager.graph.custom_vertices import (
     LidarPose,
+    LinearVelocity,
     NavState,
     Pose,
-    Velocity,
 )
 from slam.frontend_manager.graph.graph import Graph
 from slam.frontend_manager.graph.index_generator import generate_index
@@ -72,8 +72,6 @@ class GraphInitializer:
         Returns:
             list with 1 edge.
         """
-        vertex_type = self._get_vertex_type(prior.vertex_type)
-        vertex = self._get_new_vertex(graph, vertex_type, prior.timestamp)
 
         measurement = self._init_measurement(
             prior.measurement,
@@ -84,8 +82,8 @@ class GraphInitializer:
         edge_factory = self._get_edge_factory(prior.edge_factory_name)
         edge = edge_factory.create(
             graph=graph,
-            vertices=(vertex,),
             measurements=OrderedSet((measurement,)),
+            timestamp=prior.timestamp,
         )
         return edge
 
@@ -109,9 +107,9 @@ class GraphInitializer:
             if v.timestamp == timestamp:
                 return v
 
-        new_vertex = vertex_type()
-        new_vertex.timestamp = timestamp
-        new_vertex.index = generate_index(graph.vertex_storage.index_storage)
+        new_index = generate_index(graph.vertex_storage.index_storage)
+        new_vertex = vertex_type(index=new_index, timestamp=timestamp)
+
         return new_vertex
 
     @staticmethod
@@ -183,8 +181,8 @@ class GraphInitializer:
             case Pose.__name__:
                 return Pose
 
-            case Velocity.__name__:
-                return Velocity
+            case LinearVelocity.__name__:
+                return LinearVelocity
 
             case NavState.__name__:
                 return NavState

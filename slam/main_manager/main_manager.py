@@ -36,28 +36,27 @@ class MainManager:
         data_batch = self.data_manager.batch_factory.batch
         graph = self.frontend_manager.graph
 
-        self.frontend_manager.set_prior()
-
         while not data_batch.empty:
             self.frontend_manager.create_graph(data_batch)
             self.backend_manager.solve(graph)
-            self.backend_manager.update(graph)
 
         logger.info("The data batch has been successfully processed.")
 
     def build_map(self) -> None:
         """Builds the map using the data from the data manager."""
 
+        self.frontend_manager.set_prior()
+        self.backend_manager.solve(self.frontend_manager.graph)
+        self.frontend_manager.graph.factor_graph.print()
+
         while not StoppingCriterion.is_active():
             logger.info("Creating new data batch...")
             self.data_manager.make_batch()
             self._process()
 
-        print(self.frontend_manager.graph.gtsam_values)
-        self.frontend_manager.graph.factor_graph.print()
-
         self.map_manager.save_graph(self.frontend_manager.graph)
         self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
         self.map_manager.visualize_map()
+        self.map_manager.save_map()
 
         logger.info("All processes have finished successfully.")

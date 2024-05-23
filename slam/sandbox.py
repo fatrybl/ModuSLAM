@@ -24,10 +24,10 @@ pose1 = gtsam.gtsam.Pose3()
 pose2 = gtsam.gtsam.Pose3()
 prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
 odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
-# graph.addPriorPose3(X(0), pose1, prior_noise)
-# graph.push_back(
-#     gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
-# )
+graph.addPriorPose3(X(0), pose1, prior_noise)
+graph.push_back(
+    gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
+)
 
 init_values = gtsam.Values()
 init_values.insert_pose3(X(0), gtsam.gtsam.Pose3())
@@ -41,13 +41,16 @@ init_values.insert_pose3(X(1), gtsam.gtsam.Pose3())
 
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
+
+isam = gtsam.ISAM2()
+isam.update(graph, init_values)
+result_isam = isam.calculateEstimate()
+
 result = optimizer.optimizeSafely()
 
-for i in range(5):
-    graph.addPriorPose3(X(i), pose1, prior_noise)
-    graph.remove(i)
+print(result)
 
-graph.addPriorPose3(X(0), pose1, prior_noise)
+print(result_isam)
 
 # print(graph)
 # print(graph.keys())

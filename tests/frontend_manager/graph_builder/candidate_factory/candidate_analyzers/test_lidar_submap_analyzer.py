@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from slam.frontend_manager.graph_builder.candidate_factory.candidate_analyzers.lidar_submap_analyzer import (
+from slam.frontend_manager.graph_builder.candidate_analyzers.lidar_submap_analyzer import (
     LidarSubmapAnalyzer,
 )
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (

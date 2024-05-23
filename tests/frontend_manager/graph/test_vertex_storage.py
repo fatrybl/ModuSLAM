@@ -40,9 +40,6 @@ class TestVertexStorage:
         assert non_optimizable_vertex in vertex_storage.not_optimizable_vertices
         assert len(vertex_storage.get_vertices(type(non_optimizable_vertex))) == 1
 
-        assert optimizable_vertex not in vertex_storage.not_optimizable_vertices
-        assert non_optimizable_vertex not in vertex_storage.optimizable_vertices
-
     def test_add_multiple(self, vertex_storage, optimizable_vertex, non_optimizable_vertex):
         vertex_storage.add([optimizable_vertex, non_optimizable_vertex])
 

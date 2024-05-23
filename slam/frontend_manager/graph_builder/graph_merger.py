@@ -5,7 +5,6 @@ from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from slam.frontend_manager.graph.base_edges import GraphEdge
 from slam.frontend_manager.graph.base_vertices import GraphVertex
 from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import State
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.logger.logging_config import frontend_manager
@@ -49,65 +48,11 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
 
             graph: a graph to merge the state with.
         """
-        index_storage = graph.vertex_storage.index_storage
-        storage = state.data
-        table = self._create_factory_vertices_table(index_storage, state.timestamp)
+        storage = state.data.items()
+        state_time = state.timestamp
 
-        for handler, measurements in storage.items():
+        for handler, measurements in storage:
+
             edge_factory = self._table[handler]
-            vertices = table[edge_factory]
-
-            edges = edge_factory.create(graph, vertices, measurements)
+            edges = edge_factory.create(graph, measurements, state_time)
             graph.add_edges(edges)
-
-    @staticmethod
-    def _create_vertex(vertex_type: type[GraphVertex], index: int, timestamp: int) -> GraphVertex:
-        """Creates vertex instances for the state.
-
-        Args:
-            vertex_type: type of the vertex.
-
-            index: index of the vertex.
-
-            timestamp: timestamp of the vertex.
-
-        Returns:
-            vertex.
-        """
-        vertex = vertex_type()
-        vertex.index = index
-        vertex.timestamp = timestamp
-        return vertex
-
-    def _create_factory_vertices_table(
-        self, index_storage: IndexStorage, timestamp: int
-    ) -> dict[EdgeFactory, list[GraphVertex]]:
-        """Creates "edge factory -> vertices" table.
-
-        Args:
-            index_storage: storage with vertices` indices.
-
-            timestamp: timestamp.
-
-        Returns:
-            "edge factory -> vertices" table.
-        """
-
-        table: dict[EdgeFactory, list[GraphVertex]] = {}
-        edge_factories = self._table.values()
-
-        vertices_types = set[type[GraphVertex]]()
-        type_instance_table = dict[type[GraphVertex], GraphVertex]()
-        vertices_types = vertices_types.union(
-            *(factory.vertices_types for factory in edge_factories)
-        )
-        for v_type in vertices_types:
-            index: int = generate_index(index_storage)
-            vertex = self._create_vertex(v_type, index, timestamp)
-            type_instance_table[v_type] = vertex
-
-        for factory in edge_factories:
-            vertices = [type_instance_table[v_type] for v_type in factory.vertices_types]
-            table[factory] = vertices
-
-        return table

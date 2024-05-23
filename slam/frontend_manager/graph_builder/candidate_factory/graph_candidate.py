@@ -23,12 +23,14 @@ class GraphCandidate:
     @property
     def time_range(self) -> TimeRange:
         """Time range of the graph candidate."""
+
         self._time_range = self._update_time_range()
         return self._time_range
 
     @property
     def states(self) -> deque[State]:
         """States of the graph candidate."""
+
         return self._states
 
     def add(self, state: State) -> None:

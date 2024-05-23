@@ -111,8 +111,12 @@ class MeasurementStorage:
         else:
             self._remove(measurement)
 
+        self._update_time_range_all()
+
     def clear(self) -> None:
         """Clears the storage."""
+        self._start_timestamp = None
+        self._stop_timestamp = None
         self._data.clear()
 
     def _add(self, measurement: Measurement) -> None:
@@ -140,6 +144,9 @@ class MeasurementStorage:
         if not self._data[measurement.handler]:
             del self._data[measurement.handler]
 
+        if measurement == self._recent_measurement:
+            self._recent_measurement = self._find_recent_measurement()
+
     def _update_recent_measurement(self, measurement: Measurement) -> None:
         """Updates the recent measurement in the storage by comparing the "stop"
         timestamp of measurement`s time range.
@@ -164,3 +171,35 @@ class MeasurementStorage:
             self._start_timestamp = time_range.start
         if self._stop_timestamp is None or time_range.stop > self._stop_timestamp:
             self._stop_timestamp = time_range.stop
+
+    def _find_recent_measurement(self) -> Measurement | None:
+        """Finds the measurement with the latest "stop" timestamp in the storage."""
+        if not self._data:
+            return None
+
+        recent_measurement = max(
+            (measurement for measurements in self._data.values() for measurement in measurements),
+            key=lambda measurement: measurement.time_range.stop,
+            default=None,
+        )
+        return recent_measurement
+
+    def _update_time_range_all(self) -> None:
+        """Updates the time range of the storage for all measurements.
+
+        TODO: think how to make faster.
+        """
+        if not self._data:
+            self._start_timestamp = None
+            self._stop_timestamp = None
+            return
+
+        all_measurements = [
+            measurement
+            for measurements_set in self._data.values()
+            for measurement in measurements_set
+        ]
+        self._start_timestamp = min(
+            measurement.time_range.start for measurement in all_measurements
+        )
+        self._stop_timestamp = max(measurement.time_range.stop for measurement in all_measurements)

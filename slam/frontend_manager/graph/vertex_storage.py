@@ -14,9 +14,9 @@ from slam.frontend_manager.graph.custom_vertices import (
     CameraFeature,
     ImuBias,
     LidarPose,
+    LinearVelocity,
     NavState,
     Pose,
-    Velocity,
 )
 from slam.frontend_manager.graph.index_generator import IndexStorage
 from slam.logger.logging_config import frontend_manager
@@ -40,7 +40,7 @@ class VertexStorage(Generic[GraphVertex]):
         self._index_vertices_table: dict[int, set[GraphVertex]] = {}
         self._vertices_table: dict[type[Vertex], DequeSet] = {
             Pose: DequeSet[Pose](),
-            Velocity: DequeSet[Velocity](),
+            LinearVelocity: DequeSet[LinearVelocity](),
             NavState: DequeSet[NavState](),
             ImuBias: DequeSet[ImuBias](),
             LidarPose: DequeSet[LidarPose](),
@@ -145,7 +145,8 @@ class VertexStorage(Generic[GraphVertex]):
 
     def update_non_optimizable_vertices(self) -> None:
         """Updates non-optimizable vertices."""
-        [vertex.update() for vertex in self._not_optimizable_vertices]
+        # [vertex.update() for vertex in self._not_optimizable_vertices]
+        raise NotImplementedError
 
     def get_last_vertex(self, vertex_type: type[GraphVertex]) -> GraphVertex | None:
         """Gets the vertex with the latest timestamp.
@@ -178,7 +179,7 @@ class VertexStorage(Generic[GraphVertex]):
         """
         return [v for v in self._vertices if v.index == index]
 
-    def get_vertices_with_gtsam_index(self, index: int) -> list[GraphVertex]:
+    def get_vertices_with_gtsam_index(self, index: int) -> list[OptimizableVertex]:
         """Gets the vertices with the given gtsam index.
 
         Args:

@@ -110,7 +110,7 @@ class LidarMapFactory:
                 if isinstance(sensor, Lidar3D):
 
                     pointcloud = self._build_pointcloud(
-                        pose=vertex.pose,
+                        pose=vertex.value,
                         tf=sensor.tf_base_sensor,
                         values=element.measurement.values,
                     )

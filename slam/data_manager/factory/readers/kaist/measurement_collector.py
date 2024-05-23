@@ -16,7 +16,7 @@ from slam.data_manager.factory.locations import (
 )
 from slam.data_manager.factory.readers.kaist.iterators import FileIterator
 from slam.logger.logging_config import data_manager
-from slam.utils.auxiliary_methods import as_int
+from slam.utils.auxiliary_methods import to_int
 from slam.utils.exceptions import ExternalModuleException, ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
@@ -260,7 +260,7 @@ class MeasurementCollector:
                 raise StopIteration(msg)
             else:
                 timestamp_str: str = line[0]
-                current_timestamp = as_int(timestamp_str)
+                current_timestamp = to_int(timestamp_str)
         return line
 
     def _get_image(self, timestamp: int) -> tuple[Message, StereoImgDataLocation]:
@@ -489,7 +489,7 @@ class MeasurementCollector:
             logger.critical(msg)
             raise
         else:
-            timestamp: int = as_int(line[0])
+            timestamp: int = to_int(line[0])
             message, location = self._get_image(timestamp)
             return message, location
 

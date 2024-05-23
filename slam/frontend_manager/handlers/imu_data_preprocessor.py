@@ -25,6 +25,7 @@ from slam.logger.logging_config import frontend_manager
 from slam.setup_manager.sensors_factory.sensors import Imu
 from slam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
+from slam.utils.auxiliary_methods import create_empty_element
 from slam.utils.numpy_types import Vector3
 
 logger = logging.getLogger(frontend_manager)
@@ -53,7 +54,7 @@ class ImuDataPreprocessor(Handler):
         """
         if not isinstance(element.measurement.sensor, Imu):
             msg = f"Expected sensor of type {Imu}, got {type(element.measurement.sensor)}"
-            logger.critical(msg)
+            logger.error(msg)
             raise TypeError(msg)
 
         acceleration = np.array(element.measurement.values[10:13], dtype=np.float64)
@@ -70,12 +71,26 @@ class ImuDataPreprocessor(Handler):
         )
         gyro_bias_cov = tuple(element.measurement.sensor.gyroscope_bias_noise_covariance.flatten())
 
+        empty_element = self._create_empty_element(element)
+
         m = Measurement(
             time_range=t_range,
             values=imu_data,
             handler=self,
-            elements=(element,),
+            elements=(empty_element,),
             noise_covariance=(*acc_cov, *gyro_cov, *acc_bias_cov, *gyro_bias_cov),
         )
 
         return m
+
+    def _create_empty_element(self, element: Element) -> Element:
+        """
+        Creates an empty element with the same timestamp, location and sensor as the input element.
+        Args:
+            element: element of a data batch with raw data.
+
+        Returns:
+            empty element without data.
+        """
+        empty_element = create_empty_element(element)
+        return empty_element

@@ -1,0 +1,11 @@
+defaults:
+  - 2_lidar_imu_odometry
+  - /handlers/base_vrs_gps_preprocessor@handlers.vrs_gps_preprocessor
+
+handlers:
+
+  vrs_gps_preprocessor:
+    name: "vrs_gps_preprocessor"
+    type_name: "VrsGpsPreprocessor"
+    module_name: ".vrs_gps"
+    fix_statuses: [ 4 ]

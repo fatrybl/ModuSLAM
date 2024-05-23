@@ -1,0 +1,18 @@
+defaults:
+  - lidar_imu_odometry
+  - /handlers/base_vrs_gps_preprocessor@handlers.vrs_gps_preprocessor
+
+handlers:
+
+  vrs_gps_preprocessor:
+    name: "vrs_gps_preprocessor"
+    type_name: "VrsGpsPreprocessor"
+    module_name: ".vrs_gps"
+    fix_statuses: [ 4 ]
+
+  kiss_icp_odometry:
+    name: "kiss_icp_odometry"
+    type_name: "ScanMatcher"
+    module_name: ".pointcloud_matcher"
+    measurement_noise_covariance: [ 2.5, 2.5, 2.5, 2.5, 2.5, 2.5 ]
+    min_range: 8.0

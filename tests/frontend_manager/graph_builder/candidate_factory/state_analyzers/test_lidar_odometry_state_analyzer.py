@@ -3,7 +3,7 @@ from unittest.mock import patch
 from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
+from slam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
 from slam.setup_manager.handlers_factory.factory import HandlersFactory

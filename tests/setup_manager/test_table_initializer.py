@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
+from slam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
 from slam.frontend_manager.handlers.ABC_handler import Handler

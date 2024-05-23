@@ -28,12 +28,7 @@ class Graph(Generic[GraphVertex, GraphEdge]):
     def gtsam_values(self) -> gtsam.Values:
         """GTSAM values of the graph."""
         values = gtsam.Values()
-        unique_vertices: dict[int, OptimizableVertex] = {}
-
-        for vertex in self.vertex_storage.optimizable_vertices:
-            if vertex.gtsam_index not in unique_vertices:
-                unique_vertices[vertex.gtsam_index] = vertex
-
+        unique_vertices = self._get_unique_gtsam_vertices()
         [
             values.insert(vertex.gtsam_index, vertex.gtsam_instance)
             for vertex in unique_vertices.values()
@@ -114,7 +109,6 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """
 
         self.vertex_storage.update_optimizable_vertices(values)
-        self.vertex_storage.update_non_optimizable_vertices()
 
     def marginalize(self, vertices: Iterable[GraphVertex]) -> None:
         """Marginalizes out vertices.
@@ -136,3 +130,17 @@ class Graph(Generic[GraphVertex, GraphEdge]):
             unique index.
         """
         return self.factor_graph.size()
+
+    def _get_unique_gtsam_vertices(self):
+        """Gets vertices with unique gtsam indices.
+
+        Returns:
+            dict of indices and vertices.
+        """
+        unique_vertices: dict[int, OptimizableVertex] = {}
+
+        for vertex in self.vertex_storage.optimizable_vertices:
+            if vertex.gtsam_index not in unique_vertices:
+                unique_vertices[vertex.gtsam_index] = vertex
+
+        return unique_vertices

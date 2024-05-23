@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
-from slam.data_manager.factory.element import Element, RawMeasurement
+from slam.data_manager.factory.element import Element
 from slam.frontend_manager.handlers.ABC_handler import Handler
 from slam.frontend_manager.measurement_storage import Measurement
 from slam.logger.logging_config import frontend_manager
@@ -12,6 +12,7 @@ from slam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from slam.utils.auxiliary_dataclasses import TimeRange
+from slam.utils.auxiliary_methods import create_empty_element
 
 logger = logging.getLogger(frontend_manager)
 
@@ -53,13 +54,12 @@ class ScanMatcher(Handler):
         Raises:
             TypeError: if the sensor is not an instance of Lidar3D.
         """
-        if isinstance(element.measurement.sensor, Lidar3D):
-            sensor: Lidar3D = element.measurement.sensor
-        else:
-            msg = f"ScanMatcher can not process data from sensor {element.measurement.sensor!r}."
+        if not isinstance(element.measurement.sensor, Lidar3D):
+            msg = f"Expected sensor of type {Lidar3D}, got {type(element.measurement.sensor)}"
             logger.error(msg)
             raise TypeError(msg)
 
+        sensor = element.measurement.sensor
         new_measurement: Measurement | None = None
 
         tf_base_sensor = sensor.tf_base_sensor
@@ -149,15 +149,12 @@ class ScanMatcher(Handler):
         Returns:
             measurement with the transformation matrix.
         """
-        last_el = self._elements_queue[-1]
         pre_last_el = self._elements_queue[-2]
-        empty_m = RawMeasurement(sensor=last_el.measurement.sensor, values=())
-        empty_pre_last_element = Element(
-            timestamp=pre_last_el.timestamp, measurement=empty_m, location=pre_last_el.location
-        )
-        empty_last_element = Element(
-            timestamp=last_el.timestamp, measurement=empty_m, location=last_el.location
-        )
+        last_el = self._elements_queue[-1]
+
+        empty_pre_last_element = self._create_empty_element(pre_last_el)
+        empty_last_element = self._create_empty_element(last_el)
+
         start = pre_last_el.timestamp
         stop = last_el.timestamp
 
@@ -176,3 +173,15 @@ class ScanMatcher(Handler):
         """Remove the oldest element and pose from the queue."""
         self._scan_matcher.poses.pop(0)
         self._elements_queue.pop(0)
+
+    def _create_empty_element(self, element: Element) -> Element:
+        """
+        Creates an empty element with the same timestamp, location and sensor as the input element.
+        Args:
+            element: element of a data batch with raw data.
+
+        Returns:
+            empty element without data.
+        """
+        empty_element = create_empty_element(element)
+        return empty_element

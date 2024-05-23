@@ -7,7 +7,7 @@ from slam.logger.logging_config import data_manager
 from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.utils.auxiliary_dataclasses import TimeRange
-from slam.utils.auxiliary_methods import as_int
+from slam.utils.auxiliary_methods import to_int
 from slam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
@@ -161,7 +161,7 @@ class KaistReaderState:
             else:
                 t: str = line[0]
                 sensor_name = line[1]
-                current_timestamp = as_int(t)
+                current_timestamp = to_int(t)
                 occurrence.update({sensor_name})
 
         return sensor_name, occurrence

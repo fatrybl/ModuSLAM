@@ -1,0 +1,17 @@
+defaults:
+  - /handlers/base_vrs_gps_preprocessor@handlers.vrs_gps_preprocessor
+
+package_name: 'slam.frontend_manager.handlers'
+
+handlers:
+
+  vrs_gps_preprocessor:
+    name: "vrs_gps_preprocessor"
+    type_name: "VrsGpsPreprocessor"
+    module_name: ".vrs_gps"
+    fix_statuses: [ 4, 5 ]
+
+  imu_preprocessor:
+    name: "imu_preprocessor"
+    type_name: "ImuDataPreprocessor"
+    module_name: ".imu_data_preprocessor"

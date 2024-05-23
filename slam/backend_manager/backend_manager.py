@@ -18,19 +18,11 @@ class BackendManager:
         logger.debug("Backend Manager has been configured.")
 
     def solve(self, graph: Graph) -> None:
-        """Solves the optimization problem for the graph.
+        """Solves the optimization problem and updates the graph.
 
         Args:
             graph: contains factor graph to be solved.
         """
         self._result_values = self._graph_solver.solve(graph)
-        logger.debug("Graph has been solved.")
-
-    def update(self, graph: Graph) -> None:
-        """Updates the graph with the calculated values.
-
-        Args:
-            graph (Graph): a graph to be updated.
-        """
         graph.update(self._result_values)
-        logger.debug("Graph has been updated.")
+        logger.debug("Graph has been solved.")

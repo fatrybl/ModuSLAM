@@ -55,12 +55,13 @@ def create_vertex_elements_table(
     for i, vertex in enumerate(vertices):
         if i == num_poses - 1:
             for e in vertex.edges:
-                m = e.measurements[0]
-                element = m.elements[1]
-                table[vertex].add(element)
+                if isinstance(e, LidarOdometry):
+                    m = e.measurements[0]
+                    element = m.elements[1]
+                    table[vertex].add(element)
         else:
             for e in vertex.edges:
-                if e in edges:
+                if e in edges and isinstance(e, LidarOdometry):
                     m = e.measurements[0]
                     element = m.elements[0]
                     table[vertex].add(element)

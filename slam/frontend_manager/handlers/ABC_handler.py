@@ -35,3 +35,15 @@ class Handler(ABC):
         Returns:
             measurement or None.
         """
+
+    @abstractmethod
+    def _create_empty_element(self, element: Element) -> Element:
+        """Creates an empty element with the same timestamp, location and sensor as the
+        input element. Must be used for creating elements for the measurement.
+
+        Args:
+            element: element of a data batch with raw data.
+
+        Returns:
+            empty element without data.
+        """

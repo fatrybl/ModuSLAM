@@ -2,13 +2,11 @@ import pytest
 
 from slam.data_manager.factory.batch import DataBatch
 from slam.data_manager.factory.element import Element
-from slam.frontend_manager.edge_factories.lidar_odometry_factory import (
-    LidarOdometryEdgeFactory,
-)
+from slam.frontend_manager.edge_factories.lidar_odometry import LidarOdometryEdgeFactory
 from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
+from slam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
 from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
@@ -57,11 +55,9 @@ handler_module_name: str = ".pointcloud_matcher"
 handler_package_name: str = "slam.frontend_manager.handlers"
 state_analyzer_name: str = "lidar_odometry_state_analyzer"
 state_analyzer_module_name: str = ".lidar_odometry"
-state_analyzer_package_name: str = (
-    "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
-)
+state_analyzer_package_name: str = "slam.frontend_manager.graph_builder.state_analyzers"
 edge_factory_name: str = "lidar_odometry_edge_factory"
-edge_factory_module_name: str = ".lidar_odometry_factory"
+edge_factory_module_name: str = ".lidar_odometry"
 edge_factory_package_name: str = "slam.frontend_manager.edge_factories"
 
 

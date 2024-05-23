@@ -12,12 +12,29 @@ import numpy as np
 from natsort import natsorted
 from PIL.Image import Image
 
-from slam.data_manager.factory.element import Element
+from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.logger.logging_config import utils
 from slam.utils.exceptions import DimensionalityError
 from slam.utils.numpy_types import Vector3, VectorN
 
 logger = logging.getLogger(utils)
+
+
+def create_empty_element(element: Element) -> Element:
+    """Creates an empty element with the same timestamp, location and sensor as the input element.
+    Args:
+        element: input element with data.
+
+    Returns:
+        element without data.
+    """
+    empty_measurement = RawMeasurement(sensor=element.measurement.sensor, values=())
+    empty_element = Element(
+        timestamp=element.timestamp,
+        measurement=empty_measurement,
+        location=element.location,
+    )
+    return empty_element
 
 
 def to_nanoseconds(seconds: float) -> int:
@@ -85,7 +102,29 @@ def tuple_to_gtsam_pose3(values: tuple[float, float, float, float, float, float]
     return pose
 
 
-def as_int(value: str) -> int:
+def to_float(value: str) -> float:
+    """Converts value to float.
+
+    Args:
+        value: input value.
+
+    Returns:
+        float value.
+
+    Raises:
+        ValueError: if the value can not be converted to float.
+    """
+    try:
+        float_value = float(value)
+        return float_value
+
+    except ValueError:
+        msg = f"Could not convert value {value} of type {type(value)} to float."
+        logger.critical(msg)
+        raise
+
+
+def to_int(value: str) -> int:
     """Converts value to int.
 
     Args:
@@ -98,10 +137,11 @@ def as_int(value: str) -> int:
         ValueError: if the value can not be converted to int.
     """
     try:
-        int_value: int = int(value)
+        int_value = int(value)
         return int_value
+
     except ValueError:
-        msg = f"Could not convert value {value} of type {type(value)} to string"
+        msg = f"Could not convert value {value} of type {type(value)} to string."
         logger.critical(msg)
         raise
 

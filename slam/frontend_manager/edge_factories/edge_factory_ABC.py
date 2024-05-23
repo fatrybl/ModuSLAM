@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from collections.abc import Collection
 from typing import Generic
 
 from slam.frontend_manager.graph.base_edges import GraphEdge
@@ -49,17 +48,17 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     def create(
         self,
         graph: Graph,
-        vertices: Collection[GraphVertex],
         measurements: OrderedSet[Measurement],
+        timestamp: int,
     ) -> list[GraphEdge]:
         """Creates new edges from the measurements.
 
         Args:
             graph: the graph to create edges for.
 
-            vertices: graph vertices to be used for new edges.
-
             measurements: measurements from different handlers.
+
+            timestamp: final timestamp.
 
         Returns:
             new edges.
