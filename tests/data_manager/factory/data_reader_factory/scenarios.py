@@ -1,13 +1,16 @@
 from pathlib import Path
 
-from slam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
-from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
+from moduslam.data_manager.factory.readers.kaist.kaist_reader import KaistReader
+from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
+from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.system_configs.data_manager.batch_factory.regime import RegimeConfig, Stream
+from moduslam.system_configs.data_manager.batch_factory.regime import (
+    RegimeConfig,
+    Stream,
+)
 from tests_data.kaist_urban_dataset.data import DATASET_DIR as kaist_dataset_directory
 
 kaist = (

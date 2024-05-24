@@ -1,13 +1,13 @@
 """Tests for the GraphMerger class."""
 
-from slam.frontend_manager.graph.base_edges import UnaryEdge
-from slam.frontend_manager.graph.graph import Graph
-from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+from moduslam.frontend_manager.graph.base_edges import UnaryEdge
+from moduslam.frontend_manager.graph.graph import Graph
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
-from slam.frontend_manager.graph_builder.graph_merger import GraphMerger
-from slam.frontend_manager.measurement_storage import Measurement
-from slam.utils.deque_set import DequeSet
+from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger
+from moduslam.frontend_manager.measurement_storage import Measurement
+from moduslam.utils.deque_set import DequeSet
 from tests.frontend_manager.conftest import (
     BasicTestVertex,
     create_measurement,

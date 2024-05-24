@@ -1,6 +1,6 @@
 import pytest
 
-from slam.utils.auxiliary_methods import to_int
+from moduslam.utils.auxiliary_methods import to_int
 
 
 def test_as_int_with_integer_string():

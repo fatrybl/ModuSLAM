@@ -2,14 +2,14 @@ from collections import deque
 
 import pytest
 
-from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
-from slam.frontend_manager.measurement_storage import Measurement
-from slam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.frontend_manager.measurement_storage import Measurement
+from moduslam.utils.auxiliary_dataclasses import TimeRange
 from tests.frontend_manager.conftest import element, handler
 
 

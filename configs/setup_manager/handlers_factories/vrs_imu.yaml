@@ -1,7 +1,7 @@
 defaults:
   - /handlers/base_vrs_gps_preprocessor@handlers.vrs_gps_preprocessor
 
-package_name: 'slam.frontend_manager.handlers'
+package_name: 'moduslam.frontend_manager.handlers'
 
 handlers:
 

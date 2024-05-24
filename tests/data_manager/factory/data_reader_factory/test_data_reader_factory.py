@@ -1,11 +1,11 @@
 from pytest import mark, raises
 
-from slam.data_manager.factory.data_reader_ABC import DataReader
-from slam.data_manager.factory.data_reader_factory import DataReaderFactory
-from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
+from moduslam.data_manager.factory.data_reader_ABC import DataReader
+from moduslam.data_manager.factory.data_reader_factory import DataReaderFactory
+from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.data_manager.batch_factory.regime import RegimeConfig
+from moduslam.system_configs.data_manager.batch_factory.regime import RegimeConfig
 from tests.data_manager.factory.data_reader_factory.scenarios import (
     scenario1,
     scenario2,

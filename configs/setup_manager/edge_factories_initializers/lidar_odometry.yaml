@@ -1,4 +1,4 @@
-package_name: 'slam.frontend_manager.edge_factories'
+package_name: 'moduslam.frontend_manager.edge_factories'
 
 edge_factories:
 

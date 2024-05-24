@@ -2,12 +2,14 @@
 
 from unittest.mock import MagicMock, patch
 
-from slam.frontend_manager.edge_factories.lidar_odometry import LidarOdometryEdgeFactory
-from slam.setup_manager.edge_factories_initializer import factory as factory_module
-from slam.setup_manager.edge_factories_initializer.factory import (
+from moduslam.frontend_manager.edge_factories.lidar_odometry import (
+    LidarOdometryEdgeFactory,
+)
+from moduslam.setup_manager.edge_factories_initializer import factory as factory_module
+from moduslam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
-from slam.system_configs.setup_manager.edge_factories_initializer import (
+from moduslam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
 

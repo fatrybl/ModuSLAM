@@ -1,8 +1,8 @@
-from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
+from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from slam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
-from slam.utils.exceptions import ItemNotFoundError
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
+from moduslam.utils.exceptions import ItemNotFoundError
 from tests.data_manager.factory.batch_factory.test_data.readers.kaist.batches import (
     request1,
     request2,

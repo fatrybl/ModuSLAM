@@ -1,12 +1,12 @@
 from unittest.mock import patch
 
-from slam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
-from slam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
+from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
+from moduslam.setup_manager.handlers_factory.factory import HandlersFactory
 from tests.frontend_manager.conftest import handler, measurement_storage
 from tests.frontend_manager.graph_builder.candidate_factory.conftest import (
     state_analyzer_config,

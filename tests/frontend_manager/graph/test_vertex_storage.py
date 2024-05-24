@@ -7,8 +7,8 @@ import gtsam
 import numpy as np
 import pytest
 
-from slam.frontend_manager.graph.custom_vertices import CameraFeature, Pose
-from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from moduslam.frontend_manager.graph.custom_vertices import CameraFeature, Pose
+from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 
 
 class TestVertexStorage:

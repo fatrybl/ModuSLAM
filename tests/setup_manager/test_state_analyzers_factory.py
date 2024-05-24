@@ -4,19 +4,19 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from slam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
+from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
-from slam.setup_manager.state_analyzers_factory import factory as factory_module
-from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
-from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from moduslam.setup_manager.handlers_factory.factory import HandlersFactory
+from moduslam.setup_manager.state_analyzers_factory import factory as factory_module
+from moduslam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
+from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-from slam.system_configs.setup_manager.state_analyzers_factory import (
+from moduslam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzersFactoryConfig,
 )
-from slam.utils.exceptions import ItemNotFoundError
+from moduslam.utils.exceptions import ItemNotFoundError
 
 
 @pytest.fixture

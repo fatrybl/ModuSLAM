@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from slam.data_manager.factory.data_reader_ABC import DataReader
+from moduslam.data_manager.factory.data_reader_ABC import DataReader
 
 
 def test_is_file_valid():

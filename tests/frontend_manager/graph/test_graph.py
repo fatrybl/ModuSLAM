@@ -6,9 +6,9 @@ import pytest
 from gtsam import PriorFactorPoint2
 from gtsam.noiseModel import Diagonal
 
-from slam.frontend_manager.graph.base_edges import UnaryEdge
-from slam.frontend_manager.graph.custom_vertices import Pose
-from slam.frontend_manager.graph.graph import Graph
+from moduslam.frontend_manager.graph.base_edges import UnaryEdge
+from moduslam.frontend_manager.graph.custom_vertices import Pose
+from moduslam.frontend_manager.graph.graph import Graph
 
 noise = Diagonal.Sigmas([1, 1])
 

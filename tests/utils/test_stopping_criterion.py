@@ -1,4 +1,4 @@
-from slam.utils.stopping_criterion import StoppingCriterion
+from moduslam.utils.stopping_criterion import StoppingCriterion
 
 
 def test_is_active():

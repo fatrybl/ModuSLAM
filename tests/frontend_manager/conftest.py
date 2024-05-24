@@ -5,21 +5,24 @@ from typing import Any, Callable, Iterable
 import gtsam
 import pytest
 
-from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.locations import Location
-from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.graph.base_edges import UnaryEdge
-from slam.frontend_manager.graph.base_vertices import NotOptimizableVertex
-from slam.frontend_manager.graph.custom_vertices import Pose
-from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.frontend_manager.edge_factories.base_factory import (
+from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.factory.locations import Location
+from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.graph.base_edges import UnaryEdge
+from moduslam.frontend_manager.graph.base_vertices import NotOptimizableVertex
+from moduslam.frontend_manager.graph.custom_vertices import Pose
+from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.measurement_storage import (
+    Measurement,
+    MeasurementStorage,
+)
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
-from slam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
-from slam.system_configs.setup_manager.sensors import SensorConfig
-from slam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
+from moduslam.system_configs.setup_manager.sensors import SensorConfig
+from moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
 class BasicTestHandler(Handler):

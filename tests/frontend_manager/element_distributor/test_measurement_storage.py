@@ -2,12 +2,15 @@
 
 import pytest
 
-from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.locations import Location
-from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.utils.auxiliary_dataclasses import TimeRange
-from slam.utils.exceptions import EmptyStorageError
+from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.factory.locations import Location
+from moduslam.frontend_manager.measurement_storage import (
+    Measurement,
+    MeasurementStorage,
+)
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.exceptions import EmptyStorageError
 from tests.frontend_manager.conftest import (  # noqa: F401, F811
     BasicTestHandler,
     element,

@@ -2,10 +2,10 @@
 
 from unittest.mock import MagicMock, patch
 
-from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
-from slam.setup_manager.handlers_factory import factory as factory_module
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
-from slam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
+from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
+from moduslam.setup_manager.handlers_factory import factory as factory_module
+from moduslam.setup_manager.handlers_factory.factory import HandlersFactory
+from moduslam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
 
 
 def test_init_handlers():

@@ -1,4 +1,4 @@
-package_name: "slam.frontend_manager.graph_builder.state_analyzers"
+package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
 
 analyzers:
 
