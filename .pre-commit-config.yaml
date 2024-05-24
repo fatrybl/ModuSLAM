@@ -45,14 +45,3 @@ repos:
     hooks:
       - id: mypy
         args: [ --config-file=pyproject.toml ]
-
-  - repo: local
-    hooks:
-      - id: pytest-check
-        name: pytest-check
-        stages: [ commit ]
-        types: [ python ]
-        entry: pytest
-        language: python
-        pass_filenames: false
-        always_run: true

@@ -6,4 +6,4 @@ map_factory:
   max_range: 100
 
 map_loader:
-  directory: "/home/mark/Desktop/PhD/mySLAM/"
+  directory: "/home/mark/Desktop/PhD/ModuSLAM/"

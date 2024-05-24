@@ -5,11 +5,9 @@ Any method used in multiple modules/packages may be defined here.
 
 import logging
 from importlib import import_module
-from pathlib import Path
 
 import gtsam
 import numpy as np
-from natsort import natsorted
 from PIL.Image import Image
 
 from slam.data_manager.factory.element import Element, RawMeasurement
@@ -264,30 +262,3 @@ def import_object(object_name: str, module_name: str, package_name: str) -> type
         msg = f"Object {object_name!r} not found in module {module_name!r}."
         logger.error(msg)
         raise
-
-
-def sort(directory: Path, key: str) -> list:
-    """Sorts files in a directory by name, time or size.
-
-    Args:
-        directory: directory to sort.
-
-        key: sorting key.
-
-    Returns:
-        sorted list of files.
-
-    Raises:
-        ValueError: if the key is invalid.
-    """
-    files = [f for f in directory.iterdir() if f.is_file()]
-    if key == "name":
-        return natsorted(files)
-    if key == "time":
-        return sorted(files, key=lambda f: f.stat().st_ctime)
-    if key == "size":
-        return sorted(files, key=lambda f: f.stat().st_size)
-    else:
-        msg = f"Invalid key {key!r}."
-        logger.critical(msg)
-        raise ValueError(msg)

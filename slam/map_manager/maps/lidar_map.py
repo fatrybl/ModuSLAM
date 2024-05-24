@@ -1,20 +1,20 @@
 import numpy as np
-import open3d as o3d
+from open3d import geometry, utility
 
 
 class LidarMap:
     """Lidar pointcloud map."""
 
     def __init__(self) -> None:
-        self._pointcloud = o3d.geometry.PointCloud()
+        self._pointcloud = geometry.PointCloud()
 
     @property
-    def pointcloud(self) -> o3d.geometry.PointCloud:
+    def pointcloud(self) -> geometry.PointCloud:
         """Pointcloud of the map."""
         return self._pointcloud
 
     @pointcloud.setter
-    def pointcloud(self, pointcloud: o3d.geometry.PointCloud) -> None:
+    def pointcloud(self, pointcloud: geometry.PointCloud) -> None:
         """Sets pointcloud to the map instance.
 
         Args:
@@ -28,4 +28,4 @@ class LidarMap:
         Args:
             points:array [N, 3] of points to set.
         """
-        self._pointcloud.points = o3d.utility.Vector3dVector(points)
+        self._pointcloud.points = utility.Vector3dVector(points)
