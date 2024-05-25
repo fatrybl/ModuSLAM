@@ -11,16 +11,10 @@ edge_factories:
     name: 'lidar_odometry_edge_factory'
     module_name: '.lidar_odometry'
     type_name: 'LidarOdometryEdgeFactory'
-    search_time_margin: 0.08
-
-  gps_position_edge_factory:
-    name: 'gps_position_edge_factory'
-    type_name: 'GpsPositionEdgeFactory'
-    module_name: '.gps_position'
-    search_time_margin: 0.15
+    search_time_margin: 0.02
 
   imu_odometry_edge_factory:
     name: 'imu_odometry_edge_factory'
     type_name: 'ImuOdometryFactory'
     module_name: '.imu_preintegration.imu_odometry'
-    search_time_margin: 0.015
+    search_time_margin: 0.01

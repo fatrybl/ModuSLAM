@@ -1,6 +1,6 @@
 """This module contains auxiliary dataclasses that are used in the moduslam package.
 
-Any dataclass that is used in multiple packages may be defined here.
+Any dataclass that is used in multiple packages or modules may be defined here.
 """
 
 from dataclasses import dataclass

@@ -2,21 +2,6 @@ package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
 
 analyzers:
 
-  #  lidar_odometry_state_analyzer:
-  #    name: "lidar_odometry_state_analyzer"
-  #    type_name: "LidarOdometryStateAnalyzer"
-  #    module_name: ".lidar_odometry"
-  #
-  #  lidars_imu_gps_state_analyzer:
-  #    name: "lidars_imu_gps_state_analyzer"
-  #    type_name: "LidarsImuGpsAnalyzer"
-  #    module_name: ".lidars_imu_gps"
-
-  #  imu_gps_state_analyzer:
-  #    name: "imu_gps_state_analyzer"
-  #    type_name: "ImuGpsAnalyzer"
-  #    module_name: ".imu_gps"
-
   lidar_imu_state_analyzer:
     name: "lidar_imu_state_analyzer"
     type_name: "LidarInertialOdometryStateAnalyzer"

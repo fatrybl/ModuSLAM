@@ -20,7 +20,7 @@ from moduslam.frontend_manager.graph.custom_vertices import (
 )
 from moduslam.frontend_manager.graph.index_generator import IndexStorage
 from moduslam.logger.logging_config import frontend_manager
-from moduslam.utils.auxiliary_methods import equal_numbers
+from moduslam.utils.auxiliary_methods import equal_integers
 from moduslam.utils.deque_set import DequeSet
 from moduslam.utils.ordered_set import OrderedSet
 
@@ -88,7 +88,7 @@ class VertexStorage(Generic[GraphVertex]):
             vertex if found, None otherwise.
         """
         for v in reversed(self._optimizable_vertices):
-            if equal_numbers(v.timestamp, timestamp, margin) and isinstance(v, vertex_type):
+            if equal_integers(v.timestamp, timestamp, margin) and isinstance(v, vertex_type):
                 return v
 
         return None

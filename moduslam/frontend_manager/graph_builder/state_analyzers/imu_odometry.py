@@ -8,7 +8,7 @@ from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-from moduslam.utils.auxiliary_methods import equal_numbers
+from moduslam.utils.auxiliary_methods import equal_integers
 from moduslam.utils.ordered_set import OrderedSet
 
 
@@ -19,7 +19,7 @@ class ImuOdometryAnalyzer(StateAnalyzer):
     """
 
     _nanoseconds_in_second: float = 1e9
-    _tolerance: float = 0.01
+    _epsilon: float = 0.01
     _integration_time: float = 1.05
 
     def __init__(self, config: StateAnalyzerConfig) -> None:
@@ -29,7 +29,7 @@ class ImuOdometryAnalyzer(StateAnalyzer):
         """
         super().__init__(config)
         self._time_range = int(self._integration_time * self._nanoseconds_in_second)
-        self._tolerance = int(self._tolerance * self._nanoseconds_in_second)
+        self._tolerance = int(self._epsilon * self._nanoseconds_in_second)
         self._state = State()
         self._update_state = False
 
@@ -47,10 +47,8 @@ class ImuOdometryAnalyzer(StateAnalyzer):
 
         self._state.add(measurements.last)
         dt = self._state.time_range.stop - self._state.time_range.start
-        print("dt=", dt * 1e-9)
-        if equal_numbers(dt, self._time_range, self._tolerance):
+        if equal_integers(dt, self._time_range, self._tolerance):
             self._update_state = True
-            print(f"adding new IMU state...: dt-range={abs(dt- self._time_range) * 1e-9}")
             return self._state
 
         return None

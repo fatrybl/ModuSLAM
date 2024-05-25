@@ -59,7 +59,7 @@ def to_seconds(nanoseconds: int) -> float:
     return nanoseconds * 1e-9
 
 
-def equal_numbers(n1: int | float, n2: int | float, epsilon: int | float) -> bool:
+def equal_integers(n1: int, n2: int, epsilon: int) -> bool:
     """Compares two numbers with a given tolerance.
 
     Args:
@@ -72,6 +72,11 @@ def equal_numbers(n1: int | float, n2: int | float, epsilon: int | float) -> boo
     Returns:
         comparison result.
     """
+    if epsilon < 0:
+        msg = f"Epsilon must be non-negative, got {epsilon}."
+        logger.critical(msg)
+        raise ValueError(msg)
+
     return abs(n1 - n2) <= abs(epsilon)
 
 

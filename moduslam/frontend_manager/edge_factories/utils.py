@@ -5,7 +5,7 @@ import gtsam
 from moduslam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
 from moduslam.frontend_manager.graph.index_generator import generate_index
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
-from moduslam.utils.auxiliary_methods import equal_numbers
+from moduslam.utils.auxiliary_methods import equal_integers
 
 
 def update_vertex(source_vertex: OptimizableVertex, target_vertex: OptimizableVertex):
@@ -44,7 +44,7 @@ def find_vertex(
 
     vertex = storage.get_last_vertex(vertex_type)
 
-    if vertex and equal_numbers(vertex.timestamp, timestamp, time_margin):
+    if vertex and equal_integers(vertex.timestamp, timestamp, time_margin):
         return vertex
 
     vertex = storage.find_closest_optimizable_vertex(vertex_type, timestamp, time_margin)
