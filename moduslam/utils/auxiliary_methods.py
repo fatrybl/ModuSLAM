@@ -35,7 +35,7 @@ def create_empty_element(element: Element) -> Element:
     return empty_element
 
 
-def to_nanoseconds(seconds: float) -> int:
+def sec2nanosec(seconds: float) -> int:
     """Converts seconds to nanoseconds.
 
     Args:
@@ -47,7 +47,7 @@ def to_nanoseconds(seconds: float) -> int:
     return int(seconds * 1e9)
 
 
-def to_seconds(nanoseconds: int) -> float:
+def nanosec2sec(nanoseconds: int) -> float:
     """Converts nanoseconds to seconds.
 
     Args:

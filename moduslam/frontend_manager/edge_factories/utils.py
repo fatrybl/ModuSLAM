@@ -40,6 +40,8 @@ def find_vertex(
 
     Returns:
         vertex if found.
+
+    TODO: add tests
     """
 
     vertex = storage.get_last_vertex(vertex_type)
@@ -73,6 +75,8 @@ def get_vertex(
 
     Returns:
         vertex.
+
+    TODO: add tests
     """
     vertex = find_vertex(vertex_type, storage, timestamp, time_margin)
 

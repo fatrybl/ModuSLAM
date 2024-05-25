@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.frontend_manager.graph_builder.builders.conftest &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../../../index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">ModuSLAM</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.frontend_manager.graph_builder.builders.conftest</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for tests.frontend_manager.graph_builder.builders.conftest</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LidarOdometryEdgeFactory</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.builders.lidar_map_builder</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LidarMapBuilder</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LidarOdometryStateAnalyzer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.pointcloud_matcher</span> <span class="kn">import</span> <span class="n">ScanMatcher</span>
+<span class="kn">from</span> <span class="nn">moduslam.setup_manager.setup_manager</span> <span class="kn">import</span> <span class="n">SetupManager</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.edge_factories.base_factory</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EdgeFactoryConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.element_distributor.element_distributor</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ElementDistributorConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CandidateFactoryConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StateAnalyzerConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.graph_builder.graph_builder</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GraphBuilderConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.graph_builder.graph_merger.merger</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GraphMergerConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.handlers.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KissIcpScanMatcherConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.edge_factories_initializer</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EdgeFactoriesInitializerConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.handlers_factory</span> <span class="kn">import</span> <span class="n">HandlersFactoryConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorFactoryConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">Lidar3DConfig</span><span class="p">,</span> <span class="n">SensorConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.setup_manager</span> <span class="kn">import</span> <span class="n">SetupManagerConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.state_analyzers_factory</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StateAnalyzersFactoryConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">el1</span><span class="p">,</span>
+    <span class="n">el2</span><span class="p">,</span>
+    <span class="n">sensor</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">sensor_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">name</span>
+<span class="n">graph_builder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_map_builder&quot;</span>
+<span class="n">handler_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;kiss_icp_odometry&quot;</span>
+<span class="n">handler_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.pointcloud_matcher&quot;</span>
+<span class="n">handler_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.handlers&quot;</span>
+<span class="n">state_analyzer_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_odometry_state_analyzer&quot;</span>
+<span class="n">state_analyzer_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.lidar_odometry&quot;</span>
+<span class="n">state_analyzer_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.graph_builder.state_analyzers&quot;</span>
+<span class="n">edge_factory_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_odometry_edge_factory&quot;</span>
+<span class="n">edge_factory_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.lidar_odometry&quot;</span>
+<span class="n">edge_factory_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.edge_factories&quot;</span>
+
+
+<div class="viewcode-block" id="elements">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.elements">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">elements</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Element</span><span class="p">,</span> <span class="n">Element</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">el1</span><span class="p">,</span> <span class="n">el2</span></div>
+
+
+
+<div class="viewcode-block" id="data_batch">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.data_batch">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">data_batch</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataBatch</span><span class="p">:</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">DataBatch</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">batch</span></div>
+
+
+
+<div class="viewcode-block" id="sensor_factory_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.sensor_factory_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">sensor_factory_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SensorFactoryConfig</span><span class="p">:</span>
+    <span class="n">sensor_cfg</span><span class="p">:</span> <span class="n">Lidar3DConfig</span> <span class="o">=</span> <span class="n">Lidar3DConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sensor_name</span><span class="p">)</span>
+    <span class="n">sensors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SensorConfig</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">sensor_name</span><span class="p">:</span> <span class="n">sensor_cfg</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">SensorFactoryConfig</span><span class="p">(</span><span class="n">sensors</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="handlers_factory_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.handlers_factory_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">handlers_factory_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">HandlersFactoryConfig</span><span class="p">:</span>
+    <span class="n">handler_cfg</span> <span class="o">=</span> <span class="n">KissIcpScanMatcherConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">handler_name</span><span class="p">,</span>
+        <span class="n">type_name</span><span class="o">=</span><span class="n">ScanMatcher</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">module_name</span><span class="o">=</span><span class="n">handler_module_name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">HandlersFactoryConfig</span><span class="p">(</span>
+        <span class="n">handlers</span><span class="o">=</span><span class="p">{</span><span class="n">handler_name</span><span class="p">:</span> <span class="n">handler_cfg</span><span class="p">},</span>
+        <span class="n">package_name</span><span class="o">=</span><span class="n">handler_package_name</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="edge_factories_initializer_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.edge_factories_initializer_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">edge_factories_initializer_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EdgeFactoriesInitializerConfig</span><span class="p">:</span>
+    <span class="n">edge_factory_cfg</span> <span class="o">=</span> <span class="n">EdgeFactoryConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">edge_factory_name</span><span class="p">,</span>
+        <span class="n">type_name</span><span class="o">=</span><span class="n">LidarOdometryEdgeFactory</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">module_name</span><span class="o">=</span><span class="n">edge_factory_module_name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">EdgeFactoriesInitializerConfig</span><span class="p">(</span>
+        <span class="n">package_name</span><span class="o">=</span><span class="n">edge_factory_package_name</span><span class="p">,</span>
+        <span class="n">edge_factories</span><span class="o">=</span><span class="p">{</span><span class="n">edge_factory_name</span><span class="p">:</span> <span class="n">edge_factory_cfg</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="state_analyzers_factory_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.state_analyzers_factory_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">state_analyzers_factory_cfg</span><span class="p">():</span>
+    <span class="n">lidar_odometry_analyzer_cfg</span> <span class="o">=</span> <span class="n">StateAnalyzerConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">state_analyzer_name</span><span class="p">,</span>
+        <span class="n">type_name</span><span class="o">=</span><span class="n">LidarOdometryStateAnalyzer</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">module_name</span><span class="o">=</span><span class="n">state_analyzer_module_name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">StateAnalyzersFactoryConfig</span><span class="p">(</span>
+        <span class="n">package_name</span><span class="o">=</span><span class="n">state_analyzer_package_name</span><span class="p">,</span>
+        <span class="n">analyzers</span><span class="o">=</span><span class="p">{</span><span class="n">state_analyzer_name</span><span class="p">:</span> <span class="n">lidar_odometry_analyzer_cfg</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="setup_manager">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.setup_manager">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">setup_manager</span><span class="p">(</span>
+    <span class="n">sensor_factory_cfg</span><span class="p">,</span>
+    <span class="n">handlers_factory_cfg</span><span class="p">,</span>
+    <span class="n">edge_factories_initializer_cfg</span><span class="p">,</span>
+    <span class="n">state_analyzers_factory_cfg</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SetupManager</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">SetupManagerConfig</span><span class="p">(</span>
+        <span class="n">sensors_factory</span><span class="o">=</span><span class="n">sensor_factory_cfg</span><span class="p">,</span>
+        <span class="n">handlers_factory</span><span class="o">=</span><span class="n">handlers_factory_cfg</span><span class="p">,</span>
+        <span class="n">edge_factories_initializer</span><span class="o">=</span><span class="n">edge_factories_initializer_cfg</span><span class="p">,</span>
+        <span class="n">state_analyzers_factory</span><span class="o">=</span><span class="n">state_analyzers_factory_cfg</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SetupManager</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="candidate_factory_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.candidate_factory_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">candidate_factory_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">CandidateFactoryConfig</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">CandidateFactoryConfig</span><span class="p">(</span><span class="n">handler_state_analyzer_table</span><span class="o">=</span><span class="p">{</span><span class="n">handler_name</span><span class="p">:</span> <span class="n">state_analyzer_name</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="distributor_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.distributor_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">distributor_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ElementDistributorConfig</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">ElementDistributorConfig</span><span class="p">(</span><span class="n">sensor_handlers_table</span><span class="o">=</span><span class="p">{</span><span class="n">sensor_name</span><span class="p">:</span> <span class="p">[</span><span class="n">handler_name</span><span class="p">]})</span></div>
+
+
+
+<div class="viewcode-block" id="merger_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.merger_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">merger_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GraphMergerConfig</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">GraphMergerConfig</span><span class="p">(</span><span class="n">handler_edge_factory_table</span><span class="o">=</span><span class="p">{</span><span class="n">handler_name</span><span class="p">:</span> <span class="n">edge_factory_name</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="builder_cfg">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.builder_cfg">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">builder_cfg</span><span class="p">(</span>
+    <span class="n">candidate_factory_cfg</span><span class="p">:</span> <span class="n">CandidateFactoryConfig</span><span class="p">,</span>
+    <span class="n">distributor_cfg</span><span class="p">:</span> <span class="n">ElementDistributorConfig</span><span class="p">,</span>
+    <span class="n">merger_cfg</span><span class="p">:</span> <span class="n">GraphMergerConfig</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphBuilderConfig</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">GraphBuilderConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">graph_builder_name</span><span class="p">,</span>
+        <span class="n">candidate_factory</span><span class="o">=</span><span class="n">candidate_factory_cfg</span><span class="p">,</span>
+        <span class="n">element_distributor</span><span class="o">=</span><span class="n">distributor_cfg</span><span class="p">,</span>
+        <span class="n">graph_merger</span><span class="o">=</span><span class="n">merger_cfg</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="builder">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.builder">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">:</span> <span class="n">GraphBuilderConfig</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LidarMapBuilder</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">LidarMapBuilder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

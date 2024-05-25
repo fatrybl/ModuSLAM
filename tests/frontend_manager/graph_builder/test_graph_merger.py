@@ -2,7 +2,7 @@
 
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge
 from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     State,
 )
 from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger

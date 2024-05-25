@@ -1,3 +1,7 @@
+"""
+    TODO: add tests
+"""
+
 import gtsam
 
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
@@ -12,7 +16,7 @@ from moduslam.frontend_manager.noise_models import pose_diagonal_noise_model
 from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
-from moduslam.utils.auxiliary_methods import to_nanoseconds
+from moduslam.utils.auxiliary_methods import sec2nanosec
 from moduslam.utils.ordered_set import OrderedSet
 
 
@@ -25,7 +29,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             config: configuration of the factory.
         """
         super().__init__(config)
-        self._time_margin: int = to_nanoseconds(config.search_time_margin)
+        self._time_margin: int = sec2nanosec(config.search_time_margin)
 
     @property
     def vertices_types(self) -> set[type[LidarPose]]:

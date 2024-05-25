@@ -6,14 +6,14 @@ from moduslam.frontend_manager.elements_distributor import ElementDistributor
 from moduslam.frontend_manager.graph.base_edges import GraphEdge
 from moduslam.frontend_manager.graph.base_vertices import GraphVertex
 from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.frontend_manager.graph_builder.candidate_factory.factories.factory_ABC import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
     CandidateFactory,
-)
-from moduslam.frontend_manager.graph_builder.candidate_factory.factories.lidar_submap import (
-    LidarMapCandidateFactory,
 )
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
+)
+from moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap import (
+    LidarMapCandidateFactory,
 )
 from moduslam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger

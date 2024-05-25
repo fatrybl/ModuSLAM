@@ -58,7 +58,7 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
 
             measurements: measurements from different handlers.
 
-            timestamp: final timestamp.
+            timestamp: the final timestamp for the edge(s).
 
         Returns:
             new edges.

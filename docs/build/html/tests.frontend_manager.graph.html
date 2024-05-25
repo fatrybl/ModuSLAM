@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.frontend_manager.graph package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tests.frontend_manager.graph_builder package" href="tests.frontend_manager.graph_builder.html" />
+    <link rel="prev" title="tests.frontend_manager.element_distributor package" href="tests.frontend_manager.element_distributor.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ModuSLAM</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="moduslam.html">moduslam package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tests.html">tests package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tests.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tests.data_manager.html">tests.data_manager package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="tests.frontend_manager.html">tests.frontend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.setup_manager.html">tests.setup_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.utils.html">tests.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests_data.html">tests_data package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">ModuSLAM</a></li>
+          <li class="breadcrumb-item"><a href="tests.html">tests package</a></li>
+          <li class="breadcrumb-item"><a href="tests.frontend_manager.html">tests.frontend_manager package</a></li>
+      <li class="breadcrumb-item active">tests.frontend_manager.graph package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tests.frontend_manager.graph.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="tests-frontend-manager-graph-package">
+<h1>tests.frontend_manager.graph package<a class="headerlink" href="#tests-frontend-manager-graph-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tests.frontend_manager.graph.test_edge_storage">
+<span id="tests-frontend-manager-graph-test-edge-storage-module"></span><h2>tests.frontend_manager.graph.test_edge_storage module<a class="headerlink" href="#module-tests.frontend_manager.graph.test_edge_storage" title="Link to this heading"></a></h2>
+<p>Tests for EdgeStorage class.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.edge_storage">
+<span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_edge_storage.</span></span><span class="sig-name descname"><span class="pre">edge_storage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.edge_storage.EdgeStorage" title="moduslam.frontend_manager.graph.edge_storage.EdgeStorage"><span class="pre">EdgeStorage</span></a></span></span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#edge_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.edge_storage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_edge_storage.</span></span><span class="sig-name descname"><span class="pre">TestEdgeStorage</span></span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#TestEdgeStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex1">
+<span class="sig-name descname"><span class="pre">vertex1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;tests.frontend_manager.conftest.BasicTestVertex</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex2">
+<span class="sig-name descname"><span class="pre">vertex2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;tests.frontend_manager.conftest.BasicTestVertex</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex3">
+<span class="sig-name descname"><span class="pre">vertex3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;tests.frontend_manager.conftest.BasicTestVertex</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.vertex3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge1">
+<span class="sig-name descname"><span class="pre">edge1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;moduslam.frontend_manager.graph.base_edges.BinaryEdge</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge2">
+<span class="sig-name descname"><span class="pre">edge2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;moduslam.frontend_manager.graph.base_edges.UnaryEdge</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge3">
+<span class="sig-name descname"><span class="pre">edge3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;moduslam.frontend_manager.graph.base_edges.UnaryEdge</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge4">
+<span class="sig-name descname"><span class="pre">edge4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;moduslam.frontend_manager.graph.base_edges.MultiEdge</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.edge4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_add">
+<span class="sig-name descname"><span class="pre">test_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#TestEdgeStorage.test_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_add_multiple">
+<span class="sig-name descname"><span class="pre">test_add_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#TestEdgeStorage.test_add_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_add_multiple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_remove">
+<span class="sig-name descname"><span class="pre">test_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#TestEdgeStorage.test_remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_remove" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_remove_multiple">
+<span class="sig-name descname"><span class="pre">test_remove_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_edge_storage.html#TestEdgeStorage.test_remove_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_edge_storage.TestEdgeStorage.test_remove_multiple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tests.frontend_manager.graph.test_graph">
+<span id="tests-frontend-manager-graph-test-graph-module"></span><h2>tests.frontend_manager.graph.test_graph module<a class="headerlink" href="#module-tests.frontend_manager.graph.test_graph" title="Link to this heading"></a></h2>
+<p>Tests for the Graph class.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.graph">
+<span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_graph.</span></span><span class="sig-name descname"><span class="pre">graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.graph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.edge">
+<span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_graph.</span></span><span class="sig-name descname"><span class="pre">edge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.edge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.edges">
+<span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_graph.</span></span><span class="sig-name descname"><span class="pre">edges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.edges" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_graph.</span></span><span class="sig-name descname"><span class="pre">TestGraph</span></span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
+<dt>TODO: add more test cases for Graph.update method.</dt><dd><p>now it only works with OptimizableVertex.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_add_edge">
+<span class="sig-name descname"><span class="pre">test_add_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_add_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_add_edge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_add_edges">
+<span class="sig-name descname"><span class="pre">test_add_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_add_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_add_edges" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_remove_edge">
+<span class="sig-name descname"><span class="pre">test_remove_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_remove_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_remove_edge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_remove_edges">
+<span class="sig-name descname"><span class="pre">test_remove_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_remove_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_remove_edges" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_remove_vertex">
+<span class="sig-name descname"><span class="pre">test_remove_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_remove_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_remove_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_remove_vertices">
+<span class="sig-name descname"><span class="pre">test_remove_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_remove_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_remove_vertices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_update">
+<span class="sig-name descname"><span class="pre">test_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_graph.TestGraph.test_gtsam_values">
+<span class="sig-name descname"><span class="pre">test_gtsam_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.UnaryEdge" title="moduslam.frontend_manager.graph.base_edges.UnaryEdge"><span class="pre">UnaryEdge</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_graph.html#TestGraph.test_gtsam_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_graph.TestGraph.test_gtsam_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tests.frontend_manager.graph.test_index_storage">
+<span id="tests-frontend-manager-graph-test-index-storage-module"></span><h2>tests.frontend_manager.graph.test_index_storage module<a class="headerlink" href="#module-tests.frontend_manager.graph.test_index_storage" title="Link to this heading"></a></h2>
+<p>Tests for IndexStorage class.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.index_storage">
+<span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_index_storage.</span></span><span class="sig-name descname"><span class="pre">index_storage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#index_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.index_storage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_index_storage.</span></span><span class="sig-name descname"><span class="pre">TestIndexStorage</span></span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_num_indices">
+<span class="sig-name descname"><span class="pre">test_num_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_num_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_num_indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_min_idx">
+<span class="sig-name descname"><span class="pre">test_min_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_min_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_min_idx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_max_idx">
+<span class="sig-name descname"><span class="pre">test_max_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_max_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_max_idx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_indices">
+<span class="sig-name descname"><span class="pre">test_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_add">
+<span class="sig-name descname"><span class="pre">test_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_remove_method">
+<span class="sig-name descname"><span class="pre">test_remove_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_remove_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_remove_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_normalize">
+<span class="sig-name descname"><span class="pre">test_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_normalize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_update_min_max">
+<span class="sig-name descname"><span class="pre">test_update_min_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_update_min_max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_update_min_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_generate_index">
+<span class="sig-name descname"><span class="pre">test_generate_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_storage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_index_storage.html#TestIndexStorage.test_generate_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_generate_index" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tests.frontend_manager.graph.test_vertex_storage">
+<span id="tests-frontend-manager-graph-test-vertex-storage-module"></span><h2>tests.frontend_manager.graph.test_vertex_storage module<a class="headerlink" href="#module-tests.frontend_manager.graph.test_vertex_storage" title="Link to this heading"></a></h2>
+<p>Tests for VertexStorage class.</p>
+<p>TODO: add tests for update_non_optimizable_vertices methods.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.frontend_manager.graph.test_vertex_storage.</span></span><span class="sig-name descname"><span class="pre">TestVertexStorage</span></span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.vertex_storage">
+<span class="sig-name descname"><span class="pre">vertex_storage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.vertex_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.vertex_storage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.optimizable_vertex">
+<span class="sig-name descname"><span class="pre">optimizable_vertex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.optimizable_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.optimizable_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.non_optimizable_vertex">
+<span class="sig-name descname"><span class="pre">non_optimizable_vertex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.non_optimizable_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.non_optimizable_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_add">
+<span class="sig-name descname"><span class="pre">test_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Pose" title="moduslam.frontend_manager.graph.custom_vertices.Pose"><span class="pre">Pose</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.CameraFeature" title="moduslam.frontend_manager.graph.custom_vertices.CameraFeature"><span class="pre">CameraFeature</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_add_multiple">
+<span class="sig-name descname"><span class="pre">test_add_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_add_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_add_multiple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_remove">
+<span class="sig-name descname"><span class="pre">test_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_remove" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_remove_multiple">
+<span class="sig-name descname"><span class="pre">test_remove_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_remove_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_remove_multiple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_get_vertices">
+<span class="sig-name descname"><span class="pre">test_get_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_get_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_get_vertices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_get_last_vertex">
+<span class="sig-name descname"><span class="pre">test_get_last_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_get_last_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_get_last_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_update_optimizable_vertex">
+<span class="sig-name descname"><span class="pre">test_update_optimizable_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizable_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Pose" title="moduslam.frontend_manager.graph.custom_vertices.Pose"><span class="pre">Pose</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_update_optimizable_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_update_optimizable_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_update_non_optimizable_vertex">
+<span class="sig-name descname"><span class="pre">test_update_non_optimizable_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_optimizable_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.CameraFeature" title="moduslam.frontend_manager.graph.custom_vertices.CameraFeature"><span class="pre">CameraFeature</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/frontend_manager/graph/test_vertex_storage.html#TestVertexStorage.test_update_non_optimizable_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.frontend_manager.graph.test_vertex_storage.TestVertexStorage.test_update_non_optimizable_vertex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tests.frontend_manager.graph">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests.frontend_manager.graph" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tests.frontend_manager.element_distributor.html" class="btn btn-neutral float-left" title="tests.frontend_manager.element_distributor package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.frontend_manager.graph_builder.html" class="btn btn-neutral float-right" title="tests.frontend_manager.graph_builder package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

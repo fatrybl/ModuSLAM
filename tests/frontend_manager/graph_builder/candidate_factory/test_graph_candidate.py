@@ -4,8 +4,6 @@ import pytest
 
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
-)
-from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
     State,
 )
 from moduslam.frontend_manager.measurement_storage import Measurement

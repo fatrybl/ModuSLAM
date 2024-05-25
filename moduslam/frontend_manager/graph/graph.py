@@ -106,6 +106,8 @@ class Graph(Generic[GraphVertex, GraphEdge]):
 
         Args:
             values: GTSAM values.
+
+        TODO: add update for non-optimizable vertices.
         """
 
         self.vertex_storage.update_optimizable_vertices(values)

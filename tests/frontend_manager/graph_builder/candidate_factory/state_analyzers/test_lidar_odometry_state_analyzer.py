@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate_state import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     State,
 )
 from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (

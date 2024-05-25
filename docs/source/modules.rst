@@ -1,7 +1,9 @@
-slam
-====
+ModuSLAM
+========
 
 .. toctree::
    :maxdepth: 4
 
-   slam
+   moduslam
+   tests
+   tests_data

@@ -7,6 +7,7 @@
             Acceleration x, Acceleration y, Acceleration z,
             MagnetField x, MagnetField y, MagnetField z
             ]
+
     timestamp is not present in element`s raw data.
 
     Transform IMU data to the base frame according to the transformation matrix tf_base_sensor:

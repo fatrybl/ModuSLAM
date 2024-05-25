@@ -5,7 +5,6 @@ Complexity:
     O(N): remove(item: T)
 """
 
-import functools
 import logging
 from collections import deque
 from collections.abc import Iterable
@@ -16,22 +15,6 @@ from moduslam.logger.logging_config import utils
 logger = logging.getLogger(utils)
 
 T = TypeVar("T")
-
-
-def multiple(func: Callable):
-    """Decorator for multiple deque-sets.
-
-    Args:
-        func: function to be decorated.
-    """
-
-    @functools.wraps(func)
-    def wrapper(self, item):
-        func(self, item)
-        for ds in self._deque_sets:
-            getattr(ds, func.__name__)(item)
-
-    return wrapper
 
 
 class DequeSet(Generic[T]):
@@ -163,19 +146,3 @@ class DequeSet(Generic[T]):
         """Clears deque-set."""
         self._set.clear()
         self._deque.clear()
-
-
-class MultipleDequeSet(DequeSet):
-    """Stores multiple deque-sets as one."""
-
-    def __init__(self, *deque_sets: DequeSet) -> None:
-        super().__init__()
-        self._deque_sets = deque_sets
-
-    @multiple
-    def add(self, item: T) -> None:
-        super().add(item)
-
-    @multiple
-    def remove(self, item: T) -> None:
-        super().remove(item)

@@ -3,8 +3,6 @@
 Welcome to ModuSLAM's documentation!
 ====================================
 
-.. automodule:: slam
-    :members:
 
 .. toctree::
    :maxdepth: 2

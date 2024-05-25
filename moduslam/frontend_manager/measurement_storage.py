@@ -194,12 +194,24 @@ class MeasurementStorage:
             self._stop_timestamp = None
             return
 
-        all_measurements = [
+        all_measurements = (
             measurement
             for measurements_set in self._data.values()
             for measurement in measurements_set
-        ]
-        self._start_timestamp = min(
-            measurement.time_range.start for measurement in all_measurements
         )
-        self._stop_timestamp = max(measurement.time_range.stop for measurement in all_measurements)
+
+        self._start_timestamp = min(
+            (measurement.time_range.start for measurement in all_measurements),
+            default=None,
+        )
+
+        all_measurements = (
+            measurement
+            for measurements_set in self._data.values()
+            for measurement in measurements_set
+        )
+
+        self._stop_timestamp = max(
+            (measurement.time_range.stop for measurement in all_measurements),
+            default=None,
+        )

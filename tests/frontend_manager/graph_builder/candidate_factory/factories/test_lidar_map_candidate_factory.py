@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from moduslam.frontend_manager.graph_builder.candidate_factory.factories.lidar_submap import (
+from moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap import (
     LidarMapCandidateFactory,
 )
 from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (

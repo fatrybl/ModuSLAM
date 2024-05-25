@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>moduslam.frontend_manager.graph_builder.state_analyzers package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="moduslam.frontend_manager.graph_initializer package" href="moduslam.frontend_manager.graph_initializer.html" />
+    <link rel="prev" title="moduslam.frontend_manager.graph_builder.candidate_factory package" href="moduslam.frontend_manager.graph_builder.candidate_factory.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ModuSLAM</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="moduslam.html">moduslam package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="moduslam.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="moduslam.backend_manager.html">moduslam.backend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.html">moduslam.data_manager package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="moduslam.frontend_manager.html">moduslam.frontend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.logger.html">moduslam.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.main_manager.html">moduslam.main_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html">moduslam.map_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.html">moduslam.setup_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html">moduslam.system_configs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html">moduslam.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.visualization.html">moduslam.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.run">moduslam.run module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.sandbox">moduslam.sandbox module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests_data.html">tests_data package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">ModuSLAM</a></li>
+          <li class="breadcrumb-item"><a href="moduslam.html">moduslam package</a></li>
+          <li class="breadcrumb-item"><a href="moduslam.frontend_manager.html">moduslam.frontend_manager package</a></li>
+          <li class="breadcrumb-item"><a href="moduslam.frontend_manager.graph_builder.html">moduslam.frontend_manager.graph_builder package</a></li>
+      <li class="breadcrumb-item active">moduslam.frontend_manager.graph_builder.state_analyzers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/moduslam.frontend_manager.graph_builder.state_analyzers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="moduslam-frontend-manager-graph-builder-state-analyzers-package">
+<h1>moduslam.frontend_manager.graph_builder.state_analyzers package<a class="headerlink" href="#moduslam-frontend-manager-graph-builder-state-analyzers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-analyzer-abc-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.</span></span><span class="sig-name descname"><span class="pre">StateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/analyzer_ABC.html#StateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Analyzes measurements` storage and decides whether to add a new state.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/analyzer_ABC.html#StateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.name" title="Link to this definition"></a></dt>
+<dd><p>Unique name of the analyzer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.evaluate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/analyzer_ABC.html#StateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the storage and decides whether to add a new state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements to be analyzed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.gps">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-gps-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.gps module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.gps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.gps.</span></span><span class="sig-name descname"><span class="pre">GpsAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/gps.html#GpsAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar odometry measurements` handler.</p>
+<p>Adds new state if the storage contains a measurement with lidar pointcloud odometry.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/gps.html#GpsAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/gps.html#GpsAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.gps.GpsAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-imu-gps-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.</span></span><span class="sig-name descname"><span class="pre">ImuGpsAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_gps.html#ImuGpsAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for GPS &amp; IMU measurements` handlers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_gps.html#ImuGpsAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_gps.html#ImuGpsAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer._clear">
+<span class="sig-name descname"><span class="pre">_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_gps.html#ImuGpsAnalyzer._clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_gps.ImuGpsAnalyzer._clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the analyzer state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-imu-odometry-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.</span></span><span class="sig-name descname"><span class="pre">ImuOdometryAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_odometry.html#ImuOdometryAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar odometry measurements` handler.</p>
+<p>Adds new state if the storage contains a measurement with lidar pointcloud odometry.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_odometry.html#ImuOdometryAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_odometry.html#ImuOdometryAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer._clear">
+<span class="sig-name descname"><span class="pre">_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/imu_odometry.html#ImuOdometryAnalyzer._clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.imu_odometry.ImuOdometryAnalyzer._clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the analyzer state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-lidar-gps-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.</span></span><span class="sig-name descname"><span class="pre">LidarGpsAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_gps.html#LidarGpsAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar pointcloud odometry, IMU odometry, GPS position measurements`
+handlers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_gps.html#LidarGpsAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_gps.html#LidarGpsAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer._clear">
+<span class="sig-name descname"><span class="pre">_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_gps.html#LidarGpsAnalyzer._clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_gps.LidarGpsAnalyzer._clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the analyzer state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-lidar-imu-odometry-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.</span></span><span class="sig-name descname"><span class="pre">LidarInertialOdometryStateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar &amp; IMU odometry measurements` handlers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-lidar-odometry-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.</span></span><span class="sig-name descname"><span class="pre">LidarOdometryStateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar odometry measurements` handler.</p>
+<p>Adds new state if the storage contains a measurement with lidar pointcloud odometry.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidar_odometry.html#LidarOdometryStateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry.LidarOdometryStateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-lidars-imu-gps-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.</span></span><span class="sig-name descname"><span class="pre">LidarsImuGpsAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidars_imu_gps.html#LidarsImuGpsAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar pointcloud odometry, IMU odometry, GPS position measurements`
+handlers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidars_imu_gps.html#LidarsImuGpsAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidars_imu_gps.html#LidarsImuGpsAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer._clear">
+<span class="sig-name descname"><span class="pre">_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/lidars_imu_gps.html#LidarsImuGpsAnalyzer._clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.lidars_imu_gps.LidarsImuGpsAnalyzer._clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the analyzer state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-multiple-lidar-imu-odometry-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.</span></span><span class="sig-name descname"><span class="pre">LidarInertialOdometryStateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for lidar &amp; IMU odometry measurements` handlers.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.num_handlers">
+<span class="sig-name descname"><span class="pre">num_handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.num_handlers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer._clear">
+<span class="sig-name descname"><span class="pre">_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_imu_odometry.html#LidarInertialOdometryStateAnalyzer._clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_imu_odometry.LidarInertialOdometryStateAnalyzer._clear" title="Link to this definition"></a></dt>
+<dd><p>Clears the analyzer state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry">
+<span id="moduslam-frontend-manager-graph-builder-state-analyzers-multiple-lidar-odometry-module"></span><h2>moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.</span></span><span class="sig-name descname"><span class="pre">MultipleLidarOdometryStateAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_odometry.html#MultipleLidarOdometryStateAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer" title="moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC.StateAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateAnalyzer</span></code></a></p>
+<p>Analyzer for odometry measurements` handler for multiple lidars.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.num_handlers">
+<span class="sig-name descname"><span class="pre">num_handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.num_handlers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.html#moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig" title="moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer.StateAnalyzerConfig"><span class="pre">StateAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_odometry.html#MultipleLidarOdometryStateAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the analyzer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.candidate_factory.html#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/state_analyzers/multiple_lidar_odometry.html#MultipleLidarOdometryStateAnalyzer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.state_analyzers.multiple_lidar_odometry.MultipleLidarOdometryStateAnalyzer.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates a storage and creates a state if conditions are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> – an ordered set of measurements.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new state or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.frontend_manager.graph_builder.state_analyzers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.state_analyzers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="moduslam.frontend_manager.graph_builder.candidate_factory.html" class="btn btn-neutral float-left" title="moduslam.frontend_manager.graph_builder.candidate_factory package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="moduslam.frontend_manager.graph_initializer.html" class="btn btn-neutral float-right" title="moduslam.frontend_manager.graph_initializer package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>
