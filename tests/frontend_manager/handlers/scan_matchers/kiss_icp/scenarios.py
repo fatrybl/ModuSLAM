@@ -1,14 +1,14 @@
 import numpy as np
 import numpy.typing as npt
 
-from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.locations import BinaryDataLocation
-from slam.data_manager.factory.readers.kaist.measurement_collector import (
+from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.factory.locations import BinaryDataLocation
+from moduslam.data_manager.factory.readers.kaist.measurement_collector import (
     MeasurementCollector,
 )
-from slam.frontend_manager.measurement_storage import Measurement
-from slam.setup_manager.sensors_factory.sensors import Lidar3D
-from slam.system_configs.setup_manager.sensors import Lidar3DConfig
+from moduslam.frontend_manager.measurement_storage import Measurement
+from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
+from moduslam.system_configs.setup_manager.sensors import Lidar3DConfig
 from tests_data import current_directory
 
 tests_data_dir = current_directory

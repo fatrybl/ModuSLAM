@@ -7,3 +7,10 @@ handlers:
     name: "imu_preprocessor"
     type_name: "ImuDataPreprocessor"
     module_name: ".imu_data_preprocessor"
+
+  kiss_icp_odometry:
+    name: "kiss_icp_odometry"
+    type_name: "ScanMatcher"
+    module_name: ".pointcloud_matcher"
+    measurement_noise_covariance: [ 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
+    min_range: 3.0

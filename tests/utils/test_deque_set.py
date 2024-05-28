@@ -2,7 +2,7 @@
 
 import pytest
 
-from slam.utils.deque_set import DequeSet
+from moduslam.utils.deque_set import DequeSet
 
 
 def test_add():

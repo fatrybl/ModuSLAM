@@ -1,8 +1,8 @@
-package_name: "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
+package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
 
 analyzers:
-  lidar_odometry_state_analyzer:
 
+  lidar_odometry_state_analyzer:
     name: "lidar_odometry_state_analyzer"
     type_name: "LidarOdometryStateAnalyzer"
     module_name: ".lidar_odometry"

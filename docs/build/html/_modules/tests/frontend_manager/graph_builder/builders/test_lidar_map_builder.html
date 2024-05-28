@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.frontend_manager.graph_builder.builders.test_lidar_map_builder &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../../../index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">ModuSLAM</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.frontend_manager.graph_builder.builders.test_lidar_map_builder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for tests.frontend_manager.graph_builder.builders.test_lidar_map_builder</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tests for the LidarMapBuilder class.</span>
+
+<span class="sd">Build simple graph with 2 nodes (LidarPose) and 1 edge (LidarOdometry).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_edges</span> <span class="kn">import</span> <span class="n">LidarOdometry</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="n">LidarPose</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+
+<span class="kn">from</span> <span class="nn">.conftest</span> <span class="kn">import</span> <span class="n">builder</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">setup_manager</span>
+
+
+<div class="viewcode-block" id="TestLidarMapBuilder">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder">[docs]</a>
+<span class="k">class</span> <span class="nc">TestLidarMapBuilder</span><span class="p">:</span>
+<div class="viewcode-block" id="TestLidarMapBuilder.test_create_graph_candidate">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder.test_create_graph_candidate">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_create_graph_candidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">):</span>
+        <span class="n">el1</span> <span class="o">=</span> <span class="n">data_batch</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">el2</span> <span class="o">=</span> <span class="n">data_batch</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">builder</span><span class="o">.</span><span class="n">create_graph_candidate</span><span class="p">(</span><span class="n">data_batch</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">graph_candidate</span>
+
+        <span class="k">assert</span> <span class="n">candidate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">candidate</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span> <span class="o">==</span> <span class="n">el1</span><span class="o">.</span><span class="n">timestamp</span>
+        <span class="k">assert</span> <span class="n">candidate</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">stop</span> <span class="o">==</span> <span class="n">el2</span><span class="o">.</span><span class="n">timestamp</span></div>
+
+
+<div class="viewcode-block" id="TestLidarMapBuilder.test_merge_graph_candidate">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder.test_merge_graph_candidate">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_merge_graph_candidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">):</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">create_graph_candidate</span><span class="p">(</span><span class="n">data_batch</span><span class="p">)</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">LidarOdometry</span><span class="p">]()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">merge_graph_candidate</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edge_storage</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">nrFactors</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="TestLidarMapBuilder.test_create_graph_candidate_empty_batch">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder.test_create_graph_candidate_empty_batch">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_create_graph_candidate_empty_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">):</span>
+        <span class="n">empty_batch</span> <span class="o">=</span> <span class="n">DataBatch</span><span class="p">()</span>
+
+        <span class="n">builder</span><span class="o">.</span><span class="n">create_graph_candidate</span><span class="p">(</span><span class="n">empty_batch</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">graph_candidate</span>
+
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">__</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">time_range</span>  <span class="c1"># noqa: F841</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="TestLidarMapBuilder.test_merge_graph_candidate_no_candidate">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder.test_merge_graph_candidate_no_candidate">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_merge_graph_candidate_no_candidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">):</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">LidarOdometry</span><span class="p">]()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">merge_graph_candidate</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edge_storage</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">nrFactors</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="TestLidarMapBuilder.test_clear_candidate">
+<a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.test_lidar_map_builder.TestLidarMapBuilder.test_clear_candidate">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_clear_candidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">):</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">create_graph_candidate</span><span class="p">(</span><span class="n">data_batch</span><span class="p">)</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">clear_candidate</span><span class="p">()</span>
+
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">graph_candidate</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">__</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">time_range</span>  <span class="c1"># noqa: F841</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

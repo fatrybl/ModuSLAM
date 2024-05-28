@@ -2,16 +2,16 @@ from collections import deque
 
 from pytest import mark
 
-from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.batch_factory import BatchFactory
-from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
-from slam.system_configs.data_manager.batch_factory.batch_factory import (
+from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.factory.batch_factory import BatchFactory
+from moduslam.data_manager.factory.element import Element
+from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from moduslam.system_configs.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
 )
-from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
-from slam.utils.auxiliary_methods import equal_elements
+from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
+from moduslam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.batch_factory.scenarios import sc1, sc2, sc3
 
 test_cases_1 = (*sc1,)

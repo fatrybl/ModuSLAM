@@ -6,18 +6,23 @@ Other overloads of _add_data() method are too naive to be tested.
 import pytest
 from pytest import mark
 
-from slam.data_manager.factory.batch_factory import BatchFactory
-from slam.data_manager.factory.element import Element
-from slam.system_configs.data_manager.batch_factory.batch_factory import (
+from moduslam.data_manager.factory.batch_factory import BatchFactory
+from moduslam.data_manager.factory.element import Element
+from moduslam.system_configs.data_manager.batch_factory.batch_factory import (
     BatchFactoryConfig,
 )
-from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
+from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.data_manager.batch_factory.memory import MemoryAnalyzerConfig
-from slam.system_configs.data_manager.batch_factory.regime import RegimeConfig, Stream
-from slam.utils.auxiliary_dataclasses import PeriodicDataRequest
-from slam.utils.auxiliary_methods import equal_elements
+from moduslam.system_configs.data_manager.batch_factory.memory import (
+    MemoryAnalyzerConfig,
+)
+from moduslam.system_configs.data_manager.batch_factory.regime import (
+    RegimeConfig,
+    Stream,
+)
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
+from moduslam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.batch_factory.private.scenarios import sc1
 
 test_cases = (*sc1,)

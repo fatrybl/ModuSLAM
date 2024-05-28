@@ -4,8 +4,8 @@ import pytest
 from gtsam import PriorFactorPoint2
 from gtsam.noiseModel import Diagonal
 
-from slam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
-from slam.frontend_manager.graph.edge_storage import EdgeStorage
+from moduslam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
+from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
 from tests.frontend_manager.conftest import BasicTestVertex
 
 

@@ -4,19 +4,19 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from slam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.analyzer_ABC import (
+from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from slam.frontend_manager.handlers.ABC_handler import Handler
-from slam.setup_manager.edge_factories_initializer.factory import (
+from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )
-from slam.setup_manager.handlers_factory.factory import HandlersFactory
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
-from slam.setup_manager.tables_initializer import (
+from moduslam.setup_manager.handlers_factory.factory import HandlersFactory
+from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.setup_manager.state_analyzers_factory.factory import StateAnalyzersFactory
+from moduslam.setup_manager.tables_initializer import (
     init_handler_edge_factory_table,
     init_handler_state_analyzer_table,
     init_sensor_handler_table,

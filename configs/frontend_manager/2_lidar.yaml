@@ -1,0 +1,32 @@
+graph_builder:
+
+  name: 'LidarMapBuilder'
+
+  element_distributor:
+
+    sensor_handlers_table:
+      velodyne_right: [ 'kiss_icp_odometry_1' ]
+      velodyne_left: [ 'kiss_icp_odometry_2' ]
+
+  candidate_factory:
+
+    handler_state_analyzer_table:
+      kiss_icp_odometry_1: 'multiple_lidar_odometry_state_analyzer'
+      kiss_icp_odometry_2: 'multiple_lidar_odometry_state_analyzer'
+
+  graph_merger:
+
+    handler_edge_factory_table:
+      kiss_icp_odometry_1: 'lidar_odometry_edge_factory'
+      kiss_icp_odometry_2: 'lidar_odometry_edge_factory'
+
+graph_initializer:
+
+  priors:
+    initial_pose:
+      timestamp: 1544581174277398000 # timestamp of first VLP_right scan from data_manager/config.yaml
+      vertex_type: "Pose"
+      edge_factory_name: "prior_pose_edge_factory"
+      measurement: [ 0,0,0,0,0,0 ]
+      measurement_noise_covariance: [ 1, 1, 1, 1, 1, 1 ]
+      file_path: "configs/frontend_manager/lidar.yaml"
