@@ -3,11 +3,11 @@ from pathlib import Path
 import numpy as np
 import PIL.Image as Image
 
-from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.locations import CsvDataLocation, Location
-from slam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
-from slam.system_configs.setup_manager.sensors import SensorConfig
-from slam.utils.auxiliary_methods import equal_elements
+from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.factory.locations import CsvDataLocation, Location
+from moduslam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
+from moduslam.system_configs.setup_manager.sensors import SensorConfig
+from moduslam.utils.auxiliary_methods import equal_elements
 
 
 class TestEqualElements:

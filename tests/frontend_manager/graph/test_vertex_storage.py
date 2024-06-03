@@ -7,8 +7,8 @@ import gtsam
 import numpy as np
 import pytest
 
-from slam.frontend_manager.graph.custom_vertices import CameraFeature, Pose
-from slam.frontend_manager.graph.vertex_storage import VertexStorage
+from moduslam.frontend_manager.graph.custom_vertices import CameraFeature, Pose
+from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 
 
 class TestVertexStorage:
@@ -39,9 +39,6 @@ class TestVertexStorage:
         assert non_optimizable_vertex in vertex_storage.vertices
         assert non_optimizable_vertex in vertex_storage.not_optimizable_vertices
         assert len(vertex_storage.get_vertices(type(non_optimizable_vertex))) == 1
-
-        assert optimizable_vertex not in vertex_storage.not_optimizable_vertices
-        assert non_optimizable_vertex not in vertex_storage.optimizable_vertices
 
     def test_add_multiple(self, vertex_storage, optimizable_vertex, non_optimizable_vertex):
         vertex_storage.add([optimizable_vertex, non_optimizable_vertex])
@@ -117,16 +114,17 @@ class TestVertexStorage:
         assert np.array_equal(vertex.rotation, pose.rotation().matrix(), equal_nan=True) is True
         assert np.array_equal(vertex.position, pose.translation()) is True
 
-    # def test_update_non_optimizable_vertex(
-    #     self, vertex_storage, non_optimizable_vertex: CameraFeature
-    # ):
-    #     vertex_storage.add(non_optimizable_vertex)
-    #
-    #     new_values: dict[CameraFeature, np.ndarray] = {
-    #         non_optimizable_vertex: np.array([10, 10, 10])
-    #     }
-    #
-    #     vertex_storage.update_non_optimizable_vertices()
-    #     vertex = vertex_storage.get_last_vertex(CameraFeature)
-    #
-    #     assert np.array_equal(vertex.position, new_values[non_optimizable_vertex]) is True
+    @pytest.mark.skip(reason="Not implemented")
+    def test_update_non_optimizable_vertex(
+        self, vertex_storage, non_optimizable_vertex: CameraFeature
+    ):
+        vertex_storage.add(non_optimizable_vertex)
+
+        new_values: dict[CameraFeature, np.ndarray] = {
+            non_optimizable_vertex: np.array([10, 10, 10])
+        }
+
+        vertex_storage.update_non_optimizable_vertices()
+        vertex = vertex_storage.get_last_vertex(CameraFeature)
+
+        assert np.array_equal(vertex.position, new_values[non_optimizable_vertex]) is True

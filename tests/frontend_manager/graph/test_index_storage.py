@@ -2,7 +2,7 @@
 
 import pytest
 
-from slam.frontend_manager.graph.index_generator import IndexStorage, generate_index
+from moduslam.frontend_manager.graph.index_generator import IndexStorage, generate_index
 
 
 @pytest.fixture
@@ -38,7 +38,6 @@ class TestIndexStorage:
         assert index_storage.indices == {1, 2}
 
     def test_remove_method(self, index_storage):
-        # Add indices to the storage
         index_storage.add(5)
         index_storage.add(10)
         index_storage.add(15)

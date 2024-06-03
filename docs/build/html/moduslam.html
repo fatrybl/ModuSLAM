@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>moduslam package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="moduslam.backend_manager package" href="moduslam.backend_manager.html" />
+    <link rel="prev" title="ModuSLAM" href="modules.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ModuSLAM</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">moduslam package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.backend_manager.html">moduslam.backend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.html">moduslam.data_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html">moduslam.frontend_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.logger.html">moduslam.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.main_manager.html">moduslam.main_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html">moduslam.map_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.html">moduslam.setup_manager package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html">moduslam.system_configs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html">moduslam.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.visualization.html">moduslam.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-moduslam.run">moduslam.run module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#moduslam.run.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-moduslam.sandbox">moduslam.sandbox module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#moduslam.sandbox.timer"><code class="docutils literal notranslate"><span class="pre">timer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-moduslam">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests_data.html">tests_data package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">ModuSLAM</a></li>
+      <li class="breadcrumb-item active">moduslam package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/moduslam.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="moduslam-package">
+<h1>moduslam package<a class="headerlink" href="#moduslam-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.backend_manager.html">moduslam.backend_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.backend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.backend_manager.html#module-moduslam.backend_manager.backend_manager">moduslam.backend_manager.backend_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.backend_manager.html#moduslam.backend_manager.backend_manager.BackendManager"><code class="docutils literal notranslate"><span class="pre">BackendManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.backend_manager.html#moduslam.backend_manager.backend_manager.BackendManager.solve"><code class="docutils literal notranslate"><span class="pre">BackendManager.solve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.backend_manager.html#module-moduslam.backend_manager.graph_solver">moduslam.backend_manager.graph_solver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.backend_manager.html#moduslam.backend_manager.graph_solver.GraphSolver"><code class="docutils literal notranslate"><span class="pre">GraphSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.backend_manager.html#moduslam.backend_manager.graph_solver.GraphSolver.solve"><code class="docutils literal notranslate"><span class="pre">GraphSolver.solve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.backend_manager.html#module-moduslam.backend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.data_manager.html">moduslam.data_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.data_manager.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.data_manager.factory.html">moduslam.data_manager.factory package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.batch">moduslam.data_manager.factory.batch module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.batch_factory">moduslam.data_manager.factory.batch_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.data_reader_ABC">moduslam.data_manager.factory.data_reader_ABC module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.data_reader_factory">moduslam.data_manager.factory.data_reader_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.element">moduslam.data_manager.factory.element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory.locations">moduslam.data_manager.factory.locations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.factory.html#module-moduslam.data_manager.factory">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.data_manager.memory_analyzer.html">moduslam.data_manager.memory_analyzer package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.memory_analyzer.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.memory_analyzer.html#module-moduslam.data_manager.memory_analyzer.memory_analyzer">moduslam.data_manager.memory_analyzer.memory_analyzer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.memory_analyzer.html#module-moduslam.data_manager.memory_analyzer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.data_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.data_manager.html#module-moduslam.data_manager.data_manager">moduslam.data_manager.data_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.data_manager.html#moduslam.data_manager.data_manager.DataManager"><code class="docutils literal notranslate"><span class="pre">DataManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.html#moduslam.data_manager.data_manager.DataManager.__init__"><code class="docutils literal notranslate"><span class="pre">DataManager.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.data_manager.html#moduslam.data_manager.data_manager.DataManager.make_batch"><code class="docutils literal notranslate"><span class="pre">DataManager.make_batch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.data_manager.html#module-moduslam.data_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.frontend_manager.html">moduslam.frontend_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html">moduslam.frontend_manager.edge_factories package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories.edge_factory_ABC">moduslam.frontend_manager.edge_factories.edge_factory_ABC module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories.gps_position">moduslam.frontend_manager.edge_factories.gps_position module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories.lidar_odometry">moduslam.frontend_manager.edge_factories.lidar_odometry module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories.prior_pose">moduslam.frontend_manager.edge_factories.prior_pose module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories.utils">moduslam.frontend_manager.edge_factories.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.edge_factories.html#module-moduslam.frontend_manager.edge_factories">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.graph.html">moduslam.frontend_manager.graph package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.base_edges">moduslam.frontend_manager.graph.base_edges module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.base_vertices">moduslam.frontend_manager.graph.base_vertices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.custom_edges">moduslam.frontend_manager.graph.custom_edges module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.custom_vertices">moduslam.frontend_manager.graph.custom_vertices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.edge_storage">moduslam.frontend_manager.graph.edge_storage module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.graph">moduslam.frontend_manager.graph.graph module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.index_generator">moduslam.frontend_manager.graph.index_generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph.vertex_storage">moduslam.frontend_manager.graph.vertex_storage module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph.html#module-moduslam.frontend_manager.graph">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html">moduslam.frontend_manager.graph_builder package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#module-moduslam.frontend_manager.graph_builder.graph_builder_ABC">moduslam.frontend_manager.graph_builder.graph_builder_ABC module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#module-moduslam.frontend_manager.graph_builder.graph_builder_factory">moduslam.frontend_manager.graph_builder.graph_builder_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#module-moduslam.frontend_manager.graph_builder.graph_merger">moduslam.frontend_manager.graph_builder.graph_merger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_builder.html#module-moduslam.frontend_manager.graph_builder">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.graph_initializer.html">moduslam.frontend_manager.graph_initializer package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_initializer.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_initializer.html#module-moduslam.frontend_manager.graph_initializer.initializer">moduslam.frontend_manager.graph_initializer.initializer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.graph_initializer.html#module-moduslam.frontend_manager.graph_initializer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.handlers.html">moduslam.frontend_manager.handlers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers.ABC_handler">moduslam.frontend_manager.handlers.ABC_handler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers.imu_data_preprocessor">moduslam.frontend_manager.handlers.imu_data_preprocessor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers.pointcloud_matcher">moduslam.frontend_manager.handlers.pointcloud_matcher module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers.prior">moduslam.frontend_manager.handlers.prior module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers.vrs_gps">moduslam.frontend_manager.handlers.vrs_gps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.handlers.html#module-moduslam.frontend_manager.handlers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager.elements_distributor">moduslam.frontend_manager.elements_distributor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor"><code class="docutils literal notranslate"><span class="pre">ElementDistributor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor.storage"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.storage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor.sensor_handler_table"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.sensor_handler_table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor.init_table"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.init_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor.clear_storage"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.clear_storage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.elements_distributor.ElementDistributor.distribute_element"><code class="docutils literal notranslate"><span class="pre">ElementDistributor.distribute_element()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager.frontend_manager">moduslam.frontend_manager.frontend_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.frontend_manager.FrontendManager"><code class="docutils literal notranslate"><span class="pre">FrontendManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.frontend_manager.FrontendManager.__init__"><code class="docutils literal notranslate"><span class="pre">FrontendManager.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.frontend_manager.FrontendManager.set_prior"><code class="docutils literal notranslate"><span class="pre">FrontendManager.set_prior()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.frontend_manager.FrontendManager.create_graph"><code class="docutils literal notranslate"><span class="pre">FrontendManager.create_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager.graph_handler_interface">moduslam.frontend_manager.graph_handler_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request"><code class="docutils literal notranslate"><span class="pre">Request</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request.vertex_type"><code class="docutils literal notranslate"><span class="pre">Request.vertex_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request.vertex_id"><code class="docutils literal notranslate"><span class="pre">Request.vertex_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request.vertex_timestamp"><code class="docutils literal notranslate"><span class="pre">Request.vertex_timestamp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request.last"><code class="docutils literal notranslate"><span class="pre">Request.last</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.Request.first"><code class="docutils literal notranslate"><span class="pre">Request.first</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.GraphHandlerInterface"><code class="docutils literal notranslate"><span class="pre">GraphHandlerInterface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.GraphHandlerInterface.set_graph"><code class="docutils literal notranslate"><span class="pre">GraphHandlerInterface.set_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.GraphHandlerInterface.get_graph"><code class="docutils literal notranslate"><span class="pre">GraphHandlerInterface.get_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.GraphHandlerInterface.get_vertex"><code class="docutils literal notranslate"><span class="pre">GraphHandlerInterface.get_vertex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.graph_handler_interface.GraphHandlerInterface.get_vertices"><code class="docutils literal notranslate"><span class="pre">GraphHandlerInterface.get_vertices()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager.measurement_storage">moduslam.frontend_manager.measurement_storage module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement"><code class="docutils literal notranslate"><span class="pre">Measurement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement.time_range"><code class="docutils literal notranslate"><span class="pre">Measurement.time_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement.values"><code class="docutils literal notranslate"><span class="pre">Measurement.values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement.handler"><code class="docutils literal notranslate"><span class="pre">Measurement.handler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement.elements"><code class="docutils literal notranslate"><span class="pre">Measurement.elements</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement.noise_covariance"><code class="docutils literal notranslate"><span class="pre">Measurement.noise_covariance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.data"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.recent_measurement"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.recent_measurement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.time_range"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.time_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.empty"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.empty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.add"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.remove"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage.clear"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._add"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._remove"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._update_recent_measurement"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._update_recent_measurement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._update_time_range"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._update_time_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._find_recent_measurement"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._find_recent_measurement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage._update_time_range_all"><code class="docutils literal notranslate"><span class="pre">MeasurementStorage._update_time_range_all()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager.noise_models">moduslam.frontend_manager.noise_models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.position_diagonal_noise_model"><code class="docutils literal notranslate"><span class="pre">position_diagonal_noise_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.pose_isotropic_noise_model"><code class="docutils literal notranslate"><span class="pre">pose_isotropic_noise_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.pose_diagonal_noise_model"><code class="docutils literal notranslate"><span class="pre">pose_diagonal_noise_model()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.frontend_manager.html#module-moduslam.frontend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.logger.html">moduslam.logger package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.logger.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.logger.html#module-moduslam.logger.logging_config">moduslam.logger.logging_config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.logger.html#moduslam.logger.logging_config.get_config"><code class="docutils literal notranslate"><span class="pre">get_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.logger.html#moduslam.logger.logging_config.setup_logger"><code class="docutils literal notranslate"><span class="pre">setup_logger()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.logger.html#module-moduslam.logger">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.main_manager.html">moduslam.main_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.main_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.main_manager.html#module-moduslam.main_manager.main_manager">moduslam.main_manager.main_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.main_manager.html#moduslam.main_manager.main_manager.MainManager"><code class="docutils literal notranslate"><span class="pre">MainManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.main_manager.html#moduslam.main_manager.main_manager.MainManager.__init__"><code class="docutils literal notranslate"><span class="pre">MainManager.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.main_manager.html#moduslam.main_manager.main_manager.MainManager._process"><code class="docutils literal notranslate"><span class="pre">MainManager._process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.main_manager.html#moduslam.main_manager.main_manager.MainManager.build_map"><code class="docutils literal notranslate"><span class="pre">MainManager.build_map()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.main_manager.html#module-moduslam.main_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.map_manager.html">moduslam.map_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html">moduslam.map_manager.map_factories package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.map_factories.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.map_factories.html#module-moduslam.map_manager.map_factories.lidar_map_factory">moduslam.map_manager.map_factories.lidar_map_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.map_factories.html#module-moduslam.map_manager.map_factories.lidar_map_utils">moduslam.map_manager.map_factories.lidar_map_utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.map_factories.html#module-moduslam.map_manager.map_factories.utils">moduslam.map_manager.map_factories.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.map_factories.html#module-moduslam.map_manager.map_factories">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.maps.html">moduslam.map_manager.maps package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.maps.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.maps.html#module-moduslam.map_manager.maps.lidar_map">moduslam.map_manager.maps.lidar_map module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.maps.html#module-moduslam.map_manager.maps">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.html#module-moduslam.map_manager.graph_saver">moduslam.map_manager.graph_saver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.graph_saver.GraphSaver"><code class="docutils literal notranslate"><span class="pre">GraphSaver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.graph_saver.GraphSaver.save_to_file"><code class="docutils literal notranslate"><span class="pre">GraphSaver.save_to_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.graph_saver.GraphSaver.save_to_pdf"><code class="docutils literal notranslate"><span class="pre">GraphSaver.save_to_pdf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.graph_saver.GraphSaver.view"><code class="docutils literal notranslate"><span class="pre">GraphSaver.view()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.html#module-moduslam.map_manager.map_manager">moduslam.map_manager.map_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager"><code class="docutils literal notranslate"><span class="pre">MapManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.__init__"><code class="docutils literal notranslate"><span class="pre">MapManager.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.map"><code class="docutils literal notranslate"><span class="pre">MapManager.map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.create_map"><code class="docutils literal notranslate"><span class="pre">MapManager.create_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.visualize_map"><code class="docutils literal notranslate"><span class="pre">MapManager.visualize_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.save_map"><code class="docutils literal notranslate"><span class="pre">MapManager.save_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.map_manager.html#moduslam.map_manager.map_manager.MapManager.save_graph"><code class="docutils literal notranslate"><span class="pre">MapManager.save_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.html#module-moduslam.map_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.setup_manager.html">moduslam.setup_manager package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.edge_factories_initializer.html">moduslam.setup_manager.edge_factories_initializer package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.edge_factories_initializer.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.edge_factories_initializer.html#module-moduslam.setup_manager.edge_factories_initializer.factory">moduslam.setup_manager.edge_factories_initializer.factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.edge_factories_initializer.html#module-moduslam.setup_manager.edge_factories_initializer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.handlers_factory.html">moduslam.setup_manager.handlers_factory package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.handlers_factory.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.handlers_factory.html#module-moduslam.setup_manager.handlers_factory.factory">moduslam.setup_manager.handlers_factory.factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.handlers_factory.html#module-moduslam.setup_manager.handlers_factory">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html">moduslam.setup_manager.sensors_factory package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#module-moduslam.setup_manager.sensors_factory.factory">moduslam.setup_manager.sensors_factory.factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#module-moduslam.setup_manager.sensors_factory.sensors">moduslam.setup_manager.sensors_factory.sensors module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#module-moduslam.setup_manager.sensors_factory">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.state_analyzers_factory.html">moduslam.setup_manager.state_analyzers_factory package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.state_analyzers_factory.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.state_analyzers_factory.html#module-moduslam.setup_manager.state_analyzers_factory.factory">moduslam.setup_manager.state_analyzers_factory.factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.state_analyzers_factory.html#module-moduslam.setup_manager.state_analyzers_factory">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#module-moduslam.setup_manager.config_validator">moduslam.setup_manager.config_validator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.config_validator.register_config"><code class="docutils literal notranslate"><span class="pre">register_config()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#module-moduslam.setup_manager.setup_manager">moduslam.setup_manager.setup_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.setup_manager.SetupManager"><code class="docutils literal notranslate"><span class="pre">SetupManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.setup_manager.SetupManager.__init__"><code class="docutils literal notranslate"><span class="pre">SetupManager.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#module-moduslam.setup_manager.tables_initializer">moduslam.setup_manager.tables_initializer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.tables_initializer.init_handler_state_analyzer_table"><code class="docutils literal notranslate"><span class="pre">init_handler_state_analyzer_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.tables_initializer.init_handler_edge_factory_table"><code class="docutils literal notranslate"><span class="pre">init_handler_edge_factory_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.setup_manager.html#moduslam.setup_manager.tables_initializer.init_sensor_handler_table"><code class="docutils literal notranslate"><span class="pre">init_sensor_handler_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.setup_manager.html#module-moduslam.setup_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.system_configs.html">moduslam.system_configs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.system_configs.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.backend_manager.html">moduslam.system_configs.backend_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.backend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.backend_manager.html#module-moduslam.system_configs.backend_manager.backend_manager">moduslam.system_configs.backend_manager.backend_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.backend_manager.html#module-moduslam.system_configs.backend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.data_manager.html">moduslam.system_configs.data_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.data_manager.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.data_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.data_manager.html#module-moduslam.system_configs.data_manager.data_manager">moduslam.system_configs.data_manager.data_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.data_manager.html#module-moduslam.system_configs.data_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.frontend_manager.html">moduslam.system_configs.frontend_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.frontend_manager.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.frontend_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.frontend_manager.html#module-moduslam.system_configs.frontend_manager.frontend_manager">moduslam.system_configs.frontend_manager.frontend_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.frontend_manager.html#module-moduslam.system_configs.frontend_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.logger.html">moduslam.system_configs.logger package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.logger.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.logger.html#module-moduslam.system_configs.logger.config">moduslam.system_configs.logger.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.logger.html#module-moduslam.system_configs.logger">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.map_manager.html">moduslam.system_configs.map_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.map_manager.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.map_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.map_manager.html#module-moduslam.system_configs.map_manager.map_manager">moduslam.system_configs.map_manager.map_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.map_manager.html#module-moduslam.system_configs.map_manager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.setup_manager.html">moduslam.system_configs.setup_manager package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.edge_factories_initializer">moduslam.system_configs.setup_manager.edge_factories_initializer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.handlers_factory">moduslam.system_configs.setup_manager.handlers_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.sensor_factory">moduslam.system_configs.setup_manager.sensor_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.sensors">moduslam.system_configs.setup_manager.sensors module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.setup_manager">moduslam.system_configs.setup_manager.setup_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager.state_analyzers_factory">moduslam.system_configs.setup_manager.state_analyzers_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.setup_manager.html#module-moduslam.system_configs.setup_manager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.system_configs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.system_configs.html#module-moduslam.system_configs.main_manager">moduslam.system_configs.main_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig.setup_manager"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig.setup_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig.data_manager"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig.data_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig.frontend_manager"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig.frontend_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig.map_manager"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig.map_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig.logger"><code class="docutils literal notranslate"><span class="pre">MainManagerConfig.logger</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.system_configs.html#module-moduslam.system_configs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.utils.html">moduslam.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.auxiliary_dataclasses">moduslam.utils.auxiliary_dataclasses module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.TimeRange"><code class="docutils literal notranslate"><span class="pre">TimeRange</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.TimeRange.start"><code class="docutils literal notranslate"><span class="pre">TimeRange.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.TimeRange.stop"><code class="docutils literal notranslate"><span class="pre">TimeRange.stop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.TimeRange.__post_init__"><code class="docutils literal notranslate"><span class="pre">TimeRange.__post_init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.PeriodicDataRequest"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.PeriodicDataRequest.sensor"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest.sensor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.PeriodicDataRequest.period"><code class="docutils literal notranslate"><span class="pre">PeriodicDataRequest.period</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.auxiliary_methods">moduslam.utils.auxiliary_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.create_empty_element"><code class="docutils literal notranslate"><span class="pre">create_empty_element()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.sec2nanosec"><code class="docutils literal notranslate"><span class="pre">sec2nanosec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.nanosec2sec"><code class="docutils literal notranslate"><span class="pre">nanosec2sec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.equal_integers"><code class="docutils literal notranslate"><span class="pre">equal_integers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.create_vector_3"><code class="docutils literal notranslate"><span class="pre">create_vector_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.create_vector_n"><code class="docutils literal notranslate"><span class="pre">create_vector_n()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.tuple_to_gtsam_pose3"><code class="docutils literal notranslate"><span class="pre">tuple_to_gtsam_pose3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.to_float"><code class="docutils literal notranslate"><span class="pre">to_float()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.to_int"><code class="docutils literal notranslate"><span class="pre">to_int()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.check_dimensionality"><code class="docutils literal notranslate"><span class="pre">check_dimensionality()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.equal_images"><code class="docutils literal notranslate"><span class="pre">equal_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.equal_elements"><code class="docutils literal notranslate"><span class="pre">equal_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_methods.import_object"><code class="docutils literal notranslate"><span class="pre">import_object()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.deque_set">moduslam.utils.deque_set module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet"><code class="docutils literal notranslate"><span class="pre">DequeSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.__eq__"><code class="docutils literal notranslate"><span class="pre">DequeSet.__eq__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.items"><code class="docutils literal notranslate"><span class="pre">DequeSet.items</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.empty"><code class="docutils literal notranslate"><span class="pre">DequeSet.empty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.add"><code class="docutils literal notranslate"><span class="pre">DequeSet.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.remove"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.remove_first"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove_first()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.remove_last"><code class="docutils literal notranslate"><span class="pre">DequeSet.remove_last()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.sort"><code class="docutils literal notranslate"><span class="pre">DequeSet.sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet.clear"><code class="docutils literal notranslate"><span class="pre">DequeSet.clear()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.exceptions">moduslam.utils.exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ItemNotFoundError"><code class="docutils literal notranslate"><span class="pre">ItemNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ConfigFileNotValid"><code class="docutils literal notranslate"><span class="pre">ConfigFileNotValid</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.FileNotValid"><code class="docutils literal notranslate"><span class="pre">FileNotValid</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.NotSubset"><code class="docutils literal notranslate"><span class="pre">NotSubset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ExternalModuleException"><code class="docutils literal notranslate"><span class="pre">ExternalModuleException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.DimensionalityError"><code class="docutils literal notranslate"><span class="pre">DimensionalityError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.EmptyStorageError"><code class="docutils literal notranslate"><span class="pre">EmptyStorageError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.numpy_types">moduslam.utils.numpy_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.ordered_set">moduslam.utils.ordered_set module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet"><code class="docutils literal notranslate"><span class="pre">OrderedSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.__getitem__"><code class="docutils literal notranslate"><span class="pre">OrderedSet.__getitem__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.__eq__"><code class="docutils literal notranslate"><span class="pre">OrderedSet.__eq__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.items"><code class="docutils literal notranslate"><span class="pre">OrderedSet.items</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.first"><code class="docutils literal notranslate"><span class="pre">OrderedSet.first</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.last"><code class="docutils literal notranslate"><span class="pre">OrderedSet.last</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.add"><code class="docutils literal notranslate"><span class="pre">OrderedSet.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet.remove"><code class="docutils literal notranslate"><span class="pre">OrderedSet.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet._is_hashable"><code class="docutils literal notranslate"><span class="pre">OrderedSet._is_hashable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils.stopping_criterion">moduslam.utils.stopping_criterion module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.State.memory_limit"><code class="docutils literal notranslate"><span class="pre">State.memory_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.State.data_processed"><code class="docutils literal notranslate"><span class="pre">State.data_processed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.State.time_finished"><code class="docutils literal notranslate"><span class="pre">State.time_finished</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.State.solver_error"><code class="docutils literal notranslate"><span class="pre">State.solver_error</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.StoppingCriterion"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.StoppingCriterion.state"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.StoppingCriterion.is_active"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.is_active()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.stopping_criterion.StoppingCriterion.reset"><code class="docutils literal notranslate"><span class="pre">StoppingCriterion.reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.utils.html#module-moduslam.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="moduslam.visualization.html">moduslam.visualization package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.visualization.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.visualization.html#module-moduslam.visualization.trajectory_visualizer">moduslam.visualization.trajectory_visualizer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.visualization.html#moduslam.visualization.trajectory_visualizer.plot_trajectory_2d"><code class="docutils literal notranslate"><span class="pre">plot_trajectory_2d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.visualization.html#moduslam.visualization.trajectory_visualizer.plot_trajectory_3d"><code class="docutils literal notranslate"><span class="pre">plot_trajectory_3d()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moduslam.visualization.html#module-moduslam.visualization">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-moduslam.run">
+<span id="moduslam-run-module"></span><h2>moduslam.run module<a class="headerlink" href="#module-moduslam.run" title="Link to this heading"></a></h2>
+<p>Author: Mark Griguletskii
+e-mail: <a class="reference external" href="mailto:mark&#46;griguletskii&#37;&#52;&#48;skoltech&#46;ru">mark<span>&#46;</span>griguletskii<span>&#64;</span>skoltech<span>&#46;</span>ru</a>.</p>
+<p>Main runner of the SLAM system.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.run.run">
+<span class="sig-prename descclassname"><span class="pre">moduslam.run.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.html#moduslam.system_configs.main_manager.MainManagerConfig" title="moduslam.system_configs.main_manager.MainManagerConfig"><span class="pre">MainManagerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/run.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.run.run" title="Link to this definition"></a></dt>
+<dd><p>Runs SLAM based on the given configuration.</p>
+</dd></dl>
+
+</section>
+<section id="module-moduslam.sandbox">
+<span id="moduslam-sandbox-module"></span><h2>moduslam.sandbox module<a class="headerlink" href="#module-moduslam.sandbox" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.sandbox.timer">
+<span class="sig-prename descclassname"><span class="pre">moduslam.sandbox.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/sandbox.html#timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.sandbox.timer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-moduslam">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="ModuSLAM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="moduslam.backend_manager.html" class="btn btn-neutral float-right" title="moduslam.backend_manager package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

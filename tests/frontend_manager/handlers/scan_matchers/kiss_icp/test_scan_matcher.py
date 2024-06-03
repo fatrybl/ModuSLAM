@@ -7,10 +7,10 @@ from collections.abc import Iterable
 
 from pytest import fixture, mark
 
-from slam.data_manager.factory.element import Element
-from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
-from slam.frontend_manager.measurement_storage import Measurement
-from slam.system_configs.frontend_manager.handlers.lidar_odometry import (
+from moduslam.data_manager.factory.element import Element
+from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
+from moduslam.frontend_manager.measurement_storage import Measurement
+from moduslam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
 from tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios import scenarios

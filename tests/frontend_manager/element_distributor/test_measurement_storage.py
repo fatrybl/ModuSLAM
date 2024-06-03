@@ -2,11 +2,15 @@
 
 import pytest
 
-from slam.data_manager.factory.element import Element, RawMeasurement
-from slam.data_manager.factory.locations import Location
-from slam.frontend_manager.measurement_storage import Measurement, MeasurementStorage
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.factory.locations import Location
+from moduslam.frontend_manager.measurement_storage import (
+    Measurement,
+    MeasurementStorage,
+)
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.exceptions import EmptyStorageError
 from tests.frontend_manager.conftest import (  # noqa: F401, F811
     BasicTestHandler,
     element,
@@ -92,6 +96,9 @@ class TestMeasurementStorage:
         storage.add(measurement)
         storage.remove(measurement)
         assert storage.empty
+        with pytest.raises(EmptyStorageError):
+            _ = storage.recent_measurement
+            _ = storage.time_range
 
     def test_remove_nonexistent(self, measurement: Measurement):
         storage = MeasurementStorage()
@@ -103,6 +110,27 @@ class TestMeasurementStorage:
         storage.add(measurements)
         storage.remove(measurements)
         assert storage.empty
+        with pytest.raises(EmptyStorageError):
+            _ = storage.recent_measurement
+            _ = storage.time_range
+
+    def test_remove_updates_recent_measurement(self, measurements: tuple[Measurement, ...]):
+        storage = MeasurementStorage()
+        storage.add(measurements)
+        recent_measurement_before_remove = storage.recent_measurement
+        storage.remove(recent_measurement_before_remove)
+        assert storage.recent_measurement != recent_measurement_before_remove
+
+    def test_remove_updates_time_range(self, measurements: tuple[Measurement, ...]):
+        storage = MeasurementStorage()
+        storage.add(measurements)
+        time_range_before_remove = storage.time_range
+
+        storage.remove(measurements[0])
+        assert storage.time_range == time_range_before_remove
+
+        storage.remove(measurements[2])
+        assert storage.time_range != time_range_before_remove
 
     def test_clear(self, measurement: Measurement):
         storage = MeasurementStorage()

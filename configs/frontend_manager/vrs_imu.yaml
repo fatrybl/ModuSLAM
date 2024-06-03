@@ -1,0 +1,24 @@
+graph_builder:
+
+  name: 'LidarMapBuilder'
+
+  element_distributor:
+
+    sensor_handlers_table:
+      vrs: [ 'vrs_gps_preprocessor' ]
+      imu: [ 'imu_preprocessor' ]
+
+
+  candidate_factory:
+
+    handler_state_analyzer_table:
+      vrs_gps_preprocessor: 'imu_gps_state_analyzer'
+      imu_preprocessor: 'imu_gps_state_analyzer'
+
+  graph_merger:
+
+    handler_edge_factory_table:
+      vrs_gps_preprocessor: 'gps_position_edge_factory'
+      imu_preprocessor: 'imu_odometry_edge_factory'
+
+graph_initializer: null

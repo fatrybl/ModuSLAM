@@ -2,11 +2,11 @@
 
 import pytest
 
-from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
+from moduslam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
-from slam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
-from slam.frontend_manager.graph_builder.graph_builder_factory import (
+from moduslam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
+from moduslam.frontend_manager.graph_builder.graph_builder_factory import (
     GraphBuilderFactory,
 )
 

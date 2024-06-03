@@ -1,47 +1,47 @@
 import pytest
 
-from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.element import Element
-from slam.frontend_manager.edge_factories.lidar_odometry_factory import (
+from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.factory.element import Element
+from moduslam.frontend_manager.edge_factories.lidar_odometry import (
     LidarOdometryEdgeFactory,
 )
-from slam.frontend_manager.graph_builder.builders.lidar_map_builder import (
+from moduslam.frontend_manager.graph_builder.builders.lidar_map_builder import (
     LidarMapBuilder,
 )
-from slam.frontend_manager.graph_builder.candidate_factory.state_analyzers.lidar_odometry import (
+from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
-from slam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
-from slam.setup_manager.setup_manager import SetupManager
-from slam.system_configs.frontend_manager.edge_factories.base_factory import (
+from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
+from moduslam.setup_manager.setup_manager import SetupManager
+from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
-from slam.system_configs.frontend_manager.element_distributor.element_distributor import (
+from moduslam.system_configs.frontend_manager.element_distributor.element_distributor import (
     ElementDistributorConfig,
 )
-from slam.system_configs.frontend_manager.graph_builder.candidate_factory.config import (
+from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.config import (
     CandidateFactoryConfig,
 )
-from slam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
+from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,
 )
-from slam.system_configs.frontend_manager.graph_builder.graph_builder import (
+from moduslam.system_configs.frontend_manager.graph_builder.graph_builder import (
     GraphBuilderConfig,
 )
-from slam.system_configs.frontend_manager.graph_builder.graph_merger.merger import (
+from moduslam.system_configs.frontend_manager.graph_builder.graph_merger.merger import (
     GraphMergerConfig,
 )
-from slam.system_configs.frontend_manager.handlers.lidar_odometry import (
+from moduslam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
-from slam.system_configs.setup_manager.edge_factories_initializer import (
+from moduslam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
-from slam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
-from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
-from slam.system_configs.setup_manager.setup_manager import SetupManagerConfig
-from slam.system_configs.setup_manager.state_analyzers_factory import (
+from moduslam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
+from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
+from moduslam.system_configs.setup_manager.setup_manager import SetupManagerConfig
+from moduslam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzersFactoryConfig,
 )
 from tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios import (
@@ -54,15 +54,13 @@ sensor_name: str = sensor.name
 graph_builder_name: str = "lidar_map_builder"
 handler_name: str = "kiss_icp_odometry"
 handler_module_name: str = ".pointcloud_matcher"
-handler_package_name: str = "slam.frontend_manager.handlers"
+handler_package_name: str = "moduslam.frontend_manager.handlers"
 state_analyzer_name: str = "lidar_odometry_state_analyzer"
 state_analyzer_module_name: str = ".lidar_odometry"
-state_analyzer_package_name: str = (
-    "slam.frontend_manager.graph_builder.candidate_factory.state_analyzers"
-)
+state_analyzer_package_name: str = "moduslam.frontend_manager.graph_builder.state_analyzers"
 edge_factory_name: str = "lidar_odometry_edge_factory"
-edge_factory_module_name: str = ".lidar_odometry_factory"
-edge_factory_package_name: str = "slam.frontend_manager.edge_factories"
+edge_factory_module_name: str = ".lidar_odometry"
+edge_factory_package_name: str = "moduslam.frontend_manager.edge_factories"
 
 
 @pytest.fixture

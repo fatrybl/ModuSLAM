@@ -8,16 +8,16 @@ get_element(sensor: Sensor, timestamp: int)
 
 import pytest
 
-from slam.data_manager.factory.data_reader_ABC import DataReader
-from slam.data_manager.factory.element import Element
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
+from moduslam.data_manager.factory.data_reader_ABC import DataReader
+from moduslam.data_manager.factory.element import Element
+from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
-from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.utils.auxiliary_methods import equal_elements
+from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.factory.data_reader.readers.kaist.case1 import kaist1
 from tests.data_manager.factory.data_reader.readers.kaist.case2 import kaist2
 from tests.data_manager.factory.data_reader.readers.kaist.case3 import kaist3

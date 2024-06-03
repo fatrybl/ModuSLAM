@@ -2,11 +2,11 @@
 
 import pytest
 
-from slam.setup_manager.sensors_factory.factory import SensorsFactory
-from slam.setup_manager.sensors_factory.sensors import Sensor
-from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.system_configs.setup_manager.sensors import SensorConfig
-from slam.utils.exceptions import ItemNotFoundError
+from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.system_configs.setup_manager.sensors import SensorConfig
+from moduslam.utils.exceptions import ItemNotFoundError
 
 
 class TestSensorsFactory:

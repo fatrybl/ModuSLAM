@@ -2,9 +2,9 @@
 
 import itertools
 
-from slam.data_manager.factory.batch import DataBatch
-from slam.data_manager.factory.element import Element
-from slam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
+from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.factory.element import Element
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 from tests_data.kaist_urban_dataset.data import (
     el1,
     el2,

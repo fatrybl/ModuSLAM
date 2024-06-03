@@ -3,7 +3,7 @@
 import numpy as np
 from PIL import Image
 
-from slam.utils.auxiliary_methods import equal_images
+from moduslam.utils.auxiliary_methods import equal_images
 
 
 def test_equal_images():

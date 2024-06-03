@@ -1,0 +1,8 @@
+package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
+
+analyzers:
+
+  lidar_gps_state_analyzer:
+    name: "lidar_gps_state_analyzer"
+    type_name: "LidarGpsAnalyzer"
+    module_name: ".lidar_gps"

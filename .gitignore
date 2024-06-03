@@ -1,4 +1,4 @@
-slam.egg-info
+moduslam.egg-info
 .idea
 .vscode
 __pycache__
@@ -7,4 +7,3 @@ data
 dist
 outputs
 *.pdf
-*.txt
