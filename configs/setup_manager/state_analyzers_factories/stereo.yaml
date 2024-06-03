@@ -1,0 +1,8 @@
+package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
+
+analyzers:
+
+  visual_odometry_state_analyzer:
+    name: "visual_odometry_state_analyzer"
+    type_name: "VisualOdometryAnalyzer"
+    module_name: ".visual_odometry"

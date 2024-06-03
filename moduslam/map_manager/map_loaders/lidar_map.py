@@ -4,14 +4,14 @@ from pathlib import Path
 import open3d as o3d
 
 from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.maps.lidar_map import LidarMap
+from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
 from moduslam.system_configs.map_manager.map_manager import LidarMapLoaderConfig
 from moduslam.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(map_manager)
 
 
-class LidarMapLoader:
+class MapLoader:
     """Lidar pointcloud map loader."""
 
     def __init__(self, config: LidarMapLoaderConfig) -> None:
@@ -28,7 +28,7 @@ class LidarMapLoader:
         self._remove_nan: bool = config.remove_nan
         self._remove_infinity: bool = config.remove_infinity
 
-    def save(self, lidar_map: LidarMap) -> None:
+    def save(self, lidar_map: PointcloudMap) -> None:
         """Saves lidar pointcloud map to the file.
 
         Args:
@@ -52,7 +52,7 @@ class LidarMapLoader:
             logger.critical(msg)
             raise ExternalModuleException(msg)
 
-    def load(self) -> LidarMap:
+    def load(self) -> PointcloudMap:
         """Loads the map.
 
         Returns:
@@ -77,22 +77,6 @@ class LidarMapLoader:
             logger.critical(msg)
             raise ExternalModuleException(msg)
         else:
-            lidar_map = LidarMap()
+            lidar_map = PointcloudMap()
             lidar_map.pointcloud = pointcloud
             return lidar_map
-
-
-class PointcloudVisualizer:
-    """Visualizer for the lidar pointcloud."""
-
-    @staticmethod
-    def visualize(pointcloud: o3d.geometry.PointCloud) -> None:
-        """Visualizes the pointcloud.
-
-        Args:
-            pointcloud: pointcloud array [N, 3].
-        """
-        vis = o3d.visualization.Visualizer()
-        vis.create_window()
-        vis.add_geometry(pointcloud)
-        vis.run()

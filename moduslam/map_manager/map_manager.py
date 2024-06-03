@@ -4,12 +4,10 @@ from moduslam.data_manager.factory.batch_factory import BatchFactory
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.graph_saver import GraphSaver
-from moduslam.map_manager.map_factories.lidar_map_factory import LidarMapFactory
-from moduslam.map_manager.map_factories.lidar_map_utils import (
-    LidarMapLoader,
-    PointcloudVisualizer,
-)
-from moduslam.map_manager.maps.lidar_map import LidarMap
+from moduslam.map_manager.map_factories.lidar_map.factory import LidarMapFactory
+from moduslam.map_manager.map_factories.lidar_map.utils import PointcloudVisualizer
+from moduslam.map_manager.map_loaders.lidar_map import MapLoader
+from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
 from moduslam.system_configs.map_manager.map_manager import MapManagerConfig
 
 logger = logging.getLogger(map_manager)
@@ -24,13 +22,13 @@ class MapManager:
             config: map manager configuration.
         """
         self._map_factory = LidarMapFactory(config.map_factory)
-        self._map_loader = LidarMapLoader(config.map_loader)
+        self._map_loader = MapLoader(config.map_loader)
         self._graph_saver = GraphSaver()
         self._visualizer = PointcloudVisualizer()
         logger.debug("Map Manager has been configured.")
 
     @property
-    def map(self) -> LidarMap:
+    def map(self) -> PointcloudMap:
         """Map instance."""
         return self._map_factory.map
 

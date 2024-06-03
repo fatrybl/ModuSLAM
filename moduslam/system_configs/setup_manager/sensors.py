@@ -1,6 +1,11 @@
 from dataclasses import dataclass, field
 
-from moduslam.setup_manager.sensors_factory.sensors import Imu, Lidar3D, Sensor
+from moduslam.setup_manager.sensors_factory.sensors import (
+    Imu,
+    Lidar3D,
+    Sensor,
+    StereoCamera,
+)
 
 
 @dataclass
@@ -9,6 +14,50 @@ class SensorConfig:
 
     name: str
     type_name: str = Sensor.__name__
+
+
+@dataclass
+class StereoCameraConfig(SensorConfig):
+    camera_matrix_left: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    )
+
+    camera_matrix_right: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    )
+
+    distortion_coefficients_left: list[float] = field(default_factory=lambda: [0, 0, 0, 0, 0])
+
+    distortion_coefficients_right: list[float] = field(default_factory=lambda: [0, 0, 0, 0, 0])
+
+    rectification_matrix_left: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    )
+
+    rectification_matrix_right: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    )
+
+    projection_matrix_left: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
+    )
+
+    projection_matrix_right: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
+    )
+
+    tf_left_right: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+    )
+
+    tf_base_sensor: list[list[float]] = field(
+        default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+    )
+
+    distortion_model_left: str = "plumb_bob"
+    distortion_model_right: str = "plumb_bob"
+
+    type_name: str = StereoCamera.__name__
 
 
 @dataclass

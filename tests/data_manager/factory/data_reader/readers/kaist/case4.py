@@ -50,11 +50,11 @@ all_sensors = [el.measurement.sensor for el in elements]
 all_timestamps = [el.timestamp for el in elements]
 
 invalid_sensor_cfg = SensorConfig(
-    name="none_existent_camera",
-    type_name="StereoCamera",
+    name="none_existent_sensor",
+    type_name="Sensor",
 )
 
-incorrect_sensors_cfg: dict[str, SensorConfig] = {"none_existent_camera": invalid_sensor_cfg}
+incorrect_sensors_cfg: dict[str, SensorConfig] = {"none_existent_sensor": invalid_sensor_cfg}
 
 invalid_sensor = Sensor(config=invalid_sensor_cfg)
 

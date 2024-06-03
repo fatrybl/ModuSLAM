@@ -15,7 +15,7 @@ from moduslam.system_configs.frontend_manager.graph_builder.graph_merger.merger 
 class GraphBuilderConfig:
     """Base GraphBuilder configuration."""
 
-    name: str
     candidate_factory: CandidateFactoryConfig
     element_distributor: ElementDistributorConfig
     graph_merger: GraphMergerConfig
+    name: str = "PointcloudMapBuilder"

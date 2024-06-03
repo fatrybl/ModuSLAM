@@ -1,9 +1,10 @@
-import numpy as np
 from open3d import geometry, utility
 
+from moduslam.utils.numpy_types import MatrixNx3
 
-class LidarMap:
-    """Lidar pointcloud map."""
+
+class PointcloudMap:
+    """Any pointcloud map."""
 
     def __init__(self) -> None:
         self._pointcloud = geometry.PointCloud()
@@ -22,7 +23,7 @@ class LidarMap:
         """
         self._pointcloud = pointcloud
 
-    def set_points(self, points: np.ndarray) -> None:
+    def set_points(self, points: MatrixNx3) -> None:
         """Sets points to the map instance.
 
         Args:

@@ -6,13 +6,16 @@ import PIL.Image as Image
 from moduslam.data_manager.factory.element import Element, RawMeasurement
 from moduslam.data_manager.factory.locations import CsvDataLocation, Location
 from moduslam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
-from moduslam.system_configs.setup_manager.sensors import SensorConfig
+from moduslam.system_configs.setup_manager.sensors import (
+    SensorConfig,
+    StereoCameraConfig,
+)
 from moduslam.utils.auxiliary_methods import equal_elements
 
 
 class TestEqualElements:
 
-    sensor_config = SensorConfig(name="test_camera", type_name="StereoCamera")
+    sensor_config = StereoCameraConfig(name="test_camera", type_name="StereoCamera")
     sensor = StereoCamera(sensor_config)
 
     other_sensor_config = SensorConfig(name="other_sensor", type_name="Sensor")

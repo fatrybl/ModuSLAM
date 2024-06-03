@@ -19,6 +19,7 @@ from moduslam.system_configs.setup_manager.sensors import (
     ImuConfig,
     Lidar3DConfig,
     SensorConfig,
+    StereoCameraConfig,
 )
 from moduslam.utils.exceptions import ItemNotFoundError
 
@@ -105,6 +106,7 @@ class SensorsFactory:
             case Encoder.__name__:
                 sensor = Encoder(config)
             case StereoCamera.__name__:
+                config = cast(StereoCameraConfig, config)
                 sensor = StereoCamera(config)
             case Gps.__name__:
                 sensor = Gps(config)

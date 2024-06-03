@@ -10,12 +10,19 @@ from moduslam.system_configs.data_manager.batch_factory.regime import RegimeConf
 from moduslam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
 )
+from moduslam.system_configs.frontend_manager.handlers.visual_odometry import (
+    VisualOdometryConfig,
+)
 from moduslam.system_configs.frontend_manager.handlers.vrs_gps import (
     VrsGpsHandlerConfig,
 )
 from moduslam.system_configs.main_manager import MainManagerConfig
 from moduslam.system_configs.map_manager.map_manager import MapManagerConfig
-from moduslam.system_configs.setup_manager.sensors import ImuConfig, Lidar3DConfig
+from moduslam.system_configs.setup_manager.sensors import (
+    ImuConfig,
+    Lidar3DConfig,
+    StereoCameraConfig,
+)
 
 logger = logging.getLogger(main_manager)
 
@@ -31,8 +38,10 @@ def register_config():
     cs.store(group="regimes", name="base_regime", node=RegimeConfig)
     cs.store(group="handlers", name="base_kiss_icp_odometry", node=KissIcpScanMatcherConfig)
     cs.store(group="handlers", name="base_vrs_gps_preprocessor", node=VrsGpsHandlerConfig)
+    cs.store(group="handlers", name="base_visual_odometry", node=VisualOdometryConfig)
     cs.store(group="sensors", name="base_lidar3D", node=Lidar3DConfig)
     cs.store(group="sensors", name="base_imu", node=ImuConfig)
+    cs.store(group="sensors", name="base_stereo_camera", node=StereoCameraConfig)
     cs.store(group="map_manager", name="base_map_manager", node=MapManagerConfig)
 
     logger.debug("Structured config schema has been successfully registered.")

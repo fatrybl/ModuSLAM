@@ -48,10 +48,6 @@ result_isam = isam.calculateEstimate()
 
 result = optimizer.optimizeSafely()
 
-print(result)
-
-print(result_isam)
-
 # print(graph)
 # print(graph.keys())
 # print(graph.size())

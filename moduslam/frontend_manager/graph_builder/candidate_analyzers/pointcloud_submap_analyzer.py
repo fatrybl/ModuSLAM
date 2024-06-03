@@ -6,7 +6,7 @@ from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate i
 )
 
 
-class LidarSubmapAnalyzer(CandidateAnalyzer):
+class PointcloudSubmapAnalyzer(CandidateAnalyzer):
     """Simple analyzer for lidar pointcloud sub-map candidate."""
 
     def __init__(self):

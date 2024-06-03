@@ -1,8 +1,8 @@
 from moduslam.frontend_manager.graph_builder.candidate_analyzers.analyzer_ABC import (
     CandidateAnalyzer,
 )
-from moduslam.frontend_manager.graph_builder.candidate_analyzers.lidar_submap_analyzer import (
-    LidarSubmapAnalyzer,
+from moduslam.frontend_manager.graph_builder.candidate_analyzers.pointcloud_submap_analyzer import (
+    PointcloudSubmapAnalyzer,
 )
 from moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
     CandidateFactory,
@@ -22,12 +22,12 @@ from moduslam.frontend_manager.measurement_storage import (
 from moduslam.setup_manager.tables_initializer import init_handler_state_analyzer_table
 
 
-class LidarMapCandidateFactory(CandidateFactory):
+class PointcloudMapCandidateFactory(CandidateFactory):
     """Creates graph candidate with lidar pointcloud keyframe(s)."""
 
     def __init__(self) -> None:
         self._graph_candidate: GraphCandidate = GraphCandidate()
-        self._candidate_analyzer: CandidateAnalyzer = LidarSubmapAnalyzer()
+        self._candidate_analyzer: CandidateAnalyzer = PointcloudSubmapAnalyzer()
         self._previous_measurement: Measurement | None = None
         self._table: dict[Handler, StateAnalyzer] = {}
 

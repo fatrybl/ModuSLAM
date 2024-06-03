@@ -32,6 +32,9 @@ pandas = ">=1.0"
 pyyaml = ">=5.4.1"
 scikit-learn = ">=0.21"
 # ======================
+opencv-python = "^4.9.0.80"
+transformers = "^4.41.2"
+torch = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"

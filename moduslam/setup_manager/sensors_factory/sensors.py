@@ -16,6 +16,7 @@ if TYPE_CHECKING:
         ImuConfig,
         Lidar3DConfig,
         SensorConfig,
+        StereoCameraConfig,
     )
 
 
@@ -109,12 +110,24 @@ class Imu(Sensor):
 class StereoCamera(Sensor):
     """Base class for any Stereo Camera."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: StereoCameraConfig):
         """
         Args:
             config: Sensor configuration.
         """
         super().__init__(config)
+        self._config = config
+        self._tf_base_sensor: Matrix4x4 = np.array(config.tf_base_sensor)
+
+    @property
+    def calibrations(self) -> StereoCameraConfig:
+        """Camera calibration parameters."""
+        return self._config
+
+    @property
+    def tf_base_sensor(self) -> Matrix4x4:
+        """Base -> sensor transformation SE(3)."""
+        return self._tf_base_sensor
 
 
 class Encoder(Sensor):
@@ -203,11 +216,7 @@ class Lidar3D(Sensor):
             config: Sensor configuration.
         """
         super().__init__(config)
-        self._tf_base_sensor: Matrix4x4 = (
-            np.eye(4)
-            if config.tf_base_sensor is None
-            else np.array(config.tf_base_sensor, dtype=np.float32)
-        )
+        self._tf_base_sensor: Matrix4x4 = np.array(config.tf_base_sensor)
 
     @property
     def tf_base_sensor(self) -> Matrix4x4:

@@ -5,8 +5,8 @@ from moduslam.data_manager.factory.element import Element
 from moduslam.frontend_manager.edge_factories.lidar_odometry import (
     LidarOdometryEdgeFactory,
 )
-from moduslam.frontend_manager.graph_builder.builders.lidar_map_builder import (
-    LidarMapBuilder,
+from moduslam.frontend_manager.graph_builder.builders.pointcloud_map_builder import (
+    PointcloudMapBuilder,
 )
 from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
@@ -169,5 +169,5 @@ def builder_cfg(
 
 
 @pytest.fixture
-def builder(builder_cfg: GraphBuilderConfig, setup_manager) -> LidarMapBuilder:
-    return LidarMapBuilder(builder_cfg)
+def builder(builder_cfg: GraphBuilderConfig, setup_manager) -> PointcloudMapBuilder:
+    return PointcloudMapBuilder(builder_cfg)

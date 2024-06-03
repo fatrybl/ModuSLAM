@@ -80,7 +80,7 @@ class LidarOdometry(BinaryEdge):
     """Edge for Lidar odometry."""
 
 
-class StereoCameraOdometry(BinaryEdge):
+class VisualOdometry(BinaryEdge):
     """Edge for Stereo Camera odometry."""
 
 

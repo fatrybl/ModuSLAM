@@ -57,9 +57,9 @@ sensors_cfgs6: dict[str, SensorConfig] = generate_sensors_configs([el3, el8])
 
 
 incorrect_sensors_cfg: dict[str, SensorConfig] = {
-    "none_existent_camera": SensorConfig(
-        name="none_existent_camera",
-        type_name="StereoCamera",
+    "none_existent_sensor": SensorConfig(
+        name="none_existent_sensor",
+        type_name="Sensor",
     )
 }
 

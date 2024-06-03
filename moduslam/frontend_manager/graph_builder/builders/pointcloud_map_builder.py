@@ -12,8 +12,8 @@ from moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC impor
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
 )
-from moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap import (
-    LidarMapCandidateFactory,
+from moduslam.frontend_manager.graph_builder.candidate_factory.pointcloud_submap_factory import (
+    PointcloudMapCandidateFactory,
 )
 from moduslam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger
@@ -25,13 +25,13 @@ from moduslam.system_configs.frontend_manager.graph_builder.graph_builder import
 logger = logging.getLogger(frontend_manager)
 
 
-class LidarMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
+class PointcloudMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
     """Builds a graph for point-cloud based map."""
 
     def __init__(self, config: GraphBuilderConfig) -> None:
         super().__init__(config)
         self._distributor: ElementDistributor = ElementDistributor()
-        self._candidate_factory: CandidateFactory = LidarMapCandidateFactory()
+        self._candidate_factory: CandidateFactory = PointcloudMapCandidateFactory()
         self._merger = GraphMerger[GraphVertex, GraphEdge]()
         self._merger.init_table(config.graph_merger.handler_edge_factory_table)
         self._distributor.init_table(config.element_distributor.sensor_handlers_table)

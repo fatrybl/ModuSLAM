@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from moduslam.frontend_manager.graph_builder.candidate_analyzers.lidar_submap_analyzer import (
-    LidarSubmapAnalyzer,
+from moduslam.frontend_manager.graph_builder.candidate_analyzers.pointcloud_submap_analyzer import (
+    PointcloudSubmapAnalyzer,
 )
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,
@@ -12,7 +12,7 @@ from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate i
 
 @pytest.fixture
 def analyzer():
-    return LidarSubmapAnalyzer()
+    return PointcloudSubmapAnalyzer()
 
 
 def test_check_readiness_with_less_states(analyzer):

@@ -4,16 +4,14 @@ import numpy as np
 
 from moduslam.data_manager.factory.batch_factory import BatchFactory
 from moduslam.data_manager.factory.element import Element
-from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
-from moduslam.frontend_manager.graph.custom_vertices import LidarPose
+from moduslam.frontend_manager.graph.base_vertices import GraphVertex
 from moduslam.utils.auxiliary_methods import check_dimensionality
-from moduslam.utils.deque_set import DequeSet
-from moduslam.utils.numpy_types import Matrix4x4
+from moduslam.utils.numpy_types import Matrix4x4, Matrix4xN, MatrixNx3
 
 
 def get_elements(
-    vertex_elements_table: dict[LidarPose, set[Element]], batch_factory: BatchFactory
-) -> dict[LidarPose, deque[Element]]:
+    vertex_elements_table: dict[GraphVertex, set[Element]], batch_factory: BatchFactory
+) -> dict[GraphVertex, deque[Element]]:
     """Gets elements with raw lidar pointcloud measurements and assign to the
     corresponding vertices.
 
@@ -24,64 +22,14 @@ def get_elements(
         batch_factory (BatchFactory): factory to create a batch.
 
     Returns:
-        "vertices -> elements" table. Each element contains raw lidar pointcloud measurement.
+        "vertices -> elements" table.
     """
-    table: dict[LidarPose, deque[Element]] = defaultdict(deque)
+    table: dict[GraphVertex, deque[Element]] = defaultdict(deque)
     for vertex, elements in vertex_elements_table.items():
         batch_factory.create_batch(elements)  # type: ignore
         table[vertex] = batch_factory.batch.data
 
     return table
-
-
-def create_vertex_elements_table(
-    vertices: DequeSet[LidarPose], edges: set[LidarOdometry]
-) -> dict[LidarPose, set[Element]]:
-    """Creates "vertex -> elements" table.
-
-    Args:
-        vertices: vertices to get elements for.
-
-        edges: LidarOdometry edges to check.
-
-    Returns:
-        "vertex -> elements" table.
-    """
-
-    table: dict[LidarPose, set[Element]] = defaultdict(set)
-
-    num_poses = len(vertices)
-
-    for i, vertex in enumerate(vertices):
-        if i == num_poses - 1:
-            for e in vertex.edges:
-                if isinstance(e, LidarOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[1]
-                    table[vertex].add(element)
-        else:
-            for e in vertex.edges:
-                if e in edges and isinstance(e, LidarOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[0]
-                    table[vertex].add(element)
-                    edges.remove(e)
-    return table
-
-
-def values_to_array(values: tuple[float, ...], num_channels: int) -> np.ndarray:
-    """Converts values to pointcloud np.ndarray [num_channels, N].
-
-    Args:
-        values: values to convert.
-
-        num_channels: number of channels in pointcloud.
-
-    Returns:
-        Values as array [num_channels, N].
-    """
-    array = np.array(values).reshape((-1, num_channels)).T
-    return array
 
 
 def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, pointcloud: np.ndarray) -> np.ndarray:
@@ -121,3 +69,18 @@ def filter_array(array: np.ndarray, lower_bound: float, upper_bound: float) -> n
     mask = np.any((array[:3, :] >= lower_bound) & (array[:3, :] <= upper_bound), axis=0)
     filtered_arr = array[:, mask]
     return filtered_arr
+
+
+def convert_pointcloud(pointcloud: MatrixNx3) -> Matrix4xN:
+    """Converts a 3D pointcloud to homogeneous coordinates.
+
+    Args:
+        pointcloud: pointcloud array [N, 3].
+
+    Returns:
+        Homogeneous pointcloud array [4, N].
+    """
+    pointcloud = pointcloud.T
+    ones = np.ones((1, pointcloud.shape[1]))
+    pointcloud_homogeneous = np.vstack((pointcloud, ones))
+    return pointcloud_homogeneous

@@ -12,6 +12,7 @@ from moduslam.frontend_manager.graph.base_vertices import (
 )
 from moduslam.frontend_manager.graph.custom_vertices import (
     CameraFeature,
+    CameraPose,
     ImuBias,
     LidarPose,
     LinearVelocity,
@@ -45,6 +46,7 @@ class VertexStorage(Generic[GraphVertex]):
             ImuBias: DequeSet[ImuBias](),
             LidarPose: DequeSet[LidarPose](),
             CameraFeature: DequeSet[CameraFeature](),
+            CameraPose: DequeSet[CameraPose](),
         }
 
     @property
@@ -93,7 +95,7 @@ class VertexStorage(Generic[GraphVertex]):
 
         return None
 
-    def get_vertices(self, vertex_type: type[Vertex]) -> DequeSet:
+    def get_vertices(self, vertex_type: type[GraphVertex]) -> DequeSet[GraphVertex]:
         """Gets vertices of the given type.
 
         Args:
