@@ -45,18 +45,18 @@ class MainManager:
     def build_map(self) -> None:
         """Builds the map using the data from the data manager."""
 
-        self.frontend_manager.set_prior()
-        self.backend_manager.solve(self.frontend_manager.graph)
-        self.frontend_manager.graph.factor_graph.print()
+        # self.frontend_manager.set_prior()
+        # self.backend_manager.solve(self.frontend_manager.graph)
+        # self.frontend_manager.graph.factor_graph.print()
 
         while not StoppingCriterion.is_active():
             logger.info("Creating new data batch...")
             self.data_manager.make_batch()
-            self._process()
-
-        self.map_manager.save_graph(self.frontend_manager.graph)
-        self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
-        self.map_manager.visualize_map()
-        self.map_manager.save_map()
-
+            # self._process()
+        #
+        # self.map_manager.save_graph(self.frontend_manager.graph)
+        # self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
+        # self.map_manager.visualize_map()
+        # self.map_manager.save_map()
+        # TODO: Test reader functions without creating a Map
         logger.info("All processes have finished successfully.")

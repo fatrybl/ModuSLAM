@@ -20,7 +20,9 @@ np.set_printoptions(precision=4, suppress=True)
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
 
+    print("Testing HYDRA configuration for ModuSLAM for the ROS2 datareader")
     setup_logger(config.logger)
+    print(config.data_manager)
 
     main_manager = MainManager(config)
     main_manager.build_map()
