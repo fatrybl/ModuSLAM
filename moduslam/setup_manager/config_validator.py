@@ -6,6 +6,9 @@ from moduslam.logger.logging_config import main_manager
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
+from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
+    Ros2Config,
+)
 from moduslam.system_configs.data_manager.batch_factory.regime import RegimeConfig
 from moduslam.system_configs.frontend_manager.handlers.lidar_odometry import (
     KissIcpScanMatcherConfig,
@@ -28,6 +31,8 @@ def register_config():
     cs = ConfigStore.instance()
     cs.store(name="structured_schema_config", node=MainManagerConfig)
     cs.store(group="datasets", name="base_kaist_dataset", node=KaistConfig)
+    # TODO: Include/replace dataset configs here.
+    cs.store(group="datasets", name="base_ros2_dataset", node=Ros2Config)
     cs.store(group="regimes", name="base_regime", node=RegimeConfig)
     cs.store(group="handlers", name="base_kiss_icp_odometry", node=KissIcpScanMatcherConfig)
     cs.store(group="handlers", name="base_vrs_gps_preprocessor", node=VrsGpsHandlerConfig)

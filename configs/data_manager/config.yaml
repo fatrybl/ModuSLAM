@@ -1,10 +1,13 @@
 defaults:
   - /datasets/base_kaist_dataset@batch_factory.dataset
+  - /datasets/base_ros2_dataset@batch_factory.dataset
   - /regimes/base_regime@batch_factory.regime
 
 batch_factory:
   dataset:
-    directory: "/media/mark/New Volume/datasets/kaist/urban-26"
+    # directory: "/home/felipezero/Projects/mySLAM_data/urban-26"
+    directory: "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2024_1713939297"
+    # directory: "/media/mark/New Volume/datasets/kaist/urban-26"
 
   regime:
     name: "TimeLimit"
