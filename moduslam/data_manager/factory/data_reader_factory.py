@@ -58,7 +58,8 @@ class DataReaderFactory:
                 return KaistReader(regime, dataset_cfg)
             # TODO: Add ROS2 reader here.
             case Ros2DataReader.__name__:
-                dataset_cfg = cast(Ros2Config)
+                dataset_cfg = cast(Ros2Config, dataset_cfg)
+                return Ros2DataReader(regime, dataset_cfg)
             case _:
                 msg = f"No DataReader exists for dataset type {dataset_cfg.reader!r}."
                 logger.critical(msg)
