@@ -57,16 +57,3 @@ class KaistConfig(DatasetConfig):
     name: str = "Kaist Urban Dataset"
 
     url: str = "https://sites.google.com/view/complex-urban-dataset"
-
-
-@dataclass
-class Ros2Config(DatasetConfig):
-    """Ros2 Lidar Urban Dataset parameters."""
-
-    directory: Path = field(kw_only=True)
-
-    reader: str = "Ros2DataReader"
-
-    name: str = "ROS2 Dataset"
-
-    url: str = ""
