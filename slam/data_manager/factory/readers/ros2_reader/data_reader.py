@@ -3,10 +3,12 @@ from pathlib import Path
 
 from slam.data_manager.factory.element import Element, RawMeasurement
 from slam.data_manager.factory.readers.ros2_reader.data_iterator import Iterator
+from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     Ros2Config,
 )
 from slam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
 from slam.utils.auxiliary_dataclasses import TimeRange
 
 
@@ -61,5 +63,8 @@ if __name__ == "__main__":
     ros2_config = Ros2Config(directory=bag_path)
 
     reader = Ros2DataReader(regime=timelimit1, dataset_params=ros2_config)
+
+    my_config = SensorFactoryConfig()
+    SensorsFactory.init_sensors(config=my_config)
 
     reader.get_element()

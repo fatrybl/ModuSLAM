@@ -6,7 +6,7 @@ from slam.data_manager.factory.readers.ros2_reader.get_data import DataGrabber
 from slam.setup_manager.sensors_factory.factory import SensorsFactory
 from slam.setup_manager.sensors_factory.sensors import Sensor
 from slam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
-from slam.system_configs.setup_manager.sensors import SensorConfig
+from slam.system_configs.setup_manager.sensors import SensorConfig, ImuConfig
 
 
 @dataclass
@@ -17,18 +17,18 @@ class Iterator:
     # msg_limit:int = 10000
     position: int = 0
     data: list = None
-    sensors: dict = field(default_factory=lambda: {'StereoCamera':['left', 'right'], 'Lidar2D':['vlp16r','vlp16l', 'vlp32c', 'merger'], 'Imu':['xsens']} )
+    sensors: dict = field(default_factory=lambda: {'Imu':['xsens']} )
 
 
     def sensor_config_setup(self):
         configs: dict[str, SensorConfig] = {}
         for sensor_type, sensor_names in self.sensors.items():
             for sensor in sensor_names:
-                print(sensor_type, sensor)
-                sensor_cfg = SensorConfig(
-                    name=sensor,
-                    type_name=sensor_type)
-                configs[sensor] = sensor_cfg
+                print(sensor_type, sensor) # Imu, xsens
+                imu_cfg = ImuConfig(
+                    name='imu',
+                    type_name='Imu')
+                configs[sensor] = imu_cfg
 
         my_config = SensorFactoryConfig(sensors=configs)
         print(configs)
@@ -49,6 +49,7 @@ class Iterator:
         try:
             data_read, timestamp = self._get_data(self.position)
             sensor_device = data_read[1].split('/')[1]
+
             for sensor in self.sensors.keys():
                 if(sensor_device in self.sensors[sensor]):
                     sensor_name = sensor
