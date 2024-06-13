@@ -1,5 +1,5 @@
 defaults:
-  - /datasets/base_kaist_dataset@batch_factory.dataset
+  # - /datasets/base_kaist_dataset@batch_factory.dataset
   - /datasets/base_ros2_dataset@batch_factory.dataset
   - /regimes/base_regime@batch_factory.regime
 
