@@ -22,12 +22,21 @@ def run(config: MainManagerConfig) -> None:
 
     print("Testing HYDRA configuration for ModuSLAM for the ROS2 datareader")
     setup_logger(config.logger)
+    print("Logger has been set up. This is the data manager configuration: ")
     print(config.data_manager)
-
+    print(
+        "-----------------------------------------------------------------------------------------------------------"
+    )
+    print("Initializing the Main Manager")
     main_manager = MainManager(config)
+    print(
+        "-----------------------------------------------------------------------------------------------------------"
+    )
     main_manager.build_map()
 
 
 if __name__ == "__main__":
+    print("Running the SLAM system")
     register_config()
+    print("Config has been registered.")
     run()
