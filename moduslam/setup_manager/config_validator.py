@@ -41,3 +41,4 @@ def register_config():
     cs.store(group="map_manager", name="base_map_manager", node=MapManagerConfig)
 
     logger.debug("Structured config schema has been successfully registered.")
+    logger.info("The system configurations have been successfully registered.")
