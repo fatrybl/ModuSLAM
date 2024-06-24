@@ -1,8 +1,11 @@
 import os
 from pathlib import Path
 
+from moduslam.data_manager.factory.data_reader_ABC import DataReader
 from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
+# TODO: Create Rosbags manager to manage Topics, Sensors, Iteration, etc...
+from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager
+# from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
     Ros2Config,
@@ -12,13 +15,21 @@ from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryCo
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
-class Ros2DataReader:
+class Ros2DataReader(DataReader):
     """Data reader for ROS2 in test."""
 
     def __init__(self, regime: TimeLimit | Stream, dataset_params: Ros2Config):
         self._dataset_directory: Path = dataset_params.directory
         self._regime = regime
-        self.iterator = Iterator(bagpath=self._dataset_directory)
+        # self.iterator = Iterator(bagpath=self._dataset_directory)
+
+        print(f"Ros2 Data reader initialized with :")
+        print(f"Regime: {self._regime}")
+        print(f"Dataset directory: {self._dataset_directory}")
+
+        print(f"Dataset parameters: {dataset_params}")
+
+        rosbags_manager = Rosbags2Manager(self._dataset_directory)
 
         if isinstance(self._regime, TimeLimit):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
