@@ -48,7 +48,10 @@ class BatchFactory:
         """
         self.batch.clear()
         StoppingCriterion.state.data_processed = False
+        print(f"Clearing batch...")
+        print(f"Stopping Criterion: {StoppingCriterion.state.data_processed}")
         while not self._limitation():
+            logger.info("Adding data to the batch using _ADD_DATA")
             self._add_data()
 
     @overload

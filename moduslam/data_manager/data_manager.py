@@ -30,6 +30,8 @@ class DataManager:
         @overload.
         Creates a data batch sequentially based on regime in config.
         """
+        logger.info("Trying to create a new data bacth with the CREATE_BACTCH...")
+
         self.batch_factory.create_batch()
         logger.debug("Data Batch has been created")
 
