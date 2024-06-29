@@ -4,13 +4,18 @@ Any method used in multiple modules/packages may be defined here.
 """
 
 import logging
+import re
 from importlib import import_module
+from pathlib import Path
+from typing import overload
 
 import gtsam
 import numpy as np
 from PIL.Image import Image
+from plum import dispatch
 
-from moduslam.data_manager.factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import DataBatch
+from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
 from moduslam.logger.logging_config import utils
 from moduslam.utils.exceptions import DimensionalityError
 from moduslam.utils.numpy_types import Vector3, VectorN
@@ -35,7 +40,7 @@ def create_empty_element(element: Element) -> Element:
     return empty_element
 
 
-def sec2nanosec(seconds: float) -> int:
+def sec2nanosec(seconds: int | float) -> int:
     """Converts seconds to nanoseconds.
 
     Args:
@@ -57,6 +62,32 @@ def nanosec2sec(nanoseconds: int) -> float:
         time in seconds.
     """
     return nanoseconds * 1e-9
+
+
+@overload
+def microsec2nanosec(microseconds: int | float) -> int:
+    return int(microseconds * 1e3)
+
+
+@overload
+def microsec2nanosec(microseconds: str) -> int:
+    microsec_float = to_float(microseconds)
+    return microsec2nanosec(microsec_float)
+
+
+@dispatch
+def microsec2nanosec(microseconds: str | int | float):
+    """
+    @overload.
+
+    Converts microseconds to nanoseconds.
+
+    Args:
+        microseconds: time in microseconds.
+
+    Returns:
+        (int): time in nanoseconds.
+    """
 
 
 def equal_integers(n1: int, n2: int, epsilon: int) -> bool:
@@ -235,6 +266,30 @@ def equal_elements(el1: Element | None, el2: Element | None) -> bool:
     return True
 
 
+def equal_batches(batch1: DataBatch, batch2: DataBatch) -> bool:
+    """Compares two data batches.
+
+    Args:
+        batch1: 1-st data batch.
+
+        batch2: 2-nd data batch.
+
+    Returns:
+        comparison result.
+    """
+    if batch1.empty and batch2.empty:
+        return True
+
+    if len(batch1.data) != len(batch2.data):
+        return False
+
+    for el1, el2 in zip(batch1.data, batch2.data):
+        if not equal_elements(el1, el2):
+            return False
+
+    return True
+
+
 def import_object(object_name: str, module_name: str, package_name: str) -> type:
     """Imports object.
 
@@ -267,3 +322,20 @@ def import_object(object_name: str, module_name: str, package_name: str) -> type
         msg = f"Object {object_name!r} not found in module {module_name!r}."
         logger.error(msg)
         raise
+
+
+def sort_files_numerically(files: list[Path]) -> list[Path]:
+    """Sorts files numerically.
+
+    Args:
+        files: list of files to sort.
+
+    Returns:
+        sorted list of files.
+    """
+
+    def extract_number(file: Path) -> int:
+        match = re.search(r"\d+", file.stem)
+        return to_int(match.group()) if match else 0
+
+    return sorted(files, key=extract_number)

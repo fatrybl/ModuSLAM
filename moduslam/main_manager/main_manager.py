@@ -7,7 +7,6 @@ from moduslam.logger.logging_config import main_manager
 from moduslam.map_manager.map_manager import MapManager
 from moduslam.setup_manager.setup_manager import SetupManager
 from moduslam.system_configs.main_manager import MainManagerConfig
-from moduslam.utils.stopping_criterion import StoppingCriterion
 
 logger = logging.getLogger(main_manager)
 
@@ -27,13 +26,29 @@ class MainManager:
         self.backend_manager = BackendManager()
         logger.info("The system has been successfully initialized.")
 
+    def build_map(self) -> None:
+        """Builds the map using the data from the data manager."""
+
+        self._set_prior()
+
+        logger.info("Creating new data batch...")
+        self.data_manager.make_batch()
+        self._process()
+
+        self.map_manager.save_graph(self.frontend_manager.graph)
+        self.map_manager.create_map(self.frontend_manager.graph, self.data_manager._batch_factory)
+        self.map_manager.visualize_map()
+        self.map_manager.save_map()
+
+        logger.info("All processes have finished successfully.")
+
     def _process(
         self,
     ) -> None:
         """Creates graph and solves it."""
         logger.info("Processing the data batch...")
 
-        data_batch = self.data_manager.batch_factory.batch
+        data_batch = self.data_manager._batch_factory.batch
         graph = self.frontend_manager.graph
 
         while not data_batch.empty:
@@ -42,21 +57,7 @@ class MainManager:
 
         logger.info("The data batch has been successfully processed.")
 
-    def build_map(self) -> None:
-        """Builds the map using the data from the data manager."""
-
+    def _set_prior(self) -> None:
+        """Sets prior for the graph."""
         self.frontend_manager.set_prior()
         self.backend_manager.solve(self.frontend_manager.graph)
-        self.frontend_manager.graph.factor_graph.print()
-
-        while not StoppingCriterion.is_active():
-            logger.info("Creating new data batch...")
-            self.data_manager.make_batch()
-            self._process()
-
-        self.map_manager.save_graph(self.frontend_manager.graph)
-        self.map_manager.create_map(self.frontend_manager.graph, self.data_manager.batch_factory)
-        self.map_manager.visualize_map()
-        self.map_manager.save_map()
-
-        logger.info("All processes have finished successfully.")

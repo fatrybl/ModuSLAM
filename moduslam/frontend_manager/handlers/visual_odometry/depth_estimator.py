@@ -1,6 +1,7 @@
 """Model for depth estimation using Hugging Face's transformers library.
 
 Authors: https://github.com/LiheYoung/Depth-Anything
+TODO: make it faster...
 """
 
 import torch

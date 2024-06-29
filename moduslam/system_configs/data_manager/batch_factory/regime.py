@@ -1,23 +1,12 @@
 from dataclasses import dataclass, field
 
-from omegaconf import MISSING
-
-
-@dataclass
-class RegimeConfig:
-    """Data flow regime."""
-
-    name: str
-    start: int = field(kw_only=True, default=MISSING)
-    stop: int = field(kw_only=True, default=MISSING)
-
 
 @dataclass
 class TimeLimit:
     """Data flow regime with limited time range."""
 
-    start: int
-    stop: int
+    start: int = field(metadata={"help": "Start time in nanoseconds."})
+    stop: int = field(metadata={"help": "Stop time in nanoseconds."})
     name: str = "TimeLimit"
 
 

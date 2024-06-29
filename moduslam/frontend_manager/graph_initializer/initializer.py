@@ -3,8 +3,8 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.locations import ConfigFileLocation
+from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import ConfigFileLocation
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import Edge
 from moduslam.frontend_manager.graph.base_vertices import Vertex

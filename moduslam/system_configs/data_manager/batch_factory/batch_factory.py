@@ -3,16 +3,13 @@ from dataclasses import dataclass
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.memory import (
-    MemoryAnalyzerConfig,
-)
-from moduslam.system_configs.data_manager.batch_factory.regime import RegimeConfig
+from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 
 
 @dataclass
 class BatchFactoryConfig:
     """Batch factory configuration."""
 
-    memory: MemoryAnalyzerConfig
     dataset: DatasetConfig
-    regime: RegimeConfig
+    regime: Stream | TimeLimit
+    batch_memory_percent: float = 50.0

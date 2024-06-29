@@ -5,7 +5,7 @@ Build simple graph with 2 nodes (LidarPose) and 1 edge (LidarOdometry).
 
 import pytest
 
-from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.batch_factory.batch import DataBatch
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose
 from moduslam.frontend_manager.graph.graph import Graph

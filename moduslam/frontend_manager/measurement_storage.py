@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.auxiliary_dataclasses import TimeRange

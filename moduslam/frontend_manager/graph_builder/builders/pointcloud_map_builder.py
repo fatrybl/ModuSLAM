@@ -1,7 +1,7 @@
 import logging
 from typing import Generic
 
-from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.batch_factory.batch import DataBatch
 from moduslam.frontend_manager.elements_distributor import ElementDistributor
 from moduslam.frontend_manager.graph.base_edges import GraphEdge
 from moduslam.frontend_manager.graph.base_vertices import GraphVertex

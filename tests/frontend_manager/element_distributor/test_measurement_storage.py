@@ -2,8 +2,8 @@
 
 import pytest
 
-from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.locations import Location
+from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import Location
 from moduslam.frontend_manager.measurement_storage import (
     Measurement,
     MeasurementStorage,

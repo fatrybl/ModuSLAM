@@ -3,8 +3,11 @@ from pathlib import Path
 import numpy as np
 import PIL.Image as Image
 
-from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.locations import CsvDataLocation, Location
+from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import (
+    CsvDataLocation,
+    Location,
+)
 from moduslam.setup_manager.sensors_factory.sensors import Sensor, StereoCamera
 from moduslam.system_configs.setup_manager.sensors import (
     SensorConfig,

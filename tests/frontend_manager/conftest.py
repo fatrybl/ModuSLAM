@@ -3,10 +3,10 @@
 from typing import Any, Callable, Iterable
 
 import gtsam
-import pytest
+from pytest import fixture
 
-from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.locations import Location
+from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import Location
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge
 from moduslam.frontend_manager.graph.base_vertices import NotOptimizableVertex
@@ -78,7 +78,7 @@ def create_measurement(handler: Handler, element: Element):
     )
 
 
-@pytest.fixture
+@fixture
 def handler():
     cfg = HandlerConfig(
         name="test_handler", type_name=BasicTestHandler.__name__, module_name=__name__
@@ -87,13 +87,13 @@ def handler():
     return handler
 
 
-@pytest.fixture
+@fixture
 def sensor():
     cfg = SensorConfig(name="test_sensor", type_name="Sensor")
     return Sensor(config=cfg)
 
 
-@pytest.fixture
+@fixture
 def element(sensor) -> Element:
     loc = Location()
     m = RawMeasurement(sensor=sensor, values=(1, 2, 3))
@@ -101,7 +101,7 @@ def element(sensor) -> Element:
     return el
 
 
-@pytest.fixture
+@fixture
 def measurement(element, handler) -> Measurement:
     return Measurement(
         time_range=TimeRange(element.timestamp, element.timestamp),
@@ -112,14 +112,14 @@ def measurement(element, handler) -> Measurement:
     )
 
 
-@pytest.fixture
+@fixture
 def measurement_storage(measurement):
     storage = MeasurementStorage()
     storage.add(measurement)
     return storage
 
 
-@pytest.fixture
+@fixture
 def edge_factory():
     cfg = EdgeFactoryConfig(
         name="test_edge_factory",

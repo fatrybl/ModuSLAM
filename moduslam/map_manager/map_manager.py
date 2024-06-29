@@ -1,6 +1,6 @@
 import logging
 
-from moduslam.data_manager.factory.batch_factory import BatchFactory
+from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.graph_saver import GraphSaver

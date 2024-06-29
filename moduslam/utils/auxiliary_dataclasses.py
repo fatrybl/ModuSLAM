@@ -37,3 +37,11 @@ class PeriodicDataRequest:
 
     sensor: Sensor
     period: TimeRange
+
+
+@dataclass(frozen=True, eq=True)
+class Message:
+    """Message with the timestamp and data."""
+
+    timestamp: str
+    data: tuple

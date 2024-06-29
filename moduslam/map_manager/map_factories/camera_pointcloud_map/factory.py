@@ -4,8 +4,8 @@ from collections import deque
 import numpy as np
 from PIL.Image import Image
 
-from moduslam.data_manager.factory.batch_factory import BatchFactory
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.custom_edges import VisualOdometry
 from moduslam.frontend_manager.graph.custom_vertices import CameraPose
 from moduslam.frontend_manager.graph.edge_storage import EdgeStorage

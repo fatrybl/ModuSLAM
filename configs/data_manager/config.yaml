@@ -1,10 +1,10 @@
 defaults:
-  - /datasets/base_kaist_dataset@batch_factory.dataset
-  - /regimes/base_regime@batch_factory.regime
+  - /datasets/base_kaist_dataset@factory.dataset
+  - /regimes/base_regime@factory.regime
 
 batch_factory:
   dataset:
-    directory: "/media/mark/New Volume/datasets/kaist/urban-26"
+    directory: "/media/mark/New Volume/datasets/kaist_old/urban-26"
 
   regime:
     name: "TimeLimit"

@@ -14,7 +14,7 @@ from moduslam.setup_manager.sensors_factory.sensors import (
     StereoCamera,
     VrsGps,
 )
-from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.system_configs.setup_manager.sensor_factory import SensorsFactoryConfig
 from moduslam.system_configs.setup_manager.sensors import (
     ImuConfig,
     Lidar3DConfig,
@@ -33,7 +33,7 @@ class SensorsFactory:
     _sensors_table: dict[str, Sensor] = {}
 
     @classmethod
-    def get_sensors(cls) -> set[Sensor]:
+    def get_all_sensors(cls) -> set[Sensor]:
         """Gets all sensors."""
         return cls._sensors
 
@@ -57,7 +57,7 @@ class SensorsFactory:
             raise ItemNotFoundError(msg)
 
     @classmethod
-    def init_sensors(cls, config: SensorFactoryConfig) -> None:
+    def init_sensors(cls, config: SensorsFactoryConfig) -> None:
         """Initializes sensors for the given configuration.
 
         Args:

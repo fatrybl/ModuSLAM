@@ -2,8 +2,8 @@ from collections import defaultdict, deque
 
 import numpy as np
 
-from moduslam.data_manager.factory.batch_factory import BatchFactory
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.base_vertices import GraphVertex
 from moduslam.utils.auxiliary_methods import check_dimensionality
 from moduslam.utils.numpy_types import Matrix4x4, Matrix4xN, MatrixNx3

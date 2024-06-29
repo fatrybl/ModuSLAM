@@ -94,7 +94,7 @@ class TestGraph:
         assert len(graph.vertex_storage.vertices) == 0
 
     def test_update(self, graph: Graph, edge: UnaryEdge):
-        new_pose = gtsam.Pose3(gtsam.Rot3((10, 10, 10)), (10, 10, 10))
+        new_pose = gtsam.Pose3(gtsam.Rot3.Ypr(1, 1, 1), (1, 1, 1))
         graph.add_edge(edge)
         vertex: Pose = list(graph.vertex_storage.vertices)[0]
 

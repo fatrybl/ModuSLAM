@@ -9,7 +9,7 @@ import logging
 import numpy as np
 from PIL.Image import Image
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.handlers.visual_odometry.camera_features import (
     compute_transformation,

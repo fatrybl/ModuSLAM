@@ -4,7 +4,7 @@ from collections import defaultdict
 import numpy as np
 import open3d as o3d
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose
 from moduslam.logger.logging_config import map_manager

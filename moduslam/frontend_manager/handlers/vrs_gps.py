@@ -2,7 +2,7 @@
 
 import logging
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.element import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
