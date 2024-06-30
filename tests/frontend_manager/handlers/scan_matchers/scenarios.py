@@ -1,4 +1,4 @@
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.kaist.utils import read_binary
 from moduslam.data_manager.batch_factory.readers.locations import BinaryDataLocation
 from moduslam.frontend_manager.measurement_storage import Measurement

@@ -14,8 +14,7 @@ import numpy as np
 from PIL.Image import Image
 from plum import dispatch
 
-from moduslam.data_manager.batch_factory.batch import DataBatch
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element, RawMeasurement
 from moduslam.logger.logging_config import utils
 from moduslam.utils.exceptions import DimensionalityError
 from moduslam.utils.numpy_types import Vector3, VectorN

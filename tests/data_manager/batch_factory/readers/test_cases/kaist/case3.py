@@ -1,5 +1,6 @@
-from moduslam.data_manager.batch_factory.element import Element, Location
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
+from moduslam.data_manager.batch_factory.readers.locations import Location
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,

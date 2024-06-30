@@ -5,7 +5,7 @@ from typing import Any, Callable, Iterable
 import gtsam
 from pytest import fixture
 
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import Location
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge

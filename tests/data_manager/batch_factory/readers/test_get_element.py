@@ -13,7 +13,7 @@ Checklist:
 
 from pytest import mark, raises
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (

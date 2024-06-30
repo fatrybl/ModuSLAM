@@ -1,4 +1,7 @@
-"""Manages current state of Batch Factory."""
+"""Manages current state of Batch Factory.
+
+TODO: maybe remove this class ?
+"""
 
 
 class StoppingCriterion:

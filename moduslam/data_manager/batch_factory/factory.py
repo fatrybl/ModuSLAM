@@ -4,8 +4,7 @@ from typing import overload
 
 from plum import dispatch
 
-from moduslam.data_manager.batch_factory.batch import DataBatch
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.data_reader_factory import (
     DataReaderFactory,
@@ -62,8 +61,7 @@ class BatchFactory:
                     self._batch.add(element)
                 else:
                     self._all_data_processed = True
-                    msg = "All data in the dataset has been processed."
-                    logger.info(msg)
+                    logger.info("All data in the dataset has been processed.")
 
     @overload
     def create_batch(self, elements: Sequence[Element]) -> None:
@@ -168,8 +166,10 @@ class BatchFactory:
                 elements.append(element)
                 current_timestamp = element.timestamp
             else:
-                msg = f"Can not get the next element for sensor {sensor}. Previous timestamp: {current_timestamp}."
-                logger.error(msg)
+                logger.error(
+                    f"Can not get the next element for sensor {sensor}. "
+                    f"Previous timestamp: {current_timestamp}."
+                )
                 return None
 
         return elements
@@ -178,9 +178,9 @@ class BatchFactory:
         """Checks if the memory limit is exceeded.
 
         Raises:
-            MemoryError: memory limit exceeded.
+            MemoryError: memory limit is exceeded.
         """
+        msg = "Memory limit is exceeded."
         if not self._memory_analyzer.enough_memory:
-            msg = "Memory limit exceeded."
             logger.error(msg)
             raise MemoryError(msg)

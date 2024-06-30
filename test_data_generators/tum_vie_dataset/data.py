@@ -8,7 +8,7 @@ from pathlib import Path
 import PIL
 from PIL.Image import Image
 
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.directory_iterator import (
     DirectoryIterator,
 )

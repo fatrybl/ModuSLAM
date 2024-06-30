@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
 
 if TYPE_CHECKING:

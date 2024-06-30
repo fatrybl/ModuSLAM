@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import PIL.Image as Image
 
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import (
     CsvDataLocation,
     Location,

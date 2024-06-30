@@ -6,7 +6,7 @@ from typing import Any
 from numpy import dtype, ndarray, ones, uint8
 from PIL import Image
 
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,

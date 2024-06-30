@@ -62,8 +62,7 @@ Checklist:
 
 from pytest import mark, raises
 
-from moduslam.data_manager.batch_factory.batch import DataBatch
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.system_configs.data_manager.batch_factory.batch_factory import (

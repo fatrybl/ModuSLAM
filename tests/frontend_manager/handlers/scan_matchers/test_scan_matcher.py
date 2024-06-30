@@ -10,7 +10,7 @@ from collections.abc import Iterable
 
 from pytest import fixture, mark
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.system_configs.frontend_manager.handlers.lidar_odometry import (

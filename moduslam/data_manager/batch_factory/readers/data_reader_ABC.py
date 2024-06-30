@@ -5,7 +5,7 @@ from typing import overload
 
 from plum import dispatch
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.logger.logging_config import data_manager
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (

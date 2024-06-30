@@ -2,8 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from moduslam.data_manager.batch_factory.batch import DataBatch
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import BinaryDataLocation
 from moduslam.frontend_manager.edge_factories.lidar_odometry import (
     LidarOdometryEdgeFactory,

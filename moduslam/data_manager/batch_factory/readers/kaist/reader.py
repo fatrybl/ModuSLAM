@@ -7,7 +7,7 @@ from typing import overload
 
 from plum import dispatch
 
-from moduslam.data_manager.batch_factory.element import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.kaist.measurement_collector import (
     get_measurement,

@@ -8,7 +8,7 @@ from moduslam.system_configs.setup_manager.sensors import SensorConfig
 
 
 def generate_sensors_factory_config(sensors: Sequence[Sensor]) -> SensorsFactoryConfig:
-    """Generates SensorsFactoryConfig from the list of sensors.
+    """Generates SensorsFactoryConfig from a sequence of sensors.
 
     Args:
         sensors: sensors to generate configurations for.
