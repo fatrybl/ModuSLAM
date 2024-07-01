@@ -1,4 +1,7 @@
-"""Any data source."""
+"""Any data source.
+
+TODO: add tests.
+"""
 
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -20,10 +23,10 @@ class Source(ABC):
         """
 
     def open(self) -> None:
-        """Opens the source: initializes files, iterators, etc."""
+        """Opens the source: initializes files, iterators, etc..."""
 
     def flush(self) -> None:
-        """Flushes the source: closes files, destroys iterators, etc."""
+        """Flushes the source: closes files, resets iterators, etc..."""
 
 
 class CsvData(Source):

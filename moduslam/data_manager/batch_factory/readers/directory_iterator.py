@@ -1,4 +1,7 @@
-"""Iterates over files in a directory with a given extension."""
+"""Iterates over files in a directory with a given extension.
+
+TODO: add tests.
+"""
 
 import logging
 from pathlib import Path

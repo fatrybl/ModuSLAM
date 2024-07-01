@@ -37,6 +37,8 @@ class DataReaderFactory:
 
         Raises:
             NotImplementedError: No DataReader exists for the given dataset type.
+
+            ValueError: Invalid regime name.
         """
         regime: Stream | TimeLimit
         match regime_config.name:
@@ -51,7 +53,7 @@ class DataReaderFactory:
             case _:
                 msg = f"Invalid regime name {regime_config.name!r}."
                 logger.critical(msg)
-                raise NotImplementedError(msg)
+                raise ValueError(msg)
 
         match dataset_config.reader:
             case KaistReader.__name__:
