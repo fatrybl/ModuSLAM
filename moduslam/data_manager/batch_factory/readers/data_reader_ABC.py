@@ -21,10 +21,7 @@ class DataReaderState(ABC):
 
 
 class DataReader(ABC):
-    """Base abstract class for any data reader.
-
-    TODO: add common config with sensors for DataReader and SensorsFactory to avoid duplication.
-    """
+    """Base abstract class for any data reader."""
 
     _context_error_msg = "Method can only be called within a context manager."
 

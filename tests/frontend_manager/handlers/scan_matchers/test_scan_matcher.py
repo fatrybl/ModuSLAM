@@ -1,9 +1,7 @@
 """Tests for the Kiss ICP scan matcher.
 
-test_process: checks if the scan matcher processes() method returns the results of the correct type
+Checks if the scan matcher processes() method produces the result of the correct type
 for the given elements.
-
-TODO: either add more tests or remove unused data.
 """
 
 from collections.abc import Iterable
