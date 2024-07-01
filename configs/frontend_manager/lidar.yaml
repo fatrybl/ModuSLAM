@@ -21,7 +21,7 @@ graph_initializer:
 
   priors:
     initial_pose:
-      timestamp: 1544581174313709000 # timestamp of first VLP_right scan from data_manager/config.yaml
+      timestamp: 1544581170178565000 # timestamp of first VLP_right scan from data_manager/config.yaml
       vertex_type: "Pose"
       edge_factory_name: "prior_pose_edge_factory"
       measurement: [ 0,0,0,0,0,0 ]

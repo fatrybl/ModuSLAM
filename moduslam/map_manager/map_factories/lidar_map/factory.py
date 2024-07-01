@@ -3,7 +3,7 @@ from collections import deque
 
 import numpy as np
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose

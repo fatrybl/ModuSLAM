@@ -13,7 +13,7 @@ from moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieRea
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream
 from tests.conftest import tum_vie_dataset_dir
 
 

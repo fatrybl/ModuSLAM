@@ -1,18 +1,17 @@
 defaults:
-  - /datasets/base_kaist_dataset@factory.dataset
-  - /regimes/base_regime@factory.regime
+  - /datasets/base_kaist_dataset@batch_factory.dataset
+  - /regimes/base_data_regime@batch_factory.regime
 
 batch_factory:
   dataset:
-    directory: "/media/mark/New Volume/datasets/kaist_old/urban-26"
+    directory: "/media/mark/New Volume/datasets/kaist/urban-26"
 
   regime:
     name: "TimeLimit"
-    start: 1544581174111995000
-    stop: 1544581195292098000
+    start: 1544581170178565000
+    stop: 1544581190350080000
 
-  memory:
-    batch_memory: 100.0
+  batch_memory_percent: 100.0
 
 # for images:
 #    start: 1544581174020425974

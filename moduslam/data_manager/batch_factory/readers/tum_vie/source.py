@@ -1,7 +1,10 @@
 from pathlib import Path
 from typing import TextIO
 
-from moduslam.data_manager.batch_factory.readers.source import CsvData, StereoImageData
+from moduslam.data_manager.batch_factory.readers.data_sources import (
+    CsvData,
+    StereoImageData,
+)
 
 
 class TumCsvData(CsvData):

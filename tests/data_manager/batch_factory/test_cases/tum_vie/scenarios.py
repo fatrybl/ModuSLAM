@@ -6,7 +6,11 @@ from moduslam.system_configs.data_manager.batch_factory.batch_factory import (
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import (
+    DataRegimeConfig,
+    Stream,
+    TimeLimit,
+)
 from moduslam.utils.exceptions import UnfeasibleRequestError
 from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import tum_vie_dataset_dir
@@ -44,12 +48,12 @@ sensors_factory_config2 = generate_sensors_factory_config([imu])
 sensors_factory_config3 = generate_sensors_factory_config([stereo])
 invalid_sensors_factory_config = generate_sensors_factory_config([])
 
-stream = Stream()
-t_limit_1 = TimeLimit(start=el1.timestamp, stop=el24.timestamp)
-t_limit_2 = TimeLimit(start=el1.timestamp, stop=el1.timestamp)
-t_limit_3 = TimeLimit(start=el24.timestamp, stop=el24.timestamp)
-t_limit_4 = TimeLimit(start=el2.timestamp, stop=el15.timestamp)
-t_limit_5 = TimeLimit(start=el2.timestamp, stop=el2.timestamp)
+stream = DataRegimeConfig(name=Stream.name)
+t_limit_1 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el24.timestamp)
+t_limit_2 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el1.timestamp)
+t_limit_3 = DataRegimeConfig(name=TimeLimit.name, start=el24.timestamp, stop=el24.timestamp)
+t_limit_4 = DataRegimeConfig(name=TimeLimit.name, start=el2.timestamp, stop=el15.timestamp)
+t_limit_5 = DataRegimeConfig(name=TimeLimit.name, start=el2.timestamp, stop=el2.timestamp)
 
 full_memory_percent = 100.0
 low_memory_percent = 1.0

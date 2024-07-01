@@ -7,7 +7,7 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset im
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream
 from tests.conftest import kaist_custom_dataset_dir
 
 kaist_valid = (

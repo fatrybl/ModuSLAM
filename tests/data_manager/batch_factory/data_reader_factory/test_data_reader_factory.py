@@ -15,7 +15,7 @@ from moduslam.data_manager.batch_factory.readers.data_reader_factory import (
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import DataRegimeConfig
 from tests.data_manager.batch_factory.data_reader_factory.scenarios import (
     scenario1,
     scenario2,
@@ -31,7 +31,7 @@ test_cases_2 = (*scenario2,)
 )
 def test_get_reader(
     dataset_config: DatasetConfig,
-    regime: Stream | TimeLimit,
+    regime: DataRegimeConfig,
     reference_reader: type[DataReader],
 ):
     reader = DataReaderFactory.create(dataset_config, regime)
@@ -42,6 +42,6 @@ def test_get_reader(
     "dataset_config, regime",
     [test_cases_2],
 )
-def test_get_reader_invalid_dataset(dataset_config: DatasetConfig, regime: Stream | TimeLimit):
+def test_get_reader_invalid_dataset(dataset_config: DatasetConfig, regime: DataRegimeConfig):
     with raises(NotImplementedError):
         DataReaderFactory.create(dataset_config, regime)

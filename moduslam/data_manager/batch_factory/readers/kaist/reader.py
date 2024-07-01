@@ -9,16 +9,16 @@ from plum import dispatch
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.readers.data_sources import (
+    CsvData,
+    PointcloudData,
+    StereoImageData,
+)
 from moduslam.data_manager.batch_factory.readers.kaist.measurement_collector import (
     get_measurement,
     get_next_measurement,
 )
 from moduslam.data_manager.batch_factory.readers.kaist.utils import create_sequence
-from moduslam.data_manager.batch_factory.readers.source import (
-    CsvData,
-    PointcloudData,
-    StereoImageData,
-)
 from moduslam.data_manager.batch_factory.readers.utils import (
     apply_state,
     check_directory,
@@ -32,7 +32,7 @@ from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.utils.auxiliary_methods import to_int
 
 logger = logging.getLogger(data_manager)
@@ -174,8 +174,8 @@ class KaistReader(DataReader):
         msg_timestamp = to_int(message.timestamp)
         if timestamp != msg_timestamp:
             msg = (
-                f"Time {timestamp} in 'data_stamp.csv' and time {msg_timestamp} in {sensor_name} "
-                f"measurements source does not match."
+                f"There is no real measurement for the sensor {sensor_name} at the timestamp {timestamp}."
+                f"Check the data source."
             )
             logger.critical(msg)
             raise ValueError(msg)

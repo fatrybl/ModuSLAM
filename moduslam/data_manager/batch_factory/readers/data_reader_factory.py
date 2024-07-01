@@ -14,7 +14,11 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config im
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import (
+    DataRegimeConfig,
+    Stream,
+    TimeLimit,
+)
 
 logger = logging.getLogger(data_manager)
 
@@ -23,28 +27,42 @@ class DataReaderFactory:
     """Factory for creating DataReader instance based on a dataset type."""
 
     @staticmethod
-    def create(dataset_cfg: DatasetConfig, regime: Stream | TimeLimit) -> DataReader:
+    def create(dataset_config: DatasetConfig, regime_config: DataRegimeConfig) -> DataReader:
         """Creates Data Reader based on dataset type.
 
         Args:
-            dataset_cfg: configuration of the dataset.
+            dataset_config: configuration of the dataset.
 
-            regime: configuration of the data flow regime.
+            regime_config: configuration of the data flow regime.
 
         Raises:
             NotImplementedError: No DataReader exists for the given dataset type.
         """
+        regime: Stream | TimeLimit
+        match regime_config.name:
+            case "Stream":
+                regime = Stream()
+                pass
 
-        match dataset_cfg.reader:
-            case KaistReader.__name__:
-                dataset_cfg = cast(KaistConfig, dataset_cfg)
-                return KaistReader(regime, dataset_cfg)
-
-            case TumVieReader.__name__:
-                dataset_cfg = cast(TumVieConfig, dataset_cfg)
-                return TumVieReader(regime, dataset_cfg)
+            case "TimeLimit":
+                regime = TimeLimit(regime_config.start, regime_config.stop)
+                pass
 
             case _:
-                msg = f"No DataReader exists for dataset type {dataset_cfg.reader!r}."
+                msg = f"Invalid regime name {regime_config.name!r}."
+                logger.critical(msg)
+                raise NotImplementedError(msg)
+
+        match dataset_config.reader:
+            case KaistReader.__name__:
+                dataset_config = cast(KaistConfig, dataset_config)
+                return KaistReader(regime, dataset_config)
+
+            case TumVieReader.__name__:
+                dataset_config = cast(TumVieConfig, dataset_config)
+                return TumVieReader(regime, dataset_config)
+
+            case _:
+                msg = f"No DataReader exists for dataset type {dataset_config.reader!r}."
                 logger.critical(msg)
                 raise NotImplementedError(msg)

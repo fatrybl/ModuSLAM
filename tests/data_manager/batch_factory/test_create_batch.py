@@ -105,7 +105,7 @@ def test_create_batch_1_success(
     SensorsFactory.init_sensors(config1)
     batch_factory = BatchFactory(config2)
 
-    batch_factory.create_batch()
+    batch_factory.fill_batch_sequentially()
     result_batch = batch_factory.batch
 
     assert equal_batches(result_batch, reference_batch) is True
@@ -120,7 +120,7 @@ def test_create_batch_1_fail(
     batch_factory = BatchFactory(config2)
 
     with raises(MemoryError):
-        batch_factory.create_batch()
+        batch_factory.fill_batch_sequentially()
 
 
 @mark.parametrize("config1, config2, input_elements, reference_batch", [*test_cases_2_success])
@@ -133,7 +133,7 @@ def test_create_batch_2_success(
     SensorsFactory.init_sensors(config1)
     batch_factory = BatchFactory(config2)
 
-    batch_factory.create_batch(input_elements)
+    batch_factory.fill_batch_with_elements(input_elements)
     result_batch = batch_factory.batch
     assert equal_batches(result_batch, reference_batch) is True
 
@@ -147,7 +147,7 @@ def test_create_batch_2_fail(
     SensorsFactory.init_sensors(config1)
     batch_factory = BatchFactory(config2)
     with raises(MemoryError):
-        batch_factory.create_batch(input_elements)
+        batch_factory.fill_batch_with_elements(input_elements)
 
 
 @mark.parametrize(
@@ -163,7 +163,7 @@ def test_create_batch_3_success(
     SensorsFactory.init_sensors(config1)
     batch_factory = BatchFactory(config2)
 
-    batch_factory.create_batch(periodic_data_request)
+    batch_factory.fill_batch_by_request(periodic_data_request)
     result_batch = batch_factory.batch
 
     assert equal_batches(result_batch, reference_batch) is True
@@ -180,4 +180,4 @@ def test_create_batch_3_fail(
     batch_factory = BatchFactory(config2)
 
     with raises(reference_exception):
-        batch_factory.create_batch(data_request)
+        batch_factory.fill_batch_by_request(data_request)

@@ -3,6 +3,12 @@
 import logging
 from collections.abc import Callable
 
+from moduslam.data_manager.batch_factory.readers.data_sources import (
+    CsvData,
+    PointcloudData,
+    Source,
+    StereoImageData,
+)
 from moduslam.data_manager.batch_factory.readers.kaist.utils import (
     get_csv_message,
     get_csv_message_by_location,
@@ -16,12 +22,6 @@ from moduslam.data_manager.batch_factory.readers.locations import (
     CsvDataLocation,
     Location,
     StereoImagesLocation,
-)
-from moduslam.data_manager.batch_factory.readers.source import (
-    CsvData,
-    PointcloudData,
-    Source,
-    StereoImageData,
 )
 from moduslam.logger.logging_config import data_manager
 from moduslam.utils.auxiliary_dataclasses import Message

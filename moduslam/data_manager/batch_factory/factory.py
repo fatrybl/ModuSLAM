@@ -1,8 +1,5 @@
 import logging
 from collections.abc import Sequence
-from typing import overload
-
-from plum import dispatch
 
 from moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
@@ -39,17 +36,13 @@ class BatchFactory:
         self._batch.sort()
         return self._batch
 
-    @overload
-    def create_batch(self) -> None:
-        """
-        @overload.
-
-        Creates sequentially a new Data Batch from the dataset.
+    def fill_batch_sequentially(self) -> None:
+        """Adds elements with raw sensor measurements to the batch sequentially from the
+        dataset.
 
         Raises:
             MemoryError: memory limit exceeded.
         """
-        self._batch.clear()
 
         with self._data_reader as reader:
             while not self._all_data_processed:
@@ -63,11 +56,9 @@ class BatchFactory:
                     self._all_data_processed = True
                     logger.info("All data in the dataset has been processed.")
 
-    @overload
-    def create_batch(self, elements: Sequence[Element]) -> None:
-        """@overload.
-
-        Creates a new Data Batch for the sequence of elements.
+    def fill_batch_with_elements(self, elements: Sequence[Element]) -> None:
+        """Adds elements with raw sensor measurements to the batch for the given
+        elements w/o raw measurements.
 
         Args:
             elements: sequence of elements w/o raw sensor measurements.
@@ -75,7 +66,6 @@ class BatchFactory:
         Raises:
             MemoryError: memory limit exceeded.
         """
-        self._batch.clear()
 
         elements = sorted(elements, key=lambda x: x.timestamp)
 
@@ -86,11 +76,9 @@ class BatchFactory:
                 element = reader.get_element(empty_element)
                 self._batch.add(element)
 
-    @overload
-    def create_batch(self, request: PeriodicDataRequest) -> None:
-        """@overload.
-
-        Creates a new Data Batch for the sequence of requests.
+    def fill_batch_by_request(self, request: PeriodicDataRequest) -> None:
+        """Adds elements with raw sensor measurements to the batch for the given
+        request.
 
         Args:
             request: sequence of requests to create a Data Batch.
@@ -100,7 +88,6 @@ class BatchFactory:
 
             MemoryError.
         """
-        self._batch.clear()
 
         with self._data_reader as reader:
             elements = self._fulfill_request(reader, request)
@@ -112,24 +99,6 @@ class BatchFactory:
                 msg = f"Can not fulfill the request {request}."
                 logger.error(msg)
                 raise UnfeasibleRequestError(msg)
-
-    @dispatch
-    def create_batch(self, elements=None):
-        """@overload.
-
-        Calls:
-            1. Creates a new Data Batch from the dataset sequentially.
-                Args:
-                    __.
-
-            2. Creates a new Data Batch from the collection of elements.
-                Args:
-                    elements (collection[Element]): collection of elements w/o raw sensor measurements.
-
-            3. Creates a new Data Batch from the set of requests.
-                Args:
-                    requests (set[PeriodicDataRequest]): set of requests to create a Data Batch.
-        """
 
     def _fulfill_request(
         self, reader: DataReader, request: PeriodicDataRequest

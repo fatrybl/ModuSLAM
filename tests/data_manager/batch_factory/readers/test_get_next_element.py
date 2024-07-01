@@ -28,7 +28,7 @@ from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.system_configs.setup_manager.sensor_factory import SensorsFactoryConfig
 from moduslam.utils.auxiliary_methods import equal_elements
 from tests.data_manager.batch_factory.readers.test_cases.kaist.case1 import kaist1

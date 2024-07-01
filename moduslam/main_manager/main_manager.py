@@ -22,7 +22,7 @@ class MainManager:
         self.setup_manager = SetupManager(config.setup_manager)
         self.data_manager = DataManager(config.data_manager)
         self.frontend_manager = FrontendManager(config.frontend_manager)
-        self.map_manager = MapManager(config.map_manager)
+        self.map_manager = MapManager(config.map_manager, config.data_manager.batch_factory)
         self.backend_manager = BackendManager()
         logger.info("The system has been successfully initialized.")
 
@@ -32,13 +32,12 @@ class MainManager:
         self._set_prior()
 
         logger.info("Creating new data batch...")
-        self.data_manager.make_batch()
+        self.data_manager.make_batch_sequentially()
         self._process()
 
         self.map_manager.save_graph(self.frontend_manager.graph)
-        self.map_manager.create_map(self.frontend_manager.graph, self.data_manager._batch_factory)
+        self.map_manager.create_map(self.frontend_manager.graph)
         self.map_manager.visualize_map()
-        self.map_manager.save_map()
 
         logger.info("All processes have finished successfully.")
 
@@ -48,7 +47,7 @@ class MainManager:
         """Creates graph and solves it."""
         logger.info("Processing the data batch...")
 
-        data_batch = self.data_manager._batch_factory.batch
+        data_batch = self.data_manager.batch_factory.batch
         graph = self.frontend_manager.graph
 
         while not data_batch.empty:

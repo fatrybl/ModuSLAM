@@ -6,7 +6,11 @@ from moduslam.system_configs.data_manager.batch_factory.batch_factory import (
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import (
+    DataRegimeConfig,
+    Stream,
+    TimeLimit,
+)
 from moduslam.utils.exceptions import UnfeasibleRequestError
 from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import kaist_custom_dataset_dir
@@ -56,11 +60,11 @@ sensors_factory_config1 = generate_sensors_factory_config(all_sensors)
 sensors_factory_config2 = generate_sensors_factory_config([imu])
 invalid_sensors_factory_config = generate_sensors_factory_config([])
 
-stream = Stream()
-t_limit_1 = TimeLimit(start=el1.timestamp, stop=el25.timestamp)
-t_limit_2 = TimeLimit(start=el1.timestamp, stop=el1.timestamp)
-t_limit_3 = TimeLimit(start=el25.timestamp, stop=el25.timestamp)
-t_limit_4 = TimeLimit(start=el10.timestamp, stop=el23.timestamp)
+stream = DataRegimeConfig(name=Stream.name)
+t_limit_1 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el25.timestamp)
+t_limit_2 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el1.timestamp)
+t_limit_3 = DataRegimeConfig(name=TimeLimit.name, start=el25.timestamp, stop=el25.timestamp)
+t_limit_4 = DataRegimeConfig(name=TimeLimit.name, start=el10.timestamp, stop=el23.timestamp)
 
 full_memory_percent = 100.0
 low_memory_percent = 1.0

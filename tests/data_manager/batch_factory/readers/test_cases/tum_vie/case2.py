@@ -3,7 +3,7 @@ from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from test_data_generators.tum_vie_dataset.data import Data
 from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import tum_vie_dataset_dir

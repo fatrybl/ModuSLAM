@@ -42,7 +42,5 @@ class MemoryAnalyzer:
     def enough_memory(self) -> bool:
         """Checks if the memory usage is within the permissible limits."""
         if self.used_memory_percent < self.permissible_memory_percent:
-            msg = f"Memory usage is above the permissible limit: {self.permissible_memory_percent}%"
-            logger.warning(msg)
             return True
         return False

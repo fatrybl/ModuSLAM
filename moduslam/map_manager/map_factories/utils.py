@@ -2,7 +2,7 @@ from collections import defaultdict, deque
 
 import numpy as np
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.base_vertices import GraphVertex
 from moduslam.utils.auxiliary_methods import check_dimensionality
@@ -26,8 +26,9 @@ def get_elements(
     """
     table: dict[GraphVertex, deque[Element]] = defaultdict(deque)
     for vertex, elements in vertex_elements_table.items():
-        batch_factory.create_batch(elements)  # type: ignore
+        batch_factory.fill_batch_with_elements(elements)  # type: ignore
         table[vertex] = batch_factory.batch.data
+        batch_factory.batch.clear()
 
     return table
 

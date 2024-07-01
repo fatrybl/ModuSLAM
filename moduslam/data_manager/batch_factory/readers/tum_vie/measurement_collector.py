@@ -3,12 +3,12 @@ from collections.abc import Callable
 
 from PIL.Image import Image
 
+from moduslam.data_manager.batch_factory.readers.data_sources import Source
 from moduslam.data_manager.batch_factory.readers.locations import (
     CsvDataLocation,
     Location,
     StereoImagesLocation,
 )
-from moduslam.data_manager.batch_factory.readers.source import Source
 from moduslam.data_manager.batch_factory.readers.tum_vie.source import (
     TumCsvData,
     TumStereoImageData,

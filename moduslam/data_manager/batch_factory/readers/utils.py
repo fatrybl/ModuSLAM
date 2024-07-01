@@ -6,7 +6,7 @@ from pathlib import Path
 import PIL
 from PIL.Image import Image
 
-from moduslam.data_manager.batch_factory.readers.source import Source
+from moduslam.data_manager.batch_factory.readers.data_sources import Source
 from moduslam.logger.logging_config import data_manager
 from moduslam.utils.auxiliary_dataclasses import Message
 from moduslam.utils.exceptions import ExternalModuleException, ItemNotFoundError

@@ -8,7 +8,7 @@ import logging
 
 import gtsam
 
-from moduslam.data_manager.batch_factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.edge_factories.imu_preintegration.utils import (
     compute_covariance,

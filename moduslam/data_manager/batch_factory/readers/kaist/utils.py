@@ -12,7 +12,7 @@ from moduslam.data_manager.batch_factory.readers.utils import (
     get_images,
     read_csv_file,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.utils.auxiliary_dataclasses import Message
 from moduslam.utils.auxiliary_methods import to_int
 

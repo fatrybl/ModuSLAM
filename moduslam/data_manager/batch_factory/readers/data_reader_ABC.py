@@ -11,7 +11,7 @@ from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 
 logger = logging.getLogger(data_manager)
 
