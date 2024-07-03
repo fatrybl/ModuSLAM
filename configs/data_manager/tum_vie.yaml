@@ -1,0 +1,13 @@
+defaults:
+  - /datasets/base_tum_vie_dataset@batch_factory.dataset
+  - /regimes/base_data_regime@batch_factory.regime
+
+batch_factory:
+  dataset:
+    directory: "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0"
+  regime:
+    name: "TimeLimit"
+    start: 1.626653758999999845e+06
+    stop: 1.667083244000000181e+06
+
+  batch_memory_percent: 100.0

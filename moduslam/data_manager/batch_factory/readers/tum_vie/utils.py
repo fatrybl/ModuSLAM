@@ -76,9 +76,82 @@ def create_sequence(
     Returns:
         elements: a list of tuples containing the timestamp, sensor name and index.
 
-        sensor_indices: a dictionary of sensor name and index pairs.
+        sensor indices: a dictionary of sensor name <-> index pairs.
     """
 
+    if isinstance(regime, TimeLimit):
+        start = microsec2nanosec(regime.start)
+        stop = microsec2nanosec(regime.stop)
+        elements, latest_sensors_indices = process_timelimit(files, used_sensors, start, stop)
+    else:
+        elements, latest_sensors_indices = process_stream(files, used_sensors)
+
+    if len(elements) == 0:
+        latest_sensors_indices = {}
+    else:
+        elements.sort(key=lambda x: x[0])
+
+    return elements, latest_sensors_indices
+
+
+def process_stream(
+    files: dict[str, Path], used_sensors: set[str]
+) -> tuple[list[tuple[int, str, int]], dict[str, int]]:
+    """Creates a list of tuples containing the timestamp, sensor name and index for the
+    Stream regime.
+
+    Args:
+        files: dict with sensor names and file paths.
+
+        used_sensors: a set of sensor names to be used.
+
+    Returns:
+        elements: a list of tuples containing the timestamp, sensor name and index.
+
+        latest_sensors_indices: a dictionary of sensor name <-> index pairs.
+    """
+    elements: list[tuple[int, str, int]] = []
+    sensors_indices: dict[str, int] = {}
+    latest_sensors_indices: dict[str, int] = {}
+    default_index: int = 0
+
+    for sensor_name, file in files.items():
+        if sensor_name not in used_sensors:
+            continue
+
+        lines = read_csv_file(file, delimiter=" ")
+        next(lines)  # Skip header
+
+        for line in lines:
+            timestamp = get_timestamp(line)
+            index = sensors_indices.get(sensor_name, default_index) + 1
+            sensors_indices[sensor_name] = index
+            latest_sensors_indices[sensor_name] = default_index
+            elements.append((timestamp, sensor_name, index))
+
+    return elements, latest_sensors_indices
+
+
+def process_timelimit(
+    files: dict[str, Path], used_sensors: set[str], start: int, stop: int
+) -> tuple[list[tuple[int, str, int]], dict[str, int]]:
+    """Creates a list of tuples containing the timestamp, sensor name and index for the
+    TimeLimit regime.
+
+    Args:
+        files: dict with sensor names and file paths.
+
+        used_sensors: a set of sensor names to be used.
+
+        start: start timestamp.
+
+        stop: stop timestamp.
+
+    Returns:
+        elements: a list of tuples containing the timestamp, sensor name and index.
+
+        latest_sensors_indices: a dictionary of sensor name <-> index pairs.
+    """
     elements: list[tuple[int, str, int]] = []
     sensors_indices: dict[str, int] = {}
     latest_sensors_indices: dict[str, int] = {}
@@ -96,22 +169,12 @@ def create_sequence(
             index = sensors_indices.get(sensor_name, default_index) + 1
             sensors_indices[sensor_name] = index
 
-            if isinstance(regime, TimeLimit):
-                if timestamp < regime.start:
-                    latest_sensors_indices[sensor_name] = index
+            if timestamp < start:
+                latest_sensors_indices[sensor_name] = index
 
-                if regime.start <= timestamp <= regime.stop:
-                    elements.append((timestamp, sensor_name, index))
-                    if sensor_name not in latest_sensors_indices:
-                        latest_sensors_indices[sensor_name] = default_index
-
-            else:
-                latest_sensors_indices[sensor_name] = default_index
+            if start <= timestamp <= stop:
                 elements.append((timestamp, sensor_name, index))
-
-    if len(elements) == 0:
-        latest_sensors_indices = {}
-    else:
-        elements.sort(key=lambda x: x[0])
+                if sensor_name not in latest_sensors_indices:
+                    latest_sensors_indices[sensor_name] = default_index
 
     return elements, latest_sensors_indices

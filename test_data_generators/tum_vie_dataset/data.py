@@ -102,7 +102,7 @@ class Data:
         """Reads the IMU data from the file.
 
         Args:
-            imu_file (Path): The path to the IMU file.
+            imu_file: a path to the IMU file.
 
         Returns:
             list of tuples with the timestamp and IMU data.

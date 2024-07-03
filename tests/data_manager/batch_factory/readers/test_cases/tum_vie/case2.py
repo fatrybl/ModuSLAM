@@ -4,6 +4,7 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config 
     TumVieConfig,
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.utils.auxiliary_methods import nanosec2microsec
 from test_data_generators.tum_vie_dataset.data import Data
 from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import tum_vie_dataset_dir
@@ -29,13 +30,19 @@ el11 = elements[10]  # stereo
 el23 = elements[22]  # imu
 el24 = elements[23]  # stereo
 
-timelimit1 = TimeLimit(start=el1.timestamp, stop=el24.timestamp)
-timelimit2 = TimeLimit(start=el1.timestamp, stop=el11.timestamp)
-timelimit3 = TimeLimit(start=el11.timestamp, stop=el24.timestamp)
-timelimit4 = TimeLimit(start=el2.timestamp, stop=el10.timestamp)
-timelimit5 = TimeLimit(start=el5.timestamp, stop=el5.timestamp)
-timelimit6 = TimeLimit(start=el24.timestamp, stop=el24.timestamp)
-timelimit7 = TimeLimit(start=el10.timestamp, stop=el23.timestamp)
+timelimit1 = TimeLimit(start=nanosec2microsec(el1.timestamp), stop=nanosec2microsec(el24.timestamp))
+timelimit2 = TimeLimit(start=nanosec2microsec(el1.timestamp), stop=nanosec2microsec(el11.timestamp))
+timelimit3 = TimeLimit(
+    start=nanosec2microsec(el11.timestamp), stop=nanosec2microsec(el24.timestamp)
+)
+timelimit4 = TimeLimit(start=nanosec2microsec(el2.timestamp), stop=nanosec2microsec(el10.timestamp))
+timelimit5 = TimeLimit(start=nanosec2microsec(el5.timestamp), stop=nanosec2microsec(el5.timestamp))
+timelimit6 = TimeLimit(
+    start=nanosec2microsec(el24.timestamp), stop=nanosec2microsec(el24.timestamp)
+)
+timelimit7 = TimeLimit(
+    start=nanosec2microsec(el10.timestamp), stop=nanosec2microsec(el23.timestamp)
+)
 
 sensors_factory_config1 = generate_sensors_factory_config((imu, stereo))
 sensors_factory_config2 = generate_sensors_factory_config((imu,))

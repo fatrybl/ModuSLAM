@@ -63,6 +63,18 @@ def nanosec2sec(nanoseconds: int) -> float:
     return nanoseconds * 1e-9
 
 
+def nanosec2microsec(nanoseconds: int) -> float:
+    """Converts nanoseconds to microseconds.
+
+    Args:
+        nanoseconds: time in nanoseconds.
+
+    Returns:
+        time in microseconds.
+    """
+    return nanoseconds * 1e-3
+
+
 @overload
 def microsec2nanosec(microseconds: int | float) -> int:
     return int(microseconds * 1e3)
@@ -71,7 +83,7 @@ def microsec2nanosec(microseconds: int | float) -> int:
 @overload
 def microsec2nanosec(microseconds: str) -> int:
     microsec_float = to_float(microseconds)
-    return microsec2nanosec(microsec_float)
+    return int(microsec_float * 1e3)
 
 
 @dispatch

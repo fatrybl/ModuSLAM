@@ -13,5 +13,5 @@ class BatchFactoryConfig:
     dataset: DatasetConfig
     regime: DataRegimeConfig
     batch_memory_percent: float = field(
-        default=50, metadata={"help": "RAM-memory percent used for the data batch."}
+        default=90.0, metadata={"help": "RAM-memory percent used for the data batch."}
     )

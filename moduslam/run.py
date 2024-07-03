@@ -7,6 +7,7 @@ Main runner of the SLAM system.
 
 import hydra
 import numpy as np
+from omegaconf import OmegaConf
 
 from moduslam.logger.logging_config import setup_logger
 from moduslam.main_manager.main_manager import MainManager
@@ -16,9 +17,11 @@ from moduslam.system_configs.main_manager import MainManagerConfig
 np.set_printoptions(precision=4, suppress=True)
 
 
-@hydra.main(version_base=None, config_name="lidar_imu", config_path="../configs")
+@hydra.main(version_base=None, config_name="config", config_path="../configs")
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
+
+    print(OmegaConf.to_yaml(config))
 
     setup_logger(config.logger)
 

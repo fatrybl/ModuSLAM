@@ -3,6 +3,7 @@ defaults:
   - /regimes/base_data_regime@batch_factory.regime
 
 batch_factory:
+
   dataset:
     directory: "/media/mark/New Volume/datasets/kaist/urban-26"
 

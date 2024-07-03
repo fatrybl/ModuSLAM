@@ -2,7 +2,7 @@ defaults:
   - _self_ # default hydra config to override job_logging and hydra_logging
   - structured_schema_config # base Structured Schema Validation config
 
-  - data_manager: config
+  - data_manager: kaist
   - map_manager: config
   - frontend_manager: lidar
   - setup_manager: lidar

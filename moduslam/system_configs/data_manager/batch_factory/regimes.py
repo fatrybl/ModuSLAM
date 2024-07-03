@@ -8,16 +8,16 @@ class DataRegimeConfig:
     """Data flow regime."""
 
     name: str
-    start: int = field(kw_only=True, default=MISSING)
-    stop: int = field(kw_only=True, default=MISSING)
+    start: float = field(kw_only=True, default=MISSING)
+    stop: float = field(kw_only=True, default=MISSING)
 
 
 @dataclass
 class TimeLimit:
     """Data flow regime with limited time range."""
 
-    start: int
-    stop: int
+    start: int | float
+    stop: int | float
     name: str = "TimeLimit"
 
 
