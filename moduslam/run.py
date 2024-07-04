@@ -7,7 +7,6 @@ Main runner of the SLAM system.
 
 import hydra
 import numpy as np
-from omegaconf import OmegaConf
 
 from moduslam.logger.logging_config import setup_logger
 from moduslam.main_manager.main_manager import MainManager
@@ -21,7 +20,7 @@ np.set_printoptions(precision=4, suppress=True)
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
 
-    print(OmegaConf.to_yaml(config))
+    # print(OmegaConf.to_yaml(config))
 
     setup_logger(config.logger)
 

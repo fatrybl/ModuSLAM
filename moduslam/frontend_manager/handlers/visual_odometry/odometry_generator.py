@@ -105,12 +105,12 @@ class VisualOdometry(Handler):
             transformation matrix and noise covariance.
         """
 
-        image1_np, image2_np = np.array(image1), np.array(image2)
+        image1_array, image2_array = np.array(image1), np.array(image2)
         camera_matrix = np.array(camera_parameters.camera_matrix_left)
         distortion_coefficients = np.array(camera_parameters.distortion_coefficients_left)
 
-        keypoints1, descriptors1 = get_orb_features(image1_np)
-        keypoints2, descriptors2 = get_orb_features(image2_np)
+        keypoints1, descriptors1 = get_orb_features(image1_array)
+        keypoints2, descriptors2 = get_orb_features(image2_array)
 
         common_keypoints = match_keypoints(descriptors1, descriptors2)
 

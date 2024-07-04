@@ -1,5 +1,5 @@
 defaults:
-  - /sensors/stereo_camera@sensors_factory.sensors
+  - /sensors/tum_vie/stereo_camera@sensors_factory.sensors
   - edge_factories_initializers/stereo@edge_factories_initializer
   - handlers_factories/stereo@handlers_factory
   - state_analyzers_factories/stereo@state_analyzers_factory

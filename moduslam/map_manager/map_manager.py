@@ -4,7 +4,9 @@ from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.graph_saver import GraphSaver
-from moduslam.map_manager.map_factories.lidar_map.factory import LidarMapFactory
+from moduslam.map_manager.map_factories.camera_pointcloud_map.factory import (
+    CameraPointcloudMapFactory,
+)
 from moduslam.map_manager.map_factories.lidar_map.utils import PointcloudVisualizer
 from moduslam.map_manager.map_loaders.lidar_map import MapLoader
 from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
@@ -26,7 +28,7 @@ class MapManager:
         Args:
             map_manager_config: map manager configuration.
         """
-        self._map_factory = LidarMapFactory(map_manager_config.map_factory)
+        self._map_factory = CameraPointcloudMapFactory(map_manager_config.map_factory)
         self._map_loader = MapLoader(map_manager_config.map_loader)
         self._batch_factory = BatchFactory(batch_factory_config)
         self._graph_saver = GraphSaver()

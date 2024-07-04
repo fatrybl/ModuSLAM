@@ -1,7 +1,7 @@
 defaults:
-  - /sensors/lidar_3D_right@sensors_factory.sensors
-  - /sensors/lidar_3D_left@sensors_factory.sensors
-  - /sensors/vrs_gps@sensors_factory.sensors
+  - /sensors/kaist/lidar_3D_right@sensors_factory.sensors
+  - /sensors/kaist/lidar_3D_left@sensors_factory.sensors
+  - /sensors/kaist/vrs_gps@sensors_factory.sensors
   - edge_factories_initializers/lidar_vrs@edge_factories_initializer
   - handlers_factories/2_lidar_vrs@handlers_factory
   - state_analyzers_factories/lidar_vrs@state_analyzers_factory

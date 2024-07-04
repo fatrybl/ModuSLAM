@@ -1,6 +1,6 @@
 defaults:
-  - /sensors/stereo_camera@sensors_factory.sensors
-  - /sensors/imu@sensors_factory.sensors
+  - /sensors/tum_vie/stereo_camera@sensors_factory.sensors
+  - /sensors/tum_vie/imu@sensors_factory.sensors
   - edge_factories_initializers/stereo_imu@edge_factories_initializer
   - handlers_factories/stereo_imu@handlers_factory
   - state_analyzers_factories/stereo_imu@state_analyzers_factory
