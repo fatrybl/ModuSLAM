@@ -50,7 +50,7 @@ class VisualOdometry(Handler):
         been created.
 
         Args:
-            element: element of data batch with stereo iamges.
+            element: element of data batch with stereo images.
 
         Returns:
             measurement or None.
