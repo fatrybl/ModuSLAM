@@ -17,10 +17,24 @@ class Ros2Config(DatasetConfig):
 
     directory: Path = field(kw_only=True)
 
+    sensors_table: dict[str, dict[str, list]] = field(
+        default_factory=lambda: {
+            "StereoCamera": {"left": [], "right": []},
+            "imu": {"xsens": []},
+            "velodyne_right": {"vlp16r": []},
+            "velodyne_left": {"vlp16l": []},
+            "velodyne_top": {"vlp32c": [], "merger": []},
+        }
+    )
+
     data_stamp_file: Path = Ros2Paths.data_stamp
 
     reader: str = "Ros2DataReader"
 
     name: str = "Ros2 Reader for Ros2bags"
 
-    url: str = ""
+    url: str = "example.com"
+
+
+cfg = Ros2Config(directory=Path("/path/to/ros2/dataset"))
+print(cfg.sensors_table)
