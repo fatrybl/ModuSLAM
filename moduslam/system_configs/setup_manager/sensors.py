@@ -58,3 +58,10 @@ class Lidar3DConfig(SensorConfig):
         default_factory=lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
         metadata={"help": "Transformation matrix from base link to sensor."},
     )
+
+
+@dataclass
+class StereoCameraConfig(SensorConfig):
+    """Stereo camera sensor configuration."""
+
+    # TODO: define parameters
