@@ -16,6 +16,7 @@ if TYPE_CHECKING:
         ImuConfig,
         Lidar3DConfig,
         SensorConfig,
+        StereoCameraConfig,
     )
 
 
@@ -109,7 +110,7 @@ class Imu(Sensor):
 class StereoCamera(Sensor):
     """Base class for any Stereo Camera."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: StereoCameraConfig):
         """
         Args:
             config: Sensor configuration.
