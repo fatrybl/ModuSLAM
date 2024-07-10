@@ -16,28 +16,28 @@ from moduslam.system_configs.main_manager import MainManagerConfig
 np.set_printoptions(precision=4, suppress=True)
 
 
-@hydra.main(version_base=None, config_name="1_lidar_imu", config_path="../configs")
+@hydra.main(version_base=None, config_name="2_lidar", config_path="../configs")  # 1_lidar_imu
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
 
     print("Testing HYDRA configuration for ModuSLAM for the ROS2 datareader")
     setup_logger(config.logger)
     print("Logger has been set up")
+    #
+    print(
+        "-----------------------------------------------------------------------------------------------------------"
+    )
 
-    # print(
-    #     "-----------------------------------------------------------------------------------------------------------"
-    # )
-    #
-    # print("This is the data manager configuration:")
-    # data_manager_config = config.data_manager
-    #
+    print("This is the data manager configuration:")
+    data_manager_config = config.data_manager
+
     # for k1, v1 in data_manager_config.items():
     #     print(k1)
     #     for k2, v2 in v1.items():
     #         print("    ", k2)
     #         for k3, v3 in v2.items():
     #             print("        ", k3, ":", v3)
-    #
+
     # print(
     #     "-----------------------------------------------------------------------------------------------------------"
     # )
@@ -84,6 +84,7 @@ def run(config: MainManagerConfig) -> None:
     # print(
     #     "-----------------------------------------------------------------------------------------------------------"
     # )
+
     print("Starting the build_map method")
     # main_manager.build_map()
 
