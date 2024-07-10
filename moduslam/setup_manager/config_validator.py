@@ -31,7 +31,6 @@ def register_config():
     cs = ConfigStore.instance()
     cs.store(name="structured_schema_config", node=MainManagerConfig)
     cs.store(group="datasets", name="base_kaist_dataset", node=KaistConfig)
-    # TODO: Include/replace dataset configs here.
     cs.store(group="datasets", name="base_ros2_dataset", node=Ros2Config)
     cs.store(group="regimes", name="base_regime", node=RegimeConfig)
     cs.store(group="handlers", name="base_kiss_icp_odometry", node=KissIcpScanMatcherConfig)
