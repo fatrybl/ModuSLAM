@@ -2,106 +2,118 @@ import os
 import time
 from pathlib import Path
 
-from rosbags.rosbag2 import Reader, Writer
+from rosbags.rosbag2 import Reader
 from rosbags.serde import deserialize_cdr
-from tabulate import tabulate
+
+from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
+from moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
 class Rosbags2Manager:
 
-    def __init__(self, bag_path):
+    def __init__(self, bag_path, sensors_table, time_range: TimeRange = None):
         self.bag_path: Path = bag_path
-        self.topics: dict = self.get_topics()
-        self.sensors_dict: dict = self.map_sensors()
+        self.iterator = Iterator()
+        self.sensors: dict = sensors_table
+        self.sensors_list = self._map_sensors()
+        if time_range is not None:
+            self.start = time_range.start
+            self.stop = time_range.stop
 
-        print(f"Rosbag2 Manager initialized with the following topics:\n{self.sensors_dict}")
+        else:
+            self.start = -1
+            self.stop = -1
 
-    def get_topics(self):
-        topics_dict: dict = {}
+        print(f"Rosbag2 Manager initialized with the following sensors:\n{self.sensors_list}")
+
+        # table = self.rosbag_read(num_readings=20)
+
+    def _get_topics(self):
+        sensor: dict = {}
+        sensors = []
 
         with Reader(self.bag_path) as reader:
+
             for connection in reader.connections:
-                topic = connection.topic.split("/")[1]
-                msg_type = connection.msgtype.split("/")[-1]
-
-                # print(f" sensor: {topic} and message type: {msg_type}")
-                if topic not in topics_dict.keys():
-                    topics_dict[topic] = [msg_type]
-                else:
-                    topics_dict[topic].append(msg_type)
-
-        return topics_dict
-
-    def map_sensors(self):
-        print("Mapping topics to sensors")
-        # TODO: Create a YAML file with the sensors configuration
-        sensors: dict = {
-            "camera": {"left": [], "right": []},
-            "imu": {"xsens": []},
-            "lidar": {"vlp16l": [], "vlp16r": [], "vlp32c": [], "merger": []},
-        }
-        for topic, values in self.topics.items():
-            for sensor, names in sensors.items():
-                if topic in names.keys():
-                    names[topic] = values
-
+                sensor_name = connection.topic.split("/")[1]
+                data_type = connection.msgtype.split("/")[-1]
+                sensor = {
+                    "id": connection.id,
+                    "topic": connection.topic,
+                    "message_type": connection.msgtype,
+                    "sensor_name": sensor_name,
+                    "data_type": data_type,
+                }
+                sensors.append(sensor)
         return sensors
 
-    def rosbag_read(self, num_readings: int = 1) -> list:
-        n = 1
-        topics_list: list = []
-        table = [["number", "ROS Topic", "Message type", "Frame ID", "Message count", "Timestamp"]]
-        with Reader(self.bag_path) as reader:
-            print("The following topics exist in the actual rosbag file")
-            for connection in reader.connections:
-                print(f" topic: {connection.topic} and type: {connection.msgtype}")
-                topics_list.append(connection.topic)
+    def _map_sensors(self):
+        print("Mapping topics to sensors")
+        sensors_list = self._get_topics()
+        for k, v in self.sensors.items():
+            for sensor in sensors_list:
+                if sensor["sensor_name"] in v:
+                    sensor["sensor_type"] = k
 
-            for connection, timestamp, rawdata in reader.messages():
-                if n <= num_readings:
+        return sensors_list
+
+    def rosbag_read(self, num_readings: int = 1, topic_name: str = None) -> list:
+
+        n = 1
+        with Reader(self.bag_path) as reader:
+            if topic_name == None:
+                connections = [c for c in reader.connections]
+            else:
+                connections = [c for c in reader.connections if c.topic == topic_name]
+
+            for connection, timestamp, rawdata in reader.messages(connections=connections):
+                print(f"Reading messages from {self.start} to {self.stop}")
+                if n == num_readings:
                     msg = deserialize_cdr(rawdata, connection.msgtype)
                     dt_obj = int(str(timestamp)[0:10])
                     nano_seconds = int(str(timestamp)[10:])
                     # print(dt_obj, nano_seconds)
-                    row = [
-                        n,
+                    data = [
+                        connection.id,
                         connection.topic,
                         connection.msgtype,
                         msg.header.frame_id,
-                        connection.msgcount,
                         timestamp,
+                        msg,
                     ]
-                    table.append(row)
+
                     n += 1
 
                 else:
-                    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
-                    return topics_list, table
+                    return data
+            return data
 
-            return topics_list, table
+    def next_sensor_read(self):
+        n = 1
 
-    def rosbag_write(self, new_path: Path = "", msg_limit: int = 1):
         with Reader(self.bag_path) as reader:
-            with Writer(new_path) as writer:
-                n = 1
-                connections = []
-
-                for connection in reader.connections:
-                    connections.append(writer.add_connection(connection.topic, connection.msgtype))
-
-                for connection, timestamp, rawdata in reader.messages():
-                    if n <= msg_limit:
-                        for c in connections:
-                            if connection.topic == c.topic:
-                                writer.write(c, timestamp, rawdata)
+            for connection, timestamp, rawdata in reader.messages():
+                if n == self.iterator.get_iter():
+                    if timestamp < self.start:
+                        print(f"timestamp {timestamp} is not yet in {self.start}")
                         n += 1
-                    else:
-                        print("Sucessfully written {} messages in the new rosbag2".format(n - 1))
+                        self.iterator.next()
+                        continue
+                    elif timestamp > self.stop:
+                        print(f"reached the stop timestamp {self.stop}")
+                        return None
 
-                        break
-
-    def sensor_manager(self, bag_path: Path, num_readings: int = -1):
-        pass
+                    msg = deserialize_cdr(rawdata, connection.msgtype)
+                    dt_obj = int(str(timestamp)[0:10])
+                    nano_seconds = int(str(timestamp)[10:])
+                    # print(dt_obj, nano_seconds)
+                    data = (n, connection.id, connection.topic, connection.msgtype, timestamp)
+                    data = (connection.id, n, msg, timestamp)
+                    self.iterator.next()
+                    return data
+                else:
+                    n += 1
+            return None
 
 
 if __name__ == "__main__":
@@ -111,9 +123,9 @@ if __name__ == "__main__":
     bag_path = Path("{}/rosbag2_2023_11_02-12_18_16".format(folder_path))
     new_bag_path = Path("{0}/rosbag2_2024_{1:2d}".format(folder_path, now_time))
 
-    rb_manager = RosbagsManager(bag_path)
+    rb_manager = Rosbags2Manager(bag_path)
 
     # rb_manager.rosbag_write(new_bag_path, msg_limit=100)
 
-    rb_manager2 = RosbagsManager(new_bag_path)
+    rb_manager2 = Rosbags2Manager(new_bag_path)
     messages: list = rb_manager2.rosbag_read(num_readings=10)
