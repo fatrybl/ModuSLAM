@@ -61,8 +61,7 @@ def create_edge(
     noise = gtsam.noiseModel.Gaussian.Covariance(integrated_noise)
 
     edge = ImuOdometry(
-        vertex_set_1={pose_i, velocity_i, bias_i},
-        vertex_set_2={pose_j, velocity_j, bias_j},
+        vertices={pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j},
         measurements=measurements,
         factor=factor,
         noise_model=noise,

@@ -10,19 +10,20 @@ from moduslam.frontend_manager.graph.custom_edges import VisualOdometry
 from moduslam.frontend_manager.graph.custom_vertices import CameraPose
 from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
-from moduslam.frontend_manager.handlers.visual_odometry.camera_features import (
-    pointcloud_from_image,
-)
 from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.map_factories.camera_pointcloud_map.utils import (
+from moduslam.map_manager.map_factories.camera_pointcloud.depth_estimator import (
+    DepthEstimator,
+)
+from moduslam.map_manager.map_factories.camera_pointcloud.utils import (
     create_vertex_elements_table,
+    pointcloud_from_image,
 )
 from moduslam.map_manager.map_factories.utils import (
     convert_pointcloud,
     get_elements,
     transform_pointcloud,
 )
-from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
+from moduslam.map_manager.maps.pointcloud import PointcloudMap
 from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
 from moduslam.system_configs.map_manager.map_factories.lidar_map_factory import (
     LidarMapFactoryConfig,
@@ -41,6 +42,7 @@ class CameraPointcloudMapFactory:
             config: configuration of the factory.
         """
         self._map = PointcloudMap()
+        self._depth_estimator = DepthEstimator()
         self._num_channels: int = config.num_channels
         self._min_range: float = config.min_range
         self._max_range: float = config.max_range
@@ -70,9 +72,8 @@ class CameraPointcloudMapFactory:
         points_map = points_map.T
         self._map.set_points(points_map)
 
-    @staticmethod
     def _create_pointcloud(
-        pose: Matrix4x4, tf: Matrix4x4, values: tuple[Image, Image], camera_matrix: Matrix3x3
+        self, pose: Matrix4x4, tf: Matrix4x4, values: tuple[Image, Image], camera_matrix: Matrix3x3
     ) -> Matrix4xN:
         """Creates a pointcloud from the given image(s) and transforms it according to
         the camera pose and base -> camera transformation.
@@ -88,7 +89,8 @@ class CameraPointcloudMapFactory:
             Pointcloud array [4, N].
         """
         left_image, _ = values
-        pointcloud = pointcloud_from_image(left_image, camera_matrix)
+        depth_image = self._depth_estimator.estimate_depth(left_image)
+        pointcloud = pointcloud_from_image(depth_image, camera_matrix)
         pointcloud = convert_pointcloud(pointcloud)
         result = transform_pointcloud(pose, tf, pointcloud)
         return result

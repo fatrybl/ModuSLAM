@@ -1,12 +1,13 @@
+from collections import defaultdict
 from collections.abc import Sequence
 
 import cv2
 import numpy as np
-from PIL.Image import Image
 
-from moduslam.frontend_manager.handlers.visual_odometry.depth_estimator import (
-    DepthEstimator,
-)
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.frontend_manager.graph.custom_edges import VisualOdometry
+from moduslam.frontend_manager.graph.custom_vertices import CameraPose
+from moduslam.utils.deque_set import DequeSet
 from moduslam.utils.numpy_types import (
     Matrix3x3,
     Matrix4x4,
@@ -17,35 +18,39 @@ from moduslam.utils.numpy_types import (
 )
 
 
-def get_orb_features(image: MatrixMxN) -> tuple[Sequence[cv2.KeyPoint], np.ndarray]:
-    """Gets ORB features and modified BRIEF descriptors from an image.
+def create_vertex_elements_table(
+    vertices: DequeSet[CameraPose], edges: set[VisualOdometry]
+) -> dict[CameraPose, set[Element]]:
+    """Creates "CameraPose -> elements" table.
 
     Args:
-        image: image to extract features from.
+        vertices: vertices to get elements for.
+
+        edges: edges to check.
 
     Returns:
-        keypoints: keypoints found in the image.
-        descriptors: descriptors for the keypoints.
+        "vertex -> elements" table.
     """
-    orb = cv2.ORB.create()
-    mask = np.ones(image.shape[:2], dtype=np.uint8) * 255
-    keypoints, descriptors = orb.detectAndCompute(image, mask=mask)
-    return keypoints, descriptors
 
+    table: dict[CameraPose, set[Element]] = defaultdict(set)
 
-def match_keypoints(descriptors1: MatrixMxN, descriptors2: MatrixMxN) -> Sequence[cv2.DMatch]:
-    """Matches keypoints between two sets of descriptors.
+    num_poses = len(vertices)
 
-    Args:
-        descriptors1: first set of descriptors.
-        descriptors2: second set of descriptors.
-
-    Returns:
-        matches: matches between the two sets of descriptors.
-    """
-    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    matches = bf.match(descriptors1, descriptors2)
-    return matches
+    for i, vertex in enumerate(vertices):
+        if i == num_poses - 1:
+            for e in vertex.edges:
+                if isinstance(e, VisualOdometry):
+                    m = e.measurements[0]
+                    element = m.elements[1]
+                    table[vertex].add(element)
+        else:
+            for e in vertex.edges:
+                if e in edges and isinstance(e, VisualOdometry):
+                    m = e.measurements[0]
+                    element = m.elements[0]
+                    table[vertex].add(element)
+                    edges.remove(e)
+    return table
 
 
 def get_points_and_pixels(
@@ -60,10 +65,15 @@ def get_points_and_pixels(
 
     Args:
         depth_1: depth map of the first image.
+
         depth_2: depth map of the second image.
+
         keypoints1: keypoints from the first image.
+
         keypoints2: keypoints from the second image.
+
         matches: matches between the keypoints.
+
         camera_matrix: camera matrix.
 
     Returns:
@@ -101,8 +111,11 @@ def compute_transformation(
 
     Args:
         points: 3D points.
+
         pixels: corresponding pixels.
+
         camera_matrix: camera matrix.
+
         dist_coefficients: distortion coefficients.
 
     Returns:
@@ -118,27 +131,24 @@ def compute_transformation(
     return tf
 
 
-def pointcloud_from_image(image: Image, camera_matrix: Matrix3x3) -> MatrixNx3:
+def pointcloud_from_image(depth, camera_matrix: Matrix3x3) -> MatrixNx3:
     """Creates a pointcloud from the given image.
 
     Args:
-        image: image.
+        depth: depth map.
 
         camera_matrix: camera matrix.
 
     Returns:
         Pointcloud array [N, 3].
     """
-    depth_estimator = DepthEstimator()
-    depth_map = depth_estimator.estimate_depth(image)
-
-    d_height, d_width = depth_map.shape
+    d_height, d_width = depth.shape
     height, width = d_height, d_width
     pointcloud = np.zeros((height * width, 3))
 
     for v in range(height):
         for u in range(width):
-            d = depth_map[v, u]
+            d = depth[v, u]
             x, y, z = pixel_to_xyz(pixel=(u, v), depth=d, camera_matrix=camera_matrix)
             pointcloud[v * width + u] = [x, y, z]
 

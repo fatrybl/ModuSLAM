@@ -19,7 +19,9 @@ class Edge(ABC, Generic[GraphVertex]):
         """
         Args:
             measurements: measurements which formed the edge.
+
             factor: GTSAM factor.
+
             noise_model: GTSAM noise model of the factor.
         """
         self.measurements = measurements
@@ -60,52 +62,6 @@ class Edge(ABC, Generic[GraphVertex]):
         """Vertices of the edge."""
 
 
-class MultiEdge(Edge):
-    """Base class for all multi-edges in the Graph. Multi-edge connects two sets of
-    vertices.
-
-    Args:
-        vertex_set_1: first set of vertices.
-
-        vertex_set_2: second set of vertices.
-
-        measurements: measurements which formed the edge.
-
-        factor: GTSAM factor.
-
-        noise_model: GTSAM noise model of the factor.
-    """
-
-    def __init__(
-        self,
-        vertex_set_1: set[GraphVertex],
-        vertex_set_2: set[GraphVertex],
-        measurements: tuple[Measurement, ...],
-        factor: gtsam.Factor,
-        noise_model: gtsam.noiseModel.Base,
-    ) -> None:
-        """
-        Args:
-            vertex_set_1: first set of vertices.
-
-            vertex_set_2: second set of vertices.
-
-            measurements: measurements which formed the edge.
-
-            factor: GTSAM factor.
-
-            noise_model: GTSAM noise model of the factor.
-        """
-        super().__init__(measurements, factor, noise_model)
-        self.vertex_set_1 = vertex_set_1
-        self.vertex_set_2 = vertex_set_2
-
-    @property
-    def all_vertices(self) -> set[GraphVertex]:
-        """Vertices of the edge."""
-        return self.vertex_set_1.union(self.vertex_set_2)
-
-
 class UnaryEdge(Edge):
     """Edge to connect one vertex of the Graph (aka unary factor)."""
 
@@ -142,19 +98,23 @@ class BinaryEdge(Edge):
         self,
         vertex1: GraphVertex,
         vertex2: GraphVertex,
-        measurements: tuple[Measurement, ...],
+        measurement: tuple[Measurement, ...],
         factor: gtsam.Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
         """
         Args:
             vertex1: first vertex.
+
             vertex2: second vertex.
-            measurements: measurements which formed the edge.
+
+            measurement: measurement which formed the edge.
+
             factor: GTSAM factor.
+
             noise_model: GTSAM noise model of the factor.
         """
-        super().__init__(measurements, factor, noise_model)
+        super().__init__(measurement, factor, noise_model)
         self.vertex1 = vertex1
         self.vertex2 = vertex2
 
@@ -164,8 +124,8 @@ class BinaryEdge(Edge):
         return {self.vertex1, self.vertex2}
 
 
-class CalibrationEdge(Edge):
-    """Edge connects calibration vertex with other vertices."""
+class RadialEdge(Edge):
+    """Edge connects a vertex with multiple vertices."""
 
     def __init__(
         self,
@@ -178,9 +138,13 @@ class CalibrationEdge(Edge):
         """
         Args:
             measurements: measurements which formed the edge.
-            vertex: calibration vertex.
+
+            vertex: base vertex.
+
             vertices: other vertices.
+
             factor: GTSAM factor.
+
             noise_model: GTSAM noise model of the factor.
         """
         super().__init__(measurements, factor, noise_model)
@@ -191,6 +155,35 @@ class CalibrationEdge(Edge):
     def all_vertices(self) -> set[GraphVertex]:
         """Vertices of the edge."""
         return {self.vertex}.union(self.vertices)
+
+
+class MultiEdge(Edge):
+    """Base edge for connecting multiple vertices."""
+
+    def __init__(
+        self,
+        vertices: set[GraphVertex],
+        measurements: tuple[Measurement, ...],
+        factor: gtsam.Factor,
+        noise_model: gtsam.noiseModel.Base,
+    ) -> None:
+        """
+        Args:
+            vertices: vertices which are connected by the edge.
+
+            measurements: measurements which formed the edge.
+
+            factor: GTSAM factor.
+
+            noise_model: GTSAM noise model of the factor.
+        """
+        super().__init__(measurements, factor, noise_model)
+        self._vertices = vertices
+
+    @property
+    def all_vertices(self) -> set[GraphVertex]:
+        """Vertices of the edge."""
+        return self._vertices
 
 
 GraphEdge = TypeVar("GraphEdge", bound=Edge)

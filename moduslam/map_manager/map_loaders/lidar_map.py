@@ -4,7 +4,7 @@ from pathlib import Path
 import open3d as o3d
 
 from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
+from moduslam.map_manager.maps.pointcloud import PointcloudMap
 from moduslam.system_configs.map_manager.map_manager import LidarMapLoaderConfig
 from moduslam.utils.exceptions import ExternalModuleException
 

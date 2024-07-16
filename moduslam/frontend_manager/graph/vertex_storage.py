@@ -11,8 +11,8 @@ from moduslam.frontend_manager.graph.base_vertices import (
     Vertex,
 )
 from moduslam.frontend_manager.graph.custom_vertices import (
-    CameraFeature,
     CameraPose,
+    Feature3D,
     ImuBias,
     LidarPose,
     LinearVelocity,
@@ -45,7 +45,7 @@ class VertexStorage(Generic[GraphVertex]):
             NavState: DequeSet[NavState](),
             ImuBias: DequeSet[ImuBias](),
             LidarPose: DequeSet[LidarPose](),
-            CameraFeature: DequeSet[CameraFeature](),
+            Feature3D: DequeSet[Feature3D](),
             CameraPose: DequeSet[CameraPose](),
         }
 
@@ -140,14 +140,14 @@ class VertexStorage(Generic[GraphVertex]):
         """Updates optimizable vertices with new values.
 
         Args:
-            values: new values to update the vertices.
+            values: new values for the vertices.
         """
 
-        [vertex.update(values) for vertex in self._optimizable_vertices]
+        for vertex in self._optimizable_vertices:
+            vertex.update(values)
 
     def update_non_optimizable_vertices(self) -> None:
         """Updates non-optimizable vertices."""
-        # [vertex.update() for vertex in self._not_optimizable_vertices]
         raise NotImplementedError
 
     def get_last_vertex(self, vertex_type: type[GraphVertex]) -> GraphVertex | None:

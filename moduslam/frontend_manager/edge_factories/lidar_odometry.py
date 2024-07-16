@@ -31,24 +31,6 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         super().__init__(config)
         self._time_margin: int = sec2nanosec(config.search_time_margin)
 
-    @property
-    def vertices_types(self) -> set[type[LidarPose]]:
-        """Types of the used vertices.
-
-        Returns:
-            set with 1 type (LidarPose).
-        """
-        return {LidarPose}
-
-    @property
-    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set with 1 type (gtsam.Pose3).
-        """
-        return {gtsam.Pose3}
-
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[LidarOdometry]:
@@ -80,7 +62,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         vertex1_id: int,
         vertex2_id: int,
         measurement: Measurement,
-        noise_model: gtsam.noiseModel.Diagonal.Sigmas,
+        noise_model: gtsam.noiseModel.Diagonal.Variances,
     ) -> gtsam.BetweenFactorPose3:
         """Creates the GTSAM factor for the factor graph.
 
@@ -135,7 +117,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             vertex1=vertex1,
             vertex2=vertex2,
             factor=factor,
-            measurements=(measurement,),
+            measurement=(measurement,),
             noise_model=noise,
         )
         return edge

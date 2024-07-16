@@ -2,6 +2,7 @@ import functools
 import time
 
 import gtsam
+import numpy as np
 from gtsam.symbol_shorthand import X
 
 
@@ -29,15 +30,16 @@ graph.push_back(
     gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
 )
 
+k = gtsam.gtsam.Cal3_S2()
+smart_f = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+smart_f.add(np.array([1, 1]), X(0))
+graph.push_back(smart_f)
+smart_f.add(np.array([1, 1]), X(1))
+graph.push_back(smart_f)
+
 init_values = gtsam.Values()
 init_values.insert_pose3(X(0), gtsam.gtsam.Pose3())
 init_values.insert_pose3(X(1), gtsam.gtsam.Pose3())
-
-# k = gtsam.gtsam.Cal3_S2()
-# smart_f = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
-# smart_f.add(np.array([1, 1]), X(0))
-# smart_f.add(np.array([1, 1]), X(1))
-# graph.push_back(smart_f)
 
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
@@ -47,11 +49,6 @@ isam.update(graph, init_values)
 result_isam = isam.calculateEstimate()
 
 result = optimizer.optimizeSafely()
-
-# print(graph)
-# print(graph.keys())
-# print(graph.size())
-# print(graph.nrFactors())
 
 
 # pcd.colors = o3d.utility.Vector3dVector(

@@ -11,8 +11,8 @@ from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.st
 from moduslam.utils.ordered_set import OrderedSet
 
 
-class VisualOdometryAnalyzer(StateAnalyzer):
-    """Analyzer for visual odometry measurements` handler.
+class VisualFeaturesAnalyzer(StateAnalyzer):
+    """Analyzer for the measurements from key-points detector handler.
 
     Adds new state if the storage contains a measurement with visual pointcloud
     odometry.

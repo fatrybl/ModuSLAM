@@ -23,7 +23,7 @@ class TestEdgeStorage:
     edge1 = BinaryEdge(
         vertex1,
         vertex2,
-        measurements=(),
+        measurement=(),
         noise_model=Diagonal.Sigmas([1, 1]),
         factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
     )
@@ -43,8 +43,7 @@ class TestEdgeStorage:
     )
 
     edge4 = MultiEdge(
-        vertex_set_1={vertex1, vertex2},
-        vertex_set_2={vertex3},
+        vertices={vertex1, vertex2, vertex3},
         measurements=(),
         noise_model=Diagonal.Sigmas([1, 1]),
         factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),

@@ -7,7 +7,7 @@ import gtsam
 import numpy as np
 import pytest
 
-from moduslam.frontend_manager.graph.custom_vertices import CameraFeature, Pose
+from moduslam.frontend_manager.graph.custom_vertices import Feature3D, Pose
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 
 
@@ -23,13 +23,13 @@ def optimizable_vertex():
 
 @pytest.fixture
 def non_optimizable_vertex():
-    return CameraFeature()
+    return Feature3D()
 
 
 def test_add(
     vertex_storage: VertexStorage,
     optimizable_vertex: Pose,
-    non_optimizable_vertex: CameraFeature,
+    non_optimizable_vertex: Feature3D,
 ):
     vertex_storage.add(optimizable_vertex)
     assert optimizable_vertex in vertex_storage.vertices
@@ -121,12 +121,12 @@ def test_update_optimizable_vertex(vertex_storage, optimizable_vertex: Pose):
 
 
 @pytest.mark.skip(reason="Not implemented")
-def test_update_non_optimizable_vertex(vertex_storage, non_optimizable_vertex: CameraFeature):
+def test_update_non_optimizable_vertex(vertex_storage, non_optimizable_vertex: Feature3D):
     vertex_storage.add(non_optimizable_vertex)
 
-    new_values: dict[CameraFeature, np.ndarray] = {non_optimizable_vertex: np.array([10, 10, 10])}
+    new_values: dict[Feature3D, np.ndarray] = {non_optimizable_vertex: np.array([10, 10, 10])}
 
     vertex_storage.update_non_optimizable_vertices()
-    vertex = vertex_storage.get_last_vertex(CameraFeature)
+    vertex = vertex_storage.get_last_vertex(Feature3D)
 
     assert np.array_equal(vertex.position, new_values[non_optimizable_vertex]) is True

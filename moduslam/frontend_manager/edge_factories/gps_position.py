@@ -30,24 +30,6 @@ class GpsPositionEdgeFactory(EdgeFactory):
         super().__init__(config)
         self._time_margin = int(config.search_time_margin * self._second)
 
-    @property
-    def vertices_types(self) -> set[type[Pose]]:
-        """Types of the used vertices.
-
-        Returns:
-            set with 1 type (Pose).
-        """
-        return {Pose}
-
-    @property
-    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set with 1 type (gtsam.Pose3).
-        """
-        return {gtsam.Pose3}
-
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[GpsPosition]:

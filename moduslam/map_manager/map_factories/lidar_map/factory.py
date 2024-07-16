@@ -19,7 +19,7 @@ from moduslam.map_manager.map_factories.utils import (
     get_elements,
     transform_pointcloud,
 )
-from moduslam.map_manager.maps.pointcloud_map import PointcloudMap
+from moduslam.map_manager.maps.pointcloud import PointcloudMap
 from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
 from moduslam.system_configs.map_manager.map_factories.lidar_map_factory import (
     LidarMapFactoryConfig,

@@ -8,6 +8,6 @@ batch_factory:
   regime:
     name: "TimeLimit"
     start: 3.618556327999999747e+06
-    stop: 4.618943154000000097e+06
+    stop: 3.668542882999999914e+06
 
   batch_memory_percent: 100.0

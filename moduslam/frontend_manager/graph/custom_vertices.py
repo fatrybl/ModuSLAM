@@ -239,7 +239,7 @@ class PoseLandmark(Pose):
         return L(self.index)
 
 
-class Feature(NotOptimizableVertex):
+class Feature3D(NotOptimizableVertex):
     """Non-optimizable point in 3D."""
 
     def __init__(self, index: int = 0, timestamp: int = 0, value: Vector3 = zero_vector):
@@ -257,7 +257,3 @@ class Feature(NotOptimizableVertex):
             value: New value of the feature.
         """
         self._value = value
-
-
-class CameraFeature(Feature):
-    """Feature in the Camera Frame."""

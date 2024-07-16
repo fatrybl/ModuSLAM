@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Generic
 
 from moduslam.frontend_manager.graph.base_edges import GraphEdge
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex, GtsamInstance
+from moduslam.frontend_manager.graph.base_vertices import GraphVertex
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
@@ -25,24 +25,6 @@ class EdgeFactory(ABC, Generic[GraphEdge, GraphVertex]):
     def name(self) -> str:
         """Unique name of the factory."""
         return self._name
-
-    @property
-    @abstractmethod
-    def vertices_types(self) -> set[type[GraphVertex]]:
-        """Types of the used vertices.
-
-        Returns:
-            set of vertices types.
-        """
-
-    @property
-    @abstractmethod
-    def base_vertices_types(self) -> set[type[GtsamInstance]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set of base vertices types.
-        """
 
     @abstractmethod
     def create(

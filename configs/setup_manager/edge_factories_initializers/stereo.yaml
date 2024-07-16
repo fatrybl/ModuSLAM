@@ -7,8 +7,8 @@ edge_factories:
     type_name: 'PriorPoseEdgeFactory'
     module_name: '.prior_pose'
 
-  visual_odometry_edge_factory:
-    name: 'visual_odometry_edge_factory'
-    module_name: '.visual_odometry'
-    type_name: 'VisualOdometryEdgeFactory'
+  smart_visual_features_edge_factory:
+    name: 'smart_visual_features_edge_factory'
+    module_name: '.smart_visual_features.factory'
+    type_name: 'SmartVisualFeaturesFactory'
     search_time_margin: 0.02

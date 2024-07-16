@@ -54,7 +54,6 @@ class GraphMerger(Generic[GraphVertex, GraphEdge]):
         state_time = state.timestamp
 
         for handler, measurements in storage:
-
             edge_factory = self._table[handler]
             edges = edge_factory.create(graph, measurements, state_time)
             graph.add_edges(edges)

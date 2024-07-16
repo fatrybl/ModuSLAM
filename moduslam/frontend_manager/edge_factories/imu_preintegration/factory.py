@@ -30,7 +30,6 @@ from moduslam.setup_manager.sensors_factory.sensors import Imu
 from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
-from moduslam.utils.numpy_types import Vector3
 from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
@@ -54,18 +53,6 @@ class ImuOdometryFactory(EdgeFactory):
         super().__init__(config)
         self._time_margin = int(config.search_time_margin * self._second)
         self._params = gtsam.PreintegrationCombinedParams.MakeSharedU(self._gravity)
-
-    @property
-    def vertices_types(self) -> set[type[Pose | LinearVelocity | ImuBias]]:
-        """Types of the used vertices."""
-        return {Pose, LinearVelocity, ImuBias}
-
-    @property
-    def base_vertices_types(
-        self,
-    ) -> set[type[gtsam.Pose3 | Vector3 | gtsam.imuBias.ConstantBias]]:
-        """Types of the used base (GTSAM) instances."""
-        return {gtsam.Pose3, Vector3, gtsam.imuBias.ConstantBias}
 
     def create(
         self,

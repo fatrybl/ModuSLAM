@@ -1,14 +1,13 @@
 defaults:
-  - /handlers/base_visual_odometry@handlers.visual_odometry
+  - /handlers/base_visual_odometry@handlers.smart_visual_features
 
 package_name: 'moduslam.frontend_manager.handlers'
 
 handlers:
   visual_odometry:
-    name: "visual_odometry"
+    name: "smart_visual_features"
     type_name: "VisualOdometry"
-    module_name: ".visual_odometry.odometry_generator"
-    skip_n_frames: 0
+    module_name: ".smart_visual_features.odometry_generator"
 
   imu_preprocessor:
     name: "imu_preprocessor"

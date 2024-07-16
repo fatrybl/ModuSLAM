@@ -10,7 +10,7 @@ edge_factories:
   visual_odometry_edge_factory:
     name: 'visual_odometry_edge_factory'
     type_name: 'VisualOdometryEdgeFactory'
-    module_name: '.visual_odometry'
+    module_name: '.smart_visual_features'
     search_time_margin: 0.02
 
   imu_odometry_edge_factory:

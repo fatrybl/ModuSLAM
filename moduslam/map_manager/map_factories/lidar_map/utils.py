@@ -2,7 +2,6 @@ import logging
 from collections import defaultdict
 
 import numpy as np
-import open3d as o3d
 
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
@@ -11,22 +10,6 @@ from moduslam.logger.logging_config import map_manager
 from moduslam.utils.deque_set import DequeSet
 
 logger = logging.getLogger(map_manager)
-
-
-class PointcloudVisualizer:
-    """Visualizer for the lidar pointcloud."""
-
-    @staticmethod
-    def visualize(pointcloud: o3d.geometry.PointCloud) -> None:
-        """Visualizes the pointcloud.
-
-        Args:
-            pointcloud: pointcloud array [N, 3].
-        """
-        vis = o3d.visualization.Visualizer()
-        vis.create_window()
-        vis.add_geometry(pointcloud)
-        vis.run()
 
 
 def create_vertex_elements_table(

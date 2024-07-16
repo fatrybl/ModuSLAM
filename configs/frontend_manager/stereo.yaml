@@ -5,17 +5,17 @@ graph_builder:
   element_distributor:
 
     sensor_handlers_table:
-      stereo: [ 'visual_odometry' ]
+      stereo: [ 'keypoint_detector' ]
 
   candidate_factory:
 
     handler_state_analyzer_table:
-      visual_odometry: 'visual_odometry_state_analyzer'
+      keypoint_detector: 'visual_features_state_analyzer'
 
   graph_merger:
 
     handler_edge_factory_table:
-      visual_odometry: 'visual_odometry_edge_factory'
+      keypoint_detector: 'smart_visual_features_edge_factory'
 
 graph_initializer:
 

@@ -17,7 +17,7 @@ from plum import dispatch
 from moduslam.data_manager.batch_factory.batch import DataBatch, Element, RawMeasurement
 from moduslam.logger.logging_config import utils
 from moduslam.utils.exceptions import DimensionalityError
-from moduslam.utils.numpy_types import Vector3, VectorN
+from moduslam.utils.numpy_types import MatrixMxN, Vector3, VectorN
 
 logger = logging.getLogger(utils)
 
@@ -350,3 +350,19 @@ def sort_files_numerically(files: list[Path]) -> list[Path]:
         return to_int(match.group()) if match else 0
 
     return sorted(files, key=extract_number)
+
+
+def matrix_to_vector_list(matrix: MatrixMxN) -> list[VectorN]:
+    """Convert a NumPy array of shape (N, M) to a list of N arrays of shape (1, M).
+
+    Args:
+        matrix: The input NumPy array of shape (N, M).
+
+    Returns:
+        a list of N arrays, each of shape (1, M).
+
+    TODO: add tests
+    """
+    num_rows, _ = matrix.shape
+    list_of_arrays = [matrix[i : i + 1, :] for i in range(num_rows)]
+    return list_of_arrays

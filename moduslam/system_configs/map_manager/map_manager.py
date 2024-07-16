@@ -31,4 +31,4 @@ class MapManagerConfig:
     """Base configuration for map manager."""
 
     map_factory: LidarMapFactoryConfig = field(default_factory=LidarMapFactoryConfig)
-    map_loader: LidarMapLoaderConfig = field(default_factory=LidarMapLoaderConfig)
+    map_loader: MapLoaderConfig = field(default_factory=LidarMapLoaderConfig)

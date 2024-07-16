@@ -53,6 +53,7 @@ class MainManager:
         while not data_batch.empty:
             self.frontend_manager.create_graph(data_batch)
             self.backend_manager.solve(graph)
+            self.frontend_manager.graph.factor_graph.print()
 
         logger.info("The data batch has been successfully processed.")
 
