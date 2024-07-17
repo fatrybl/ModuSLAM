@@ -5,13 +5,16 @@ import open3d as o3d
 
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.maps.pointcloud import PointcloudMap
-from moduslam.system_configs.map_manager.map_manager import LidarMapLoaderConfig
+from moduslam.map_manager.protocols import MapLoader
+from moduslam.system_configs.map_manager.map_loaders.lidar_map import (
+    LidarMapLoaderConfig,
+)
 from moduslam.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(map_manager)
 
 
-class MapLoader:
+class LidarMapLoader(MapLoader):
     """Lidar pointcloud map loader."""
 
     def __init__(self, config: LidarMapLoaderConfig) -> None:

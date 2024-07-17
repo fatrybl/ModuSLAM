@@ -1,5 +1,6 @@
 defaults:
-  - /map_manager/base_map_manager@_here_
+  - /map_factories/base_lidar_map_factory@map_factory
+  - /map_loaders/base_lidar_map_loader@map_loader
 
 map_factory:
   min_range: 3

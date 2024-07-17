@@ -1,8 +1,10 @@
 import open3d as o3d
 
+from moduslam.map_manager.protocols import MapVisualizer
 
-class PointcloudVisualizer:
-    """Visualizer for the lidar pointcloud."""
+
+class PointcloudVisualizer(MapVisualizer):
+    """Visualizer for a 3D pointcloud."""
 
     @staticmethod
     def visualize(pointcloud: o3d.geometry.PointCloud) -> None:

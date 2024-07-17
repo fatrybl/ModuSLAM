@@ -21,7 +21,7 @@ class TimeLimit:
     name: str = "TimeLimit"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Stream:
     """Data flow regime w/o limitations."""
 

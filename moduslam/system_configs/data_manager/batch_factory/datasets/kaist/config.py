@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
@@ -11,11 +12,11 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.paths imp
 
 @dataclass
 class KaistConfig(DatasetConfig):
-    """Kaist Urban Dataset parameters."""
+    """Base Kaist Urban Dataset configuration."""
 
-    directory: Path = Path("")
+    directory: Path = Path()
 
-    reader: str = "KaistReader"
+    reader: str = DataReaders.kaist_reader
 
     name: str = "Kaist Urban Dataset"
 

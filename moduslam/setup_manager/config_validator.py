@@ -20,7 +20,12 @@ from moduslam.system_configs.frontend_manager.handlers.vrs_gps import (
     VrsGpsHandlerConfig,
 )
 from moduslam.system_configs.main_manager import MainManagerConfig
-from moduslam.system_configs.map_manager.map_manager import MapManagerConfig
+from moduslam.system_configs.map_manager.map_factories.lidar_map import (
+    LidarMapFactoryConfig,
+)
+from moduslam.system_configs.map_manager.map_loaders.lidar_map import (
+    LidarMapLoaderConfig,
+)
 from moduslam.system_configs.setup_manager.sensors import (
     ImuConfig,
     Lidar3DConfig,
@@ -46,6 +51,7 @@ def register_config():
     cs.store(group="sensors", name="base_lidar3D", node=Lidar3DConfig)
     cs.store(group="sensors", name="base_imu", node=ImuConfig)
     cs.store(group="sensors", name="base_stereo_camera", node=StereoCameraConfig)
-    cs.store(group="map_manager", name="base_map_manager", node=MapManagerConfig)
+    cs.store(group="map_factories", name="base_lidar_map_factory", node=LidarMapFactoryConfig)
+    cs.store(group="map_loaders", name="base_lidar_map_loader", node=LidarMapLoaderConfig)
 
     logger.debug("Structured config schema has been successfully registered.")

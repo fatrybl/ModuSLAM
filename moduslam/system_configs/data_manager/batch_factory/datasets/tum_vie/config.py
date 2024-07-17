@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
@@ -15,7 +16,7 @@ class TumVieConfig(DatasetConfig):
 
     directory: Path = Path("")
 
-    reader: str = "TumVieReader"
+    reader: str = DataReaders.tum_vie_reader
 
     name: str = "TUM Visual-Inertial Event Dataset"
 

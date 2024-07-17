@@ -25,7 +25,7 @@ from moduslam.map_manager.map_factories.utils import (
 )
 from moduslam.map_manager.maps.pointcloud import PointcloudMap
 from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
-from moduslam.system_configs.map_manager.map_factories.lidar_map_factory import (
+from moduslam.system_configs.map_manager.map_factories.lidar_map import (
     LidarMapFactoryConfig,
 )
 from moduslam.utils.numpy_types import Matrix3x3, Matrix4x4, Matrix4xN, MatrixNx3

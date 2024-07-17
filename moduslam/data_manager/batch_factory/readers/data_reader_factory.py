@@ -5,6 +5,7 @@ from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataRead
 from moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
 from moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from moduslam.logger.logging_config import data_manager
+from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
@@ -42,13 +43,11 @@ class DataReaderFactory:
         """
         regime: Stream | TimeLimit
         match regime_config.name:
-            case "Stream":
+            case Stream.name:
                 regime = Stream()
-                pass
 
-            case "TimeLimit":
+            case TimeLimit.name:
                 regime = TimeLimit(regime_config.start, regime_config.stop)
-                pass
 
             case _:
                 msg = f"Invalid regime name {regime_config.name!r}."
@@ -56,11 +55,11 @@ class DataReaderFactory:
                 raise ValueError(msg)
 
         match dataset_config.reader:
-            case KaistReader.__name__:
+            case DataReaders.kaist_reader:
                 dataset_config = cast(KaistConfig, dataset_config)
                 return KaistReader(regime, dataset_config)
 
-            case TumVieReader.__name__:
+            case DataReaders.tum_vie_reader:
                 dataset_config = cast(TumVieConfig, dataset_config)
                 return TumVieReader(regime, dataset_config)
 

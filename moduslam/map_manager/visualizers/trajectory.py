@@ -1,9 +1,10 @@
 import open3d as o3d
 
 from moduslam.map_manager.maps.trajectory import TrajectoryMap
+from moduslam.map_manager.protocols import MapVisualizer
 
 
-class TrajectoryVisualizer:
+class TrajectoryVisualizer(MapVisualizer):
 
     @staticmethod
     def visualize(trajectory: TrajectoryMap) -> None:
