@@ -16,7 +16,7 @@ from moduslam.system_configs.main_manager import MainManagerConfig
 np.set_printoptions(precision=4, suppress=True)
 
 
-@hydra.main(version_base=None, config_name="2_lidar", config_path="../configs")  # 1_lidar_imu
+@hydra.main(version_base=None, config_name="2_lidar_imu", config_path="../configs")  # 1_lidar_imu
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
 
