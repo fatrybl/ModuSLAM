@@ -3,18 +3,17 @@ from pathlib import Path
 
 from moduslam.data_manager.factory.data_reader_ABC import DataReader
 from moduslam.data_manager.factory.element import Element, RawMeasurement
-
-# TODO: Create Rosbags manager to manage Topics, Sensors, Iteration, etc...
 from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager
 
 # from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
     Ros2Config,
-)  # TODO: Change the configuration file to ROS2Config
+)
 from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
 from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
 from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.exceptions import ItemNotFoundError
 
 
 class Ros2DataReader(DataReader):
@@ -23,7 +22,10 @@ class Ros2DataReader(DataReader):
     def __init__(self, regime: TimeLimit | Stream, dataset_params: Ros2Config):
         self._dataset_directory: Path = dataset_params.directory
         self._regime = regime
+
         self.sensors_table = dataset_params.sensors_table
+        print("Initial sensors table:")
+        print(self.sensors_table)
 
         if isinstance(self._regime, TimeLimit):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
@@ -34,10 +36,10 @@ class Ros2DataReader(DataReader):
         else:
             self.rosbags_manager = Rosbags2Manager(self._dataset_directory, self.sensors_table)
 
-        # for i in range(10):
-        #     element = self.get_element()
-        #     if element is not None:
-        #         print(f"Got element: {element}")
+        for i in range(1):
+            element = self.get_element()
+            if element is not None:
+                print(f"Got element: {element}")
 
     def get_element(self) -> Element | None:
         """
@@ -53,14 +55,15 @@ class Ros2DataReader(DataReader):
         print(f"Got sensor: {sensor_id}")
         for sensor in self.rosbags_manager.sensors_list:
             if sensor["id"] == sensor_id:
-                sensor_name = sensor["sensor_type"]
+                sensor_name = sensor["sensor_name"]
                 print(f"That means sensor {sensor_name}")
                 break
         try:
             sensor = SensorsFactory.get_sensor(sensor_name)
+            # TODO Check that sensor_name MATCHES with the name in the sensors configs
 
         # except StopIteration:
-        except Exception as e:
+        except ItemNotFoundError as e:
             print(f"Failed to get sensor {sensor_name} with error message: {e}")
             return None
 
