@@ -8,6 +8,12 @@ batch_factory:
     # directory: "/home/felipezero/Projects/mySLAM_data/urban-26"
     directory: "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2023_11_02-12_18_16"
     # directory: "/media/mark/New Volume/datasets/kaist/urban-26"
+    sensors_table:
+      vlp16l: "velodyne_left"
+      vlp16r: "velodyne_right"
+      xsens: "imu"
+      #left: "stereocamera_left"
+      #right: "stereocamera_right"
 
   regime:
     name: "TimeLimit"
@@ -17,9 +23,9 @@ batch_factory:
   memory:
     batch_memory: 100.0
 
-#    start: 1544581174111995000
-#    stop: 1544581174479101000
+      #    start: 1544581174111995000
+    #    stop: 1544581174479101000
 
-# for urban-30
-#    start: 1544677010043554000
-#    stop: 1544677020028534000
+    # for urban-30
+    #    start: 1544677010043554000
+    #    stop: 1544677020028534000
