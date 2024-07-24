@@ -17,15 +17,7 @@ class Ros2Config(DatasetConfig):
 
     directory: Path = field(kw_only=True)
 
-    sensors_table: dict[str, dict[str, list]] = field(
-        default_factory=lambda: {
-            "StereoCamera": {"left": [], "right": []},
-            "imu": {"xsens": []},
-            "velodyne_right": {"vlp16r": []},
-            "velodyne_left": {"vlp16l": []},
-            "velodyne_top": {"vlp32c": [], "merger": []},
-        }
-    )
+    sensors_table: dict[str, str] = field(default_factory=lambda: {})
 
     data_stamp_file: Path = Ros2Paths.data_stamp
 
@@ -36,5 +28,11 @@ class Ros2Config(DatasetConfig):
     url: str = "example.com"
 
 
-cfg = Ros2Config(directory=Path("/path/to/ros2/dataset"))
-print(cfg.sensors_table)
+# cfg = Ros2Config(directory=Path("/path/to/ros2/dataset"))
+# print(cfg.sensors_table)
+# my_config = Ros2Config(
+#     directory=Path("/path/to/ros2/dataset"),
+#     sensors_table={"sensor1": {"sensor_name": ["sensor1", "sensor2"]}},
+# )
+#
+# print(my_config.sensors_table)
