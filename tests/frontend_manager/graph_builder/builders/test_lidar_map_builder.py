@@ -35,7 +35,7 @@ def test_merge_graph_candidate(data_batch, builder, setup_manager):
     assert len(graph.vertex_storage.vertices) == 2
     assert len(graph.edge_storage.edges) == 1
     assert graph.factor_graph.nrFactors() == 1
-    assert graph.gtsam_values.size() == 2
+    assert graph.backend_values.size() == 2
 
 
 def test_create_graph_candidate_empty_batch(builder, setup_manager):
@@ -57,7 +57,7 @@ def test_merge_graph_candidate_no_candidate(builder, setup_manager):
     assert len(graph.vertex_storage.vertices) == 0
     assert len(graph.edge_storage.edges) == 0
     assert graph.factor_graph.nrFactors() == 0
-    assert graph.gtsam_values.size() == 0
+    assert graph.backend_values.size() == 0
 
 
 def test_clear_candidate(data_batch, builder, setup_manager):

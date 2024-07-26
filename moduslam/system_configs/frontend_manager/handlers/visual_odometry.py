@@ -7,5 +7,5 @@ from moduslam.system_configs.frontend_manager.handlers.base_handler import Handl
 class FeatureDetectorConfig(HandlerConfig):
     skip_n_frames: int = 0
     noise_variance: tuple[float, float] = field(
-        default_factory=lambda: (1, 1), metadata={"unit": "pixel"}
+        default_factory=lambda: (3.0, 3.0), metadata={"unit": "pixel"}
     )

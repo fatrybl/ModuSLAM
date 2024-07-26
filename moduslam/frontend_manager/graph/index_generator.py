@@ -34,8 +34,13 @@ class IndexStorage:
 
         Args:
             index: index to add.
+
+        Raises:
+            ValueError: if index is negative.
         """
-        assert index >= 0, "index must be non-negative"
+        if index < 0:
+            raise ValueError("index must be non-negative")
+
         self._indices.add(index)
         self._update_min_max(index)
 

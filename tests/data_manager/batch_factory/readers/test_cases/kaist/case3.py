@@ -6,11 +6,11 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config im
     KaistConfig,
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
-from test_data_generators.kaist_dataset.data import Data
 from tests.conftest import kaist_custom_dataset_dir
 from tests.data_manager.batch_factory.readers.test_cases.kaist.case1 import (
     generate_sensors_factory_config,
 )
+from tests_data_generators.kaist_dataset.data import Data
 
 data = Data(kaist_custom_dataset_dir)
 elements = data.elements

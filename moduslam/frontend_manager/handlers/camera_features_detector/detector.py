@@ -4,19 +4,19 @@ from collections.abc import Iterable, Sequence
 
 import cv2
 import numpy as np
-import PIL
-from PIL.Image import Image
+from PIL.Image import Image, fromarray
+from PIL.ImageFile import ImageFile
 
 from moduslam.system_configs.setup_manager.sensors import StereoCameraConfig
+from moduslam.types.numpy import Matrix3x3, MatrixMxN, VectorN
 from moduslam.utils.auxiliary_dataclasses import Position, VisualFeature
 from moduslam.utils.auxiliary_methods import matrix_to_vector_list
-from moduslam.utils.numpy_types import Matrix3x3, MatrixMxN, VectorN
 
 
 class KeypointDetector:
 
-    def __init__(self):
-        self._orb = cv2.ORB.create()
+    def __init__(self, num_features: int = 100) -> None:
+        self._orb = cv2.ORB.create(nfeatures=num_features)
 
     def get_orb_keypoints(self, image: Image) -> tuple[Sequence[cv2.KeyPoint], MatrixMxN]:
         """Gets ORB features and modified BRIEF descriptors from an image.
@@ -34,7 +34,7 @@ class KeypointDetector:
 
     @staticmethod
     def undistort_image(
-        image: Image, camera_matrix: Matrix3x3, dist_coeffs: VectorN
+        image: ImageFile, camera_matrix: Matrix3x3, dist_coeffs: VectorN
     ) -> tuple[Image, Matrix3x3]:
         """Removes distortion of an image and recomputes the camera matrix.
 
@@ -58,7 +58,7 @@ class KeypointDetector:
         undistorted_array = cv2.undistort(
             array, camera_matrix, dist_coeffs, None, new_camera_matrix
         )
-        undistorted_image = PIL.Image.fromarray(undistorted_array)
+        undistorted_image = fromarray(undistorted_array)
 
         return undistorted_image, new_camera_matrix
 
@@ -116,7 +116,7 @@ class KeypointDetector:
         return features
 
     def get_visual_features(
-        self, image: Image, camera_parameters: StereoCameraConfig
+        self, image: ImageFile, camera_parameters: StereoCameraConfig
     ) -> list[VisualFeature]:
         """Gets visual features from an image.
 

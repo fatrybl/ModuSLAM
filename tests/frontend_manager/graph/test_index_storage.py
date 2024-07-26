@@ -37,8 +37,12 @@ def test_indices(index_storage):
 def test_add(index_storage):
     index_storage.add(1)
     assert index_storage.indices == {1}
+
     index_storage.add(2)
     assert index_storage.indices == {1, 2}
+
+    with pytest.raises(ValueError):
+        index_storage.add(-1)
 
 
 def test_remove_method(index_storage):

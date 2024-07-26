@@ -12,7 +12,6 @@ from moduslam.system_configs.data_manager.batch_factory.regimes import (
     TimeLimit,
 )
 from moduslam.utils.exceptions import UnfeasibleRequestError
-from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import kaist_custom_dataset_dir
 from tests.data_manager.batch_factory.test_cases.kaist.data import (
     all_elements_batch,
@@ -52,6 +51,7 @@ from tests.data_manager.batch_factory.test_cases.kaist.data import (
     stereo_request2,
     stereo_request3,
 )
+from tests_data_generators.utils import generate_sensors_factory_config
 
 dataset_cfg = KaistConfig(directory=kaist_custom_dataset_dir)
 

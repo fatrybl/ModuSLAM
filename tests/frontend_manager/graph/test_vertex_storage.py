@@ -111,7 +111,7 @@ def test_update_optimizable_vertex(vertex_storage, optimizable_vertex: Pose):
     pose = gtsam.Pose3(gtsam.Rot3([10, 10, 10]), np.array([10, 10, 10]))
     values = gtsam.Values()
 
-    values.insert(optimizable_vertex.gtsam_index, pose)
+    values.insert(optimizable_vertex.backend_index, pose)
 
     vertex_storage.update_optimizable_vertices(values)
     vertex: Pose = vertex_storage.get_last_vertex(Pose)
@@ -126,7 +126,7 @@ def test_update_non_optimizable_vertex(vertex_storage, non_optimizable_vertex: F
 
     new_values: dict[Feature3D, np.ndarray] = {non_optimizable_vertex: np.array([10, 10, 10])}
 
-    vertex_storage.update_non_optimizable_vertices()
+    vertex_storage.update_not_optimizable_vertices()
     vertex = vertex_storage.get_last_vertex(Feature3D)
 
     assert np.array_equal(vertex.position, new_values[non_optimizable_vertex]) is True

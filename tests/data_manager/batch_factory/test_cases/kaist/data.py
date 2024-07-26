@@ -4,8 +4,8 @@ import itertools
 
 from moduslam.data_manager.batch_factory.batch import DataBatch
 from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
-from test_data_generators.kaist_dataset.data import Data
 from tests.conftest import kaist_custom_dataset_dir
+from tests_data_generators.kaist_dataset.data import Data
 
 data = Data(kaist_custom_dataset_dir)
 elements = data.elements

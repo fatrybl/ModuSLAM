@@ -7,14 +7,14 @@ edge_factories:
     type_name: 'PriorPoseEdgeFactory'
     module_name: '.prior_pose'
 
-  visual_odometry_edge_factory:
-    name: 'visual_odometry_edge_factory'
-    type_name: 'VisualOdometryEdgeFactory'
-    module_name: '.smart_visual_features'
+  smart_visual_features_edge_factory:
+    name: 'smart_visual_features_edge_factory'
+    type_name: 'SmartVisualFeaturesFactory'
+    module_name: '.smart_visual_features.factory'
     search_time_margin: 0.02
 
   imu_odometry_edge_factory:
     name: 'imu_odometry_edge_factory'
     type_name: 'ImuOdometryFactory'
-    module_name: '.imu_preintegration.imu_odometry'
+    module_name: '.imu_preintegration.factory'
     search_time_margin: 0.01

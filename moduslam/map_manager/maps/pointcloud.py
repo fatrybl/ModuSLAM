@@ -1,6 +1,6 @@
 from open3d import geometry, utility
 
-from moduslam.utils.numpy_types import MatrixNx3
+from moduslam.types.numpy import MatrixNx3
 
 
 class PointcloudMap:

@@ -3,7 +3,7 @@
 """
 
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from moduslam.frontend_manager.edge_factories.smart_visual_features.smart_factor import (
+from moduslam.frontend_manager.edge_factories.smart_visual_features.smart_factor_factory import (
     VisualSmartFactorFactory,
 )
 from moduslam.frontend_manager.edge_factories.smart_visual_features.storage import (

@@ -45,8 +45,11 @@ class PriorPoseEdgeFactory(EdgeFactory):
             list with 1 edge.
         """
         vertex = get_vertex(Pose, graph.vertex_storage, timestamp, self._time_margin)
-        edge = self._create_edge(vertex, measurements.last)
-        return [edge]
+        if isinstance(vertex, Pose):
+            edge = self._create_edge(vertex, measurements.last)
+            return [edge]
+        else:
+            return []
 
     @staticmethod
     def _create_edge(vertex: Pose, measurement: Measurement) -> PriorPose:
@@ -70,15 +73,15 @@ class PriorPoseEdgeFactory(EdgeFactory):
         )
         noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variances)
 
-        pose = tuple_to_gtsam_pose3(measurement.values)
+        pose = tuple_to_gtsam_pose3(measurement.value)
 
         gtsam_factor = gtsam.PriorFactorPose3(
-            key=vertex.gtsam_index,
+            key=vertex.backend_index,
             prior=pose,
             noiseModel=noise,
         )
 
         edge = PriorPose(
-            vertex=vertex, measurements=(measurement,), factor=gtsam_factor, noise_model=noise
+            vertex=vertex, measurement=measurement, factor=gtsam_factor, noise_model=noise
         )
         return edge

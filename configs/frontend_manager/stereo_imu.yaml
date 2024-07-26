@@ -10,7 +10,7 @@ graph_builder:
   candidate_factory:
 
     handler_state_analyzer_table:
-      visual_odometry: 'visual_inertial_odometry_state_analyzer'
+      camera_features_detector: 'visual_inertial_odometry_state_analyzer'
       imu_preprocessor: 'visual_inertial_odometry_state_analyzer'
 
 
@@ -18,14 +18,24 @@ graph_builder:
 
     handler_edge_factory_table:
       imu_preprocessor: 'imu_odometry_edge_factory'
+      camera_features_detector: 'smart_visual_features_edge_factory'
 
 graph_initializer:
 
   priors:
-    initial_pose:
-      timestamp: 1544581174020425974 # timestamp of first VLP_right scan from data_manager/kaist.yaml
+
+    first_pose:
+      timestamp: 3618556327 # timestamp of first VLP_right scan from data_manager/kaist.yaml
       vertex_type: "Pose"
       edge_factory_name: "prior_pose_edge_factory"
       measurement: [ 0,0,0,0,0,0 ]
       measurement_noise_covariance: [ 0.5, 0.5, 0.5, 1, 1, 1 ]
-      file_path: "configs/frontend_manager/kaist.yaml"
+      file_path: "configs/frontend_manager/stereo_imu.yaml"
+
+    second_pose:
+      timestamp: 3668542882 # timestamp of first VLP_right scan from data_manager/kaist.yaml
+      vertex_type: "Pose"
+      edge_factory_name: "prior_pose_edge_factory"
+      measurement: [ 0,0,0,0,0,0 ]
+      measurement_noise_covariance: [ 0.5, 0.5, 0.5, 1, 1, 1 ]
+      file_path: "configs/frontend_manager/stereo_imu.yaml"

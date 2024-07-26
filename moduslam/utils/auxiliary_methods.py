@@ -16,8 +16,8 @@ from plum import dispatch
 
 from moduslam.data_manager.batch_factory.batch import DataBatch, Element, RawMeasurement
 from moduslam.logger.logging_config import utils
+from moduslam.types.numpy import MatrixMxN, Vector3, VectorN
 from moduslam.utils.exceptions import DimensionalityError
-from moduslam.utils.numpy_types import MatrixMxN, Vector3, VectorN
 
 logger = logging.getLogger(utils)
 

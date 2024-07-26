@@ -13,14 +13,12 @@ from moduslam.main_manager.main_manager import MainManager
 from moduslam.setup_manager.config_validator import register_config
 from moduslam.system_configs.main_manager import MainManagerConfig
 
-np.set_printoptions(precision=4, suppress=True)
+np.set_printoptions(precision=6, suppress=True)
 
 
 @hydra.main(version_base=None, config_name="config", config_path="../configs")
 def run(config: MainManagerConfig) -> None:
     """Runs SLAM based on the given configuration."""
-
-    # print(OmegaConf.to_yaml(config))
 
     setup_logger(config.logger)
 

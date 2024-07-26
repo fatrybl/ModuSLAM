@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -7,43 +8,38 @@ from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose
 from moduslam.logger.logging_config import map_manager
-from moduslam.utils.deque_set import DequeSet
 
 logger = logging.getLogger(map_manager)
 
 
 def create_vertex_elements_table(
-    vertices: DequeSet[LidarPose], edges: set[LidarOdometry]
+    vertices: Sequence[LidarPose],
+    vertex_edges_table: dict[LidarPose, set[LidarOdometry]],
 ) -> dict[LidarPose, set[Element]]:
     """Creates "vertex -> elements" table.
 
     Args:
         vertices: vertices to get elements for.
 
-        edges: edges to check.
+        vertex_edges_table: "vertex -> edges" table.
 
     Returns:
         "vertex -> elements" table.
     """
 
     table: dict[LidarPose, set[Element]] = defaultdict(set)
-
     num_poses = len(vertices)
 
     for i, vertex in enumerate(vertices):
+        vertex_edges = vertex_edges_table[vertex]
         if i == num_poses - 1:
-            for e in vertex.edges:
-                if isinstance(e, LidarOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[1]
-                    table[vertex].add(element)
+            for edge in vertex_edges:
+                element = edge.measurement.elements[1]
+                table[vertex].add(element)
         else:
-            for e in vertex.edges:
-                if e in edges and isinstance(e, LidarOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[0]
-                    table[vertex].add(element)
-                    edges.remove(e)
+            for edge in vertex_edges:
+                element = edge.measurement.elements[0]
+                table[vertex].add(element)
     return table
 
 

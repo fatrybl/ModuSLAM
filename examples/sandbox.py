@@ -3,6 +3,7 @@ import time
 
 import gtsam
 import numpy as np
+from graphviz import Source
 from gtsam.symbol_shorthand import X
 
 
@@ -21,39 +22,34 @@ def timer(func):
 
 graph = gtsam.NonlinearFactorGraph()
 
-pose1 = gtsam.gtsam.Pose3()
-pose2 = gtsam.gtsam.Pose3()
-prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
-odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
-graph.addPriorPose3(X(0), pose1, prior_noise)
-graph.push_back(
-    gtsam.BetweenFactorPose3(X(0), X(1), gtsam.gtsam.Pose3(r=gtsam.Rot3(), t=[1, 0, 0]), odom_noise)
-)
-
-k = gtsam.gtsam.Cal3_S2()
-smart_f = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
-smart_f.add(np.array([1, 1]), X(0))
-graph.push_back(smart_f)
-smart_f.add(np.array([1, 1]), X(1))
-graph.push_back(smart_f)
-
 init_values = gtsam.Values()
 init_values.insert_pose3(X(0), gtsam.gtsam.Pose3())
 init_values.insert_pose3(X(1), gtsam.gtsam.Pose3())
 
+pose1 = gtsam.gtsam.Pose3()
+pose2 = gtsam.gtsam.Pose3()
+prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
+odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
+
+graph.addPriorPose3(X(0), pose1, prior_noise)
+
+k = gtsam.gtsam.Cal3_S2()
+smart_f1 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+smart_f1.add(np.array([1, 1]), X(0))
+smart_f2 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+smart_f2.add(np.array([1, 1]), X(0))
+smart_f2.add(np.array([20, 20]), X(1))
+graph.push_back(smart_f1)
+print(graph)
+
+smart_f1.add(np.array([20, 20]), X(1))
+
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
-
-isam = gtsam.ISAM2()
-isam.update(graph, init_values)
-result_isam = isam.calculateEstimate()
-
 result = optimizer.optimizeSafely()
 
+print(graph)
 
-# pcd.colors = o3d.utility.Vector3dVector(
-#     np.tile(intensity[:, np.newaxis], (1, 3))
-# )  # Assigning colors based on intensity
-
-# Visualize the point cloud using Open3D's visualization module
-# o3d.visualization.draw_geometries([pcd])
+dot = graph.dot(result)
+source = Source(dot)
+source.render("graph", format="pdf", cleanup=True)

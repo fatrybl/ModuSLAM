@@ -1,6 +1,5 @@
 import logging
 from collections import deque
-from collections.abc import Iterable
 from typing import TypeAlias
 
 import gtsam
@@ -19,17 +18,12 @@ VisualFeatureTuple: TypeAlias = tuple[VisualFeature, Feature3D, gtsam.SmartProje
 
 
 class VisualFeatureStorage:
-    def __init__(self, matcher_threshold: int = 30):
-        """
-        Args:
-            matcher_threshold: threshold for the feature matcher.
-        """
+    def __init__(self):
         self._features: deque[VisualFeatureTuple] = deque()
-        self._matcher_threshold = matcher_threshold
         self._matcher = FeatureMatcher()
 
     @property
-    def visual_features(self) -> Iterable[VisualFeature]:
+    def visual_features(self) -> list[VisualFeature]:
         """All visual features in the storage."""
         return [tup[0] for tup in self._features]
 
@@ -57,10 +51,9 @@ class VisualFeatureStorage:
 
         matches = self._matcher.find_matches(descriptors_1, descriptors_2)
         filtered_matches = self._matcher.filter_with_ransac(keypoints_1, keypoints_2, matches)
-        unique_matches = self._matcher.ensure_unique_matches(filtered_matches)
 
         matched_features, matched_features_indices, unmatched_features = (
-            self._matcher.sort_features(new_features, unique_matches)
+            self._matcher.sort_features(new_features, filtered_matches)
         )
 
         return matched_features, matched_features_indices, unmatched_features

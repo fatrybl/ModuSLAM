@@ -1,37 +1,42 @@
+from collections.abc import Sequence
+
 import gtsam
 
-from moduslam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
-from moduslam.frontend_manager.graph.base_vertices import (
-    NotOptimizableVertex,
-    OptimizableVertex,
+from moduslam.frontend_manager.graph.base_edges import (
+    BinaryEdge,
+    MultiEdge,
+    RadialEdge,
+    UnaryEdge,
 )
+from moduslam.frontend_manager.graph.base_vertices import OptimizableVertex
+from moduslam.frontend_manager.graph.custom_vertices import Feature3D
 from moduslam.frontend_manager.measurement_storage import Measurement
 
 
-class SmartVisualFeature(BinaryEdge):
-    """Edge for Smart Factor in the Graph: https://dellaert.github.io/files/Carlone14icra.pdf"""
+class SmartVisualFeature(RadialEdge):
+    """Edge for SmartProjectionPose3Factor: https://dellaert.github.io/files/Carlone14icra.pdf"""
 
     def __init__(
         self,
-        base_vertex: OptimizableVertex,
-        support_vertex: NotOptimizableVertex,
-        measurement: Measurement,
+        pose: OptimizableVertex,
+        features: Sequence[Feature3D],
+        measurements: Sequence[Measurement],
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
         """
         Args:
-            base_vertex: main vertex.
+            pose: optimizable pose.
 
-            support_vertex: support vertices
+            features: non-optimizable 3D points.
 
-            measurement: a measurement with the distance to the visual feature.
+            measurements: a measurement with the distance to the visual feature.
 
             factor: GTSAM factor.
 
             noise_model: GTSAM noise model of the factor.
         """
-        super().__init__(base_vertex, support_vertex, (measurement,), factor, noise_model)
+        super().__init__(pose, features, measurements, factor, noise_model)
 
 
 class ImuOdometry(MultiEdge):

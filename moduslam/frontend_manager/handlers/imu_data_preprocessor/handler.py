@@ -15,27 +15,20 @@
 """
 
 import logging
-from dataclasses import dataclass
-
-import numpy as np
 
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.imu_data_preprocessor.line_parsers import (
+    get_tum_vie_imu_data,
+)
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.setup_manager.sensors_factory.sensors import Imu
 from moduslam.system_configs.frontend_manager.handlers.base_handler import HandlerConfig
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.auxiliary_methods import create_empty_element
-from moduslam.utils.numpy_types import Vector3
 
 logger = logging.getLogger(frontend_manager)
-
-
-@dataclass
-class ImuData:
-    angular_velocity: Vector3
-    acceleration: Vector3
 
 
 class ImuDataPreprocessor(Handler):
@@ -58,28 +51,23 @@ class ImuDataPreprocessor(Handler):
             logger.error(msg)
             raise TypeError(msg)
 
-        acceleration = np.array(element.measurement.values[10:13], dtype=np.float64)
-        angular_velocity = np.array(element.measurement.values[7:10], dtype=np.float64)
-
-        imu_data = ImuData(angular_velocity, acceleration)
+        imu_data = get_tum_vie_imu_data(element.measurement.values)
 
         t_range = TimeRange(element.timestamp, element.timestamp)
 
-        acc_cov = tuple(element.measurement.sensor.accelerometer_noise_covariance.flatten())
-        gyro_cov = tuple(element.measurement.sensor.gyroscope_noise_covariance.flatten())
-        acc_bias_cov = tuple(
-            element.measurement.sensor.accelerometer_bias_noise_covariance.flatten()
-        )
-        gyro_bias_cov = tuple(element.measurement.sensor.gyroscope_bias_noise_covariance.flatten())
+        acc_cov = element.measurement.sensor.accelerometer_noise_covariance
+        gyro_cov = element.measurement.sensor.gyroscope_noise_covariance
+        acc_bias_cov = element.measurement.sensor.accelerometer_bias_noise_covariance
+        gyro_bias_cov = element.measurement.sensor.gyroscope_bias_noise_covariance
 
         empty_element = self._create_empty_element(element)
 
         m = Measurement(
             time_range=t_range,
-            values=imu_data,
+            value=imu_data,
             handler=self,
             elements=(empty_element,),
-            noise_covariance=(*acc_cov, *gyro_cov, *acc_bias_cov, *gyro_bias_cov),
+            noise_covariance=(acc_cov, gyro_cov, acc_bias_cov, gyro_bias_cov),
         )
 
         return m

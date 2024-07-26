@@ -1,13 +1,14 @@
+import cv2
 import gtsam
 import numpy as np
 
-from moduslam.frontend_manager.edge_factories.smart_visual_features.smart_factor import (
+from moduslam.frontend_manager.edge_factories.smart_visual_features.smart_factor_factory import (
     VisualSmartFactorFactory,
 )
 from moduslam.frontend_manager.edge_factories.smart_visual_features.storage import (
     VisualFeatureStorage,
 )
-from moduslam.frontend_manager.edge_factories.utils import find_vertex
+from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
 from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
 from moduslam.frontend_manager.graph.custom_vertices import CameraPose, Feature3D, Pose
 from moduslam.frontend_manager.graph.index_generator import generate_index
@@ -35,9 +36,9 @@ def get_vertex(
     Returns:
         vertex.
     """
-    cam_pose = find_vertex(CameraPose, storage, timestamp, time_margin)
+    cam_pose = get_last_vertex(CameraPose, storage, timestamp, time_margin)
     if not cam_pose:
-        pose = find_vertex(Pose, storage, timestamp, time_margin)
+        pose = get_last_vertex(Pose, storage, timestamp, time_margin)
         if pose:
             cam_pose = CameraPose(timestamp=pose.timestamp, index=pose.index, value=pose.value)
             return cam_pose
@@ -76,18 +77,16 @@ def create_edge(
         new edge.
     """
     pixels = np.array(visual_feature.key_point.pt)
-    try:
-        smart_factor.add(pixels, base_vertex.gtsam_index)
-    except Exception:
-        raise
+    smart_factor.add(pixels, base_vertex.backend_index)
+
     m = Measurement(
         time_range=measurement.time_range,
         elements=measurement.elements,
-        values=visual_feature,
+        value=visual_feature,
         handler=measurement.handler,
         noise_covariance=measurement.noise_covariance,
     )
-    edge = SmartVisualFeature(base_vertex, support_vertex, m, smart_factor, noise_model)
+    edge = SmartVisualFeature(base_vertex, [support_vertex], [m], smart_factor, noise_model)
     return edge
 
 
@@ -116,9 +115,14 @@ def create_edges(
         raise TypeError(f"The sensor must be a stereo camera but got {type(sensor)!r}.")
 
     edges: list[SmartVisualFeature] = []
-    tf = sensor.tf_base_sensor
+    tf = np.array(sensor.tf_base_sensor)
     camera_matrix = np.array(sensor.calibrations.camera_matrix_left)
-    visual_features = measurement.values
+    # visual_features = measurement.values
+
+    kp = cv2.KeyPoint()
+    desc = np.ones((1, 32), dtype=np.uint8)
+    visual_features = [VisualFeature(kp, desc)]
+
     noise_variances = (measurement.noise_covariance[0], measurement.noise_covariance[1])
     noise = pixel_diagonal_noise_model(noise_variances)
 

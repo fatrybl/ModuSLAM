@@ -34,21 +34,21 @@ def elements(sensor: Sensor) -> tuple[Element, ...]:
 def measurements(handler: BasicTestHandler, element: Element):
     m1 = Measurement(
         time_range=TimeRange(element.timestamp, element.timestamp),
-        values=(1, 2, 3),
+        value=(1, 2, 3),
         handler=handler,
         elements=(element,),
         noise_covariance=(1, 1, 1),
     )
     m2 = Measurement(
         time_range=TimeRange(element.timestamp + 1, element.timestamp + 1),
-        values=(1, 2, 3),
+        value=(1, 2, 3),
         handler=handler,
         elements=(element,),
         noise_covariance=(1, 1, 1),
     )
     m3 = Measurement(
         time_range=TimeRange(element.timestamp + 2, element.timestamp + 2),
-        values=(1, 2, 3),
+        value=(1, 2, 3),
         handler=handler,
         elements=(element,),
         noise_covariance=(1, 1, 1),
@@ -56,7 +56,7 @@ def measurements(handler: BasicTestHandler, element: Element):
 
     m4 = Measurement(
         time_range=TimeRange(element.timestamp, element.timestamp + 1),
-        values=(1, 2, 3),
+        value=(1, 2, 3),
         handler=handler,
         elements=(element,),
         noise_covariance=(1, 1, 1),

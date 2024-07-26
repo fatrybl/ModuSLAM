@@ -13,15 +13,14 @@ class TrajectoryVisualizer(MapVisualizer):
         Args:
             trajectory: trajectory.
         """
-        coordinate_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
-            size=0.1, origin=[0, 0, 0]
-        )
         vis = o3d.visualization.Visualizer()
         vis.create_window()
 
         for pose in trajectory.poses:
-            coordinate_frame.transform(pose)
-            vis.add_geometry(coordinate_frame)
+            frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1)
+            frame.transform(pose)
+            vis.add_geometry(frame)
 
+        # Start the visualization loop
         vis.run()
         vis.destroy_window()

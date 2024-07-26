@@ -1,3 +1,5 @@
+"""Numpy type aliases."""
+
 from typing import Annotated, Literal
 
 import numpy as np

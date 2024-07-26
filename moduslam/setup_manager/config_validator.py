@@ -47,7 +47,7 @@ def register_config():
     cs.store(group="regimes", name="base_data_regime", node=DataRegimeConfig)
     cs.store(group="handlers", name="base_kiss_icp_odometry", node=KissIcpScanMatcherConfig)
     cs.store(group="handlers", name="base_vrs_gps_preprocessor", node=VrsGpsHandlerConfig)
-    cs.store(group="handlers", name="base_visual_odometry", node=FeatureDetectorConfig)
+    cs.store(group="handlers", name="base_feature_detector", node=FeatureDetectorConfig)
     cs.store(group="sensors", name="base_lidar3D", node=Lidar3DConfig)
     cs.store(group="sensors", name="base_imu", node=ImuConfig)
     cs.store(group="sensors", name="base_stereo_camera", node=StereoCameraConfig)

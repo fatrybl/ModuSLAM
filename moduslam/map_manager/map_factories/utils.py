@@ -1,17 +1,20 @@
 from collections import defaultdict, deque
+from collections.abc import Iterable
 
 import numpy as np
 
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex
+from moduslam.frontend_manager.graph.base_edges import BaseEdge
+from moduslam.frontend_manager.graph.base_vertices import BaseVertex
+from moduslam.frontend_manager.graph.graph import Graph
+from moduslam.types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
 from moduslam.utils.auxiliary_methods import check_dimensionality
-from moduslam.utils.numpy_types import Matrix4x4, Matrix4xN, MatrixNx3
 
 
 def get_elements(
-    vertex_elements_table: dict[GraphVertex, set[Element]], batch_factory: BatchFactory
-) -> dict[GraphVertex, deque[Element]]:
+    vertex_elements_table: dict[BaseVertex, set[Element]], batch_factory: BatchFactory
+) -> dict[BaseVertex, deque[Element]]:
     """Gets elements with raw lidar pointcloud measurements and assign to the
     corresponding vertices.
 
@@ -24,7 +27,7 @@ def get_elements(
     Returns:
         "vertices -> elements" table.
     """
-    table: dict[GraphVertex, deque[Element]] = defaultdict(deque)
+    table: dict[BaseVertex, deque[Element]] = defaultdict(deque)
     for vertex, elements in vertex_elements_table.items():
         batch_factory.fill_batch_with_elements(elements)  # type: ignore
         table[vertex] = batch_factory.batch.data
@@ -85,3 +88,32 @@ def convert_pointcloud(pointcloud: MatrixNx3) -> Matrix4xN:
     ones = np.ones((1, pointcloud.shape[1]))
     pointcloud_homogeneous = np.vstack((pointcloud, ones))
     return pointcloud_homogeneous
+
+
+def create_vertex_edges_table(
+    graph: Graph, vertices: Iterable[BaseVertex], edge_type: type[BaseEdge]
+) -> dict[BaseVertex, set[BaseEdge]]:
+    """Creates a table with vertices and corresponding edges of the given type.
+
+    Args:
+        graph: graph to create a table from.
+
+        vertices: vertices to create a table for.
+
+        edge_type: edge type to filter.
+
+    Returns:
+        "vertex -> edges" table.
+    """
+    table: dict[BaseVertex, set[BaseEdge]] = {}
+
+    for v in vertices:
+        edges = graph.get_connected_edges(v)
+        for edge in edges:
+            if isinstance(edge, edge_type):
+                if v not in table:
+                    table[v] = {edge}
+                else:
+                    table[v].add(edge)
+
+    return table

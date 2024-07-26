@@ -14,7 +14,7 @@ from moduslam.data_manager.batch_factory.readers.locations import (
 )
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.setup_manager.sensors import SensorConfig
-from test_data_generators.kaist_dataset.structure import DatasetStructure
+from tests_data_generators.kaist_dataset.structure import DatasetStructure
 
 
 class Data:

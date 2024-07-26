@@ -16,5 +16,5 @@ hydra:
     dir: .
 
 logger:
-  level: "INFO"
+  level: "DEBUG"
   logs_directory: "logs"

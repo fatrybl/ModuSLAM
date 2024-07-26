@@ -154,7 +154,7 @@ class GraphInitializer:
 
         m = Measurement(
             time_range=TimeRange(timestamp, timestamp),
-            values=values,
+            value=values,
             noise_covariance=noise_covariance,
             handler=self._handler,
             elements=(element,),

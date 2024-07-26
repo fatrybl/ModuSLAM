@@ -7,8 +7,8 @@ https://github.com/borglab/gtsam/blob/develop/python/gtsam/examples/CombinedImuF
 import logging
 
 import gtsam
+import numpy as np
 
-from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.edge_factories.imu_preintegration.utils import (
     compute_covariance,
@@ -40,10 +40,8 @@ class ImuOdometryFactory(EdgeFactory):
     Creates edges of type: ImuOdometry.
     """
 
-    _gravity: float = 9.81
     _second: float = 1e9  # nanoseconds in 1 second.
     _nanosecond: float = 1e-9  # 1 nanosecond in seconds.
-    _minimum_number_of_measurements: int = 4
 
     def __init__(self, config: EdgeFactoryConfig) -> None:
         """
@@ -51,6 +49,8 @@ class ImuOdometryFactory(EdgeFactory):
             config: configuration of the factory.
         """
         super().__init__(config)
+        self._min_num_of_measurements: int = 4
+        self._gravity: float = 9.81
         self._time_margin = int(config.search_time_margin * self._second)
         self._params = gtsam.PreintegrationCombinedParams.MakeSharedU(self._gravity)
 
@@ -75,10 +75,8 @@ class ImuOdometryFactory(EdgeFactory):
         Raises:
             TypeError: if the vertex is not of type Pose, Velocity or ImuBias.
         """
-        if len(measurements) < self._minimum_number_of_measurements:
-            logger.error(
-                f"Number of measurements is less than {self._minimum_number_of_measurements}."
-            )
+        if len(measurements) < self._min_num_of_measurements:
+            logger.error(f"Not enough measurements: {self._min_num_of_measurements}.")
             return []
 
         t_start = measurements.first.time_range.start
@@ -110,19 +108,19 @@ class ImuOdometryFactory(EdgeFactory):
             velocity_i = LinearVelocity(timestamp=t, index=index, value=velocity_j.value)
             bias_i = ImuBias(timestamp=t, index=index, value=bias_j.value)
 
-        if pose_i.gtsam_index == pose_j.gtsam_index:
+        if pose_i.backend_index == pose_j.backend_index:
             logger.error("Pose-i and Pose-j are the same!")
             return []
 
-        if velocity_i.gtsam_index == velocity_j.gtsam_index:
+        if velocity_i.backend_index == velocity_j.backend_index:
             logger.error("Velocity-i and Velocity-j are the same!")
             return []
 
-        if bias_i.gtsam_index == bias_j.gtsam_index:
+        if bias_i.backend_index == bias_j.backend_index:
             logger.error("Bias-i and Bias-j are the same!")
             return []
 
-        biases = bias_i.gtsam_instance
+        biases = bias_i.backend_instance
 
         pim = self._preintegrate_measurements(measurements, pose_j.timestamp, biases)
 
@@ -157,31 +155,32 @@ class ImuOdometryFactory(EdgeFactory):
         Returns:
              preintegrated IMU measurements.
         """
-
-        element: Element = measurements.first.elements[0]
+        element = measurements.first.elements[0]
         sensor = element.measurement.sensor
 
         if isinstance(sensor, Imu):
+            tf = np.array(sensor.tf_base_sensor)
+            integration_noise_cov = np.array(sensor.integration_noise_covariance)
+            accel_bias_noise_cov = np.array(sensor.accelerometer_bias_noise_covariance)
+            gyro_bias_noise_cov = np.array(sensor.gyroscope_bias_noise_covariance)
 
-            if len(measurements) == self._minimum_number_of_measurements:
+            if len(measurements) == self._min_num_of_measurements:
 
-                accelerometer_noise_covariance = sensor.accelerometer_noise_covariance
-                gyroscope_noise_covariance = sensor.gyroscope_noise_covariance
+                accel_noise_cov = np.array(sensor.accelerometer_noise_covariance)
+                gyro_noise_cov = np.array(sensor.gyroscope_noise_covariance)
 
             else:
 
-                accelerometer_noise_covariance, gyroscope_noise_covariance = compute_covariance(
-                    measurements
-                )
+                accel_noise_cov, gyro_noise_cov = compute_covariance(measurements)
 
             set_parameters(
                 self._params,
-                sensor.tf_base_sensor,
-                accelerometer_noise_covariance,
-                gyroscope_noise_covariance,
-                sensor.integration_noise_covariance,
-                sensor.accelerometer_bias_noise_covariance,
-                sensor.gyroscope_bias_noise_covariance,
+                tf,
+                accel_noise_cov,
+                gyro_noise_cov,
+                integration_noise_cov,
+                accel_bias_noise_cov,
+                gyro_bias_noise_cov,
             )
 
         else:

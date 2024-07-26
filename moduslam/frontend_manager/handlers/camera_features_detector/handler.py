@@ -9,7 +9,7 @@ from collections.abc import Sequence
 
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
-from moduslam.frontend_manager.handlers.keypoint_detector.detector import (
+from moduslam.frontend_manager.handlers.camera_features_detector.detector import (
     KeypointDetector,
 )
 from moduslam.frontend_manager.measurement_storage import Measurement
@@ -91,7 +91,7 @@ class FeatureDetector(Handler):
         m = Measurement(
             time_range=t_range,
             elements=(element,),
-            values=features,
+            value=features,
             handler=self,
             noise_covariance=noise_covariance,
         )

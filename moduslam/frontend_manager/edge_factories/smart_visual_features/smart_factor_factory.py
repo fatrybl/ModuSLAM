@@ -1,6 +1,6 @@
 import gtsam
 
-from moduslam.utils.numpy_types import Matrix3x3, Matrix4x4
+from moduslam.types.numpy import Matrix3x3, Matrix4x4
 
 
 class VisualSmartFactorFactory:
@@ -10,6 +10,7 @@ class VisualSmartFactorFactory:
             smart_projection_params: parameters of GTSAM SmartProjectionParams instance.
         """
         self._projection_params = gtsam.SmartProjectionParams()
+        self._projection_params.setDynamicOutlierRejectionThreshold(True)
 
     def create(
         self,
@@ -29,14 +30,16 @@ class VisualSmartFactorFactory:
         Returns:
             GTSAM smart projection factor.
         """
-        tf = gtsam.Pose3(tf_base_camera)
         fx, fy, cx, cy = (
-            camera_matrix[0, 0],
-            camera_matrix[1, 1],
-            camera_matrix[0, 2],
-            camera_matrix[1, 2],
+            camera_matrix[0][0],
+            camera_matrix[1][1],
+            camera_matrix[0][2],
+            camera_matrix[1][2],
         )
         s = 0.0
-        matrix = gtsam.Cal3_S2(fx, fy, s, cx, cy)
-        factor = gtsam.SmartProjectionPose3Factor(noise_model, matrix, tf, self._projection_params)
+        tf = gtsam.Pose3(tf_base_camera)
+        calibrations = gtsam.Cal3_S2(fx, fy, s, cx, cy)
+        factor = gtsam.SmartProjectionPose3Factor(
+            noise_model, calibrations, tf, self._projection_params
+        )
         return factor

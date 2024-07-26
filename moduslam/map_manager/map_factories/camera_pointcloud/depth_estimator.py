@@ -13,7 +13,7 @@ from transformers import (
     is_torch_available,
 )
 
-from moduslam.utils.numpy_types import MatrixMxN
+from moduslam.types.numpy import MatrixMxN
 
 
 class DepthEstimator:

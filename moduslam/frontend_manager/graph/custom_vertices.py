@@ -1,15 +1,19 @@
 import gtsam
-import numpy as np
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
 from moduslam.frontend_manager.graph.base_vertices import (
     NotOptimizableVertex,
     OptimizableVertex,
 )
-from moduslam.utils.numpy_types import Matrix3x3, Matrix4x4, Vector3
+from moduslam.types.aliases import Matrix3x3, Matrix4x4, Point3D, Vector3
 
-identity_matrix = np.eye(4)
-zero_vector = np.zeros(3)
+identity_matrix = (
+    (1.0, 0.0, 0.0, 0.0),
+    (0.0, 1.0, 0.0, 0.0),
+    (0.0, 0.0, 1.0, 0.0),
+    (0.0, 0.0, 0.0, 1.0),
+)
+zero_vector = (0.0, 0.0, 0.0)
 
 
 class Pose(OptimizableVertex):
@@ -23,17 +27,17 @@ class Pose(OptimizableVertex):
             value: SE(3) pose.
         """
         super().__init__(index=index, timestamp=timestamp, value=value)
-        self._gtsam_instance = gtsam.Pose3(value)
+        self._backend_instance = gtsam.Pose3(value)
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return X(self.index)
 
     @property
-    def gtsam_instance(self) -> gtsam.Pose3:
+    def backend_instance(self) -> gtsam.Pose3:
         """GTSAM pose."""
-        return self._gtsam_instance
+        return self._backend_instance
 
     @property
     def value(self) -> Matrix4x4:
@@ -43,12 +47,12 @@ class Pose(OptimizableVertex):
     @property
     def position(self) -> Vector3:
         """Translation part of the pose: x, y, z."""
-        return self.gtsam_instance.translation()
+        return self.backend_instance.translation()
 
     @property
     def rotation(self) -> Matrix3x3:
         """Rotation part of the pose: SO(3) matrix."""
-        return self.gtsam_instance.rotation().matrix()
+        return self.backend_instance.rotation().matrix()
 
     def update(self, value: gtsam.Values) -> None:
         """Updates the pose with the new value.
@@ -56,8 +60,8 @@ class Pose(OptimizableVertex):
         Args:
             value: GTSAM values.
         """
-        self._gtsam_instance = value.atPose3(self.gtsam_index)
-        self._value = self.gtsam_instance.matrix()
+        self._backend_instance = value.atPose3(self.backend_index)
+        self._value = self.backend_instance.matrix()
 
 
 class LinearVelocity(OptimizableVertex):
@@ -72,14 +76,14 @@ class LinearVelocity(OptimizableVertex):
         return self._value
 
     @property
-    def gtsam_instance(self) -> Vector3:
+    def backend_instance(self) -> Vector3:
         """Linear velocity: Vx, Vy, Vz.
         Identical to the value property, as GTSAM does not have a separate class for linear velocity.
         """
         return self.value
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return V(self.index)
 
@@ -89,7 +93,7 @@ class LinearVelocity(OptimizableVertex):
         Args:
             value: GTSAM values.
         """
-        self._value = value.atVector(self.gtsam_index)
+        self._value = value.atVector(self.backend_index)
 
 
 class NavState(OptimizableVertex):
@@ -103,7 +107,7 @@ class NavState(OptimizableVertex):
     ):
         super().__init__(index=index, timestamp=timestamp, value=value)
         pose, velocity = gtsam.Pose3(value[0]), value[1]
-        self._gtsam_instance = gtsam.NavState(pose, velocity)
+        self._backend_instance = gtsam.NavState(pose, velocity)
 
     @property
     def value(self) -> tuple[Matrix4x4, Vector3]:
@@ -121,12 +125,12 @@ class NavState(OptimizableVertex):
         return self._value[1]
 
     @property
-    def gtsam_instance(self) -> gtsam.NavState:
+    def backend_instance(self) -> gtsam.NavState:
         """GTSAM NavState instance."""
-        return self._gtsam_instance
+        return self._backend_instance
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return N(self.index)
 
@@ -136,27 +140,27 @@ class NavState(OptimizableVertex):
         Args:
             value: GTSAM values.
         """
-        self._gtsam_instance = value.atNavState(self.gtsam_index)
-        self._value = self.gtsam_instance.pose().matrix(), self.gtsam_instance.velocity()
+        self._backend_instance = value.atNavState(self.backend_index)
+        self._value = self.backend_instance.pose().matrix(), self.backend_instance.velocity()
 
 
 class Point(OptimizableVertex):
-    def __init__(self, index: int = 0, timestamp: int = 0, value: Vector3 = zero_vector):
+    def __init__(self, index: int = 0, timestamp: int = 0, value: Point3D = zero_vector):
         super().__init__(index=index, timestamp=timestamp, value=value)
 
     @property
-    def value(self) -> Vector3:
+    def value(self) -> Point3D:
         """Position of the point: x, y, z."""
         return self._value
 
     @property
-    def gtsam_instance(self) -> Vector3:
+    def backend_instance(self) -> Point3D:
         """Identical to the value property, as GTSAM does not have a separate class for
         point in 3D."""
         return self.value
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return P(self.index)
 
@@ -166,7 +170,7 @@ class Point(OptimizableVertex):
         Args:
             value: GTSAM values.
         """
-        self._value = value.atPoint3(self.gtsam_index)
+        self._value = value.atPoint3(self.backend_index)
 
 
 class ImuBias(OptimizableVertex):
@@ -185,7 +189,7 @@ class ImuBias(OptimizableVertex):
             value: accelerometer bias, gyroscope bias.
         """
         super().__init__(index=index, timestamp=timestamp, value=value)
-        self._gtsam_instance = gtsam.imuBias.ConstantBias(value[0], value[1])
+        self._backend_instance = gtsam.imuBias.ConstantBias(value[0], value[1])
 
     @property
     def value(self) -> tuple[Vector3, Vector3]:
@@ -203,12 +207,12 @@ class ImuBias(OptimizableVertex):
         return self._value[1]
 
     @property
-    def gtsam_instance(self) -> gtsam.imuBias.ConstantBias:
+    def backend_instance(self) -> gtsam.imuBias.ConstantBias:
         """GTSAM instance."""
-        return self._gtsam_instance
+        return self._backend_instance
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return B(self.index)
 
@@ -218,8 +222,8 @@ class ImuBias(OptimizableVertex):
         Args:
             value: GTSAM values.
         """
-        self._gtsam_instance = value.atConstantBias(self.gtsam_index)
-        self._value = self.gtsam_instance.accelerometer(), self.gtsam_instance.gyroscope()
+        self._backend_instance = value.atConstantBias(self.backend_index)
+        self._value = self.backend_instance.accelerometer(), self.backend_instance.gyroscope()
 
 
 class CameraPose(Pose):
@@ -234,7 +238,7 @@ class PoseLandmark(Pose):
     """Base landmark in the Graph."""
 
     @property
-    def gtsam_index(self) -> int:
+    def backend_index(self) -> int:
         """GTSAM instance index."""
         return L(self.index)
 
@@ -242,15 +246,15 @@ class PoseLandmark(Pose):
 class Feature3D(NotOptimizableVertex):
     """Non-optimizable point in 3D."""
 
-    def __init__(self, index: int = 0, timestamp: int = 0, value: Vector3 = zero_vector):
+    def __init__(self, index: int = 0, timestamp: int = 0, value: Point3D = zero_vector):
         super().__init__(index=index, timestamp=timestamp, value=value)
 
     @property
-    def value(self) -> Vector3:
+    def value(self) -> Point3D:
         """Position of the feature: x, y, z."""
         return self._value
 
-    def update(self, value: Vector3) -> None:
+    def update(self, value: Point3D) -> None:
         """Updates the feature with the new value.
 
         Args:

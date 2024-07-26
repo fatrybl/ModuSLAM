@@ -3,8 +3,8 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config 
     TumVieConfig,
 )
 from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
-from test_data_generators.tum_vie_dataset.data import Data
 from tests.conftest import tum_vie_dataset_dir
+from tests_data_generators.tum_vie_dataset.data import Data
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 data = Data(dataset_cfg)

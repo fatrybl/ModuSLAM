@@ -2,9 +2,9 @@ from shutil import rmtree
 
 from pytest import fixture
 
-from test_data_generators.kaist_dataset.data import Data
-from test_data_generators.kaist_dataset.factory import DataFactory
 from tests.conftest import kaist_custom_dataset_dir
+from tests_data_generators.kaist_dataset.data import Data
+from tests_data_generators.kaist_dataset.factory import DataFactory
 
 
 @fixture(scope="package", autouse=True)

@@ -1,15 +1,15 @@
 defaults:
-  - /handlers/base_visual_odometry@handlers.smart_visual_features
+  - /handlers/base_feature_detector@handlers.camera_features_detector
 
 package_name: 'moduslam.frontend_manager.handlers'
 
 handlers:
-  visual_odometry:
-    name: "smart_visual_features"
-    type_name: "VisualOdometry"
-    module_name: ".smart_visual_features.odometry_generator"
+  camera_features_detector:
+    name: "camera_features_detector"
+    type_name: "FeatureDetector"
+    module_name: ".camera_features_detector.handler"
 
   imu_preprocessor:
     name: "imu_preprocessor"
     type_name: "ImuDataPreprocessor"
-    module_name: ".imu_data_preprocessor"
+    module_name: ".imu_data_preprocessor.handler"

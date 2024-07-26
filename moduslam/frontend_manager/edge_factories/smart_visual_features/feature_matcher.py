@@ -1,15 +1,22 @@
+import logging
 from collections.abc import Sequence
 
 import cv2
 import numpy as np
 
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.types.numpy import VectorN
 from moduslam.utils.auxiliary_dataclasses import VisualFeature
-from moduslam.utils.numpy_types import VectorN
+
+logger = logging.getLogger(frontend_manager)
 
 
 class FeatureMatcher:
     def __init__(self):
         self._bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+        self._min_required_matches: int = 4
+        self._ransac_reproj_threshold: float = 0.5
+        self._num_matches: int | None = None
 
     def find_matches(self, descriptors_1: VectorN, descriptors_2: VectorN) -> Sequence[cv2.DMatch]:
         """Find matches between two sets of descriptors using a brute-force matcher.
@@ -23,10 +30,14 @@ class FeatureMatcher:
             matches.
         """
         matches = self._bf.match(descriptors_1, descriptors_2)
-        return matches
+        matches_sorted = sorted(matches, key=lambda x: x.distance)
+        if self._num_matches:
+            return matches_sorted[: self._num_matches]
+        else:
+            return matches_sorted
 
-    @staticmethod
     def filter_with_ransac(
+        self,
         keypoints_1: list[cv2.KeyPoint],
         keypoints_2: list[cv2.KeyPoint],
         matches: Sequence[cv2.DMatch],
@@ -43,40 +54,18 @@ class FeatureMatcher:
         Returns:
             filtered matches.
         """
-        if len(matches) < 4:
+        if len(matches) < self._min_required_matches:
+            msg = f"Number of matches is less than the required minimum of {self._min_required_matches}."
+            logger.error(msg)
             return []
 
         src_pts = np.array([keypoints_1[m.queryIdx].pt for m in matches]).reshape(-1, 2)
         dst_pts = np.array([keypoints_2[m.trainIdx].pt for m in matches]).reshape(-1, 2)
 
-        H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+        H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, self._ransac_reproj_threshold)
 
         matches = [m for i, m in enumerate(matches) if mask[i]]
         return matches
-
-    @staticmethod
-    def ensure_unique_matches(matches: list[cv2.DMatch]) -> list[cv2.DMatch]:
-        """Ensure no more than one match per keypoint.
-
-        Args:
-            matches: matches.
-
-        Returns:
-            unique matches.
-        """
-        unique_matches = []
-        seen_query_indices, seen_train_indices = set(), set()
-
-        for match in matches:
-            if (
-                match.queryIdx not in seen_query_indices
-                and match.trainIdx not in seen_train_indices
-            ):
-                unique_matches.append(match)
-                seen_query_indices.add(match.queryIdx)
-                seen_train_indices.add(match.trainIdx)
-
-        return unique_matches
 
     @staticmethod
     def get_unique_features(
@@ -98,21 +87,35 @@ class FeatureMatcher:
 
     @staticmethod
     def sort_features(
-        features: list[VisualFeature], matches: list[cv2.DMatch]
+        new_features: list[VisualFeature], matches: list[cv2.DMatch]
     ) -> tuple[list[VisualFeature], list[int], list[VisualFeature]]:
-        """Sorts features into matched and unmatched.
+        """Sorts new visual features into matched and unmatched categories based on
+        matches.
 
         Args:
-            features: visual features.
+            new_features: List of new visual features of type VisualFeature.
 
-            matches: features` matches.
+            matches: List of cv2.DMatch objects representing the matches.
 
         Returns:
-            matched and unmatched features.
+            A tuple containing:
+                list of matched new visual features.
+                list of indices corresponding to the matched features in the existing list of features.
+                list of unmatched new visual features.
         """
-        matched_indices = {match.queryIdx for match in matches}
-        matched_features = [features[m.queryIdx] for m in matches]
-        unmatched_features = [f for i, f in enumerate(features) if i not in matched_indices]
-        matched_feature_indices = [m.trainIdx for m in matches]
 
-        return matched_features, matched_feature_indices, unmatched_features
+        matched_features = []
+        matched_indices = []
+        matched_indices_set = set()
+
+        for match in matches:
+            new_feature_idx = match.queryIdx
+            existing_feature_idx = match.trainIdx
+
+            matched_features.append(new_features[new_feature_idx])
+            matched_indices.append(existing_feature_idx)
+            matched_indices_set.add(new_feature_idx)
+
+        unmatched_features = [f for i, f in enumerate(new_features) if i not in matched_indices_set]
+
+        return matched_features, matched_indices, unmatched_features

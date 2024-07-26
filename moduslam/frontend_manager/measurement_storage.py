@@ -21,10 +21,10 @@ class Measurement:
     """
 
     time_range: TimeRange
-    values: Any
+    value: Any
     handler: Handler
     elements: tuple[Element, ...]
-    noise_covariance: tuple[float, ...]
+    noise_covariance: tuple
 
     def __hash__(self):
         return hash(

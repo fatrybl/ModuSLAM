@@ -4,7 +4,9 @@ from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate i
 from moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from moduslam.frontend_manager.handlers.keypoint_detector.handler import FeatureDetector
+from moduslam.frontend_manager.handlers.camera_features_detector.handler import (
+    FeatureDetector,
+)
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.system_configs.frontend_manager.graph_builder.candidate_factory.state_analyzer import (
     StateAnalyzerConfig,

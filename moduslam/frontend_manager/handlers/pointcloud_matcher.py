@@ -164,7 +164,7 @@ class ScanMatcher(Handler):
             handler=self,
             elements=(empty_pre_last_element, empty_last_element),
             time_range=t_range,
-            values=tf,
+            value=tf,
             noise_covariance=self._measurement_noise_covariance,
         )
         return m

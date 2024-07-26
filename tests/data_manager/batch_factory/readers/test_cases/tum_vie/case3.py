@@ -5,9 +5,9 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config 
     TumVieConfig,
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream
-from test_data_generators.tum_vie_dataset.data import Data
-from test_data_generators.utils import generate_sensors_factory_config
 from tests.conftest import tum_vie_dataset_dir
+from tests_data_generators.tum_vie_dataset.data import Data
+from tests_data_generators.utils import generate_sensors_factory_config
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 data = Data(dataset_cfg)

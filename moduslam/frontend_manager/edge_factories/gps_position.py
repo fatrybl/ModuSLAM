@@ -46,8 +46,11 @@ class GpsPositionEdgeFactory(EdgeFactory):
             list with 1 edge.
         """
         vertex = get_vertex(Pose, graph.vertex_storage, timestamp, self._time_margin)
-        edge = self._create_edge(vertex, measurements.last)
-        return [edge]
+        if isinstance(vertex, Pose):
+            edge = self._create_edge(vertex, measurements.last)
+            return [edge]
+        else:
+            return []
 
     @staticmethod
     def _create_edge(vertex: Pose, measurement: Measurement) -> GpsPosition:
@@ -67,10 +70,6 @@ class GpsPositionEdgeFactory(EdgeFactory):
             measurement.noise_covariance[2],
         )
         noise: gtsam.noiseModel.Diagonal.Variances = position_diagonal_noise_model(variances)
-
-        gtsam_factor = gtsam.GPSFactor(vertex.gtsam_index, measurement.values, noise)
-
-        edge = GpsPosition(
-            vertex=vertex, measurements=(measurement,), factor=gtsam_factor, noise_model=noise
-        )
+        gtsam_factor = gtsam.GPSFactor(vertex.backend_index, measurement.value, noise)
+        edge = GpsPosition(vertex, measurement, gtsam_factor, noise)
         return edge

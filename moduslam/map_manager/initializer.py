@@ -3,7 +3,7 @@
 import logging
 from typing import cast
 
-from moduslam.frontend_manager.graph.custom_vertices import Pose
+from moduslam.frontend_manager.graph.custom_vertices import CameraPose
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.map_factories.lidar_map.factory import LidarMapFactory
 from moduslam.map_manager.map_factories.trajectory.factory import TrajectoryMapFactory
@@ -41,7 +41,7 @@ class Initializer:
         """
         match config.map_type:
             case MapType.trajectory:
-                return TrajectoryMapFactory(pose_type=Pose)
+                return TrajectoryMapFactory(pose_type=CameraPose)
             case MapType.lidar_pointcloud:
                 lidar_cfg = cast(LidarMapFactoryConfig, config)
                 return LidarMapFactory(lidar_cfg)

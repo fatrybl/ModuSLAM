@@ -6,13 +6,13 @@ Complexity:
 """
 
 from collections import OrderedDict
-from collections.abc import Iterable, Iterator
-from typing import Any, Generic, TypeVar
+from collections.abc import Iterable, Iterator, MutableSet, Sequence
+from typing import Any, Generic, TypeVar, overload
 
 T = TypeVar("T")
 
 
-class OrderedSet(Generic[T]):
+class OrderedSet(MutableSet, Sequence, Generic[T]):
     """OrderedSet is a combination of set and OrderedDict."""
 
     def __init__(self, iterable: Iterable[T] | None = None):
@@ -22,7 +22,7 @@ class OrderedSet(Generic[T]):
             for item in iterable:
                 self.add(item)
 
-    def __contains__(self, item: T) -> bool:
+    def __contains__(self, item: object) -> bool:
         return item in self._items
 
     def __iter__(self) -> Iterator[T]:
@@ -34,24 +34,36 @@ class OrderedSet(Generic[T]):
     def __repr__(self) -> str:
         return f"OrderedSet({set(self._items.keys())})"
 
-    def __getitem__(self, index: int) -> T:
+    @overload
+    def __getitem__(self, index: int) -> T: ...
+
+    @overload
+    def __getitem__(self, index: slice) -> Sequence[T]: ...
+
+    def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         """
         Attention: This method requires O(n) time complexity.
 
         Args:
-            index: index of an item.
+            index: index of an item or a slice.
 
         Returns:
-            item.
+            item or a sequence of items.
 
         Raises:
             IndexError: if index is out of range.
         """
-        try:
-            return list(self._items.keys())[index]
+        if isinstance(index, slice):
+            return [list(self._items.keys())[i] for i in range(*index.indices(len(self._items)))]
 
-        except IndexError:
-            raise IndexError("OrderedSet index out of range")
+        elif isinstance(index, int):
+            try:
+                return list(self._items.keys())[index]
+
+            except IndexError:
+                raise IndexError("OrderedSet index out of range")
+        else:
+            raise TypeError("Invalid argument type.")
 
     def __eq__(self, other: Any) -> bool:
         """Compares if an OrderedSet is equal to another OrderedSet. Two OrderedSets are
@@ -118,14 +130,29 @@ class OrderedSet(Generic[T]):
             else:
                 raise TypeError(msg)
 
+    def discard(self, item: T | Iterable[T]) -> None:
+        """Removes an item from the OrderedSet if it is present.
+
+        Args:
+            item: item(s) to be removed.
+        """
+
+        if isinstance(item, Iterable):
+            for i in item:
+                if i in self._items:
+                    self._items.pop(i)
+        else:
+            if item in self._items:
+                self._items.pop(item)
+
     def remove(self, item: T | Iterable[T]) -> None:
-        """Removes an item or items from the OrderedSet.
+        """Removes an item from the OrderedSet if it is present.
 
         Args:
             item: item(s) to be removed.
 
         Raises:
-            KeyError: if an item is not in the OrderedSet.
+            KeyError: if an item is not present in the OrderedSet.
         """
         msg = "Item not found in OrderedSet:"
 

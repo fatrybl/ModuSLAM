@@ -5,25 +5,34 @@ graph_builder:
   element_distributor:
 
     sensor_handlers_table:
-      stereo: [ 'keypoint_detector' ]
+      stereo: [ 'camera_features_detector' ]
 
   candidate_factory:
 
     handler_state_analyzer_table:
-      keypoint_detector: 'visual_features_state_analyzer'
+      camera_features_detector: 'visual_features_state_analyzer'
 
   graph_merger:
 
     handler_edge_factory_table:
-      keypoint_detector: 'smart_visual_features_edge_factory'
+      camera_features_detector: 'smart_visual_features_edge_factory'
 
 graph_initializer:
 
   priors:
-    initial_pose:
-      timestamp: 3618556327
+
+    first_pose:
+      timestamp: 4418806189 # timestamp of first VLP_right scan from data_manager/kaist.yaml
       vertex_type: "Pose"
       edge_factory_name: "prior_pose_edge_factory"
       measurement: [ 0,0,0,0,0,0 ]
       measurement_noise_covariance: [ 0.5, 0.5, 0.5, 1, 1, 1 ]
-      file_path: "configs/frontend_manager/kaist.yaml"
+      file_path: "configs/frontend_manager/stereo_imu.yaml"
+
+    second_pose:
+      timestamp: 4468949240 # timestamp of first VLP_right scan from data_manager/kaist.yaml
+      vertex_type: "Pose"
+      edge_factory_name: "prior_pose_edge_factory"
+      measurement: [ 0,0,0,0,0,0 ]
+      measurement_noise_covariance: [ 0.5, 0.5, 0.5, 1, 1, 1 ]
+      file_path: "configs/frontend_manager/stereo_imu.yaml"

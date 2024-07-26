@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 from plum import dispatch
 
-from test_data_generators.kaist_dataset.data import Data
+from tests_data_generators.kaist_dataset.data import Data
 
 
 class DataFactory:

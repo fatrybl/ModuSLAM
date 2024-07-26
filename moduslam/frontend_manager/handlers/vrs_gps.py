@@ -10,6 +10,7 @@ from moduslam.setup_manager.sensors_factory.sensors import VrsGps
 from moduslam.system_configs.frontend_manager.handlers.vrs_gps import (
     VrsGpsHandlerConfig,
 )
+from moduslam.types.numpy import Vector3
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.auxiliary_methods import (
     create_empty_element,
@@ -17,7 +18,6 @@ from moduslam.utils.auxiliary_methods import (
     to_float,
     to_int,
 )
-from moduslam.utils.numpy_types import Vector3
 
 logger = logging.getLogger(frontend_manager)
 
@@ -46,12 +46,12 @@ class VrsGpsPreprocessor(Handler):
             logger.error(msg)
             raise TypeError(msg)
 
-        fix_status = to_int(element.measurement.values[5])
+        fix_status = to_int(element.measurement.value[5])
         if fix_status not in self._fix_statuses:
             return None
 
-        position_str: tuple[str, str, str] = element.measurement.values[2:5]
-        standard_deviations_str = element.measurement.values[8:11]
+        position_str: tuple[str, str, str] = element.measurement.value[2:5]
+        standard_deviations_str = element.measurement.value[8:11]
         variances = tuple(to_float(x) ** 2 for x in standard_deviations_str)
 
         t = TimeRange(start=element.timestamp, stop=element.timestamp)
@@ -62,7 +62,7 @@ class VrsGpsPreprocessor(Handler):
 
         m = Measurement(
             time_range=t,
-            values=position,
+            value=position,
             handler=self,
             elements=(empty_element,),
             noise_covariance=variances,

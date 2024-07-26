@@ -1,14 +1,12 @@
-from collections import defaultdict
 from collections.abc import Sequence
 
 import cv2
 import numpy as np
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.graph.custom_edges import VisualOdometry
+from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
 from moduslam.frontend_manager.graph.custom_vertices import CameraPose
-from moduslam.utils.deque_set import DequeSet
-from moduslam.utils.numpy_types import (
+from moduslam.types.numpy import (
     Matrix3x3,
     Matrix4x4,
     MatrixMxN,
@@ -19,38 +17,24 @@ from moduslam.utils.numpy_types import (
 
 
 def create_vertex_elements_table(
-    vertices: DequeSet[CameraPose], edges: set[VisualOdometry]
+    vertices: Sequence[CameraPose],
+    vertex_edges_table: dict[CameraPose, set[SmartVisualFeature]],
 ) -> dict[CameraPose, set[Element]]:
-    """Creates "CameraPose -> elements" table.
+    """Creates "vertex -> elements" table.
 
     Args:
         vertices: vertices to get elements for.
 
-        edges: edges to check.
+        vertex_edges_table: "vertex -> edges" table.
 
     Returns:
         "vertex -> elements" table.
+
+    TODO: add implementation.
     """
 
-    table: dict[CameraPose, set[Element]] = defaultdict(set)
-
-    num_poses = len(vertices)
-
-    for i, vertex in enumerate(vertices):
-        if i == num_poses - 1:
-            for e in vertex.edges:
-                if isinstance(e, VisualOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[1]
-                    table[vertex].add(element)
-        else:
-            for e in vertex.edges:
-                if e in edges and isinstance(e, VisualOdometry):
-                    m = e.measurements[0]
-                    element = m.elements[0]
-                    table[vertex].add(element)
-                    edges.remove(e)
-    return table
+    # table: dict[CameraPose, set[Element]] = defaultdict(set)
+    raise NotImplementedError("This function is not implemented yet.")
 
 
 def get_points_and_pixels(

@@ -14,6 +14,7 @@ from moduslam.map_manager.map_factories.lidar_map.utils import (
     values_to_array,
 )
 from moduslam.map_manager.map_factories.utils import (
+    create_vertex_edges_table,
     filter_array,
     get_elements,
     transform_pointcloud,
@@ -24,7 +25,7 @@ from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
 from moduslam.system_configs.map_manager.map_factories.lidar_map import (
     LidarMapFactoryConfig,
 )
-from moduslam.utils.numpy_types import Matrix4x4
+from moduslam.types.aliases import Matrix4x4
 
 logger = logging.getLogger(map_manager)
 
@@ -47,7 +48,9 @@ class LidarMapFactory(MapFactory):
         """Lidar pointcloud map instance."""
         return self._map
 
-    def create_map(self, graph: Graph, batch_factory: BatchFactory) -> None:
+    def create_map(
+        self, graph: Graph[LidarPose, LidarOdometry], batch_factory: BatchFactory
+    ) -> None:
         """Creates a lidar pointcloud map.
 
         Args:
@@ -56,8 +59,8 @@ class LidarMapFactory(MapFactory):
             batch_factory: factory to create a data batch.
         """
         vertices = graph.vertex_storage.get_vertices(LidarPose)
-        edges = {edge for edge in graph.edge_storage.edges if isinstance(edge, LidarOdometry)}
-        table1 = create_vertex_elements_table(vertices, edges)
+        vertex_edges_table = create_vertex_edges_table(graph, vertices, LidarOdometry)
+        table1 = create_vertex_elements_table(vertices, vertex_edges_table)
         table2 = get_elements(table1, batch_factory)
         points_map = self._create_points_map(table2)
         self._map.set_points(points_map)
@@ -83,11 +86,8 @@ class LidarMapFactory(MapFactory):
                 sensor = element.measurement.sensor
 
                 if isinstance(sensor, Lidar3D):
-
                     pointcloud = self._create_pointcloud(
-                        pose=vertex.value,
-                        tf=sensor.tf_base_sensor,
-                        values=element.measurement.values,
+                        vertex.value, sensor.tf_base_sensor, element.measurement.values
                     )
                     pointcloud_map = np.concatenate((pointcloud_map, pointcloud), axis=1)
 
@@ -102,7 +102,7 @@ class LidarMapFactory(MapFactory):
         return pointcloud_map
 
     def _create_pointcloud(
-        self, pose: Matrix4x4, tf: Matrix4x4, values: tuple[float, ...]
+        self, pose: Matrix4x4, tf: list[list[float]], values: tuple[float, ...]
     ) -> np.ndarray:
         """Creates a pointcloud from the given values and transforms it according to the
         vertex pose and base -> lidar transformation. Ignores intensity values.
@@ -117,8 +117,10 @@ class LidarMapFactory(MapFactory):
         Returns:
             Pointcloud array [4, N].
         """
+        tf_array = np.array(tf)
+        pose_array = np.array(pose)
         pointcloud = values_to_array(values, self._num_channels)
         pointcloud = filter_array(pointcloud, self._min_range, self._max_range)
         pointcloud[3, :] = 1  # ignore intensity values
-        pointcloud = transform_pointcloud(pose, tf, pointcloud)
+        pointcloud = transform_pointcloud(pose_array, tf_array, pointcloud)
         return pointcloud

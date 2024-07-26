@@ -3,8 +3,8 @@ from typing import Generic
 
 from moduslam.data_manager.batch_factory.batch import DataBatch
 from moduslam.frontend_manager.elements_distributor import ElementDistributor
-from moduslam.frontend_manager.graph.base_edges import GraphEdge
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex
+from moduslam.frontend_manager.graph.base_edges import BaseEdge
+from moduslam.frontend_manager.graph.base_vertices import BaseVertex
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC import (
     CandidateFactory,
@@ -25,14 +25,14 @@ from moduslam.system_configs.frontend_manager.graph_builder.graph_builder import
 logger = logging.getLogger(frontend_manager)
 
 
-class PointcloudMapBuilder(GraphBuilder, Generic[GraphVertex, GraphEdge]):
+class PointcloudMapBuilder(GraphBuilder, Generic[BaseVertex, BaseEdge]):
     """Builds a graph for point-cloud based map."""
 
     def __init__(self, config: GraphBuilderConfig) -> None:
         super().__init__(config)
         self._distributor: ElementDistributor = ElementDistributor()
         self._candidate_factory: CandidateFactory = PointcloudMapCandidateFactory()
-        self._merger = GraphMerger[GraphVertex, GraphEdge]()
+        self._merger = GraphMerger[BaseVertex, BaseEdge]()
         self._merger.init_table(config.graph_merger.handler_edge_factory_table)
         self._distributor.init_table(config.element_distributor.sensor_handlers_table)
         self._candidate_factory.init_table(config.candidate_factory.handler_state_analyzer_table)
