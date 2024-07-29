@@ -30,5 +30,6 @@ class GraphSolver:
         )
         optimizer.optimize()
         result = optimizer.values()
+        logger.debug(f"result: {result}")
         logger.debug(f"optimization error: {optimizer.error()}")
         return result
