@@ -72,23 +72,24 @@
 
   <h1>Source code for moduslam.map_manager.map_factories.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.batch_factory</span> <span class="kn">import</span> <span class="n">BatchFactory</span>
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_edges</span> <span class="kn">import</span> <span class="n">LidarOdometry</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="n">LidarPose</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.factory</span> <span class="kn">import</span> <span class="n">BatchFactory</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_edges</span> <span class="kn">import</span> <span class="n">BaseEdge</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">BaseVertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Matrix4xN</span><span class="p">,</span> <span class="n">MatrixNx3</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_methods</span> <span class="kn">import</span> <span class="n">check_dimensionality</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.deque_set</span> <span class="kn">import</span> <span class="n">DequeSet</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.numpy_types</span> <span class="kn">import</span> <span class="n">Matrix4x4</span>
 
 
 <div class="viewcode-block" id="get_elements">
 <a class="viewcode-back" href="../../../../moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.get_elements">[docs]</a>
 <span class="k">def</span> <span class="nf">get_elements</span><span class="p">(</span>
-    <span class="n">vertex_elements_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Element</span><span class="p">]],</span> <span class="n">batch_factory</span><span class="p">:</span> <span class="n">BatchFactory</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Element</span><span class="p">]]:</span>
+    <span class="n">vertex_elements_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Element</span><span class="p">]],</span> <span class="n">batch_factory</span><span class="p">:</span> <span class="n">BatchFactory</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Element</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets elements with raw lidar pointcloud measurements and assign to the</span>
 <span class="sd">    corresponding vertices.</span>
 
@@ -99,70 +100,15 @@
 <span class="sd">        batch_factory (BatchFactory): factory to create a batch.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        &quot;vertices -&gt; elements&quot; table. Each element contains raw lidar pointcloud measurement.</span>
+<span class="sd">        &quot;vertices -&gt; elements&quot; table.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Element</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span>
+    <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Element</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">vertex_elements_table</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">batch_factory</span><span class="o">.</span><span class="n">create_batch</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_with_elements</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="n">table</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch_factory</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">batch_factory</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">table</span></div>
-
-
-
-<div class="viewcode-block" id="create_vertex_elements_table">
-<a class="viewcode-back" href="../../../../moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.create_vertex_elements_table">[docs]</a>
-<span class="k">def</span> <span class="nf">create_vertex_elements_table</span><span class="p">(</span>
-    <span class="n">vertices</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">],</span> <span class="n">edges</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">LidarOdometry</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Element</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates &quot;vertex -&gt; elements&quot; table.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        vertices: vertices to get elements for.</span>
-
-<span class="sd">        edges: LidarOdometry edges to check.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        &quot;vertex -&gt; elements&quot; table.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Element</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
-
-    <span class="n">num_poses</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertices</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">num_poses</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">LidarOdometry</span><span class="p">):</span>
-                    <span class="n">m</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">measurements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">element</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">table</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">LidarOdometry</span><span class="p">):</span>
-                    <span class="n">m</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">measurements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">element</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">table</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-                    <span class="n">edges</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">table</span></div>
-
-
-
-<div class="viewcode-block" id="values_to_array">
-<a class="viewcode-back" href="../../../../moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.values_to_array">[docs]</a>
-<span class="k">def</span> <span class="nf">values_to_array</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">num_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts values to pointcloud np.ndarray [num_channels, N].</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        values: values to convert.</span>
-
-<span class="sd">        num_channels: number of channels in pointcloud.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Values as array [num_channels, N].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-    <span class="k">return</span> <span class="n">array</span></div>
 
 
 
@@ -208,6 +154,56 @@
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">array</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;=</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">array</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;=</span> <span class="n">upper_bound</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">filtered_arr</span> <span class="o">=</span> <span class="n">array</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">filtered_arr</span></div>
+
+
+
+<div class="viewcode-block" id="convert_pointcloud">
+<a class="viewcode-back" href="../../../../moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.convert_pointcloud">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_pointcloud</span><span class="p">(</span><span class="n">pointcloud</span><span class="p">:</span> <span class="n">MatrixNx3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix4xN</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a 3D pointcloud to homogeneous coordinates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pointcloud: pointcloud array [N, 3].</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Homogeneous pointcloud array [4, N].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pointcloud</span> <span class="o">=</span> <span class="n">pointcloud</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">pointcloud</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">pointcloud_homogeneous</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pointcloud</span><span class="p">,</span> <span class="n">ones</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pointcloud_homogeneous</span></div>
+
+
+
+<div class="viewcode-block" id="create_vertex_edges_table">
+<a class="viewcode-back" href="../../../../moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.create_vertex_edges_table">[docs]</a>
+<span class="k">def</span> <span class="nf">create_vertex_edges_table</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">],</span> <span class="n">edge_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a table with vertices and corresponding edges of the given type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        graph: graph to create a table from.</span>
+
+<span class="sd">        vertices: vertices to create a table for.</span>
+
+<span class="sd">        edge_type: edge type to filter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        &quot;vertex -&gt; edges&quot; table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_connected_edges</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+                    <span class="n">table</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">edge</span><span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">table</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">table</span></div>
 
 </pre></div>
 

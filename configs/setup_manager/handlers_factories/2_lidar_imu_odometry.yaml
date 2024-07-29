@@ -2,6 +2,8 @@ defaults:
   - /handlers/base_kiss_icp_odometry@handlers.kiss_icp_odometry_1
   - /handlers/base_kiss_icp_odometry@handlers.kiss_icp_odometry_2
 
+package_name: 'moduslam.frontend_manager.handlers'
+
 handlers:
 
   kiss_icp_odometry_1:

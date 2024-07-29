@@ -1,4 +1,0 @@
-defaults:
-  - lidar
-  - override setup_manager: 2_lidar
-  - override frontend_manager: 2_lidar

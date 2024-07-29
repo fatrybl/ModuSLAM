@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from moduslam.data_manager.factory.batch import DataBatch
+from moduslam.data_manager.batch_factory.batch import DataBatch
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     GraphCandidate,

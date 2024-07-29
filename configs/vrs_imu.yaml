@@ -1,4 +1,0 @@
-defaults:
-  - lidar
-  - override setup_manager: vrs_imu
-  - override frontend_manager: vrs_imu

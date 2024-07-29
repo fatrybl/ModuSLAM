@@ -63,7 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.run">moduslam.run module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.sandbox">moduslam.sandbox module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#moduslam-sandbox-module">moduslam.sandbox module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam">Module contents</a></li>
 </ul>
 </li>
@@ -109,15 +109,15 @@
 <span id="moduslam-data-manager-memory-analyzer-memory-analyzer-module"></span><h2>moduslam.data_manager.memory_analyzer.memory_analyzer module<a class="headerlink" href="#module-moduslam.data_manager.memory_analyzer.memory_analyzer" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.memory_analyzer.memory_analyzer.</span></span><span class="sig-name descname"><span class="pre">MemoryAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.html#moduslam.system_configs.data_manager.batch_factory.memory.MemoryAnalyzerConfig" title="moduslam.system_configs.data_manager.batch_factory.memory.MemoryAnalyzerConfig"><span class="pre">MemoryAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/memory_analyzer/memory_analyzer.html#MemoryAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.memory_analyzer.memory_analyzer.</span></span><span class="sig-name descname"><span class="pre">MemoryAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_memory_percent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/memory_analyzer/memory_analyzer.html#MemoryAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Analyzes current memory usage.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.html#moduslam.system_configs.data_manager.batch_factory.memory.MemoryAnalyzerConfig" title="moduslam.system_configs.data_manager.batch_factory.memory.MemoryAnalyzerConfig"><span class="pre">MemoryAnalyzerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/memory_analyzer/memory_analyzer.html#MemoryAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_memory_percent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/memory_analyzer/memory_analyzer.html#MemoryAnalyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.__init__" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – the configuration for the memory analyzer.</p>
+<dd class="field-odd"><p><strong>batch_memory_percent</strong> – permissible memory usage in percentage.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -144,6 +144,12 @@
 <dt class="sig sig-object py" id="moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.permissible_memory_percent">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">permissible_memory_percent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.permissible_memory_percent" title="Link to this definition"></a></dt>
 <dd><p>Permissible percentage of memory which is available for the user.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.enough_memory">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enough_memory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.enough_memory" title="Link to this definition"></a></dt>
+<dd><p>Checks if the memory usage is within the permissible limits.</p>
 </dd></dl>
 
 </dd></dl>

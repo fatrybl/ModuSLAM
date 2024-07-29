@@ -6,7 +6,7 @@ handlers:
   imu_preprocessor:
     name: "imu_preprocessor"
     type_name: "ImuDataPreprocessor"
-    module_name: ".imu_data_preprocessor"
+    module_name: ".imu_data_preprocessor.handler"
 
   kiss_icp_odometry:
     name: "kiss_icp_odometry"

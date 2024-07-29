@@ -5,6 +5,7 @@ defaults:
 package_name: 'moduslam.frontend_manager.handlers'
 
 handlers:
+
   kiss_icp_odometry_1:
     name: "kiss_icp_odometry_1"
     type_name: "ScanMatcher"

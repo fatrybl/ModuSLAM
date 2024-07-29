@@ -79,16 +79,31 @@
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">KaistConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regime</span> <span class="kn">import</span> <span class="n">RegimeConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TumVieConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regimes</span> <span class="kn">import</span> <span class="n">DataRegimeConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.handlers.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">KissIcpScanMatcherConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.handlers.visual_odometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">FeatureDetectorConfig</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.handlers.vrs_gps</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">VrsGpsHandlerConfig</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.main_manager</span> <span class="kn">import</span> <span class="n">MainManagerConfig</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.map_manager.map_manager</span> <span class="kn">import</span> <span class="n">MapManagerConfig</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">ImuConfig</span><span class="p">,</span> <span class="n">Lidar3DConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.map_manager.map_factories.lidar_map</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LidarMapFactoryConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.map_manager.map_loaders.lidar_map</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LidarMapLoaderConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ImuConfig</span><span class="p">,</span>
+    <span class="n">Lidar3DConfig</span><span class="p">,</span>
+    <span class="n">StereoCameraConfig</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">main_manager</span><span class="p">)</span>
 
@@ -103,12 +118,16 @@
     <span class="n">cs</span> <span class="o">=</span> <span class="n">ConfigStore</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;structured_schema_config&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">MainManagerConfig</span><span class="p">)</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;datasets&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_kaist_dataset&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">KaistConfig</span><span class="p">)</span>
-    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;regimes&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_regime&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">RegimeConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;datasets&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_tum_vie_dataset&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">TumVieConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;regimes&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_data_regime&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">DataRegimeConfig</span><span class="p">)</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;handlers&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_kiss_icp_odometry&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">KissIcpScanMatcherConfig</span><span class="p">)</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;handlers&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_vrs_gps_preprocessor&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">VrsGpsHandlerConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;handlers&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_feature_detector&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">FeatureDetectorConfig</span><span class="p">)</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;sensors&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_lidar3D&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">Lidar3DConfig</span><span class="p">)</span>
     <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;sensors&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_imu&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">ImuConfig</span><span class="p">)</span>
-    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;map_manager&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_map_manager&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">MapManagerConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;sensors&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_stereo_camera&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">StereoCameraConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;map_factories&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_lidar_map_factory&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">LidarMapFactoryConfig</span><span class="p">)</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;map_loaders&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_lidar_map_loader&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">LidarMapLoaderConfig</span><span class="p">)</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Structured config schema has been successfully registered.&quot;</span><span class="p">)</span></div>
 

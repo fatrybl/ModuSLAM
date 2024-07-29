@@ -79,8 +79,8 @@
 <span class="kn">import</span> <span class="nn">gtsam</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">find_vertex</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">GraphVertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">get_last_vertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">BaseVertex</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_edges</span> <span class="kn">import</span> <span class="n">ImuOdometry</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ImuBias</span><span class="p">,</span>
@@ -89,10 +89,14 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.index_generator</span> <span class="kn">import</span> <span class="n">generate_index</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.vertex_storage</span> <span class="kn">import</span> <span class="n">VertexStorage</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.imu_data_preprocessor</span> <span class="kn">import</span> <span class="n">ImuData</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.imu_data_preprocessor.line_parsers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ImuData</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.numpy_types</span> <span class="kn">import</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Vector3</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.aliases</span> <span class="kn">import</span> <span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Vector3</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">Matrix3x3</span> <span class="k">as</span> <span class="n">NumpyMatrix3x3</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">Matrix4x4</span> <span class="k">as</span> <span class="n">NumpyMatrix4x4</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.ordered_set</span> <span class="kn">import</span> <span class="n">OrderedSet</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">frontend_manager</span><span class="p">)</span>
@@ -101,8 +105,8 @@
 <div class="viewcode-block" id="create_vertex">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.imu_preintegration.html#moduslam.frontend_manager.edge_factories.imu_preintegration.utils.create_vertex">[docs]</a>
 <span class="k">def</span> <span class="nf">create_vertex</span><span class="p">(</span>
-    <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphVertex</span><span class="p">:</span>
+    <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseVertex</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">vertex_type</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 
@@ -116,7 +120,7 @@
     <span class="n">pose_j</span><span class="p">:</span> <span class="n">Pose</span><span class="p">,</span>
     <span class="n">velocity_j</span><span class="p">:</span> <span class="n">LinearVelocity</span><span class="p">,</span>
     <span class="n">bias_j</span><span class="p">:</span> <span class="n">ImuBias</span><span class="p">,</span>
-    <span class="n">measurements</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Measurement</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">measurements</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Measurement</span><span class="p">],</span>
     <span class="n">pim</span><span class="p">:</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">PreintegratedCombinedMeasurements</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImuOdometry</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates new edge of type ImuOdometry.</span>
@@ -126,12 +130,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">factor</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">CombinedImuFactor</span><span class="p">(</span>
-        <span class="n">pose_i</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
-        <span class="n">velocity_i</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
-        <span class="n">pose_j</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
-        <span class="n">velocity_j</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
-        <span class="n">bias_i</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
-        <span class="n">bias_j</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span>
+        <span class="n">pose_i</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
+        <span class="n">velocity_i</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
+        <span class="n">pose_j</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
+        <span class="n">velocity_j</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
+        <span class="n">bias_i</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
+        <span class="n">bias_j</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
         <span class="n">pim</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -139,8 +143,7 @@
     <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Gaussian</span><span class="o">.</span><span class="n">Covariance</span><span class="p">(</span><span class="n">integrated_noise</span><span class="p">)</span>
 
     <span class="n">edge</span> <span class="o">=</span> <span class="n">ImuOdometry</span><span class="p">(</span>
-        <span class="n">vertex_set_1</span><span class="o">=</span><span class="p">{</span><span class="n">pose_i</span><span class="p">,</span> <span class="n">velocity_i</span><span class="p">,</span> <span class="n">bias_i</span><span class="p">},</span>
-        <span class="n">vertex_set_2</span><span class="o">=</span><span class="p">{</span><span class="n">pose_j</span><span class="p">,</span> <span class="n">velocity_j</span><span class="p">,</span> <span class="n">bias_j</span><span class="p">},</span>
+        <span class="n">vertices</span><span class="o">=</span><span class="p">[</span><span class="n">pose_i</span><span class="p">,</span> <span class="n">velocity_i</span><span class="p">,</span> <span class="n">bias_i</span><span class="p">,</span> <span class="n">pose_j</span><span class="p">,</span> <span class="n">velocity_j</span><span class="p">,</span> <span class="n">bias_j</span><span class="p">],</span>
         <span class="n">measurements</span><span class="o">=</span><span class="n">measurements</span><span class="p">,</span>
         <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
         <span class="n">noise_model</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
@@ -151,7 +154,9 @@
 
 <div class="viewcode-block" id="compute_covariance">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.imu_preintegration.html#moduslam.frontend_manager.edge_factories.imu_preintegration.utils.compute_covariance">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_covariance</span><span class="p">(</span><span class="n">measurements</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Measurement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">Matrix3x3</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">compute_covariance</span><span class="p">(</span>
+    <span class="n">measurements</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Measurement</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NumpyMatrix3x3</span><span class="p">,</span> <span class="n">NumpyMatrix3x3</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the covariance of the accelerometer and gyroscope measurements [x,y,z].</span>
 <span class="sd">    If only one measurement is available, the default covariance is used.</span>
 
@@ -162,8 +167,10 @@
 <span class="sd">        accelerometer and gyroscope noise covariance matrices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">accelerations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">acceleration</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">measurements</span><span class="p">])</span>
-    <span class="n">angular_velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">angular_velocity</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">measurements</span><span class="p">])</span>
+    <span class="n">accelerations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">acceleration</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">measurements</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">angular_velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">angular_velocity</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">measurements</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+    <span class="p">)</span>
 
     <span class="n">acc_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">accelerations</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">gyro_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">angular_velocities</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -176,12 +183,12 @@
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.imu_preintegration.html#moduslam.frontend_manager.edge_factories.imu_preintegration.utils.set_parameters">[docs]</a>
 <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">PreintegrationCombinedParams</span><span class="p">,</span>
-    <span class="n">tf_base_sensor</span><span class="p">:</span> <span class="n">Matrix4x4</span><span class="p">,</span>
-    <span class="n">acc_cov</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span>
-    <span class="n">gyro_cov</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span>
-    <span class="n">integration_cov</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span>
-    <span class="n">bias_acc_cov</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span>
-    <span class="n">bias_omega_cov</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span>
+    <span class="n">tf_base_sensor</span><span class="p">:</span> <span class="n">NumpyMatrix4x4</span><span class="p">,</span>
+    <span class="n">acc_cov</span><span class="p">:</span> <span class="n">NumpyMatrix3x3</span><span class="p">,</span>
+    <span class="n">gyro_cov</span><span class="p">:</span> <span class="n">NumpyMatrix3x3</span><span class="p">,</span>
+    <span class="n">integration_cov</span><span class="p">:</span> <span class="n">NumpyMatrix3x3</span><span class="p">,</span>
+    <span class="n">bias_acc_cov</span><span class="p">:</span> <span class="n">NumpyMatrix3x3</span><span class="p">,</span>
+    <span class="n">bias_omega_cov</span><span class="p">:</span> <span class="n">NumpyMatrix3x3</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the parameters for the IMU measurements preintegration.</span>
 
@@ -240,24 +247,26 @@
     <span class="n">measurements_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
     <span class="n">num_elements</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurements_list</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">measurements</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">measurements</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="n">num_elements</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">dt_nanoseconds</span> <span class="o">=</span> <span class="n">timestamp</span> <span class="o">-</span> <span class="n">measurements</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">dt_nanoseconds</span> <span class="o">=</span> <span class="n">measurements_list</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">m</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span>
+            <span class="n">dt_nanoseconds</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">measurements_list</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">measurement</span><span class="o">.</span><span class="n">time_range</span><span class="o">.</span><span class="n">start</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">dt_nanoseconds</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;dt &lt;= 0. Stopping integration of IMU measurements.&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">pim</span>
 
-        <span class="n">values</span><span class="p">:</span> <span class="n">ImuData</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">values</span>
-        <span class="n">acc</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">acceleration</span>
-        <span class="n">omega</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">angular_velocity</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">ImuData</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">acceleration</span><span class="p">)</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">angular_velocity</span><span class="p">)</span>
 
-        <span class="n">dt_secs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">dt_nanoseconds</span> <span class="o">*</span> <span class="n">time_scale</span>
+        <span class="n">dt_secs</span> <span class="o">=</span> <span class="n">dt_nanoseconds</span> <span class="o">*</span> <span class="n">time_scale</span>
         <span class="n">pim</span><span class="o">.</span><span class="n">integrateMeasurement</span><span class="p">(</span><span class="n">acc</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">dt_secs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pim</span></div>
@@ -292,9 +301,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">is_new_index</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="n">pose</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
-    <span class="n">velocity</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">LinearVelocity</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
-    <span class="n">bias</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">ImuBias</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+    <span class="n">pose</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">LinearVelocity</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">ImuBias</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">pose</span> <span class="ow">and</span> <span class="n">velocity</span> <span class="ow">and</span> <span class="n">bias</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pose</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">is_new_index</span>
@@ -307,9 +316,12 @@
             <span class="n">is_new_index</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">default_values</span><span class="p">:</span>
-            <span class="n">pose</span> <span class="o">=</span> <span class="n">Pose</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">velocity</span> <span class="o">=</span> <span class="n">LinearVelocity</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">bias</span> <span class="o">=</span> <span class="n">ImuBias</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_values</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">default_pose</span> <span class="o">=</span> <span class="n">default_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">default_velocity</span> <span class="o">=</span> <span class="n">default_values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">default_bias</span> <span class="o">=</span> <span class="n">default_values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">pose</span> <span class="o">=</span> <span class="n">Pose</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_pose</span><span class="p">)</span>
+            <span class="n">velocity</span> <span class="o">=</span> <span class="n">LinearVelocity</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_velocity</span><span class="p">)</span>
+            <span class="n">bias</span> <span class="o">=</span> <span class="n">ImuBias</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">default_bias</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">pose</span> <span class="o">=</span> <span class="n">Pose</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>
             <span class="n">velocity</span> <span class="o">=</span> <span class="n">LinearVelocity</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>

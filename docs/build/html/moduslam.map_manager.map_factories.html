@@ -63,7 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.run">moduslam.run module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.sandbox">moduslam.sandbox module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#moduslam-sandbox-module">moduslam.sandbox module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam">Module contents</a></li>
 </ul>
 </li>
@@ -105,154 +105,17 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-moduslam.map_manager.map_factories.lidar_map_factory">
-<span id="moduslam-map-manager-map-factories-lidar-map-factory-module"></span><h2>moduslam.map_manager.map_factories.lidar_map_factory module<a class="headerlink" href="#module-moduslam.map_manager.map_factories.lidar_map_factory" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.lidar_map_factory.</span></span><span class="sig-name descname"><span class="pre">LidarMapFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.map_factories.html#moduslam.system_configs.map_manager.map_factories.lidar_map_factory.LidarMapFactoryConfig" title="moduslam.system_configs.map_manager.map_factories.lidar_map_factory.LidarMapFactoryConfig"><span class="pre">LidarMapFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_factory.html#LidarMapFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Factory for a lidar map.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.map_factories.html#moduslam.system_configs.map_manager.map_factories.lidar_map_factory.LidarMapFactoryConfig" title="moduslam.system_configs.map_manager.map_factories.lidar_map_factory.LidarMapFactoryConfig"><span class="pre">LidarMapFactoryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_factory.html#LidarMapFactory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – configuration of the factory.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.map">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="moduslam.map_manager.maps.html#moduslam.map_manager.maps.lidar_map.LidarMap" title="moduslam.map_manager.maps.lidar_map.LidarMap"><span class="pre">LidarMap</span></a></em><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.map" title="Link to this definition"></a></dt>
-<dd><p>Lidar pointcloud map instance.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.edge_storage.EdgeStorage" title="moduslam.frontend_manager.graph.edge_storage.EdgeStorage"><span class="pre">EdgeStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.batch_factory.BatchFactory" title="moduslam.data_manager.factory.batch_factory.BatchFactory"><span class="pre">BatchFactory</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_factory.html#LidarMapFactory.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory.create" title="Link to this definition"></a></dt>
-<dd><p>Creates a lidar pointcloud map.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vertex_storage</strong> – storage of graph vertices.</p></li>
-<li><p><strong>edge_storage</strong> – storage of graph edges.</p></li>
-<li><p><strong>batch_factory</strong> – factory to create a data batch.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud">
-<span class="sig-name descname"><span class="pre">_build_pointcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_factory.html#LidarMapFactory._build_pointcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud" title="Link to this definition"></a></dt>
-<dd><p>Builds a pointcloud from the given values and transforms it according to the
-vertex pose and base -&gt; lidar transformation. Ignores intensity values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pose</strong> – pose SE(3).</p></li>
-<li><p><strong>tf</strong> – base -&gt; lidar transformation SE(3).</p></li>
-<li><p><strong>values</strong> – raw lidar pointcloud data.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pointcloud array [4, N].</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud_map">
-<span class="sig-name descname"><span class="pre">_build_pointcloud_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_elements_table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.LidarPose" title="moduslam.frontend_manager.graph.custom_vertices.LidarPose"><span class="pre">LidarPose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">deque</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_factory.html#LidarMapFactory._build_pointcloud_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_factory.LidarMapFactory._build_pointcloud_map" title="Link to this definition"></a></dt>
-<dd><p>Builds a pointcloud map from the given “vertex -&gt; elements” table.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vertex_elements_table</strong> – “vertex -&gt; elements” table.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pointcloud map array [N,3].</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>TypeError</strong> – if the sensor is not of type Lidar3D.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-map-manager-map-factories-lidar-map-factory-module">
+<h2>moduslam.map_manager.map_factories.lidar_map_factory module<a class="headerlink" href="#moduslam-map-manager-map-factories-lidar-map-factory-module" title="Link to this heading"></a></h2>
 </section>
-<section id="module-moduslam.map_manager.map_factories.lidar_map_utils">
-<span id="moduslam-map-manager-map-factories-lidar-map-utils-module"></span><h2>moduslam.map_manager.map_factories.lidar_map_utils module<a class="headerlink" href="#module-moduslam.map_manager.map_factories.lidar_map_utils" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.lidar_map_utils.</span></span><span class="sig-name descname"><span class="pre">LidarMapLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.LidarMapLoaderConfig" title="moduslam.system_configs.map_manager.map_manager.LidarMapLoaderConfig"><span class="pre">LidarMapLoaderConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#LidarMapLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Lidar pointcloud map loader.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.LidarMapLoaderConfig" title="moduslam.system_configs.map_manager.map_manager.LidarMapLoaderConfig"><span class="pre">LidarMapLoaderConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#LidarMapLoader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – configuration for the loader.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lidar_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.map_manager.maps.html#moduslam.map_manager.maps.lidar_map.LidarMap" title="moduslam.map_manager.maps.lidar_map.LidarMap"><span class="pre">LidarMap</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#LidarMapLoader.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.save" title="Link to this definition"></a></dt>
-<dd><p>Saves lidar pointcloud map to the file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>lidar_map</strong> – lidar pointcloud map to save.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ExternalModuleException" title="moduslam.utils.exceptions.ExternalModuleException"><strong>ExternalModuleException</strong></a> – if failed to save the map using Open3D lib.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.map_manager.maps.html#moduslam.map_manager.maps.lidar_map.LidarMap" title="moduslam.map_manager.maps.lidar_map.LidarMap"><span class="pre">LidarMap</span></a></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#LidarMapLoader.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.LidarMapLoader.load" title="Link to this definition"></a></dt>
-<dd><p>Loads the map.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>lidar pointcloud map instance.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ExternalModuleException" title="moduslam.utils.exceptions.ExternalModuleException"><strong>ExternalModuleException</strong></a> – if failed to load the map using Open3D lib.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.lidar_map_utils.</span></span><span class="sig-name descname"><span class="pre">PointcloudVisualizer</span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#PointcloudVisualizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Visualizer for the lidar pointcloud.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer.visualize">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointcloud</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PointCloud</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/lidar_map_utils.html#PointcloudVisualizer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.lidar_map_utils.PointcloudVisualizer.visualize" title="Link to this definition"></a></dt>
-<dd><p>Visualizes the pointcloud.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>pointcloud</strong> – pointcloud array [N, 3].</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-map-manager-map-factories-lidar-map-utils-module">
+<h2>moduslam.map_manager.map_factories.lidar_map_utils module<a class="headerlink" href="#moduslam-map-manager-map-factories-lidar-map-utils-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.map_manager.map_factories.utils">
 <span id="moduslam-map-manager-map-factories-utils-module"></span><h2>moduslam.map_manager.map_factories.utils module<a class="headerlink" href="#module-moduslam.map_manager.map_factories.utils" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.get_elements">
-<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">get_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_elements_table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.LidarPose" title="moduslam.frontend_manager.graph.custom_vertices.LidarPose"><span class="pre">LidarPose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.batch_factory.BatchFactory" title="moduslam.data_manager.factory.batch_factory.BatchFactory"><span class="pre">BatchFactory</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.LidarPose" title="moduslam.frontend_manager.graph.custom_vertices.LidarPose"><span class="pre">LidarPose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">deque</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#get_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.get_elements" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">get_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_elements_table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.factory.BatchFactory" title="moduslam.data_manager.batch_factory.factory.BatchFactory"><span class="pre">BatchFactory</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">deque</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#get_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.get_elements" title="Link to this definition"></a></dt>
 <dd><p>Gets elements with raw lidar pointcloud measurements and assign to the
 corresponding vertices.</p>
 <dl class="field-list simple">
@@ -260,52 +123,18 @@ corresponding vertices.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vertex_elements_table</strong> – “vertices -&gt; elements” table.
 Elements do not contain raw lidar pointcloud measurements.</p></li>
-<li><p><strong>batch_factory</strong> (<a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.batch_factory.BatchFactory" title="moduslam.data_manager.factory.batch_factory.BatchFactory"><em>BatchFactory</em></a>) – factory to create a batch.</p></li>
+<li><p><strong>batch_factory</strong> (<a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.factory.BatchFactory" title="moduslam.data_manager.batch_factory.factory.BatchFactory"><em>BatchFactory</em></a>) – factory to create a batch.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>“vertices -&gt; elements” table. Each element contains raw lidar pointcloud measurement.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.create_vertex_elements_table">
-<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">create_vertex_elements_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.deque_set.DequeSet" title="moduslam.utils.deque_set.DequeSet"><span class="pre">DequeSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.LidarPose" title="moduslam.frontend_manager.graph.custom_vertices.LidarPose"><span class="pre">LidarPose</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_edges.LidarOdometry" title="moduslam.frontend_manager.graph.custom_edges.LidarOdometry"><span class="pre">LidarOdometry</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.LidarPose" title="moduslam.frontend_manager.graph.custom_vertices.LidarPose"><span class="pre">LidarPose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#create_vertex_elements_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.create_vertex_elements_table" title="Link to this definition"></a></dt>
-<dd><p>Creates “vertex -&gt; elements” table.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices</strong> – vertices to get elements for.</p></li>
-<li><p><strong>edges</strong> – LidarOdometry edges to check.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>“vertex -&gt; elements” table.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.values_to_array">
-<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">values_to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#values_to_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.values_to_array" title="Link to this definition"></a></dt>
-<dd><p>Converts values to pointcloud np.ndarray [num_channels, N].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values</strong> – values to convert.</p></li>
-<li><p><strong>num_channels</strong> – number of channels in pointcloud.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Values as array [num_channels, N].</p>
+<dd class="field-even"><p>“vertices -&gt; elements” table.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.transform_pointcloud">
-<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">transform_pointcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tf1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointcloud</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#transform_pointcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.transform_pointcloud" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">transform_pointcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tf1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointcloud</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#transform_pointcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.transform_pointcloud" title="Link to this definition"></a></dt>
 <dd><dl class="simple">
 <dt>Transforms points` coordinates to the global coordinate frame based</dt><dd><p>on the given vertex pose and transformation: base -&gt; sensor.</p>
 </dd>
@@ -339,6 +168,38 @@ value outside the bounds, the whole column is removed.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>filtered array [4, K].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.convert_pointcloud">
+<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">convert_pointcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointcloud</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#convert_pointcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.convert_pointcloud" title="Link to this definition"></a></dt>
+<dd><p>Converts a 3D pointcloud to homogeneous coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pointcloud</strong> – pointcloud array [N, 3].</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Homogeneous pointcloud array [4, N].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.map_manager.map_factories.utils.create_vertex_edges_table">
+<span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_factories.utils.</span></span><span class="sig-name descname"><span class="pre">create_vertex_edges_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.BaseEdge" title="moduslam.frontend_manager.graph.base_edges.BaseEdge"><span class="pre">BaseEdge</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.BaseEdge" title="moduslam.frontend_manager.graph.base_edges.BaseEdge"><span class="pre">BaseEdge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_factories/utils.html#create_vertex_edges_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_factories.utils.create_vertex_edges_table" title="Link to this definition"></a></dt>
+<dd><p>Creates a table with vertices and corresponding edges of the given type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> – graph to create a table from.</p></li>
+<li><p><strong>vertices</strong> – vertices to create a table for.</p></li>
+<li><p><strong>edge_type</strong> – edge type to filter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>“vertex -&gt; edges” table.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -72,17 +72,21 @@
 
   <h1>Source code for moduslam.frontend_manager.graph.custom_vertices</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">gtsam</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">gtsam.symbol_shorthand</span> <span class="kn">import</span> <span class="n">B</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">X</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">NotOptimizableVertex</span><span class="p">,</span>
     <span class="n">OptimizableVertex</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.numpy_types</span> <span class="kn">import</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Vector3</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.aliases</span> <span class="kn">import</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Vector3</span>
 
-<span class="n">identity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">zero_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">identity_matrix</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">zero_vector</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Pose">
@@ -100,18 +104,18 @@
 <span class="sd">            value: SE(3) pose.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">X</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM pose.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix4x4</span><span class="p">:</span>
@@ -121,12 +125,12 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Translation part of the pose: x, y, z.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">translation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">translation</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix3x3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Rotation part of the pose: SO(3) matrix.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Pose.update">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Pose.update">[docs]</a>
@@ -136,8 +140,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            value: GTSAM values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atPose3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atPose3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span></div>
 </div>
 
 
@@ -156,14 +160,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Linear velocity: Vx, Vy, Vz.</span>
 <span class="sd">        Identical to the value property, as GTSAM does not have a separate class for linear velocity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">V</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
@@ -175,7 +179,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            value: GTSAM values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atVector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atVector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_index</span><span class="p">)</span></div>
 </div>
 
 
@@ -193,7 +197,7 @@
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
         <span class="n">pose</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NavState</span><span class="p">(</span><span class="n">pose</span><span class="p">,</span> <span class="n">velocity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NavState</span><span class="p">(</span><span class="n">pose</span><span class="p">,</span> <span class="n">velocity</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Matrix4x4</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">]:</span>
@@ -211,12 +215,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NavState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NavState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM NavState instance.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">N</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
@@ -228,8 +232,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            value: GTSAM values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atNavState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">pose</span><span class="p">()</span><span class="o">.</span><span class="n">matrix</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">velocity</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atNavState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">pose</span><span class="p">()</span><span class="o">.</span><span class="n">matrix</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">velocity</span><span class="p">()</span></div>
 </div>
 
 
@@ -237,22 +241,22 @@
 <div class="viewcode-block" id="Point">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Point">[docs]</a>
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">OptimizableVertex</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Vector3</span> <span class="o">=</span> <span class="n">zero_vector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Point3D</span> <span class="o">=</span> <span class="n">zero_vector</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3D</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Position of the point: x, y, z.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3D</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Identical to the value property, as GTSAM does not have a separate class for</span>
 <span class="sd">        point in 3D.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
@@ -264,7 +268,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            value: GTSAM values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atPoint3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atPoint3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_index</span><span class="p">)</span></div>
 </div>
 
 
@@ -289,7 +293,7 @@
 <span class="sd">            value: accelerometer bias, gyroscope bias.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">imuBias</span><span class="o">.</span><span class="n">ConstantBias</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">imuBias</span><span class="o">.</span><span class="n">ConstantBias</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
 
     <span class="nd">@property</span>
@@ -308,12 +312,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">imuBias</span><span class="o">.</span><span class="n">ConstantBias</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">imuBias</span><span class="o">.</span><span class="n">ConstantBias</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">B</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
@@ -325,8 +329,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            value: GTSAM values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gtsam_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atConstantBias</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">accelerometer</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="o">.</span><span class="n">gyroscope</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">atConstantBias</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">accelerometer</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_instance</span><span class="o">.</span><span class="n">gyroscope</span><span class="p">()</span></div>
 </div>
 
 
@@ -351,28 +355,28 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base landmark in the Graph.&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">L</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="Feature">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Feature">[docs]</a>
-<span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="n">NotOptimizableVertex</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature3D">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Feature3D">[docs]</a>
+<span class="k">class</span> <span class="nc">Feature3D</span><span class="p">(</span><span class="n">NotOptimizableVertex</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-optimizable point in 3D.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Vector3</span> <span class="o">=</span> <span class="n">zero_vector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Point3D</span> <span class="o">=</span> <span class="n">zero_vector</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3D</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Position of the feature: x, y, z.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 
-<div class="viewcode-block" id="Feature.update">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Feature.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Vector3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Feature3D.update">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.Feature3D.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Point3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the feature with the new value.</span>
 
 <span class="sd">        Args:</span>
@@ -380,13 +384,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span></div>
 </div>
-
-
-
-<div class="viewcode-block" id="CameraFeature">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_vertices.CameraFeature">[docs]</a>
-<span class="k">class</span> <span class="nc">CameraFeature</span><span class="p">(</span><span class="n">Feature</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Feature in the Camera Frame.&quot;&quot;&quot;</span></div>
 
 </pre></div>
 

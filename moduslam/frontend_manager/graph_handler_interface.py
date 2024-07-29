@@ -1,3 +1,8 @@
+"""Interface for handlers that need to interact with the graph.
+
+TODO: add implementation of the interface.
+"""
+
 import logging
 from collections.abc import Iterable
 from dataclasses import dataclass

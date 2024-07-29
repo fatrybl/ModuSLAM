@@ -1,6 +1,6 @@
 defaults:
-  - /sensors/lidar_3D_right@sensors_factory.sensors
-  - /sensors/lidar_3D_left@sensors_factory.sensors
+  - /sensors/kaist/lidar_3D_right@sensors_factory.sensors
+  - /sensors/kaist/lidar_3D_left@sensors_factory.sensors
   - edge_factories_initializers/lidar_odometry@edge_factories_initializer
   - handlers_factories/2_lidar_odometry@handlers_factory
   - state_analyzers_factories/2_lidar@state_analyzers_factory

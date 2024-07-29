@@ -71,12 +71,20 @@
            <div itemprop="articleBody">
 
   <h1>Source code for moduslam.system_configs.map_manager.map_manager</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span></span><span class="sd">&quot;&quot;&quot;Base configurations for map manager.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.map_manager.map_factories.lidar_map_factory</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">LidarMapFactoryConfig</span><span class="p">,</span>
-<span class="p">)</span>
+
+<div class="viewcode-block" id="MapFactoryConfig">
+<a class="viewcode-back" href="../../../../moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.MapFactoryConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MapFactoryConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base configuration for map factory.&quot;&quot;&quot;</span>
+
+    <span class="n">map_type</span><span class="p">:</span> <span class="nb">str</span></div>
+
 
 
 <div class="viewcode-block" id="MapLoaderConfig">
@@ -85,23 +93,8 @@
 <span class="k">class</span> <span class="nc">MapLoaderConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base configuration for map loader.&quot;&quot;&quot;</span>
 
-    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;maps&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="LidarMapLoaderConfig">
-<a class="viewcode-back" href="../../../../moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.LidarMapLoaderConfig">[docs]</a>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">LidarMapLoaderConfig</span><span class="p">(</span><span class="n">MapLoaderConfig</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for lidar pointcloud map loader.&quot;&quot;&quot;</span>
-
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_map&quot;</span>
-    <span class="n">file_extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pcd&quot;</span>
-    <span class="n">compress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">write_ascii</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">remove_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">remove_infinity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></div>
+    <span class="n">map_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;help&quot;</span><span class="p">:</span> <span class="s2">&quot;Directory to save the map.&quot;</span><span class="p">})</span></div>
 
 
 
@@ -111,8 +104,8 @@
 <span class="k">class</span> <span class="nc">MapManagerConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base configuration for map manager.&quot;&quot;&quot;</span>
 
-    <span class="n">map_factory</span><span class="p">:</span> <span class="n">LidarMapFactoryConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">LidarMapFactoryConfig</span><span class="p">)</span>
-    <span class="n">map_loader</span><span class="p">:</span> <span class="n">LidarMapLoaderConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">LidarMapLoaderConfig</span><span class="p">)</span></div>
+    <span class="n">map_factory</span><span class="p">:</span> <span class="n">MapFactoryConfig</span>
+    <span class="n">map_loader</span><span class="p">:</span> <span class="n">MapLoaderConfig</span></div>
 
 </pre></div>
 

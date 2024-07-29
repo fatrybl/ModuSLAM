@@ -87,11 +87,12 @@
     <span class="n">StereoCamera</span><span class="p">,</span>
     <span class="n">VrsGps</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorFactoryConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorsFactoryConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ImuConfig</span><span class="p">,</span>
     <span class="n">Lidar3DConfig</span><span class="p">,</span>
     <span class="n">SensorConfig</span><span class="p">,</span>
+    <span class="n">StereoCameraConfig</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.exceptions</span> <span class="kn">import</span> <span class="n">ItemNotFoundError</span>
 
@@ -106,10 +107,10 @@
     <span class="n">_sensors</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">_sensors_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="SensorsFactory.get_sensors">
-<a class="viewcode-back" href="../../../../moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.factory.SensorsFactory.get_sensors">[docs]</a>
+<div class="viewcode-block" id="SensorsFactory.get_all_sensors">
+<a class="viewcode-back" href="../../../../moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.factory.SensorsFactory.get_all_sensors">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_all_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Sensor</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets all sensors.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_sensors</span></div>
 
@@ -139,7 +140,7 @@
 <div class="viewcode-block" id="SensorsFactory.init_sensors">
 <a class="viewcode-back" href="../../../../moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.factory.SensorsFactory.init_sensors">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">init_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">SensorFactoryConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">init_sensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes sensors for the given configuration.</span>
 
 <span class="sd">        Args:</span>
@@ -191,6 +192,7 @@
             <span class="k">case</span> <span class="n">Encoder</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
                 <span class="n">sensor</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
             <span class="k">case</span> <span class="n">StereoCamera</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">StereoCameraConfig</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
                 <span class="n">sensor</span> <span class="o">=</span> <span class="n">StereoCamera</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
             <span class="k">case</span> <span class="n">Gps</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
                 <span class="n">sensor</span> <span class="o">=</span> <span class="n">Gps</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>

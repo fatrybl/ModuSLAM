@@ -78,7 +78,10 @@
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
+<span class="kn">import</span> <span class="nn">cv2</span>
+
 <span class="kn">from</span> <span class="nn">moduslam.setup_manager.sensors_factory.sensors</span> <span class="kn">import</span> <span class="n">Sensor</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">VectorN</span>
 
 
 <div class="viewcode-block" id="TimeRange">
@@ -118,6 +121,40 @@
 
     <span class="n">sensor</span><span class="p">:</span> <span class="n">Sensor</span>
     <span class="n">period</span><span class="p">:</span> <span class="n">TimeRange</span></div>
+
+
+
+<div class="viewcode-block" id="Message">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Message</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message with the timestamp and data.&quot;&quot;&quot;</span>
+
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">tuple</span></div>
+
+
+
+<div class="viewcode-block" id="Position">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Position">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Position</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3D position of the point.&quot;&quot;&quot;</span>
+
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="VisualFeature">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.VisualFeature">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">VisualFeature</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visual feature.&quot;&quot;&quot;</span>
+
+    <span class="n">key_point</span><span class="p">:</span> <span class="n">cv2</span><span class="o">.</span><span class="n">KeyPoint</span>
+    <span class="n">descriptor</span><span class="p">:</span> <span class="n">VectorN</span></div>
 
 </pre></div>
 

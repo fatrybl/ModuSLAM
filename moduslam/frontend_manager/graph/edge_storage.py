@@ -1,21 +1,22 @@
 from collections.abc import Iterable
 from typing import Generic
 
-from moduslam.frontend_manager.graph.base_edges import GraphEdge
+from moduslam.frontend_manager.graph.base_edges import BaseEdge
+from moduslam.utils.ordered_set import OrderedSet
 
 
-class EdgeStorage(Generic[GraphEdge]):
+class EdgeStorage(Generic[BaseEdge]):
     """Stores edges of the Graph."""
 
     def __init__(self):
-        self._edges = set[GraphEdge]()
+        self._edges = OrderedSet[BaseEdge]()
 
     @property
-    def edges(self) -> set[GraphEdge]:
+    def edges(self) -> OrderedSet[BaseEdge]:
         """Edges in the storage."""
         return self._edges
 
-    def add(self, edge: GraphEdge | Iterable[GraphEdge]):
+    def add(self, edge: BaseEdge | Iterable[BaseEdge]):
         """Adds new edge(s).
 
         Args:
@@ -27,7 +28,7 @@ class EdgeStorage(Generic[GraphEdge]):
         else:
             self._edges.add(edge)
 
-    def remove(self, edge: GraphEdge | Iterable[GraphEdge]):
+    def remove(self, edge: BaseEdge | Iterable[BaseEdge]):
         """Removes edge(s).
 
         Args:

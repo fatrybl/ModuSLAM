@@ -7,15 +7,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
-
-from moduslam.utils.numpy_types import Matrix3x3, Matrix4x4
-
 if TYPE_CHECKING:
     from moduslam.system_configs.setup_manager.sensors import (
         ImuConfig,
         Lidar3DConfig,
         SensorConfig,
+        StereoCameraConfig,
     )
 
 
@@ -57,51 +54,40 @@ class Imu(Sensor):
             config: Sensor configuration.
         """
         super().__init__(config)
-        self._tf_base_sensor: Matrix4x4 = np.array(config.tf_base_sensor)
-        self._accelerometer_noise_covariance: Matrix3x3 = np.diag(
-            config.accelerometer_noise_covariance,
-        )
-        self._gyroscope_noise_covariance: Matrix3x3 = np.diag(
-            config.gyroscope_noise_covariance,
-        )
-        self._integration_noise_covariance: Matrix3x3 = np.diag(
-            config.integration_noise_covariance,
-        )
-
-        self._accelerometer_bias_noise_covariance: Matrix3x3 = np.diag(
-            config.accelerometer_bias_noise_covariance
-        )
-        self._gyroscope_bias_noise_covariance: Matrix3x3 = np.diag(
-            config.gyroscope_bias_noise_covariance
-        )
+        self._tf_base_sensor = config.tf_base_sensor
+        self._accelerometer_noise_covariance = config.accelerometer_noise_covariance
+        self._gyroscope_noise_covariance = config.gyroscope_noise_covariance
+        self._integration_noise_covariance = config.integration_noise_covariance
+        self._accelerometer_bias_noise_covariance = config.accelerometer_bias_noise_covariance
+        self._gyroscope_bias_noise_covariance = config.gyroscope_bias_noise_covariance
 
     @property
-    def tf_base_sensor(self) -> Matrix4x4:
+    def tf_base_sensor(self) -> list[list[float]]:
         """Base -> sensor transformation SE(3)."""
         return self._tf_base_sensor
 
     @property
-    def accelerometer_noise_covariance(self) -> Matrix3x3:
+    def accelerometer_noise_covariance(self) -> list[list[float]]:
         """Accelerometer noise covariance diagonal matrix [3, 3]."""
         return self._accelerometer_noise_covariance
 
     @property
-    def gyroscope_noise_covariance(self) -> Matrix3x3:
+    def gyroscope_noise_covariance(self) -> list[list[float]]:
         """Gyroscope noise covariance diagonal matrix [3, 3]."""
         return self._gyroscope_noise_covariance
 
     @property
-    def integration_noise_covariance(self) -> Matrix3x3:
+    def integration_noise_covariance(self) -> list[list[float]]:
         """Integration noise covariance diagonal matrix [3, 3]."""
         return self._integration_noise_covariance
 
     @property
-    def accelerometer_bias_noise_covariance(self) -> Matrix3x3:
+    def accelerometer_bias_noise_covariance(self) -> list[list[float]]:
         """Accelerometer bias noise covariance diagonal matrix [3, 3]."""
         return self._accelerometer_bias_noise_covariance
 
     @property
-    def gyroscope_bias_noise_covariance(self) -> Matrix3x3:
+    def gyroscope_bias_noise_covariance(self) -> list[list[float]]:
         """Gyroscope bias noise covariance diagonal matrix [3, 3]."""
         return self._gyroscope_bias_noise_covariance
 
@@ -109,12 +95,24 @@ class Imu(Sensor):
 class StereoCamera(Sensor):
     """Base class for any Stereo Camera."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: StereoCameraConfig):
         """
         Args:
             config: Sensor configuration.
         """
         super().__init__(config)
+        self._config = config
+        self._tf_base_sensor = config.tf_base_sensor
+
+    @property
+    def calibrations(self) -> StereoCameraConfig:
+        """Camera calibration parameters."""
+        return self._config
+
+    @property
+    def tf_base_sensor(self) -> list[list[float]]:
+        """Base -> sensor transformation SE(3)."""
+        return self._tf_base_sensor
 
 
 class Encoder(Sensor):
@@ -203,13 +201,9 @@ class Lidar3D(Sensor):
             config: Sensor configuration.
         """
         super().__init__(config)
-        self._tf_base_sensor: Matrix4x4 = (
-            np.eye(4)
-            if config.tf_base_sensor is None
-            else np.array(config.tf_base_sensor, dtype=np.float32)
-        )
+        self._tf_base_sensor = config.tf_base_sensor
 
     @property
-    def tf_base_sensor(self) -> Matrix4x4:
+    def tf_base_sensor(self) -> list[list[float]]:
         """Base -> sensor transformation SE(3)."""
         return self._tf_base_sensor

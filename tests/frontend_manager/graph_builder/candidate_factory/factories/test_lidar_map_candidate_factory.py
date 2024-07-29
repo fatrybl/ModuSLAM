@@ -2,8 +2,8 @@
 
 from unittest.mock import patch
 
-from moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap import (
-    LidarMapCandidateFactory,
+from moduslam.frontend_manager.graph_builder.candidate_factory.pointcloud_submap_factory import (
+    PointcloudMapCandidateFactory,
 )
 from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
@@ -17,7 +17,7 @@ from tests.frontend_manager.graph_builder.candidate_factory.conftest import (
 
 
 def test_lidar_map_candidate_factory_process_storage():
-    factory = LidarMapCandidateFactory()
+    factory = PointcloudMapCandidateFactory()
     storage = MeasurementStorage()
     factory.process_storage(storage)
     assert factory._previous_measurement is None
@@ -29,7 +29,7 @@ def test_lidar_map_candidate_factory_process_storage_with_measurement(
 
     with patch.object(HandlersFactory, "get_handler", return_value=handler):
 
-        factory = LidarMapCandidateFactory()
+        factory = PointcloudMapCandidateFactory()
         factory._table = {handler: LidarOdometryStateAnalyzer(state_analyzer_config)}
 
         storage = MeasurementStorage()

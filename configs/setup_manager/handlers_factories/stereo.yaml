@@ -1,0 +1,10 @@
+defaults:
+  - /handlers/base_feature_detector@handlers.camera_features_detector
+
+package_name: 'moduslam.frontend_manager.handlers'
+
+handlers:
+  camera_features_detector:
+    name: "camera_features_detector"
+    type_name: "FeatureDetector"
+    module_name: ".camera_features_detector.handler"

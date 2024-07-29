@@ -5,7 +5,10 @@ Any dataclass that is used in multiple packages or modules may be defined here.
 
 from dataclasses import dataclass
 
+import cv2
+
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
+from moduslam.types.numpy import VectorN
 
 
 @dataclass(frozen=True, eq=True)
@@ -37,3 +40,28 @@ class PeriodicDataRequest:
 
     sensor: Sensor
     period: TimeRange
+
+
+@dataclass(frozen=True, eq=True)
+class Message:
+    """Message with the timestamp and data."""
+
+    timestamp: str
+    data: tuple
+
+
+@dataclass
+class Position:
+    """3D position of the point."""
+
+    x: float
+    y: float
+    z: float
+
+
+@dataclass
+class VisualFeature:
+    """Visual feature."""
+
+    key_point: cv2.KeyPoint
+    descriptor: VectorN

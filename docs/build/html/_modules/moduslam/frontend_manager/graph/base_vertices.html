@@ -76,7 +76,7 @@
 
 <span class="kn">import</span> <span class="nn">gtsam</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.utils.numpy_types</span> <span class="kn">import</span> <span class="n">Vector3</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.aliases</span> <span class="kn">import</span> <span class="n">Vector3</span>
 
 <span class="n">GtsamInstance</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">,</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Rot3</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NavState</span><span class="p">,</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">imuBias</span><span class="o">.</span><span class="n">ConstantBias</span><span class="p">]</span>
 
@@ -89,7 +89,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span> <span class="o">=</span> <span class="n">timestamp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
@@ -103,11 +102,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Edges of the vertex.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Value of the vertex.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
@@ -115,37 +109,29 @@
 <div class="viewcode-block" id="Vertex.update">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.Vertex.update">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the vertex with the new value.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            value (Any): new value.</span>
+<span class="sd">            value: new value.</span>
+
+<span class="sd">            *args: additional arguments.</span>
+
+<span class="sd">            **kwargs: additional keyword arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 </div>
 
 
 
-<span class="n">GraphVertex</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;GraphVertex&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Vertex</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;TypeVar for the Graph vertices.&quot;&quot;&quot;</span>
-
-
 <div class="viewcode-block" id="NotOptimizableVertex">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.NotOptimizableVertex">[docs]</a>
 <span class="k">class</span> <span class="nc">NotOptimizableVertex</span><span class="p">(</span><span class="n">Vertex</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base abstract non-optimizable vertex: does not have GTSAM properties</span>
-<span class="sd">    and is not included in GTSAM factor graph as a variable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for not optimizable vertex of the Graph.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NotOptimizableVertex.update">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.NotOptimizableVertex.update">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the vertex with the new value.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            value (Any): new value.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span></div>
 </div>
 
 
@@ -158,14 +144,18 @@
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">gtsam_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GtsamInstance</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM instance of the vertex.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GtsamInstance</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;External backend instance of the vertex.&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">gtsam_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique index of GTSAM instance.&quot;&quot;&quot;</span></div>
+    <span class="k">def</span> <span class="nf">backend_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique external backend index of an instance.&quot;&quot;&quot;</span></div>
 
+
+
+<span class="n">BaseVertex</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;BaseVertex&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Vertex</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;TypeVar for the Graph vertices.&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

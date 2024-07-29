@@ -4,16 +4,11 @@ from unittest.mock import patch
 
 import pytest
 
-from moduslam.data_manager.factory.batch import DataBatch
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from moduslam.frontend_manager.elements_distributor import ElementDistributor
 from moduslam.utils.ordered_set import OrderedSet
-from tests.frontend_manager.conftest import (  # noqa: F401, F811
-    create_measurement,
-    element,
-    handler,
-    sensor,
-)
+from tests.frontend_manager.conftest import element, handler, sensor  # noqa: F401, F811
+from tests.frontend_manager.objects import create_measurement
 
 
 @pytest.fixture

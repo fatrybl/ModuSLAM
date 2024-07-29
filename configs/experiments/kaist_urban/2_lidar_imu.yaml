@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - override /setup_manager: 2_lidar_imu
+  - override /frontend_manager: 2_lidar_imu
+  - _self_
+
+logger:
+  level: "DEBUG"

@@ -2,88 +2,97 @@
 
 import pytest
 from gtsam import PriorFactorPoint2
-from gtsam.noiseModel import Diagonal
+from gtsam.noiseModel import Isotropic
 
 from moduslam.frontend_manager.graph.base_edges import BinaryEdge, MultiEdge, UnaryEdge
 from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
-from tests.frontend_manager.conftest import BasicTestVertex
+from tests.frontend_manager.conftest import measurement
+from tests.frontend_manager.objects import BasicTestVertex
 
 
 @pytest.fixture
 def edge_storage() -> EdgeStorage:
-    return EdgeStorage[BinaryEdge | UnaryEdge | MultiEdge]()
+    return EdgeStorage()
 
 
-class TestEdgeStorage:
-
-    vertex1 = BasicTestVertex()
-    vertex2 = BasicTestVertex()
-    vertex3 = BasicTestVertex()
-
-    edge1 = BinaryEdge(
-        vertex1,
-        vertex2,
-        measurements=(),
-        noise_model=Diagonal.Sigmas([1, 1]),
-        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
+@pytest.fixture
+def edge1(measurement):
+    return BinaryEdge(
+        BasicTestVertex(),
+        BasicTestVertex(),
+        measurement=measurement,
+        noise_model=Isotropic.Sigma(dim=2, sigma=1),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Isotropic.Sigma(dim=2, sigma=1)),
     )
 
-    edge2 = UnaryEdge(
-        vertex1,
-        measurements=(),
-        noise_model=Diagonal.Sigmas([1, 1]),
-        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
+
+@pytest.fixture
+def edge2(measurement):
+    return UnaryEdge(
+        BasicTestVertex(),
+        measurement=measurement,
+        noise_model=Isotropic.Sigma(dim=2, sigma=1),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Isotropic.Sigma(dim=2, sigma=1)),
     )
 
-    edge3 = UnaryEdge(
-        vertex3,
-        measurements=(),
-        noise_model=Diagonal.Sigmas([1, 1]),
-        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
+
+@pytest.fixture
+def edge3(measurement):
+    return UnaryEdge(
+        BasicTestVertex(),
+        measurement=measurement,
+        noise_model=Isotropic.Sigma(dim=2, sigma=1),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Isotropic.Sigma(dim=2, sigma=1)),
     )
 
-    edge4 = MultiEdge(
-        vertex_set_1={vertex1, vertex2},
-        vertex_set_2={vertex3},
-        measurements=(),
-        noise_model=Diagonal.Sigmas([1, 1]),
-        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Diagonal.Sigmas([1, 1])),
+
+@pytest.fixture
+def edge4(measurement):
+    return MultiEdge(
+        vertices=[BasicTestVertex(), BasicTestVertex(), BasicTestVertex()],
+        measurements=[measurement],
+        noise_model=Isotropic.Sigma(dim=2, sigma=1),
+        factor=PriorFactorPoint2(key=0, prior=[0, 0], noiseModel=Isotropic.Sigma(dim=2, sigma=1)),
     )
 
-    def test_add(self, edge_storage):
 
-        edge_storage.add(self.edge1)
-        assert self.edge1 in edge_storage._edges
+def test_add(edge_storage, edge1, edge2, edge4):
 
-        edge_storage.add([self.edge2, self.edge4])
-        assert self.edge2 in edge_storage._edges
-        assert self.edge4 in edge_storage._edges
+    edge_storage.add(edge1)
+    assert edge1 in edge_storage._edges
 
-    def test_add_multiple(self, edge_storage):
+    edge_storage.add([edge2, edge4])
+    assert edge2 in edge_storage._edges
+    assert edge4 in edge_storage._edges
 
-        edge_storage.add([self.edge1, self.edge2, self.edge3, self.edge4])
-        assert self.edge1 in edge_storage._edges
-        assert self.edge2 in edge_storage._edges
-        assert self.edge3 in edge_storage._edges
-        assert self.edge4 in edge_storage._edges
 
-    def test_remove(self, edge_storage):
+def test_add_multiple(edge_storage, edge1, edge2, edge3, edge4):
 
-        edge_storage.add(self.edge1)
-        edge_storage.remove(self.edge1)
-        assert self.edge1 not in edge_storage._edges
+    edge_storage.add([edge1, edge2, edge3, edge4])
+    assert edge1 in edge_storage._edges
+    assert edge2 in edge_storage._edges
+    assert edge3 in edge_storage._edges
+    assert edge4 in edge_storage._edges
 
-        edge_storage.add([self.edge2, self.edge3])
-        edge_storage.remove([self.edge2, self.edge3])
-        assert self.edge2 not in edge_storage._edges
-        assert self.edge3 not in edge_storage._edges
 
-    def test_remove_multiple(self, edge_storage):
+def test_remove(edge_storage, edge1, edge2, edge3):
 
-        edge_storage.add([self.edge1, self.edge2, self.edge3, self.edge4])
-        edge_storage.remove([self.edge1, self.edge2, self.edge3, self.edge4])
-        assert self.edge1 not in edge_storage._edges
-        assert self.edge2 not in edge_storage._edges
-        assert self.edge3 not in edge_storage._edges
-        assert self.edge4 not in edge_storage._edges
-        assert len(edge_storage.edges) == 0
+    edge_storage.add(edge1)
+    edge_storage.remove(edge1)
+    assert edge1 not in edge_storage._edges
+
+    edge_storage.add([edge2, edge3])
+    edge_storage.remove([edge2, edge3])
+    assert edge2 not in edge_storage._edges
+    assert edge3 not in edge_storage._edges
+
+
+def test_remove_multiple(edge_storage, edge1, edge2, edge3, edge4):
+
+    edge_storage.add([edge1, edge2, edge3, edge4])
+    edge_storage.remove([edge1, edge2, edge3, edge4])
+    assert edge1 not in edge_storage._edges
+    assert edge2 not in edge_storage._edges
+    assert edge3 not in edge_storage._edges
+    assert edge4 not in edge_storage._edges
+    assert len(edge_storage.edges) == 0

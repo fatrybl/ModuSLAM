@@ -5,12 +5,8 @@ class ItemNotFoundError(Exception):
     """The given item has not been found."""
 
 
-class ConfigFileNotValid(OSError):
-    """Config file is not valid."""
-
-
 class FileNotValid(Exception):
-    """Invalid file: not exists or empty"""
+    """Invalid file: does not exist or is empty"""
 
 
 class NotSubset(Exception):
@@ -27,3 +23,15 @@ class DimensionalityError(Exception):
 
 class EmptyStorageError(Exception):
     """Raised when attempting to access an element of an empty storage."""
+
+
+class ClosedSourceError(Exception):
+    """Raised when attempting to access a source that is closed."""
+
+
+class StateNotSetError(Exception):
+    """The state has not been set."""
+
+
+class UnfeasibleRequestError(Exception):
+    """The request is unfeasible."""
