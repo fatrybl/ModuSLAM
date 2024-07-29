@@ -172,7 +172,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="tests.utils.test_equal_elements.TestEqualElements.sensor_config">
-<span class="sig-name descname"><span class="pre">sensor_config</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">SensorConfig(name='test_camera',</span> <span class="pre">type_name='StereoCamera')</span></em><a class="headerlink" href="#tests.utils.test_equal_elements.TestEqualElements.sensor_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensor_config</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">StereoCameraConfig(name='test_camera',</span> <span class="pre">type_name='StereoCamera',</span> <span class="pre">camera_matrix_left=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">camera_matrix_right=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">distortion_coefficients_left=[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">distortion_coefficients_right=[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">rectification_matrix_left=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">rectification_matrix_right=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">projection_matrix_left=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0]],</span> <span class="pre">projection_matrix_right=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0]],</span> <span class="pre">tf_left_right=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">tf_base_sensor=[[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0],</span> <span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0]],</span> <span class="pre">distortion_model_left='plumb_bob',</span> <span class="pre">distortion_model_right='plumb_bob')</span></em><a class="headerlink" href="#tests.utils.test_equal_elements.TestEqualElements.sensor_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -302,6 +302,11 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tests.utils.test_ordered_set.test_discard">
+<span class="sig-prename descclassname"><span class="pre">tests.utils.test_ordered_set.</span></span><span class="sig-name descname"><span class="pre">test_discard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/utils/test_ordered_set.html#test_discard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.utils.test_ordered_set.test_discard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tests.utils.test_ordered_set.test_first">
 <span class="sig-prename descclassname"><span class="pre">tests.utils.test_ordered_set.</span></span><span class="sig-name descname"><span class="pre">test_first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/utils/test_ordered_set.html#test_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.utils.test_ordered_set.test_first" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -337,21 +342,12 @@
 <dd></dd></dl>
 
 </section>
-<section id="module-tests.utils.test_stopping_criterion">
-<span id="tests-utils-test-stopping-criterion-module"></span><h2>tests.utils.test_stopping_criterion module<a class="headerlink" href="#module-tests.utils.test_stopping_criterion" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.utils.test_stopping_criterion.test_is_active">
-<span class="sig-prename descclassname"><span class="pre">tests.utils.test_stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">test_is_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/utils/test_stopping_criterion.html#test_is_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.utils.test_stopping_criterion.test_is_active" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.utils.test_stopping_criterion.test_reset">
-<span class="sig-prename descclassname"><span class="pre">tests.utils.test_stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">test_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/utils/test_stopping_criterion.html#test_reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.utils.test_stopping_criterion.test_reset" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<section id="tests-utils-test-stopping-criterion-module">
+<h2>tests.utils.test_stopping_criterion module<a class="headerlink" href="#tests-utils-test-stopping-criterion-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-tests.utils.test_to_float">
 <span id="tests-utils-test-to-float-module"></span><h2>tests.utils.test_to_float module<a class="headerlink" href="#module-tests.utils.test_to_float" title="Link to this heading"></a></h2>
+<p>TODO: add tests</p>
 </section>
 <section id="module-tests.utils.test_to_int">
 <span id="tests-utils-test-to-int-module"></span><h2>tests.utils.test_to_int module<a class="headerlink" href="#module-tests.utils.test_to_int" title="Link to this heading"></a></h2>

@@ -78,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">gtsam</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.edge_factory_ABC</span> <span class="kn">import</span> <span class="n">EdgeFactory</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">find_vertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">get_last_vertex</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_edges</span> <span class="kn">import</span> <span class="n">LidarOdometry</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="n">LidarPose</span><span class="p">,</span> <span class="n">Pose</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
@@ -108,24 +108,6 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_margin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">sec2nanosec</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">search_time_margin</span><span class="p">)</span></div>
 
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vertices_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Types of the used vertices.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            set with 1 type (LidarPose).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">LidarPose</span><span class="p">}</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">base_vertices_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Types of the used base (GTSAM) instances.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            set with 1 type (gtsam.Pose3).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">}</span>
 
 <div class="viewcode-block" id="LidarOdometryEdgeFactory.create">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.edge_factories.html#moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.create">[docs]</a>
@@ -163,7 +145,7 @@
         <span class="n">vertex1_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">vertex2_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">,</span>
-        <span class="n">noise_model</span><span class="p">:</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Sigmas</span><span class="p">,</span>
+        <span class="n">noise_model</span><span class="p">:</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">BetweenFactorPose3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates the GTSAM factor for the factor graph.</span>
 
@@ -179,7 +161,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            GTSAM factor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tf</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">tf</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">factor</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">BetweenFactorPose3</span><span class="p">(</span>
             <span class="n">key1</span><span class="o">=</span><span class="n">vertex1_id</span><span class="p">,</span>
             <span class="n">key2</span><span class="o">=</span><span class="n">vertex2_id</span><span class="p">,</span>
@@ -216,12 +198,14 @@
         <span class="p">)</span>
         <span class="n">noise</span><span class="p">:</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span> <span class="o">=</span> <span class="n">pose_diagonal_noise_model</span><span class="p">(</span><span class="n">variance</span><span class="p">)</span>
 
-        <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_factor</span><span class="p">(</span><span class="n">vertex1</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span> <span class="n">vertex2</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span> <span class="n">measurement</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_factor</span><span class="p">(</span>
+            <span class="n">vertex1</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span> <span class="n">vertex2</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span> <span class="n">measurement</span><span class="p">,</span> <span class="n">noise</span>
+        <span class="p">)</span>
         <span class="n">edge</span> <span class="o">=</span> <span class="n">LidarOdometry</span><span class="p">(</span>
             <span class="n">vertex1</span><span class="o">=</span><span class="n">vertex1</span><span class="p">,</span>
             <span class="n">vertex2</span><span class="o">=</span><span class="n">vertex2</span><span class="p">,</span>
             <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
-            <span class="n">measurements</span><span class="o">=</span><span class="p">(</span><span class="n">measurement</span><span class="p">,),</span>
+            <span class="n">measurement</span><span class="o">=</span><span class="n">measurement</span><span class="p">,</span>
             <span class="n">noise_model</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">edge</span></div>
@@ -250,15 +234,15 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            2 vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">v1</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">v1</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
                 <span class="n">v1</span> <span class="o">=</span> <span class="n">LidarPose</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="n">v2</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">LidarPose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">v2</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">find_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
                 <span class="n">v2</span> <span class="o">=</span> <span class="n">LidarPose</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 

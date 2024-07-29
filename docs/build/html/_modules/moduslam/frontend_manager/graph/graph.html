@@ -77,8 +77,8 @@
 
 <span class="kn">import</span> <span class="nn">gtsam</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_edges</span> <span class="kn">import</span> <span class="n">GraphEdge</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">GraphVertex</span><span class="p">,</span> <span class="n">OptimizableVertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_edges</span> <span class="kn">import</span> <span class="n">BaseEdge</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">BaseVertex</span><span class="p">,</span> <span class="n">OptimizableVertex</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.edge_storage</span> <span class="kn">import</span> <span class="n">EdgeStorage</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.vertex_storage</span> <span class="kn">import</span> <span class="n">VertexStorage</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
@@ -88,50 +88,79 @@
 
 <div class="viewcode-block" id="Graph">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph">[docs]</a>
-<span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">,</span> <span class="n">GraphEdge</span><span class="p">]):</span>
+<span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="n">BaseEdge</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level Graph.</span>
 
 <span class="sd">    Includes gtsam.NonlinearFactorGraph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertex_storage</span> <span class="o">=</span> <span class="n">VertexStorage</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edge_storage</span> <span class="o">=</span> <span class="n">EdgeStorage</span><span class="p">[</span><span class="n">GraphEdge</span><span class="p">]()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factor_graph</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">NonlinearFactorGraph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span> <span class="o">=</span> <span class="n">VertexStorage</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edge_storage</span> <span class="o">=</span> <span class="n">EdgeStorage</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gtsam_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Values</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;GTSAM values of the graph.&quot;&quot;&quot;</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Values</span><span class="p">()</span>
-        <span class="n">unique_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_unique_gtsam_vertices</span><span class="p">()</span>
-        <span class="p">[</span>
-            <span class="n">values</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">,</span> <span class="n">vertex</span><span class="o">.</span><span class="n">gtsam_instance</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">unique_vertices</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-        <span class="p">]</span>
+    <span class="k">def</span> <span class="nf">vertex_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VertexStorage</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Storage for the vertices of the graph.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edge_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdgeStorage</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Storage for the edges of the graph.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edge_storage</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">backend_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Values</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal values of the factor graph.&quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">Values</span><span class="p">()</span>
+        <span class="n">unique_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_unique_optimizable_vertices</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">unique_vertices</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span> <span class="n">vertex</span><span class="o">.</span><span class="n">backend_instance</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">values</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Connections of vertices with edges.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span>
+
+<div class="viewcode-block" id="Graph.get_connected_edges">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.get_connected_edges">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_connected_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets edges connected to the vertex.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vertex: vertex for which the edges are retrieved.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            set of edges connected to the vertex.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span></div>
+
 
 <div class="viewcode-block" id="Graph.add_edge">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.add_edge">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GraphEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">BaseEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds edge to the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            edge (GraphEdge): new edge to be added to the graph.</span>
+<span class="sd">            edge: new edge to be added to the graph.</span>
+
+<span class="sd">        TODO: timestamped based sorting has been removed. Check if it works.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">edge</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_index</span><span class="p">()</span>
 
-        <span class="n">vertices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">all_vertices</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">timestamp</span><span class="p">)</span>
-        <span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edge_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">factor</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edge_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">factor</span><span class="p">)</span></div>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">edge</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_connection</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph.add_edges">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.add_edges">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphEdge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">add_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds multiple edges to the graph.</span>
 
 <span class="sd">        Args:</span>
@@ -143,55 +172,82 @@
 
 <div class="viewcode-block" id="Graph.remove_edge">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.remove_edge">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GraphEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">BaseEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes edge from the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            edge (GraphEdge): edge to be deleted from the graph.</span>
+<span class="sd">            edge: edge to be deleted from the graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edge_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">edge</span><span class="o">.</span><span class="n">all_vertices</span><span class="p">:</span>
-            <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edge_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">edge</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove_connection</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph.remove_edges">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.remove_edges">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphEdge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remove_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseEdge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes multiple edges from the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            edges (Iterable[GraphEdge]): edges to be deleted from the graph.</span>
+<span class="sd">            edges: edges to be deleted from the graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">edges_copy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>  <span class="c1"># to avoid changing the size of collection during iterations.</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges_copy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph.remove_vertex">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.remove_vertex">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remove_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes vertex from the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            vertex (GraphVertex): vertex to be deleted from the graph.</span>
+<span class="sd">            vertex: vertex to be deleted from the graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">edges</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># to avoid RuntimeError: Set changed size during iteration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span></div>
+        <span class="n">edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="k">if</span> <span class="n">edges</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph.remove_vertices">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.remove_vertices">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remove_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes multiple vertices from the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.</span>
+<span class="sd">            vertices: vertices to be deleted from the graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_vertex</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Graph.update_connections">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.update_connections">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_connections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">original_vertices</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">],</span> <span class="n">modified_edge</span><span class="p">:</span> <span class="n">BaseEdge</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates edge`s connections in the graph. Does not update backend factor</span>
+<span class="sd">        graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            original_vertices: vertices of an edge before modifications.</span>
+
+<span class="sd">            modified_edge: edge with modified vertices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modified_vertices</span> <span class="o">=</span> <span class="n">modified_edge</span><span class="o">.</span><span class="n">vertices</span>
+
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">original_vertices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modified_vertices</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_remove_connection</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">modified_edge</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">modified_vertices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">original_vertices</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_connection</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">modified_edge</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph.update">
@@ -205,17 +261,7 @@
 <span class="sd">        TODO: add update for non-optimizable vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">update_optimizable_vertices</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Graph.marginalize">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph.marginalize">[docs]</a>
-    <span class="k">def</span> <span class="nf">marginalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Marginalizes out vertices.</span>
-
-<span class="sd">        Not implemented.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">update_optimizable_vertices</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Graph._set_index">
@@ -235,21 +281,54 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Graph._get_unique_gtsam_vertices">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph._get_unique_gtsam_vertices">[docs]</a>
-    <span class="k">def</span> <span class="nf">_get_unique_gtsam_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets vertices with unique gtsam indices.</span>
+<div class="viewcode-block" id="Graph._get_unique_optimizable_vertices">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph._get_unique_optimizable_vertices">[docs]</a>
+    <span class="k">def</span> <span class="nf">_get_unique_optimizable_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">OptimizableVertex</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets vertices with unique backend indices.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict of indices and vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unique_vertices</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">OptimizableVertex</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">optimizable_vertices</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">vertex</span><span class="o">.</span><span class="n">gtsam_index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_vertices</span><span class="p">:</span>
-                <span class="n">unique_vertices</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">gtsam_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex</span>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertex_storage</span><span class="o">.</span><span class="n">optimizable_vertices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vertex</span><span class="o">.</span><span class="n">backend_index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_vertices</span><span class="p">:</span>
+                <span class="n">unique_vertices</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">backend_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex</span>
 
         <span class="k">return</span> <span class="n">unique_vertices</span></div>
+
+
+<div class="viewcode-block" id="Graph._add_connection">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph._add_connection">[docs]</a>
+    <span class="k">def</span> <span class="nf">_add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">BaseEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds edge to the connection with the vertex.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            vertex: vertex to which the edge is added.</span>
+
+<span class="sd">            edge: edge to be added to the vertex.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">edge</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Graph._remove_connection">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph._remove_connection">[docs]</a>
+    <span class="k">def</span> <span class="nf">_remove_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">BaseEdge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes edge from the connection with the vertex.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vertex: vertex from which the edge is removed.</span>
+
+<span class="sd">            edge: edge to be removed from the vertex.</span>
+
+<span class="sd">        Attention:</span>
+<span class="sd">           if all edges are removed from connection, the vertex still exists in the connection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span> <span class="ow">and</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">[</span><span class="n">vertex</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

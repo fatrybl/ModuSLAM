@@ -1,7 +1,7 @@
 """Ordered-set data structure implementation.
 
 Complexity:
-    O(1): add(), contains(), remove(item), remove_first, remove_last.
+    O(1): add, discard, remove, remove_first, remove_last, contains
     O(N): __getitem__(index: int).
 """
 
@@ -110,7 +110,7 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
         """Adds an item to the OrderedSet.
 
         Args:
-            item (T): item(s) to be added.
+            item: item(s) to be added.
 
         Raises:
             TypeError: if an item is not hashable.

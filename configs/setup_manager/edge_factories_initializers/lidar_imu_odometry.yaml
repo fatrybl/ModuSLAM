@@ -9,12 +9,12 @@ edge_factories:
 
   lidar_odometry_edge_factory:
     name: 'lidar_odometry_edge_factory'
-    module_name: '.lidar_odometry'
     type_name: 'LidarOdometryEdgeFactory'
+    module_name: '.lidar_odometry'
     search_time_margin: 0.02
 
   imu_odometry_edge_factory:
     name: 'imu_odometry_edge_factory'
     type_name: 'ImuOdometryFactory'
-    module_name: '.imu_preintegration.imu_odometry'
+    module_name: '.imu_preintegration.factory'
     search_time_margin: 0.01

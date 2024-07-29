@@ -63,11 +63,11 @@ class ImuOdometryFactory(EdgeFactory):
         """Creates new edges from the given measurements.
 
         Args:
-            graph: the main graph.
+            graph: main graph.
 
-            measurements: measurements from different handlers.
+            measurements: raw imu measurements.
 
-            timestamp: timestamp to integrate the measurements up to.
+            timestamp: upper bound for integrating IMU measurements.
 
         Returns:
             new edges.
@@ -76,7 +76,7 @@ class ImuOdometryFactory(EdgeFactory):
             TypeError: if the vertex is not of type Pose, Velocity or ImuBias.
         """
         if len(measurements) < self._min_num_of_measurements:
-            logger.error(f"Not enough measurements: {self._min_num_of_measurements}.")
+            logger.error(f"Not enough measurements to integrate: {self._min_num_of_measurements}.")
             return []
 
         t_start = measurements.first.time_range.start
@@ -184,7 +184,7 @@ class ImuOdometryFactory(EdgeFactory):
             )
 
         else:
-            msg = f"Expected sensor of type {Imu}, got {type(element.measurement.sensor)}"
+            msg = f"Expected sensor of type {Imu}, got {type(sensor)!r}."
             logger.critical(msg)
             raise TypeError(msg)
 

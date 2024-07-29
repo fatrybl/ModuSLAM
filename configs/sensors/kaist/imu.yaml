@@ -9,8 +9,29 @@ imu:
     [ 0.0, 0.0, 1.0, 1.7 ],
     [ 0.0, 0.0, 0.0, 1.0 ]
   ]
-  accelerometer_noise_covariance: [ 1e-3, 1e-3, 1e-3 ]
-  gyroscope_noise_covariance: [ 1e-3, 1e-3, 1e-3 ]
-  accelerometer_bias_noise_covariance: [ 1e-4, 1e-4, 1e-4 ]
-  gyroscope_bias_noise_covariance: [ 1e-4, 1e-4, 1e-4 ]
-  integration_noise_covariance: [ 1e-6, 1e-6, 1e-6 ]
+  accelerometer_noise_covariance: [
+    [ 1e-3, 0.0, 0.0 ],
+    [ 0.0, 1e-3, 0.0 ],
+    [ 0.0, 0.0, 1e-3 ]
+  ]
+  gyroscope_noise_covariance: [
+    [ 1e-3, 0.0, 0.0 ],
+    [ 0.0, 1e-3, 0.0 ],
+    [ 0.0, 0.0, 1e-3 ]
+  ]
+  accelerometer_bias_noise_covariance: [
+    [ 1e-4, 0.0, 0.0 ],
+    [ 0.0, 1e-4, 0.0 ],
+    [ 0.0, 0.0, 1e-4 ]
+  ]
+  gyroscope_bias_noise_covariance: [
+    [ 1e-4, 0.0, 0.0 ],
+    [ 0.0, 1e-4, 0.0 ],
+    [ 0.0, 0.0, 1e-4 ]
+  ]
+  integration_noise_covariance:
+    [
+      [ 1e-6, 0.0, 0.0 ],
+      [ 0.0, 1e-6, 0.0 ],
+      [ 0.0, 0.0, 1e-6 ]
+    ]

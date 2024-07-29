@@ -71,21 +71,27 @@
            <div itemprop="articleBody">
 
   <h1>Source code for tests.frontend_manager.graph_builder.builders.conftest</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span>
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span><span class="p">,</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.locations</span> <span class="kn">import</span> <span class="n">BinaryDataLocation</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">LidarOdometryEdgeFactory</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.builders.lidar_map_builder</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">LidarMapBuilder</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.builders.pointcloud_map_builder</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PointcloudMapBuilder</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">LidarOdometryStateAnalyzer</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.pointcloud_matcher</span> <span class="kn">import</span> <span class="n">ScanMatcher</span>
+<span class="kn">from</span> <span class="nn">moduslam.setup_manager.sensors_factory.sensors</span> <span class="kn">import</span> <span class="n">Lidar3D</span>
 <span class="kn">from</span> <span class="nn">moduslam.setup_manager.setup_manager</span> <span class="kn">import</span> <span class="n">SetupManager</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KaistConfig</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.edge_factories.base_factory</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EdgeFactoryConfig</span><span class="p">,</span>
 <span class="p">)</span>
@@ -111,26 +117,25 @@
     <span class="n">EdgeFactoriesInitializerConfig</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.handlers_factory</span> <span class="kn">import</span> <span class="n">HandlersFactoryConfig</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorFactoryConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorsFactoryConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">Lidar3DConfig</span><span class="p">,</span> <span class="n">SensorConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.setup_manager</span> <span class="kn">import</span> <span class="n">SetupManagerConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.state_analyzers_factory</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">StateAnalyzersFactoryConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">el1</span><span class="p">,</span>
-    <span class="n">el2</span><span class="p">,</span>
-    <span class="n">sensor</span><span class="p">,</span>
-<span class="p">)</span>
 
-<span class="n">sensor_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">name</span>
-<span class="n">graph_builder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_map_builder&quot;</span>
+<span class="n">sensor_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">KaistConfig</span><span class="o">.</span><span class="n">lidar_3D_left_name</span>
+
+<span class="n">graph_builder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PointcloudMapBuilder</span><span class="o">.</span><span class="vm">__name__</span>
+
 <span class="n">handler_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;kiss_icp_odometry&quot;</span>
 <span class="n">handler_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.pointcloud_matcher&quot;</span>
 <span class="n">handler_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.handlers&quot;</span>
+
 <span class="n">state_analyzer_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_odometry_state_analyzer&quot;</span>
 <span class="n">state_analyzer_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.lidar_odometry&quot;</span>
 <span class="n">state_analyzer_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.graph_builder.state_analyzers&quot;</span>
+
 <span class="n">edge_factory_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lidar_odometry_edge_factory&quot;</span>
 <span class="n">edge_factory_module_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.lidar_odometry&quot;</span>
 <span class="n">edge_factory_package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;moduslam.frontend_manager.edge_factories&quot;</span>
@@ -140,6 +145,16 @@
 <a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.elements">[docs]</a>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
 <span class="k">def</span> <span class="nf">elements</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Element</span><span class="p">,</span> <span class="n">Element</span><span class="p">]:</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span>
+    <span class="n">sensor</span> <span class="o">=</span> <span class="n">Lidar3D</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">Lidar3DConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;velodyne_left&quot;</span><span class="p">))</span>
+
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">RawMeasurement</span><span class="p">(</span><span class="n">sensor</span><span class="o">=</span><span class="n">sensor</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">loc1</span> <span class="o">=</span> <span class="n">BinaryDataLocation</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">el1</span> <span class="o">=</span> <span class="n">Element</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">measurement</span><span class="o">=</span><span class="n">m1</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">loc1</span><span class="p">)</span>
+
+    <span class="n">m2</span> <span class="o">=</span> <span class="n">RawMeasurement</span><span class="p">(</span><span class="n">sensor</span><span class="o">=</span><span class="n">sensor</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">loc2</span> <span class="o">=</span> <span class="n">BinaryDataLocation</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">el2</span> <span class="o">=</span> <span class="n">Element</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">measurement</span><span class="o">=</span><span class="n">m2</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">loc2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">el1</span><span class="p">,</span> <span class="n">el2</span></div>
 
 
@@ -158,10 +173,10 @@
 <div class="viewcode-block" id="sensor_factory_cfg">
 <a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.sensor_factory_cfg">[docs]</a>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-<span class="k">def</span> <span class="nf">sensor_factory_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SensorFactoryConfig</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">sensor_factory_cfg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SensorsFactoryConfig</span><span class="p">:</span>
     <span class="n">sensor_cfg</span><span class="p">:</span> <span class="n">Lidar3DConfig</span> <span class="o">=</span> <span class="n">Lidar3DConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sensor_name</span><span class="p">)</span>
     <span class="n">sensors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SensorConfig</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">sensor_name</span><span class="p">:</span> <span class="n">sensor_cfg</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">SensorFactoryConfig</span><span class="p">(</span><span class="n">sensors</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">SensorsFactoryConfig</span><span class="p">(</span><span class="n">sensors</span><span class="p">)</span></div>
 
 
 
@@ -277,8 +292,8 @@
 <div class="viewcode-block" id="builder">
 <a class="viewcode-back" href="../../../../../tests.frontend_manager.graph_builder.builders.html#tests.frontend_manager.graph_builder.builders.conftest.builder">[docs]</a>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-<span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">:</span> <span class="n">GraphBuilderConfig</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LidarMapBuilder</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">LidarMapBuilder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">:</span> <span class="n">GraphBuilderConfig</span><span class="p">,</span> <span class="n">setup_manager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointcloudMapBuilder</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">PointcloudMapBuilder</span><span class="p">(</span><span class="n">builder_cfg</span><span class="p">)</span></div>
 
 </pre></div>
 

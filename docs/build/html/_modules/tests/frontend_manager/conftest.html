@@ -73,18 +73,10 @@
   <h1>Source code for tests.frontend_manager.conftest</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Fixtures and classes for frontend_manager tests.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">pytest</span> <span class="kn">import</span> <span class="n">fixture</span>
 
-<span class="kn">import</span> <span class="nn">gtsam</span>
-<span class="kn">import</span> <span class="nn">pytest</span>
-
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.locations</span> <span class="kn">import</span> <span class="n">Location</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.edge_factory_ABC</span> <span class="kn">import</span> <span class="n">EdgeFactory</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_edges</span> <span class="kn">import</span> <span class="n">UnaryEdge</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">NotOptimizableVertex</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="n">Pose</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.ABC_handler</span> <span class="kn">import</span> <span class="n">Handler</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.locations</span> <span class="kn">import</span> <span class="n">Location</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Measurement</span><span class="p">,</span>
     <span class="n">MeasurementStorage</span><span class="p">,</span>
@@ -96,88 +88,12 @@
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.handlers.base_handler</span> <span class="kn">import</span> <span class="n">HandlerConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">SensorConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_dataclasses</span> <span class="kn">import</span> <span class="n">TimeRange</span>
-
-
-<div class="viewcode-block" id="BasicTestHandler">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestHandler">[docs]</a>
-<span class="k">class</span> <span class="nc">BasicTestHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">HandlerConfig</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
-
-<div class="viewcode-block" id="BasicTestHandler.process">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestHandler.process">[docs]</a>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Measurement</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">create_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">m</span></div>
-
-
-    <span class="k">def</span> <span class="nf">_create_empty_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">element</span></div>
-
-
-
-<div class="viewcode-block" id="BasicTestVertex">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestVertex">[docs]</a>
-<span class="k">class</span> <span class="nc">BasicTestVertex</span><span class="p">(</span><span class="n">NotOptimizableVertex</span><span class="p">):</span>
-<div class="viewcode-block" id="BasicTestVertex.update">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestVertex.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">pass</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="BasicTestEdgeFactory">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestEdgeFactory">[docs]</a>
-<span class="k">class</span> <span class="nc">BasicTestEdgeFactory</span><span class="p">(</span><span class="n">EdgeFactory</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">EdgeFactoryConfig</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-
-<div class="viewcode-block" id="BasicTestEdgeFactory.noise_model">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestEdgeFactory.noise_model">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">noise_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Base</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Sigmas</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vertices_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Pose</span><span class="p">]]:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">Pose</span><span class="p">}</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">base_vertices_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">]]:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">gtsam</span><span class="o">.</span><span class="n">Pose3</span><span class="p">}</span>
-
-<div class="viewcode-block" id="BasicTestEdgeFactory.create">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.BasicTestEdgeFactory.create">[docs]</a>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">measurements</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnaryEdge</span><span class="p">]:</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">PriorFactorPoint2</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">noiseModel</span><span class="o">=</span><span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Sigmas</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="p">)</span>
-        <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Sigmas</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">edge</span> <span class="o">=</span> <span class="n">UnaryEdge</span><span class="p">(</span><span class="n">vertex</span><span class="o">=</span><span class="n">BasicTestVertex</span><span class="p">(),</span> <span class="n">measurements</span><span class="o">=</span><span class="p">(),</span> <span class="n">noise_model</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">edge</span><span class="p">]</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="create_measurement">
-<a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.create_measurement">[docs]</a>
-<span class="k">def</span> <span class="nf">create_measurement</span><span class="p">(</span><span class="n">handler</span><span class="p">:</span> <span class="n">Handler</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">Measurement</span><span class="p">(</span>
-        <span class="n">time_range</span><span class="o">=</span><span class="n">TimeRange</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">timestamp</span><span class="p">),</span>
-        <span class="n">values</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">measurement</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
-        <span class="n">elements</span><span class="o">=</span><span class="p">(</span><span class="n">element</span><span class="p">,),</span>
-        <span class="n">noise_covariance</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">)</span></div>
-
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.objects</span> <span class="kn">import</span> <span class="n">BasicTestEdgeFactory</span><span class="p">,</span> <span class="n">BasicTestHandler</span>
 
 
 <div class="viewcode-block" id="handler">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.handler">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">HandlerConfig</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_handler&quot;</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="n">BasicTestHandler</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">module_name</span><span class="o">=</span><span class="vm">__name__</span>
@@ -189,7 +105,7 @@
 
 <div class="viewcode-block" id="sensor">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.sensor">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">sensor</span><span class="p">():</span>
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">SensorConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_sensor&quot;</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">&quot;Sensor&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Sensor</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">cfg</span><span class="p">)</span></div>
@@ -198,7 +114,7 @@
 
 <div class="viewcode-block" id="element">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.element">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">element</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
     <span class="n">loc</span> <span class="o">=</span> <span class="n">Location</span><span class="p">()</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">RawMeasurement</span><span class="p">(</span><span class="n">sensor</span><span class="o">=</span><span class="n">sensor</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -209,11 +125,11 @@
 
 <div class="viewcode-block" id="measurement">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.measurement">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">measurement</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Measurement</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">Measurement</span><span class="p">(</span>
         <span class="n">time_range</span><span class="o">=</span><span class="n">TimeRange</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">timestamp</span><span class="p">),</span>
-        <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
         <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
         <span class="n">elements</span><span class="o">=</span><span class="p">(</span><span class="n">element</span><span class="p">,),</span>
         <span class="n">noise_covariance</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
@@ -223,7 +139,7 @@
 
 <div class="viewcode-block" id="measurement_storage">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.measurement_storage">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">measurement_storage</span><span class="p">(</span><span class="n">measurement</span><span class="p">):</span>
     <span class="n">storage</span> <span class="o">=</span> <span class="n">MeasurementStorage</span><span class="p">()</span>
     <span class="n">storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
@@ -233,7 +149,7 @@
 
 <div class="viewcode-block" id="edge_factory">
 <a class="viewcode-back" href="../../../tests.frontend_manager.html#tests.frontend_manager.conftest.edge_factory">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="nd">@fixture</span>
 <span class="k">def</span> <span class="nf">edge_factory</span><span class="p">():</span>
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">EdgeFactoryConfig</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_edge_factory&quot;</span><span class="p">,</span>

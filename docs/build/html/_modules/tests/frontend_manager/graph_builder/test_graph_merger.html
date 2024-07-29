@@ -73,38 +73,33 @@
   <h1>Source code for tests.frontend_manager.graph_builder.test_graph_merger</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Tests for the GraphMerger class.&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.edge_factory_ABC</span> <span class="kn">import</span> <span class="n">EdgeFactory</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_edges</span> <span class="kn">import</span> <span class="n">UnaryEdge</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">State</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph_builder.graph_merger</span> <span class="kn">import</span> <span class="n">GraphMerger</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="n">Measurement</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.deque_set</span> <span class="kn">import</span> <span class="n">DequeSet</span>
-<span class="kn">from</span> <span class="nn">tests.frontend_manager.conftest</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">BasicTestVertex</span><span class="p">,</span>
-    <span class="n">create_measurement</span><span class="p">,</span>
-    <span class="n">edge_factory</span><span class="p">,</span>
-    <span class="n">element</span><span class="p">,</span>
-    <span class="n">handler</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.ABC_handler</span> <span class="kn">import</span> <span class="n">Handler</span>
+<span class="kn">from</span> <span class="nn">moduslam.utils.ordered_set</span> <span class="kn">import</span> <span class="n">OrderedSet</span>
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.conftest</span> <span class="kn">import</span> <span class="n">edge_factory</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">handler</span>
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.objects</span> <span class="kn">import</span> <span class="n">BasicTestVertex</span><span class="p">,</span> <span class="n">create_measurement</span>
 
 
 <div class="viewcode-block" id="test_merge">
 <a class="viewcode-back" href="../../../../tests.frontend_manager.graph_builder.html#tests.frontend_manager.graph_builder.test_graph_merger.test_merge">[docs]</a>
-<span class="k">def</span> <span class="nf">test_merge</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">edge_factory</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_merge</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Handler</span><span class="p">,</span> <span class="n">edge_factory</span><span class="p">:</span> <span class="n">EdgeFactory</span><span class="p">):</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">[</span><span class="n">BasicTestVertex</span><span class="p">,</span> <span class="n">UnaryEdge</span><span class="p">]()</span>
-
     <span class="c1"># add new key-value pair to the protected table. Only for testing purposes.</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">_vertices_table</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">BasicTestVertex</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">()})</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">_vertices_table</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">BasicTestVertex</span><span class="p">:</span> <span class="n">OrderedSet</span><span class="p">()})</span>
 
     <span class="n">merger</span> <span class="o">=</span> <span class="n">GraphMerger</span><span class="p">[</span><span class="n">BasicTestVertex</span><span class="p">,</span> <span class="n">UnaryEdge</span><span class="p">]()</span>
-
     <span class="c1"># add new key-value pair to the protected table. Only for testing purposes.</span>
     <span class="n">merger</span><span class="o">.</span><span class="n">_table</span> <span class="o">=</span> <span class="p">{</span><span class="n">handler</span><span class="p">:</span> <span class="n">edge_factory</span><span class="p">}</span>
 
     <span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
-    <span class="n">z</span><span class="p">:</span> <span class="n">Measurement</span> <span class="o">=</span> <span class="n">create_measurement</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">create_measurement</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
     <span class="n">state</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 
     <span class="n">merger</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
@@ -116,7 +111,11 @@
 
     <span class="k">assert</span> <span class="n">vertex</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">==</span> <span class="n">element</span><span class="o">.</span><span class="n">timestamp</span>
     <span class="k">assert</span> <span class="n">vertex</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_connected_edges</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">edges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">UnaryEdge</span><span class="p">)</span></div>
 
 </pre></div>

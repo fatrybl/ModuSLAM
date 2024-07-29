@@ -99,7 +99,7 @@
 <span class="sd">            graph: a graph to save.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">saveGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span> <span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="p">)</span></div>
+        <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">saveGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span> <span class="n">graph</span><span class="o">.</span><span class="n">backend_values</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GraphSaver.save_to_pdf">
@@ -110,7 +110,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            graph: a graph to save.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dot</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_graphviz_formatting</span><span class="p">)</span>
+        <span class="n">dot</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">backend_values</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_graphviz_formatting</span><span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
         <span class="n">source</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
@@ -123,7 +123,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            graph: a graph to visualize.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dot</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_graphviz_formatting</span><span class="p">)</span>
+        <span class="n">dot</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">backend_values</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_graphviz_formatting</span><span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
         <span class="n">source</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 </div>

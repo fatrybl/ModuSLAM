@@ -76,9 +76,6 @@
 <span class="kn">import</span> <span class="nn">psutil</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">data_manager</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.memory</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">MemoryAnalyzerConfig</span><span class="p">,</span>
-<span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
@@ -90,12 +87,12 @@
 
 <div class="viewcode-block" id="MemoryAnalyzer.__init__">
 <a class="viewcode-back" href="../../../../moduslam.data_manager.memory_analyzer.html#moduslam.data_manager.memory_analyzer.memory_analyzer.MemoryAnalyzer.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">MemoryAnalyzerConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_memory_percent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">50.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
-<span class="sd">            config: the configuration for the memory analyzer.</span>
+<span class="sd">            batch_memory_percent: permissible memory usage in percentage.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_memory_percent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_memory</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_memory_percent</span> <span class="o">=</span> <span class="n">batch_memory_percent</span></div>
 
 
     <span class="nd">@property</span>
@@ -106,7 +103,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">available_memory_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Percentage of available memory.&quot;&quot;&quot;</span>
-        <span class="n">available_percent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_memory</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">available_percent</span> <span class="o">=</span> <span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_memory</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
         <span class="k">return</span> <span class="n">available_percent</span>
 
     <span class="nd">@property</span>
@@ -117,7 +114,14 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">permissible_memory_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Permissible percentage of memory which is available for the user.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_memory_percent</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_memory_percent</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">enough_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the memory usage is within the permissible limits.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_memory_percent</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">permissible_memory_percent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 </pre></div>
 

@@ -76,10 +76,16 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="k">as</span> <span class="nn">Image</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.locations</span> <span class="kn">import</span> <span class="n">CsvDataLocation</span><span class="p">,</span> <span class="n">Location</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.locations</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CsvDataLocation</span><span class="p">,</span>
+    <span class="n">Location</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.setup_manager.sensors_factory.sensors</span> <span class="kn">import</span> <span class="n">Sensor</span><span class="p">,</span> <span class="n">StereoCamera</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">SensorConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SensorConfig</span><span class="p">,</span>
+    <span class="n">StereoCameraConfig</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_methods</span> <span class="kn">import</span> <span class="n">equal_elements</span>
 
 
@@ -87,7 +93,7 @@
 <a class="viewcode-back" href="../../../tests.utils.html#tests.utils.test_equal_elements.TestEqualElements">[docs]</a>
 <span class="k">class</span> <span class="nc">TestEqualElements</span><span class="p">:</span>
 
-    <span class="n">sensor_config</span> <span class="o">=</span> <span class="n">SensorConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_camera&quot;</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">&quot;StereoCamera&quot;</span><span class="p">)</span>
+    <span class="n">sensor_config</span> <span class="o">=</span> <span class="n">StereoCameraConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_camera&quot;</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">&quot;StereoCamera&quot;</span><span class="p">)</span>
     <span class="n">sensor</span> <span class="o">=</span> <span class="n">StereoCamera</span><span class="p">(</span><span class="n">sensor_config</span><span class="p">)</span>
 
     <span class="n">other_sensor_config</span> <span class="o">=</span> <span class="n">SensorConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;other_sensor&quot;</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">&quot;Sensor&quot;</span><span class="p">)</span>

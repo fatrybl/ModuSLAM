@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>moduslam.data_manager.batch_factory.readers.kaist package &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">ModuSLAM</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">moduslam.data_manager.batch_factory.readers.kaist package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/moduslam.data_manager.batch_factory.readers.kaist.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="moduslam-data-manager-batch-factory-readers-kaist-package">
+<h1>moduslam.data_manager.batch_factory.readers.kaist package<a class="headerlink" href="#moduslam-data-manager-batch-factory-readers-kaist-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-moduslam.data_manager.batch_factory.readers.kaist.measurement_collector">
+<span id="moduslam-data-manager-batch-factory-readers-kaist-measurement-collector-module"></span><h2>moduslam.data_manager.batch_factory.readers.kaist.measurement_collector module<a class="headerlink" href="#module-moduslam.data_manager.batch_factory.readers.kaist.measurement_collector" title="Link to this heading"></a></h2>
+<p>Module for collecting measurements from the data sources for Kaist Urban Dataset.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_next_measurement">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.</span></span><span class="sig-name descname"><span class="pre">get_next_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.Source" title="moduslam.data_manager.batch_factory.readers.data_sources.Source"><span class="pre">Source</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation"><span class="pre">CsvDataLocation</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation"><span class="pre">BinaryDataLocation</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation" title="moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation"><span class="pre">StereoImagesLocation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/measurement_collector.html#get_next_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_next_measurement" title="Link to this definition"></a></dt>
+<dd><p>Gets the next measurement from the data source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> – Data source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>message and location.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>StopIteration</strong> – if the data source has exhausted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_measurement">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.</span></span><span class="sig-name descname"><span class="pre">get_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.Location" title="moduslam.data_manager.batch_factory.readers.locations.Location"><span class="pre">Location</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/measurement_collector.html#get_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_measurement" title="Link to this definition"></a></dt>
+<dd><p>Gets the measurement by the location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> – Data location.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>message.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – if the location type is unknown.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_csv_measurement">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.</span></span><span class="sig-name descname"><span class="pre">get_csv_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.CsvData" title="moduslam.data_manager.batch_factory.readers.data_sources.CsvData"><span class="pre">CsvData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation"><span class="pre">CsvDataLocation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/measurement_collector.html#get_csv_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_csv_measurement" title="Link to this definition"></a></dt>
+<dd><p>Gets the next CSV measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> – CSV data source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>message and location.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>StopIteration</strong> – if the CSV data has finished.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_pointcloud_measurement">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.</span></span><span class="sig-name descname"><span class="pre">get_pointcloud_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.PointcloudData" title="moduslam.data_manager.batch_factory.readers.data_sources.PointcloudData"><span class="pre">PointcloudData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation"><span class="pre">BinaryDataLocation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/measurement_collector.html#get_pointcloud_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_pointcloud_measurement" title="Link to this definition"></a></dt>
+<dd><p>Gets the next pointcloud measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> – Pointcloud data source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>message and location.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>StopIteration</strong> – if the pointcloud data has finished.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_stereo_measurement">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.</span></span><span class="sig-name descname"><span class="pre">get_stereo_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.StereoImageData" title="moduslam.data_manager.batch_factory.readers.data_sources.StereoImageData"><span class="pre">StereoImageData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation" title="moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation"><span class="pre">StereoImagesLocation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/measurement_collector.html#get_stereo_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.measurement_collector.get_stereo_measurement" title="Link to this definition"></a></dt>
+<dd><p>Gets the next stereo image measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> – Stereo image data source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>message and location.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>StopIteration</strong> – if the stereo image data has finished.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-moduslam.data_manager.batch_factory.readers.kaist.reader">
+<span id="moduslam-data-manager-batch-factory-readers-kaist-reader-module"></span><h2>moduslam.data_manager.batch_factory.readers.kaist.reader module<a class="headerlink" href="#module-moduslam.data_manager.batch_factory.readers.kaist.reader" title="Link to this heading"></a></h2>
+<p>Kaist Urban Dataset reader.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.reader.</span></span><span class="sig-name descname"><span class="pre">KaistReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimeLimit</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.datasets.kaist.html#moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config.KaistConfig" title="moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config.KaistConfig"><span class="pre">KaistConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_reader_ABC.DataReader" title="moduslam.data_manager.batch_factory.readers.data_reader_ABC.DataReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataReader</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimeLimit</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.datasets.kaist.html#moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config.KaistConfig" title="moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config.KaistConfig"><span class="pre">KaistConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regime</strong> – regime to read the data.</p></li>
+<li><p><strong>dataset_params</strong> – dataset parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – if any required file does not exist.</p></li>
+<li><p><strong>NotADirectoryError</strong> – if the dataset directory does not exist.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__enter__" title="Link to this definition"></a></dt>
+<dd><p>Opens all files for reading and initializes iterators.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseException</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseException</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TracebackType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.__exit__" title="Link to this definition"></a></dt>
+<dd><p>Closes all opened files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.set_initial_state">
+<span class="sig-name descname"><span class="pre">set_initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.sensors.Sensor" title="moduslam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">Sensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.set_initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.set_initial_state" title="Link to this definition"></a></dt>
+<dd><p>Sets the iterator position for the given sensor and timestamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sensor</strong> – sensor to set the iterator position.</p></li>
+<li><p><strong>timestamp</strong> – timestamp to set the iterator position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – if the method is called outside the context manager.</p></li>
+<li><p><a class="reference internal" href="moduslam.utils.html#moduslam.utils.exceptions.ItemNotFoundError" title="moduslam.utils.exceptions.ItemNotFoundError"><strong>ItemNotFoundError</strong></a> – if no measurement found for the sensor at the given timestamp.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.get_next_element">
+<span class="sig-name descname"><span class="pre">get_next_element</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.get_next_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.get_next_element" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_next_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.sensors.Sensor" title="moduslam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">Sensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
+<dd><p>&#64;overload.</p>
+<p>Gets element from a dataset sequentially based on iterator position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>element with raw measurement or None if all measurements from a dataset have already been read.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if the method is called outside the context manager.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_next_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.setup_manager.sensors_factory.html#moduslam.setup_manager.sensors_factory.sensors.Sensor" title="moduslam.setup_manager.sensors_factory.sensors.Sensor"><span class="pre">moduslam.setup_manager.sensors_factory.sensors.Sensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">moduslam.data_manager.batch_factory.batch.Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.get_next_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<p>&#64;overload.</p>
+<p>Gets next element from a dataset for the given sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – sensor to get the measurement of.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>element with raw data or None if all measurements from a dataset have already been read.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if the method is called outside the context manager.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.get_element">
+<span class="sig-name descname"><span class="pre">get_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader.get_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader.get_element" title="Link to this definition"></a></dt>
+<dd><p>Gets element from a dataset based on the given element without raw data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>element</strong> – element with timestamp.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>element with raw data.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if the method is called outside the context manager.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader._set_root_path">
+<span class="sig-name descname"><span class="pre">_set_root_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader._set_root_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader._set_root_path" title="Link to this definition"></a></dt>
+<dd><p>Sets the root path for all files and directories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>root_path</strong> – root path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader._base_sensor_source_table">
+<span class="sig-name descname"><span class="pre">_base_sensor_source_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.CsvData" title="moduslam.data_manager.batch_factory.readers.data_sources.CsvData"><span class="pre">CsvData</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.PointcloudData" title="moduslam.data_manager.batch_factory.readers.data_sources.PointcloudData"><span class="pre">PointcloudData</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.data_sources.StereoImageData" title="moduslam.data_manager.batch_factory.readers.data_sources.StereoImageData"><span class="pre">StereoImageData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/reader.html#KaistReader._base_sensor_source_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.reader.KaistReader._base_sensor_source_table" title="Link to this definition"></a></dt>
+<dd><p>Base “sensors &lt;-&gt; source” table of Kaist Urban datasets.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-moduslam.data_manager.batch_factory.readers.kaist.utils">
+<span id="moduslam-data-manager-batch-factory-readers-kaist-utils-module"></span><h2>moduslam.data_manager.batch_factory.readers.kaist.utils module<a class="headerlink" href="#module-moduslam.data_manager.batch_factory.readers.kaist.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.read_binary">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">read_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#read_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.read_binary" title="Link to this definition"></a></dt>
+<dd><p>Reads binary data from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – path to the binary file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>binary data as floats.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.get_csv_message_by_location">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">get_csv_message_by_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.CsvDataLocation"><span class="pre">CsvDataLocation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#get_csv_message_by_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.get_csv_message_by_location" title="Link to this definition"></a></dt>
+<dd><p>Gets csv message by location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> – location of the csv data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a message with csv data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>message</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.get_pointcloud_message_by_location">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">get_pointcloud_message_by_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation" title="moduslam.data_manager.batch_factory.readers.locations.BinaryDataLocation"><span class="pre">BinaryDataLocation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#get_pointcloud_message_by_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.get_pointcloud_message_by_location" title="Link to this definition"></a></dt>
+<dd><p>Gets binary data by location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> – location of the binary data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a message with binary data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>message</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.get_stereo_message_by_location">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">get_stereo_message_by_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.readers.html#moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation" title="moduslam.data_manager.batch_factory.readers.locations.StereoImagesLocation"><span class="pre">StereoImagesLocation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.auxiliary_dataclasses.Message" title="moduslam.utils.auxiliary_dataclasses.Message"><span class="pre">Message</span></a></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#get_stereo_message_by_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.get_stereo_message_by_location" title="Link to this definition"></a></dt>
+<dd><p>Get stereo images by location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> – location of the stereo images.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a message containing the stereo images.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>message</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.process_csv_line">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">process_csv_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#process_csv_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.process_csv_line" title="Link to this definition"></a></dt>
+<dd><p>Processes a row of a csv file and returns the timestamp, sensor name and index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>row</strong> – a row of a csv file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.create_sequence">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">create_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimeLimit</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#create_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.create_sequence" title="Link to this definition"></a></dt>
+<dd><p>Create a list of tuples containing the timestamp, sensor name and index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – csv file path.</p></li>
+<li><p><strong>regime</strong> – a TimeLimit or Stream object.</p></li>
+<li><p><strong>used_sensors</strong> – a set of sensor names to be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>a list of tuples containing the timestamp, sensor name and index.</p>
+<p>sensor_indices: a dictionary of sensor name and index pairs.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>elements</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.process_stream">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">process_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#process_stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.process_stream" title="Link to this definition"></a></dt>
+<dd><p>Creates a list of tuples containing the timestamp, sensor name and index for the
+Stream regime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – csv file path.</p></li>
+<li><p><strong>used_sensors</strong> – a set of sensor names to be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>a list of tuples containing the timestamp, sensor name and index.</p>
+<p>latest_sensors_indices: a dictionary of sensor name and index pairs.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>elements</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.data_manager.batch_factory.readers.kaist.utils.process_timelimit">
+<span class="sig-prename descclassname"><span class="pre">moduslam.data_manager.batch_factory.readers.kaist.utils.</span></span><span class="sig-name descname"><span class="pre">process_timelimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/data_manager/batch_factory/readers/kaist/utils.html#process_timelimit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.data_manager.batch_factory.readers.kaist.utils.process_timelimit" title="Link to this definition"></a></dt>
+<dd><p>Creates a list of tuples containing the timestamp, sensor name and index for the
+TimeLimit regime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – csv file path.</p></li>
+<li><p><strong>used_sensors</strong> – a set of sensor names to be used.</p></li>
+<li><p><strong>start</strong> – start timestamp.</p></li>
+<li><p><strong>stop</strong> – stop timestamp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>a list of tuples containing the timestamp, sensor name and index.</p>
+<p>latest_sensors_indices: a dictionary of sensor name and index pairs.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>elements</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-moduslam.data_manager.batch_factory.readers.kaist">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.data_manager.batch_factory.readers.kaist" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

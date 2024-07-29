@@ -63,7 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.run">moduslam.run module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.sandbox">moduslam.sandbox module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#moduslam-sandbox-module">moduslam.sandbox module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam">Module contents</a></li>
 </ul>
 </li>
@@ -238,57 +238,8 @@ candidate if needed.</p>
 </dd></dl>
 
 </section>
-<section id="module-moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap">
-<span id="moduslam-frontend-manager-graph-builder-candidate-factory-lidar-submap-module"></span><h2>moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap module<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.</span></span><span class="sig-name descname"><span class="pre">LidarMapCandidateFactory</span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/candidate_factory/lidar_submap.html#LidarMapCandidateFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC.CandidateFactory" title="moduslam.frontend_manager.graph_builder.candidate_factory.factory_ABC.CandidateFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">CandidateFactory</span></code></a></p>
-<p>Creates graph candidate with lidar pointcloud keyframe(s).</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.graph_candidate">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">graph_candidate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.GraphCandidate" title="moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate.GraphCandidate"><span class="pre">GraphCandidate</span></a></em><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.graph_candidate" title="Link to this definition"></a></dt>
-<dd><p>Graph candidate to be merged with the graph.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.init_table">
-<span class="sig-name descname"><span class="pre">init_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/candidate_factory/lidar_submap.html#LidarMapCandidateFactory.init_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.init_table" title="Link to this definition"></a></dt>
-<dd><p>Initializes “handler -&gt; state analyzer” table.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – config with “handler name -&gt; state analyzer name” table.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.candidate_ready">
-<span class="sig-name descname"><span class="pre">candidate_ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/candidate_factory/lidar_submap.html#LidarMapCandidateFactory.candidate_ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.candidate_ready" title="Link to this definition"></a></dt>
-<dd><p>Candidate readiness status.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.synchronize_states">
-<span class="sig-name descname"><span class="pre">synchronize_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/candidate_factory/lidar_submap.html#LidarMapCandidateFactory.synchronize_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.synchronize_states" title="Link to this definition"></a></dt>
-<dd><p>Synchronizes states of the graph candidate.</p>
-<p>Not implemented.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.process_storage">
-<span class="sig-name descname"><span class="pre">process_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.MeasurementStorage" title="moduslam.frontend_manager.measurement_storage.MeasurementStorage"><span class="pre">MeasurementStorage</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph_builder/candidate_factory/lidar_submap.html#LidarMapCandidateFactory.process_storage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap.LidarMapCandidateFactory.process_storage" title="Link to this definition"></a></dt>
-<dd><p>Processes the storage with measurements and adds new states to the graph
-candidate if needed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>storage</strong> – storage with measurements.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-frontend-manager-graph-builder-candidate-factory-lidar-submap-module">
+<h2>moduslam.frontend_manager.graph_builder.candidate_factory.lidar_submap module<a class="headerlink" href="#moduslam-frontend-manager-graph-builder-candidate-factory-lidar-submap-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.frontend_manager.graph_builder.candidate_factory">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.frontend_manager.graph_builder.candidate_factory" title="Link to this heading"></a></h2>

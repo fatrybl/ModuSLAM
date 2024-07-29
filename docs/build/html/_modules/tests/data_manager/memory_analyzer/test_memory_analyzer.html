@@ -71,52 +71,19 @@
            <div itemprop="articleBody">
 
   <h1>Source code for tests.data_manager.memory_analyzer.test_memory_analyzer</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span></span><span class="sd">&quot;&quot;&quot;Tests for the MemoryAnalyzer.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.memory_analyzer.memory_analyzer</span> <span class="kn">import</span> <span class="n">MemoryAnalyzer</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.memory</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">MemoryAnalyzerConfig</span><span class="p">,</span>
-<span class="p">)</span>
 
 
-<div class="viewcode-block" id="memory_analyzer">
-<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.memory_analyzer">[docs]</a>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-<span class="k">def</span> <span class="nf">memory_analyzer</span><span class="p">():</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">MemoryAnalyzerConfig</span><span class="p">(</span><span class="n">batch_memory</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">MemoryAnalyzer</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="test_total_memory">
-<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.test_total_memory">[docs]</a>
-<span class="k">def</span> <span class="nf">test_total_memory</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="p">:</span> <span class="n">MemoryAnalyzer</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="o">.</span><span class="n">total_memory</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">memory_analyzer</span><span class="o">.</span><span class="n">total_memory</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
-
-
-
-<div class="viewcode-block" id="test_available_memory_percent">
-<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.test_available_memory_percent">[docs]</a>
-<span class="k">def</span> <span class="nf">test_available_memory_percent</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="p">:</span> <span class="n">MemoryAnalyzer</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="o">.</span><span class="n">available_memory_percent</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">memory_analyzer</span><span class="o">.</span><span class="n">available_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span></div>
-
-
-
-<div class="viewcode-block" id="test_used_memory_percent">
-<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.test_used_memory_percent">[docs]</a>
-<span class="k">def</span> <span class="nf">test_used_memory_percent</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="p">:</span> <span class="n">MemoryAnalyzer</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="o">.</span><span class="n">used_memory_percent</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">memory_analyzer</span><span class="o">.</span><span class="n">used_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span></div>
-
-
-
-<div class="viewcode-block" id="test_permissible_memory_percent">
-<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.test_permissible_memory_percent">[docs]</a>
-<span class="k">def</span> <span class="nf">test_permissible_memory_percent</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="p">:</span> <span class="n">MemoryAnalyzer</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">memory_analyzer</span><span class="o">.</span><span class="n">permissible_memory_percent</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">memory_analyzer</span><span class="o">.</span><span class="n">permissible_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span></div>
+<div class="viewcode-block" id="test_analyzer">
+<a class="viewcode-back" href="../../../../tests.data_manager.memory_analyzer.html#tests.data_manager.memory_analyzer.test_memory_analyzer.test_analyzer">[docs]</a>
+<span class="k">def</span> <span class="nf">test_analyzer</span><span class="p">():</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">MemoryAnalyzer</span><span class="p">(</span><span class="n">batch_memory_percent</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">total_memory</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">available_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">used_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">permissible_memory_percent</span> <span class="o">&lt;=</span> <span class="mi">100</span></div>
 
 </pre></div>
 

@@ -71,15 +71,12 @@
            <div itemprop="articleBody">
 
   <h1>Source code for moduslam.system_configs.data_manager.batch_factory.batch_factory</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DatasetConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.memory</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">MemoryAnalyzerConfig</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regime</span> <span class="kn">import</span> <span class="n">RegimeConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regimes</span> <span class="kn">import</span> <span class="n">DataRegimeConfig</span>
 
 
 <div class="viewcode-block" id="BatchFactoryConfig">
@@ -88,9 +85,11 @@
 <span class="k">class</span> <span class="nc">BatchFactoryConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Batch factory configuration.&quot;&quot;&quot;</span>
 
-    <span class="n">memory</span><span class="p">:</span> <span class="n">MemoryAnalyzerConfig</span>
     <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetConfig</span>
-    <span class="n">regime</span><span class="p">:</span> <span class="n">RegimeConfig</span></div>
+    <span class="n">regime</span><span class="p">:</span> <span class="n">DataRegimeConfig</span>
+    <span class="n">batch_memory_percent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">90.0</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;help&quot;</span><span class="p">:</span> <span class="s2">&quot;RAM-memory percent used for the data batch.&quot;</span><span class="p">}</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 
