@@ -4,7 +4,7 @@
 
 import gtsam
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose, Pose
@@ -28,8 +28,13 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Args:
             config: configuration of the factory.
         """
-        super().__init__(config)
+        self._name: str = config.name
         self._time_margin: int = sec2nanosec(config.search_time_margin)
+
+    @property
+    def name(self) -> str:
+        """Unique factory name."""
+        return self._name
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int

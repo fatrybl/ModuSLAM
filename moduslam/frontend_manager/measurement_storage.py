@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.exceptions import EmptyStorageError

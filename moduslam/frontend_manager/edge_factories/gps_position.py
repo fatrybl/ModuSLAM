@@ -4,7 +4,7 @@
 
 import gtsam
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.edge_factories.utils import get_vertex
 from moduslam.frontend_manager.graph.custom_edges import GpsPosition
 from moduslam.frontend_manager.graph.custom_vertices import Pose
@@ -27,8 +27,13 @@ class GpsPositionEdgeFactory(EdgeFactory):
         Args:
             config: configuration of the factory.
         """
-        super().__init__(config)
+        self._name: str = config.name
         self._time_margin = int(config.search_time_margin * self._second)
+
+    @property
+    def name(self) -> str:
+        """Unique factory name."""
+        return self._name
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int

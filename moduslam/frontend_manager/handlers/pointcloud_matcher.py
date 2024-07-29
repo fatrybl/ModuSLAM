@@ -4,7 +4,7 @@ import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
@@ -31,7 +31,7 @@ class ScanMatcher(Handler):
         Args:
             config: handler configuration with parameters for Kiss-ICP scan matcher.
         """
-        super().__init__(config)
+        self._name = config.name
         cfg: KISSConfig = self._to_kiss_icp_config(config)
         self._scan_matcher = KissICP(cfg)
         self._elements_queue: list[Element] = []
@@ -39,6 +39,11 @@ class ScanMatcher(Handler):
 
         # self._visualizer = RegistrationVisualizer()
         # self._visualizer.global_view = True
+
+    @property
+    def name(self) -> str:
+        """Unique handler name."""
+        return self._name
 
     def process(self, element: Element) -> Measurement | None:
         """Computes the transformation SE(3) matrix between 2 point clouds. Always
@@ -62,7 +67,7 @@ class ScanMatcher(Handler):
         sensor = element.measurement.sensor
         new_measurement: Measurement | None = None
 
-        tf_base_sensor = sensor.tf_base_sensor
+        tf_base_sensor = np.array(sensor.tf_base_sensor)
         tf_base_sensor_inv = np.linalg.inv(tf_base_sensor)
 
         self._elements_queue.append(element)
@@ -152,8 +157,8 @@ class ScanMatcher(Handler):
         pre_last_el = self._elements_queue[-2]
         last_el = self._elements_queue[-1]
 
-        empty_pre_last_element = self._create_empty_element(pre_last_el)
-        empty_last_element = self._create_empty_element(last_el)
+        empty_pre_last_element = self.create_empty_element(pre_last_el)
+        empty_last_element = self.create_empty_element(last_el)
 
         start = pre_last_el.timestamp
         stop = last_el.timestamp
@@ -174,7 +179,8 @@ class ScanMatcher(Handler):
         self._scan_matcher.poses.pop(0)
         self._elements_queue.pop(0)
 
-    def _create_empty_element(self, element: Element) -> Element:
+    @staticmethod
+    def create_empty_element(element: Element) -> Element:
         """
         Creates an empty element with the same timestamp, location and sensor as the input element.
         Args:
@@ -183,5 +189,4 @@ class ScanMatcher(Handler):
         Returns:
             empty element without data.
         """
-        empty_element = create_empty_element(element)
-        return empty_element
+        return create_empty_element(element)

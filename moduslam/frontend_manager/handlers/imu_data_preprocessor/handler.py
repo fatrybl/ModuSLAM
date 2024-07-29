@@ -17,10 +17,10 @@
 import logging
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.handlers.imu_data_preprocessor.line_parsers import (
     get_tum_vie_imu_data,
 )
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.setup_manager.sensors_factory.sensors import Imu
@@ -35,7 +35,12 @@ class ImuDataPreprocessor(Handler):
     """IMU data handler."""
 
     def __init__(self, config: HandlerConfig):
-        super().__init__(config)
+        self._name = config.name
+
+    @property
+    def name(self) -> str:
+        """Unique handler name."""
+        return self._name
 
     def process(self, element: Element) -> Measurement | None:
         """Processes the element with raw IMU data and returns the measurement.
@@ -60,7 +65,7 @@ class ImuDataPreprocessor(Handler):
         acc_bias_cov = element.measurement.sensor.accelerometer_bias_noise_covariance
         gyro_bias_cov = element.measurement.sensor.gyroscope_bias_noise_covariance
 
-        empty_element = self._create_empty_element(element)
+        empty_element = self.create_empty_element(element)
 
         m = Measurement(
             time_range=t_range,
@@ -72,7 +77,8 @@ class ImuDataPreprocessor(Handler):
 
         return m
 
-    def _create_empty_element(self, element: Element) -> Element:
+    @staticmethod
+    def create_empty_element(element: Element) -> Element:
         """
         Creates an empty element with the same timestamp, location and sensor as the input element.
         Args:
@@ -81,5 +87,4 @@ class ImuDataPreprocessor(Handler):
         Returns:
             empty element without data.
         """
-        empty_element = create_empty_element(element)
-        return empty_element
+        return create_empty_element(element)

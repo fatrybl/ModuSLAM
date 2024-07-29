@@ -1,6 +1,6 @@
 import logging
 
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.logger.logging_config import setup_manager
 from moduslam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
 from moduslam.utils.auxiliary_methods import import_object

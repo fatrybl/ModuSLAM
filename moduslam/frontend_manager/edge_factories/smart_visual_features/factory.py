@@ -2,7 +2,7 @@
     TODO: add tests
 """
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.edge_factories.smart_visual_features.smart_factor_factory import (
     VisualSmartFactorFactory,
 )
@@ -31,12 +31,17 @@ class SmartVisualFeaturesFactory(EdgeFactory):
         Args:
             config: configuration of the factory.
         """
-        super().__init__(config)
+        self._name: str = config.name
         self._time_margin: int = sec2nanosec(config.search_time_margin)
         self._feature_storage = VisualFeatureStorage()
         self._smart_factor_factory = VisualSmartFactorFactory()
         self._frame_limit: int = 10
         self._current_frame: int = 0
+
+    @property
+    def name(self) -> str:
+        """Unique factory name."""
+        return self._name
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int

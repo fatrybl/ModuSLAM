@@ -9,7 +9,6 @@ import logging
 import gtsam
 import numpy as np
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.edge_factories.imu_preintegration.utils import (
     compute_covariance,
     create_edge,
@@ -17,6 +16,7 @@ from moduslam.frontend_manager.edge_factories.imu_preintegration.utils import (
     integrate,
     set_parameters,
 )
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph.custom_edges import ImuOdometry
 from moduslam.frontend_manager.graph.custom_vertices import (
     ImuBias,
@@ -48,11 +48,16 @@ class ImuOdometryFactory(EdgeFactory):
         Args:
             config: configuration of the factory.
         """
-        super().__init__(config)
+        self._name: str = config.name
         self._min_num_of_measurements: int = 4
         self._gravity: float = 9.81
         self._time_margin = int(config.search_time_margin * self._second)
         self._params = gtsam.PreintegrationCombinedParams.MakeSharedU(self._gravity)
+
+    @property
+    def name(self) -> str:
+        """Unique factory name."""
+        return self._name
 
     def create(
         self,

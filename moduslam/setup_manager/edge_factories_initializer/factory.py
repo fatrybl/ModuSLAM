@@ -1,6 +1,6 @@
 import logging
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.logger.logging_config import setup_manager
 from moduslam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,

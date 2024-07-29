@@ -3,11 +3,11 @@ from typing import Any
 import gtsam
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge
 from moduslam.frontend_manager.graph.base_vertices import NotOptimizableVertex
 from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
@@ -30,13 +30,18 @@ def create_measurement(handler: Handler, element: Element):
 class BasicTestHandler(Handler):
 
     def __init__(self, cfg: HandlerConfig):
-        super().__init__(cfg)
+        self._name = cfg.name
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def process(self, element: Element) -> Measurement | None:
         m = create_measurement(self, element)
         return m
 
-    def _create_empty_element(self, element: Element) -> Element:
+    @staticmethod
+    def create_empty_element(element: Element) -> Element:
         return element
 
 
@@ -46,7 +51,11 @@ class BasicTestVertex(NotOptimizableVertex):
 
 class BasicTestEdgeFactory(EdgeFactory):
     def __init__(self, config: EdgeFactoryConfig):
-        super().__init__(config)
+        self._name = config.name
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
