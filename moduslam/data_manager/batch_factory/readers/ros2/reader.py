@@ -1,19 +1,27 @@
+"""ROS2 dataset Reader"""
+
+import logging
 import os
 from pathlib import Path
 
-from moduslam.data_manager.factory.data_reader_ABC import DataReader
-from moduslam.data_manager.factory.element import Element, RawMeasurement
-from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager
+from rosbags.rosbag2 import Reader
 
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
+from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager  # UPDATE
 # from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
+from moduslam.logger.logging_config import data_manager
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
     Ros2Config,
 )
-from moduslam.system_configs.data_manager.batch_factory.regime import Stream, TimeLimit
+from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.exceptions import ItemNotFoundError
+
+logger = logging.getLogger(data_manager)
 
 
 class Ros2DataReader(DataReader):
@@ -36,10 +44,45 @@ class Ros2DataReader(DataReader):
         else:
             self.rosbags_manager = Rosbags2Manager(self._dataset_directory, self.sensors_table)
 
-        for i in range(1):
-            element = self.get_element()
-            if element is not None:
-                print(f"Got element: {element}")
+    def __enter__(self):
+        """Opens the dataset for reading."""
+        self.reader = Reader(self._dataset_directory)
+        self.reader.open()
+        return self.reader
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Closes the dataset."""
+        if self.reader:
+            self.reader.close()
+            self.reader = None
+
+    def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
+        """
+        @overload.
+        Sets the iterator(s) position(s) for the given sensor and timestamp.
+
+        Args:
+            sensor: sensor to set the iterator(s) position(s) to.
+
+            timestamp: timestamp to set the iterator(s) position(s) to.
+
+        Raises:
+            RuntimeError: if the method is called outside the context manager.
+
+            ItemNotFoundError: if no measurement for the given sensor and timestamp is found.
+        """
+        pass
+
+    def get_next_element(self) -> Element | None:
+        """
+        @overload.
+        Gets element from a dataset sequentially based on iterator position.
+
+        Returns:
+            Element | None: element with raw sensor measurement
+                            or None if all measurements from a dataset has already been processed
+        """
+        pass
 
     def get_element(self) -> Element | None:
         """
