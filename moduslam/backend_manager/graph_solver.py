@@ -27,9 +27,10 @@ class GraphSolver:
         """
 
         optimizer = gtsam.LevenbergMarquardtOptimizer(
-            graph.factor_graph, graph.gtsam_values, self._params
+            graph.factor_graph, graph.backend_values, self._params
         )
         optimizer.optimize()
         result = optimizer.values()
+        logger.debug(f"result: {result}")
         logger.debug(f"optimization error: {optimizer.error()}")
         return result

@@ -77,16 +77,11 @@
 
 <span class="kn">import</span> <span class="nn">pytest</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span>
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span><span class="p">,</span> <span class="n">Element</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.elements_distributor</span> <span class="kn">import</span> <span class="n">ElementDistributor</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.ordered_set</span> <span class="kn">import</span> <span class="n">OrderedSet</span>
-<span class="kn">from</span> <span class="nn">tests.frontend_manager.conftest</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># noqa: F401, F811</span>
-    <span class="n">create_measurement</span><span class="p">,</span>
-    <span class="n">element</span><span class="p">,</span>
-    <span class="n">handler</span><span class="p">,</span>
-    <span class="n">sensor</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.conftest</span> <span class="kn">import</span> <span class="n">element</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">sensor</span>  <span class="c1"># noqa: F401, F811</span>
+<span class="kn">from</span> <span class="nn">tests.frontend_manager.objects</span> <span class="kn">import</span> <span class="n">create_measurement</span>
 
 
 <div class="viewcode-block" id="data_batch">

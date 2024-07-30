@@ -78,23 +78,14 @@
 <span class="kn">import</span> <span class="nn">gtsam</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">GraphVertex</span><span class="p">,</span>
+    <span class="n">BaseVertex</span><span class="p">,</span>
     <span class="n">NotOptimizableVertex</span><span class="p">,</span>
     <span class="n">OptimizableVertex</span><span class="p">,</span>
     <span class="n">Vertex</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CameraFeature</span><span class="p">,</span>
-    <span class="n">ImuBias</span><span class="p">,</span>
-    <span class="n">LidarPose</span><span class="p">,</span>
-    <span class="n">LinearVelocity</span><span class="p">,</span>
-    <span class="n">NavState</span><span class="p">,</span>
-    <span class="n">Pose</span><span class="p">,</span>
-<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.index_generator</span> <span class="kn">import</span> <span class="n">IndexStorage</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_methods</span> <span class="kn">import</span> <span class="n">equal_integers</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.deque_set</span> <span class="kn">import</span> <span class="n">DequeSet</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.ordered_set</span> <span class="kn">import</span> <span class="n">OrderedSet</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">frontend_manager</span><span class="p">)</span>
@@ -102,25 +93,19 @@
 
 <div class="viewcode-block" id="VertexStorage">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage">[docs]</a>
-<span class="k">class</span> <span class="nc">VertexStorage</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores vertices of the Graph.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">VertexStorage</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores vertices of the Graph.</span>
+
+<span class="sd">    TODO: remove hardcoded table of vertices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span> <span class="o">=</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index_storage</span> <span class="o">=</span> <span class="n">IndexStorage</span><span class="p">()</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_optimizable_vertices</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">OptimizableVertex</span><span class="p">]()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_not_optimizable_vertices</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">NotOptimizableVertex</span><span class="p">]()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Vertex</span><span class="p">],</span> <span class="n">DequeSet</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">Pose</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">Pose</span><span class="p">](),</span>
-            <span class="n">LinearVelocity</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">LinearVelocity</span><span class="p">](),</span>
-            <span class="n">NavState</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">NavState</span><span class="p">](),</span>
-            <span class="n">ImuBias</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">ImuBias</span><span class="p">](),</span>
-            <span class="n">LidarPose</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">LidarPose</span><span class="p">](),</span>
-            <span class="n">CameraFeature</span><span class="p">:</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">CameraFeature</span><span class="p">](),</span>
-        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Vertex</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">],</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">index_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IndexStorage</span><span class="p">:</span>
@@ -128,7 +113,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_storage</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DequeSet</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;All vertices in the Graph.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span>
 
@@ -145,15 +130,13 @@
 <div class="viewcode-block" id="VertexStorage.find_closest_optimizable_vertex">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.find_closest_optimizable_vertex">[docs]</a>
     <span class="k">def</span> <span class="nf">find_closest_optimizable_vertex</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">],</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">margin</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphVertex</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">OptimizableVertex</span><span class="p">],</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">margin</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizableVertex</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Finds the closest optimizable vertex with the given timestamp, time margin and type.</span>
 <span class="sd">        Start searching from the latest vertex to reduce complexity.</span>
 <span class="sd">        Complexity: O(N).</span>
 
-<span class="sd">        TODO: Implement a more efficient search algorithm.</span>
-<span class="sd">              Add tests.</span>
-
+<span class="sd">        TODO: Implement a more efficient search algorithm.Add tests.</span>
 <span class="sd">        Args:</span>
 <span class="sd">            vertex_type: type of the vertex.</span>
 
@@ -173,7 +156,7 @@
 
 <div class="viewcode-block" id="VertexStorage.get_vertices">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.get_vertices">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Vertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DequeSet</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets vertices of the given type.</span>
 
 <span class="sd">        Args:</span>
@@ -181,19 +164,16 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            vertices of the given type.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError: if the vertex type is not defined in the vertices table.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">vertex_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="n">vertex_type</span><span class="si">!r}</span><span class="s2"> has not been defined in the vertices table.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">]()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">[</span><span class="n">vertex_type</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="VertexStorage.add">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.add">[docs]</a>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds vertex(s).</span>
 
 <span class="sd">        Args:</span>
@@ -208,7 +188,7 @@
 
 <div class="viewcode-block" id="VertexStorage.remove">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.remove">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes vertex(s).</span>
 
 <span class="sd">        Args:</span>
@@ -227,23 +207,23 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates optimizable vertices with new values.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            values: new values to update the vertices.</span>
+<span class="sd">            values: new values for the vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizable_vertices</span><span class="p">]</span></div>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizable_vertices</span><span class="p">:</span>
+            <span class="n">vertex</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="VertexStorage.update_non_optimizable_vertices">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.update_non_optimizable_vertices">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_non_optimizable_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="VertexStorage.update_not_optimizable_vertices">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.update_not_optimizable_vertices">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_not_optimizable_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates non-optimizable vertices.&quot;&quot;&quot;</span>
-        <span class="c1"># [vertex.update() for vertex in self._not_optimizable_vertices]</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="VertexStorage.get_last_vertex">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.get_last_vertex">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_last_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GraphVertex</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_last_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseVertex</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BaseVertex</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the vertex with the latest timestamp.</span>
 
 <span class="sd">        Args:</span>
@@ -266,7 +246,7 @@
 
 <div class="viewcode-block" id="VertexStorage.get_vertices_with_index">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage.get_vertices_with_index">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_vertices_with_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">GraphVertex</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_vertices_with_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Vertex</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the vertices with the given index.</span>
 
 <span class="sd">        Args:</span>
@@ -289,12 +269,12 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            vertices or empty list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizable_vertices</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">gtsam_index</span> <span class="o">==</span> <span class="n">index</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizable_vertices</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">backend_index</span> <span class="o">==</span> <span class="n">index</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="VertexStorage._add_to_tables">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage._add_to_tables">[docs]</a>
-    <span class="k">def</span> <span class="nf">_add_to_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_add_to_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds vertex to the tables:</span>
 <span class="sd">            1. &quot;Vertex type -&gt; vertices&quot; table.\n</span>
 <span class="sd">            2. &quot;Vertex index -&gt; vertices&quot; table.</span>
@@ -304,55 +284,46 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="n">t</span><span class="si">!r}</span><span class="s2"> has not been defined in the vertices table.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">vertex</span><span class="o">.</span><span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="VertexStorage._remove_from_tables">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage._remove_from_tables">[docs]</a>
-    <span class="k">def</span> <span class="nf">_remove_from_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_remove_from_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes vertex from the tables:</span>
 <span class="sd">            1. &quot;Vertex type -&gt; vertices&quot; table.\n</span>
 <span class="sd">            2. &quot;Vertex index -&gt; vertices&quot; table.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            vertex: vertex to be removed from the tables.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError:</span>
-<span class="sd">                1. Vertex is not present in the tables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span> <span class="ow">and</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">[</span><span class="n">t</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_table</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Vertex </span><span class="si">{</span><span class="n">vertex</span><span class="si">}</span><span class="s2"> is not present in &#39;Vertex type -&gt; vertices&#39; table.&quot;</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="n">vertex</span><span class="o">.</span><span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span>
             <span class="ow">and</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Vertex </span><span class="si">{</span><span class="n">vertex</span><span class="si">}</span><span class="s2"> is not present in &#39;Vertex index -&gt; vertices&#39; table.&quot;</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_vertices_table</span><span class="p">[</span><span class="n">vertex</span><span class="o">.</span><span class="n">index</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="VertexStorage._add">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage._add">[docs]</a>
-    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds vertex(s).</span>
 
 <span class="sd">        Args:</span>
@@ -377,11 +348,11 @@
 
 <div class="viewcode-block" id="VertexStorage._remove">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage._remove">[docs]</a>
-    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">GraphVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="n">BaseVertex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes one vertex from the graph.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            vertex (GraphVertex): vertex to be removed.</span>
+<span class="sd">            vertex: vertex to be removed.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            TypeError: if the vertex is neither Optimizable nor NotOptimizable.</span>

@@ -145,6 +145,22 @@
 
 
 
+<div class="viewcode-block" id="test_discard">
+<a class="viewcode-back" href="../../../tests.utils.html#tests.utils.test_ordered_set.test_discard">[docs]</a>
+<span class="k">def</span> <span class="nf">test_discard</span><span class="p">():</span>
+    <span class="n">os</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">os</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+
 <div class="viewcode-block" id="test_first">
 <a class="viewcode-back" href="../../../tests.utils.html#tests.utils.test_ordered_set.test_first">[docs]</a>
 <span class="k">def</span> <span class="nf">test_first</span><span class="p">():</span>

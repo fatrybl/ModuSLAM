@@ -77,16 +77,20 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
 
 <span class="kn">import</span> <span class="nn">gtsam</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">PIL.Image</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">plum</span> <span class="kn">import</span> <span class="n">dispatch</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.data_manager.factory.element</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span><span class="p">,</span> <span class="n">Element</span><span class="p">,</span> <span class="n">RawMeasurement</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">MatrixMxN</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">VectorN</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.exceptions</span> <span class="kn">import</span> <span class="n">DimensionalityError</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.numpy_types</span> <span class="kn">import</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">VectorN</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">utils</span><span class="p">)</span>
 
@@ -113,7 +117,7 @@
 
 <div class="viewcode-block" id="sec2nanosec">
 <a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.sec2nanosec">[docs]</a>
-<span class="k">def</span> <span class="nf">sec2nanosec</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">sec2nanosec</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts seconds to nanoseconds.</span>
 
 <span class="sd">    Args:</span>
@@ -138,6 +142,50 @@
 <span class="sd">        time in seconds.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">nanoseconds</span> <span class="o">*</span> <span class="mf">1e-9</span></div>
+
+
+
+<div class="viewcode-block" id="nanosec2microsec">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.nanosec2microsec">[docs]</a>
+<span class="k">def</span> <span class="nf">nanosec2microsec</span><span class="p">(</span><span class="n">nanoseconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts nanoseconds to microseconds.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        nanoseconds: time in nanoseconds.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        time in microseconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">nanoseconds</span> <span class="o">*</span> <span class="mf">1e-3</span></div>
+
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">microsec2nanosec</span><span class="p">(</span><span class="n">microseconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">microseconds</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">microsec2nanosec</span><span class="p">(</span><span class="n">microseconds</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">microsec_float</span> <span class="o">=</span> <span class="n">to_float</span><span class="p">(</span><span class="n">microseconds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">microsec_float</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="microsec2nanosec">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.microsec2nanosec">[docs]</a>
+<span class="nd">@dispatch</span>
+<span class="k">def</span> <span class="nf">microsec2nanosec</span><span class="p">(</span><span class="n">microseconds</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    @overload.</span>
+
+<span class="sd">    Converts microseconds to nanoseconds.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        microseconds: time in microseconds.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (int): time in nanoseconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 
@@ -344,6 +392,33 @@
 
 
 
+<div class="viewcode-block" id="equal_batches">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.equal_batches">[docs]</a>
+<span class="k">def</span> <span class="nf">equal_batches</span><span class="p">(</span><span class="n">batch1</span><span class="p">:</span> <span class="n">DataBatch</span><span class="p">,</span> <span class="n">batch2</span><span class="p">:</span> <span class="n">DataBatch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares two data batches.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        batch1: 1-st data batch.</span>
+
+<span class="sd">        batch2: 2-nd data batch.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        comparison result.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">batch1</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">batch2</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch1</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch2</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">el1</span><span class="p">,</span> <span class="n">el2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">batch1</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">batch2</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">equal_elements</span><span class="p">(</span><span class="n">el1</span><span class="p">,</span> <span class="n">el2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
 <div class="viewcode-block" id="import_object">
 <a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.import_object">[docs]</a>
 <span class="k">def</span> <span class="nf">import_object</span><span class="p">(</span><span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
@@ -378,6 +453,45 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Object </span><span class="si">{</span><span class="n">object_name</span><span class="si">!r}</span><span class="s2"> not found in module </span><span class="si">{</span><span class="n">module_name</span><span class="si">!r}</span><span class="s2">.&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">raise</span></div>
+
+
+
+<div class="viewcode-block" id="sort_files_numerically">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.sort_files_numerically">[docs]</a>
+<span class="k">def</span> <span class="nf">sort_files_numerically</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sorts files numerically.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files: list of files to sort.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        sorted list of files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">extract_number</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">to_int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">())</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">extract_number</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="matrix_to_vector_list">
+<a class="viewcode-back" href="../../../moduslam.utils.html#moduslam.utils.auxiliary_methods.matrix_to_vector_list">[docs]</a>
+<span class="k">def</span> <span class="nf">matrix_to_vector_list</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">MatrixMxN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">VectorN</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a NumPy array of shape (N, M) to a list of N arrays of shape (1, M).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        matrix: The input NumPy array of shape (N, M).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a list of N arrays, each of shape (1, M).</span>
+
+<span class="sd">    TODO: add tests</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_rows</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">list_of_arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">list_of_arrays</span></div>
 
 </pre></div>
 

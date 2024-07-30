@@ -4,8 +4,8 @@ from typing import Generic
 
 import gtsam
 
-from moduslam.frontend_manager.graph.base_edges import GraphEdge
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex, OptimizableVertex
+from moduslam.frontend_manager.graph.base_edges import BaseEdge
+from moduslam.frontend_manager.graph.base_vertices import BaseVertex, OptimizableVertex
 from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 from moduslam.logger.logging_config import frontend_manager
@@ -13,45 +13,71 @@ from moduslam.logger.logging_config import frontend_manager
 logger = logging.getLogger(frontend_manager)
 
 
-class Graph(Generic[GraphVertex, GraphEdge]):
+class Graph(Generic[BaseVertex, BaseEdge]):
     """High-level Graph.
 
     Includes gtsam.NonlinearFactorGraph.
     """
 
     def __init__(self) -> None:
-        self.vertex_storage = VertexStorage[GraphVertex]()
-        self.edge_storage = EdgeStorage[GraphEdge]()
         self.factor_graph = gtsam.NonlinearFactorGraph()
+        self._vertex_storage = VertexStorage[BaseVertex]()
+        self._edge_storage = EdgeStorage[BaseEdge]()
+        self._connections: dict[BaseVertex, set[BaseEdge]] = {}
 
     @property
-    def gtsam_values(self) -> gtsam.Values:
-        """GTSAM values of the graph."""
-        values = gtsam.Values()
-        unique_vertices = self._get_unique_gtsam_vertices()
-        [
-            values.insert(vertex.gtsam_index, vertex.gtsam_instance)
-            for vertex in unique_vertices.values()
-        ]
+    def vertex_storage(self) -> VertexStorage[BaseVertex]:
+        """Storage for the vertices of the graph."""
+        return self._vertex_storage
 
+    @property
+    def edge_storage(self) -> EdgeStorage[BaseEdge]:
+        """Storage for the edges of the graph."""
+        return self._edge_storage
+
+    @property
+    def backend_values(self) -> gtsam.Values:
+        """Internal values of the factor graph."""
+        values = gtsam.Values()
+        unique_vertices = self._get_unique_optimizable_vertices()
+        for vertex in unique_vertices.values():
+            values.insert(vertex.backend_index, vertex.backend_instance)
         return values
 
-    def add_edge(self, edge: GraphEdge) -> None:
+    @property
+    def connections(self) -> dict[BaseVertex, set[BaseEdge]]:
+        """Connections of vertices with edges."""
+        return self._connections
+
+    def get_connected_edges(self, vertex: BaseVertex) -> set[BaseEdge]:
+        """Gets edges connected to the vertex.
+
+        Args:
+            vertex: vertex for which the edges are retrieved.
+
+        Returns:
+            set of edges connected to the vertex.
+        """
+        return self._connections.get(vertex, set())
+
+    def add_edge(self, edge: BaseEdge) -> None:
         """Adds edge to the graph.
 
         Args:
-            edge (GraphEdge): new edge to be added to the graph.
+            edge: new edge to be added to the graph.
+
+        TODO: timestamped based sorting has been removed. Check if it works.
         """
         edge.index = self._set_index()
 
-        vertices = sorted(edge.all_vertices, key=lambda v: v.timestamp)
-        [vertex.edges.add(edge) for vertex in vertices]
-
-        self.vertex_storage.add(vertices)
-        self.edge_storage.add(edge)
+        self._vertex_storage.add(edge.vertices)
+        self._edge_storage.add(edge)
         self.factor_graph.add(edge.factor)
 
-    def add_edges(self, edges: Iterable[GraphEdge]) -> None:
+        for v in edge.vertices:
+            self._add_connection(v, edge)
+
+    def add_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Adds multiple edges to the graph.
 
         Args:
@@ -60,46 +86,70 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         for edge in edges:
             self.add_edge(edge)
 
-    def remove_edge(self, edge: GraphEdge) -> None:
+    def remove_edge(self, edge: BaseEdge) -> None:
         """Removes edge from the graph.
 
         Args:
-            edge (GraphEdge): edge to be deleted from the graph.
+            edge: edge to be deleted from the graph.
         """
 
         self.factor_graph.remove(edge.index)
-        self.edge_storage.remove(edge)
-        for vertex in edge.all_vertices:
-            vertex.edges.remove(edge)
-            if not vertex.edges:
-                self.vertex_storage.remove(vertex)
+        self._edge_storage.remove(edge)
+        for vertex in edge.vertices:
+            self._remove_connection(vertex, edge)
 
-    def remove_edges(self, edges: Iterable[GraphEdge]) -> None:
+    def remove_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Removes multiple edges from the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): edges to be deleted from the graph.
+            edges: edges to be deleted from the graph.
         """
-        for edge in edges:
+        edges_copy = list(edges)  # to avoid changing the size of collection during iterations.
+        for edge in edges_copy:
             self.remove_edge(edge)
 
-    def remove_vertex(self, vertex: GraphVertex) -> None:
+    def remove_vertex(self, vertex: BaseVertex) -> None:
         """Removes vertex from the graph.
 
         Args:
-            vertex (GraphVertex): vertex to be deleted from the graph.
+            vertex: vertex to be deleted from the graph.
         """
-        edges = vertex.edges.copy()  # to avoid RuntimeError: Set changed size during iteration
-        self.remove_edges(edges)
+        edges = self._connections.get(vertex, None)
+        self.remove_edges(edges) if edges else None
+        self._vertex_storage.remove(vertex)
+        self._connections.pop(vertex, None)
 
-    def remove_vertices(self, vertices: Iterable[GraphVertex]) -> None:
+    def remove_vertices(self, vertices: Iterable[BaseVertex]) -> None:
         """Removes multiple vertices from the graph.
 
         Args:
-            vertices (Iterable[GraphVertex]): vertices to be deleted from the graph.
+            vertices: vertices to be deleted from the graph.
         """
         for vertex in vertices:
             self.remove_vertex(vertex)
+
+    def update_connections(
+        self, original_vertices: set[BaseVertex], modified_edge: BaseEdge
+    ) -> None:
+        """Updates edge`s connections in the graph. Does not update backend factor
+        graph.
+
+        Args:
+            original_vertices: vertices of an edge before modifications.
+
+            modified_edge: edge with modified vertices.
+        """
+        modified_vertices = modified_edge.vertices
+
+        for vertex in original_vertices:
+            if vertex not in modified_vertices:
+                self._remove_connection(vertex, modified_edge)
+
+        for vertex in modified_vertices:
+            if vertex not in original_vertices:
+                self._add_connection(vertex, modified_edge)
+            if vertex not in self._vertex_storage.vertices:
+                self._vertex_storage.add(vertex)
 
     def update(self, values: gtsam.Values) -> None:
         """Updates the graph with new values.
@@ -110,14 +160,7 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         TODO: add update for non-optimizable vertices.
         """
 
-        self.vertex_storage.update_optimizable_vertices(values)
-
-    def marginalize(self, vertices: Iterable[GraphVertex]) -> None:
-        """Marginalizes out vertices.
-
-        Not implemented.
-        """
-        raise NotImplementedError
+        self._vertex_storage.update_optimizable_vertices(values)
 
     def _set_index(self) -> int:
         """Sets unique index for the new edge base on the size of the factor graph.
@@ -133,16 +176,43 @@ class Graph(Generic[GraphVertex, GraphEdge]):
         """
         return self.factor_graph.size()
 
-    def _get_unique_gtsam_vertices(self):
-        """Gets vertices with unique gtsam indices.
+    def _get_unique_optimizable_vertices(self) -> dict[int, OptimizableVertex]:
+        """Gets vertices with unique backend indices.
 
         Returns:
             dict of indices and vertices.
         """
         unique_vertices: dict[int, OptimizableVertex] = {}
 
-        for vertex in self.vertex_storage.optimizable_vertices:
-            if vertex.gtsam_index not in unique_vertices:
-                unique_vertices[vertex.gtsam_index] = vertex
+        for vertex in self._vertex_storage.optimizable_vertices:
+            if vertex.backend_index not in unique_vertices:
+                unique_vertices[vertex.backend_index] = vertex
 
         return unique_vertices
+
+    def _add_connection(self, vertex: BaseVertex, edge: BaseEdge) -> None:
+        """Adds edge to the connection with the vertex.
+        Args:
+            vertex: vertex to which the edge is added.
+
+            edge: edge to be added to the vertex.
+        """
+        if vertex not in self._connections:
+            self._connections[vertex] = {edge}
+        else:
+            self._connections[vertex].add(edge)
+
+    def _remove_connection(self, vertex: BaseVertex, edge: BaseEdge) -> None:
+        """Removes edge from the connection with the vertex.
+
+        Args:
+            vertex: vertex from which the edge is removed.
+
+            edge: edge to be removed from the vertex.
+
+        Attention:
+           if all edges are removed from connection, the vertex still exists in the connection.
+        """
+
+        if vertex in self._connections and edge in self._connections[vertex]:
+            self._connections[vertex].remove(edge)

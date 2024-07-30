@@ -3,7 +3,7 @@
 Is used only for instantiation of the Measurement object.
 """
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 

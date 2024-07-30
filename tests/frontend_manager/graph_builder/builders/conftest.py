@@ -1,18 +1,24 @@
+from pathlib import Path
+
 import pytest
 
-from moduslam.data_manager.factory.batch import DataBatch
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import BinaryDataLocation
 from moduslam.frontend_manager.edge_factories.lidar_odometry import (
     LidarOdometryEdgeFactory,
 )
-from moduslam.frontend_manager.graph_builder.builders.lidar_map_builder import (
-    LidarMapBuilder,
+from moduslam.frontend_manager.graph_builder.builders.pointcloud_map_builder import (
+    PointcloudMapBuilder,
 )
 from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry import (
     LidarOdometryStateAnalyzer,
 )
 from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
+from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
 from moduslam.setup_manager.setup_manager import SetupManager
+from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
+    KaistConfig,
+)
 from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
     EdgeFactoryConfig,
 )
@@ -38,26 +44,25 @@ from moduslam.system_configs.setup_manager.edge_factories_initializer import (
     EdgeFactoriesInitializerConfig,
 )
 from moduslam.system_configs.setup_manager.handlers_factory import HandlersFactoryConfig
-from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
+from moduslam.system_configs.setup_manager.sensor_factory import SensorsFactoryConfig
 from moduslam.system_configs.setup_manager.sensors import Lidar3DConfig, SensorConfig
 from moduslam.system_configs.setup_manager.setup_manager import SetupManagerConfig
 from moduslam.system_configs.setup_manager.state_analyzers_factory import (
     StateAnalyzersFactoryConfig,
 )
-from tests.frontend_manager.handlers.scan_matchers.kiss_icp.scenarios import (
-    el1,
-    el2,
-    sensor,
-)
 
-sensor_name: str = sensor.name
-graph_builder_name: str = "lidar_map_builder"
+sensor_name: str = KaistConfig.lidar_3D_left_name
+
+graph_builder_name: str = PointcloudMapBuilder.__name__
+
 handler_name: str = "kiss_icp_odometry"
 handler_module_name: str = ".pointcloud_matcher"
 handler_package_name: str = "moduslam.frontend_manager.handlers"
+
 state_analyzer_name: str = "lidar_odometry_state_analyzer"
 state_analyzer_module_name: str = ".lidar_odometry"
 state_analyzer_package_name: str = "moduslam.frontend_manager.graph_builder.state_analyzers"
+
 edge_factory_name: str = "lidar_odometry_edge_factory"
 edge_factory_module_name: str = ".lidar_odometry"
 edge_factory_package_name: str = "moduslam.frontend_manager.edge_factories"
@@ -65,6 +70,16 @@ edge_factory_package_name: str = "moduslam.frontend_manager.edge_factories"
 
 @pytest.fixture
 def elements() -> tuple[Element, Element]:
+    file = Path()
+    sensor = Lidar3D(config=Lidar3DConfig(name="velodyne_left"))
+
+    m1 = RawMeasurement(sensor=sensor, values=(1, 2, 3, 4))
+    loc1 = BinaryDataLocation(file)
+    el1 = Element(timestamp=1, measurement=m1, location=loc1)
+
+    m2 = RawMeasurement(sensor=sensor, values=(4, 5, 6, 7))
+    loc2 = BinaryDataLocation(file)
+    el2 = Element(timestamp=2, measurement=m2, location=loc2)
     return el1, el2
 
 
@@ -77,10 +92,10 @@ def data_batch(elements) -> DataBatch:
 
 
 @pytest.fixture
-def sensor_factory_cfg() -> SensorFactoryConfig:
+def sensor_factory_cfg() -> SensorsFactoryConfig:
     sensor_cfg: Lidar3DConfig = Lidar3DConfig(name=sensor_name)
     sensors: dict[str, SensorConfig] = {sensor_name: sensor_cfg}
-    return SensorFactoryConfig(sensors)
+    return SensorsFactoryConfig(sensors)
 
 
 @pytest.fixture
@@ -169,5 +184,5 @@ def builder_cfg(
 
 
 @pytest.fixture
-def builder(builder_cfg: GraphBuilderConfig, setup_manager) -> LidarMapBuilder:
-    return LidarMapBuilder(builder_cfg)
+def builder(builder_cfg: GraphBuilderConfig, setup_manager) -> PointcloudMapBuilder:
+    return PointcloudMapBuilder(builder_cfg)

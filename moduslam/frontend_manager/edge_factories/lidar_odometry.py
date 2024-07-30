@@ -5,7 +5,7 @@
 import gtsam
 
 from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from moduslam.frontend_manager.edge_factories.utils import find_vertex
+from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose, Pose
 from moduslam.frontend_manager.graph.graph import Graph
@@ -30,24 +30,6 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         """
         super().__init__(config)
         self._time_margin: int = sec2nanosec(config.search_time_margin)
-
-    @property
-    def vertices_types(self) -> set[type[LidarPose]]:
-        """Types of the used vertices.
-
-        Returns:
-            set with 1 type (LidarPose).
-        """
-        return {LidarPose}
-
-    @property
-    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set with 1 type (gtsam.Pose3).
-        """
-        return {gtsam.Pose3}
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
@@ -80,7 +62,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         vertex1_id: int,
         vertex2_id: int,
         measurement: Measurement,
-        noise_model: gtsam.noiseModel.Diagonal.Sigmas,
+        noise_model: gtsam.noiseModel.Diagonal.Variances,
     ) -> gtsam.BetweenFactorPose3:
         """Creates the GTSAM factor for the factor graph.
 
@@ -96,7 +78,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Returns:
             GTSAM factor.
         """
-        tf = gtsam.Pose3(measurement.values)
+        tf = gtsam.Pose3(measurement.value)
         factor = gtsam.BetweenFactorPose3(
             key1=vertex1_id,
             key2=vertex2_id,
@@ -130,12 +112,14 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         )
         noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variance)
 
-        factor = self._create_factor(vertex1.gtsam_index, vertex2.gtsam_index, measurement, noise)
+        factor = self._create_factor(
+            vertex1.backend_index, vertex2.backend_index, measurement, noise
+        )
         edge = LidarOdometry(
             vertex1=vertex1,
             vertex2=vertex2,
             factor=factor,
-            measurements=(measurement,),
+            measurement=measurement,
             noise_model=noise,
         )
         return edge
@@ -161,15 +145,15 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Returns:
             2 vertices.
         """
-        v1 = find_vertex(LidarPose, storage, t1, time_margin)
+        v1 = get_last_vertex(LidarPose, storage, t1, time_margin)
         if not v1:
-            p = find_vertex(Pose, storage, t1, time_margin)
+            p = get_last_vertex(Pose, storage, t1, time_margin)
             if p:
                 v1 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
 
-        v2 = find_vertex(LidarPose, storage, t2, time_margin)
+        v2 = get_last_vertex(LidarPose, storage, t2, time_margin)
         if not v2:
-            p = find_vertex(Pose, storage, t2, time_margin)
+            p = get_last_vertex(Pose, storage, t2, time_margin)
             if p:
                 v2 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
 

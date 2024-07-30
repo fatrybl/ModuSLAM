@@ -54,6 +54,19 @@ def test_remove_exception():
         os.remove(2)
 
 
+def test_discard():
+    os = OrderedSet[int]()
+    os.add(1)
+    os.discard(1)
+    assert 1 not in os
+    assert len(os) == 0
+
+    os.add(1)
+    os.discard(2)
+    assert 1 in os
+    assert len(os) == 1
+
+
 def test_first():
     os = OrderedSet[int]()
     os.add(1)

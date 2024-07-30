@@ -71,29 +71,23 @@
            <div itemprop="articleBody">
 
   <h1>Source code for moduslam.frontend_manager.noise_models</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="kn">import</span> <span class="nn">gtsam</span>
-
-<span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">frontend_manager</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">gtsam</span>
 
 
 <div class="viewcode-block" id="position_diagonal_noise_model">
 <a class="viewcode-back" href="../../../moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.position_diagonal_noise_model">[docs]</a>
 <span class="k">def</span> <span class="nf">position_diagonal_noise_model</span><span class="p">(</span>
-    <span class="n">noise_variance</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+    <span class="n">noise_variances</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Diagonal Gaussian noise model for position: [x, y, z].</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        noise_variance: tuple of 3 floats representing the variances of the noise.</span>
+<span class="sd">        noise_variances: tuple of 3 floats representing the variances of the noise.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        gtsam noise model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">(</span><span class="n">noise_variance</span><span class="p">)</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">(</span><span class="n">noise_variances</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">noise</span></div>
 
 
@@ -117,18 +111,36 @@
 <div class="viewcode-block" id="pose_diagonal_noise_model">
 <a class="viewcode-back" href="../../../moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.pose_diagonal_noise_model">[docs]</a>
 <span class="k">def</span> <span class="nf">pose_diagonal_noise_model</span><span class="p">(</span>
-    <span class="n">noise_variance</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">noise_variances</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Diagonal Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        noise_variance: tuple of 6 floats representing the variances of the noise.</span>
+<span class="sd">        noise_variances: tuple of 6 floats representing the variances of the noise.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        gtsam noise model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">(</span><span class="n">noise_variance</span><span class="p">)</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">(</span><span class="n">noise_variances</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">noise</span></div>
+
+
+
+<div class="viewcode-block" id="pixel_diagonal_noise_model">
+<a class="viewcode-back" href="../../../moduslam.frontend_manager.html#moduslam.frontend_manager.noise_models.pixel_diagonal_noise_model">[docs]</a>
+<span class="k">def</span> <span class="nf">pixel_diagonal_noise_model</span><span class="p">(</span>
+    <span class="n">noise_variances</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Diagonal Gaussian noise model for pixel: [u, v].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        noise_variances: tuple of 2 floats representing the variances of the noise.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        gtsam noise model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">noiseModel</span><span class="o">.</span><span class="n">Diagonal</span><span class="o">.</span><span class="n">Variances</span><span class="p">(</span><span class="n">noise_variances</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">noise</span></div>
 
 </pre></div>

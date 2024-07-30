@@ -1,35 +1,30 @@
 """Tests for the GraphMerger class."""
 
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     State,
 )
 from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger
-from moduslam.frontend_manager.measurement_storage import Measurement
-from moduslam.utils.deque_set import DequeSet
-from tests.frontend_manager.conftest import (
-    BasicTestVertex,
-    create_measurement,
-    edge_factory,
-    element,
-    handler,
-)
+from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.utils.ordered_set import OrderedSet
+from tests.frontend_manager.conftest import edge_factory, element, handler
+from tests.frontend_manager.objects import BasicTestVertex, create_measurement
 
 
-def test_merge(element, handler, edge_factory):
+def test_merge(element: Element, handler: Handler, edge_factory: EdgeFactory):
     graph = Graph[BasicTestVertex, UnaryEdge]()
-
     # add new key-value pair to the protected table. Only for testing purposes.
-    graph.vertex_storage._vertices_table.update({BasicTestVertex: DequeSet()})
+    graph.vertex_storage._vertices_table.update({BasicTestVertex: OrderedSet()})
 
     merger = GraphMerger[BasicTestVertex, UnaryEdge]()
-
     # add new key-value pair to the protected table. Only for testing purposes.
     merger._table = {handler: edge_factory}
 
     state = State()
-    z: Measurement = create_measurement(handler, element)
+    z = create_measurement(handler, element)
     state.add(z)
 
     merger.merge(state, graph)
@@ -41,5 +36,9 @@ def test_merge(element, handler, edge_factory):
 
     assert vertex.timestamp == element.timestamp
     assert vertex.index == 0
-    for edge in vertex.edges:
+
+    edges = graph.get_connected_edges(vertex)
+
+    assert edges is not None
+    for edge in edges:
         assert isinstance(edge, UnaryEdge)

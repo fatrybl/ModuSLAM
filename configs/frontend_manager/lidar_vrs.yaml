@@ -28,4 +28,4 @@ graph_initializer: null
 #      edge_factory_name: "prior_pose_edge_factory"
 #      measurement: [ 330096.41562497173436, 4118151.5854207249358, 35.731699, 0, 0, 0 ]
 #      measurement_noise_covariance: [ 0.1, 0.1, 0.1, 1, 1, 1 ]
-#      file_path: "configs/frontend_manager/lidar.yaml"
+#      file_path: "configs/frontend_manager/kaist.yaml"

@@ -1,75 +1,42 @@
+from collections.abc import Sequence
+
 import gtsam
 
 from moduslam.frontend_manager.graph.base_edges import (
     BinaryEdge,
-    CalibrationEdge,
     MultiEdge,
+    RadialEdge,
     UnaryEdge,
 )
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex
+from moduslam.frontend_manager.graph.base_vertices import OptimizableVertex
+from moduslam.frontend_manager.graph.custom_vertices import Feature3D
 from moduslam.frontend_manager.measurement_storage import Measurement
 
 
-class SmartFactor(CalibrationEdge):
-    """Edge for Smart Factor in the Graph: https://dellaert.github.io/files/Carlone14icra.pdf"""
+class SmartVisualFeature(RadialEdge):
+    """Edge for SmartProjectionPose3Factor: https://dellaert.github.io/files/Carlone14icra.pdf"""
 
     def __init__(
         self,
-        vertex: GraphVertex,
-        support_vertices: set[GraphVertex],
-        measurements: tuple[Measurement, ...],
+        pose: OptimizableVertex,
+        features: Sequence[Feature3D],
+        measurements: Sequence[Measurement],
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
         """
         Args:
-            vertex: target vertex.
+            pose: optimizable pose.
 
-            support_vertices: support vertices
+            features: non-optimizable 3D points.
 
-            measurements: measurements to be used in the factor.
-
-            factor: GTSAM factor.
-
-            noise_model: GTSAM noise model of the factor.
-        """
-        super().__init__(measurements, vertex, support_vertices, factor, noise_model)
-
-    @property
-    def all_vertices(self) -> set[GraphVertex]:
-        """Vertices of the edge."""
-        return {self.vertex}.union(self.vertices)
-
-
-class SmartStereoFeature(SmartFactor):
-    """Edge for smart Stereo Camera features."""
-
-    def __init__(
-        self,
-        vertex: GraphVertex,
-        support_vertices: set[GraphVertex],
-        measurements: tuple[Measurement, ...],
-        factor: gtsam.SmartProjectionPose3Factor,
-        noise_model: gtsam.noiseModel.Base,
-    ) -> None:
-        """
-
-        Args:
-            vertex: target vertex (camera pose).
-
-            support_vertices: camera feature vertices.
-
-            measurements: from pose to features.
+            measurements: a measurement with the distance to the visual feature.
 
             factor: GTSAM factor.
 
             noise_model: GTSAM noise model of the factor.
         """
-        super().__init__(vertex, support_vertices, measurements, factor, noise_model)
-
-        self.K: gtsam.Cal3_S2 = gtsam.Cal3_S2()
-        self.params: gtsam.SmartProjectionParams = gtsam.SmartProjectionParams()
-        self.sensor_body: gtsam.Pose3 = gtsam.Pose3()
+        super().__init__(pose, features, measurements, factor, noise_model)
 
 
 class ImuOdometry(MultiEdge):
@@ -80,7 +47,7 @@ class LidarOdometry(BinaryEdge):
     """Edge for Lidar odometry."""
 
 
-class StereoCameraOdometry(BinaryEdge):
+class VisualOdometry(BinaryEdge):
     """Edge for Stereo Camera odometry."""
 
 

@@ -3,7 +3,7 @@ from typing import Any, TypeVar, Union
 
 import gtsam
 
-from moduslam.utils.numpy_types import Vector3
+from moduslam.types.aliases import Vector3
 
 GtsamInstance = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.imuBias.ConstantBias]
 
@@ -14,7 +14,6 @@ class Vertex(ABC):
     def __init__(self, index: int = 0, timestamp: int = 0, value: Any = None):
         self._index = index
         self._timestamp = timestamp
-        self._edges: set = set()
         self._value = value
 
     @property
@@ -28,41 +27,28 @@ class Vertex(ABC):
         return self._index
 
     @property
-    def edges(self) -> set:
-        """Edges of the vertex."""
-        return self._edges
-
-    @property
     def value(self) -> Any:
         """Value of the vertex."""
         return self._value
 
     @abstractmethod
-    def update(self, value: Any) -> None:
+    def update(self, value: Any, *args, **kwargs) -> None:
         """Updates the vertex with the new value.
 
         Args:
-            value (Any): new value.
+            value: new value.
+
+            *args: additional arguments.
+
+            **kwargs: additional keyword arguments.
         """
-
-
-GraphVertex = TypeVar("GraphVertex", bound=Vertex)
-"""TypeVar for the Graph vertices."""
 
 
 class NotOptimizableVertex(Vertex):
-    """
-    Base abstract non-optimizable vertex: does not have GTSAM properties
-    and is not included in GTSAM factor graph as a variable.
-    """
+    """Base class for not optimizable vertex of the Graph."""
 
     @abstractmethod
-    def update(self, value: Any) -> None:
-        """Updates the vertex with the new value.
-
-        Args:
-            value (Any): new value.
-        """
+    def update(self, value: Any, *args, **kwargs) -> None: ...
 
 
 class OptimizableVertex(Vertex):
@@ -71,10 +57,14 @@ class OptimizableVertex(Vertex):
 
     @property
     @abstractmethod
-    def gtsam_instance(self) -> GtsamInstance:
-        """GTSAM instance of the vertex."""
+    def backend_instance(self) -> GtsamInstance:
+        """External backend instance of the vertex."""
 
     @property
     @abstractmethod
-    def gtsam_index(self) -> int:
-        """Unique index of GTSAM instance."""
+    def backend_index(self) -> int:
+        """Unique external backend index of an instance."""
+
+
+BaseVertex = TypeVar("BaseVertex", bound=Vertex)
+"""TypeVar for the Graph vertices."""

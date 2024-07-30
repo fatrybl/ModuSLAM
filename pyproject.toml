@@ -32,10 +32,13 @@ pandas = ">=1.0"
 pyyaml = ">=5.4.1"
 scikit-learn = ">=0.21"
 # ======================
+opencv-python = "^4.9.0.80"
+transformers = "^4.41.2"
+torch = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
-mypy = "^1.10.0"
+mypy = "^1.11.0"
 black = "^24.4.2"
 flake8 = "^7.0.0"
 sphinx = "^7.3.7"

@@ -30,24 +30,6 @@ class GpsPositionEdgeFactory(EdgeFactory):
         super().__init__(config)
         self._time_margin = int(config.search_time_margin * self._second)
 
-    @property
-    def vertices_types(self) -> set[type[Pose]]:
-        """Types of the used vertices.
-
-        Returns:
-            set with 1 type (Pose).
-        """
-        return {Pose}
-
-    @property
-    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set with 1 type (gtsam.Pose3).
-        """
-        return {gtsam.Pose3}
-
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[GpsPosition]:
@@ -64,8 +46,11 @@ class GpsPositionEdgeFactory(EdgeFactory):
             list with 1 edge.
         """
         vertex = get_vertex(Pose, graph.vertex_storage, timestamp, self._time_margin)
-        edge = self._create_edge(vertex, measurements.last)
-        return [edge]
+        if isinstance(vertex, Pose):
+            edge = self._create_edge(vertex, measurements.last)
+            return [edge]
+        else:
+            return []
 
     @staticmethod
     def _create_edge(vertex: Pose, measurement: Measurement) -> GpsPosition:
@@ -85,10 +70,6 @@ class GpsPositionEdgeFactory(EdgeFactory):
             measurement.noise_covariance[2],
         )
         noise: gtsam.noiseModel.Diagonal.Variances = position_diagonal_noise_model(variances)
-
-        gtsam_factor = gtsam.GPSFactor(vertex.gtsam_index, measurement.values, noise)
-
-        edge = GpsPosition(
-            vertex=vertex, measurements=(measurement,), factor=gtsam_factor, noise_model=noise
-        )
+        gtsam_factor = gtsam.GPSFactor(vertex.backend_index, measurement.value, noise)
+        edge = GpsPosition(vertex, measurement, gtsam_factor, noise)
         return edge

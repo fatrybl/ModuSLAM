@@ -6,8 +6,8 @@ from typing import Any
 import gtsam
 import numpy as np
 
-from moduslam.frontend_manager.edge_factories.utils import find_vertex
-from moduslam.frontend_manager.graph.base_vertices import GraphVertex
+from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
+from moduslam.frontend_manager.graph.base_vertices import BaseVertex
 from moduslam.frontend_manager.graph.custom_edges import ImuOdometry
 from moduslam.frontend_manager.graph.custom_vertices import (
     ImuBias,
@@ -16,18 +16,22 @@ from moduslam.frontend_manager.graph.custom_vertices import (
 )
 from moduslam.frontend_manager.graph.index_generator import generate_index
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
-from moduslam.frontend_manager.handlers.imu_data_preprocessor import ImuData
+from moduslam.frontend_manager.handlers.imu_data_preprocessor.line_parsers import (
+    ImuData,
+)
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
-from moduslam.utils.numpy_types import Matrix3x3, Matrix4x4, Vector3
+from moduslam.types.aliases import Matrix4x4, Vector3
+from moduslam.types.numpy import Matrix3x3 as NumpyMatrix3x3
+from moduslam.types.numpy import Matrix4x4 as NumpyMatrix4x4
 from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
 
 def create_vertex(
-    vertex_type: type[GraphVertex], index: int, timestamp: int, value: Any
-) -> GraphVertex:
+    vertex_type: type[BaseVertex], index: int, timestamp: int, value: Any
+) -> BaseVertex:
     return vertex_type(index, timestamp, value)
 
 
@@ -38,7 +42,7 @@ def create_edge(
     pose_j: Pose,
     velocity_j: LinearVelocity,
     bias_j: ImuBias,
-    measurements: tuple[Measurement, ...],
+    measurements: list[Measurement],
     pim: gtsam.PreintegratedCombinedMeasurements,
 ) -> ImuOdometry:
     """Creates new edge of type ImuOdometry.
@@ -48,12 +52,12 @@ def create_edge(
     """
 
     factor = gtsam.CombinedImuFactor(
-        pose_i.gtsam_index,
-        velocity_i.gtsam_index,
-        pose_j.gtsam_index,
-        velocity_j.gtsam_index,
-        bias_i.gtsam_index,
-        bias_j.gtsam_index,
+        pose_i.backend_index,
+        velocity_i.backend_index,
+        pose_j.backend_index,
+        velocity_j.backend_index,
+        bias_i.backend_index,
+        bias_j.backend_index,
         pim,
     )
 
@@ -61,8 +65,7 @@ def create_edge(
     noise = gtsam.noiseModel.Gaussian.Covariance(integrated_noise)
 
     edge = ImuOdometry(
-        vertex_set_1={pose_i, velocity_i, bias_i},
-        vertex_set_2={pose_j, velocity_j, bias_j},
+        vertices=[pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j],
         measurements=measurements,
         factor=factor,
         noise_model=noise,
@@ -70,7 +73,9 @@ def create_edge(
     return edge
 
 
-def compute_covariance(measurements: Iterable[Measurement]) -> tuple[Matrix3x3, Matrix3x3]:
+def compute_covariance(
+    measurements: Iterable[Measurement],
+) -> tuple[NumpyMatrix3x3, NumpyMatrix3x3]:
     """Computes the covariance of the accelerometer and gyroscope measurements [x,y,z].
     If only one measurement is available, the default covariance is used.
 
@@ -81,8 +86,10 @@ def compute_covariance(measurements: Iterable[Measurement]) -> tuple[Matrix3x3, 
         accelerometer and gyroscope noise covariance matrices.
     """
 
-    accelerations = np.array([m.values.acceleration for m in measurements])
-    angular_velocities = np.array([m.values.angular_velocity for m in measurements])
+    accelerations = np.array([m.value.acceleration for m in measurements], dtype=np.float64)
+    angular_velocities = np.array(
+        [m.value.angular_velocity for m in measurements], dtype=np.float64
+    )
 
     acc_cov = np.cov(accelerations, rowvar=False)
     gyro_cov = np.cov(angular_velocities, rowvar=False)
@@ -92,12 +99,12 @@ def compute_covariance(measurements: Iterable[Measurement]) -> tuple[Matrix3x3, 
 
 def set_parameters(
     params: gtsam.PreintegrationCombinedParams,
-    tf_base_sensor: Matrix4x4,
-    acc_cov: Matrix3x3,
-    gyro_cov: Matrix3x3,
-    integration_cov: Matrix3x3,
-    bias_acc_cov: Matrix3x3,
-    bias_omega_cov: Matrix3x3,
+    tf_base_sensor: NumpyMatrix4x4,
+    acc_cov: NumpyMatrix3x3,
+    gyro_cov: NumpyMatrix3x3,
+    integration_cov: NumpyMatrix3x3,
+    bias_acc_cov: NumpyMatrix3x3,
+    bias_omega_cov: NumpyMatrix3x3,
 ) -> None:
     """Sets the parameters for the IMU measurements preintegration.
 
@@ -153,24 +160,26 @@ def integrate(
     measurements_list = list(measurements)
     num_elements = len(measurements_list)
 
-    for idx, m in enumerate(measurements):
+    for idx, measurement in enumerate(measurements):
 
         if idx == num_elements - 1:
             dt_nanoseconds = timestamp - measurements.last.time_range.start
 
         else:
-            dt_nanoseconds = measurements_list[idx + 1].time_range.start - m.time_range.start
+            dt_nanoseconds = (
+                measurements_list[idx + 1].time_range.start - measurement.time_range.start
+            )
 
         if dt_nanoseconds <= 0:
             msg = "dt <= 0. Stopping integration of IMU measurements."
             logger.error(msg)
             return pim
 
-        values: ImuData = m.values
-        acc = values.acceleration
-        omega = values.angular_velocity
+        values: ImuData = measurement.value
+        acc = np.array(values.acceleration)
+        omega = np.array(values.angular_velocity)
 
-        dt_secs: float = dt_nanoseconds * time_scale
+        dt_secs = dt_nanoseconds * time_scale
         pim.integrateMeasurement(acc, omega, dt_secs)
 
     return pim
@@ -202,9 +211,9 @@ def get_vertices(
     """
     is_new_index = False
 
-    pose = find_vertex(Pose, storage, timestamp, time_margin)
-    velocity = find_vertex(LinearVelocity, storage, timestamp, time_margin)
-    bias = find_vertex(ImuBias, storage, timestamp, time_margin)
+    pose = get_last_vertex(Pose, storage, timestamp, time_margin)
+    velocity = get_last_vertex(LinearVelocity, storage, timestamp, time_margin)
+    bias = get_last_vertex(ImuBias, storage, timestamp, time_margin)
 
     if pose and velocity and bias:
         return pose, velocity, bias, is_new_index
@@ -217,9 +226,12 @@ def get_vertices(
             is_new_index = True
 
         if default_values:
-            pose = Pose(index=new_index, timestamp=timestamp, value=default_values[0])
-            velocity = LinearVelocity(index=new_index, timestamp=timestamp, value=default_values[1])
-            bias = ImuBias(index=new_index, timestamp=timestamp, value=default_values[2])
+            default_pose = default_values[0]
+            default_velocity = default_values[1]
+            default_bias = default_values[2]
+            pose = Pose(index=new_index, timestamp=timestamp, value=default_pose)
+            velocity = LinearVelocity(index=new_index, timestamp=timestamp, value=default_velocity)
+            bias = ImuBias(index=new_index, timestamp=timestamp, value=default_bias)
         else:
             pose = Pose(index=new_index, timestamp=timestamp)
             velocity = LinearVelocity(index=new_index, timestamp=timestamp)

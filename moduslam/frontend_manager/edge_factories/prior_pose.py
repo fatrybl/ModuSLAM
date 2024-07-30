@@ -29,24 +29,6 @@ class PriorPoseEdgeFactory(EdgeFactory):
         super().__init__(config)
         self._time_margin: int = 0
 
-    @property
-    def vertices_types(self) -> set[type[Pose]]:
-        """Types of the used vertices.
-
-        Returns:
-            set with 1 type (Pose).
-        """
-        return {Pose}
-
-    @property
-    def base_vertices_types(self) -> set[type[gtsam.Pose3]]:
-        """Types of the used base (GTSAM) instances.
-
-        Returns:
-            set with 1 type (gtsam.Pose3).
-        """
-        return {gtsam.Pose3}
-
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[PriorPose]:
@@ -63,8 +45,11 @@ class PriorPoseEdgeFactory(EdgeFactory):
             list with 1 edge.
         """
         vertex = get_vertex(Pose, graph.vertex_storage, timestamp, self._time_margin)
-        edge = self._create_edge(vertex, measurements.last)
-        return [edge]
+        if isinstance(vertex, Pose):
+            edge = self._create_edge(vertex, measurements.last)
+            return [edge]
+        else:
+            return []
 
     @staticmethod
     def _create_edge(vertex: Pose, measurement: Measurement) -> PriorPose:
@@ -88,15 +73,15 @@ class PriorPoseEdgeFactory(EdgeFactory):
         )
         noise: gtsam.noiseModel.Diagonal.Variances = pose_diagonal_noise_model(variances)
 
-        pose = tuple_to_gtsam_pose3(measurement.values)
+        pose = tuple_to_gtsam_pose3(measurement.value)
 
         gtsam_factor = gtsam.PriorFactorPose3(
-            key=vertex.gtsam_index,
+            key=vertex.backend_index,
             prior=pose,
             noiseModel=noise,
         )
 
         edge = PriorPose(
-            vertex=vertex, measurements=(measurement,), factor=gtsam_factor, noise_model=noise
+            vertex=vertex, measurement=measurement, factor=gtsam_factor, noise_model=noise
         )
         return edge

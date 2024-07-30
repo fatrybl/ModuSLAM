@@ -86,112 +86,120 @@
 
 
 
-<div class="viewcode-block" id="TestIndexStorage">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage">[docs]</a>
-<span class="k">class</span> <span class="nc">TestIndexStorage</span><span class="p">:</span>
-<div class="viewcode-block" id="TestIndexStorage.test_num_indices">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_num_indices">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_num_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">num_indices</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">num_indices</span> <span class="o">==</span> <span class="mi">1</span></div>
+<div class="viewcode-block" id="test_num_indices">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_num_indices">[docs]</a>
+<span class="k">def</span> <span class="nf">test_num_indices</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">num_indices</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">num_indices</span> <span class="o">==</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_min_idx">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_min_idx">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_min_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="test_min_idx">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_min_idx">[docs]</a>
+<span class="k">def</span> <span class="nf">test_min_idx</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_max_idx">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_max_idx">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_max_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="test_max_idx">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_max_idx">[docs]</a>
+<span class="k">def</span> <span class="nf">test_max_idx</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_indices">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_indices">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="test_indices">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_indices">[docs]</a>
+<span class="k">def</span> <span class="nf">test_indices</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_add">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_add">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="test_add">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_add">[docs]</a>
+<span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
+
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_remove_method">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_remove_method">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_remove_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">}</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
+<div class="viewcode-block" id="test_remove_method">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_remove_method">[docs]</a>
+<span class="k">def</span> <span class="nf">test_remove_method</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">}</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
 
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">15</span><span class="p">}</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">15</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
 
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">15</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">15</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">15</span>
 
-        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
-            <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">0</span>
 
-
-<div class="viewcode-block" id="TestIndexStorage.test_normalize">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_normalize">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span></div>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_update_min_max">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_update_min_max">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_update_min_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">10</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">10</span>
-        <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">10</span></div>
+
+<div class="viewcode-block" id="test_normalize">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_normalize">[docs]</a>
+<span class="k">def</span> <span class="nf">test_normalize</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">indices</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="TestIndexStorage.test_generate_index">
-<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.TestIndexStorage.test_generate_index">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_storage</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
-        <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span></div>
-</div>
+
+<div class="viewcode-block" id="test_update_min_max">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_update_min_max">[docs]</a>
+<span class="k">def</span> <span class="nf">test_update_min_max</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">10</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">min_idx</span> <span class="o">==</span> <span class="mi">10</span>
+    <span class="k">assert</span> <span class="n">index_storage</span><span class="o">.</span><span class="n">max_idx</span> <span class="o">==</span> <span class="mi">10</span></div>
+
+
+
+<div class="viewcode-block" id="test_generate_index">
+<a class="viewcode-back" href="../../../../tests.frontend_manager.graph.html#tests.frontend_manager.graph.test_index_storage.test_generate_index">[docs]</a>
+<span class="k">def</span> <span class="nf">test_generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="n">index_storage</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">index_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span></div>
 
 </pre></div>
 

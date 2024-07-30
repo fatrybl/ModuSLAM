@@ -63,7 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.run">moduslam.run module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam.sandbox">moduslam.sandbox module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.html#moduslam-sandbox-module">moduslam.sandbox module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.html#module-moduslam">Module contents</a></li>
 </ul>
 </li>
@@ -153,6 +153,62 @@
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Message">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_dataclasses.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_dataclasses.html#Message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Message" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Message with the timestamp and data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Message.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Message.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Message.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Message.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Position">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_dataclasses.</span></span><span class="sig-name descname"><span class="pre">Position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_dataclasses.html#Position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Position" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>3D position of the point.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Position.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Position.x" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Position.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Position.y" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.Position.z">
+<span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.Position.z" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.VisualFeature">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_dataclasses.</span></span><span class="sig-name descname"><span class="pre">VisualFeature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">KeyPoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_dataclasses.html#VisualFeature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.VisualFeature" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Visual feature.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.VisualFeature.key_point">
+<span class="sig-name descname"><span class="pre">key_point</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">KeyPoint</span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.VisualFeature.key_point" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_dataclasses.VisualFeature.descriptor">
+<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#moduslam.utils.auxiliary_dataclasses.VisualFeature.descriptor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-moduslam.utils.auxiliary_methods">
 <span id="moduslam-utils-auxiliary-methods-module"></span><h2>moduslam.utils.auxiliary_methods module<a class="headerlink" href="#module-moduslam.utils.auxiliary_methods" title="Link to this heading"></a></h2>
@@ -160,7 +216,7 @@
 <p>Any method used in multiple modules/packages may be defined here.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.create_empty_element">
-<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_empty_element" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_empty_element" title="Link to this definition"></a></dt>
 <dd><p>Creates an empty element with the same timestamp, location and sensor as the input element.
 :param element: input element with data.</p>
 <dl class="field-list simple">
@@ -172,7 +228,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.sec2nanosec">
-<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">sec2nanosec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#sec2nanosec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.sec2nanosec" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">sec2nanosec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#sec2nanosec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.sec2nanosec" title="Link to this definition"></a></dt>
 <dd><p>Converts seconds to nanoseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -199,6 +255,36 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.nanosec2microsec">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">nanosec2microsec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nanoseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#nanosec2microsec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.nanosec2microsec" title="Link to this definition"></a></dt>
+<dd><p>Converts nanoseconds to microseconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nanoseconds</strong> – time in nanoseconds.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>time in microseconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.microsec2nanosec">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">microsec2nanosec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#microsec2nanosec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.microsec2nanosec" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">microsec2nanosec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">microsec2nanosec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#microsec2nanosec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.equal_integers">
 <span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_integers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#equal_integers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.equal_integers" title="Link to this definition"></a></dt>
 <dd><p>Compares two numbers with a given tolerance.</p>
@@ -218,13 +304,13 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.create_vector_3">
-<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_vector_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_vector_3" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_vector_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_vector_3" title="Link to this definition"></a></dt>
 <dd><p>Creates 3D float64 numpy array.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.create_vector_n">
-<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_vector_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_vector_n" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">create_vector_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#create_vector_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.create_vector_n" title="Link to this definition"></a></dt>
 <dd><p>Creates N-dimensional float64 numpy array.</p>
 </dd></dl>
 
@@ -318,7 +404,7 @@ but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.equal_elements">
-<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">el2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.factory.html#moduslam.data_manager.factory.element.Element" title="moduslam.data_manager.factory.element.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#equal_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.equal_elements" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">el2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#equal_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.equal_elements" title="Link to this definition"></a></dt>
 <dd><p>Compares two elements.</p>
 <p>If the values are of type Image, they are compared separately with equal_images() method.</p>
 <dl class="field-list simple">
@@ -326,6 +412,23 @@ but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>el1</strong> – 1-st element.</p></li>
 <li><p><strong>el2</strong> – 2-nd element.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>comparison result.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.equal_batches">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">equal_batches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.DataBatch" title="moduslam.data_manager.batch_factory.batch.DataBatch"><span class="pre">DataBatch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.DataBatch" title="moduslam.data_manager.batch_factory.batch.DataBatch"><span class="pre">DataBatch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#equal_batches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.equal_batches" title="Link to this definition"></a></dt>
+<dd><p>Compares two data batches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch1</strong> – 1-st data batch.</p></li>
+<li><p><strong>batch2</strong> – 2-nd data batch.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -356,6 +459,35 @@ but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.sort_files_numerically">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">sort_files_numerically</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#sort_files_numerically"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.sort_files_numerically" title="Link to this definition"></a></dt>
+<dd><p>Sorts files numerically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>files</strong> – list of files to sort.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>sorted list of files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moduslam.utils.auxiliary_methods.matrix_to_vector_list">
+<span class="sig-prename descclassname"><span class="pre">moduslam.utils.auxiliary_methods.</span></span><span class="sig-name descname"><span class="pre">matrix_to_vector_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'M'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">floating</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">integer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'N'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/utils/auxiliary_methods.html#matrix_to_vector_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.auxiliary_methods.matrix_to_vector_list" title="Link to this definition"></a></dt>
+<dd><p>Convert a NumPy array of shape (N, M) to a list of N arrays of shape (1, M).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> – The input NumPy array of shape (N, M).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of N arrays, each of shape (1, M).</p>
+</dd>
+</dl>
+<p>TODO: add tests</p>
 </dd></dl>
 
 </section>
@@ -486,17 +618,10 @@ equal if they have the same elements in the same order.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt class="sig sig-object py" id="moduslam.utils.exceptions.ConfigFileNotValid">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">ConfigFileNotValid</span></span><a class="reference internal" href="_modules/moduslam/utils/exceptions.html#ConfigFileNotValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.exceptions.ConfigFileNotValid" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></p>
-<p>Config file is not valid.</p>
-</dd></dl>
-
-<dl class="py exception">
 <dt class="sig sig-object py" id="moduslam.utils.exceptions.FileNotValid">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">FileNotValid</span></span><a class="reference internal" href="_modules/moduslam/utils/exceptions.html#FileNotValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.exceptions.FileNotValid" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Invalid file: not exists or empty</p>
+<p>Invalid file: does not exist or is empty</p>
 </dd></dl>
 
 <dl class="py exception">
@@ -527,33 +652,56 @@ equal if they have the same elements in the same order.</p>
 <p>Raised when attempting to access an element of an empty storage.</p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="moduslam.utils.exceptions.ClosedSourceError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">ClosedSourceError</span></span><a class="reference internal" href="_modules/moduslam/utils/exceptions.html#ClosedSourceError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.exceptions.ClosedSourceError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised when attempting to access a source that is closed.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="moduslam.utils.exceptions.StateNotSetError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">StateNotSetError</span></span><a class="reference internal" href="_modules/moduslam/utils/exceptions.html#StateNotSetError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.exceptions.StateNotSetError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>The state has not been set.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="moduslam.utils.exceptions.UnfeasibleRequestError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.exceptions.</span></span><span class="sig-name descname"><span class="pre">UnfeasibleRequestError</span></span><a class="reference internal" href="_modules/moduslam/utils/exceptions.html#UnfeasibleRequestError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.exceptions.UnfeasibleRequestError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>The request is unfeasible.</p>
+</dd></dl>
+
 </section>
-<section id="module-moduslam.utils.numpy_types">
-<span id="moduslam-utils-numpy-types-module"></span><h2>moduslam.utils.numpy_types module<a class="headerlink" href="#module-moduslam.utils.numpy_types" title="Link to this heading"></a></h2>
+<section id="moduslam-utils-numpy-types-module">
+<h2>moduslam.utils.numpy_types module<a class="headerlink" href="#moduslam-utils-numpy-types-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.utils.ordered_set">
 <span id="moduslam-utils-ordered-set-module"></span><h2>moduslam.utils.ordered_set module<a class="headerlink" href="#module-moduslam.utils.ordered_set" title="Link to this heading"></a></h2>
 <p>Ordered-set data structure implementation.</p>
 <dl class="simple">
-<dt>Complexity:</dt><dd><p>O(1): add(), contains(item: T), remove(item), remove_first, remove_last.
+<dt>Complexity:</dt><dd><p>O(1): add, discard, remove, remove_first, remove_last, contains
 O(N): __getitem__(index: int).</p>
 </dd>
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.utils.ordered_set.OrderedSet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.ordered_set.</span></span><span class="sig-name descname"><span class="pre">OrderedSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/ordered_set.html#OrderedSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.ordered_set.OrderedSet" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MutableSet</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
 <p>OrderedSet is a combination of set and OrderedDict.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.utils.ordered_set.OrderedSet.__getitem__">
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="_modules/moduslam/utils/ordered_set.html#OrderedSet.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.ordered_set.OrderedSet.__getitem__" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">slice</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span></dt>
 <dd><p>Attention: This method requires O(n) time complexity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> – index of an item.</p>
+<dd class="field-odd"><p><strong>index</strong> – index of an item or a slice.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>item.</p>
+<dd class="field-even"><p>item or a sequence of items.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>IndexError</strong> – if index is out of range.</p>
@@ -610,7 +758,7 @@ equal if they have the same elements in the same order.</p>
 <dd><p>Adds an item to the OrderedSet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>item</strong> (<em>T</em>) – item(s) to be added.</p>
+<dd class="field-odd"><p><strong>item</strong> – item(s) to be added.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>TypeError</strong> – if an item is not hashable.</p>
@@ -619,15 +767,26 @@ equal if they have the same elements in the same order.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="moduslam.utils.ordered_set.OrderedSet.discard">
+<span class="sig-name descname"><span class="pre">discard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/utils/ordered_set.html#OrderedSet.discard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.ordered_set.OrderedSet.discard" title="Link to this definition"></a></dt>
+<dd><p>Removes an item from the OrderedSet if it is present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – item(s) to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="moduslam.utils.ordered_set.OrderedSet.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/utils/ordered_set.html#OrderedSet.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.ordered_set.OrderedSet.remove" title="Link to this definition"></a></dt>
-<dd><p>Removes an item or items from the OrderedSet.</p>
+<dd><p>Removes an item from the OrderedSet if it is present.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>item</strong> – item(s) to be removed.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – if an item is not in the OrderedSet.</p>
+<dd class="field-even"><p><strong>KeyError</strong> – if an item is not present in the OrderedSet.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -649,58 +808,8 @@ equal if they have the same elements in the same order.</p>
 </dd></dl>
 
 </section>
-<section id="module-moduslam.utils.stopping_criterion">
-<span id="moduslam-utils-stopping-criterion-module"></span><h2>moduslam.utils.stopping_criterion module<a class="headerlink" href="#module-moduslam.utils.stopping_criterion" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.State">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_processed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_finished</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/stopping_criterion.html#State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.stopping_criterion.State" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.State.memory_limit">
-<span class="sig-name descname"><span class="pre">memory_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#moduslam.utils.stopping_criterion.State.memory_limit" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.State.data_processed">
-<span class="sig-name descname"><span class="pre">data_processed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#moduslam.utils.stopping_criterion.State.data_processed" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.State.time_finished">
-<span class="sig-name descname"><span class="pre">time_finished</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#moduslam.utils.stopping_criterion.State.time_finished" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.State.solver_error">
-<span class="sig-name descname"><span class="pre">solver_error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#moduslam.utils.stopping_criterion.State.solver_error" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.StoppingCriterion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.utils.stopping_criterion.</span></span><span class="sig-name descname"><span class="pre">StoppingCriterion</span></span><a class="reference internal" href="_modules/moduslam/utils/stopping_criterion.html#StoppingCriterion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.stopping_criterion.StoppingCriterion" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>High level criteria to stop mapping process.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.StoppingCriterion.state">
-<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">State(memory_limit=False,</span> <span class="pre">data_processed=False,</span> <span class="pre">time_finished=False,</span> <span class="pre">solver_error=False)</span></em><a class="headerlink" href="#moduslam.utils.stopping_criterion.StoppingCriterion.state" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.StoppingCriterion.is_active">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/moduslam/utils/stopping_criterion.html#StoppingCriterion.is_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.stopping_criterion.StoppingCriterion.is_active" title="Link to this definition"></a></dt>
-<dd><p>Checks if any of stopping criteria is active.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.utils.stopping_criterion.StoppingCriterion.reset">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/utils/stopping_criterion.html#StoppingCriterion.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.utils.stopping_criterion.StoppingCriterion.reset" title="Link to this definition"></a></dt>
-<dd><p>Resets all criteria to default values.</p>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-utils-stopping-criterion-module">
+<h2>moduslam.utils.stopping_criterion module<a class="headerlink" href="#moduslam-utils-stopping-criterion-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.utils" title="Link to this heading"></a></h2>

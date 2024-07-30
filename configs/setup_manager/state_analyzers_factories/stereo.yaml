@@ -1,0 +1,8 @@
+package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
+
+analyzers:
+
+  visual_features_state_analyzer:
+    name: "visual_features_state_analyzer"
+    type_name: "VisualFeaturesAnalyzer"
+    module_name: ".visual_features"

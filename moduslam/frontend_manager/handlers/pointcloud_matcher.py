@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
@@ -164,7 +164,7 @@ class ScanMatcher(Handler):
             handler=self,
             elements=(empty_pre_last_element, empty_last_element),
             time_range=t_range,
-            values=tf,
+            value=tf,
             noise_covariance=self._measurement_noise_covariance,
         )
         return m

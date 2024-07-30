@@ -2,8 +2,8 @@
 
 import pytest
 
-from moduslam.frontend_manager.graph_builder.builders.lidar_map_builder import (
-    LidarMapBuilder,
+from moduslam.frontend_manager.graph_builder.builders.pointcloud_map_builder import (
+    PointcloudMapBuilder,
 )
 from moduslam.frontend_manager.graph_builder.graph_builder_ABC import GraphBuilder
 from moduslam.frontend_manager.graph_builder.graph_builder_factory import (
@@ -14,7 +14,7 @@ from moduslam.frontend_manager.graph_builder.graph_builder_factory import (
 @pytest.mark.parametrize(
     "name, graph_builder_type",
     [
-        (LidarMapBuilder.__name__, LidarMapBuilder),
+        (PointcloudMapBuilder.__name__, PointcloudMapBuilder),
         # Add more tuples for additional test cases
     ],
 )

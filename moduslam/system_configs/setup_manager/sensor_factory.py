@@ -4,7 +4,7 @@ from moduslam.system_configs.setup_manager.sensors import SensorConfig
 
 
 @dataclass
-class SensorFactoryConfig:
+class SensorsFactoryConfig:
     """Sensor factory configuration."""
 
     sensors: dict[str, SensorConfig]

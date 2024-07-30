@@ -22,7 +22,7 @@ class GraphSaver:
             graph: a graph to save.
         """
 
-        graph.factor_graph.saveGraph(self._path.as_posix(), graph.gtsam_values)
+        graph.factor_graph.saveGraph(self._path.as_posix(), graph.backend_values)
 
     def save_to_pdf(self, graph: Graph) -> None:
         """Saves graph to .pdf file.
@@ -30,7 +30,7 @@ class GraphSaver:
         Args:
             graph: a graph to save.
         """
-        dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
+        dot = graph.factor_graph.dot(graph.backend_values, writer=self._graphviz_formatting)
         source = Source(dot)
         source.render("graph", format="pdf", cleanup=True)
 
@@ -40,6 +40,6 @@ class GraphSaver:
         Args:
             graph: a graph to visualize.
         """
-        dot = graph.factor_graph.dot(graph.gtsam_values, writer=self._graphviz_formatting)
+        dot = graph.factor_graph.dot(graph.backend_values, writer=self._graphviz_formatting)
         source = Source(dot)
         source.view("graph", cleanup=True)

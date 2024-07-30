@@ -1,11 +1,8 @@
 import logging
-from collections import deque
-from typing import overload
+from collections.abc import Sequence
 
-from plum import dispatch
-
-from moduslam.data_manager.factory.batch_factory import BatchFactory
-from moduslam.data_manager.factory.element import Element
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.logger.logging_config import data_manager
 from moduslam.system_configs.data_manager.data_manager import DataManagerConfig
 from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
@@ -21,63 +18,39 @@ class DataManager:
         Args:
             cfg (DataManagerConfig): config for DataManager.
         """
-        self.batch_factory = BatchFactory(cfg.batch_factory)
+        self._batch_factory = BatchFactory(cfg.batch_factory)
         logger.debug("Data Manager has been configured.")
 
-    @overload
-    def make_batch(self) -> None:
-        """
-        @overload.
-        Creates a data batch sequentially based on regime in config.
-        """
-        logger.info("Trying to create a new data bacth with the CREATE_BACTCH...")
+    @property
+    def batch_factory(self) -> BatchFactory:
+        """Batch factory."""
+        return self._batch_factory
 
-        self.batch_factory.create_batch()
+    def make_batch_sequentially(self) -> None:
+        """Creates a data batch sequentially based on regime."""
+        self._batch_factory.batch.clear()
+        self._batch_factory.fill_batch_sequentially()
         logger.debug("Data Batch has been created")
 
-    @overload
-    def make_batch(self, measurements: deque[Element]) -> None:
-        """
-        @overload.
-
-        Creates a data batch with given measurements
+    def make_batch_by_elements(self, elements: Sequence[Element]) -> None:
+        """Creates a data batch of elements with raw data.
 
         Args:
-            measurements (deque[Element]): list of elements without row data
+            elements: elements without raw data.
         """
-        self.batch_factory.create_batch(measurements)
+        self._batch_factory.batch.clear()
+        self._batch_factory.fill_batch_with_elements(elements)
         logger.debug("Data Batch has been created")
 
-    @overload
-    def make_batch(self, requests: set[PeriodicDataRequest]) -> None:
-        """
-        @overload.
-
-        Creates a data batch from requests.
+    def make_batch_by_requests(self, requests: Sequence[PeriodicDataRequest]) -> None:
+        """Creates a data batch based on the requests.
 
         Args:
-            requests (set[PeriodicDataRequest]): set of requests.
-
-            Each request corresponds to sensor and time limits: (start, stop)
+            requests: periodic data requests.
         """
-        self.batch_factory.create_batch(requests)
+        self._batch_factory.batch.clear()
+
+        for request in requests:
+            self._batch_factory.fill_batch_by_request(request)
+
         logger.debug("Data Batch has been created")
-
-    @dispatch
-    def make_batch(self, measurements=None):
-        """
-        @overload.
-
-        Calls:
-            1. Sequentially: create a batch with measurements sequentially.
-
-            2. With measurements: create a batch with given measurements:
-                Args:
-                    measurements (deque[Element]): deque of elements without row data.
-
-            3. With requests: create a batch with measurements from requests:
-                Args:
-                    requests (set[PeriodicDataRequest]): set of requests.
-
-                    Each request corresponds to sensor and time limits: (start, stop).
-        """

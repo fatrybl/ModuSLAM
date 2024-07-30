@@ -104,10 +104,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">LevenbergMarquardtOptimizer</span><span class="p">(</span>
-            <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">gtsam_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">factor_graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">backend_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span>
         <span class="p">)</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;optimization error: </span><span class="si">{</span><span class="n">optimizer</span><span class="o">.</span><span class="n">error</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
 </div>

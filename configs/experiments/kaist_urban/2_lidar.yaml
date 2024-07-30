@@ -1,0 +1,4 @@
+# @package _global_
+defaults:
+  - override /setup_manager: 2_lidar
+  - override /frontend_manager: 2_lidar
