@@ -8,6 +8,9 @@ from rosbags.rosbag2 import Reader
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.readers.utils import (
+    check_directory,
+)
 from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager  # UPDATE
 # from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
 from moduslam.logger.logging_config import data_manager
@@ -17,7 +20,6 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config imp
     Ros2Config,
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
-from moduslam.system_configs.setup_manager.sensor_factory import SensorFactoryConfig
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.exceptions import ItemNotFoundError
 
@@ -28,12 +30,27 @@ class Ros2DataReader(DataReader):
     """Data reader for ROS2 in test."""
 
     def __init__(self, regime: TimeLimit | Stream, dataset_params: Ros2Config):
+        """
+        Args:
+            regime: regime to read the data.
+
+            dataset_params: dataset parameters.
+
+        Raises:
+            FileNotFoundError: if any required file does not exist.
+
+            NotADirectoryError: if the dataset directory does not exist.
+        """
         self._dataset_directory: Path = dataset_params.directory
         self._regime = regime
 
+        check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
-        print("Initial sensors table:")
+        print("\nInitial sensors table:")
         print(self.sensors_table)
+
+        self.reader = None
+        print(f"Reader: {self.reader}")
 
         if isinstance(self._regime, TimeLimit):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
@@ -82,6 +99,7 @@ class Ros2DataReader(DataReader):
             Element | None: element with raw sensor measurement
                             or None if all measurements from a dataset has already been processed
         """
+        # TODO: use yield to return elements from the rosbags one by one.
         pass
 
     def get_element(self) -> Element | None:
