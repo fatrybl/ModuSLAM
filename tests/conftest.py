@@ -11,3 +11,6 @@ else:
 kaist_custom_dataset_dir = test_data_dir / "kaist_urban_custom_dataset"
 kaist_urban30_dataset_dir = test_data_dir / "datasets" / "kaist_urban/kaist_urban30_gangnam"
 tum_vie_dataset_dir = test_data_dir / "datasets" / "tum_vie" / "loop_floor_0"
+ros2_dataset_dir = Path(
+    "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2023_11_02-12_18_16"
+)
