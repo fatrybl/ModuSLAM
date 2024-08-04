@@ -3,14 +3,13 @@ import gtsam
 from moduslam.types.numpy import Matrix3x3, Matrix4x4
 
 
-class VisualSmartFactorFactory:
+class SmartFactorFactory:
     def __init__(self, smart_projection_params: dict[str, bool] | None = None):
         """
         Args:
             smart_projection_params: parameters of GTSAM SmartProjectionParams instance.
         """
         self._projection_params = gtsam.SmartProjectionParams()
-        self._projection_params.setDynamicOutlierRejectionThreshold(True)
 
     def create(
         self,

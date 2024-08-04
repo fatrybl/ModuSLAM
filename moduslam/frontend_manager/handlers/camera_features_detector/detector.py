@@ -7,7 +7,6 @@ import numpy as np
 from PIL.Image import Image, fromarray
 from PIL.ImageFile import ImageFile
 
-from moduslam.system_configs.setup_manager.sensors import StereoCameraConfig
 from moduslam.types.numpy import Matrix3x3, MatrixMxN, VectorN
 from moduslam.utils.auxiliary_dataclasses import Position, VisualFeature
 from moduslam.utils.auxiliary_methods import matrix_to_vector_list
@@ -15,8 +14,8 @@ from moduslam.utils.auxiliary_methods import matrix_to_vector_list
 
 class KeypointDetector:
 
-    def __init__(self, num_features: int = 100) -> None:
-        self._orb = cv2.ORB.create(nfeatures=num_features)
+    def __init__(self, num_features: int = 500) -> None:
+        self._orb = cv2.ORB.create(nfeatures=num_features, scoreType=cv2.ORB_HARRIS_SCORE)
 
     def get_orb_keypoints(self, image: Image) -> tuple[Sequence[cv2.KeyPoint], MatrixMxN]:
         """Gets ORB features and modified BRIEF descriptors from an image.
@@ -27,15 +26,13 @@ class KeypointDetector:
         Returns:
             keypoints and descriptors.
         """
-        array = np.array(image)
-        mask = np.ones(array.shape[:2], dtype=np.uint8) * 255
+        array = np.array(image, dtype=np.uint8)
+        mask = np.ones(shape=array.shape, dtype=np.uint8) * 255
         keypoints, descriptors = self._orb.detectAndCompute(array, mask=mask)
         return keypoints, descriptors
 
     @staticmethod
-    def undistort_image(
-        image: ImageFile, camera_matrix: Matrix3x3, dist_coeffs: VectorN
-    ) -> tuple[Image, Matrix3x3]:
+    def undistort_image(image: ImageFile, camera_matrix: Matrix3x3, dist_coeffs: VectorN) -> Image:
         """Removes distortion of an image and recomputes the camera matrix.
 
         Args:
@@ -48,19 +45,17 @@ class KeypointDetector:
         Returns:
             undistorted_image and new camera matrix.
         """
-        h, w = image.height, image.width
+        # h, w = image.height, image.width
         array = np.array(image)
-        new_camera_matrix, _ = cv2.getOptimalNewCameraMatrix(
-            camera_matrix, dist_coeffs, (w, h), 1, (w, h)
-        )
+        # new_camera_matrix, _ = cv2.getOptimalNewCameraMatrix(
+        #     camera_matrix, dist_coeffs, (w, h), 1, (w, h)
+        # )
 
-        new_camera_matrix = new_camera_matrix.astype(np.float64)
-        undistorted_array = cv2.undistort(
-            array, camera_matrix, dist_coeffs, None, new_camera_matrix
-        )
+        # new_camera_matrix = new_camera_matrix.astype(np.float64)
+        undistorted_array = cv2.undistort(array, camera_matrix, dist_coeffs, None, camera_matrix)
         undistorted_image = fromarray(undistorted_array)
 
-        return undistorted_image, new_camera_matrix
+        return undistorted_image
 
     @staticmethod
     def project_3d(
@@ -115,24 +110,17 @@ class KeypointDetector:
             features.append(feature)
         return features
 
-    def get_visual_features(
-        self, image: ImageFile, camera_parameters: StereoCameraConfig
-    ) -> list[VisualFeature]:
+    def get_visual_features(self, image: ImageFile) -> list[VisualFeature]:
         """Gets visual features from an image.
 
         Args:
             image: image to extract features from.
-            camera_parameters: camera parameters.
 
         Returns:
             list of visual features.
         """
 
-        camera_matrix = np.array(camera_parameters.camera_matrix_left)
-        distortion_coeffs = np.array(camera_parameters.distortion_coefficients_left)
-
-        undistorted_image, _ = self.undistort_image(image, camera_matrix, distortion_coeffs)
-        keypoints, descriptors = self.get_orb_keypoints(undistorted_image)
+        keypoints, descriptors = self.get_orb_keypoints(image)
         descriptors_list = matrix_to_vector_list(descriptors)
         features = self.create_visual_features(keypoints, descriptors_list)
         return features

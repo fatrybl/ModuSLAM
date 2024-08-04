@@ -1,11 +1,11 @@
 import logging
 
-from moduslam.backend_manager.backend_manager import BackendManager
-from moduslam.data_manager.data_manager import DataManager
-from moduslam.frontend_manager.frontend_manager import FrontendManager
+from moduslam.backend_manager.manager import BackendManager
+from moduslam.data_manager.manager import DataManager
+from moduslam.frontend_manager.manager import FrontendManager
 from moduslam.logger.logging_config import main_manager
-from moduslam.map_manager.map_manager import MapManager
-from moduslam.setup_manager.setup_manager import SetupManager
+from moduslam.map_manager.manager import MapManager
+from moduslam.setup_manager.manager import SetupManager
 from moduslam.system_configs.main_manager import MainManagerConfig
 
 logger = logging.getLogger(main_manager)
@@ -53,8 +53,8 @@ class MainManager:
         while not data_batch.empty:
             self.frontend_manager.create_graph(data_batch)
             self.backend_manager.solve(graph)
-            self.frontend_manager.graph.factor_graph.print()
 
+        # self.frontend_manager.graph.factor_graph.print()
         logger.info("The data batch has been successfully processed.")
 
     def _set_prior(self) -> None:

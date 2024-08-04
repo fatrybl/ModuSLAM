@@ -76,5 +76,5 @@ class MapManager:
         Args:
             graph: a graph to save.
         """
-        self._graph_saver.save_to_pdf(graph)
+        # self._graph_saver.save_to_pdf(graph)
         logger.info("Graph has been saved.")

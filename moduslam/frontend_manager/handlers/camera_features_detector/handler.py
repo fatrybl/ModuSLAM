@@ -33,7 +33,7 @@ class FeatureDetector(Handler):
         """
         self._name = config.name
         self._noise_covariance = config.noise_variance
-        self._detector = KeypointDetector()
+        self._detector = KeypointDetector(num_features=1000)
 
     @property
     def name(self) -> str:
@@ -59,7 +59,7 @@ class FeatureDetector(Handler):
             logger.error(msg)
             raise TypeError(msg)
 
-        features = self._detector.get_visual_features(image, sensor.calibrations)
+        features = self._detector.get_visual_features(image)
         empty_element = self.create_empty_element(element)
         measurement = self._create_measurement(empty_element, features, self._noise_covariance)
         return measurement

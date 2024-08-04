@@ -14,8 +14,8 @@ from moduslam.frontend_manager.graph_builder.state_analyzers.lidar_odometry impo
     LidarOdometryStateAnalyzer,
 )
 from moduslam.frontend_manager.handlers.pointcloud_matcher import ScanMatcher
+from moduslam.setup_manager.manager import SetupManager
 from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
-from moduslam.setup_manager.setup_manager import SetupManager
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )

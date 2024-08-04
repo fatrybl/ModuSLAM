@@ -9,7 +9,7 @@ import hydra
 import numpy as np
 
 from moduslam.logger.logging_config import setup_logger
-from moduslam.main_manager.main_manager import MainManager
+from moduslam.main_manager.manager import MainManager
 from moduslam.setup_manager.config_validator import register_config
 from moduslam.system_configs.main_manager import MainManagerConfig
 

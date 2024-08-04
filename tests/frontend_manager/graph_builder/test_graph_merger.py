@@ -19,7 +19,7 @@ def test_merge(element: Element, handler: Handler, edge_factory: EdgeFactory):
     # add new key-value pair to the protected table. Only for testing purposes.
     graph.vertex_storage._vertices_table.update({BasicTestVertex: OrderedSet()})
 
-    merger = GraphMerger[BasicTestVertex, UnaryEdge]()
+    merger = GraphMerger()
     # add new key-value pair to the protected table. Only for testing purposes.
     merger._table = {handler: edge_factory}
 

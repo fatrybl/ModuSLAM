@@ -67,11 +67,17 @@ class Graph(Generic[BaseVertex, BaseEdge]):
             edge: new edge to be added to the graph.
 
         TODO: timestamped based sorting has been removed. Check if it works.
+        TODO: add tests for the existing edges being added.
+        TODO: add more efficient way to update the connections for the existing edges. Now it takes O(N) time.
         """
+        if edge in self._edge_storage.edges:
+            self._update_edge_connections(edge)
+            return
+
         edge.index = self._set_index()
 
-        self._vertex_storage.add(edge.vertices)
         self._edge_storage.add(edge)
+        self._vertex_storage.add(edge.vertices)
         self.factor_graph.add(edge.factor)
 
         for v in edge.vertices:
@@ -81,7 +87,7 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         """Adds multiple edges to the graph.
 
         Args:
-            edges (Iterable[GraphEdge]): new edges to be added to the graph.
+            edges: new edges to be added to the graph.
         """
         for edge in edges:
             self.add_edge(edge)
@@ -139,7 +145,7 @@ class Graph(Generic[BaseVertex, BaseEdge]):
 
             modified_edge: edge with modified vertices.
         """
-        modified_vertices = modified_edge.vertices
+        modified_vertices = set(modified_edge.vertices)
 
         for vertex in original_vertices:
             if vertex not in modified_vertices:
@@ -201,6 +207,23 @@ class Graph(Generic[BaseVertex, BaseEdge]):
             self._connections[vertex] = {edge}
         else:
             self._connections[vertex].add(edge)
+
+    def _update_edge_connections(self, edge: BaseEdge) -> None:
+        """Updates connections of the edge with the vertices.
+
+        Args:
+            edge: edge to be updated.
+        """
+        new_vertices = set(edge.vertices)
+
+        for vertex, edges in self._connections.items():
+            if edge in edges:
+                self._connections[vertex].remove(edge)
+
+        for vertex in new_vertices:
+            self._add_connection(vertex, edge)
+            if vertex not in self._vertex_storage.vertices:
+                self._vertex_storage.add(vertex)
 
     def _remove_connection(self, vertex: BaseVertex, edge: BaseEdge) -> None:
         """Removes edge from the connection with the vertex.

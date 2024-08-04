@@ -8,8 +8,7 @@ from moduslam.frontend_manager.graph.base_edges import (
     RadialEdge,
     UnaryEdge,
 )
-from moduslam.frontend_manager.graph.base_vertices import OptimizableVertex
-from moduslam.frontend_manager.graph.custom_vertices import Feature3D
+from moduslam.frontend_manager.graph.custom_vertices import CameraPose, Feature3D
 from moduslam.frontend_manager.measurement_storage import Measurement
 
 
@@ -18,17 +17,17 @@ class SmartVisualFeature(RadialEdge):
 
     def __init__(
         self,
-        pose: OptimizableVertex,
-        features: Sequence[Feature3D],
+        feature: Feature3D,
+        poses: Sequence[CameraPose],
         measurements: Sequence[Measurement],
         factor: gtsam.SmartProjectionPose3Factor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
         """
         Args:
-            pose: optimizable pose.
+            feature: 3D feature.
 
-            features: non-optimizable 3D points.
+            poses: camera poses.
 
             measurements: a measurement with the distance to the visual feature.
 
@@ -36,7 +35,34 @@ class SmartVisualFeature(RadialEdge):
 
             noise_model: GTSAM noise model of the factor.
         """
-        super().__init__(pose, features, measurements, factor, noise_model)
+        super().__init__(feature, poses, measurements, factor, noise_model)
+        self._radials: list[CameraPose] = list(poses)
+        self._measurements: list[Measurement] = list(measurements)
+
+    @property
+    def factor(self) -> gtsam.SmartProjectionPose3Factor:
+        """GTSAM factor."""
+        return self._factor
+
+    @property
+    def central_vertex(self) -> Feature3D:
+        """Central vertex of the edge."""
+        return self._center
+
+    @property
+    def radial_vertices(self) -> list[CameraPose]:
+        """Radial vertices of the edge."""
+        return self._radials
+
+    @property
+    def vertices(self) -> tuple[Feature3D | CameraPose, ...]:
+        """Vertices of the edge."""
+        return self._center, *self._radials
+
+    @property
+    def measurements(self) -> list[Measurement]:
+        """Measurements which formed the edge."""
+        return self._measurements
 
 
 class ImuOdometry(MultiEdge):
