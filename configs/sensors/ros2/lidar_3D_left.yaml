@@ -1,0 +1,5 @@
+defaults:
+  - /sensors/base_lidar3D@vlp16l
+
+velodyne_left:
+  name: "vlp16l"
