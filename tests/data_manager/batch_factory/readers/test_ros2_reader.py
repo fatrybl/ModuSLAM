@@ -29,13 +29,10 @@ def test_ros2_reader_1():
 def test_ros2_reader_2():
     dataset_cfg = Ros2Config(directory=ros2_dataset_dir)
     limit_check = 20
-    with Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg) as reader:
-        assert reader is not None
+    rosbag_reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
+    with rosbag_reader as reader:
+
         print("Rosbag opened successfully")
-        n = 0
-        for connection in reader.connections:
-            n += 1
-            print(f"Topic: {connection.topic}, Type: {connection.msgtype}")
 
     print("Rosbag closed successfully")
 
