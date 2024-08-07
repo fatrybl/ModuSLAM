@@ -1,0 +1,20 @@
+defaults:
+  - /sensors/base_imu@imu
+
+imu:
+  name: "imu"
+  orientation_covariance: [
+    [ 0.000484, 0.      , 0.      ,
+      0.      , 0.000484, 0.      ,
+      0.      , 0.      , 0.000484 ]
+  ]
+  angular_velocity_covariance: [
+    [ 0.0025, 0.    , 0.    ,
+      0.    , 0.0025, 0.    ,
+      0.    , 0.    , 0.0025 ]
+  ]
+  linear_acceleration_covariance: [
+    [ 0.16, 0.  , 0.  ,
+      0.  , 0.16, 0.  ,
+      0.  , 0.  , 0.16 ]
+  ]
