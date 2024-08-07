@@ -8,10 +8,17 @@ from rosbags.rosbag2 import Reader
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.readers.ros2.utils import (
+    get_rosbag_sensors,
+    get_connections,
+    map_sensors,
+)
 from moduslam.data_manager.batch_factory.readers.utils import (
     check_directory,
 )
-from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import Rosbags2Manager  # UPDATE
+from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import (
+    Rosbags2Manager,
+)  # TODO: UPDATE rosbags2_manager
 # from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
 from moduslam.logger.logging_config import data_manager
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
@@ -46,8 +53,30 @@ class Ros2DataReader(DataReader):
 
         check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
+        # For testing purposes
+        self.sensors_table = {
+            "stereo_camera_left": "left",
+            "imu": "xsens",
+        }
+
+        # TODO: Change print statements with Logger functions
+
         print("\nInitial sensors table:")
         print(self.sensors_table)
+
+        self.sensors = get_rosbag_sensors(self._dataset_directory)
+        print("\nSensors from rosbag:")
+        print(self.sensors)
+
+        self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
+        print("\nMapped sensors:")
+        print(self.sensors)
+        print("\nConnection list:")
+        print(self.connection_list)
+
+        self.connections = get_connections(self.connection_list, self._dataset_directory)
+        print("\nConnections from rosbag:")
+        print(self.connections)
 
         self.reader = None
         print(f"Reader: {self.reader}")
@@ -63,12 +92,15 @@ class Ros2DataReader(DataReader):
 
     def __enter__(self):
         """Opens the dataset for reading."""
+        print("Opening the Rosbag now")
+        self._in_context = True
         self.reader = Reader(self._dataset_directory)
         self.reader.open()
         return self.reader
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Closes the dataset."""
+        self._in_context = False
         if self.reader:
             self.reader.close()
             self.reader = None
@@ -88,7 +120,9 @@ class Ros2DataReader(DataReader):
 
             ItemNotFoundError: if no measurement for the given sensor and timestamp is found.
         """
-        pass
+        if not self._in_context:
+            logger.critical(self._context_error_msg)
+            raise RuntimeError(self._context_error_msg)
 
     def get_next_element(self) -> Element | None:
         """
