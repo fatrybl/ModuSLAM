@@ -5,7 +5,7 @@
 
 Checklist:
 
-| KaistReader | TumVieReader |             |
+| KaistReader | TumVieReader |  Ros2Reader  |
 |-------------|--------------|--------------
 |      +      |       +      |             |
 |-------------|--------------|--------------
