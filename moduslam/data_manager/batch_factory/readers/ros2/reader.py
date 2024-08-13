@@ -3,8 +3,11 @@
 import logging
 import os
 from pathlib import Path
+from typing import overload
 
+from plum import dispatch
 from rosbags.rosbag2 import Reader
+from rosbags.serde import deserialize_cdr
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
@@ -16,10 +19,6 @@ from moduslam.data_manager.batch_factory.readers.ros2.utils import (
 from moduslam.data_manager.batch_factory.readers.utils import (
     check_directory,
 )
-from moduslam.data_manager.factory.readers.ros2.rosbags2_manager import (
-    Rosbags2Manager,
-)  # TODO: UPDATE rosbags2_manager
-# from moduslam.data_manager.factory.readers.ros2.data_iterator import Iterator
 from moduslam.logger.logging_config import data_manager
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
@@ -28,7 +27,6 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config imp
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.utils.auxiliary_dataclasses import TimeRange
-from moduslam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
 
@@ -51,6 +49,8 @@ class Ros2DataReader(DataReader):
         self._dataset_directory: Path = dataset_params.directory
         self._regime = regime
 
+        self._in_context = False
+
         check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
         # For testing purposes
@@ -60,7 +60,8 @@ class Ros2DataReader(DataReader):
         }
 
         # TODO: Change print statements with Logger functions
-
+        logger.info("ROS2 data reader created.")
+        logger.debug(f"Dataset directory: {self._dataset_directory}")
         print("\nInitial sensors table:")
         print(self.sensors_table)
 
@@ -71,24 +72,13 @@ class Ros2DataReader(DataReader):
         self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
         print("\nMapped sensors:")
         print(self.sensors)
-        print("\nConnection list:")
-        print(self.connection_list)
 
         self.connections = get_connections(self.connection_list, self._dataset_directory)
         print("\nConnections from rosbag:")
         print(self.connections)
 
-        self.reader = None
-        print(f"Reader: {self.reader}")
-
         if isinstance(self._regime, TimeLimit):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
-            self.rosbags_manager = Rosbags2Manager(
-                self._dataset_directory, self.sensors_table, self._time_range
-            )
-
-        else:
-            self.rosbags_manager = Rosbags2Manager(self._dataset_directory, self.sensors_table)
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -96,6 +86,7 @@ class Ros2DataReader(DataReader):
         self._in_context = True
         self.reader = Reader(self._dataset_directory)
         self.reader.open()
+        self.rosbag_iter = self.rosbag_iterator()
         return self.reader
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -105,25 +96,48 @@ class Ros2DataReader(DataReader):
             self.reader.close()
             self.reader = None
 
-    def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
-        """
-        @overload.
-        Sets the iterator(s) position(s) for the given sensor and timestamp.
+    def set_initial_state(self, sensor: Sensor, timestamp: int):
+        """Sets the iterator position for the sensor at the given timestamp.
 
         Args:
-            sensor: sensor to set the iterator(s) position(s) to.
+            sensor: sensor to set the iterator position.
 
-            timestamp: timestamp to set the iterator(s) position(s) to.
+            timestamp: timestamp to set the iterator position.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            ItemNotFoundError: if no measurement found for the sensor at the given timestamp.
+        """
+        pass
 
-            ItemNotFoundError: if no measurement for the given sensor and timestamp is found.
+    def rosbag_iterator(self):
+        """Generator for Rosbag data
+
+        Yields:
+            tuple: timestamp, sensor_name, message
+
+
         """
         if not self._in_context:
             logger.critical(self._context_error_msg)
             raise RuntimeError(self._context_error_msg)
 
+        for i, (connection, timestamp, rawdata) in enumerate(
+            self.reader.messages(connections=self.connections)
+        ):
+            sensor_name = "no sensor"
+            sensor_id = connection.id
+            sensor = connection.topic.split("/")[1]
+            data_type = connection.msgtype.split("/")[-1]
+            msg = deserialize_cdr(rawdata, connection.msgtype)
+
+            for single_sensor in self.sensors:
+                if single_sensor["sensor"] == sensor:
+                    sensor_name = single_sensor["sensor_name"]
+                    break
+
+            yield (i, timestamp, sensor_name, msg)
+
+    @overload
     def get_next_element(self) -> Element | None:
         """
         @overload.
@@ -134,9 +148,47 @@ class Ros2DataReader(DataReader):
                             or None if all measurements from a dataset has already been processed
         """
         # TODO: use yield to return elements from the rosbags one by one.
+
+        if not self._in_context:
+            logger.critical(self._context_error_msg)
+            raise RuntimeError(self._context_error_msg)
+
+        try:
+            index, timestamp, sensor_name, data = next(self.rosbag_iter)
+            print("Sucessfully obtained sensor data")
+
+        except (StopIteration, KeyError):
+            return None
+
+        sensor = SensorsFactory.get_sensor(sensor_name)
+        measurement = RawMeasurement(sensor, data)
+        # timestamp = to_int(timestamp)
+
+        element = Element(timestamp, measurement, index)
+
+        return None
+
+    @overload
+    def get_next_element(self, sensor: Sensor):
+        """
+        @overload.
+        Gets element from a dataset sequentially based on iterator position.
+
+        Args:
+            sensor: sensor to get the element for
+
+        Returns:
+            Element | None: element with raw sensor measurement
+                            or None if all measurements from a dataset has already been processed
+        """
+
         pass
 
-    def get_element(self) -> Element | None:
+    @dispatch
+    def get_next_element(self, element=None):
+        """Get an element from the dataset."""
+
+    def get_element(self):
         """
         @overload.
         Gets element from a dataset sequentially based on iterator position.
@@ -146,30 +198,7 @@ class Ros2DataReader(DataReader):
                             or None if all measurements from a dataset has already been processed
         """
 
-        sensor_id, location, message, t = self.rosbags_manager.next_sensor_read()
-        print(f"Got sensor: {sensor_id}")
-        for sensor in self.rosbags_manager.sensors_list:
-            if sensor["id"] == sensor_id:
-                sensor_name = sensor["sensor_name"]
-                print(f"That means sensor {sensor_name}")
-                break
-        try:
-            sensor = SensorsFactory.get_sensor(sensor_name)
-            # TODO Check that sensor_name MATCHES with the name in the sensors configs
-
-        # except StopIteration:
-        except ItemNotFoundError as e:
-            print(f"Failed to get sensor {sensor_name} with error message: {e}")
-            return None
-
-        # timestamp: int = as_int(t)
-        if isinstance(self._regime, TimeLimit) and t > self._time_range.stop:
-            return None
-
-        measurement = RawMeasurement(sensor, message)
-        element = Element(t, measurement, location)
-
-        return element
+        pass
 
 
 if __name__ == "__main__":
@@ -185,7 +214,11 @@ if __name__ == "__main__":
 
     reader = Ros2DataReader(regime=timelimit1, dataset_params=ros2_config)
 
-    my_config = SensorFactoryConfig()
-    SensorsFactory.init_sensors(config=my_config)
+    with reader as r:
+        print("Rosbag opened successfully")
+        user_input = input("Get sensor read? (y/n): ")
 
-    reader.get_element()
+        while user_input == "y":
+            element = reader.get_next_element()
+            print(element)
+            user_input = input("Get another sensor read? (y/n): ").lower()
