@@ -75,16 +75,13 @@ def map_sensors(sensors: dict, sensor_list: list):
                 connections_list.append(sensor_params["topic"])
                 continue
 
-    print(f"Updated sensors list: {updated_list}")
-    print(f"Connections list: {connections_list}")
-
     return connections_list, updated_list
 
 
-def rosbag_read(
+def rosbag_read_one_element(
     rosbag_path: Path, topic_name: str | list, reading_pos: int = 1
 ) -> dict[str, any] | None:
-    """Reads a rosbag file.
+    """Opens a Rosbag file and get one readings from the bag at a specific position.
 
     Args:
         topic_name: a string with the specific topic name of the wanted sensor readings.
@@ -120,6 +117,12 @@ def rosbag_read(
 
                 return sensor
         return None
+
+
+def rosbag_read_list_elements(
+    rosbag_path: Path,
+):
+    pass
 
 
 def main():
