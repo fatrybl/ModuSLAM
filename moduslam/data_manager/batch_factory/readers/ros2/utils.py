@@ -1,7 +1,14 @@
+from collections.abc import Callable
 from pathlib import Path
 
 from rosbags.rosbag2 import Reader
 from rosbags.serde import deserialize_cdr
+
+from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
+    get_imu_measurement,
+    get_lidar_measurement,
+    get_stereo_measurement,
+)
 
 
 def get_rosbag_sensors(rosbag_path: Path):
@@ -78,51 +85,38 @@ def map_sensors(sensors: dict, sensor_list: list):
     return connections_list, updated_list
 
 
-def rosbag_read_one_element(
-    rosbag_path: Path, topic_name: str | list, reading_pos: int = 1
-) -> dict[str, any] | None:
-    """Opens a Rosbag file and get one readings from the bag at a specific position.
+def rosbag_iterator(reader, sensors, connections):
+    """Iterates through the Readings of a Rosbag file based on the connections provided and returns data of each reading
 
     Args:
-        topic_name: a string with the specific topic name of the wanted sensor readings.
-        num_readings: an integer with the number of readings to be read.
-
-    Returns:
-        sensor: a dictionary with values of the requested sensor.
+        reader: Rosbag reader object
+        sensors: List of sensors in the moduslam configs.
+        connections: List of connections for the sensors
     """
 
-    with Reader(rosbag_path) as reader:
-        print(f"Reading messages from {topic_name} for {reading_pos} times.")
-        connections = [c for c in reader.connections if c.topic == topic_name]
-        if len(connections) == 0:
-            raise ValueError(f"Topic {topic_name} not found in the rosbag file.")
-            return None
+    for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
+        sensor_name = "no sensor"
+        sensor_id = connection.id
+        sensor = connection.topic.split("/")[1]
+        data_type = connection.msgtype.split("/")[-1]
+        msg = deserialize_cdr(rawdata, connection.msgtype)
 
-        for i, (connection, timestamp, rawdata) in enumerate(
-            reader.messages(connections=connections)
-        ):
-            if i == reading_pos:
-                msg = deserialize_cdr(rawdata, connection.msgtype)
-                sensor_id = connection.id
-                sensor_name = connection.topic.split("/")[1]
-                data_type = connection.msgtype.split("/")[-1]
-                sensor = {
-                    "id": sensor_id,
-                    "topic": connection.topic,
-                    "message_type": connection.msgtype,
-                    "sensor": sensor_name,
-                    "data_type": data_type,
-                    "message": msg,
-                }
+        for single_sensor in sensors:
+            if single_sensor["sensor"] == sensor:
+                sensor_name = single_sensor["sensor_name"]
+                break
 
-                return sensor
-        return None
+        # TODO: get the actual data from msg in the measurement_collector.py
+        test_dict: dict[str, Callable]
+        test_dict = {
+            "imu": get_imu_measurement,
+            "lidar": get_lidar_measurement,
+            "stereo": get_stereo_measurement,
+        }
+        message_getter = test_dict[data_type]
+        data = message_getter(msg)
 
-
-def rosbag_read_list_elements(
-    rosbag_path: Path,
-):
-    pass
+        yield (i, timestamp, sensor_name, data, data_type)
 
 
 def main():
@@ -130,17 +124,6 @@ def main():
     folder_path = Path(
         "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2023_11_02-12_18_16"
     )
-    sensors = get_rosbag_sensors(folder_path)
-    for sensor in sensors:
-        sensor_read = rosbag_read(folder_path, sensor["topic"], 1)
-        if sensor_read is not None:
-            for key, value in sensor_read.items():
-                print(f"{key}: {value}")
-            print(
-                "---------------------------------------------------------------------------------------------------------"
-            )
-
-    sensor_config = {}
 
 
 if __name__ == "__main__":
