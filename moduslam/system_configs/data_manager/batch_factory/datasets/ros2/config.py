@@ -26,13 +26,3 @@ class Ros2Config(DatasetConfig):
     name: str = "Ros2 Reader for Ros2bags"
 
     url: str = "example.com"
-
-
-# cfg = Ros2Config(directory=Path("/path/to/ros2/dataset"))
-# print(cfg.sensors_table)
-# my_config = Ros2Config(
-#     directory=Path("/path/to/ros2/dataset"),
-#     sensors_table={"sensor1": {"sensor_name": ["sensor1", "sensor2"]}},
-# )
-#
-# print(my_config.sensors_table)
