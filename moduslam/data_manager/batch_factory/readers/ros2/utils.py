@@ -2,13 +2,16 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TypeAlias
 
-import cv2
-import numpy as np
 import pandas as pd
-from PIL import Image
 from rosbags.rosbag2 import Reader, Writer
 from rosbags.serde import deserialize_cdr
 from tabulate import tabulate
+
+from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
+    get_imu_measurement,
+    get_lidar_measurement,
+    get_stereo_measurement,
+)
 
 TupleImage: TypeAlias = tuple[list[list[int]], list[list[int]], list[list[int]]]
 
@@ -204,66 +207,6 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
                 else:
                     print("Sucessfully writter {} messages in the new rosbag".format(i - 1))
                     break
-
-
-def image_decoding(raw_image_msg) -> TupleImage:
-    """Decodes a ROS2 Image message into an array.
-
-    Args:
-        raw_image_msg: a ROS2 Image message.
-
-    Returns:
-        image_tuple: a tuple with the image data.
-
-    Raises:
-        ValueError: if the encoding is not supported.
-    """
-    # TODO: Either add more functions with different encodings. Be more SPECIFIC with function names
-
-    height = raw_image_msg.height
-    width = raw_image_msg.width
-    steps = raw_image_msg.step
-    encoding = raw_image_msg.encoding
-    bgr_num_channels = 3
-
-    print(height, width, steps, encoding)
-
-    if encoding == "bgr8":
-        np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
-            (height, width, bgr_num_channels)
-        )
-        image_list = np_array.tolist()
-
-        # TODO: Transform np array into a TupleImage format.
-
-        return image_tuple
-    else:
-        raise ValueError("Encoding {} is not supported".format(encoding))
-
-
-def convert2image(img_array, encoding: str):
-    """Converts an array into a PIL image.
-    Args:
-        img_array: an array to be converted to a PIL Image.
-        encoding: the encoding of the image.
-
-     Returns:
-        pil_img: a PIL Image object.
-    """
-
-    if isinstance(img_array, np.ndarray):
-        print("Converting numpy array to PIL Image")
-        if encoding == "bgr8":
-            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
-
-    elif isinstance(img_array, (list, tuple)):
-        print("Converting list to PIL Image")
-        img_array = np.array(img_array)
-        if encoding == "bgr8":
-            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
-
-    else:
-        raise ValueError("Array type {} is not supported".format(type(img_array)))
 
 
 def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
