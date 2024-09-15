@@ -65,6 +65,7 @@ s = 0.0
 camera_model = gtsam.Cal3_S2(fx, fy, s, cx, cy)
 
 factors = []
+graph = gtsam.NonlinearFactorGraph()
 
 tf = gtsam.Pose3()
 pose1 = gtsam.Pose3()
@@ -73,14 +74,8 @@ pose3 = gtsam.Pose3(gtsam.Rot3(), [0.02, -0.02, 0.12])
 pose4 = gtsam.Pose3(gtsam.Rot3(), [0.04, -0.05, 0.13])
 
 init_values = gtsam.Values()
-init_values.insert(X(1), pose1)
-init_values.insert(X(2), pose2)
-init_values.insert(X(3), pose3)
-init_values.insert(X(4), pose4)
 
-params = gtsam.LevenbergMarquardtParams()
-
-graph = gtsam.NonlinearFactorGraph()
+optimizer_params = gtsam.LevenbergMarquardtParams()
 projection_params = gtsam.SmartProjectionParams()
 projection_params.setLandmarkDistanceThreshold(20)
 camera_noise = gtsam.noiseModel.Isotropic.Sigma(2, 1)
@@ -89,6 +84,13 @@ prior1 = gtsam.PriorFactorPose3(X(1), pose1, gtsam.noiseModel.Isotropic.Sigma(6,
 prior2 = gtsam.PriorFactorPose3(X(2), pose2, gtsam.noiseModel.Isotropic.Sigma(6, 1))
 graph.add(prior1)
 graph.add(prior2)
+init_values.insert(X(1), pose1)
+init_values.insert(X(2), pose1)
+
+optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, optimizer_params)
+result = optimizer.optimizeSafely()
+pose1 = result.atPose3(X(1))
+pose2 = result.atPose3(X(2))
 
 detector = KeypointDetector(num_features=500)
 matcher = FeatureMatcher()
@@ -140,6 +142,15 @@ for feature in unmatched_features:
 
 all_features += unmatched_features
 
+[graph.add(factor) for factor in factors]
+init_values = gtsam.Values()
+init_values.insert(X(1), pose1)
+init_values.insert(X(2), pose2)
+optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, optimizer_params)
+result = optimizer.optimizeSafely()
+pose1 = result.atPose3(X(1))
+pose2 = result.atPose3(X(2))
+
 all_desc = np.array([f.descriptor for f in all_features], dtype=np.uint8)
 all_keypoints = [f.key_point for f in all_features]
 matches = matcher.find_matches(descriptors3, all_desc)
@@ -159,6 +170,17 @@ for feature in unmatched_features:
     factors.append(factor)
 
 all_features += unmatched_features
+
+[graph.add(factor) for factor in factors]
+init_values = gtsam.Values()
+init_values.insert(X(1), pose1)
+init_values.insert(X(2), pose2)
+init_values.insert(X(3), pose2)
+optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, optimizer_params)
+result = optimizer.optimizeSafely()
+
+print(result)
+print(optimizer.error())
 
 # image1_array = np.array(image1)
 # image2_array = np.array(image3)
@@ -193,8 +215,7 @@ all_features += unmatched_features
 for factor in factors:
     graph.add(factor)
 
-optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
-result = optimizer.optimizeSafely()
+result = optimizer.optimize()
 
 p1 = result.atPose3(X(1)).matrix()
 p2 = result.atPose3(X(2)).matrix()

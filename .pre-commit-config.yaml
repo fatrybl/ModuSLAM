@@ -12,7 +12,7 @@ repos:
         args: [ '--maxkb=4000' ]
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 24.8.0
     hooks:
       - id: black
         args: [ --config=pyproject.toml ]
@@ -21,27 +21,28 @@ repos:
     rev: v1.7.5
     hooks:
       - id: docformatter
+        args: [ --config=pyproject.toml ]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
       - id: isort
-        args: [ --config pyproject.toml ]
+        args: [ --settings-path pyproject.toml ]
 
   - repo: https://github.com/PyCQA/doc8
-    rev: v1.1.1
+    rev: v1.1.2
     hooks:
       - id: doc8
         args: [ --config=pyproject.toml ]
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.0
+    rev: 7.1.1
     hooks:
       - id: flake8
         args: [ --config=setup.cfg ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.0
+    rev: v1.11.2
     hooks:
       - id: mypy
         args: [ --config-file=pyproject.toml ]
