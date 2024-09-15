@@ -1,14 +1,13 @@
 """ROS2 dataset Reader"""
 
 import logging
-import os
 from pathlib import Path
 from typing import overload
 
 from plum import dispatch
 from rosbags.rosbag2 import Reader
 
-from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.ros2.utils import (
     get_rosbag_sensors,
@@ -20,6 +19,7 @@ from moduslam.data_manager.batch_factory.readers.utils import (
     check_directory,
 )
 from moduslam.logger.logging_config import data_manager
+from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
     Ros2Config,
@@ -28,6 +28,8 @@ from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, T
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 
 logger = logging.getLogger(data_manager)
+
+SensorsFactory.get_all_sensors()
 
 
 class Ros2DataReader(DataReader):
@@ -51,11 +53,17 @@ class Ros2DataReader(DataReader):
 
         check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
+        # TODO: Check and change to private variables.
+
         # For testing purposes
-        self.sensors_table = {
-            "stereo_camera_left": "left",
-            "stereo_camera_right": "right",
-        }
+        # self.sensors_table = {
+        #     "stereo_camera_left": "left",
+        #     "stereo_camera_right": "right",
+        #     "imu": "imu",
+        #     "lidar_left": "vlp16l",
+        #     "lidar_right": "vlp16r",
+        #     "lidar_center": "vlp32c",
+        # }
 
         # TODO: Change print statements with Logger functions
         logger.info("ROS2 data reader created.")
@@ -109,9 +117,8 @@ class Ros2DataReader(DataReader):
         pass
 
     @overload
-    def get_next_element(self) -> Element | None:
-        """
-        @overload.
+    def get_next_element(self):
+        """@overload.
         Gets element from a dataset sequentially based on iterator position.
 
         Returns:
@@ -133,18 +140,17 @@ class Ros2DataReader(DataReader):
         except (StopIteration, KeyError):
             return None
 
-        # sensor = SensorsFactory.get_sensor(sensor_name)
-        # measurement = RawMeasurement(sensor, data)
+        sensor = SensorsFactory.get_sensor(sensor_name)
+        measurement = RawMeasurement(sensor, data)
         # timestamp = to_int(timestamp)
 
-        # element = Element(timestamp, measurement, index)
+        element = Element(timestamp, measurement, index)
 
-        return None
+        return element
 
     @overload
     def get_next_element(self, sensor: Sensor):
-        """
-        @overload.
+        """@overload.
         Gets element from a dataset sequentially based on iterator position.
 
         Args:
@@ -180,9 +186,9 @@ class Ros2DataReader(DataReader):
 if __name__ == "__main__":
 
     print("Testing ROS2 data reader")
-    folder_path = Path(os.environ["DATA_DIR"])
-    print(folder_path)
-    bag_path = Path("{}/rosbag2_2024_1713944720".format(folder_path))
+    from tests.conftest import ros2_dataset_dir
+
+    bag_path = ros2_dataset_dir
 
     timelimit1 = TimeLimit(start=10, stop=20)
     timelimit2 = Stream()
@@ -194,7 +200,36 @@ if __name__ == "__main__":
         print("Rosbag opened successfully")
         user_input = input("Get sensor read? (y/n): ")
 
+        import pandas as pd
+
+        raw_data_df = pd.DataFrame(columns=["timestamp", "sensor_name", "data_type", "data"])
+
         while user_input == "y":
             element = reader.get_next_element()
             print(element)
+            index = element[0]
+            timestamp = element[1]
+            sensor_name = element[2]
+            data = element[3]
+            data_type = element[4]
+
+            next_row = pd.DataFrame(
+                {
+                    "timestamp": [timestamp],
+                    "sensor_name": [sensor_name],
+                    "data_type": [data_type],
+                    "data": [data],
+                }
+            )
+
+            raw_data_df = pd.concat([raw_data_df, next_row], ignore_index=True)
+
             user_input = input("Get another sensor read? (y/n): ").lower()
+
+        save_data = input(
+            f"Do you want to save the data {raw_data_df} to a csv file? (y/n): "
+        ).lower()
+
+        if save_data == "y":
+            raw_data_df.to_csv("rosbags_raw_data.csv", index=False)
+            print("Data saved successfully")
