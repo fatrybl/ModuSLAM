@@ -1,14 +1,16 @@
 from collections.abc import Callable
 from pathlib import Path
+from typing import TypeAlias
 
-from rosbags.rosbag2 import Reader
+import cv2
+import numpy as np
+import pandas as pd
+from PIL import Image
+from rosbags.rosbag2 import Reader, Writer
 from rosbags.serde import deserialize_cdr
+from tabulate import tabulate
 
-from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
-    get_imu_measurement,
-    get_lidar_measurement,
-    get_stereo_measurement,
-)
+TupleImage: TypeAlias = tuple[list[list[int]], list[list[int]], list[list[int]]]
 
 
 def get_rosbag_sensors(rosbag_path: Path):
@@ -73,10 +75,14 @@ def map_sensors(sensors: dict, sensor_list: list):
     """
     updated_list = []
     connections_list = []
+    sensor_types = ["Image", "PointCloud2", "Imu"]
 
     for sensor_params in sensor_list:
         for config_name, sensor_name in sensors.items():
-            if sensor_params["sensor"] == sensor_name:
+            if (
+                sensor_params["sensor"] == sensor_name
+                and sensor_params["data_type"] in sensor_types
+            ):
                 sensor_params["sensor_name"] = config_name
                 updated_list.append(sensor_params)
                 connections_list.append(sensor_params["topic"])
@@ -106,12 +112,11 @@ def rosbag_iterator(reader, sensors, connections):
                 sensor_name = single_sensor["sensor_name"]
                 break
 
-        # TODO: get the actual data from msg in the measurement_collector.py
         test_dict: dict[str, Callable]
         test_dict = {
-            "imu": get_imu_measurement,
-            "lidar": get_lidar_measurement,
-            "stereo": get_stereo_measurement,
+            "Imu": get_imu_measurement,
+            "PointCloud2": get_lidar_measurement,
+            "Image": get_stereo_measurement,
         }
         message_getter = test_dict[data_type]
         data = message_getter(msg)
@@ -119,12 +124,201 @@ def rosbag_iterator(reader, sensors, connections):
         yield (i, timestamp, sensor_name, data, data_type)
 
 
-def main():
-    """Main function."""
-    folder_path = Path(
-        "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2023_11_02-12_18_16"
-    )
+def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = None) -> None:
+    """Reads a rosbag file and shows a determined number of readings in a table format.
+
+    Args:
+        bag_path: a path to the rosbag file.
+
+        num_readings: the number of sensor readings to display in a table.
+
+        topic_name: the topic name to read from the rosbag file.
+
+    Returns:
+        data: a list of tuples with the data from the rosbag file.
+    """
+
+    table = [["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]]
+
+    with Reader(bag_path) as reader:
+        if topic_name == None:
+            connections = [c for c in reader.connections]
+
+        else:
+            connections = [c for c in reader.connections if c.topic == topic_name]
+
+        for i, (connection, timestamp, rawdata) in enumerate(reader.messages()):
+
+            if i <= num_readings:
+                msg = deserialize_cdr(rawdata, connection.msgtype)
+
+                row = [
+                    i,
+                    connection.topic,
+                    connection.msgtype,
+                    msg.header.frame_id,
+                    connection.msgcount,
+                    timestamp,
+                ]
+                table.append(row)
+            else:
+                print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
+                break
+
+        print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
+
+    return None
+
+
+def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
+    """Writes a rosbag file with a specific number of sensor readings.
+
+    Args:
+        bag_path: a path to the rosbag file.
+
+        new_path: a path to the new rosbag file.
+
+        num_msgs: the number of messages to write.
+
+    """
+
+    # TODO: Remove prints and give more detailed information about bag paths.
+
+    with Reader(bag_path) as reader:
+        with Writer(new_path) as writer:
+
+            rosbag_connections = []
+
+            for connection in reader.connections:
+                rosbag_connections.append(
+                    writer.add_connection(connection.topic, connection.msgtype)
+                )
+
+            print(rosbag_connections)
+
+            for i, (connection, timestamp, rawdata) in enumerate(reader.messages()):
+                if i < num_msgs:
+                    for c in rosbag_connections:
+                        if connection.topic == c.topic:
+                            writer.write(c, timestamp, rawdata)
+                else:
+                    print("Sucessfully writter {} messages in the new rosbag".format(i - 1))
+                    break
+
+
+def image_decoding(raw_image_msg) -> TupleImage:
+    """Decodes a ROS2 Image message into an array.
+
+    Args:
+        raw_image_msg: a ROS2 Image message.
+
+    Returns:
+        image_tuple: a tuple with the image data.
+
+    Raises:
+        ValueError: if the encoding is not supported.
+    """
+    # TODO: Either add more functions with different encodings. Be more SPECIFIC with function names
+
+    height = raw_image_msg.height
+    width = raw_image_msg.width
+    steps = raw_image_msg.step
+    encoding = raw_image_msg.encoding
+    bgr_num_channels = 3
+
+    print(height, width, steps, encoding)
+
+    if encoding == "bgr8":
+        np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
+            (height, width, bgr_num_channels)
+        )
+        image_list = np_array.tolist()
+
+        # TODO: Transform np array into a TupleImage format.
+
+        return image_tuple
+    else:
+        raise ValueError("Encoding {} is not supported".format(encoding))
+
+
+def convert2image(img_array, encoding: str):
+    """Converts an array into a PIL image.
+    Args:
+        img_array: an array to be converted to a PIL Image.
+        encoding: the encoding of the image.
+
+     Returns:
+        pil_img: a PIL Image object.
+    """
+
+    if isinstance(img_array, np.ndarray):
+        print("Converting numpy array to PIL Image")
+        if encoding == "bgr8":
+            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
+
+    elif isinstance(img_array, (list, tuple)):
+        print("Converting list to PIL Image")
+        img_array = np.array(img_array)
+        if encoding == "bgr8":
+            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
+
+    else:
+        raise ValueError("Array type {} is not supported".format(type(img_array)))
+
+
+def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
+    """Gets sensor readings from a rosbag file and saves it into a CSV file.
+
+    Args:
+        rosbag_path: a path to the rosbag file.
+
+        csv_path: a path to the CSV file.
+
+    Returns:
+        data: a list of tuples with the data from the rosbag file.
+    """
+
+    columns = ["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]
+    rows = []
+    with Reader(rosbag_path) as reader:
+        for i, (connection, timestamp, rawdata) in enumerate(reader.messages()):
+
+            msg = deserialize_cdr(rawdata, connection.msgtype)
+            row = {
+                "ID": i,
+                "ROS Topic": connection.topic,
+                "Message Type": connection.msgtype,
+                "Frame ID": msg.header.frame_id,
+                "Message Count": connection.msgcount,
+                "Timestamp": timestamp,
+            }
+
+            rows.append(row)
+
+    pd_df = pd.DataFrame(rows, columns=columns)
+
+    pd_df.to_csv(csv_path, index=False)
+
+
+def create_csv(readings_lenght=15):
+    print("Creating ROS2 test bags for the Ros2 Datareader ")
+
+    DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
+    rosbag_name = "test_rosbag_" + str(readings_lenght)
+
+    rosbag_path = Path(DATA_PATH, rosbag_name)
+    csv_path = Path(DATA_PATH, rosbag_name + ".csv")
+
+    get_csv_from_rosbag(rosbag_path=rosbag_path, csv_path=csv_path)
+
+
+def create_rosbag(num_readings=15):
+    DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
+    rosbag_name = "rosbag2_2023_11_02-12_18_16"
+    rosbag_path = Path(DATA_PATH, rosbag_name)
+
+    new_rosbag_name = "test_rosbag_" + str(num_readings)
 
 
 if __name__ == "__main__":
-    main()
+    create_csv(15)
