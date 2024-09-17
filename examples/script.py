@@ -90,8 +90,8 @@ matches = matcher.match(descriptors1, descriptors2)
 matches = sorted(matches, key=lambda x: x.distance)
 src_pts = np.array([keypoints1[m.queryIdx].pt for m in matches]).reshape(-1, 2)
 dst_pts = np.array([keypoints2[m.trainIdx].pt for m in matches]).reshape(-1, 2)
-H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 0.5)
-good_matches = [m for i, m in enumerate(matches) if mask[i]]
+H, new_mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 0.5)
+good_matches = [m for i, m in enumerate(matches) if new_mask[i]]
 
 for match in good_matches:
     factor = factors[match.queryIdx]

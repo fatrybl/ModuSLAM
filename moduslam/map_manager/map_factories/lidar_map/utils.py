@@ -1,6 +1,5 @@
 import logging
 from collections import defaultdict
-from collections.abc import Sequence
 
 import numpy as np
 
@@ -12,34 +11,31 @@ from moduslam.logger.logging_config import map_manager
 logger = logging.getLogger(map_manager)
 
 
-def create_vertex_elements_table(
-    vertices: Sequence[LidarPose],
-    vertex_edges_table: dict[LidarPose, set[LidarOdometry]],
+def map_elements2vertices(
+    vertex_edges_table: dict[LidarPose, set[LidarOdometry]]
 ) -> dict[LidarPose, set[Element]]:
     """Creates "vertex -> elements" table.
 
     Args:
-        vertices: vertices to get elements for.
-
         vertex_edges_table: "vertex -> edges" table.
 
     Returns:
         "vertex -> elements" table.
     """
-
+    used_edges: set[LidarOdometry] = set()
     table: dict[LidarPose, set[Element]] = defaultdict(set)
-    num_poses = len(vertices)
 
-    for i, vertex in enumerate(vertices):
-        vertex_edges = vertex_edges_table[vertex]
-        if i == num_poses - 1:
-            for edge in vertex_edges:
-                element = edge.measurement.elements[1]
-                table[vertex].add(element)
-        else:
-            for edge in vertex_edges:
-                element = edge.measurement.elements[0]
-                table[vertex].add(element)
+    for vertex, edges in vertex_edges_table.items():
+        for edge in edges:
+            if edge not in used_edges:
+                v1 = edge.vertex1
+                v2 = edge.vertex2
+                first_element = edge.measurement.elements[0]
+                second_element = edge.measurement.elements[1]
+                table[v1].add(first_element)
+                table[v2].add(second_element)
+                used_edges.add(edge)
+
     return table
 
 

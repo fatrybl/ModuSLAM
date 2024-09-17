@@ -52,4 +52,3 @@ class FrontendManager:
         self._graph_builder.create_graph_candidate(batch)
         self._graph_builder.merge_graph_candidate(self.graph)
         self._graph_builder.clear_candidate()
-        logger.debug("Graph candidate has been created and merged.")

@@ -25,4 +25,3 @@ class BackendManager:
         """
         self._result_values = self._graph_solver.solve(graph)
         graph.update(self._result_values)
-        logger.debug("Graph has been solved.")

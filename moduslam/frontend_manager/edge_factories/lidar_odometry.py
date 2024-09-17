@@ -39,7 +39,7 @@ class LidarOdometryEdgeFactory(EdgeFactory):
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[LidarOdometry]:
-        """Creates 1 edge (LidarOdometry) with the given measurements.
+        """Creates 1 LidarOdometry edge with the given measurements.
 
         Args:
             graph: the graph to create the edge for.
@@ -155,6 +155,10 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             p = get_last_vertex(Pose, storage, t1, time_margin)
             if p:
                 v1 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
+
+            vertex = storage.find_closest_optimizable_vertex(Pose, t1, time_margin)
+            if vertex:
+                v1 = LidarPose(timestamp=vertex.timestamp, index=vertex.index, value=vertex.value)
 
         v2 = get_last_vertex(LidarPose, storage, t2, time_margin)
         if not v2:

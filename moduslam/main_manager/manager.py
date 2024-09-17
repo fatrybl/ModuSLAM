@@ -54,7 +54,6 @@ class MainManager:
             self.frontend_manager.create_graph(data_batch)
             self.backend_manager.solve(graph)
 
-        # self.frontend_manager.graph.factor_graph.print()
         logger.info("The data batch has been successfully processed.")
 
     def _set_prior(self) -> None:

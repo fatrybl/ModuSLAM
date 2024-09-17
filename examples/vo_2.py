@@ -27,16 +27,16 @@ from moduslam.frontend_manager.handlers.camera_features_detector.detector import
     KeypointDetector,
 )
 
-image1: ImageFile = Image.open(
+img1: ImageFile = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00055.jpg"
 )
-image2: ImageFile = Image.open(
+img2: ImageFile = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00060.jpg"
 )
-image3: ImageFile = Image.open(
+img3: ImageFile = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00065.jpg"
 )
-image4: ImageFile = Image.open(
+img4: ImageFile = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00070.jpg"
 )
 
@@ -95,10 +95,10 @@ pose2 = result.atPose3(X(2))
 detector = KeypointDetector(num_features=500)
 matcher = FeatureMatcher()
 
-image1 = detector.undistort_image(image1, camera_matrix, distortion_coefficients_left)
-image2 = detector.undistort_image(image2, camera_matrix, distortion_coefficients_left)
-image3 = detector.undistort_image(image3, camera_matrix, distortion_coefficients_left)
-image4 = detector.undistort_image(image4, camera_matrix, distortion_coefficients_left)
+image1 = detector.undistort_image(img1, camera_matrix, distortion_coefficients_left)
+image2 = detector.undistort_image(img2, camera_matrix, distortion_coefficients_left)
+image3 = detector.undistort_image(img3, camera_matrix, distortion_coefficients_left)
+image4 = detector.undistort_image(img4, camera_matrix, distortion_coefficients_left)
 
 ##########################################################################
 

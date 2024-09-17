@@ -53,12 +53,8 @@ distortion_coefficients_left = np.array(
 detector = KeypointDetector(num_features=20)
 matcher = FeatureMatcher()
 
-image1_undistorted, _ = detector.undistort_image(
-    image1, camera_matrix, distortion_coefficients_left
-)
-image2_undistorted, _ = detector.undistort_image(
-    image2, camera_matrix, distortion_coefficients_left
-)
+image1_undistorted = detector.undistort_image(image1, camera_matrix, distortion_coefficients_left)
+image2_undistorted = detector.undistort_image(image2, camera_matrix, distortion_coefficients_left)
 
 
 fx = camera_matrix[0, 0]

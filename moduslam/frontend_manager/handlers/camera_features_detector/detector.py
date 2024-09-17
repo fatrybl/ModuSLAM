@@ -110,7 +110,7 @@ class KeypointDetector:
             features.append(feature)
         return features
 
-    def get_visual_features(self, image: ImageFile) -> list[VisualFeature]:
+    def get_visual_features(self, image: ImageFile | Image) -> list[VisualFeature]:
         """Gets visual features from an image.
 
         Args:

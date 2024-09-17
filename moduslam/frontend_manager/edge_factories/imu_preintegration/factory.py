@@ -49,7 +49,7 @@ class ImuOdometryFactory(EdgeFactory):
             config: configuration of the factory.
         """
         self._name: str = config.name
-        self._min_num_of_measurements: int = 4
+        self._min_num_of_measurements: int = 1
         self._gravity: float = 9.81
         self._time_margin = int(config.search_time_margin * self._second)
         self._params = gtsam.PreintegrationCombinedParams.MakeSharedU(self._gravity)

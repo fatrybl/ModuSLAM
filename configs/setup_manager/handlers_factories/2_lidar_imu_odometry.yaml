@@ -21,4 +21,4 @@ handlers:
   imu_preprocessor:
     name: "imu_preprocessor"
     type_name: "ImuDataPreprocessor"
-    module_name: ".imu_data_preprocessor"
+    module_name: ".imu_data_preprocessor.handler"

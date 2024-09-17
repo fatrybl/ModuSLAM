@@ -4,22 +4,22 @@ from moduslam.types.numpy import MatrixNx3
 
 
 class PointcloudMap:
-    """Any pointcloud map."""
+    """A point cloud map."""
 
     def __init__(self) -> None:
         self._pointcloud = geometry.PointCloud()
 
     @property
     def pointcloud(self) -> geometry.PointCloud:
-        """Pointcloud of the map."""
+        """Point cloud of the map."""
         return self._pointcloud
 
     @pointcloud.setter
     def pointcloud(self, pointcloud: geometry.PointCloud) -> None:
-        """Sets pointcloud to the map instance.
+        """Sets point cloud to the map instance.
 
         Args:
-            pointcloud: pointcloud to set.
+            pointcloud: point cloud to set.
         """
         self._pointcloud = pointcloud
 

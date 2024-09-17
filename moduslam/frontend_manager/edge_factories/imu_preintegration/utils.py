@@ -192,8 +192,7 @@ def get_vertices(
     index: int | None = None,
     default_values: tuple[Matrix4x4, Vector3, tuple[Vector3, Vector3]] | None = None,
 ) -> tuple[Pose, LinearVelocity, ImuBias, bool]:
-    """Gets the vertices from the storage if the condition is satisfied or creates new
-    ones.
+    """Gets the vertices from the storage or creates new ones.
 
     Args:
         storage: storage with vertices.

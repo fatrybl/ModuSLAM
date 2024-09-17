@@ -63,7 +63,7 @@ class MapManager:
 
     def visualize_map(self) -> None:
         """Visualizes the map."""
-        self._map_visualizer.visualize(self.map)
+        self._map_visualizer.visualize(self._map_factory.map)
 
     def save_map(self) -> None:
         """Saves the map."""
@@ -76,5 +76,5 @@ class MapManager:
         Args:
             graph: a graph to save.
         """
-        # self._graph_saver.save_to_pdf(graph)
+        self._graph_saver.save_to_pdf(graph)
         logger.info("Graph has been saved.")

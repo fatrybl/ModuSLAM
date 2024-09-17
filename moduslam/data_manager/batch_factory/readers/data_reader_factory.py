@@ -3,6 +3,7 @@ from typing import cast
 
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
+from moduslam.data_manager.batch_factory.readers.regime_factory import Factory
 from moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from moduslam.logger.logging_config import data_manager
 from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
@@ -15,11 +16,7 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config im
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.regimes import (
-    DataRegimeConfig,
-    Stream,
-    TimeLimit,
-)
+from moduslam.system_configs.data_manager.batch_factory.regimes import DataRegimeConfig
 
 logger = logging.getLogger(data_manager)
 
@@ -38,28 +35,16 @@ class DataReaderFactory:
 
         Raises:
             NotImplementedError: No DataReader exists for the given dataset type.
-
-            ValueError: Invalid regime name.
         """
-        regime: Stream | TimeLimit
-        match regime_config.name:
-            case Stream.name:
-                regime = Stream()
-
-            case TimeLimit.name:
-                regime = TimeLimit(regime_config.start, regime_config.stop)
-
-            case _:
-                msg = f"Invalid regime name {regime_config.name!r}."
-                logger.critical(msg)
-                raise ValueError(msg)
 
         match dataset_config.reader:
             case DataReaders.kaist_reader:
+                regime = Factory.kaist_regime(regime_config)
                 dataset_config = cast(KaistConfig, dataset_config)
                 return KaistReader(regime, dataset_config)
 
             case DataReaders.tum_vie_reader:
+                regime = Factory.tum_vie_regime(regime_config)
                 dataset_config = cast(TumVieConfig, dataset_config)
                 return TumVieReader(regime, dataset_config)
 
