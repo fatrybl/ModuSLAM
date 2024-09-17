@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.data_manager.batch_factory.test_create_batch &mdash; ModuSLAM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../../index.html" class="icon icon-home">
+            ModuSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">ModuSLAM</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ModuSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.data_manager.batch_factory.test_create_batch</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for tests.data_manager.batch_factory.test_create_batch</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tests for BatchFactory.create_batch() overloaded methods.</span>
+
+<span class="sd">All test cases must be run on any DataReader implementation.</span>
+
+<span class="sd">1. create_batch ():</span>
+<span class="sd">    1.1 all sensors, stream -&gt; DataBatch</span>
+<span class="sd">    1.2 all sensors, time limit includes all data -&gt; DataBatch</span>
+<span class="sd">    1.3 all sensors, time limit includes some data -&gt; DataBatch</span>
+<span class="sd">    1.4 some sensors, stream -&gt; DataBatch</span>
+<span class="sd">    1.5 some sensors, time limit includes all of them -&gt; DataBatch</span>
+<span class="sd">    1.6 some sensors, time limit includes some of them -&gt; DataBatch</span>
+<span class="sd">    1.7 some sensors, time limit includes none of them -&gt; Empty DataBatch</span>
+<span class="sd">    1.8 no sensors, stream -&gt; Empty DataBatch</span>
+<span class="sd">    1.9 no sensors, time limit includes all sensors -&gt; Empty DataBatch</span>
+<span class="sd">    1.10 Memory limit is too low: MemoryError</span>
+
+<span class="sd">2. create_batch (elements: Sequence[Element]):</span>
+<span class="sd">    2.1 all element -&gt; DataBatch</span>
+<span class="sd">    2.2 one element -&gt; DataBatch</span>
+<span class="sd">    2.3 multiple valid elements -&gt; DataBatch</span>
+<span class="sd">    2.4 multiple equal elements -&gt; DataBatch</span>
+<span class="sd">    2.5 multiple elements: some equal, some different -&gt; DataBatch</span>
+<span class="sd">    2.6 Memory limit is too low: MemoryError</span>
+
+<span class="sd">3. create_batch (request: PeriodicData):</span>
+<span class="sd">    3.1 Regime and SensorsFactory configs are OK -&gt; DataBatch</span>
+<span class="sd">    3.2 Regime - OK, SensorsFactory: no sensors -&gt; UnfeasibleRequestError</span>
+<span class="sd">    3.3 Regime: invalid time margins, SensorsFactory - OK -&gt; UnfeasibleRequestError</span>
+<span class="sd">    3.4 Regime: invalid time margins, SensorsFactory: no sensors -&gt; UnfeasibleRequestError</span>
+<span class="sd">    3.5 Memory limit is too low: MemoryError</span>
+
+
+<span class="sd">Checklist:</span>
+
+<span class="sd">| Test case | KaistReader | Ros1Reader  | Ros2Reader  |</span>
+<span class="sd">=======================================================</span>
+<span class="sd">| 1.1       |      +      |      +      |             |</span>
+<span class="sd">| 1.2       |      +      |      +      |             |</span>
+<span class="sd">| 1.3       |      +      |      +      |             |</span>
+<span class="sd">| 1.4       |      +      |      +      |             |</span>
+<span class="sd">| 1.5       |      +      |      +      |             |</span>
+<span class="sd">| 1.6       |      +      |      +      |             |</span>
+<span class="sd">| 1.7       |      +      |      +      |             |</span>
+<span class="sd">| 1.8       |      +      |      +      |             |</span>
+<span class="sd">| 1.9       |      +      |      +      |             |</span>
+<span class="sd">| 1.10      |      +      |      +      |             |</span>
+<span class="sd">=======================================================</span>
+<span class="sd">| 2.1       |      +      |      +      |             |</span>
+<span class="sd">| 2.2       |      +      |      +      |             |</span>
+<span class="sd">| 2.3       |      +      |      +      |             |</span>
+<span class="sd">| 2.4       |      +      |      +      |             |</span>
+<span class="sd">| 2.5       |      +      |      +      |             |</span>
+<span class="sd">| 2.6       |      +      |      +      |             |</span>
+<span class="sd">=======================================================</span>
+<span class="sd">| 3.1       |      +      |      +      |             |</span>
+<span class="sd">| 3.2       |      +      |      +      |             |</span>
+<span class="sd">| 3.3       |      +      |      +      |             |</span>
+<span class="sd">| 3.4       |      +      |      +      |             |</span>
+<span class="sd">| 3.5       |      +      |      +      |             |</span>
+<span class="sd">=======================================================</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pytest</span> <span class="kn">import</span> <span class="n">mark</span><span class="p">,</span> <span class="n">raises</span>
+
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">DataBatch</span><span class="p">,</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.factory</span> <span class="kn">import</span> <span class="n">BatchFactory</span>
+<span class="kn">from</span> <span class="nn">moduslam.setup_manager.sensors_factory.factory</span> <span class="kn">import</span> <span class="n">SensorsFactory</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.batch_factory</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensor_factory</span> <span class="kn">import</span> <span class="n">SensorsFactoryConfig</span>
+<span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_dataclasses</span> <span class="kn">import</span> <span class="n">PeriodicDataRequest</span>
+<span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_methods</span> <span class="kn">import</span> <span class="n">equal_batches</span>
+<span class="kn">from</span> <span class="nn">moduslam.utils.exceptions</span> <span class="kn">import</span> <span class="n">UnfeasibleRequestError</span>
+<span class="kn">from</span> <span class="nn">tests.data_manager.batch_factory.test_cases.kaist.scenarios</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">kaist_scenarios1_fail</span><span class="p">,</span>
+    <span class="n">kaist_scenarios1_success</span><span class="p">,</span>
+    <span class="n">kaist_scenarios2_fail</span><span class="p">,</span>
+    <span class="n">kaist_scenarios2_success</span><span class="p">,</span>
+    <span class="n">kaist_scenarios3_fail</span><span class="p">,</span>
+    <span class="n">kaist_scenarios3_success</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tests.data_manager.batch_factory.test_cases.tum_vie.scenarios</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">tum_vie_scenarios1_fail</span><span class="p">,</span>
+    <span class="n">tum_vie_scenarios1_success</span><span class="p">,</span>
+    <span class="n">tum_vie_scenarios2_fail</span><span class="p">,</span>
+    <span class="n">tum_vie_scenarios2_success</span><span class="p">,</span>
+    <span class="n">tum_vie_scenarios3_fail</span><span class="p">,</span>
+    <span class="n">tum_vie_scenarios3_success</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">test_cases_1_success</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="o">*</span><span class="n">kaist_scenarios1_success</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">tum_vie_scenarios1_success</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">test_cases_2_success</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">kaist_scenarios2_success</span><span class="p">,</span> <span class="o">*</span><span class="n">tum_vie_scenarios2_success</span><span class="p">)</span>
+<span class="n">test_cases_3_success</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">kaist_scenarios3_success</span><span class="p">,</span> <span class="o">*</span><span class="n">tum_vie_scenarios3_success</span><span class="p">)</span>
+<span class="n">test_cases_1_fail</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">kaist_scenarios1_fail</span><span class="p">,</span> <span class="o">*</span><span class="n">tum_vie_scenarios1_fail</span><span class="p">)</span>
+<span class="n">test_cases_2_fail</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">kaist_scenarios2_fail</span><span class="p">,</span> <span class="o">*</span><span class="n">tum_vie_scenarios2_fail</span><span class="p">)</span>
+<span class="n">test_cases_3_fail</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">kaist_scenarios3_fail</span><span class="p">,</span> <span class="o">*</span><span class="n">tum_vie_scenarios3_fail</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="test_create_batch_1_success">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_1_success">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;config1, config2, reference_batch&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_1_success</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_create_batch_1_success</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+    <span class="n">reference_batch</span><span class="p">:</span> <span class="n">DataBatch</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+
+    <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_sequentially</span><span class="p">()</span>
+    <span class="n">result_batch</span> <span class="o">=</span> <span class="n">batch_factory</span><span class="o">.</span><span class="n">batch</span>
+
+    <span class="k">assert</span> <span class="n">equal_batches</span><span class="p">(</span><span class="n">result_batch</span><span class="p">,</span> <span class="n">reference_batch</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="test_create_batch_1_fail">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_1_fail">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;config1, config2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_1_fail</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_create_batch_1_fail</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">raises</span><span class="p">(</span><span class="ne">MemoryError</span><span class="p">):</span>
+        <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_sequentially</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="test_create_batch_2_success">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_2_success">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;config1, config2, input_elements, reference_batch&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_2_success</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_create_batch_2_success</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+    <span class="n">input_elements</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">],</span>
+    <span class="n">reference_batch</span><span class="p">:</span> <span class="n">DataBatch</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+
+    <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_with_elements</span><span class="p">(</span><span class="n">input_elements</span><span class="p">)</span>
+    <span class="n">result_batch</span> <span class="o">=</span> <span class="n">batch_factory</span><span class="o">.</span><span class="n">batch</span>
+    <span class="k">assert</span> <span class="n">equal_batches</span><span class="p">(</span><span class="n">result_batch</span><span class="p">,</span> <span class="n">reference_batch</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="test_create_batch_2_fail">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_2_fail">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;config1, config2, input_elements&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_2_fail</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_create_batch_2_fail</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+    <span class="n">input_elements</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">],</span>
+<span class="p">):</span>
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">raises</span><span class="p">(</span><span class="ne">MemoryError</span><span class="p">):</span>
+        <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_with_elements</span><span class="p">(</span><span class="n">input_elements</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="test_create_batch_3_success">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_3_success">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s2">&quot;config1, config2, periodic_data_request, reference_batch&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_3_success</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_create_batch_3_success</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+    <span class="n">periodic_data_request</span><span class="p">:</span> <span class="n">PeriodicDataRequest</span><span class="p">,</span>
+    <span class="n">reference_batch</span><span class="p">:</span> <span class="n">DataBatch</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+
+    <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_by_request</span><span class="p">(</span><span class="n">periodic_data_request</span><span class="p">)</span>
+    <span class="n">result_batch</span> <span class="o">=</span> <span class="n">batch_factory</span><span class="o">.</span><span class="n">batch</span>
+
+    <span class="k">assert</span> <span class="n">equal_batches</span><span class="p">(</span><span class="n">result_batch</span><span class="p">,</span> <span class="n">reference_batch</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="test_create_batch_3_fail">
+<a class="viewcode-back" href="../../../../tests.data_manager.batch_factory.html#tests.data_manager.batch_factory.test_create_batch.test_create_batch_3_fail">[docs]</a>
+<span class="nd">@mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;config1, config2, data_request, reference_exception&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">test_cases_3_fail</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_create_batch_3_fail</span><span class="p">(</span>
+    <span class="n">config1</span><span class="p">:</span> <span class="n">SensorsFactoryConfig</span><span class="p">,</span>
+    <span class="n">config2</span><span class="p">:</span> <span class="n">BatchFactoryConfig</span><span class="p">,</span>
+    <span class="n">data_request</span><span class="p">:</span> <span class="n">PeriodicDataRequest</span><span class="p">,</span>
+    <span class="n">reference_exception</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">MemoryError</span> <span class="o">|</span> <span class="n">UnfeasibleRequestError</span><span class="p">],</span>
+<span class="p">):</span>
+    <span class="n">SensorsFactory</span><span class="o">.</span><span class="n">init_sensors</span><span class="p">(</span><span class="n">config1</span><span class="p">)</span>
+    <span class="n">batch_factory</span> <span class="o">=</span> <span class="n">BatchFactory</span><span class="p">(</span><span class="n">config2</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">raises</span><span class="p">(</span><span class="n">reference_exception</span><span class="p">):</span>
+        <span class="n">batch_factory</span><span class="o">.</span><span class="n">fill_batch_by_request</span><span class="p">(</span><span class="n">data_request</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mark Griguletskii.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

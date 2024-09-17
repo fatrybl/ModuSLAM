@@ -128,49 +128,8 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-moduslam.frontend_manager.edge_factories.edge_factory_ABC">
-<span id="moduslam-frontend-manager-edge-factories-edge-factory-abc-module"></span><h2>moduslam.frontend_manager.edge_factories.edge_factory_ABC module<a class="headerlink" href="#module-moduslam.frontend_manager.edge_factories.edge_factory_ABC" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.edge_factory_ABC.</span></span><span class="sig-name descname"><span class="pre">EdgeFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.edge_factories.html#moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/edge_factory_ABC.html#EdgeFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.BaseEdge" title="moduslam.frontend_manager.graph.base_edges.BaseEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseEdge</span></code></a>, <a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseVertex</span></code></a>]</p>
-<p>Abstract factory for creating edges.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.edge_factories.html#moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/edge_factory_ABC.html#EdgeFactory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – configuration of the factory.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.name" title="Link to this definition"></a></dt>
-<dd><p>Unique name of the factory.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.create">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_edges.BaseEdge" title="moduslam.frontend_manager.graph.base_edges.BaseEdge"><span class="pre">BaseEdge</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/edge_factory_ABC.html#EdgeFactory.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory.create" title="Link to this definition"></a></dt>
-<dd><p>Creates new edges from the measurements.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> – the graph to create edges for.</p></li>
-<li><p><strong>measurements</strong> – measurements from different handlers.</p></li>
-<li><p><strong>timestamp</strong> – the final timestamp for the edge(s).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>new edges.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-frontend-manager-edge-factories-edge-factory-abc-module">
+<h2>moduslam.frontend_manager.edge_factories.edge_factory_ABC module<a class="headerlink" href="#moduslam-frontend-manager-edge-factories-edge-factory-abc-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.frontend_manager.edge_factories.gps_position">
 <span id="moduslam-frontend-manager-edge-factories-gps-position-module"></span><h2>moduslam.frontend_manager.edge_factories.gps_position module<a class="headerlink" href="#module-moduslam.frontend_manager.edge_factories.gps_position" title="Link to this heading"></a></h2>
@@ -178,7 +137,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.gps_position.</span></span><span class="sig-name descname"><span class="pre">GpsPositionEdgeFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.edge_factories.html#moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/gps_position.html#GpsPositionEdgeFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory" title="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></p>
 <p>Creates edges of type GpsPosition.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory.__init__">
@@ -188,6 +147,12 @@
 <dd class="field-odd"><p><strong>config</strong> – configuration of the factory.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory.name" title="Link to this definition"></a></dt>
+<dd><p>Unique factory name.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -225,6 +190,24 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory._get_vertex">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_get_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/gps_position.html#GpsPositionEdgeFactory._get_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.gps_position.GpsPositionEdgeFactory._get_vertex" title="Link to this definition"></a></dt>
+<dd><p>Gets the vertex to be used for the new edge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> – vertex storage.</p></li>
+<li><p><strong>timestamp</strong> – timestamp of the new vertex.</p></li>
+<li><p><strong>time_margin</strong> – time margin to search for the vertex.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertex to be used for the new edge.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -234,7 +217,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.lidar_odometry.</span></span><span class="sig-name descname"><span class="pre">LidarOdometryEdgeFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.edge_factories.html#moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/lidar_odometry.html#LidarOdometryEdgeFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory" title="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></p>
 <p>Creates edges of type LidarOdometry.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.__init__">
@@ -246,10 +229,16 @@
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.name" title="Link to this definition"></a></dt>
+<dd><p>Unique factory name.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.create">
 <span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.utils.html#moduslam.utils.ordered_set.OrderedSet" title="moduslam.utils.ordered_set.OrderedSet"><span class="pre">OrderedSet</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.custom_edges.LidarOdometry" title="moduslam.frontend_manager.graph.custom_edges.LidarOdometry"><span class="pre">LidarOdometry</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/lidar_odometry.html#LidarOdometryEdgeFactory.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.lidar_odometry.LidarOdometryEdgeFactory.create" title="Link to this definition"></a></dt>
-<dd><p>Creates 1 edge (LidarOdometry) with the given measurements.</p>
+<dd><p>Creates 1 LidarOdometry edge with the given measurements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -329,7 +318,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.prior_pose.</span></span><span class="sig-name descname"><span class="pre">PriorPoseEdgeFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.edge_factories.html#moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig" title="moduslam.system_configs.frontend_manager.edge_factories.base_factory.EdgeFactoryConfig"><span class="pre">EdgeFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/prior_pose.html#PriorPoseEdgeFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory" title="moduslam.frontend_manager.edge_factories.edge_factory_ABC.EdgeFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeFactory</span></code></p>
 <p>Creates edges of type PriorPose.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory.__init__">
@@ -339,6 +328,12 @@
 <dd class="field-odd"><p><strong>config</strong> – configuration of the factory.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory.name" title="Link to this definition"></a></dt>
+<dd><p>Unique factory name.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -376,26 +371,30 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory._get_vertex">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_get_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/prior_pose.html#PriorPoseEdgeFactory._get_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory._get_vertex" title="Link to this definition"></a></dt>
+<dd><p>Gets the vertex to be used for the new edge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> – vertex storage.</p></li>
+<li><p><strong>timestamp</strong> – timestamp of the new vertex.</p></li>
+<li><p><strong>time_margin</strong> – time margin to search for the vertex.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertex to be used for the new edge.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
 <section id="module-moduslam.frontend_manager.edge_factories.utils">
 <span id="moduslam-frontend-manager-edge-factories-utils-module"></span><h2>moduslam.frontend_manager.edge_factories.utils module<a class="headerlink" href="#module-moduslam.frontend_manager.edge_factories.utils" title="Link to this heading"></a></h2>
-<p>Common utility functions for edge factories.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.utils.update_vertex">
-<span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.utils.</span></span><span class="sig-name descname"><span class="pre">update_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/utils.html#update_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.utils.update_vertex" title="Link to this definition"></a></dt>
-<dd><p>Updates the target vertex with the source vertex value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source_vertex</strong> – vertex to copy the value from.</p></li>
-<li><p><strong>target_vertex</strong> – vertex to copy the value to.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<p>Common methods for edge factories.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.utils.get_last_vertex">
 <span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.utils.</span></span><span class="sig-name descname"><span class="pre">get_last_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.BaseVertex" title="moduslam.frontend_manager.graph.base_vertices.BaseVertex"><span class="pre">BaseVertex</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/utils.html#get_last_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.utils.get_last_vertex" title="Link to this definition"></a></dt>
@@ -411,25 +410,6 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>vertex if found.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.edge_factories.utils.get_vertex">
-<span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.edge_factories.utils.</span></span><span class="sig-name descname"><span class="pre">get_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.Vertex" title="moduslam.frontend_manager.graph.base_vertices.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.vertex_storage.VertexStorage" title="moduslam.frontend_manager.graph.vertex_storage.VertexStorage"><span class="pre">VertexStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.base_vertices.Vertex" title="moduslam.frontend_manager.graph.base_vertices.Vertex"><span class="pre">Vertex</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/edge_factories/utils.html#get_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.edge_factories.utils.get_vertex" title="Link to this definition"></a></dt>
-<dd><p>Seeks for the vertex or creates a new one.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vertex_type</strong> – type of the vertex.</p></li>
-<li><p><strong>storage</strong> – storage of the vertices.</p></li>
-<li><p><strong>timestamp</strong> – timestamp of the vertex.</p></li>
-<li><p><strong>time_margin</strong> – time margin for the vertex search.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>vertex.</p>
 </dd>
 </dl>
 </dd></dl>

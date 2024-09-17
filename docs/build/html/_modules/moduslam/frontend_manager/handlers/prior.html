@@ -77,7 +77,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.ABC_handler</span> <span class="kn">import</span> <span class="n">Handler</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.interface</span> <span class="kn">import</span> <span class="n">Handler</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="n">Measurement</span>
 
 
@@ -86,16 +86,24 @@
 <span class="k">class</span> <span class="nc">PriorHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Empty (fake) handler for prior measurements.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;Prior Handler&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique handler name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Prior Handler&quot;</span>
 
 <div class="viewcode-block" id="PriorHandler.process">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.handlers.html#moduslam.frontend_manager.handlers.prior.PriorHandler.process">[docs]</a>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Measurement</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_create_empty_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
+<div class="viewcode-block" id="PriorHandler.create_empty_element">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.handlers.html#moduslam.frontend_manager.handlers.prior.PriorHandler.create_empty_element">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_empty_element</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+</div>
 
 </pre></div>
 

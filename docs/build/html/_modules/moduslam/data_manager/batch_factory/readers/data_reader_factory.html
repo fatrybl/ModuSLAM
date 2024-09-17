@@ -76,6 +76,7 @@
 
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.data_reader_ABC</span> <span class="kn">import</span> <span class="n">DataReader</span>
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.kaist.reader</span> <span class="kn">import</span> <span class="n">KaistReader</span>
+<span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.regime_factory</span> <span class="kn">import</span> <span class="n">Factory</span>
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.readers.tum_vie.reader</span> <span class="kn">import</span> <span class="n">TumVieReader</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">data_manager</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.data_readers</span> <span class="kn">import</span> <span class="n">DataReaders</span>
@@ -88,11 +89,7 @@
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">TumVieConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regimes</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DataRegimeConfig</span><span class="p">,</span>
-    <span class="n">Stream</span><span class="p">,</span>
-    <span class="n">TimeLimit</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">moduslam.system_configs.data_manager.batch_factory.regimes</span> <span class="kn">import</span> <span class="n">DataRegimeConfig</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
@@ -115,28 +112,16 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            NotImplementedError: No DataReader exists for the given dataset type.</span>
-
-<span class="sd">            ValueError: Invalid regime name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">regime</span><span class="p">:</span> <span class="n">Stream</span> <span class="o">|</span> <span class="n">TimeLimit</span>
-        <span class="k">match</span> <span class="n">regime_config</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-            <span class="k">case</span> <span class="n">Stream</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">regime</span> <span class="o">=</span> <span class="n">Stream</span><span class="p">()</span>
-
-            <span class="k">case</span> <span class="n">TimeLimit</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">regime</span> <span class="o">=</span> <span class="n">TimeLimit</span><span class="p">(</span><span class="n">regime_config</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">regime_config</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
-
-            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid regime name </span><span class="si">{</span><span class="n">regime_config</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">.&quot;</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">match</span> <span class="n">dataset_config</span><span class="o">.</span><span class="n">reader</span><span class="p">:</span>
             <span class="k">case</span> <span class="n">DataReaders</span><span class="o">.</span><span class="n">kaist_reader</span><span class="p">:</span>
+                <span class="n">regime</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">kaist_regime</span><span class="p">(</span><span class="n">regime_config</span><span class="p">)</span>
                 <span class="n">dataset_config</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">KaistConfig</span><span class="p">,</span> <span class="n">dataset_config</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">KaistReader</span><span class="p">(</span><span class="n">regime</span><span class="p">,</span> <span class="n">dataset_config</span><span class="p">)</span>
 
             <span class="k">case</span> <span class="n">DataReaders</span><span class="o">.</span><span class="n">tum_vie_reader</span><span class="p">:</span>
+                <span class="n">regime</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">tum_vie_regime</span><span class="p">(</span><span class="n">regime_config</span><span class="p">)</span>
                 <span class="n">dataset_config</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">TumVieConfig</span><span class="p">,</span> <span class="n">dataset_config</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">TumVieReader</span><span class="p">(</span><span class="n">regime</span><span class="p">,</span> <span class="n">dataset_config</span><span class="p">)</span>
 

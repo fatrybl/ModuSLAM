@@ -93,7 +93,7 @@
 <span class="kn">from</span> <span class="nn">moduslam.map_manager.map_factories.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">convert_pointcloud</span><span class="p">,</span>
     <span class="n">create_vertex_edges_table</span><span class="p">,</span>
-    <span class="n">get_elements</span><span class="p">,</span>
+    <span class="n">fill_elements</span><span class="p">,</span>
     <span class="n">transform_pointcloud</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">moduslam.map_manager.maps.pointcloud</span> <span class="kn">import</span> <span class="n">PointcloudMap</span>
@@ -136,7 +136,7 @@
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">[</span><span class="n">CameraPose</span><span class="p">,</span> <span class="n">SmartVisualFeature</span><span class="p">],</span> <span class="n">batch_factory</span><span class="p">:</span> <span class="n">BatchFactory</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates camera-based pointcloud map.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates camera-based point cloud map.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            graph: graph to create the map from.</span>
@@ -146,7 +146,7 @@
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="o">.</span><span class="n">get_vertices</span><span class="p">(</span><span class="n">CameraPose</span><span class="p">)</span>
         <span class="n">vertex_edges_table</span> <span class="o">=</span> <span class="n">create_vertex_edges_table</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">SmartVisualFeature</span><span class="p">)</span>
         <span class="n">table1</span> <span class="o">=</span> <span class="n">create_vertex_elements_table</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">vertex_edges_table</span><span class="p">)</span>
-        <span class="n">table2</span> <span class="o">=</span> <span class="n">get_elements</span><span class="p">(</span><span class="n">table1</span><span class="p">,</span> <span class="n">batch_factory</span><span class="p">)</span>
+        <span class="n">table2</span> <span class="o">=</span> <span class="n">fill_elements</span><span class="p">(</span><span class="n">table1</span><span class="p">,</span> <span class="n">batch_factory</span><span class="p">)</span>
         <span class="n">points_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_points_map</span><span class="p">(</span><span class="n">table2</span><span class="p">)</span>
         <span class="n">points_map</span> <span class="o">=</span> <span class="n">points_map</span><span class="o">.</span><span class="n">T</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">set_points</span><span class="p">(</span><span class="n">points_map</span><span class="p">)</span></div>

@@ -77,11 +77,14 @@
 
 <span class="kn">import</span> <span class="nn">gtsam</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.edge_factory_ABC</span> <span class="kn">import</span> <span class="n">EdgeFactory</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">get_vertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.interface</span> <span class="kn">import</span> <span class="n">EdgeFactory</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.edge_factories.utils</span> <span class="kn">import</span> <span class="n">get_last_vertex</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.base_vertices</span> <span class="kn">import</span> <span class="n">OptimizableVertex</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_edges</span> <span class="kn">import</span> <span class="n">PriorPose</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.custom_vertices</span> <span class="kn">import</span> <span class="n">Pose</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.index_generator</span> <span class="kn">import</span> <span class="n">generate_index</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.graph.vertex_storage</span> <span class="kn">import</span> <span class="n">VertexStorage</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.noise_models</span> <span class="kn">import</span> <span class="n">pose_diagonal_noise_model</span>
 <span class="kn">from</span> <span class="nn">moduslam.system_configs.frontend_manager.edge_factories.base_factory</span> <span class="kn">import</span> <span class="p">(</span>
@@ -103,9 +106,14 @@
 <span class="sd">        Args:</span>
 <span class="sd">            config: configuration of the factory.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_margin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique factory name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
 <div class="viewcode-block" id="PriorPoseEdgeFactory.create">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.edge_factories.html#moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory.create">[docs]</a>
@@ -124,7 +132,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list with 1 edge.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">vertex</span> <span class="o">=</span> <span class="n">get_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_margin</span><span class="p">)</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_vertex</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_margin</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">Pose</span><span class="p">):</span>
             <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_edge</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">measurements</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">edge</span><span class="p">]</span>
@@ -158,16 +166,39 @@
 
         <span class="n">pose</span> <span class="o">=</span> <span class="n">tuple_to_gtsam_pose3</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="n">gtsam_factor</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">PriorFactorPose3</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="n">vertex</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span>
-            <span class="n">prior</span><span class="o">=</span><span class="n">pose</span><span class="p">,</span>
-            <span class="n">noiseModel</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">gtsam_factor</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">PriorFactorPose3</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">backend_index</span><span class="p">,</span> <span class="n">pose</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">PriorPose</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">measurement</span><span class="p">,</span> <span class="n">gtsam_factor</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
 
-        <span class="n">edge</span> <span class="o">=</span> <span class="n">PriorPose</span><span class="p">(</span>
-            <span class="n">vertex</span><span class="o">=</span><span class="n">vertex</span><span class="p">,</span> <span class="n">measurement</span><span class="o">=</span><span class="n">measurement</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">gtsam_factor</span><span class="p">,</span> <span class="n">noise_model</span><span class="o">=</span><span class="n">noise</span>
-        <span class="p">)</span>
         <span class="k">return</span> <span class="n">edge</span></div>
+
+
+<div class="viewcode-block" id="PriorPoseEdgeFactory._get_vertex">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.edge_factories.html#moduslam.frontend_manager.edge_factories.prior_pose.PriorPoseEdgeFactory._get_vertex">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_vertex</span><span class="p">(</span><span class="n">storage</span><span class="p">:</span> <span class="n">VertexStorage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizableVertex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the vertex to be used for the new edge.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            storage: vertex storage.</span>
+
+<span class="sd">            timestamp: timestamp of the new vertex.</span>
+
+<span class="sd">            time_margin: time margin to search for the vertex.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            vertex to be used for the new edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">get_last_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vertex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vertex</span>
+
+        <span class="n">opt_vertex</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">find_closest_optimizable_vertex</span><span class="p">(</span><span class="n">Pose</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">time_margin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opt_vertex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">opt_vertex</span>
+
+        <span class="n">new_index</span> <span class="o">=</span> <span class="n">generate_index</span><span class="p">(</span><span class="n">storage</span><span class="o">.</span><span class="n">index_storage</span><span class="p">)</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">Pose</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vertex</span></div>
 </div>
 
 </pre></div>

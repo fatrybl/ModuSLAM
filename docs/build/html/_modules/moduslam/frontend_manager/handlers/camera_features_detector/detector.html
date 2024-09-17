@@ -80,7 +80,6 @@
 <span class="kn">from</span> <span class="nn">PIL.Image</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">fromarray</span>
 <span class="kn">from</span> <span class="nn">PIL.ImageFile</span> <span class="kn">import</span> <span class="n">ImageFile</span>
 
-<span class="kn">from</span> <span class="nn">moduslam.system_configs.setup_manager.sensors</span> <span class="kn">import</span> <span class="n">StereoCameraConfig</span>
 <span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">MatrixMxN</span><span class="p">,</span> <span class="n">VectorN</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_dataclasses</span> <span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">VisualFeature</span>
 <span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_methods</span> <span class="kn">import</span> <span class="n">matrix_to_vector_list</span>
@@ -90,8 +89,8 @@
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.handlers.camera_features_detector.html#moduslam.frontend_manager.handlers.camera_features_detector.detector.KeypointDetector">[docs]</a>
 <span class="k">class</span> <span class="nc">KeypointDetector</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_orb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">ORB</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nfeatures</span><span class="o">=</span><span class="n">num_features</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">ORB</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nfeatures</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span> <span class="n">scoreType</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">ORB_HARRIS_SCORE</span><span class="p">)</span>
 
 <div class="viewcode-block" id="KeypointDetector.get_orb_keypoints">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.handlers.camera_features_detector.html#moduslam.frontend_manager.handlers.camera_features_detector.detector.KeypointDetector.get_orb_keypoints">[docs]</a>
@@ -104,8 +103,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            keypoints and descriptors.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
         <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orb</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptors</span></div>
 
@@ -113,9 +112,7 @@
 <div class="viewcode-block" id="KeypointDetector.undistort_image">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.handlers.camera_features_detector.html#moduslam.frontend_manager.handlers.camera_features_detector.detector.KeypointDetector.undistort_image">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">undistort_image</span><span class="p">(</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">ImageFile</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">dist_coeffs</span><span class="p">:</span> <span class="n">VectorN</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Image</span><span class="p">,</span> <span class="n">Matrix3x3</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">undistort_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">ImageFile</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">:</span> <span class="n">Matrix3x3</span><span class="p">,</span> <span class="n">dist_coeffs</span><span class="p">:</span> <span class="n">VectorN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes distortion of an image and recomputes the camera matrix.</span>
 
 <span class="sd">        Args:</span>
@@ -128,19 +125,17 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            undistorted_image and new camera matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span>
+        <span class="c1"># h, w = image.height, image.width</span>
         <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-        <span class="n">new_camera_matrix</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getOptimalNewCameraMatrix</span><span class="p">(</span>
-            <span class="n">camera_matrix</span><span class="p">,</span> <span class="n">dist_coeffs</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="c1"># new_camera_matrix, _ = cv2.getOptimalNewCameraMatrix(</span>
+        <span class="c1">#     camera_matrix, dist_coeffs, (w, h), 1, (w, h)</span>
+        <span class="c1"># )</span>
 
-        <span class="n">new_camera_matrix</span> <span class="o">=</span> <span class="n">new_camera_matrix</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-        <span class="n">undistorted_array</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">undistort</span><span class="p">(</span>
-            <span class="n">array</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">,</span> <span class="n">dist_coeffs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">new_camera_matrix</span>
-        <span class="p">)</span>
+        <span class="c1"># new_camera_matrix = new_camera_matrix.astype(np.float64)</span>
+        <span class="n">undistorted_array</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">undistort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">,</span> <span class="n">dist_coeffs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">)</span>
         <span class="n">undistorted_image</span> <span class="o">=</span> <span class="n">fromarray</span><span class="p">(</span><span class="n">undistorted_array</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">undistorted_image</span><span class="p">,</span> <span class="n">new_camera_matrix</span></div>
+        <span class="k">return</span> <span class="n">undistorted_image</span></div>
 
 
 <div class="viewcode-block" id="KeypointDetector.project_3d">
@@ -204,24 +199,17 @@
 
 <div class="viewcode-block" id="KeypointDetector.get_visual_features">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.handlers.camera_features_detector.html#moduslam.frontend_manager.handlers.camera_features_detector.detector.KeypointDetector.get_visual_features">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_visual_features</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">ImageFile</span><span class="p">,</span> <span class="n">camera_parameters</span><span class="p">:</span> <span class="n">StereoCameraConfig</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">VisualFeature</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_visual_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">ImageFile</span> <span class="o">|</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">VisualFeature</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets visual features from an image.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            image: image to extract features from.</span>
-<span class="sd">            camera_parameters: camera parameters.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            list of visual features.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">camera_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">camera_parameters</span><span class="o">.</span><span class="n">camera_matrix_left</span><span class="p">)</span>
-        <span class="n">distortion_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">camera_parameters</span><span class="o">.</span><span class="n">distortion_coefficients_left</span><span class="p">)</span>
-
-        <span class="n">undistorted_image</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">undistort_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">camera_matrix</span><span class="p">,</span> <span class="n">distortion_coeffs</span><span class="p">)</span>
-        <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_orb_keypoints</span><span class="p">(</span><span class="n">undistorted_image</span><span class="p">)</span>
+        <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_orb_keypoints</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
         <span class="n">descriptors_list</span> <span class="o">=</span> <span class="n">matrix_to_vector_list</span><span class="p">(</span><span class="n">descriptors</span><span class="p">)</span>
         <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_visual_features</span><span class="p">(</span><span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptors_list</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">features</span></div>
