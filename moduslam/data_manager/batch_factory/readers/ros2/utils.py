@@ -1,6 +1,5 @@
 from collections.abc import Callable
 from pathlib import Path
-from typing import TypeAlias
 
 import pandas as pd
 from rosbags.rosbag2 import Reader, Writer
@@ -12,8 +11,6 @@ from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector impo
     get_lidar_measurement,
     get_stereo_measurement,
 )
-
-TupleImage: TypeAlias = tuple[list[list[int]], list[list[int]], list[list[int]]]
 
 
 def get_rosbag_sensors(rosbag_path: Path):
@@ -103,31 +100,38 @@ def rosbag_iterator(reader, sensors, connections):
         connections: List of connections for the sensors
     """
 
+    test_dict: dict[str, Callable]
+    test_dict = {
+        "Imu": get_imu_measurement,
+        "PointCloud2": get_lidar_measurement,
+        "Image": get_stereo_measurement,
+    }
+
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
         sensor_name = "no sensor"
         sensor_id = connection.id
-        sensor = connection.topic.split("/")[1]
+        sensor_topic = connection.topic.split("/")[1]
         data_type = connection.msgtype.split("/")[-1]
+
+        if data_type not in test_dict.keys():
+            continue
+
         msg = deserialize_cdr(rawdata, connection.msgtype)
 
         for single_sensor in sensors:
-            if single_sensor["sensor"] == sensor:
+            if single_sensor["sensor"] == sensor_topic:
                 sensor_name = single_sensor["sensor_name"]
                 break
 
-        test_dict: dict[str, Callable]
-        test_dict = {
-            "Imu": get_imu_measurement,
-            "PointCloud2": get_lidar_measurement,
-            "Image": get_stereo_measurement,
-        }
         message_getter = test_dict[data_type]
         data = message_getter(msg)
 
         yield (i, timestamp, sensor_name, data, data_type)
 
 
-def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = None) -> None:
+def rosbag_read(
+    bag_path: Path, num_readings: int = 1, topic_name: str | None = None, print_table: bool = False
+) -> list:
     """Reads a rosbag file and shows a determined number of readings in a table format.
 
     Args:
@@ -141,7 +145,11 @@ def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = 
         data: a list of tuples with the data from the rosbag file.
     """
 
-    table = [["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]]
+    if print_table:
+        table = [["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]]
+
+    else:
+        table = []
 
     with Reader(bag_path) as reader:
         if topic_name == None:
@@ -162,15 +170,18 @@ def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = 
                     msg.header.frame_id,
                     connection.msgcount,
                     timestamp,
+                    msg,
                 ]
                 table.append(row)
             else:
-                print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
-                break
+                if print_table:
+                    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
+                return table
 
-        print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
+        if print_table:
+            print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
 
-    return None
+    return table
 
 
 def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
@@ -205,7 +216,7 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
                         if connection.topic == c.topic:
                             writer.write(c, timestamp, rawdata)
                 else:
-                    print("Sucessfully writter {} messages in the new rosbag".format(i - 1))
+                    print("Sucessfully writter {} messages in the new rosbag".format(i))
                     break
 
 
@@ -243,7 +254,7 @@ def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
     pd_df.to_csv(csv_path, index=False)
 
 
-def create_csv(readings_lenght=15):
+def _create_csv(readings_lenght=15):
     print("Creating ROS2 test bags for the Ros2 Datareader ")
 
     DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
@@ -255,13 +266,19 @@ def create_csv(readings_lenght=15):
     get_csv_from_rosbag(rosbag_path=rosbag_path, csv_path=csv_path)
 
 
-def create_rosbag(num_readings=15):
+def _create_rosbag(num_readings=15):
     DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
     rosbag_name = "rosbag2_2023_11_02-12_18_16"
     rosbag_path = Path(DATA_PATH, rosbag_name)
 
     new_rosbag_name = "test_rosbag_" + str(num_readings)
 
+    rosbag_write(
+        bag_path=rosbag_path, new_path=Path(DATA_PATH, new_rosbag_name), num_msgs=num_readings
+    )
+
+    rosbag_read(bag_path=Path(DATA_PATH, new_rosbag_name), num_readings=num_readings)
+
 
 if __name__ == "__main__":
-    create_csv(15)
+    _create_rosbag(15)
