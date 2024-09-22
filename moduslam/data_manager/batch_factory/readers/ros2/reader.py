@@ -9,6 +9,7 @@ from rosbags.rosbag2 import Reader
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
 from moduslam.data_manager.batch_factory.readers.ros2.utils import (
     get_rosbag_sensors,
     get_connections,
@@ -55,16 +56,6 @@ class Ros2DataReader(DataReader):
         self.sensors_table = dataset_params.sensors_table
         # TODO: Check and change to private variables.
 
-        # For testing purposes
-        # self.sensors_table = {
-        #     "stereo_camera_left": "left",
-        #     "stereo_camera_right": "right",
-        #     "imu": "imu",
-        #     "lidar_left": "vlp16l",
-        #     "lidar_right": "vlp16r",
-        #     "lidar_center": "vlp32c",
-        # }
-
         # TODO: Change print statements with Logger functions
         logger.info("ROS2 data reader created.")
         logger.debug(f"Dataset directory: {self._dataset_directory}")
@@ -72,16 +63,12 @@ class Ros2DataReader(DataReader):
         print(self.sensors_table)
 
         self.sensors = get_rosbag_sensors(self._dataset_directory)
-        print("\nSensors from rosbag:")
-        print(self.sensors)
 
         self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
-        print("\nMapped sensors:")
-        print(self.sensors)
+
+        print(f"Sensors are: {self.sensors}")
 
         self.connections = get_connections(self.connection_list, self._dataset_directory)
-        print("\nConnections from rosbag:")
-        print(self.connections)
 
         self.reader = Reader(self._dataset_directory)
 
@@ -142,9 +129,10 @@ class Ros2DataReader(DataReader):
 
         sensor = SensorsFactory.get_sensor(sensor_name)
         measurement = RawMeasurement(sensor, data)
+        location = RosbagLocation(file=self._dataset_directory, position=index)
         # timestamp = to_int(timestamp)
 
-        element = Element(timestamp, measurement, index)
+        element = Element(timestamp=timestamp, measurement=measurement, location=location)
 
         return element
 
@@ -183,53 +171,10 @@ class Ros2DataReader(DataReader):
         pass
 
 
+def main():
+    pass
+
+
 if __name__ == "__main__":
 
-    print("Testing ROS2 data reader")
-    from tests.conftest import ros2_dataset_dir
-
-    bag_path = ros2_dataset_dir
-
-    timelimit1 = TimeLimit(start=10, stop=20)
-    timelimit2 = Stream()
-    ros2_config = Ros2Config(directory=bag_path)
-
-    reader = Ros2DataReader(regime=timelimit1, dataset_params=ros2_config)
-
-    with reader as r:
-        print("Rosbag opened successfully")
-        user_input = input("Get sensor read? (y/n): ")
-
-        import pandas as pd
-
-        raw_data_df = pd.DataFrame(columns=["timestamp", "sensor_name", "data_type", "data"])
-
-        while user_input == "y":
-            element = reader.get_next_element()
-            print(element)
-            index = element[0]
-            timestamp = element[1]
-            sensor_name = element[2]
-            data = element[3]
-            data_type = element[4]
-
-            next_row = pd.DataFrame(
-                {
-                    "timestamp": [timestamp],
-                    "sensor_name": [sensor_name],
-                    "data_type": [data_type],
-                    "data": [data],
-                }
-            )
-
-            raw_data_df = pd.concat([raw_data_df, next_row], ignore_index=True)
-
-            user_input = input("Get another sensor read? (y/n): ").lower()
-
-        save_data = input(
-            f"Do you want to save the data {raw_data_df} to a csv file? (y/n): "
-        ).lower()
-
-        if save_data == "y":
-            raw_data_df.to_csv("rosbags_raw_data.csv", index=False)
-            print("Data saved successfully")
+    main()
