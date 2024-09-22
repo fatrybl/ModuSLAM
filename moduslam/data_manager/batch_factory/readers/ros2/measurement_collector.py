@@ -1,7 +1,11 @@
+from typing import TypeAlias
+
 import numpy as np
 
+TupleImage: TypeAlias = tuple[list[list[int]]]
 
-def get_stereo_measurement(raw_msg) -> tuple:
+
+def get_stereo_measurement(raw_msg) -> TupleImage:
     """Transform raw stereo image messages from a rosbag into an image-like array.
     Args:
         raw_msg: raw stereo image message.
@@ -10,15 +14,7 @@ def get_stereo_measurement(raw_msg) -> tuple:
         img_array: image-like array.
     """
 
-    print(type(raw_msg))
-    encoding = raw_msg.encoding
-
     img_array = image_decoding(raw_image_msg=raw_msg)
-
-    # Convert the array into a PIL Image
-    img = convert2image(img_array, encoding)
-
-    # pil_img.show()
 
     return img_array
 
@@ -70,8 +66,6 @@ def get_lidar_measurement(raw_msg) -> tuple:
         data: tuple with the LiDAR data.
 
     """
-    data = np.array(raw_msg.data)
-
     data = tuple(raw_msg.data)
 
     return data
@@ -97,22 +91,18 @@ def image_decoding(raw_image_msg) -> TupleImage:
     encoding = raw_image_msg.encoding
     bgr_num_channels = 3
 
-    print(height, width, steps, encoding)
-
     if encoding == "bgr8":
         np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
             (height, width, bgr_num_channels)
         )
-        image_list = np_array.tolist()
-
-        # TODO: Transform np array into a TupleImage format.
+        image_tuple = tuple(np_array.tolist())
 
         return image_tuple
     else:
         raise ValueError("Encoding {} is not supported".format(encoding))
 
 
-def convert2image(img_array, encoding: str):
+def convert2image(img_tuple: TupleImage, encoding: str):
     """Converts an array into a PIL image.
     Args:
         img_array: an array to be converted to a PIL Image.
@@ -122,16 +112,14 @@ def convert2image(img_array, encoding: str):
         pil_img: a PIL Image object.
     """
 
-    if isinstance(img_array, np.ndarray):
-        print("Converting numpy array to PIL Image")
-        if encoding == "bgr8":
-            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
+    import cv2
 
-    elif isinstance(img_array, (list, tuple)):
-        print("Converting list to PIL Image")
-        img_array = np.array(img_array)
-        if encoding == "bgr8":
-            pil_img = Image.fromarray(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB))
+    img = np.array(img_tuple, dtype=np.uint8)
+    print("Image shape: ", img.shape)
+    if encoding == "bgr8":
+        cv2.imshow("test", img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
     else:
-        raise ValueError("Array type {} is not supported".format(type(img_array)))
+        raise ValueError("Encoding {} is not supported".format(encoding))
