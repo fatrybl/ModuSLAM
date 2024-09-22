@@ -2,44 +2,75 @@
 
 from pathlib import Path
 
-import pandas as pd
-
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
+from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
+    get_imu_measurement,
+    get_stereo_measurement,
+    get_lidar_measurement,
+)
+from moduslam.data_manager.batch_factory.readers.ros2.utils import rosbag_read
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.setup_manager.sensors import SensorConfig
 
 # TODO: Create a class to get the ground truth elements from a test rosbag instead of using a CSV file
-data = pd.read_csv(
-    Path("/home/felipezero/Projects/mySLAM/tests_data/ROS2_dataset/rosbags_raw_data.csv")
-)
+
+DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
+test_bag = "test_rosbag_100"
+
+rosbag_path = Path(DATA_PATH, test_bag)
+
+data = rosbag_read(bag_path=rosbag_path, num_readings=100, print_table=False)
 
 sensors_table = {
-    "stereo_camera_left": "left",
-    "stereo_camera_right": "right",
-    "imu": "imu",
-    "lidar_left": "vlp16l",
-    "lidar_right": "vlp16r",
-    "lidar_center": "vlp32c",
+    "left": "stereo_camera_left",
+    "right": "stereo_camera_right",
+    "xsens": "imu",
+    "vlp16l": "lidar_left",
+    "vlp16r": "lidar_right",
+    "vlp32c": "lidar_ceter",
 }
 
-sensors = {
-    "imu": Sensor(SensorConfig(sensors_table["imu"])),
-    "stereo_camera_left": Sensor(SensorConfig(sensors_table["stereo_camera_left"])),
-    "stereo_camera_right": Sensor(SensorConfig(sensors_table["stereo_camera_right"])),
-    "lidar_left": Sensor(SensorConfig(sensors_table["lidar_left"])),
-    "lidar_right": Sensor(SensorConfig(sensors_table["lidar_right"])),
-    "lidar_center": Sensor(SensorConfig(sensors_table["lidar_center"])),
+test_dict = {
+    "data": get_imu_measurement,
+    "velodyne_points": get_lidar_measurement,
+    "image_raw": get_stereo_measurement,
 }
 
 
 elements = []
+count = 0
+for i, row in enumerate(data):
+    topic = row[1]
+    sensor_topic = topic.split("/")[1]
+    data_type = topic.split("/")[-1]
 
-for index, sensor_reading in data.iterrows():
-    timestamp = sensor_reading.timestamp
-    raw_values = sensor_reading.data
-    sensor = sensors[sensor_reading.sensor_name]
+    if sensor_topic in sensors_table.keys() and data_type in test_dict.keys():
+        sensor_name = sensors_table[sensor_topic]
 
-    raw_measurement = RawMeasurement(sensor=sensor, values=raw_values)
-    element = Element(timestamp=timestamp, measurement=raw_measurement, location=index)
+        raw_data = row[6]
+        timestamp = row[5]
+        message_getter = test_dict[data_type]
+        data = message_getter(raw_data)
 
-    elements.append(element)
+        sensor = Sensor(SensorConfig(sensor_name))
+
+        measurement = RawMeasurement(sensor=sensor, values=data)
+
+        location = RosbagLocation(file=rosbag_path, position=i - 1)
+
+        element = Element(
+            timestamp=timestamp,
+            measurement=measurement,
+            location=location,
+        )
+
+        elements.append(element)
+        count += 1
+
+print(len(elements))
+
+element = elements[0]
+
+print(element.timestamp)
+print(element.measurement.values)
