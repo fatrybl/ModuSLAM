@@ -12,14 +12,12 @@ from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector impo
 from moduslam.data_manager.batch_factory.readers.ros2.utils import rosbag_read
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from moduslam.system_configs.setup_manager.sensors import SensorConfig
+from tests.conftest import ros2_dataset_dir
 
 # TODO: Create a class to get the ground truth elements from a test rosbag instead of using a CSV file
 
-DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
-test_bag = "test_rosbag_100"
-# TODO: Import data directory instead of hardcoding it here.
 
-rosbag_path = Path(DATA_PATH, test_bag)
+rosbag_path = Path(ros2_dataset_dir)
 
 data = rosbag_read(bag_path=rosbag_path, num_readings=100, print_table=False)
 
