@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data_manager: kaist
+  - override /setup_manager: 2_lidar
+  - override /frontend_manager: 2_lidar

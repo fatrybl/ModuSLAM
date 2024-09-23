@@ -20,7 +20,7 @@ from moduslam.map_manager.map_factories.camera_pointcloud.utils import (
 from moduslam.map_manager.map_factories.utils import (
     convert_pointcloud,
     create_vertex_edges_table,
-    get_elements,
+    fill_elements,
     transform_pointcloud,
 )
 from moduslam.map_manager.maps.pointcloud import PointcloudMap
@@ -56,7 +56,7 @@ class CameraPointcloudMapFactory:
     def create(
         self, graph: Graph[CameraPose, SmartVisualFeature], batch_factory: BatchFactory
     ) -> None:
-        """Creates camera-based pointcloud map.
+        """Creates camera-based point cloud map.
 
         Args:
             graph: graph to create the map from.
@@ -66,7 +66,7 @@ class CameraPointcloudMapFactory:
         vertices = graph.vertex_storage.get_vertices(CameraPose)
         vertex_edges_table = create_vertex_edges_table(graph, vertices, SmartVisualFeature)
         table1 = create_vertex_elements_table(vertices, vertex_edges_table)
-        table2 = get_elements(table1, batch_factory)
+        table2 = fill_elements(table1, batch_factory)
         points_map = self._create_points_map(table2)
         points_map = points_map.T
         self._map.set_points(points_map)

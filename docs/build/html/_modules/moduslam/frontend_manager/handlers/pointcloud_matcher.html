@@ -77,7 +77,7 @@
 <span class="kn">from</span> <span class="nn">kiss_icp.kiss_icp</span> <span class="kn">import</span> <span class="n">KISSConfig</span><span class="p">,</span> <span class="n">KissICP</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.data_manager.batch_factory.batch</span> <span class="kn">import</span> <span class="n">Element</span>
-<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.ABC_handler</span> <span class="kn">import</span> <span class="n">Handler</span>
+<span class="kn">from</span> <span class="nn">moduslam.frontend_manager.handlers.interface</span> <span class="kn">import</span> <span class="n">Handler</span>
 <span class="kn">from</span> <span class="nn">moduslam.frontend_manager.measurement_storage</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
 <span class="kn">from</span> <span class="nn">moduslam.setup_manager.sensors_factory.sensors</span> <span class="kn">import</span> <span class="n">Lidar3D</span>
@@ -108,7 +108,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            config: handler configuration with parameters for Kiss-ICP scan matcher.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">name</span>
         <span class="n">cfg</span><span class="p">:</span> <span class="n">KISSConfig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_kiss_icp_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scan_matcher</span> <span class="o">=</span> <span class="n">KissICP</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_elements_queue</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -117,6 +117,11 @@
 
         <span class="c1"># self._visualizer = RegistrationVisualizer()</span>
         <span class="c1"># self._visualizer.global_view = True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique handler name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
 <div class="viewcode-block" id="ScanMatcher.process">
 <a class="viewcode-back" href="../../../../moduslam.frontend_manager.handlers.html#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.process">[docs]</a>
@@ -142,7 +147,7 @@
         <span class="n">sensor</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">measurement</span><span class="o">.</span><span class="n">sensor</span>
         <span class="n">new_measurement</span><span class="p">:</span> <span class="n">Measurement</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">tf_base_sensor</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">tf_base_sensor</span>
+        <span class="n">tf_base_sensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">tf_base_sensor</span><span class="p">)</span>
         <span class="n">tf_base_sensor_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">tf_base_sensor</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_elements_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
@@ -244,8 +249,8 @@
         <span class="n">pre_last_el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_queue</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">last_el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">empty_pre_last_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_empty_element</span><span class="p">(</span><span class="n">pre_last_el</span><span class="p">)</span>
-        <span class="n">empty_last_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_empty_element</span><span class="p">(</span><span class="n">last_el</span><span class="p">)</span>
+        <span class="n">empty_pre_last_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_empty_element</span><span class="p">(</span><span class="n">pre_last_el</span><span class="p">)</span>
+        <span class="n">empty_last_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_empty_element</span><span class="p">(</span><span class="n">last_el</span><span class="p">)</span>
 
         <span class="n">start</span> <span class="o">=</span> <span class="n">pre_last_el</span><span class="o">.</span><span class="n">timestamp</span>
         <span class="n">stop</span> <span class="o">=</span> <span class="n">last_el</span><span class="o">.</span><span class="n">timestamp</span>
@@ -270,9 +275,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_elements_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ScanMatcher._create_empty_element">
-<a class="viewcode-back" href="../../../../moduslam.frontend_manager.handlers.html#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher._create_empty_element">[docs]</a>
-    <span class="k">def</span> <span class="nf">_create_empty_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanMatcher.create_empty_element">
+<a class="viewcode-back" href="../../../../moduslam.frontend_manager.handlers.html#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.create_empty_element">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_empty_element</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Element</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates an empty element with the same timestamp, location and sensor as the input element.</span>
 <span class="sd">        Args:</span>
@@ -281,8 +287,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            empty element without data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">empty_element</span> <span class="o">=</span> <span class="n">create_empty_element</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">empty_element</span></div>
+        <span class="k">return</span> <span class="n">create_empty_element</span><span class="p">(</span><span class="n">element</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

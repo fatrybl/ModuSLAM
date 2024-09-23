@@ -12,15 +12,15 @@ from moduslam.types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
 from moduslam.utils.auxiliary_methods import check_dimensionality
 
 
-def get_elements(
+def fill_elements(
     vertex_elements_table: dict[BaseVertex, set[Element]], batch_factory: BatchFactory
 ) -> dict[BaseVertex, deque[Element]]:
-    """Gets elements with raw lidar pointcloud measurements and assign to the
+    """Gets elements with raw lidar point cloud measurements and assign to the
     corresponding vertices.
 
     Args:
         vertex_elements_table: "vertices -> elements" table.
-                                Elements do not contain raw lidar pointcloud measurements.
+                                Elements do not contain raw lidar point cloud measurements.
 
         batch_factory (BatchFactory): factory to create a batch.
 
@@ -107,13 +107,13 @@ def create_vertex_edges_table(
     """
     table: dict[BaseVertex, set[BaseEdge]] = {}
 
-    for v in vertices:
-        edges = graph.get_connected_edges(v)
+    for vertex in vertices:
+        edges = graph.get_connected_edges(vertex)
         for edge in edges:
             if isinstance(edge, edge_type):
-                if v not in table:
-                    table[v] = {edge}
+                if vertex not in table:
+                    table[vertex] = {edge}
                 else:
-                    table[v].add(edge)
+                    table[vertex].add(edge)
 
     return table

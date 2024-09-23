@@ -424,23 +424,53 @@ included in GTSAM factor graph as a variable.</p>
 <span id="moduslam-frontend-manager-graph-custom-edges-module"></span><h2>moduslam.frontend_manager.graph.custom_edges module<a class="headerlink" href="#module-moduslam.frontend_manager.graph.custom_edges" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph.custom_edges.</span></span><span class="sig-name descname"><span class="pre">SmartVisualFeature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SmartProjectionPose3Factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph/custom_edges.html#SmartVisualFeature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.graph.custom_edges.</span></span><span class="sig-name descname"><span class="pre">SmartVisualFeature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">poses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.CameraPose" title="moduslam.frontend_manager.graph.custom_vertices.CameraPose"><span class="pre">CameraPose</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SmartProjectionPose3Factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph/custom_edges.html#SmartVisualFeature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.graph.base_edges.RadialEdge" title="moduslam.frontend_manager.graph.base_edges.RadialEdge"><code class="xref py py-class docutils literal notranslate"><span class="pre">RadialEdge</span></code></a></p>
 <p>Edge for SmartProjectionPose3Factor: <a class="reference external" href="https://dellaert.github.io/files/Carlone14icra.pdf">https://dellaert.github.io/files/Carlone14icra.pdf</a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#moduslam.frontend_manager.graph.base_vertices.OptimizableVertex" title="moduslam.frontend_manager.graph.base_vertices.OptimizableVertex"><span class="pre">OptimizableVertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SmartProjectionPose3Factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Base</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph/custom_edges.html#SmartVisualFeature.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">poses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.CameraPose" title="moduslam.frontend_manager.graph.custom_vertices.CameraPose"><span class="pre">CameraPose</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SmartProjectionPose3Factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Base</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph/custom_edges.html#SmartVisualFeature.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.__init__" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pose</strong> – optimizable pose.</p></li>
-<li><p><strong>features</strong> – non-optimizable 3D points.</p></li>
+<li><p><strong>feature</strong> – 3D feature.</p></li>
+<li><p><strong>poses</strong> – camera poses.</p></li>
 <li><p><strong>measurements</strong> – a measurement with the distance to the visual feature.</p></li>
 <li><p><strong>factor</strong> – GTSAM factor.</p></li>
 <li><p><strong>noise_model</strong> – GTSAM noise model of the factor.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.factor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SmartProjectionPose3Factor</span></em><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.factor" title="Link to this definition"></a></dt>
+<dd><p>GTSAM factor.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.central_vertex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">central_vertex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a></em><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.central_vertex" title="Link to this definition"></a></dt>
+<dd><p>Central vertex of the edge.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.radial_vertices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">radial_vertices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.CameraPose" title="moduslam.frontend_manager.graph.custom_vertices.CameraPose"><span class="pre">CameraPose</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.radial_vertices" title="Link to this definition"></a></dt>
+<dd><p>Radial vertices of the edge.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.vertices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vertices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.Feature3D" title="moduslam.frontend_manager.graph.custom_vertices.Feature3D"><span class="pre">Feature3D</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#moduslam.frontend_manager.graph.custom_vertices.CameraPose" title="moduslam.frontend_manager.graph.custom_vertices.CameraPose"><span class="pre">CameraPose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.vertices" title="Link to this definition"></a></dt>
+<dd><p>Vertices of the edge.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.measurements">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measurements</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#moduslam.frontend_manager.graph.custom_edges.SmartVisualFeature.measurements" title="Link to this definition"></a></dt>
+<dd><p>Measurements which formed the edge.</p>
 </dd></dl>
 
 </dd></dl>
@@ -942,7 +972,9 @@ point in 3D.</p>
 <dd class="field-odd"><p><strong>edge</strong> – new edge to be added to the graph.</p>
 </dd>
 </dl>
-<p>TODO: timestamped based sorting has been removed. Check if it works.</p>
+<p>TODO: timestamped based sorting has been removed. Check if it works.
+TODO: add tests for the existing edges being added.
+TODO: add more efficient way to update the connections for the existing edges. Now it takes O(N) time.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -951,7 +983,7 @@ point in 3D.</p>
 <dd><p>Adds multiple edges to the graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>edges</strong> (<em>Iterable</em><em>[</em><em>GraphEdge</em><em>]</em>) – new edges to be added to the graph.</p>
+<dd class="field-odd"><p><strong>edges</strong> – new edges to be added to the graph.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1061,6 +1093,17 @@ factor graph, the resize() method should be called.</p>
 <dd><p>Adds edge to the connection with the vertex.
 :param vertex: vertex to which the edge is added.
 :param edge: edge to be added to the vertex.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.graph.graph.Graph._update_edge_connections">
+<span class="sig-name descname"><span class="pre">_update_edge_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#moduslam.frontend_manager.graph.base_edges.BaseEdge" title="moduslam.frontend_manager.graph.base_edges.BaseEdge"><span class="pre">BaseEdge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/graph/graph.html#Graph._update_edge_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.graph.graph.Graph._update_edge_connections" title="Link to this definition"></a></dt>
+<dd><p>Updates connections of the edge with the vertices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>edge</strong> – edge to be updated.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

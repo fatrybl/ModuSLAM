@@ -19,7 +19,7 @@ from moduslam.system_configs.data_manager.batch_factory.regimes import (
 from tests.conftest import kaist_custom_dataset_dir, tum_vie_dataset_dir
 
 _valid_regime_config1 = DataRegimeConfig(name=Stream.name)
-_valid_regime_config2 = DataRegimeConfig(name=TimeLimit.name, start=0, stop=0)
+_valid_regime_config2 = DataRegimeConfig(name=TimeLimit.name, start="0", stop="0")
 _invalid_regime_config = DataRegimeConfig(name="InvalidRegime")
 
 _kaist = (

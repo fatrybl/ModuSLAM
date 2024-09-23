@@ -26,10 +26,10 @@ from moduslam.frontend_manager.handlers.camera_features_detector.detector import
 )
 
 image1: ImageFile = Image.open(
-    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00055.jpg"
+    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00064.jpg"
 )
 image2: ImageFile = Image.open(
-    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00060.jpg"
+    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00065.jpg"
 )
 
 
@@ -50,15 +50,11 @@ distortion_coefficients_left = np.array(
 )
 
 
-detector = KeypointDetector(num_features=1000)
+detector = KeypointDetector(num_features=20)
 matcher = FeatureMatcher()
 
-image1_undistorted, _ = detector.undistort_image(
-    image1, camera_matrix, distortion_coefficients_left
-)
-image2_undistorted, _ = detector.undistort_image(
-    image2, camera_matrix, distortion_coefficients_left
-)
+image1_undistorted = detector.undistort_image(image1, camera_matrix, distortion_coefficients_left)
+image2_undistorted = detector.undistort_image(image2, camera_matrix, distortion_coefficients_left)
 
 
 fx = camera_matrix[0, 0]
@@ -110,11 +106,11 @@ graph = gtsam.NonlinearFactorGraph()
 projection_params = gtsam.SmartProjectionParams()
 
 pose1 = gtsam.Pose3()
-pose2 = gtsam.Pose3(gtsam.Rot3(), [0.0, 0, 0.1])
-camera_noise = gtsam.noiseModel.Isotropic.Sigma(2, 3.0)
+pose2 = gtsam.Pose3(gtsam.Rot3(), [0.0, 0.0, 0.1])
+camera_noise = gtsam.noiseModel.Isotropic.Sigma(2, 2.0)
 
-prior1 = gtsam.PriorFactorPose3(X(1), pose1, gtsam.noiseModel.Isotropic.Sigma(6, 0.1))
-prior2 = gtsam.PriorFactorPose3(X(2), pose2, gtsam.noiseModel.Isotropic.Sigma(6, 20))
+prior1 = gtsam.PriorFactorPose3(X(1), pose1, gtsam.noiseModel.Isotropic.Sigma(6, 1))
+prior2 = gtsam.PriorFactorPose3(X(2), pose2, gtsam.noiseModel.Isotropic.Sigma(6, 10))
 graph.push_back(prior1)
 graph.push_back(prior2)
 
@@ -127,6 +123,8 @@ for match in matches:
     factor.add(kp2.pt, X(2))
 
     graph.push_back(factor)
+
+graph.print()
 
 
 init_values = gtsam.Values()

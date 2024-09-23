@@ -88,8 +88,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">gtsam</span><span class="o">.</span><span class="n">LevenbergMarquardtParams</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="o">.</span><span class="n">setlambdaInitial</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="o">.</span><span class="n">setVerbosity</span><span class="p">(</span><span class="s2">&quot;SUMMARY&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="o">.</span><span class="n">setlambdaInitial</span><span class="p">(</span><span class="mf">1e-1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GraphSolver.solve">
 <a class="viewcode-back" href="../../../moduslam.backend_manager.html#moduslam.backend_manager.graph_solver.GraphSolver.solve">[docs]</a>

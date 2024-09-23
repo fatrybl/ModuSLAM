@@ -1,14 +1,14 @@
 """Tests for the GraphMerger class."""
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import UnaryEdge
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     State,
 )
 from moduslam.frontend_manager.graph_builder.graph_merger import GraphMerger
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.utils.ordered_set import OrderedSet
 from tests.frontend_manager.conftest import edge_factory, element, handler
 from tests.frontend_manager.objects import BasicTestVertex, create_measurement
@@ -19,7 +19,7 @@ def test_merge(element: Element, handler: Handler, edge_factory: EdgeFactory):
     # add new key-value pair to the protected table. Only for testing purposes.
     graph.vertex_storage._vertices_table.update({BasicTestVertex: OrderedSet()})
 
-    merger = GraphMerger[BasicTestVertex, UnaryEdge]()
+    merger = GraphMerger()
     # add new key-value pair to the protected table. Only for testing purposes.
     merger._table = {handler: edge_factory}
 

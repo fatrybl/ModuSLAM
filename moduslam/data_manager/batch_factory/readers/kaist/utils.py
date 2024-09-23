@@ -99,7 +99,7 @@ def create_sequence(
     Args:
         file: csv file path.
 
-        regime: a TimeLimit or Stream object.
+        regime: a TimeLimit or Stream.
 
         used_sensors: a set of sensor names to be used.
 

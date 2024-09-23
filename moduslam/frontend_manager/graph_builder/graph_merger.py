@@ -1,21 +1,18 @@
 import logging
-from typing import Generic
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
-from moduslam.frontend_manager.graph.base_edges import BaseEdge
-from moduslam.frontend_manager.graph.base_vertices import BaseVertex
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate import (
     State,
 )
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.setup_manager.tables_initializer import init_handler_edge_factory_table
 
 logger = logging.getLogger(frontend_manager)
 
 
-class GraphMerger(Generic[BaseVertex, BaseEdge]):
+class GraphMerger:
     """Merges the graph candidate with the graph."""
 
     def __init__(self) -> None:

@@ -1,10 +1,10 @@
 """The module contains functions for initializing tables with different connections."""
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.setup_manager.edge_factories_initializer.factory import (
     EdgeFactoriesInitializer,
 )

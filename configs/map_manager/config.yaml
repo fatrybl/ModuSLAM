@@ -3,7 +3,7 @@ defaults:
   - /map_loaders/base_lidar_map_loader@map_loader
 
 map_factory:
-  map_type: "trajectory"
+  map_type: "lidar_pointcloud"
   min_range: 3
   max_range: 100
 

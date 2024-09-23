@@ -5,8 +5,6 @@ import cv2
 import numpy as np
 
 from moduslam.logger.logging_config import frontend_manager
-from moduslam.types.numpy import VectorN
-from moduslam.utils.auxiliary_dataclasses import VisualFeature
 
 logger = logging.getLogger(frontend_manager)
 
@@ -15,10 +13,23 @@ class FeatureMatcher:
     def __init__(self):
         self._bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         self._min_required_matches: int = 4
-        self._ransac_reproj_threshold: float = 0.5
+        self._ransac_reproj_threshold: float = 1.0
         self._num_matches: int | None = None
 
-    def find_matches(self, descriptors_1: VectorN, descriptors_2: VectorN) -> Sequence[cv2.DMatch]:
+    @staticmethod
+    def reshape_array(arr: np.ndarray) -> np.ndarray:
+        if arr.ndim == 2:
+            return arr
+        elif arr.ndim == 1:
+            return arr.reshape(1, 32)
+        elif arr.ndim == 3:
+            return arr.squeeze()
+        else:
+            raise ValueError("Unsupported array shape")
+
+    def find_matches(
+        self, descriptors_1: np.ndarray, descriptors_2: np.ndarray
+    ) -> Sequence[cv2.DMatch]:
         """Find matches between two sets of descriptors using a brute-force matcher.
 
         Args:
@@ -29,12 +40,14 @@ class FeatureMatcher:
         Returns:
             matches.
         """
+        descriptors_1 = self.reshape_array(descriptors_1)
+        descriptors_2 = self.reshape_array(descriptors_2)
+
         matches = self._bf.match(descriptors_1, descriptors_2)
-        matches_sorted = sorted(matches, key=lambda x: x.distance)
         if self._num_matches:
-            return matches_sorted[: self._num_matches]
+            return matches[: self._num_matches]
         else:
-            return matches_sorted
+            return matches
 
     def filter_with_ransac(
         self,
@@ -55,7 +68,7 @@ class FeatureMatcher:
             filtered matches.
         """
         if len(matches) < self._min_required_matches:
-            msg = f"Number of matches is less than the required minimum of {self._min_required_matches}."
+            msg = f"Number of matches is less than the required minimum of {self._min_required_matches} for RANSAC."
             logger.error(msg)
             return []
 
@@ -65,57 +78,34 @@ class FeatureMatcher:
         H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, self._ransac_reproj_threshold)
 
         matches = [m for i, m in enumerate(matches) if mask[i]]
+
+        if len(matches) == 0:
+            logger.warning("Number of matches after RANSAC is 0.")
+
         return matches
 
     @staticmethod
-    def get_unique_features(
-        keypoints: list[cv2.KeyPoint], matches: Sequence[cv2.DMatch]
-    ) -> list[cv2.KeyPoint]:
-        """Gets unmatched features.
+    def filter_with_ration_test(
+        matches: Sequence[cv2.DMatch], ratio: float = 0.8
+    ) -> list[cv2.DMatch]:
+        """Filter matches with ratio test.
 
         Args:
-            keypoints: keypoints.
+            matches: matches.
 
-            matches: keypoint matches.
-
-        Returns:
-            unmatched features.
-        """
-        matched_indices = {match.queryIdx for match in matches}
-        unique_keypoints = [kp for i, kp in enumerate(keypoints) if i not in matched_indices]
-        return unique_keypoints
-
-    @staticmethod
-    def sort_features(
-        new_features: list[VisualFeature], matches: list[cv2.DMatch]
-    ) -> tuple[list[VisualFeature], list[int], list[VisualFeature]]:
-        """Sorts new visual features into matched and unmatched categories based on
-        matches.
-
-        Args:
-            new_features: List of new visual features of type VisualFeature.
-
-            matches: List of cv2.DMatch objects representing the matches.
+            ratio: ratio threshold.
 
         Returns:
-            A tuple containing:
-                list of matched new visual features.
-                list of indices corresponding to the matched features in the existing list of features.
-                list of unmatched new visual features.
+            filtered matches.
         """
+        if len(matches) < 2:
+            logger.warning("Number of matches is less than 2 for Lowe's ratio test.")
+            return []
 
-        matched_features = []
-        matched_indices = []
-        matched_indices_set = set()
+        matches = sorted(matches, key=lambda x: x.distance)
+        good_matches = []
+        for m, n in zip(matches, matches[1:]):
+            if m.distance < ratio * n.distance:
+                good_matches.append(m)
 
-        for match in matches:
-            new_feature_idx = match.queryIdx
-            existing_feature_idx = match.trainIdx
-
-            matched_features.append(new_features[new_feature_idx])
-            matched_indices.append(existing_feature_idx)
-            matched_indices_set.add(new_feature_idx)
-
-        unmatched_features = [f for i, f in enumerate(new_features) if i not in matched_indices_set]
-
-        return matched_features, matched_indices, unmatched_features
+        return good_matches

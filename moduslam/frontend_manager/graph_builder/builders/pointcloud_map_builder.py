@@ -32,7 +32,7 @@ class PointcloudMapBuilder(GraphBuilder, Generic[BaseVertex, BaseEdge]):
         super().__init__(config)
         self._distributor: ElementDistributor = ElementDistributor()
         self._candidate_factory: CandidateFactory = PointcloudMapCandidateFactory()
-        self._merger = GraphMerger[BaseVertex, BaseEdge]()
+        self._merger = GraphMerger()
         self._merger.init_table(config.graph_merger.handler_edge_factory_table)
         self._distributor.init_table(config.element_distributor.sensor_handlers_table)
         self._candidate_factory.init_table(config.candidate_factory.handler_state_analyzer_table)

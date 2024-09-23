@@ -61,10 +61,16 @@ sensors_factory_config2 = generate_sensors_factory_config([imu])
 invalid_sensors_factory_config = generate_sensors_factory_config([])
 
 stream = DataRegimeConfig(name=Stream.name)
-t_limit_1 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el25.timestamp)
-t_limit_2 = DataRegimeConfig(name=TimeLimit.name, start=el1.timestamp, stop=el1.timestamp)
-t_limit_3 = DataRegimeConfig(name=TimeLimit.name, start=el25.timestamp, stop=el25.timestamp)
-t_limit_4 = DataRegimeConfig(name=TimeLimit.name, start=el10.timestamp, stop=el23.timestamp)
+t_limit_1 = DataRegimeConfig(
+    name=TimeLimit.name, start=str(el1.timestamp), stop=str(el25.timestamp)
+)
+t_limit_2 = DataRegimeConfig(name=TimeLimit.name, start=str(el1.timestamp), stop=str(el1.timestamp))
+t_limit_3 = DataRegimeConfig(
+    name=TimeLimit.name, start=str(el25.timestamp), stop=str(el25.timestamp)
+)
+t_limit_4 = DataRegimeConfig(
+    name=TimeLimit.name, start=str(el10.timestamp), stop=str(el23.timestamp)
+)
 
 full_memory_percent = 100.0
 low_memory_percent = 1.0

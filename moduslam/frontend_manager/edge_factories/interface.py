@@ -1,32 +1,26 @@
-from abc import ABC, abstractmethod
-from typing import Generic
+from typing import Protocol, runtime_checkable
 
 from moduslam.frontend_manager.graph.base_edges import BaseEdge
-from moduslam.frontend_manager.graph.base_vertices import BaseVertex
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.frontend_manager.measurement_storage import Measurement
-from moduslam.system_configs.frontend_manager.edge_factories.base_factory import (
-    EdgeFactoryConfig,
-)
 from moduslam.utils.ordered_set import OrderedSet
 
 
-class EdgeFactory(ABC, Generic[BaseEdge, BaseVertex]):
+@runtime_checkable
+class EdgeFactory(Protocol[BaseEdge]):
     """Abstract factory for creating edges."""
 
-    def __init__(self, config: EdgeFactoryConfig):
-        """
+    def __init__(self, *args, **kwargs):
+        """Initializes the handler.
+
         Args:
-            config: configuration of the factory.
+            config: configuration of the handler.
         """
-        self._name = config.name
 
     @property
     def name(self) -> str:
-        """Unique name of the factory."""
-        return self._name
+        """Unique factory name."""
 
-    @abstractmethod
     def create(
         self,
         graph: Graph,
@@ -43,5 +37,5 @@ class EdgeFactory(ABC, Generic[BaseEdge, BaseVertex]):
             timestamp: the final timestamp for the edge(s).
 
         Returns:
-            new edges.
+            new edge(s).
         """

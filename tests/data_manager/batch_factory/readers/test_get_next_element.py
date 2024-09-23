@@ -11,7 +11,6 @@ get_next_element() should be tested for both of them.
 
 Checklist:
 
-| Overload  | KaistReader | TumVieReader | Ros2Reader  |
 ------------|-------------|--------------|--------------
 | 1         |     +       |              |             |
 ------------|-------------|--------------|--------------
@@ -31,10 +30,13 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset im
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.system_configs.setup_manager.sensor_factory import SensorsFactoryConfig
 from moduslam.utils.auxiliary_methods import equal_elements
+from tests.data_manager.batch_factory.readers.test_cases.kaist.case1 import kaist1
 from tests.data_manager.batch_factory.readers.test_cases.kaist.case2 import kaist2
+from tests.data_manager.batch_factory.readers.test_cases.tum_vie.case1 import tum_vie1
 from tests.data_manager.batch_factory.readers.test_cases.ros2.case1 import ros1
 from tests.data_manager.batch_factory.readers.test_cases.tum_vie.case2 import tum_vie2
 
+test_cases_1 = (*kaist1, *tum_vie1)
 # test_cases_1 = (*kaist1, *tum_vie1)
 test_cases_2 = (*kaist2, *tum_vie2)
 

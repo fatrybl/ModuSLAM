@@ -1,5 +1,0 @@
-#TODO: Change and add configuration for: Stereo, Lidar and Imu
-defaults:
-  - lidar
-  - override setup_manager: lidar_imu_vrs
-  - override frontend_manager: lidar_imu_vrs

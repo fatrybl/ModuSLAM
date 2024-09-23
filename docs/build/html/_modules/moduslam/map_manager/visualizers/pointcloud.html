@@ -73,26 +73,27 @@
   <h1>Source code for moduslam.map_manager.visualizers.pointcloud</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">o3d</span>
 
+<span class="kn">from</span> <span class="nn">moduslam.map_manager.maps.pointcloud</span> <span class="kn">import</span> <span class="n">PointcloudMap</span>
 <span class="kn">from</span> <span class="nn">moduslam.map_manager.protocols</span> <span class="kn">import</span> <span class="n">MapVisualizer</span>
 
 
 <div class="viewcode-block" id="PointcloudVisualizer">
 <a class="viewcode-back" href="../../../../moduslam.map_manager.visualizers.html#moduslam.map_manager.visualizers.pointcloud.PointcloudVisualizer">[docs]</a>
 <span class="k">class</span> <span class="nc">PointcloudVisualizer</span><span class="p">(</span><span class="n">MapVisualizer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualizer for a 3D pointcloud.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualizer for a 3D point cloud.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PointcloudVisualizer.visualize">
 <a class="viewcode-back" href="../../../../moduslam.map_manager.visualizers.html#moduslam.map_manager.visualizers.pointcloud.PointcloudVisualizer.visualize">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="n">pointcloud</span><span class="p">:</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualizes the pointcloud.</span>
+    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="n">pointcloud_map</span><span class="p">:</span> <span class="n">PointcloudMap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualizes the point cloud.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            pointcloud: pointcloud array [N, 3].</span>
+<span class="sd">            map: point cloud array [N, 3].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vis</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">Visualizer</span><span class="p">()</span>
         <span class="n">vis</span><span class="o">.</span><span class="n">create_window</span><span class="p">()</span>
-        <span class="n">vis</span><span class="o">.</span><span class="n">add_geometry</span><span class="p">(</span><span class="n">pointcloud</span><span class="p">)</span>
+        <span class="n">vis</span><span class="o">.</span><span class="n">add_geometry</span><span class="p">(</span><span class="n">pointcloud_map</span><span class="o">.</span><span class="n">pointcloud</span><span class="p">)</span>
         <span class="n">vis</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
 </div>
 

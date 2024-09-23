@@ -105,60 +105,8 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-moduslam.frontend_manager.handlers.ABC_handler">
-<span id="moduslam-frontend-manager-handlers-abc-handler-module"></span><h2>moduslam.frontend_manager.handlers.ABC_handler module<a class="headerlink" href="#module-moduslam.frontend_manager.handlers.ABC_handler" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.ABC_handler.Handler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.handlers.ABC_handler.</span></span><span class="sig-name descname"><span class="pre">Handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.handlers.html#moduslam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="moduslam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><span class="pre">HandlerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/ABC_handler.html#Handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Base abstract handler for inheritance.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.ABC_handler.Handler.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.handlers.html#moduslam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig" title="moduslam.system_configs.frontend_manager.handlers.base_handler.HandlerConfig"><span class="pre">HandlerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/ABC_handler.html#Handler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> – configuration of the handler.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.ABC_handler.Handler.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler.name" title="Link to this definition"></a></dt>
-<dd><p>Name of the handler.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.ABC_handler.Handler.process">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/ABC_handler.html#Handler.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler.process" title="Link to this definition"></a></dt>
-<dd><p>Processes the element.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>element</strong> – element of data batch to be processed.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>measurement or None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.ABC_handler.Handler._create_empty_element">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/ABC_handler.html#Handler._create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler._create_empty_element" title="Link to this definition"></a></dt>
-<dd><p>Creates an empty element with the same timestamp, location and sensor as the
-input element. Must be used for creating elements for the measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>element</strong> – element of a data batch with raw data.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>empty element without data.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-frontend-manager-handlers-abc-handler-module">
+<h2>moduslam.frontend_manager.handlers.ABC_handler module<a class="headerlink" href="#moduslam-frontend-manager-handlers-abc-handler-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.frontend_manager.handlers.imu_data_preprocessor">
 <span id="moduslam-frontend-manager-handlers-imu-data-preprocessor-module"></span><h2>moduslam.frontend_manager.handlers.imu_data_preprocessor module<a class="headerlink" href="#module-moduslam.frontend_manager.handlers.imu_data_preprocessor" title="Link to this heading"></a></h2>
@@ -168,7 +116,7 @@ input element. Must be used for creating elements for the measurement.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.handlers.pointcloud_matcher.</span></span><span class="sig-name descname"><span class="pre">ScanMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.handlers.html#moduslam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig" title="moduslam.system_configs.frontend_manager.handlers.lidar_odometry.KissIcpScanMatcherConfig"><span class="pre">KissIcpScanMatcherConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/pointcloud_matcher.html#ScanMatcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler" title="moduslam.frontend_manager.handlers.ABC_handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></p>
 <p>Handler computes the transformation between two point clouds based on Kiss-ICP method:
 <a class="reference external" href="https://github.com/PRBonn/kiss-icp">https://github.com/PRBonn/kiss-icp</a>.</p>
 <dl class="py method">
@@ -179,6 +127,12 @@ input element. Must be used for creating elements for the measurement.</p>
 <dd class="field-odd"><p><strong>config</strong> – handler configuration with parameters for Kiss-ICP scan matcher.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.name" title="Link to this definition"></a></dt>
+<dd><p>Unique handler name.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -266,8 +220,8 @@ computed for a single point cloud.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher._create_empty_element">
-<span class="sig-name descname"><span class="pre">_create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/pointcloud_matcher.html#ScanMatcher._create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher._create_empty_element" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.create_empty_element">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/pointcloud_matcher.html#ScanMatcher.create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.pointcloud_matcher.ScanMatcher.create_empty_element" title="Link to this definition"></a></dt>
 <dd><p>Creates an empty element with the same timestamp, location and sensor as the input element.
 :param element: element of a data batch with raw data.</p>
 <dl class="field-list simple">
@@ -287,18 +241,39 @@ computed for a single point cloud.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.prior.PriorHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.handlers.prior.</span></span><span class="sig-name descname"><span class="pre">PriorHandler</span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/prior.html#PriorHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.prior.PriorHandler" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#moduslam.frontend_manager.handlers.ABC_handler.Handler" title="moduslam.frontend_manager.handlers.ABC_handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></p>
 <p>Empty (fake) handler for prior measurements.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.prior.PriorHandler.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.handlers.prior.PriorHandler.name" title="Link to this definition"></a></dt>
+<dd><p>Unique handler name.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.prior.PriorHandler.process">
 <span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/prior.html#PriorHandler.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.prior.PriorHandler.process" title="Link to this definition"></a></dt>
 <dd><p>Processes the element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>element</strong> – element of data batch to be processed.</p>
+<dd class="field-odd"><p><strong>element</strong> – element of a data batch to be processed.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>measurement or None.</p>
+<dd class="field-even"><p>new measurement if created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.prior.PriorHandler.create_empty_element">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/prior.html#PriorHandler.create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.prior.PriorHandler.create_empty_element" title="Link to this definition"></a></dt>
+<dd><p>Creates an empty element with the same timestamp, location and sensor as the
+input element. Must be used in every Handler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>element</strong> – element of a data batch with raw data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>empty element without raw data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,8 +281,57 @@ computed for a single point cloud.</p>
 </dd></dl>
 
 </section>
-<section id="moduslam-frontend-manager-handlers-vrs-gps-module">
-<h2>moduslam.frontend_manager.handlers.vrs_gps module<a class="headerlink" href="#moduslam-frontend-manager-handlers-vrs-gps-module" title="Link to this heading"></a></h2>
+<section id="module-moduslam.frontend_manager.handlers.vrs_gps">
+<span id="moduslam-frontend-manager-handlers-vrs-gps-module"></span><h2>moduslam.frontend_manager.handlers.vrs_gps module<a class="headerlink" href="#module-moduslam.frontend_manager.handlers.vrs_gps" title="Link to this heading"></a></h2>
+<p>Preprocesses the GPS data for VRS_GPS sensor of Kaist Urban dataset.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.frontend_manager.handlers.vrs_gps.</span></span><span class="sig-name descname"><span class="pre">VrsGpsPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.handlers.html#moduslam.system_configs.frontend_manager.handlers.vrs_gps.VrsGpsHandlerConfig" title="moduslam.system_configs.frontend_manager.handlers.vrs_gps.VrsGpsHandlerConfig"><span class="pre">VrsGpsHandlerConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/vrs_gps.html#VrsGpsPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.frontend_manager.handlers.html#moduslam.system_configs.frontend_manager.handlers.vrs_gps.VrsGpsHandlerConfig" title="moduslam.system_configs.frontend_manager.handlers.vrs_gps.VrsGpsHandlerConfig"><span class="pre">VrsGpsHandlerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/vrs_gps.html#VrsGpsPreprocessor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – configuration of the handler.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.name" title="Link to this definition"></a></dt>
+<dd><p>Unique handler name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.frontend_manager.html#moduslam.frontend_manager.measurement_storage.Measurement" title="moduslam.frontend_manager.measurement_storage.Measurement"><span class="pre">Measurement</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/vrs_gps.html#VrsGpsPreprocessor.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.process" title="Link to this definition"></a></dt>
+<dd><p>Preprocesses the GPS data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>element</strong> – GPS data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>measurement with GPS data or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.create_empty_element">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_empty_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="moduslam.data_manager.batch_factory.html#moduslam.data_manager.batch_factory.batch.Element" title="moduslam.data_manager.batch_factory.batch.Element"><span class="pre">Element</span></a></span></span><a class="reference internal" href="_modules/moduslam/frontend_manager/handlers/vrs_gps.html#VrsGpsPreprocessor.create_empty_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.frontend_manager.handlers.vrs_gps.VrsGpsPreprocessor.create_empty_element" title="Link to this definition"></a></dt>
+<dd><p>Creates an empty element with the same timestamp, location and sensor as the input element.
+:param element: element of a data batch with raw data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>empty element without data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-moduslam.frontend_manager.handlers">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.frontend_manager.handlers" title="Link to this heading"></a></h2>

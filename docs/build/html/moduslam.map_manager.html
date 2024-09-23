@@ -110,7 +110,7 @@
 <li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam-map-manager-map-factories-lidar-map-factory-module">moduslam.map_manager.map_factories.lidar_map_factory module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam-map-manager-map-factories-lidar-map-utils-module">moduslam.map_manager.map_factories.lidar_map_utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="moduslam.map_manager.map_factories.html#module-moduslam.map_manager.map_factories.utils">moduslam.map_manager.map_factories.utils module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.get_elements"><code class="docutils literal notranslate"><span class="pre">get_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.fill_elements"><code class="docutils literal notranslate"><span class="pre">fill_elements()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.transform_pointcloud"><code class="docutils literal notranslate"><span class="pre">transform_pointcloud()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.filter_array"><code class="docutils literal notranslate"><span class="pre">filter_array()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="moduslam.map_manager.map_factories.html#moduslam.map_manager.map_factories.utils.convert_pointcloud"><code class="docutils literal notranslate"><span class="pre">convert_pointcloud()</span></code></a></li>
@@ -175,68 +175,8 @@
 </dd></dl>
 
 </section>
-<section id="module-moduslam.map_manager.map_manager">
-<span id="moduslam-map-manager-map-manager-module"></span><h2>moduslam.map_manager.map_manager module<a class="headerlink" href="#module-moduslam.map_manager.map_manager" title="Link to this heading"></a></h2>
-<p>Manages all manipulations with the map.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moduslam.map_manager.map_manager.</span></span><span class="sig-name descname"><span class="pre">MapManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manager_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.MapManagerConfig" title="moduslam.system_configs.map_manager.map_manager.MapManagerConfig"><span class="pre">MapManagerConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.html#moduslam.system_configs.data_manager.batch_factory.batch_factory.BatchFactoryConfig" title="moduslam.system_configs.data_manager.batch_factory.batch_factory.BatchFactoryConfig"><span class="pre">BatchFactoryConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manager_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.map_manager.html#moduslam.system_configs.map_manager.map_manager.MapManagerConfig" title="moduslam.system_configs.map_manager.map_manager.MapManagerConfig"><span class="pre">MapManagerConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_factory_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.system_configs.data_manager.batch_factory.html#moduslam.system_configs.data_manager.batch_factory.batch_factory.BatchFactoryConfig" title="moduslam.system_configs.data_manager.batch_factory.batch_factory.BatchFactoryConfig"><span class="pre">BatchFactoryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>manager_config</strong> – map manager configuration.</p></li>
-<li><p><strong>batch_factory_config</strong> – batch factory configuration.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.map">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.map" title="Link to this definition"></a></dt>
-<dd><p>Map instance.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.create_map">
-<span class="sig-name descname"><span class="pre">create_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager.create_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.create_map" title="Link to this definition"></a></dt>
-<dd><p>Creates a map from the graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><em>Graph</em></a>) – a graph to create a map from.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.visualize_map">
-<span class="sig-name descname"><span class="pre">visualize_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager.visualize_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.visualize_map" title="Link to this definition"></a></dt>
-<dd><p>Visualizes the map.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.save_map">
-<span class="sig-name descname"><span class="pre">save_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager.save_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.save_map" title="Link to this definition"></a></dt>
-<dd><p>Saves the map.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="moduslam.map_manager.map_manager.MapManager.save_graph">
-<span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="moduslam.frontend_manager.graph.html#moduslam.frontend_manager.graph.graph.Graph" title="moduslam.frontend_manager.graph.graph.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/moduslam/map_manager/map_manager.html#MapManager.save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moduslam.map_manager.map_manager.MapManager.save_graph" title="Link to this definition"></a></dt>
-<dd><p>Saves the graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>graph</strong> – a graph to save.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="moduslam-map-manager-map-manager-module">
+<h2>moduslam.map_manager.map_manager module<a class="headerlink" href="#moduslam-map-manager-map-manager-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-moduslam.map_manager">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moduslam.map_manager" title="Link to this heading"></a></h2>

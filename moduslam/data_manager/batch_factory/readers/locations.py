@@ -45,11 +45,3 @@ class CsvDataLocation(Location):
 @dataclass(frozen=True, eq=True)
 class TxtDataLocation(CsvDataLocation):
     """The location of .txt file and the position (line number) in it."""
-
-
-@dataclass(frozen=True, eq=True)
-class RosbagLocation(Location):
-    """Path to a ROS2 bag file and reading position of a sensor."""
-
-    file: Path
-    position: int

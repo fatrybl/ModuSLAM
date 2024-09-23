@@ -78,8 +78,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">moduslam.logger.logging_config</span> <span class="kn">import</span> <span class="n">frontend_manager</span>
-<span class="kn">from</span> <span class="nn">moduslam.types.numpy</span> <span class="kn">import</span> <span class="n">VectorN</span>
-<span class="kn">from</span> <span class="nn">moduslam.utils.auxiliary_dataclasses</span> <span class="kn">import</span> <span class="n">VisualFeature</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">frontend_manager</span><span class="p">)</span>
 
@@ -90,12 +88,28 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_bf</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BFMatcher</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">NORM_HAMMING</span><span class="p">,</span> <span class="n">crossCheck</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_min_required_matches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ransac_reproj_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ransac_reproj_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_matches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FeatureMatcher.reshape_array">
+<a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.smart_visual_features.html#moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher.FeatureMatcher.reshape_array">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">reshape_array</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arr</span>
+        <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported array shape&quot;</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="FeatureMatcher.find_matches">
 <a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.smart_visual_features.html#moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher.FeatureMatcher.find_matches">[docs]</a>
-    <span class="k">def</span> <span class="nf">find_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">descriptors_1</span><span class="p">:</span> <span class="n">VectorN</span><span class="p">,</span> <span class="n">descriptors_2</span><span class="p">:</span> <span class="n">VectorN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">find_matches</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">descriptors_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">descriptors_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find matches between two sets of descriptors using a brute-force matcher.</span>
 
 <span class="sd">        Args:</span>
@@ -106,12 +120,14 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            matches.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">descriptors_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reshape_array</span><span class="p">(</span><span class="n">descriptors_1</span><span class="p">)</span>
+        <span class="n">descriptors_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reshape_array</span><span class="p">(</span><span class="n">descriptors_2</span><span class="p">)</span>
+
         <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bf</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">descriptors_1</span><span class="p">,</span> <span class="n">descriptors_2</span><span class="p">)</span>
-        <span class="n">matches_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">matches</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_matches</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">matches_sorted</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_matches</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">matches</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_matches</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">matches_sorted</span></div>
+            <span class="k">return</span> <span class="n">matches</span></div>
 
 
 <div class="viewcode-block" id="FeatureMatcher.filter_with_ransac">
@@ -135,7 +151,7 @@
 <span class="sd">            filtered matches.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_required_matches</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Number of matches is less than the required minimum of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_required_matches</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Number of matches is less than the required minimum of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_required_matches</span><span class="si">}</span><span class="s2"> for RANSAC.&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">return</span> <span class="p">[]</span>
 
@@ -145,66 +161,40 @@
         <span class="n">H</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findHomography</span><span class="p">(</span><span class="n">src_pts</span><span class="p">,</span> <span class="n">dst_pts</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RANSAC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ransac_reproj_threshold</span><span class="p">)</span>
 
         <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Number of matches after RANSAC is 0.&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">matches</span></div>
 
 
-<div class="viewcode-block" id="FeatureMatcher.get_unique_features">
-<a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.smart_visual_features.html#moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher.FeatureMatcher.get_unique_features">[docs]</a>
+<div class="viewcode-block" id="FeatureMatcher.filter_with_ration_test">
+<a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.smart_visual_features.html#moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher.FeatureMatcher.filter_with_ration_test">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_unique_features</span><span class="p">(</span>
-        <span class="n">keypoints</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">KeyPoint</span><span class="p">],</span> <span class="n">matches</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">KeyPoint</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets unmatched features.</span>
+    <span class="k">def</span> <span class="nf">filter_with_ration_test</span><span class="p">(</span>
+        <span class="n">matches</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">],</span> <span class="n">ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter matches with ratio test.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            keypoints: keypoints.</span>
+<span class="sd">            matches: matches.</span>
 
-<span class="sd">            matches: keypoint matches.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            unmatched features.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">matched_indices</span> <span class="o">=</span> <span class="p">{</span><span class="n">match</span><span class="o">.</span><span class="n">queryIdx</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">}</span>
-        <span class="n">unique_keypoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">kp</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">kp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keypoints</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">matched_indices</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">unique_keypoints</span></div>
-
-
-<div class="viewcode-block" id="FeatureMatcher.sort_features">
-<a class="viewcode-back" href="../../../../../moduslam.frontend_manager.edge_factories.smart_visual_features.html#moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher.FeatureMatcher.sort_features">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">sort_features</span><span class="p">(</span>
-        <span class="n">new_features</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">VisualFeature</span><span class="p">],</span> <span class="n">matches</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">DMatch</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">VisualFeature</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">VisualFeature</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts new visual features into matched and unmatched categories based on</span>
-<span class="sd">        matches.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            new_features: List of new visual features of type VisualFeature.</span>
-
-<span class="sd">            matches: List of cv2.DMatch objects representing the matches.</span>
+<span class="sd">            ratio: ratio threshold.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A tuple containing:</span>
-<span class="sd">                list of matched new visual features.</span>
-<span class="sd">                list of indices corresponding to the matched features in the existing list of features.</span>
-<span class="sd">                list of unmatched new visual features.</span>
+<span class="sd">            filtered matches.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Number of matches is less than 2 for Lowe&#39;s ratio test.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
 
-        <span class="n">matched_features</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">matched_indices</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">matched_indices_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">matches</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
+        <span class="n">good_matches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">matches</span><span class="p">,</span> <span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">n</span><span class="o">.</span><span class="n">distance</span><span class="p">:</span>
+                <span class="n">good_matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
-            <span class="n">new_feature_idx</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">queryIdx</span>
-            <span class="n">existing_feature_idx</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">trainIdx</span>
-
-            <span class="n">matched_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_features</span><span class="p">[</span><span class="n">new_feature_idx</span><span class="p">])</span>
-            <span class="n">matched_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">existing_feature_idx</span><span class="p">)</span>
-            <span class="n">matched_indices_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_feature_idx</span><span class="p">)</span>
-
-        <span class="n">unmatched_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_features</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">matched_indices_set</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">matched_features</span><span class="p">,</span> <span class="n">matched_indices</span><span class="p">,</span> <span class="n">unmatched_features</span></div>
+        <span class="k">return</span> <span class="n">good_matches</span></div>
 </div>
 
 </pre></div>

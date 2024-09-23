@@ -51,19 +51,29 @@ invalid_sensors_factory_config = generate_sensors_factory_config([])
 
 stream = DataRegimeConfig(name=Stream.name)
 t_limit_1 = DataRegimeConfig(
-    TimeLimit.name, start=nanosec2microsec(el1.timestamp), stop=nanosec2microsec(el24.timestamp)
+    TimeLimit.name,
+    start=str(nanosec2microsec(el1.timestamp)),
+    stop=str(nanosec2microsec(el24.timestamp)),
 )
 t_limit_2 = DataRegimeConfig(
-    TimeLimit.name, start=nanosec2microsec(el1.timestamp), stop=nanosec2microsec(el1.timestamp)
+    TimeLimit.name,
+    start=str(nanosec2microsec(el1.timestamp)),
+    stop=str(nanosec2microsec(el1.timestamp)),
 )
 t_limit_3 = DataRegimeConfig(
-    TimeLimit.name, start=nanosec2microsec(el24.timestamp), stop=nanosec2microsec(el24.timestamp)
+    TimeLimit.name,
+    start=str(nanosec2microsec(el24.timestamp)),
+    stop=str(nanosec2microsec(el24.timestamp)),
 )
 t_limit_4 = DataRegimeConfig(
-    TimeLimit.name, start=nanosec2microsec(el2.timestamp), stop=nanosec2microsec(el15.timestamp)
+    TimeLimit.name,
+    start=str(nanosec2microsec(el2.timestamp)),
+    stop=str(nanosec2microsec(el15.timestamp)),
 )
 t_limit_5 = DataRegimeConfig(
-    TimeLimit.name, start=nanosec2microsec(el2.timestamp), stop=nanosec2microsec(el2.timestamp)
+    TimeLimit.name,
+    start=str(nanosec2microsec(el2.timestamp)),
+    stop=str(nanosec2microsec(el2.timestamp)),
 )
 
 full_memory_percent = 100.0

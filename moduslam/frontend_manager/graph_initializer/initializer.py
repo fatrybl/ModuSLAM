@@ -5,7 +5,7 @@ from typing import Any
 
 from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import ConfigFileLocation
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.graph.base_edges import Edge
 from moduslam.frontend_manager.graph.base_vertices import Vertex
 from moduslam.frontend_manager.graph.custom_vertices import (

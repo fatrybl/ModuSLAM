@@ -8,10 +8,10 @@ import logging
 from collections.abc import Sequence
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
 from moduslam.frontend_manager.handlers.camera_features_detector.detector import (
     KeypointDetector,
 )
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
@@ -31,9 +31,14 @@ class FeatureDetector(Handler):
         Args:
             config: configuration for the feature detector.
         """
-        super().__init__(config)
+        self._name = config.name
         self._noise_covariance = config.noise_variance
-        self._detector = KeypointDetector()
+        self._detector = KeypointDetector(num_features=1000)
+
+    @property
+    def name(self) -> str:
+        """Unique handler name."""
+        return self._name
 
     def process(self, element: Element) -> Measurement | None:
         """Processes the element and returns the measurement with odometry if one has
@@ -50,16 +55,17 @@ class FeatureDetector(Handler):
         image = element.measurement.values[0]
 
         if not isinstance(sensor, StereoCamera):
-            msg = f"Expected sensor to be of type {StereoCamera.__name__}, got {type(element.measurement.sensor)}"
+            msg = f"Expected sensor to be of type {StereoCamera.__name__}, got {type(sensor)!r}."
             logger.error(msg)
             raise TypeError(msg)
 
-        features = self._detector.get_visual_features(image, sensor.calibrations)
-        empty_element = self._create_empty_element(element)
+        features = self._detector.get_visual_features(image)
+        empty_element = self.create_empty_element(element)
         measurement = self._create_measurement(empty_element, features, self._noise_covariance)
         return measurement
 
-    def _create_empty_element(self, element: Element) -> Element:
+    @staticmethod
+    def create_empty_element(element: Element) -> Element:
         """Creates an empty element with the same timestamp, location and sensor as the
         given element.
 
@@ -81,7 +87,9 @@ class FeatureDetector(Handler):
 
         Args:
             element: first element.
+
             features: visual features.
+
             noise_covariance: noise covariance.
 
         Returns:

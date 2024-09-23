@@ -10,13 +10,13 @@ from moduslam.frontend_manager.graph.custom_vertices import LidarPose
 from moduslam.frontend_manager.graph.graph import Graph
 from moduslam.logger.logging_config import map_manager
 from moduslam.map_manager.map_factories.lidar_map.utils import (
-    create_vertex_elements_table,
+    map_elements2vertices,
     values_to_array,
 )
 from moduslam.map_manager.map_factories.utils import (
     create_vertex_edges_table,
+    fill_elements,
     filter_array,
-    get_elements,
     transform_pointcloud,
 )
 from moduslam.map_manager.maps.pointcloud import PointcloudMap
@@ -45,13 +45,13 @@ class LidarMapFactory(MapFactory):
 
     @property
     def map(self) -> PointcloudMap:
-        """Lidar pointcloud map instance."""
+        """Lidar point cloud map instance."""
         return self._map
 
     def create_map(
         self, graph: Graph[LidarPose, LidarOdometry], batch_factory: BatchFactory
     ) -> None:
-        """Creates a lidar pointcloud map.
+        """Creates a lidar point cloud map.
 
         Args:
             graph: graph to create a map from.
@@ -60,8 +60,8 @@ class LidarMapFactory(MapFactory):
         """
         vertices = graph.vertex_storage.get_vertices(LidarPose)
         vertex_edges_table = create_vertex_edges_table(graph, vertices, LidarOdometry)
-        table1 = create_vertex_elements_table(vertices, vertex_edges_table)
-        table2 = get_elements(table1, batch_factory)
+        table1 = map_elements2vertices(vertex_edges_table)
+        table2 = fill_elements(table1, batch_factory)
         points_map = self._create_points_map(table2)
         self._map.set_points(points_map)
 
@@ -112,10 +112,10 @@ class LidarMapFactory(MapFactory):
 
             tf: base -> lidar transformation SE(3).
 
-            values: raw lidar pointcloud data.
+            values: raw lidar point cloud data.
 
         Returns:
-            Pointcloud array [4, N].
+            Point cloud array [4, N].
         """
         tf_array = np.array(tf)
         pose_array = np.array(pose)

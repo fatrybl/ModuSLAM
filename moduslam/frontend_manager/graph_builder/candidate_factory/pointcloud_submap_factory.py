@@ -14,7 +14,7 @@ from moduslam.frontend_manager.graph_builder.candidate_factory.graph_candidate i
 from moduslam.frontend_manager.graph_builder.state_analyzers.analyzer_ABC import (
     StateAnalyzer,
 )
-from moduslam.frontend_manager.handlers.ABC_handler import Handler
+from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import (
     Measurement,
     MeasurementStorage,

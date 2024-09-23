@@ -7,7 +7,7 @@ batch_factory:
     directory: "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0"
   regime:
     name: "TimeLimit"
-    start: 4.418806189999999478e+06
-    stop: 4.468949240999999456e+06
+    start: 4.218859222000000067e+06
+    stop: 4.368686637999999337e+06
 
   batch_memory_percent: 100.0

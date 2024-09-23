@@ -8,8 +8,8 @@ class DataRegimeConfig:
     """Data flow regime."""
 
     name: str
-    start: float = field(kw_only=True, default=MISSING)
-    stop: float = field(kw_only=True, default=MISSING)
+    start: str = field(kw_only=True, default=MISSING)
+    stop: str = field(kw_only=True, default=MISSING)
 
 
 @dataclass
@@ -21,7 +21,7 @@ class TimeLimit:
     name: str = "TimeLimit"
 
 
-@dataclass(frozen=True)
+@dataclass
 class Stream:
     """Data flow regime w/o limitations."""
 

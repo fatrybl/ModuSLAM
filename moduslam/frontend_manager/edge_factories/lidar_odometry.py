@@ -4,7 +4,7 @@
 
 import gtsam
 
-from moduslam.frontend_manager.edge_factories.edge_factory_ABC import EdgeFactory
+from moduslam.frontend_manager.edge_factories.interface import EdgeFactory
 from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
 from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose, Pose
@@ -28,13 +28,18 @@ class LidarOdometryEdgeFactory(EdgeFactory):
         Args:
             config: configuration of the factory.
         """
-        super().__init__(config)
+        self._name: str = config.name
         self._time_margin: int = sec2nanosec(config.search_time_margin)
+
+    @property
+    def name(self) -> str:
+        """Unique factory name."""
+        return self._name
 
     def create(
         self, graph: Graph, measurements: OrderedSet[Measurement], timestamp: int
     ) -> list[LidarOdometry]:
-        """Creates 1 edge (LidarOdometry) with the given measurements.
+        """Creates 1 LidarOdometry edge with the given measurements.
 
         Args:
             graph: the graph to create the edge for.
@@ -150,6 +155,10 @@ class LidarOdometryEdgeFactory(EdgeFactory):
             p = get_last_vertex(Pose, storage, t1, time_margin)
             if p:
                 v1 = LidarPose(timestamp=p.timestamp, index=p.index, value=p.value)
+
+            vertex = storage.find_closest_optimizable_vertex(Pose, t1, time_margin)
+            if vertex:
+                v1 = LidarPose(timestamp=vertex.timestamp, index=vertex.index, value=vertex.value)
 
         v2 = get_last_vertex(LidarPose, storage, t2, time_margin)
         if not v2:
