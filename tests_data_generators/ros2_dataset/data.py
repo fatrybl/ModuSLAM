@@ -17,6 +17,7 @@ from moduslam.system_configs.setup_manager.sensors import SensorConfig
 
 DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
 test_bag = "test_rosbag_100"
+# TODO: Import data directory instead of hardcoding it here.
 
 rosbag_path = Path(DATA_PATH, test_bag)
 
@@ -31,7 +32,7 @@ sensors_table = {
     "vlp32c": "lidar_ceter",
 }
 
-test_dict = {
+data_getters = {
     "data": get_imu_measurement,
     "velodyne_points": get_lidar_measurement,
     "image_raw": get_stereo_measurement,
@@ -39,25 +40,26 @@ test_dict = {
 
 
 elements = []
-count = 0
+
 for i, row in enumerate(data):
     topic = row[1]
     sensor_topic = topic.split("/")[1]
     data_type = topic.split("/")[-1]
 
-    if sensor_topic in sensors_table.keys() and data_type in test_dict.keys():
+    if sensor_topic in sensors_table.keys() and data_type in data_getters.keys():
         sensor_name = sensors_table[sensor_topic]
 
         raw_data = row[6]
         timestamp = row[5]
-        message_getter = test_dict[data_type]
+        message_getter = data_getters[data_type]
+        # TODO: Fix mypy complain
         data = message_getter(raw_data)
 
         sensor = Sensor(SensorConfig(sensor_name))
 
         measurement = RawMeasurement(sensor=sensor, values=data)
 
-        location = RosbagLocation(file=rosbag_path, position=i - 1)
+        location = RosbagLocation(file=rosbag_path, position=i)
 
         element = Element(
             timestamp=timestamp,
@@ -66,11 +68,3 @@ for i, row in enumerate(data):
         )
 
         elements.append(element)
-        count += 1
-
-print(len(elements))
-
-element = elements[0]
-
-print(element.timestamp)
-print(element.measurement.values)
