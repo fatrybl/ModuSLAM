@@ -51,7 +51,6 @@ def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
         connections: a list of connections.
     """
     topics_list = topics if isinstance(topics, list) else [topics]
-    print(f"Getting connections for topics: {topics_list}")
 
     with Reader(rosbag_path) as reader:
         connections = [c for c in reader.connections if c.topic in topics_list]

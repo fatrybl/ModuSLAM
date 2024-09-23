@@ -31,6 +31,7 @@ def test_ros2_reader_2():
     limit_check = 20
     rosbag_reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
     with rosbag_reader as reader:
+        # TODO: Remove prints. Check test and rewrite so it is logical
 
         print("Rosbag opened successfully")
 

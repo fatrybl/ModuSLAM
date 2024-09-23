@@ -59,18 +59,16 @@ class Ros2DataReader(DataReader):
         # TODO: Change print statements with Logger functions
         logger.info("ROS2 data reader created.")
         logger.debug(f"Dataset directory: {self._dataset_directory}")
-        print("\nInitial sensors table:")
-        print(self.sensors_table)
 
         self.sensors = get_rosbag_sensors(self._dataset_directory)
 
         self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
 
-        print(f"Sensors are: {self.sensors}")
-
         self.connections = get_connections(self.connection_list, self._dataset_directory)
 
         self.reader = Reader(self._dataset_directory)
+
+        self.connections = []
 
         self.rosbag_iterator = rosbag_iterator(self.reader, self.sensors, self.connections)
 
@@ -79,7 +77,6 @@ class Ros2DataReader(DataReader):
 
     def __enter__(self):
         """Opens the dataset for reading."""
-        print("Opening the Rosbag now")
         self._in_context = True
         self.reader.open()
         return self.reader
@@ -119,10 +116,6 @@ class Ros2DataReader(DataReader):
 
         try:
             index, timestamp, sensor_name, data, data_type = next(self.rosbag_iterator)
-            print("Sucessfully obtained sensor data")
-            print(
-                f"index: {index} timestamp: {timestamp} sensor_name: {sensor_name} data type: {data_type}"
-            )
 
         except (StopIteration, KeyError):
             return None
