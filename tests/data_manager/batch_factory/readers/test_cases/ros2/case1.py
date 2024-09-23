@@ -70,9 +70,9 @@ timestamp2 = 1698927496739239954  # 20 sensor readings
 timestamp3 = 1698927496799306816  # 40 sensor readings
 timestamp4 = 1698927496898641344  # 60 sensor readings
 timestamp5 = 1698927497046583719  # 80 sensor readings
-timestamp5 = 1698927497190095250  # 100 sensor readings
+timestamp6 = 1698927497190095250  # 100 sensor readings
 
-timelimit1 = TimeLimit(start=timestamp1, stop=timestamp5)
+timelimit1 = TimeLimit(start=timestamp1, stop=timestamp6)
 
 sensors_table1 = {
     "stereo_camera_left": "left",
@@ -85,8 +85,6 @@ sensors_table1 = {
 
 
 sensors1 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table1.keys())]
-
-print(sensors1)
 
 dataset_cfg1 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table1)
 
