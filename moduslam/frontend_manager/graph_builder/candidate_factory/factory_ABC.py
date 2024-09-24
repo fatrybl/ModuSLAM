@@ -17,7 +17,7 @@ class CandidateFactory(ABC):
 
     @abstractmethod
     def synchronize_states(self) -> None:
-        """Synchronizes states of the candidate based on criteria."""
+        """Synchronizes states of the candidate based on metrics."""
 
     @abstractmethod
     def process_storage(self, storage: MeasurementStorage) -> None:
