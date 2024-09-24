@@ -51,11 +51,11 @@ for i, row in enumerate(data):
         timestamp = row[5]
         message_getter = data_getters[data_type]
         # TODO: Fix mypy complain
-        data = message_getter(raw_data)
+        sensor_data = message_getter(raw_data)
 
         sensor = Sensor(SensorConfig(sensor_name))
 
-        measurement = RawMeasurement(sensor=sensor, values=data)
+        measurement = RawMeasurement(sensor=sensor, values=sensor_data)
 
         location = RosbagLocation(file=rosbag_path, position=i)
 
