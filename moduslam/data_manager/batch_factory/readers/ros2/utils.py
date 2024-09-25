@@ -90,7 +90,7 @@ def map_sensors(sensors: dict, sensor_list: list):
     return connections_list, updated_list
 
 
-def rosbag_iterator(reader, sensors, connections):
+def rosbag_iterator(reader, sensors, connections, time_range=None):
     """Iterates through the Readings of a Rosbag file based on the connections provided and returns data of each reading
 
     Args:
@@ -99,20 +99,26 @@ def rosbag_iterator(reader, sensors, connections):
         connections: List of connections for the sensors
     """
 
-    test_dict: dict[str, Callable]
-    test_dict = {
+    data_getter: dict[str, Callable]
+    data_getter = {
         "Imu": get_imu_measurement,
         "PointCloud2": get_lidar_measurement,
         "Image": get_stereo_measurement,
     }
 
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
+
+        if time_range is not None:
+            if timestamp < time_range.start:
+                continue
+            elif timestamp > time_range.stop:
+                break
         sensor_name = "no sensor"
         sensor_id = connection.id
         sensor_topic = connection.topic.split("/")[1]
         data_type = connection.msgtype.split("/")[-1]
 
-        if data_type not in test_dict.keys():
+        if data_type not in data_getter.keys():
             continue
 
         msg = deserialize_cdr(rawdata, connection.msgtype)
@@ -122,7 +128,7 @@ def rosbag_iterator(reader, sensors, connections):
                 sensor_name = single_sensor["sensor_name"]
                 break
 
-        message_getter = test_dict[data_type]
+        message_getter = data_getter[data_type]
         data = message_getter(msg)
 
         yield (i, timestamp, sensor_name, data, data_type)
