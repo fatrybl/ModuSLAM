@@ -27,7 +27,7 @@ sensors_table = {
     "xsens": "imu",
     "vlp16l": "lidar_left",
     "vlp16r": "lidar_right",
-    "vlp32c": "lidar_ceter",
+    "vlp32c": "lidar_center",
 }
 
 data_getters = {
@@ -50,7 +50,6 @@ for i, row in enumerate(data):
         raw_data = row[6]
         timestamp = row[5]
         message_getter = data_getters[data_type]
-        # TODO: Fix mypy complain
         sensor_data = message_getter(raw_data)
 
         sensor = Sensor(SensorConfig(sensor_name))
