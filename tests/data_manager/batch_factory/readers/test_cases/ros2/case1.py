@@ -64,7 +64,6 @@ el52 = elements[51]
 el53 = elements[52]
 el54 = elements[53]
 
-
 timestamp1 = 1698927496694033807
 timestamp2 = 1698927496739239954  # 20 sensor readings
 timestamp3 = 1698927496799306816  # 40 sensor readings
@@ -72,7 +71,18 @@ timestamp4 = 1698927496898641344  # 60 sensor readings
 timestamp5 = 1698927497046583719  # 80 sensor readings
 timestamp6 = 1698927497190095250  # 100 sensor readings
 
-timelimit1 = TimeLimit(start=timestamp1, stop=timestamp6)
+elements_0_20 = [e for e in elements if e.timestamp >= timestamp1 and e.timestamp < timestamp2]
+elements20_40 = [e for e in elements if e.timestamp >= timestamp2 and e.timestamp < timestamp3]
+elements40_60 = [e for e in elements if e.timestamp >= timestamp3 and e.timestamp < timestamp4]
+elements60_80 = [e for e in elements if e.timestamp >= timestamp4 and e.timestamp < timestamp5]
+elements80_100 = [e for e in elements if e.timestamp >= timestamp5 and e.timestamp < timestamp6]
+
+timelimit20 = TimeLimit(start=timestamp1, stop=timestamp2)
+timelimit20_40 = TimeLimit(start=timestamp2, stop=timestamp3)
+timelimit40_60 = TimeLimit(start=timestamp3, stop=timestamp4)
+timelimit60_80 = TimeLimit(start=timestamp4, stop=timestamp5)
+timelimit80_100 = TimeLimit(start=timestamp5, stop=timestamp6)
+
 
 sensors_table1 = {
     "stereo_camera_left": "left",
@@ -100,7 +110,11 @@ valid_stream_scenarios = (
 )
 
 valid_time_limit_scenarios = (
-    (sensors_factory_config1, dataset_cfg1, timelimit1, Ros2DataReader, elements),
+    (sensors_factory_config1, dataset_cfg1, timelimit20, Ros2DataReader, elements_0_20),
+    (sensors_factory_config1, dataset_cfg1, timelimit20_40, Ros2DataReader, elements20_40),
+    (sensors_factory_config1, dataset_cfg1, timelimit40_60, Ros2DataReader, elements40_60),
+    (sensors_factory_config1, dataset_cfg1, timelimit60_80, Ros2DataReader, elements60_80),
+    (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
 
