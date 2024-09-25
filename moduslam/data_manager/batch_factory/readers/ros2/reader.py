@@ -70,10 +70,21 @@ class Ros2DataReader(DataReader):
 
         self.connections = []
 
-        self.rosbag_iterator = rosbag_iterator(self.reader, self.sensors, self.connections)
-
         if isinstance(self._regime, TimeLimit):
             self._time_range = TimeRange(self._regime.start, self._regime.stop)
+            self.rosbag_iterator = rosbag_iterator(
+                self.reader,
+                self.sensors,
+                self.connections,
+                self._time_range,
+            )
+
+        else:
+            self.rosbag_iterator = rosbag_iterator(
+                self.reader,
+                self.sensors,
+                self.connections,
+            )
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -118,6 +129,7 @@ class Ros2DataReader(DataReader):
             index, timestamp, sensor_name, data, data_type = next(self.rosbag_iterator)
 
         except (StopIteration, KeyError):
+            print("StopIteration")
             return None
 
         sensor = SensorsFactory.get_sensor(sensor_name)
