@@ -14,9 +14,15 @@ def get_stereo_measurement(raw_msg) -> TupleImage:
         img_array: image-like array.
     """
 
-    img_array = image_decoding(raw_image_msg=raw_msg)
+    encoding = raw_msg.encoding
 
-    return img_array
+    if encoding == "bgr8":
+        img_array = image_decoding_bgr8(raw_image_msg=raw_msg)
+
+        return img_array
+
+    else:
+        raise ValueError("Encoding {} is not supported".format(encoding))
 
 
 def get_imu_measurement(raw_msg) -> tuple:
@@ -71,7 +77,7 @@ def get_lidar_measurement(raw_msg) -> tuple:
     return data
 
 
-def image_decoding(raw_image_msg) -> TupleImage:
+def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     """Decodes a ROS2 Image message into an array.
 
     Args:
@@ -88,18 +94,14 @@ def image_decoding(raw_image_msg) -> TupleImage:
     height = raw_image_msg.height
     width = raw_image_msg.width
     steps = raw_image_msg.step
-    encoding = raw_image_msg.encoding
     bgr_num_channels = 3
 
-    if encoding == "bgr8":
-        np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
-            (height, width, bgr_num_channels)
-        )
-        image_tuple = tuple(np_array.tolist())
+    np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
+        (height, width, bgr_num_channels)
+    )
+    image_tuple = tuple(np_array.tolist())
 
-        return image_tuple
-    else:
-        raise ValueError("Encoding {} is not supported".format(encoding))
+    return image_tuple
 
 
 def convert2image(img_tuple: TupleImage, encoding: str):
