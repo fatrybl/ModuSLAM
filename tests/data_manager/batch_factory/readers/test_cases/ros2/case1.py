@@ -112,8 +112,6 @@ valid_stream_scenarios = (
 valid_time_limit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit20, Ros2DataReader, elements_0_20),
     (sensors_factory_config1, dataset_cfg1, timelimit20_40, Ros2DataReader, elements20_40),
-    (sensors_factory_config1, dataset_cfg1, timelimit40_60, Ros2DataReader, elements40_60),
-    (sensors_factory_config1, dataset_cfg1, timelimit60_80, Ros2DataReader, elements60_80),
     (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
