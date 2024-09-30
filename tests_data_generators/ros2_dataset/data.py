@@ -6,8 +6,8 @@ from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
 from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
     get_imu_measurement,
-    get_stereo_measurement,
     get_lidar_measurement,
+    get_stereo_measurement,
 )
 from moduslam.data_manager.batch_factory.readers.ros2.utils import rosbag_read
 from moduslam.setup_manager.sensors_factory.sensors import Sensor

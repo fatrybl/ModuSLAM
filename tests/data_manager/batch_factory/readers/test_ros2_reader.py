@@ -1,10 +1,8 @@
 """Tests for Ros2Reader constructor.
 
-1) test_ros2_reader_1: Successful creation.
-2) test_ros2_reader_2: Successful creation.
-creation and exploration of rosbag
-3) test_ros2_reader_3: Unsuccessful
-creation with non-existent directory
+1) test_ros2_reader_1: Successful creation. 2) test_ros2_reader_2: Successful creation.
+creation and exploration of rosbag 3) test_ros2_reader_3: Unsuccessful creation with
+non-existent directory
 """
 
 from pathlib import Path

@@ -21,7 +21,6 @@ def get_rosbag_sensors(rosbag_path: Path):
 
     Returns:
         topics: a list of sensors in a dict.
-
     """
     sensors = []
 
@@ -91,7 +90,8 @@ def map_sensors(sensors: dict, sensor_list: list):
 
 
 def rosbag_iterator(reader, sensors, connections, time_range=None):
-    """Iterates through the Readings of a Rosbag file based on the connections provided and returns data of each reading
+    """Iterates through the Readings of a Rosbag file based on the connections provided
+    and returns data of each reading.
 
     Args:
         reader: Rosbag reader object
@@ -198,7 +198,6 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
         new_path: a path to the new rosbag file.
 
         num_msgs: the number of messages to write.
-
     """
 
     # TODO: Remove prints and give more detailed information about bag paths.

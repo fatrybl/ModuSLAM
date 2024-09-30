@@ -89,8 +89,6 @@ def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     Raises:
         ValueError: if the encoding is not supported.
     """
-    # TODO: Either add more functions with different encodings. Be more SPECIFIC with function names
-
     height = raw_image_msg.height
     width = raw_image_msg.width
     steps = raw_image_msg.step

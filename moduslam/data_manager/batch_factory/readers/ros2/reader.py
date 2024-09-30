@@ -1,4 +1,4 @@
-"""ROS2 dataset Reader"""
+"""ROS2 dataset Reader."""
 
 import logging
 from pathlib import Path
@@ -11,14 +11,12 @@ from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
 from moduslam.data_manager.batch_factory.readers.ros2.utils import (
-    get_rosbag_sensors,
     get_connections,
+    get_rosbag_sensors,
     map_sensors,
     rosbag_iterator,
 )
-from moduslam.data_manager.batch_factory.readers.utils import (
-    check_directory,
-)
+from moduslam.data_manager.batch_factory.readers.utils import check_directory
 from moduslam.logger.logging_config import data_manager
 from moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
@@ -54,9 +52,7 @@ class Ros2DataReader(DataReader):
 
         check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
-        # TODO: Check and change to private variables.
 
-        # TODO: Change print statements with Logger functions
         logger.info("ROS2 data reader created.")
         logger.debug(f"Dataset directory: {self._dataset_directory}")
 
@@ -129,7 +125,6 @@ class Ros2DataReader(DataReader):
             index, timestamp, sensor_name, data, data_type = next(self.rosbag_iterator)
 
         except (StopIteration, KeyError):
-            print("StopIteration")
             return None
 
         sensor = SensorsFactory.get_sensor(sensor_name)

@@ -77,6 +77,8 @@ elements40_60 = [e for e in elements if e.timestamp >= timestamp3 and e.timestam
 elements60_80 = [e for e in elements if e.timestamp >= timestamp4 and e.timestamp < timestamp5]
 elements80_100 = [e for e in elements if e.timestamp >= timestamp5 and e.timestamp < timestamp6]
 
+# TODO: check test with elements 40_60 and 60_80 due to test fail
+
 timelimit20 = TimeLimit(start=timestamp1, stop=timestamp2)
 timelimit20_40 = TimeLimit(start=timestamp2, stop=timestamp3)
 timelimit40_60 = TimeLimit(start=timestamp3, stop=timestamp4)
