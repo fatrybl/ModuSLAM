@@ -91,7 +91,6 @@ def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     """
     height = raw_image_msg.height
     width = raw_image_msg.width
-    steps = raw_image_msg.step
     bgr_num_channels = 3
 
     np_array = np.frombuffer(raw_image_msg.data, np.uint8).reshape(
