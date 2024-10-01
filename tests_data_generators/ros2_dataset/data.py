@@ -19,7 +19,7 @@ from tests.conftest import ros2_dataset_dir
 
 rosbag_path = Path(ros2_dataset_dir)
 
-data = rosbag_read(bag_path=rosbag_path, num_readings=100, print_table=False)
+data = rosbag_read(bag_path=rosbag_path, num_readings=100)
 
 sensors_table = {
     "left": "stereo_camera_left",
