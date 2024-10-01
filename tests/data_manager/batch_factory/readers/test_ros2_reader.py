@@ -26,7 +26,6 @@ def test_ros2_reader_1():
 
 def test_ros2_reader_2():
     dataset_cfg = Ros2Config(directory=ros2_dataset_dir)
-    limit_check = 20
     rosbag_reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
     with rosbag_reader as reader:
         assert reader is not None
