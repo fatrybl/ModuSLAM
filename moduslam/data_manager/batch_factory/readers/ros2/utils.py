@@ -4,7 +4,6 @@ from pathlib import Path
 import pandas as pd
 from rosbags.rosbag2 import Reader, Writer
 from rosbags.serde import deserialize_cdr
-from tabulate import tabulate
 
 from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
     get_imu_measurement,
@@ -134,9 +133,7 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         yield (i, timestamp, sensor_name, data, data_type)
 
 
-def rosbag_read(
-    bag_path: Path, num_readings: int = 1, topic_name: str | None = None, print_table: bool = False
-) -> list:
+def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = None) -> list:
     """Reads a rosbag file and shows a determined number of readings in a table format.
 
     Args:
@@ -150,11 +147,7 @@ def rosbag_read(
         data: a list of tuples with the data from the rosbag file.
     """
 
-    if print_table:
-        table = [["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]]
-
-    else:
-        table = []
+    table = []
 
     with Reader(bag_path) as reader:
         if topic_name == None:
@@ -179,13 +172,7 @@ def rosbag_read(
                 ]
                 table.append(row)
             else:
-                if print_table:
-                    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
                 return table
-
-        if print_table:
-            print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
-
     return table
 
 
