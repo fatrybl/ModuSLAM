@@ -113,7 +113,6 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
             elif timestamp > time_range.stop:
                 break
         sensor_name = "no sensor"
-        sensor_id = connection.id
         sensor_topic = connection.topic.split("/")[1]
         data_type = connection.msgtype.split("/")[-1]
 
@@ -133,15 +132,13 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         yield (i, timestamp, sensor_name, data, data_type)
 
 
-def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = None) -> list:
+def rosbag_read(bag_path: Path, num_readings: int = 1) -> list:
     """Reads a rosbag file and shows a determined number of readings in a table format.
 
     Args:
         bag_path: a path to the rosbag file.
 
         num_readings: the number of sensor readings to display in a table.
-
-        topic_name: the topic name to read from the rosbag file.
 
     Returns:
         data: a list of tuples with the data from the rosbag file.
@@ -150,11 +147,6 @@ def rosbag_read(bag_path: Path, num_readings: int = 1, topic_name: str | None = 
     table = []
 
     with Reader(bag_path) as reader:
-        if topic_name == None:
-            connections = [c for c in reader.connections]
-
-        else:
-            connections = [c for c in reader.connections if c.topic == topic_name]
 
         for i, (connection, timestamp, rawdata) in enumerate(reader.messages()):
 
