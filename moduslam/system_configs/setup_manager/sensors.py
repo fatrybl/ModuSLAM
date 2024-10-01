@@ -175,10 +175,3 @@ class Lidar3DConfig(SensorConfig):
         ],
         metadata={"help": "Transformation matrix base link -> sensor."},
     )
-
-
-@dataclass
-class StereoCameraConfig(SensorConfig):
-    """Stereo camera sensor configuration."""
-
-    # TODO: define parameters
