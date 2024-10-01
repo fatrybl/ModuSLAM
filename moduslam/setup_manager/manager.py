@@ -20,7 +20,7 @@ class SetupManager:
         Args:
             config: configuration of the SetupManager.
         """
-        print(f"CONFIGURATION FOR SENSORS IS:")
+        print("CONFIGURATION FOR SENSORS IS:")
         for sensors in config.sensors_factory.values():
             for sensor, value in sensors.items():
                 print(sensor, value)
