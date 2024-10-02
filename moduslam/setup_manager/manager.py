@@ -20,11 +20,6 @@ class SetupManager:
         Args:
             config: configuration of the SetupManager.
         """
-        print("CONFIGURATION FOR SENSORS IS:")
-        for sensors in config.sensors_factory.values():
-            for sensor, value in sensors.items():
-                print(sensor, value)
-
         SensorsFactory.init_sensors(config.sensors_factory)
         HandlersFactory.init_handlers(config.handlers_factory)
         EdgeFactoriesInitializer.init_factories(config.edge_factories_initializer)
