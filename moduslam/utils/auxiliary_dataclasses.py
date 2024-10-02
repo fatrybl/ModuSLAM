@@ -15,8 +15,8 @@ from moduslam.types.numpy import VectorN
 class TimeRange:
     """Represents time range with start/stop timestamps."""
 
-    start: int | float
-    stop: int | float
+    start: int
+    stop: int
 
     def __post_init__(self) -> None:
         """Check if the start and stop timestamps are valid.
