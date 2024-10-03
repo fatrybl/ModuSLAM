@@ -107,6 +107,7 @@ sensors_factory_config1 = generate_sensors_factory_config(sensors1)
 
 incorrect_sensors_factory_config = generate_sensors_factory_config([])
 
+# TODO: Create valid stream scenarios to test
 valid_stream_scenarios = (
     (sensors_factory_config1, dataset_cfg1, stream, Ros2DataReader, elements),
 )
