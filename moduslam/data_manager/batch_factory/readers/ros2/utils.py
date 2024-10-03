@@ -133,15 +133,15 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
 
 
 def rosbag_read(bag_path: Path, num_readings: int = 1) -> list:
-    """Reads a rosbag file and shows a determined number of readings in a table format.
+    """Reads a rosbag file and returns a list with the sensor readings.
 
     Args:
         bag_path: a path to the rosbag file.
 
-        num_readings: the number of sensor readings to display in a table.
+        num_readings: the number of sensor readings to store in the list.
 
     Returns:
-        data: a list of tuples with the data from the rosbag file.
+        data: a list of list with the data from the rosbag file.
     """
 
     table = []
@@ -174,12 +174,10 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
     Args:
         bag_path: a path to the rosbag file.
 
-        new_path: a path to the new rosbag file.
+        new_path: a path where to save the new rosbag file.
 
-        num_msgs: the number of messages to write.
+        num_msgs: the total number of messages to be saved in the new rosbag file.
     """
-
-    # TODO: Remove prints and give more detailed information about bag paths.
 
     with Reader(bag_path) as reader:
         with Writer(new_path) as writer:
@@ -204,15 +202,13 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
 
 
 def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
-    """Gets sensor readings from a rosbag file and saves it into a CSV file.
+    """Gets all the sensor readings from a rosbag file and saves them into a CSV file.
 
     Args:
         rosbag_path: a path to the rosbag file.
 
-        csv_path: a path to the CSV file.
+        csv_path: a path where to save the CSV file.
 
-    Returns:
-        data: a list of tuples with the data from the rosbag file.
     """
 
     columns = ["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]
@@ -238,6 +234,13 @@ def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
 
 
 def _create_csv(readings_lenght=15):
+    """Creates a CSV file from a rosbag file.
+
+    Args:
+        readings_lenght: the number of sensor readings to read from the rosbag and write to the CSV file.
+
+
+    """
     print("Creating ROS2 test bags for the Ros2 Datareader ")
 
     DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
@@ -250,6 +253,13 @@ def _create_csv(readings_lenght=15):
 
 
 def _create_rosbag(num_readings=15):
+    """Creates a new rosbag file with a specific number of sensor readings.
+
+    Args:
+        num_readings: the number of sensor readings to read from the rosbag and then write to a new rosbag file.
+
+
+    """
     DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
     rosbag_name = "rosbag2_2023_11_02-12_18_16"
     rosbag_path = Path(DATA_PATH, rosbag_name)
