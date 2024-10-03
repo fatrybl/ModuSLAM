@@ -1,7 +1,6 @@
 """ROS2 dataset Reader."""
 
 import logging
-from pathlib import Path
 from typing import overload
 
 from plum import dispatch
@@ -46,10 +45,13 @@ class Ros2DataReader(DataReader):
 
             NotADirectoryError: if the dataset directory does not exist.
         """
-        self._dataset_directory: Path = dataset_params.directory
-        self._regime = regime
-        self._in_context = False
 
+        super().__init__(regime, dataset_params)
+        # self._dataset_directory: Path = dataset_params.directory
+        # self._regime = regime
+        # self._in_context = False
+
+        self._dataset_directory = dataset_params.directory
         check_directory(self._dataset_directory)
         self.sensors_table = dataset_params.sensors_table
 
@@ -67,7 +69,9 @@ class Ros2DataReader(DataReader):
         self.connections = []
 
         if isinstance(self._regime, TimeLimit):
-            self._time_range = TimeRange(self._regime.start, self._regime.stop)
+            start = int(self._regime.start)
+            stop = int(self._regime.stop)
+            self._time_range = TimeRange(start, stop)
             self.rosbag_iterator = rosbag_iterator(
                 self.reader,
                 self.sensors,
