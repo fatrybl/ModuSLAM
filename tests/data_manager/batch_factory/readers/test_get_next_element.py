@@ -37,7 +37,6 @@ from tests.data_manager.batch_factory.readers.test_cases.tum_vie.case1 import tu
 from tests.data_manager.batch_factory.readers.test_cases.tum_vie.case2 import tum_vie2
 
 test_cases_1 = (*kaist1, *tum_vie1, *ros1)
-# test_cases_1 = (*kaist1, *tum_vie1)
 test_cases_2 = (*kaist2, *tum_vie2)
 
 
