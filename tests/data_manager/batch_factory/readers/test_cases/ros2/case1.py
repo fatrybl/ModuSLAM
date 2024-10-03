@@ -118,5 +118,6 @@ valid_time_limit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
+# TODO: Create invalid stream and time limit scenarios to test
 
 ros1 = (*valid_time_limit_scenarios,)
