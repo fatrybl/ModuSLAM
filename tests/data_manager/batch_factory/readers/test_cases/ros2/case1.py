@@ -9,6 +9,8 @@ from tests.conftest import ros2_dataset_dir
 from tests_data_generators.ros2_dataset.data import elements
 from tests_data_generators.utils import generate_sensors_factory_config
 
+# TODO: Optimize cases for Ros2 because the test is taking too long to run
+
 el1 = elements[0]
 el2 = elements[1]
 el3 = elements[2]
@@ -120,4 +122,4 @@ valid_time_limit_scenarios = (
 
 # TODO: Create invalid stream and time limit scenarios to test
 
-ros1 = (*valid_time_limit_scenarios,)
+ros2_case1 = (*valid_time_limit_scenarios,)
