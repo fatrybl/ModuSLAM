@@ -10,7 +10,6 @@ from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
 from moduslam.data_manager.batch_factory.readers.ros2.utils import (
-    get_connections,
     get_rosbag_sensors,
     map_sensors,
     rosbag_iterator,
@@ -47,9 +46,6 @@ class Ros2DataReader(DataReader):
         """
 
         super().__init__(regime, dataset_params)
-        # self._dataset_directory: Path = dataset_params.directory
-        # self._regime = regime
-        # self._in_context = False
 
         self._dataset_directory = dataset_params.directory
         check_directory(self._dataset_directory)
@@ -62,15 +58,14 @@ class Ros2DataReader(DataReader):
 
         self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
 
-        self.connections = get_connections(self.connection_list, self._dataset_directory)
-
         self.reader = Reader(self._dataset_directory)
 
-        self.connections = []
+        self.connections: list = []
 
         if isinstance(self._regime, TimeLimit):
             start = int(self._regime.start)
             stop = int(self._regime.stop)
+
             self._time_range = TimeRange(start, stop)
             self.rosbag_iterator = rosbag_iterator(
                 self.reader,
