@@ -208,7 +208,6 @@ def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
         rosbag_path: a path to the rosbag file.
 
         csv_path: a path where to save the CSV file.
-
     """
 
     columns = ["ID", "ROS Topic", "Message Type", "Frame ID", "Message Count", "Timestamp"]
@@ -238,8 +237,6 @@ def _create_csv(readings_lenght=15):
 
     Args:
         readings_lenght: the number of sensor readings to read from the rosbag and write to the CSV file.
-
-
     """
     print("Creating ROS2 test bags for the Ros2 Datareader ")
 
@@ -257,8 +254,6 @@ def _create_rosbag(num_readings=15):
 
     Args:
         num_readings: the number of sensor readings to read from the rosbag and then write to a new rosbag file.
-
-
     """
     DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
     rosbag_name = "rosbag2_2023_11_02-12_18_16"
