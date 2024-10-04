@@ -3,12 +3,12 @@ from collections.abc import Iterable
 
 import numpy as np
 
+from moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.base_edges import BaseEdge
 from moduslam.frontend_manager.graph.base_vertices import BaseVertex
 from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
 from moduslam.utils.auxiliary_methods import check_dimensionality
 
 
