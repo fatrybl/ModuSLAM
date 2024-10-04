@@ -6,6 +6,7 @@ from moduslam.logger.logging_config import main_manager
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
+from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import Ros2Config
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
@@ -44,6 +45,7 @@ def register_config():
     cs.store(name="structured_schema_config", node=MainManagerConfig)
     cs.store(group="datasets", name="base_kaist_dataset", node=KaistConfig)
     cs.store(group="datasets", name="base_tum_vie_dataset", node=TumVieConfig)
+    cs.store(group="datasets", name="base_ros2_dataset", node=Ros2Config)
     cs.store(group="regimes", name="base_data_regime", node=DataRegimeConfig)
     cs.store(group="handlers", name="base_kiss_icp_odometry", node=KissIcpScanMatcherConfig)
     cs.store(group="handlers", name="base_vrs_gps_preprocessor", node=VrsGpsHandlerConfig)
