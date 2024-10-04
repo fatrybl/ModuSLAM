@@ -4,6 +4,7 @@ from typing import cast
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
 from moduslam.data_manager.batch_factory.readers.regime_factory import Factory
+from moduslam.data_manager.batch_factory.readers.ros2.reader import Ros2DataReader
 from moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from moduslam.logger.logging_config import data_manager
 from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
@@ -13,6 +14,7 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset im
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
+from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import Ros2Config
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
@@ -47,6 +49,11 @@ class DataReaderFactory:
                 regime = Factory.tum_vie_regime(regime_config)
                 dataset_config = cast(TumVieConfig, dataset_config)
                 return TumVieReader(regime, dataset_config)
+
+            case DataReaders.ros2_reader:
+                regime = Factory.ros2_regime(regime_config)
+                dataset_config = cast(Ros2Config, dataset_config)
+                return Ros2DataReader(regime, dataset_config)
 
             case _:
                 msg = f"No DataReader exists for dataset type {dataset_config.reader!r}."
