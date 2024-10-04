@@ -21,7 +21,7 @@ class Ros2Config(DatasetConfig):
 
     data_stamp_file: Path = Ros2Paths.data_stamp
 
-    reader: str = "Ros2DataReader"
+    reader: str = "Ros2 Reader"
 
     name: str = "Ros2 Reader for Ros2bags"
 
