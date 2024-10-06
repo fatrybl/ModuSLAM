@@ -215,7 +215,7 @@ class KaistReader(DataReader):
 
     @dispatch
     def get_next_element(self, element=None):
-        """Get an element from the dataset."""
+        """Gets an element from the dataset."""
 
     def get_element(self, element: Element) -> Element:
         """Gets element from a dataset based on the given element without raw data.

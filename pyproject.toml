@@ -62,7 +62,7 @@ profile = "black"
 
 [tool.docformatter]
 black = true
-inplace = true
+in-place = true
 style = "google"
 recursive = true
 
