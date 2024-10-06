@@ -1,39 +1,43 @@
 from collections.abc import Iterable
 from typing import Any
 
-from phd_thesis.src.objects import Vertex
+from phd_thesis.src.objects.cluster import Cluster
+from phd_thesis.src.objects.measurements import DiscreteMeasurement
 
 
-class MergesFactory:
+class CombinationsFactory:
 
     _splitter: str = "+"
     _encoder_mask: str = "item_"
 
     @classmethod
-    def create_merges(cls, items: list) -> list[list]:
-        """Creates all possible combinations by merging adjacent items.
+    def combine(cls, measurements: Iterable[DiscreteMeasurement]) -> list[list[Cluster]]:
+        """Creates combinations of clusters by merging adjacent measurements.
 
         Args:
-            items: items to create combinations of.
+            measurements: measurements to create combinations of.
 
         Returns:
-            list of combinations.
+            combinations of clusters.
         """
         decoded_combinations = []
-        encoded_items, mask = cls._encode_items(items)
+        encoded_items, mask = cls._encode_items(measurements)
         encoded_combinations = cls._create_combinations(encoded_items)
 
         for comb in encoded_combinations:
             decoded_comb = cls._decode_items(comb, mask)
-            vertices = []
+            clusters = []
             for measurements in decoded_comb:
+                cluster = Cluster()
                 if isinstance(measurements, Iterable):
-                    vertex = Vertex(tuple(measurements))
+                    for m in measurements:
+                        cluster.add(m)
                 else:
-                    vertex = Vertex((measurements,))
-                vertices.append(vertex)
+                    cluster.add(measurements)
 
-            decoded_combinations.append(vertices)
+                clusters.append(cluster)
+
+            decoded_combinations.append(clusters)
 
         return decoded_combinations
 
@@ -122,15 +126,21 @@ class MergesFactory:
             unique merges.
         """
         results = set()
-        for i in range(len(items) - 1):
+        num_items = len(items)
+        for i in range(num_items - 1):
             merged = items[:i] + [f"{items[i]}{cls._splitter}{items[i + 1]}"] + items[i + 2 :]
             results.add(tuple(merged))  # Use tuple to store in a set
         return results
 
 
-# sequence = [1, 2, 3]
-#
-# merges = MergesFactory.create_merges(sequence)
-#
-# for m in merges:
-#     print(m)
+if __name__ == "__main__":
+    m1 = DiscreteMeasurement(1, "a")
+    m2 = DiscreteMeasurement(2, "b")
+    m3 = DiscreteMeasurement(3, "c")
+
+    sequence = (m1, m2, m3)
+
+    merges = CombinationsFactory.combine(sequence)
+
+    for m in merges:
+        print(m)

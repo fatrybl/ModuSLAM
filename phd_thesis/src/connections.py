@@ -1,51 +1,52 @@
 from collections.abc import Iterable
 from typing import Any
 
-from phd_thesis.src.objects import Edge, Vertex
+from phd_thesis.src.objects.auxiliary_objects import Connection
+from phd_thesis.src.objects.cluster import Cluster
+from phd_thesis.src.objects.measurements import DiscreteMeasurement
 
 
-class EdgesFactory:
+class ConnectionsFactory:
 
     _encoder_mask: str = "item_"
     _splitter_1: str = "+"
     _splitter_2: str = ","
 
     @classmethod
-    def create_combinations(cls, vertices: list[Vertex]) -> list[list[Edge]]:
-        """Creates all edges combinations.
+    def create_combinations(cls, clusters: list[Cluster]) -> list[list[Connection]]:
+        """Creates combinations of connections.
 
         Args:
-            vertices: vertices to create edges connections for.
+            clusters: clusters to create combinations of connections for.
 
         Returns:
-            edges combinations.
+            combinations.
         """
-        if len(vertices) == 1:
+        if len(clusters) == 1:
             return []
 
         combinations = []
-        encoded_vertices, mask = cls._encode_items(vertices)
-        connections = cls._create_connections(encoded_vertices)
+        encoded_clusters, mask = cls._encode_items(clusters)
+        connections = cls._create_connections(encoded_clusters)
         for con in connections:
-            edges = []
+            combination = []
             decoded_con = cls._decode_items(con, mask)
             for pair in decoded_con:
-                edge = Edge(pair[0], pair[1])
-                edges.append(edge)
+                combination.append(Connection(pair[0], pair[1]))
 
-            combinations.append(edges)
+            combinations.append(combination)
 
         return combinations
 
     @classmethod
     def _create_connections(cls, items: list):
-        """Creates all possible connections between vertices.
+        """Creates all possible connections between items without intersactions.
 
         Args:
-            items: vertices to connect.
+            items: items to connect.
 
         Returns:
-            list of connections.
+            connections.
         """
         n = len(items)
         if n <= 1:
@@ -130,12 +131,20 @@ class EdgesFactory:
         return compositions
 
 
-# v1 = Vertex(1)
-# v2 = Vertex(2)
-# v3 = Vertex(3)
-#
-# sequence = [v1, v2, v3]
-# edges_combinations = EdgesFactory.create_combinations(sequence)
-#
-# for comb in edges_combinations:
-#     print(comb)
+if __name__ == "__main__":
+    m1 = DiscreteMeasurement(1, "a")
+    m2 = DiscreteMeasurement(2, "b")
+    m3 = DiscreteMeasurement(3, "c")
+    c1 = Cluster()
+    c2 = Cluster()
+    c3 = Cluster()
+
+    c1.add(m1)
+    c2.add(m2)
+    c3.add(m3)
+
+    sequence = [c1, c2, c3]
+    edges_combinations = ConnectionsFactory.create_combinations(sequence)
+
+    for comb in edges_combinations:
+        print(comb)
