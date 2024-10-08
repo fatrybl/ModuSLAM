@@ -3,6 +3,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from moduslam.system_configs.data_manager.batch_factory.data_readers import DataReaders
 from moduslam.system_configs.data_manager.batch_factory.datasets.base_dataset import (
     DatasetConfig,
 )
@@ -21,7 +22,7 @@ class Ros2Config(DatasetConfig):
 
     data_stamp_file: Path = Ros2Paths.data_stamp
 
-    reader: str = "Ros2 Reader"
+    reader: str = DataReaders.ros2_reader
 
     name: str = "Ros2 Reader for Ros2bags"
 
