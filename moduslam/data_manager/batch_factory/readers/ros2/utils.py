@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Callable
 from pathlib import Path
 
@@ -10,6 +11,9 @@ from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector impo
     get_lidar_measurement,
     get_stereo_measurement,
 )
+from moduslam.logger.logging_config import data_manager
+
+logger = logging.getLogger(data_manager)
 
 
 def get_rosbag_sensors(rosbag_path: Path):
@@ -84,6 +88,10 @@ def map_sensors(sensors: dict, sensor_list: list):
                 updated_list.append(sensor_params)
                 connections_list.append(sensor_params["topic"])
                 continue
+
+    if len(updated_list) == 0:
+        logger.error("No sensors found in the rosbag")
+        raise ValueError("No sensors found in the rosbag")
 
     return connections_list, updated_list
 
@@ -266,7 +274,3 @@ def _create_rosbag(num_readings=15):
     )
 
     rosbag_read(bag_path=Path(DATA_PATH, new_rosbag_name), num_readings=num_readings)
-
-
-if __name__ == "__main__":
-    _create_rosbag(15)
