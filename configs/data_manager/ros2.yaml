@@ -6,6 +6,14 @@ batch_factory:
 
   dataset:
     directory: "/home/felipezero/Projects/mySLAM_data/20231102_kia/rosbag2_2023_11_02-12_18_16"
+    sensors_table:
+      stereo_camera_left: "left"
+      stereo_camera_right: "right"
+      imu: "xsens"
+      lidar_left: "vlp16l"
+      lidar_right: "vlp16r"
+      lidar_center: "vlp32c"
+
 
   regime:
     name: "TimeLimit"
