@@ -20,10 +20,15 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     """
 
     def __init__(self) -> None:
-        self.factor_graph = gtsam.NonlinearFactorGraph()
+        self._factor_graph = gtsam.NonlinearFactorGraph()
         self._vertex_storage = VertexStorage[BaseVertex]()
         self._edge_storage = EdgeStorage[BaseEdge]()
         self._connections: dict[BaseVertex, set[BaseEdge]] = {}
+
+    @property
+    def factor_graph(self) -> gtsam.NonlinearFactorGraph:
+        """Backend Factor Graph."""
+        return self._factor_graph
 
     @property
     def vertex_storage(self) -> VertexStorage[BaseVertex]:
