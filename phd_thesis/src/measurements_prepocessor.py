@@ -1,10 +1,7 @@
 from collections.abc import Sequence
 from typing import Any
 
-from phd_thesis.src.objects.measurements import (
-    ContinuousMeasurement,
-    DiscreteMeasurement,
-)
+from phd.external.objects.measurements import ContinuousMeasurement, CoreMeasurement
 
 
 class Odometry:
@@ -24,7 +21,7 @@ class Sorter:
     def sort_measurements(
         cls,
         measurements: Sequence,
-    ) -> tuple[list[DiscreteMeasurement], list[ContinuousMeasurement]]:
+    ) -> tuple[list[CoreMeasurement], list[ContinuousMeasurement]]:
         """Sorts measurements to Discrete and Continuous.
 
         Args:
@@ -55,7 +52,7 @@ class Sorter:
 
 class MeasurementSplitter:
     @staticmethod
-    def split(measurement: Odometry) -> tuple[DiscreteMeasurement, DiscreteMeasurement]:
+    def split(measurement: Odometry) -> tuple[CoreMeasurement, CoreMeasurement]:
         """Splits odometry-based measurement into 2 measurements with the same value but
         different timestamps.
 
@@ -65,6 +62,6 @@ class MeasurementSplitter:
         Returns:
             2 discrete measurements with the same value.
         """
-        m1 = DiscreteMeasurement(timestamp=measurement.start, value=measurement.value)
-        m2 = DiscreteMeasurement(timestamp=measurement.stop, value=measurement.value)
+        m1 = CoreMeasurement(timestamp=measurement.start, value=measurement.value)
+        m2 = CoreMeasurement(timestamp=measurement.stop, value=measurement.value)
         return m1, m2

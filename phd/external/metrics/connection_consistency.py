@@ -1,7 +1,7 @@
 from phd.external.metrics.protocols import Metrics
 from phd.external.objects.auxiliary_objects import Connection
+from phd.external.objects.cluster import MeasurementsCluster
 from phd.external.objects.measurements import ContinuousMeasurement, CoreMeasurement
-from phd.external.objects.measurements_cluster import Cluster
 from phd.external.utils import get_subsequence
 
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     m3 = CoreMeasurement(5, 1)
     measurement = ContinuousMeasurement(elements=[m1, m2, m3])
 
-    c1, c2, c3 = Cluster(), Cluster(), Cluster()
+    c1, c2, c3 = MeasurementsCluster(), MeasurementsCluster(), MeasurementsCluster()
 
     c1.add(d1)
     c2.add(d2)

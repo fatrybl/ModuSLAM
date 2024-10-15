@@ -1,24 +1,29 @@
 from bisect import bisect_left
 from collections.abc import Iterable
+from typing import TypeVar, cast
 
-from phd.external.objects.auxiliary_objects import ClustersWithLeftovers, Connection
+from phd.external.connections_factory import Factory
+from phd.external.objects.auxiliary_objects import (
+    ClustersWithConnections,
+    ClustersWithLeftovers,
+    Connection,
+)
+from phd.external.objects.cluster import MeasurementsCluster
 from phd.external.objects.measurements import (
     ContinuousMeasurement,
     CoreMeasurement,
+    FakeMeasurement,
     Measurement,
-    MeasurementGroup,
-    SplittedOdometry,
-    T,
 )
-from phd.external.objects.measurements_cluster import Cluster
+
+T = TypeVar("T", bound=Measurement)
 
 
 def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], int, int]:
-    """Gets the sub-sequence of items within the given range for the sorted sequence.
-    Complexity: O(log n).
+    """Gets the sub-sequence of items  within the given range.
 
     Args:
-        sequence: a sorted with timestamps sequence of items to get a sub-sequence of.
+        sequence: a sequence of items to get a sub-sequence from.
 
         start: left timestamp limit (inclusive).
 
@@ -27,7 +32,7 @@ def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], 
     Returns:
         a subsequence of the given range, start index, stop index.
     """
-    if not sequence or start > stop:
+    if not sequence or start >= stop:
         raise ValueError("Empty sequence or invalid limits.")
 
     timestamps: list[int] = [item.timestamp for item in sequence]
@@ -37,7 +42,211 @@ def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], 
     return sequence[start_idx:stop_idx], start_idx, stop_idx
 
 
-def copy_cluster(cluster: Cluster) -> Cluster:
+def find_fake_measurement(measurements: Iterable[Measurement]) -> FakeMeasurement | None:
+    """Finds the 1-st fake measurement in the sequence of measurements.
+
+    Args:
+        measurements: sequence of measurements.
+
+    Returns:
+        the 1-st fake measurement in the sequence of measurements or None if not found.
+    """
+    for m in measurements:
+        if m.value == FakeMeasurement.fake_value:
+            m = cast(FakeMeasurement, m)
+            return m
+    return None
+
+
+def process_single_fake(
+    connection: Connection,
+    measurement: ContinuousMeasurement,
+    fake_measurement: FakeMeasurement,
+):
+    """Processes a connection with the 1-st cluster having a fake measurement.
+
+    Args:
+        connection: connection to be processed.
+
+        measurement: continuous measurement to be used for connection.
+
+        fake_measurement: fake measurement to be used for connection.
+
+    Returns:
+        used measurements and empty cluster.
+    """
+    cluster1 = connection.cluster1
+    cluster2 = connection.cluster2
+    start = fake_measurement.timestamp
+    stop = cluster2.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    new_measurement = ContinuousMeasurement(elements)
+    cluster2.add(new_measurement)
+    return elements, cluster1
+
+
+def process_fake_and_non_fake(
+    connection: Connection,
+    measurement: ContinuousMeasurement,
+    fake_measurement: FakeMeasurement,
+):
+    """Processes a connection when the 1-st cluster has both fake and real measurements.
+
+    Args:
+        connection: connection to be processed.
+
+        measurement: continuous measurement to be used for connection.
+
+        fake_measurement: fake measurement to be used for connection.
+
+    Returns:
+        used elements.
+    """
+    used_elements = []
+    cluster1 = connection.cluster1
+    cluster2 = connection.cluster2
+    start = fake_measurement.timestamp
+    stop = cluster1.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    new_measurement = ContinuousMeasurement(elements)
+    cluster1.add(new_measurement)
+    cluster1.remove(fake_measurement)
+    used_elements += elements
+
+    start = cluster1.timestamp
+    stop = cluster2.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    new_measurement = ContinuousMeasurement(elements)
+    cluster2.add(new_measurement)
+    used_elements += elements
+    return used_elements
+
+
+def process_non_fake(connection: Connection, measurement: ContinuousMeasurement):
+    """Processes a connection when the 1-st cluster has no fake measurement.
+
+    Args:
+        connection: connection to be processed.
+
+        measurement: continuous measurement to be used for connection.
+
+    Returns:
+        used elements.
+    """
+    cluster1 = connection.cluster1
+    cluster2 = connection.cluster2
+    start = cluster1.timestamp
+    stop = cluster2.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    new_measurement = ContinuousMeasurement(elements)
+    cluster2.add(new_measurement)
+    return elements
+
+
+def fill_single_connection(
+    cluster: MeasurementsCluster, measurement: ContinuousMeasurement
+) -> tuple[MeasurementsCluster, list[CoreMeasurement]]:
+    """Creates a new cluster and adds a continuous measurement to it.
+
+    Args:
+        cluster: a cluster to be copied.
+
+        measurement: a continuous measurement to add.
+
+    Returns:
+        new cluster and unused measurements.
+    """
+    cluster_copy = copy_cluster(cluster)
+    fake_measurement = find_fake_measurement(cluster_copy.measurements)
+
+    if fake_measurement:
+        cluster_copy.remove(fake_measurement)
+
+    start = measurement.time_range.start
+    stop = cluster_copy.timestamp
+    elements, _, _ = get_subsequence(measurement.elements, start, stop)
+    leftovers = [el for el in measurement.elements if el not in elements]
+    new_measurement = ContinuousMeasurement(elements)
+    cluster_copy.add(new_measurement)
+    return cluster_copy, leftovers
+
+
+def fill_multiple_connections(
+    item: ClustersWithConnections, measurement: ContinuousMeasurement
+) -> tuple[list[MeasurementsCluster], list[CoreMeasurement]]:
+    """Fills connections using the continuous measurement.
+
+    Args:
+        item: clusters and connections.
+
+        measurement: a continuous measurement to be used for connections.
+
+    Returns:
+        unused discrete measurements.
+    """
+    used_elements = set[CoreMeasurement]()
+
+    for connection in item.connections:
+
+        measurements = connection.cluster1.measurements[:]
+        num_measurements = len(measurements)
+        fake_measurement = find_fake_measurement(measurements)
+
+        if fake_measurement and num_measurements == 1:
+            elements, empty_cluster = process_single_fake(connection, measurement, fake_measurement)
+            item.clusters.remove(empty_cluster)
+
+        elif fake_measurement and num_measurements > 1:
+            elements = process_fake_and_non_fake(connection, measurement, fake_measurement)
+
+        else:
+            elements = process_non_fake(connection, measurement)
+
+        used_elements.update(elements)
+
+    leftovers = [el for el in measurement.elements if el not in used_elements]
+    leftovers.sort(key=lambda el: el.timestamp)
+    return item.clusters, leftovers
+
+
+def get_clusters_and_leftovers(
+    clusters_combinations: list[list[MeasurementsCluster]], measurement: ContinuousMeasurement
+) -> list[ClustersWithLeftovers]:
+    """Creates combinations of clusters and unused measurements.
+
+    Args:
+        clusters_combinations: combinations of clusters.
+
+        measurement: a continuous measurement to use elements of.
+
+    Returns:
+        combinations of clusters and corresponding unused elements.
+    """
+
+    variants: list[ClustersWithLeftovers] = []
+
+    for clusters in clusters_combinations:
+
+        if len(clusters) == 1:
+            new_cluster, leftovers = fill_single_connection(clusters[0], measurement)
+            v = ClustersWithLeftovers([new_cluster], leftovers)
+            variants.append(v)
+
+        else:
+            combinations = Factory.create_combinations(clusters)
+            # TODO: filter irrealizable combinations here due to limitations.
+
+            for connections in combinations:
+                clusters_copy, connections_copy = create_copy(clusters, connections)
+                item = ClustersWithConnections(clusters_copy, connections_copy)
+                new_clusters, leftovers = fill_multiple_connections(item, measurement)
+                v = ClustersWithLeftovers(new_clusters, leftovers)
+                variants.append(v)
+
+    return variants
+
+
+def copy_cluster(cluster: MeasurementsCluster) -> MeasurementsCluster:
     """Creates a cluster with the same measurements as in the given cluster.
 
     Args:
@@ -46,15 +255,15 @@ def copy_cluster(cluster: Cluster) -> Cluster:
     Returns:
         new cluster with the same measurements.
     """
-    new_cluster = Cluster()
+    new_cluster = MeasurementsCluster()
     for m in cluster.measurements:
         new_cluster.add(m)
     return new_cluster
 
 
 def create_copy(
-    clusters: list[Cluster], connections: list[Connection]
-) -> tuple[list[Cluster], list[Connection]]:
+    clusters: list[MeasurementsCluster], connections: list[Connection]
+) -> tuple[list[MeasurementsCluster], list[Connection]]:
     """Copies clusters and connections.
 
     Args:
@@ -118,54 +327,3 @@ def remove_duplicates(
             unique_clusters_with_leftovers.append(clusters_with_leftovers)
 
     return unique_clusters_with_leftovers
-
-
-def group_by_timestamp(measurements: Iterable[Measurement]) -> dict[int, MeasurementGroup]:
-    """Groups measurements by timestamp.
-
-    Args:
-        measurements: measurements to group by timestamp.
-
-    Returns:
-        grouped measurements by timestamp.
-    """
-    groups: dict[int, MeasurementGroup] = {}
-
-    for m in measurements:
-        if m.timestamp not in groups:
-            groups[m.timestamp] = MeasurementGroup()
-        groups[m.timestamp].measurements.append(m)
-
-    return groups
-
-
-def remove_loops(combinations: list[list[Cluster]]) -> list[list[Cluster]]:
-    """Removes combinations which have clusters with loops.
-    Loop - a cluster which has multiple SplittedOdometry measurements with the same parent.
-
-    Args:
-        combinations: combinations of clusters.
-
-    Returns:
-        combinations without loops.
-    """
-
-    new_combinations = []
-
-    for combination in combinations:
-        clusters = []
-        for cluster in combination:
-            splited_odometries = [
-                m for m in cluster.measurements if isinstance(m, SplittedOdometry)
-            ]
-            num_unique_parents = len(set([m.parent for m in splited_odometries]))
-            num_all_parents = len([m.parent for m in splited_odometries])
-            if num_unique_parents == num_all_parents:
-                clusters.append(cluster)
-            else:
-                break
-
-        if len(clusters) == len(combination):
-            new_combinations.append(clusters)
-
-    return new_combinations

@@ -2,8 +2,8 @@ from collections.abc import Iterable
 from typing import Any
 
 from phd.external.objects.auxiliary_objects import Connection
+from phd.external.objects.cluster import MeasurementsCluster
 from phd.external.objects.measurements import CoreMeasurement
-from phd.external.objects.measurements_cluster import Cluster
 
 
 class Factory:
@@ -13,7 +13,7 @@ class Factory:
     _splitter_2: str = ","
 
     @classmethod
-    def create_combinations(cls, clusters: list[Cluster]) -> list[list[Connection]]:
+    def create_combinations(cls, clusters: list[MeasurementsCluster]) -> list[list[Connection]]:
         """Creates combinations of connections.
 
         Args:
@@ -32,8 +32,7 @@ class Factory:
             combination = []
             decoded_con = cls._decode_items(con, mask)
             for pair in decoded_con:
-                connection = Connection(pair[0], pair[1])
-                combination.append(connection)
+                combination.append(Connection(pair[0], pair[1]))
 
             combinations.append(combination)
 
@@ -41,7 +40,7 @@ class Factory:
 
     @classmethod
     def _create_connections(cls, items: list):
-        """Creates all possible connections between items without intersections.
+        """Creates all possible connections between items without intersactions.
 
         Args:
             items: items to connect.
@@ -136,9 +135,9 @@ if __name__ == "__main__":
     m1 = CoreMeasurement(1, "a")
     m2 = CoreMeasurement(2, "b")
     m3 = CoreMeasurement(3, "c")
-    c1 = Cluster()
-    c2 = Cluster()
-    c3 = Cluster()
+    c1 = MeasurementsCluster()
+    c2 = MeasurementsCluster()
+    c3 = MeasurementsCluster()
 
     c1.add(m1)
     c2.add(m2)

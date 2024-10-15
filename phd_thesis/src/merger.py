@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 from typing import Any
 
-from phd_thesis.src.objects.cluster import Cluster
-from phd_thesis.src.objects.measurements import DiscreteMeasurement
+from phd.external.objects.cluster import MeasurementsCluster
+from phd.external.objects.measurements import CoreMeasurement, FakeMeasurement
 
 
 class CombinationsFactory:
@@ -11,7 +11,9 @@ class CombinationsFactory:
     _encoder_mask: str = "item_"
 
     @classmethod
-    def combine(cls, measurements: Iterable[DiscreteMeasurement]) -> list[list[Cluster]]:
+    def combine(
+        cls, measurements: Iterable[CoreMeasurement | FakeMeasurement]
+    ) -> list[list[MeasurementsCluster]]:
         """Creates combinations of clusters by merging adjacent measurements.
 
         Args:
@@ -28,7 +30,7 @@ class CombinationsFactory:
             decoded_comb = cls._decode_items(comb, mask)
             clusters = []
             for measurements in decoded_comb:
-                cluster = Cluster()
+                cluster = MeasurementsCluster()
                 if isinstance(measurements, Iterable):
                     for m in measurements:
                         cluster.add(m)
@@ -134,9 +136,9 @@ class CombinationsFactory:
 
 
 if __name__ == "__main__":
-    m1 = DiscreteMeasurement(1, "a")
-    m2 = DiscreteMeasurement(2, "b")
-    m3 = DiscreteMeasurement(3, "c")
+    m1 = CoreMeasurement(1, "a")
+    m2 = CoreMeasurement(2, "b")
+    m3 = CoreMeasurement(3, "c")
 
     sequence = (m1, m2, m3)
 
