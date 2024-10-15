@@ -1,7 +1,7 @@
 from phd.external.metrics.protocols import Metrics
 from phd.external.objects.auxiliary_objects import Connection
-from phd.external.objects.cluster import Cluster
-from phd.external.objects.measurements import ContinuousMeasurement, DiscreteMeasurement
+from phd.external.objects.cluster import MeasurementsCluster
+from phd.external.objects.measurements import ContinuousMeasurement, CoreMeasurement
 from phd.external.utils import get_subsequence
 
 
@@ -30,9 +30,7 @@ class EdgeConsistency(Metrics):
         return True
 
     @staticmethod
-    def _num_elements_in_range(
-        measurements: list[DiscreteMeasurement], start: int, stop: int
-    ) -> int:
+    def _num_elements_in_range(measurements: list[CoreMeasurement], start: int, stop: int) -> int:
         """Counts the number of elements in a sorted sequence that are within the range
         [start, stop].
 
@@ -54,16 +52,16 @@ if __name__ == "__main__":
 
     """Correct consistency example."""
 
-    d1 = DiscreteMeasurement(1, "a")
-    d2 = DiscreteMeasurement(4, "b")
-    d3 = DiscreteMeasurement(7, "c")
+    d1 = CoreMeasurement(1, "a")
+    d2 = CoreMeasurement(4, "b")
+    d3 = CoreMeasurement(7, "c")
 
-    m1 = DiscreteMeasurement(1, 1)
-    m2 = DiscreteMeasurement(2, 1)
-    m3 = DiscreteMeasurement(5, 1)
+    m1 = CoreMeasurement(1, 1)
+    m2 = CoreMeasurement(2, 1)
+    m3 = CoreMeasurement(5, 1)
     measurement = ContinuousMeasurement(elements=[m1, m2, m3])
 
-    c1, c2, c3 = Cluster(), Cluster(), Cluster()
+    c1, c2, c3 = MeasurementsCluster(), MeasurementsCluster(), MeasurementsCluster()
 
     c1.add(d1)
     c2.add(d2)
@@ -76,9 +74,9 @@ if __name__ == "__main__":
     print(f"Consistency status: {consistency}")
     """Incorrect consistency example."""
 
-    m1 = DiscreteMeasurement(4, 1)
-    m2 = DiscreteMeasurement(5, 1)
-    m3 = DiscreteMeasurement(6, 1)
+    m1 = CoreMeasurement(4, 1)
+    m2 = CoreMeasurement(5, 1)
+    m3 = CoreMeasurement(6, 1)
     measurement = ContinuousMeasurement(elements=[m1, m2, m3])
 
     connections = [Connection(c1, c2)]

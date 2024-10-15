@@ -9,6 +9,7 @@ from moduslam.frontend_manager.graph.base_vertices import BaseVertex, Optimizabl
 from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
 from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 from moduslam.logger.logging_config import frontend_manager
+from phd.moduslam.frontend_manager.graph.cluster_storage import ClusterStorage
 
 logger = logging.getLogger(frontend_manager)
 
@@ -22,6 +23,7 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     def __init__(self) -> None:
         self._factor_graph = gtsam.NonlinearFactorGraph()
         self._vertex_storage = VertexStorage[BaseVertex]()
+        self._cluster_storage = ClusterStorage()
         self._edge_storage = EdgeStorage[BaseEdge]()
         self._connections: dict[BaseVertex, set[BaseEdge]] = {}
 
@@ -29,6 +31,11 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     def factor_graph(self) -> gtsam.NonlinearFactorGraph:
         """Backend Factor Graph."""
         return self._factor_graph
+
+    @property
+    def cluster_storage(self) -> ClusterStorage:
+        """Storage of clusters with vertices."""
+        return self._cluster_storage
 
     @property
     def vertex_storage(self) -> VertexStorage[BaseVertex]:
@@ -79,14 +86,18 @@ class Graph(Generic[BaseVertex, BaseEdge]):
             self._update_edge_connections(edge)
             return
 
+        vertices = edge.vertices
+
+        self._cluster_storage.add_vertices(vertices)
+
         edge.index = self._set_index()
-
         self._edge_storage.add(edge)
-        self._vertex_storage.add(edge.vertices)
-        self.factor_graph.add(edge.factor)
+        self._vertex_storage.add(vertices)
 
-        for v in edge.vertices:
+        for v in vertices:
             self._add_connection(v, edge)
+
+        self.factor_graph.add(edge.factor)
 
     def add_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Adds multiple edges to the graph.
@@ -104,10 +115,12 @@ class Graph(Generic[BaseVertex, BaseEdge]):
             edge: edge to be deleted from the graph.
         """
 
+        vertices = edge.vertices
         self.factor_graph.remove(edge.index)
         self._edge_storage.remove(edge)
-        for vertex in edge.vertices:
+        for vertex in vertices:
             self._remove_connection(vertex, edge)
+            self._cluster_storage.remove_vertex(vertex)
 
     def remove_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Removes multiple edges from the graph.
@@ -139,6 +152,17 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         for vertex in vertices:
             self.remove_vertex(vertex)
 
+    def update(self, values: gtsam.Values) -> None:
+        """Updates the graph with new values.
+
+        Args:
+            values: GTSAM values.
+
+        TODO: add update for non-optimizable vertices.
+        """
+
+        self._vertex_storage.update_optimizable_vertices(values)
+
     def update_connections(
         self, original_vertices: set[BaseVertex], modified_edge: BaseEdge
     ) -> None:
@@ -161,17 +185,6 @@ class Graph(Generic[BaseVertex, BaseEdge]):
                 self._add_connection(vertex, modified_edge)
             if vertex not in self._vertex_storage.vertices:
                 self._vertex_storage.add(vertex)
-
-    def update(self, values: gtsam.Values) -> None:
-        """Updates the graph with new values.
-
-        Args:
-            values: GTSAM values.
-
-        TODO: add update for non-optimizable vertices.
-        """
-
-        self._vertex_storage.update_optimizable_vertices(values)
 
     def _set_index(self) -> int:
         """Sets unique index for the new edge base on the size of the factor graph.

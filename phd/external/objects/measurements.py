@@ -14,7 +14,7 @@ class Measurement(Protocol):
     def value(self) -> Any: ...
 
 
-class DiscreteMeasurement(Measurement):
+class CoreMeasurement(Measurement):
     """Any discrete measurement."""
 
     def __init__(self, timestamp: int, value: Any):
@@ -34,9 +34,9 @@ class DiscreteMeasurement(Measurement):
 
 
 class ContinuousMeasurement(Measurement):
-    """Any pre-integratable measurement (aka IMU)."""
+    """Any non-core measurement (aka IMU)."""
 
-    def __init__(self, elements: list[DiscreteMeasurement]):
+    def __init__(self, elements: list[CoreMeasurement]):
 
         if len(elements) == 0:
             raise ValueError("Not enough elements to create a measurement.")
@@ -64,5 +64,25 @@ class ContinuousMeasurement(Measurement):
         return self._value
 
     @property
-    def elements(self) -> list[DiscreteMeasurement]:
+    def elements(self) -> list[CoreMeasurement]:
         return self._elements
+
+
+class FakeMeasurement(Measurement):
+
+    fake_value: str = "Fake"
+
+    def __init__(self, timestamp: int):
+        self._timestamp = timestamp
+        self._value = self.fake_value
+
+    def __repr__(self):
+        return self.fake_value
+
+    @property
+    def timestamp(self) -> int:
+        return self._timestamp
+
+    @property
+    def value(self) -> str:
+        return self._value

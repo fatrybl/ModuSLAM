@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from phd.external.objects.cluster import Cluster
-from phd.external.objects.measurements import DiscreteMeasurement
+from phd.external.objects.cluster import MeasurementsCluster
+from phd.external.objects.measurements import CoreMeasurement
 
 
 @dataclass
@@ -11,19 +11,19 @@ class Connection:
     Only for a continuous measurement.
     """
 
-    cluster1: Cluster
-    cluster2: Cluster
+    cluster1: MeasurementsCluster
+    cluster2: MeasurementsCluster
 
 
 @dataclass
 class ClustersWithConnections:
     """A combination of vertices & edges."""
 
-    clusters: list[Cluster]
+    clusters: list[MeasurementsCluster]
     connections: list[Connection]
 
 
 @dataclass
 class ClustersWithLeftovers:
-    clusters: list[Cluster]
-    leftovers: list[DiscreteMeasurement]
+    clusters: list[MeasurementsCluster]
+    leftovers: list[CoreMeasurement]

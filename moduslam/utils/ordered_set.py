@@ -1,7 +1,7 @@
 """Ordered-set data structure implementation.
 
 Complexity:
-    O(1): add, discard, remove, remove_first, remove_last, contains
+    O(1): add, discard, remove, remove_first, remove_last, contains, first, last
     O(N): __getitem__(index: int).
 """
 

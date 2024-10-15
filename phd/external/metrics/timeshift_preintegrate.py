@@ -2,7 +2,7 @@ from collections.abc import Sequence
 
 from phd.external.metrics.protocols import Metrics
 from phd.external.objects.auxiliary_objects import Connection
-from phd.external.objects.cluster import Cluster
+from phd.external.objects.cluster import MeasurementsCluster
 
 
 class TotalTimeShift(Metrics):
@@ -27,7 +27,7 @@ class TotalTimeShift(Metrics):
         raise NotImplementedError
 
     @classmethod
-    def _accumulative_time_shift_vertices(cls, vertices: list[Cluster]) -> int:
+    def _accumulative_time_shift_vertices(cls, vertices: list[MeasurementsCluster]) -> int:
         # """Calculates accumulative time shift for the merged vertices.
         #
         # Args:
