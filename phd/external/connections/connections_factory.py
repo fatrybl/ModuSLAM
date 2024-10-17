@@ -2,8 +2,8 @@ from collections.abc import Iterable
 from typing import Any
 
 from phd.external.objects.auxiliary_objects import Connection
-from phd.external.objects.cluster import MeasurementsCluster
 from phd.external.objects.measurements import CoreMeasurement
+from phd.external.objects.measurements_cluster import Cluster
 
 
 class Factory:
@@ -13,7 +13,7 @@ class Factory:
     _splitter_2: str = ","
 
     @classmethod
-    def create_combinations(cls, clusters: list[MeasurementsCluster]) -> list[list[Connection]]:
+    def create_combinations(cls, clusters: list[Cluster]) -> list[list[Connection]]:
         """Creates combinations of connections.
 
         Args:
@@ -135,9 +135,9 @@ if __name__ == "__main__":
     m1 = CoreMeasurement(1, "a")
     m2 = CoreMeasurement(2, "b")
     m3 = CoreMeasurement(3, "c")
-    c1 = MeasurementsCluster()
-    c2 = MeasurementsCluster()
-    c3 = MeasurementsCluster()
+    c1 = Cluster()
+    c2 = Cluster()
+    c3 = Cluster()
 
     c1.add(m1)
     c2.add(m2)

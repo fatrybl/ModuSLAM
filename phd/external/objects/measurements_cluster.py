@@ -4,10 +4,11 @@ from phd.external.objects.measurements import (
     ContinuousMeasurement,
     CoreMeasurement,
     FakeMeasurement,
+    Measurement,
 )
 
 
-class MeasurementsCluster:
+class Cluster:
     """Stores measurements.
 
     TODO: make timestamp and time range properties calculation more efficient.
@@ -80,7 +81,7 @@ class MeasurementsCluster:
         else:
             raise ValueError("Time range does not exist for empty cluster.")
 
-    def add(self, measurement: CoreMeasurement | ContinuousMeasurement | FakeMeasurement) -> None:
+    def add(self, measurement: Measurement) -> None:
         """Adds new measurement to the cluster.
 
         Args:
@@ -89,15 +90,16 @@ class MeasurementsCluster:
         Raises:
             TypeError: wrong type of measurement.
         """
-        if isinstance(measurement, CoreMeasurement):
-            self._core_measurements.append(measurement)
-            self._timestamp = self._compute_timestamp()
-            self._time_range = self._compute_time_range()
-        elif isinstance(measurement, ContinuousMeasurement):
+        if isinstance(measurement, ContinuousMeasurement):
             self._continuous_measurements.append(measurement)
 
         elif isinstance(measurement, FakeMeasurement):
             self._fake_measurements.append(measurement)
+
+        elif isinstance(measurement, CoreMeasurement):
+            self._core_measurements.append(measurement)
+            self._timestamp = self._compute_timestamp()
+            self._time_range = self._compute_time_range()
 
         else:
             raise TypeError(f"Wrong type of measurement: {type(measurement)}")
