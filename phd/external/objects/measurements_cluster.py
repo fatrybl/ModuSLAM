@@ -22,10 +22,9 @@ class Cluster:
         self._time_range: TimeRange | None = None
 
     def __repr__(self):
-        core_values = [m.value for m in self._core_measurements]
-        continuous_values = [m.value for m in self._continuous_measurements]
-        fake_values = [m.value for m in self._fake_measurements]
-        return f"Cluster: {core_values + continuous_values + fake_values}"
+        return str(
+            self._core_measurements + self._continuous_measurements + self._fake_measurements
+        )
 
     @property
     def is_empty(self) -> bool:

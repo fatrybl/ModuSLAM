@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from phd.external.objects.measurements import Measurement, Odometry, SplitOdometry
+from phd.external.objects.measurements import Measurement, Odometry, SplittedOdometry
 
 
 def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
@@ -15,7 +15,7 @@ def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
     return [m for m in measurements if not isinstance(m, Odometry)]
 
 
-def find_and_split(measurements: Iterable[Measurement]) -> list[SplitOdometry] | None:
+def find_and_split(measurements: Iterable[Measurement]) -> list[SplittedOdometry] | None:
     """Finds and splits odometry measurements in the sequence of measurements.
 
     Args:
@@ -24,13 +24,15 @@ def find_and_split(measurements: Iterable[Measurement]) -> list[SplitOdometry] |
     Returns:
         odometry measurements if found or None.
     """
-    odometry_measurements = find_odometry_measurements(measurements)
+    odometry_measurements = get_odometry_measurements(measurements)
     if odometry_measurements:
-        return split_multiple(odometry_measurements)
-    return None
+        splits = split_multiple(odometry_measurements)
+        return splits
+    else:
+        return None
 
 
-def find_odometry_measurements(measurements: Iterable[Measurement]) -> list[Odometry]:
+def get_odometry_measurements(measurements: Iterable[Measurement]) -> list[Odometry]:
     """Finds all odometry measurements in the sequence of measurements.
 
     Args:
@@ -39,15 +41,11 @@ def find_odometry_measurements(measurements: Iterable[Measurement]) -> list[Odom
     Returns:
         odometry measurements.
     """
-    odometry_measurements = []
-    for m in measurements:
-        if isinstance(m, Odometry):
-            odometry_measurements.append(m)
-
+    odometry_measurements = [m for m in measurements if isinstance(m, Odometry)]
     return odometry_measurements
 
 
-def split_one(measurement: Odometry) -> tuple[SplitOdometry, SplitOdometry]:
+def split_one(measurement: Odometry) -> tuple[SplittedOdometry, SplittedOdometry]:
     """Splits odometry-based parent measurement into 2 children measurements with the
     same value but different timestamps.
 
@@ -57,12 +55,12 @@ def split_one(measurement: Odometry) -> tuple[SplitOdometry, SplitOdometry]:
     Returns:
         2 children measurements.
     """
-    m1 = SplitOdometry(measurement.time_range.start, "-" + measurement.value, measurement)
-    m2 = SplitOdometry(measurement.time_range.stop, measurement.value, measurement)
+    m1 = SplittedOdometry(measurement.time_range.start, measurement.value, measurement)
+    m2 = SplittedOdometry(measurement.time_range.stop, measurement.value, measurement)
     return m1, m2
 
 
-def split_multiple(measurements: Iterable[Odometry]) -> list[SplitOdometry]:
+def split_multiple(measurements: Iterable[Odometry]) -> list[SplittedOdometry]:
     """Splits odometry-based parent measurements into 2 children measurements with the
     same value but different timestamps.
 

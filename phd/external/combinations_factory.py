@@ -4,7 +4,7 @@ from typing import TypeVar
 from phd.external.objects.measurements import (
     CoreMeasurement,
     MeasurementGroup,
-    SplitOdometry,
+    SplittedOdometry,
 )
 from phd.external.objects.measurements_cluster import Cluster
 
@@ -34,7 +34,7 @@ class Factory:
             clusters = []
             for cluster in combination:
                 splited_odometries = [
-                    m for m in cluster.measurements if isinstance(m, SplitOdometry)
+                    m for m in cluster.measurements if isinstance(m, SplittedOdometry)
                 ]
                 num_unique_parents = len(set([m.parent for m in splited_odometries]))
                 num_all_parents = len([m.parent for m in splited_odometries])

@@ -8,7 +8,7 @@ from phd.external.objects.measurements import (
     Measurement,
     Odometry,
 )
-from phd.external.preprocessors.fake_measurement_factory import create_fake
+from phd.external.preprocessors.fake_measurement_factory import add_fake_if_needed
 from phd.external.preprocessors.odometry_splitter import find_and_split, remove_odometry
 from phd.external.preprocessors.utils import find_continuous_measurement
 from phd.external.utils import group_by_timestamp, remove_duplicates
@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     d1 = CoreMeasurement(1, "a")
     d2 = CoreMeasurement(3, "b")
-    # d3 = CoreMeasurement(5, "c")
+    d3 = CoreMeasurement(5, "c")
     # d4 = CoreMeasurement(7, "d")
     imu1 = CoreMeasurement(0, 0.5)
     imu2 = CoreMeasurement(1, 0.5)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     odom1 = Odometry(1, 2, "o1")
     odom2 = Odometry(2, 3, "o2")
 
-    measurements: list[Measurement] = [d1, d2]
+    measurements: list[Measurement] = [d1, d2, odom1]
 
     # ===============================================================================================
 
@@ -39,19 +39,12 @@ if __name__ == "__main__":
         measurements += odometry_measurements
 
     continuous_measurement = find_continuous_measurement(measurements)
+
     if continuous_measurement:
         measurements.remove(continuous_measurement)
+        add_fake_if_needed(continuous_measurement, measurements)
 
     measurements.sort(key=lambda m: m.timestamp)
-
-    if continuous_measurement:
-        t1 = continuous_measurement.time_range.start
-        t2 = measurements[0].timestamp
-        if t1 < t2:
-            fake = create_fake(continuous_measurement)
-            measurements.insert(0, fake)
-
-    # TODO: check if connections is consistent.
 
     groups = group_by_timestamp(measurements)
 

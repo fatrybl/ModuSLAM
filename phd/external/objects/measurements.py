@@ -131,13 +131,13 @@ class Odometry(Measurement):
         return self._value
 
 
-class SplitOdometry(CoreMeasurement):
+class SplittedOdometry(CoreMeasurement):
     def __init__(self, timestamp: int, value: Any, parent: Odometry):
         super().__init__(timestamp, value)
         self._parent = parent
 
     def __repr__(self):
-        return f"timestamp:{self._timestamp}"
+        return f"odom:{self._timestamp}"
 
     @property
     def parent(self) -> Odometry:

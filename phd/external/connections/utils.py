@@ -2,16 +2,93 @@ from phd.external.connections.connections_factory import Factory
 from phd.external.objects.auxiliary_objects import (
     ClustersWithConnections,
     ClustersWithLeftovers,
+    Connection,
 )
-from phd.external.objects.measurements import ContinuousMeasurement, CoreMeasurement
+from phd.external.objects.measurements import (
+    ContinuousMeasurement,
+    CoreMeasurement,
+    FakeMeasurement,
+)
 from phd.external.objects.measurements_cluster import Cluster
-from phd.external.preprocessors.fake_measurement_factory import (
-    find_fake_measurement,
-    process_fake_and_non_fake,
-    process_non_fake,
-    process_single_fake,
-)
+from phd.external.preprocessors.fake_measurement_factory import find_fake_measurement
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
+
+
+def process_single_fake(
+    cluster: Cluster, measurement: ContinuousMeasurement, fake_measurement: FakeMeasurement
+) -> list[CoreMeasurement]:
+    """Processes a connection with the 1-st cluster having a fake measurement.
+
+    Args:
+        cluster: cluster to add the new measurement.
+
+        measurement: continuous measurement to be used for connection.
+
+        fake_measurement: fake measurement to be used for connection.
+
+    Returns:
+        used measurements.
+    """
+    start = fake_measurement.timestamp
+    stop = cluster.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    new_measurement = ContinuousMeasurement(elements)
+    cluster.add(new_measurement)
+    return elements
+
+
+def process_non_fake(
+    connection: Connection, measurement: ContinuousMeasurement
+) -> list[CoreMeasurement]:
+    """Processes a connection when the 1-st cluster has no fake measurement.
+
+    Args:
+        connection: connection to be processed.
+
+        measurement: continuous measurement to be used for connection.
+
+    Returns:
+        used elements.
+    """
+    cluster1 = connection.cluster1
+    cluster2 = connection.cluster2
+    start = cluster1.timestamp
+    stop = cluster2.timestamp
+    elements, _, stop = get_subsequence(measurement.elements, start, stop)
+    if len(elements) > 0:
+        new_measurement = ContinuousMeasurement(elements)
+        cluster2.add(new_measurement)
+
+    return elements
+
+
+def process_fake_and_non_fake(
+    connection: Connection,
+    measurement: ContinuousMeasurement,
+    fake_measurement: FakeMeasurement,
+) -> list[CoreMeasurement]:
+    """Processes a connection when the 1-st cluster has both fake and real measurements.
+
+    Args:
+        connection: connection to be processed.
+
+        measurement: continuous measurement to be used for connection.
+
+        fake_measurement: fake measurement to be used for connection.
+
+    Returns:
+        used elements.
+    """
+    used_elements = []
+    cluster1 = connection.cluster1
+    elements = process_single_fake(cluster1, measurement, fake_measurement)
+    cluster1.remove(fake_measurement)
+    used_elements += elements
+
+    elements = process_non_fake(connection, measurement)
+    used_elements += elements
+
+    return used_elements
 
 
 def fill_single_connection(
@@ -42,7 +119,7 @@ def fill_single_connection(
     return cluster_copy, leftovers
 
 
-def fill_multiple_connections(
+def fill_connections(
     item: ClustersWithConnections, measurement: ContinuousMeasurement
 ) -> tuple[list[Cluster], list[CoreMeasurement]]:
     """Fills connections using the continuous measurement.
@@ -64,8 +141,8 @@ def fill_multiple_connections(
         fake_measurement = find_fake_measurement(measurements)
 
         if fake_measurement and num_measurements == 1:
-            elements, empty_cluster = process_single_fake(connection, measurement, fake_measurement)
-            item.clusters.remove(empty_cluster)
+            elements = process_single_fake(connection.cluster2, measurement, fake_measurement)
+            item.clusters.remove(connection.cluster1)
 
         elif fake_measurement and num_measurements > 1:
             elements = process_fake_and_non_fake(connection, measurement, fake_measurement)
@@ -105,12 +182,11 @@ def get_clusters_and_leftovers(
 
         else:
             combinations = Factory.create_combinations(clusters)
-            # TODO: filter irrealizable combinations due to limitations.
 
             for connections in combinations:
                 clusters_copy, connections_copy = create_copy(clusters, connections)
                 item = ClustersWithConnections(clusters_copy, connections_copy)
-                new_clusters, leftovers = fill_multiple_connections(item, measurement)
+                new_clusters, leftovers = fill_connections(item, measurement)
                 v = ClustersWithLeftovers(new_clusters, leftovers)
                 variants.append(v)
 

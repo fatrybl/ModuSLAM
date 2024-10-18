@@ -32,7 +32,8 @@ class Factory:
             combination = []
             decoded_con = cls._decode_items(con, mask)
             for pair in decoded_con:
-                combination.append(Connection(pair[0], pair[1]))
+                connection = Connection(pair[0], pair[1])
+                combination.append(connection)
 
             combinations.append(combination)
 
@@ -40,7 +41,7 @@ class Factory:
 
     @classmethod
     def _create_connections(cls, items: list):
-        """Creates all possible connections between items without intersactions.
+        """Creates all possible connections between items without intersections.
 
         Args:
             items: items to connect.
