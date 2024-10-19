@@ -12,6 +12,7 @@ class Cluster:
     """Stores measurements.
 
     TODO: make timestamp and time range properties calculation more efficient.
+          now it takes O(n).
     """
 
     def __init__(self):
@@ -103,9 +104,7 @@ class Cluster:
         else:
             raise TypeError(f"Wrong type of measurement: {type(measurement)}")
 
-    def remove(
-        self, measurement: ContinuousMeasurement | CoreMeasurement | FakeMeasurement
-    ) -> None:
+    def remove(self, measurement: Measurement) -> None:
         """Removes the measurement from the cluster.
 
         Args:
@@ -116,6 +115,9 @@ class Cluster:
         """
         if isinstance(measurement, CoreMeasurement):
             self._core_measurements.remove(measurement)
+            self._timestamp = self._compute_timestamp()
+            self._time_range = self._compute_time_range()
+
         elif isinstance(measurement, ContinuousMeasurement):
             self._continuous_measurements.remove(measurement)
 
@@ -125,12 +127,17 @@ class Cluster:
         else:
             raise TypeError(f"Wrong type of measurement: {type(measurement)}")
 
-    def _compute_timestamp(self) -> int:
+    def _compute_timestamp(self) -> int | None:
         timestamps = [m.timestamp for m in self._core_measurements]
-        t = median(timestamps)
-        return t
+        if timestamps:
+            return median(timestamps)
+        else:
+            return None
 
-    def _compute_time_range(self) -> TimeRange:
-        start = min((m.timestamp for m in self._core_measurements))
-        stop = max((m.timestamp for m in self._core_measurements))
-        return TimeRange(start, stop)
+    def _compute_time_range(self) -> TimeRange | None:
+        if self._core_measurements:
+            start = min((m.timestamp for m in self._core_measurements))
+            stop = max((m.timestamp for m in self._core_measurements))
+            return TimeRange(start, stop)
+        else:
+            return None
