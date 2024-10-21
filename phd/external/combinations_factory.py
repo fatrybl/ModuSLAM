@@ -1,11 +1,7 @@
 from collections.abc import Iterable
 from typing import TypeVar
 
-from phd.external.objects.measurements import (
-    CoreMeasurement,
-    MeasurementGroup,
-    SplittedOdometry,
-)
+from phd.external.objects.measurements import CoreMeasurement, MeasurementGroup
 from phd.external.objects.measurements_cluster import Cluster
 
 T = TypeVar("T")
@@ -15,38 +11,6 @@ class Factory:
 
     _splitter: str = "+"
     _encoder_mask: str = "item_"
-
-    @staticmethod
-    def remove_loops(combinations: list[list[Cluster]]) -> list[list[Cluster]]:
-        """Removes combinations which have clusters with loops. Loop is when a cluster
-        has multiple measurements with the same parent.
-
-        Args:
-            combinations: combinations of clusters.
-
-        Returns:
-            combinations without loops.
-        """
-
-        new_combinations = []
-
-        for combination in combinations:
-            clusters = []
-            for cluster in combination:
-                splited_odometries = [
-                    m for m in cluster.measurements if isinstance(m, SplittedOdometry)
-                ]
-                num_unique_parents = len(set([m.parent for m in splited_odometries]))
-                num_all_parents = len([m.parent for m in splited_odometries])
-                if num_unique_parents == num_all_parents:
-                    clusters.append(cluster)
-                else:
-                    break
-
-            if len(clusters) == len(combination):
-                new_combinations.append(clusters)
-
-        return new_combinations
 
     @classmethod
     def combine(cls, groups: Iterable[MeasurementGroup]) -> list[list[Cluster]]:
@@ -72,6 +36,7 @@ class Factory:
                         cluster.add(measurement)
 
                 clusters.append(cluster)
+
             combinations.append(clusters)
 
         return combinations

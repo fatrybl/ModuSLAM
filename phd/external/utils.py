@@ -7,16 +7,18 @@ from phd.external.objects.measurements import (
     CoreMeasurement,
     Measurement,
     MeasurementGroup,
+    SplittedOdometry,
     T,
 )
 from phd.external.objects.measurements_cluster import Cluster
 
 
 def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], int, int]:
-    """Gets the sub-sequence of items  within the given range.
+    """Gets the sub-sequence of items within the given range for the sorted sequence.
+    Complexity: O(log n).
 
     Args:
-        sequence: a sequence of items to get a sub-sequence from.
+        sequence: a sorted with timestamps sequence of items to get a sub-sequence of.
 
         start: left timestamp limit (inclusive).
 
@@ -135,3 +137,35 @@ def group_by_timestamp(measurements: Iterable[Measurement]) -> dict[int, Measure
         groups[m.timestamp].measurements.append(m)
 
     return groups
+
+
+def remove_loops(combinations: list[list[Cluster]]) -> list[list[Cluster]]:
+    """Removes combinations which have clusters with loops.
+    Loop - a cluster which has multiple SplittedOdometry measurements with the same parent.
+
+    Args:
+        combinations: combinations of clusters.
+
+    Returns:
+        combinations without loops.
+    """
+
+    new_combinations = []
+
+    for combination in combinations:
+        clusters = []
+        for cluster in combination:
+            splited_odometries = [
+                m for m in cluster.measurements if isinstance(m, SplittedOdometry)
+            ]
+            num_unique_parents = len(set([m.parent for m in splited_odometries]))
+            num_all_parents = len([m.parent for m in splited_odometries])
+            if num_unique_parents == num_all_parents:
+                clusters.append(cluster)
+            else:
+                break
+
+        if len(clusters) == len(combination):
+            new_combinations.append(clusters)
+
+    return new_combinations

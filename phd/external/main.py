@@ -11,7 +11,7 @@ from phd.external.objects.measurements import (
 from phd.external.preprocessors.fake_measurement_factory import add_fake_if_needed
 from phd.external.preprocessors.odometry_splitter import find_and_split, remove_odometry
 from phd.external.preprocessors.utils import find_continuous_measurement
-from phd.external.utils import group_by_timestamp, remove_duplicates
+from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
 
 if __name__ == "__main__":
 
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     groups = group_by_timestamp(measurements)
 
     clusters_combinations = Factory.combine(groups.values())
-    clusters_combinations = Factory.remove_loops(clusters_combinations)
+    clusters_combinations = remove_loops(clusters_combinations)
 
     if continuous_measurement:
         clusters_with_leftovers = get_clusters_and_leftovers(
