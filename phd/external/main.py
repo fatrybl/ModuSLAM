@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     d1 = CoreMeasurement(1, "a")
     d2 = CoreMeasurement(3, "b")
-    d3 = CoreMeasurement(5, "c")
+    # d3 = CoreMeasurement(5, "c")
     # d4 = CoreMeasurement(7, "d")
     imu1 = CoreMeasurement(0, 0.5)
     imu2 = CoreMeasurement(1, 0.5)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     odom1 = Odometry(1, 2, "o1")
     odom2 = Odometry(2, 3, "o2")
 
-    measurements: list[Measurement] = [d1, d2, odom1]
+    measurements: list[Measurement] = [d1, d2, odom1, imu, odom2]
 
     # ===============================================================================================
 

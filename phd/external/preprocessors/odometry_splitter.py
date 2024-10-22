@@ -23,6 +23,9 @@ def find_and_split(measurements: Iterable[Measurement]) -> list[SplittedOdometry
 
     Returns:
         odometry measurements if found or None.
+
+    TODO: check if any odometry.time_range.start is inside the time range of all measurements.
+        if not: do not split.
     """
     odometry_measurements = get_odometry_measurements(measurements)
     if odometry_measurements:
