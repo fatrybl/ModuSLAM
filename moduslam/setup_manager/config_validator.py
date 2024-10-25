@@ -6,7 +6,9 @@ from moduslam.logger.logging_config import main_manager
 from moduslam.system_configs.data_manager.batch_factory.datasets.kaist.config import (
     KaistConfig,
 )
-from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import Ros2Config
+from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
+    Ros2Config,
+)
 from moduslam.system_configs.data_manager.batch_factory.datasets.tum_vie.config import (
     TumVieConfig,
 )
