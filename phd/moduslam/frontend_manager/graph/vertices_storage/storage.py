@@ -1,16 +1,15 @@
 import logging
-from collections.abc import Iterable
 from typing import Generic
 
-from moduslam.frontend_manager.graph.base_vertices import (
+from moduslam.frontend_manager.graph.index_generator import IndexStorage
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.utils.ordered_set import OrderedSet
+from phd.moduslam.frontend_manager.graph.vertices.base import (
     BaseVertex,
     NotOptimizableVertex,
     OptimizableVertex,
 )
-from moduslam.frontend_manager.graph.index_generator import IndexStorage
-from moduslam.logger.logging_config import frontend_manager
-from moduslam.utils.ordered_set import OrderedSet
-from phd.moduslam.frontend_manager.graph.cluster import VertexCluster
+from phd.moduslam.frontend_manager.graph.vertices_storage.cluster import VertexCluster
 
 logger = logging.getLogger(frontend_manager)
 
@@ -53,29 +52,21 @@ class VertexStorage(Generic[BaseVertex]):
         """Not optimizable vertices."""
         return self._not_optimizable_vertices
 
-    def add(self, vertex: BaseVertex | Iterable[BaseVertex]) -> None:
-        """Adds vertex(s).
+    def add(self, vertex: BaseVertex) -> None:
+        """Adds vertex.
 
         Args:
-            vertex: new vertex(s) to be added.
+            vertex: a new vertex to be added.
         """
-        if isinstance(vertex, Iterable):
-            for v in vertex:
-                self._add(v)
-        else:
-            self._add(vertex)
+        raise NotImplementedError
 
-    def remove(self, vertex: BaseVertex | Iterable[BaseVertex]) -> None:
-        """Removes vertex(s).
+    def remove(self, vertex: BaseVertex) -> None:
+        """Removes vertex.
 
         Args:
-            vertex: vertex(s) to be removed.
+            vertex: a vertex to be removed.
         """
-        if isinstance(vertex, Iterable):
-            for v in vertex:
-                self._remove(v)
-        else:
-            self._remove(vertex)
+        raise NotImplementedError
 
     def get_vertices(self, vertex_type: type[BaseVertex]) -> OrderedSet[BaseVertex]:
         """Gets vertices of the given type.

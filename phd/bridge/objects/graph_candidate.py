@@ -1,13 +1,5 @@
-from dataclasses import dataclass, field
-
 from moduslam.frontend_manager.graph.base_edges import Edge
-from moduslam.frontend_manager.graph.base_vertices import Vertex
-from phd.moduslam.frontend_manager.graph.graph import Graph
-
-
-@dataclass
-class VertexCluster:
-    vertices: list[Vertex] = field(default_factory=lambda: [])
+from phd.bridge.objects.vertices_cluster import Cluster
 
 
 class Candidate:
@@ -16,15 +8,9 @@ class Candidate:
     Stores new edges and vertices to be added to the graph.
     """
 
-    def __init__(self, graph: Graph):
-        self._graph = graph
+    def __init__(self):
         self._edges: list[Edge] = []
-        self._clusters: list[VertexCluster] = []
-
-    @property
-    def graph(self) -> Graph:
-        """Graph."""
-        return self._graph
+        self._clusters: list[Cluster] = []
 
     @property
     def edges(self) -> list[Edge]:
@@ -32,7 +18,7 @@ class Candidate:
         return self._edges
 
     @property
-    def clusters(self) -> list[VertexCluster]:
+    def clusters(self) -> list[Cluster]:
         """Clusters to be added to the graph."""
         return self._clusters
 
@@ -40,6 +26,6 @@ class Candidate:
         """Adds edges to the candidate."""
         self._edges += edges
 
-    def add_cluster(self, cluster: VertexCluster):
+    def add_cluster(self, cluster: Cluster):
         """Adds a cluster to the candidate."""
         self._clusters.append(cluster)

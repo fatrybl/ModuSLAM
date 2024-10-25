@@ -5,7 +5,7 @@ from phd.external.metrics.utils import median
 
 
 class VertexCluster:
-    """Stores vertices related to one timestamp.
+    """Stores vertices related to the same timestamp.
 
     TODO: recompute timestamp and time ranges more efficiently.
     """
@@ -21,7 +21,10 @@ class VertexCluster:
 
     @property
     def vertices(self) -> dict[type[Vertex], OrderedSet[Vertex]]:
-        """Vertices in the cluster."""
+        """Vertices in the cluster.
+
+        TODO: do we really need a dictionary here?
+        """
         return self._vertices
 
     @property
@@ -63,7 +66,7 @@ class VertexCluster:
         """Removes vertex from the cluster.
 
         Args:
-            vertex: a vertex to remove.
+            vertex: a vertex to be removed.
         """
         v_type = type(vertex)
         if v_type in self._vertices:

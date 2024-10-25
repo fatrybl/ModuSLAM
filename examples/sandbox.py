@@ -33,7 +33,7 @@ odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.0
 
 graph.addPriorPose3(X(0), pose1, prior_noise)
 
-odom = gtsam.BetweenFactorPose3(X(0), X(0), pose2, odom_noise)
+odom = gtsam.BetweenFactorPose3(X(0), X(1), pose2, odom_noise)
 
 graph.add(odom)
 

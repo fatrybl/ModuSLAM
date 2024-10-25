@@ -4,12 +4,11 @@ from typing import Generic
 
 import gtsam
 
-from moduslam.frontend_manager.graph.base_edges import BaseEdge
-from moduslam.frontend_manager.graph.base_vertices import BaseVertex, OptimizableVertex
-from moduslam.frontend_manager.graph.edge_storage import EdgeStorage
-from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
 from moduslam.logger.logging_config import frontend_manager
-from phd.moduslam.frontend_manager.graph.cluster_storage import ClusterStorage
+from phd.moduslam.frontend_manager.graph.edges.base import BaseEdge
+from phd.moduslam.frontend_manager.graph.edges_storage.storage import EdgeStorage
+from phd.moduslam.frontend_manager.graph.vertices.base import BaseVertex
+from phd.moduslam.frontend_manager.graph.vertices_storage.storage import VertexStorage
 
 logger = logging.getLogger(frontend_manager)
 
@@ -23,7 +22,6 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     def __init__(self) -> None:
         self._factor_graph = gtsam.NonlinearFactorGraph()
         self._vertex_storage = VertexStorage[BaseVertex]()
-        self._cluster_storage = ClusterStorage()
         self._edge_storage = EdgeStorage[BaseEdge]()
         self._connections: dict[BaseVertex, set[BaseEdge]] = {}
 
@@ -31,11 +29,6 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     def factor_graph(self) -> gtsam.NonlinearFactorGraph:
         """Backend Factor Graph."""
         return self._factor_graph
-
-    @property
-    def cluster_storage(self) -> ClusterStorage:
-        """Storage of clusters with vertices."""
-        return self._cluster_storage
 
     @property
     def vertex_storage(self) -> VertexStorage[BaseVertex]:
@@ -50,11 +43,7 @@ class Graph(Generic[BaseVertex, BaseEdge]):
     @property
     def backend_values(self) -> gtsam.Values:
         """Internal values of the factor graph."""
-        values = gtsam.Values()
-        unique_vertices = self._get_unique_optimizable_vertices()
-        for vertex in unique_vertices.values():
-            values.insert(vertex.backend_index, vertex.backend_instance)
-        return values
+        raise NotImplementedError
 
     @property
     def connections(self) -> dict[BaseVertex, set[BaseEdge]]:
@@ -70,34 +59,35 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         Returns:
             set of edges connected to the vertex.
         """
-        return self._connections.get(vertex, set())
+        # return self._connections.get(vertex, set())
+        raise NotImplementedError
 
     def add_edge(self, edge: BaseEdge) -> None:
         """Adds edge to the graph.
 
         Args:
             edge: new edge to be added to the graph.
-
-        TODO: timestamped based sorting has been removed. Check if it works.
-        TODO: add tests for the existing edges being added.
         TODO: add more efficient way to update the connections for the existing edges. Now it takes O(N) time.
         """
-        if edge in self._edge_storage.edges:
-            self._update_edge_connections(edge)
-            return
-
-        vertices = edge.vertices
-
-        self._cluster_storage.add_vertices(vertices)
-
-        edge.index = self._set_index()
-        self._edge_storage.add(edge)
-        self._vertex_storage.add(vertices)
-
-        for v in vertices:
-            self._add_connection(v, edge)
-
+        # if edge in self._edge_storage.edges:
+        #     self._update_edge_connections(edge)
+        #     return
+        #
+        # vertices = edge.vertices
+        #
+        # self._cluster_storage.add_vertices(vertices)
+        #
+        # edge.index = self._set_index()
+        # self._edge_storage.add(edge)
+        # self._vertex_storage.add(vertices)
+        #
+        # for v in vertices:
+        #     self._add_connection(v, edge)
+        #
+        # self.factor_graph.add(edge.factor)
         self.factor_graph.add(edge.factor)
+        self.edge_storage.add(edge)
+        raise NotImplementedError
 
     def add_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Adds multiple edges to the graph.
@@ -115,12 +105,16 @@ class Graph(Generic[BaseVertex, BaseEdge]):
             edge: edge to be deleted from the graph.
         """
 
-        vertices = edge.vertices
-        self.factor_graph.remove(edge.index)
-        self._edge_storage.remove(edge)
-        for vertex in vertices:
-            self._remove_connection(vertex, edge)
-            self._cluster_storage.remove_vertex(vertex)
+        # vertices = edge.vertices
+        # self.factor_graph.remove(edge.index)
+        # self._edge_storage.remove(edge)
+        # for vertex in vertices:
+        #     self._remove_connection(vertex, edge)
+        #     self._cluster_storage.remove_vertex(vertex)
+        self._factor_graph.remove(edge.index)
+        self.edge_storage.remove(edge)
+
+        raise NotImplementedError
 
     def remove_edges(self, edges: Iterable[BaseEdge]) -> None:
         """Removes multiple edges from the graph.
@@ -132,16 +126,27 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         for edge in edges_copy:
             self.remove_edge(edge)
 
+    def replace_edge(self, old_edge: BaseEdge, new_edge: BaseEdge) -> None:
+        """Replaces old edge with new edge in the graph.
+
+        Args:
+            old_edge: an old edge to be replaced.
+
+            new_edge: a new edge to replace the old one.
+        """
+        raise NotImplementedError
+
     def remove_vertex(self, vertex: BaseVertex) -> None:
         """Removes vertex from the graph.
 
         Args:
             vertex: vertex to be deleted from the graph.
         """
-        edges = self._connections.get(vertex, None)
-        self.remove_edges(edges) if edges else None
-        self._vertex_storage.remove(vertex)
-        self._connections.pop(vertex, None)
+        # edges = self._connections.get(vertex, None)
+        # self.remove_edges(edges) if edges else None
+        # self._vertex_storage.remove(vertex)
+        # self._connections.pop(vertex, None)
+        raise NotImplementedError
 
     def remove_vertices(self, vertices: Iterable[BaseVertex]) -> None:
         """Removes multiple vertices from the graph.
@@ -161,7 +166,8 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         TODO: add update for non-optimizable vertices.
         """
 
-        self._vertex_storage.update_optimizable_vertices(values)
+        # self._vertex_storage.update_optimizable_vertices(values)
+        raise NotImplementedError
 
     def update_connections(
         self, original_vertices: set[BaseVertex], modified_edge: BaseEdge
@@ -174,17 +180,18 @@ class Graph(Generic[BaseVertex, BaseEdge]):
 
             modified_edge: edge with modified vertices.
         """
-        modified_vertices = set(modified_edge.vertices)
-
-        for vertex in original_vertices:
-            if vertex not in modified_vertices:
-                self._remove_connection(vertex, modified_edge)
-
-        for vertex in modified_vertices:
-            if vertex not in original_vertices:
-                self._add_connection(vertex, modified_edge)
-            if vertex not in self._vertex_storage.vertices:
-                self._vertex_storage.add(vertex)
+        # modified_vertices = set(modified_edge.vertices)
+        #
+        # for vertex in original_vertices:
+        #     if vertex not in modified_vertices:
+        #         self._remove_connection(vertex, modified_edge)
+        #
+        # for vertex in modified_vertices:
+        #     if vertex not in original_vertices:
+        #         self._add_connection(vertex, modified_edge)
+        #     if vertex not in self._vertex_storage.vertices:
+        #         self._vertex_storage.add(vertex)
+        raise NotImplementedError
 
     def _set_index(self) -> int:
         """Sets unique index for the new edge base on the size of the factor graph.
@@ -198,21 +205,8 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         Returns:
             unique index.
         """
-        return self.factor_graph.size()
-
-    def _get_unique_optimizable_vertices(self) -> dict[int, OptimizableVertex]:
-        """Gets vertices with unique backend indices.
-
-        Returns:
-            dict of indices and vertices.
-        """
-        unique_vertices: dict[int, OptimizableVertex] = {}
-
-        for vertex in self._vertex_storage.optimizable_vertices:
-            if vertex.backend_index not in unique_vertices:
-                unique_vertices[vertex.backend_index] = vertex
-
-        return unique_vertices
+        # return self.factor_graph.size()
+        raise NotImplementedError
 
     def _add_connection(self, vertex: BaseVertex, edge: BaseEdge) -> None:
         """Adds edge to the connection with the vertex.
@@ -221,10 +215,11 @@ class Graph(Generic[BaseVertex, BaseEdge]):
 
             edge: edge to be added to the vertex.
         """
-        if vertex not in self._connections:
-            self._connections[vertex] = {edge}
-        else:
-            self._connections[vertex].add(edge)
+        # if vertex not in self._connections:
+        #     self._connections[vertex] = {edge}
+        # else:
+        #     self._connections[vertex].add(edge)
+        raise NotImplementedError
 
     def _update_edge_connections(self, edge: BaseEdge) -> None:
         """Updates connections of the edge with the vertices.
@@ -232,16 +227,17 @@ class Graph(Generic[BaseVertex, BaseEdge]):
         Args:
             edge: edge to be updated.
         """
-        new_vertices = set(edge.vertices)
-
-        for vertex, edges in self._connections.items():
-            if edge in edges:
-                self._connections[vertex].remove(edge)
-
-        for vertex in new_vertices:
-            self._add_connection(vertex, edge)
-            if vertex not in self._vertex_storage.vertices:
-                self._vertex_storage.add(vertex)
+        # new_vertices = set(edge.vertices)
+        #
+        # for vertex, edges in self._connections.items():
+        #     if edge in edges:
+        #         self._connections[vertex].remove(edge)
+        #
+        # for vertex in new_vertices:
+        #     self._add_connection(vertex, edge)
+        #     if vertex not in self._vertex_storage.vertices:
+        #         self._vertex_storage.add(vertex)
+        raise NotImplementedError
 
     def _remove_connection(self, vertex: BaseVertex, edge: BaseEdge) -> None:
         """Removes edge from the connection with the vertex.
@@ -255,5 +251,6 @@ class Graph(Generic[BaseVertex, BaseEdge]):
            if all edges are removed from connection, the vertex still exists in the connection.
         """
 
-        if vertex in self._connections and edge in self._connections[vertex]:
-            self._connections[vertex].remove(edge)
+        # if vertex in self._connections and edge in self._connections[vertex]:
+        #     self._connections[vertex].remove(edge)
+        raise NotImplementedError

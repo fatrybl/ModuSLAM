@@ -2,9 +2,8 @@ from moduslam.frontend_manager.graph.base_edges import Edge
 from moduslam.frontend_manager.graph.base_vertices import Vertex
 from moduslam.frontend_manager.graph.custom_vertices import LidarPose
 from phd.bridge.edges_builder.edge_factories.protocol import EdgeFactory
-from phd.bridge.objects.graph_candidate import VertexCluster
+from phd.bridge.objects.search_database import Database
 from phd.external.objects.measurements import Odometry
-from phd.moduslam.frontend_manager.graph.graph import Graph
 
 
 class Factory(EdgeFactory):
@@ -12,9 +11,7 @@ class Factory(EdgeFactory):
     _vertex_type = LidarPose
 
     @classmethod
-    def create(
-        cls, measurement: Odometry, graph: Graph, vertices_db: list[VertexCluster]
-    ) -> tuple[list[Edge], list[Vertex]]:
+    def create(cls, measurement: Odometry, database: Database) -> tuple[list[Edge], list[Vertex]]:
         """Vertices = []
 
         1) cluster = graph.find_cluster(measurement.time_range.start) - O(log N)
