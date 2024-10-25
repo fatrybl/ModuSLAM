@@ -16,7 +16,7 @@ from moduslam.logger.logging_config import data_manager
 logger = logging.getLogger(data_manager)
 
 
-def get_rosbag_sensors(rosbag_path: Path):
+def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list) -> list:
     """Gets sensors and topics from a rosbag file.
 
     Args:
@@ -31,20 +31,43 @@ def get_rosbag_sensors(rosbag_path: Path):
         for connection in reader.connections:
             sensor_name = connection.topic.split("/")[1]
             data_type = connection.msgtype.split("/")[-1]
+
+            if sensor_name not in sensors_table.keys() or data_type not in data_types:
+                continue
+
             sensor = {
                 "id": connection.id,
                 "topic": connection.topic,
                 "message_type": connection.msgtype,
-                "sensor": sensor_name,
+                "sensor_name": sensor_name,
                 "data_type": data_type,
+                "sensor": sensors_table[sensor_name],
             }
             sensors.append(sensor)
 
     return sensors
 
 
+def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: set) -> dict:
+    """Checks and compares the sensors in the setup_manager and the sensors available in the rosbag.
+    If the sensor is not found in the sensors table, it raises an error.
+    Then, the table is updated with the sensor name from the setup_manager.
+    ."""
+    sensor_names = list(dataset_manager_sensors.keys())
+    new_sensors_table = {}
+
+    for sensor in setup_manager_sensors:
+        if sensor.name not in sensor_names:
+            logger.error(f"Sensor {sensor.name} not found in the sensors table")
+            raise ValueError(f"Sensor {sensor.name} not found in the Datamanager's sensors table")
+        else:
+            new_sensors_table[dataset_manager_sensors[sensor.name]] = sensor.name
+
+    return new_sensors_table
+
+
 def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
-    """Gets connections from a rosbag file.
+    """Gets connections from a rosbag file. This will extract only the sensor data from specific sensor topics
 
     Args:
         topics: a string or a list of strings with topics names.
@@ -61,39 +84,6 @@ def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
             print(f"No connections found for topics: {topics_list}")
             return None
     return connections
-
-
-def map_sensors(sensors: dict, sensor_list: list):
-    """Maps sensors to topics.
-
-    Args:
-        sensors: a dictionary with the sensors in the ros2 Config
-
-        topics: a list of topics from the Rosbags
-
-    Returns:
-        sensors_list: a list of sensors with each sensor parameters
-    """
-    updated_list = []
-    connections_list = []
-    sensor_types = ["Image", "PointCloud2", "Imu"]
-
-    for sensor_params in sensor_list:
-        for config_name, sensor_name in sensors.items():
-            if (
-                sensor_params["sensor"] == sensor_name
-                and sensor_params["data_type"] in sensor_types
-            ):
-                sensor_params["sensor_name"] = config_name
-                updated_list.append(sensor_params)
-                connections_list.append(sensor_params["topic"])
-                continue
-
-    if len(updated_list) == 0:
-        logger.error("No sensors found in the rosbag")
-        raise ValueError("No sensors found in the rosbag")
-
-    return connections_list, updated_list
 
 
 def rosbag_iterator(reader, sensors, connections, time_range=None):
@@ -130,9 +120,12 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         msg = deserialize_cdr(rawdata, connection.msgtype)
 
         for single_sensor in sensors:
-            if single_sensor["sensor"] == sensor_topic:
-                sensor_name = single_sensor["sensor_name"]
+            if single_sensor["sensor_name"] == sensor_topic:
+                sensor_name = single_sensor["sensor"]
                 break
+
+        if sensor_name == "no sensor":
+            continue
 
         message_getter = data_getter[data_type]
         data = message_getter(msg)
@@ -176,7 +169,7 @@ def rosbag_read(bag_path: Path, num_readings: int = 1) -> list:
     return table
 
 
-def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
+def _rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
     """Writes a rosbag file with a specific number of sensor readings.
 
     Args:
@@ -209,7 +202,7 @@ def rosbag_write(bag_path: Path, new_path: Path, num_msgs: int = 1) -> None:
                     break
 
 
-def get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
+def _get_csv_from_rosbag(rosbag_path: Path, csv_path: Path) -> None:
     """Gets all the sensor readings from a rosbag file and saves them into a CSV file.
 
     Args:
@@ -254,23 +247,4 @@ def _create_csv(readings_lenght=15):
     rosbag_path = Path(DATA_PATH, rosbag_name)
     csv_path = Path(DATA_PATH, rosbag_name + ".csv")
 
-    get_csv_from_rosbag(rosbag_path=rosbag_path, csv_path=csv_path)
-
-
-def _create_rosbag(num_readings=15):
-    """Creates a new rosbag file with a specific number of sensor readings.
-
-    Args:
-        num_readings: the number of sensor readings to read from the rosbag and then write to a new rosbag file.
-    """
-    DATA_PATH = "/home/felipezero/Projects/mySLAM_data/20231102_kia/"
-    rosbag_name = "rosbag2_2023_11_02-12_18_16"
-    rosbag_path = Path(DATA_PATH, rosbag_name)
-
-    new_rosbag_name = "test_rosbag_" + str(num_readings)
-
-    rosbag_write(
-        bag_path=rosbag_path, new_path=Path(DATA_PATH, new_rosbag_name), num_msgs=num_readings
-    )
-
-    rosbag_read(bag_path=Path(DATA_PATH, new_rosbag_name), num_readings=num_readings)
+    _get_csv_from_rosbag(rosbag_path=rosbag_path, csv_path=csv_path)

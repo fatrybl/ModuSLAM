@@ -10,8 +10,8 @@ from moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
 from moduslam.data_manager.batch_factory.readers.locations import RosbagLocation
 from moduslam.data_manager.batch_factory.readers.ros2.utils import (
+    check_setup_sensors,
     get_rosbag_sensors,
-    map_sensors,
     rosbag_iterator,
 )
 from moduslam.data_manager.batch_factory.readers.utils import check_directory
@@ -48,50 +48,55 @@ class Ros2DataReader(DataReader):
         super().__init__(regime, dataset_params)
 
         self._dataset_directory = dataset_params.directory
+
         check_directory(self._dataset_directory)
-        self.sensors_table = dataset_params.sensors_table
 
-        logger.info("ROS2 data reader created.")
-        logger.debug(f"Dataset directory: {self._dataset_directory}")
+        self._sensors_in_config = dataset_params.sensors_table
 
-        self.sensors = get_rosbag_sensors(self._dataset_directory)
+        self._data_types = ["Image", "PointCloud2", "Imu"]
 
-        self.connection_list, self.sensors = map_sensors(self.sensors_table, self.sensors)
+        self._sensors_in_factory = SensorsFactory.get_all_sensors()
 
-        self.reader = Reader(self._dataset_directory)
+        self._sensors_table = check_setup_sensors(self._sensors_in_config, self._sensors_in_factory)
 
-        self.connections: list = []
+        self._sensors = get_rosbag_sensors(
+            self._dataset_directory, self._sensors_table, self._data_types
+        )
+
+        self._rosbag_reader = Reader(self._dataset_directory)
+
+        self._connections: list = []
 
         if isinstance(self._regime, TimeLimit):
             start = int(self._regime.start)
             stop = int(self._regime.stop)
 
             self._time_range = TimeRange(start, stop)
-            self.rosbag_iterator = rosbag_iterator(
-                self.reader,
-                self.sensors,
-                self.connections,
+            self._rosbag_iterator = rosbag_iterator(
+                self._rosbag_reader,
+                self._sensors,
+                self._connections,
                 self._time_range,
             )
 
         else:
-            self.rosbag_iterator = rosbag_iterator(
-                self.reader,
-                self.sensors,
-                self.connections,
+            self._rosbag_iterator = rosbag_iterator(
+                self._rosbag_reader,
+                self._sensors,
+                self._connections,
             )
 
     def __enter__(self):
         """Opens the dataset for reading."""
         self._in_context = True
-        self.reader.open()
-        return self.reader
+        self._rosbag_reader.open()
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Closes the dataset."""
         self._in_context = False
-        if self.reader:
-            self.reader.close()
+        self._rosbag_reader.close()
+        logger.info("ROS2 data reader closed.")
 
     def set_initial_state(self, sensor: Sensor, timestamp: int):
         """Sets the iterator position for the sensor at the given timestamp.
@@ -121,7 +126,8 @@ class Ros2DataReader(DataReader):
             raise RuntimeError(self._context_error_msg)
 
         try:
-            index, timestamp, sensor_name, data, data_type = next(self.rosbag_iterator)
+            index, timestamp, sensor_name, data, data_type = next(self._rosbag_iterator)
+            logger.debug(f"Reading {sensor_name} sensor data at {timestamp}.")
 
         except (StopIteration, KeyError):
             return None
@@ -168,12 +174,3 @@ class Ros2DataReader(DataReader):
         """
 
         pass
-
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-
-    main()
