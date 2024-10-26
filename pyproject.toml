@@ -35,6 +35,7 @@ scikit-learn = ">=0.21"
 opencv-python = "^4.9.0.80"
 transformers = "^4.41.2"
 torch = "^2.3.0"
+rosbags = "^0.10.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
