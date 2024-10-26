@@ -49,10 +49,12 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list)
 
 
 def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: set) -> dict:
-    """Checks and compares the sensors in the setup_manager and the sensors available in the rosbag.
-    If the sensor is not found in the sensors table, it raises an error.
-    Then, the table is updated with the sensor name from the setup_manager.
-    ."""
+    """Checks and compares the sensors in the setup_manager and the sensors available in
+    the rosbag.
+
+    If the sensor is not found in the sensors table, it raises an error. Then, the table
+    is updated with the sensor name from the setup_manager. .
+    """
     sensor_names = list(dataset_manager_sensors.keys())
     new_sensors_table = {}
 
@@ -67,7 +69,8 @@ def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: se
 
 
 def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
-    """Gets connections from a rosbag file. This will extract only the sensor data from specific sensor topics
+    """Gets connections from a rosbag file. This will extract only the sensor data from
+    specific sensor topics.
 
     Args:
         topics: a string or a list of strings with topics names.
