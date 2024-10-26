@@ -3,10 +3,7 @@ from collections.abc import Sequence
 import cv2
 import numpy as np
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
-from moduslam.frontend_manager.graph.custom_vertices import CameraPose
-from moduslam.types.numpy import (
+from moduslam.custom_types.numpy import (
     Matrix3x3,
     Matrix4x4,
     MatrixMxN,
@@ -14,6 +11,9 @@ from moduslam.types.numpy import (
     MatrixNx3,
     VectorN,
 )
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
+from moduslam.frontend_manager.graph.custom_vertices import CameraPose
 
 
 def create_vertex_elements_table(

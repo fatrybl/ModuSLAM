@@ -1,6 +1,6 @@
 import gtsam
 
-from moduslam.types.numpy import Matrix3x3, Matrix4x4
+from moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
 
 
 class SmartFactorFactory:

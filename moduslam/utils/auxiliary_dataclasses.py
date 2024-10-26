@@ -7,8 +7,8 @@ from dataclasses import dataclass
 
 import cv2
 
+from moduslam.custom_types.numpy import VectorN
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
-from moduslam.types.numpy import VectorN
 
 
 @dataclass(frozen=True, eq=True)

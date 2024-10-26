@@ -4,6 +4,8 @@ from collections import deque
 import numpy as np
 from PIL.Image import Image
 
+from moduslam.custom_types.aliases import Matrix4x4
+from moduslam.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.data_manager.batch_factory.factory import BatchFactory
 from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
@@ -28,8 +30,6 @@ from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
 from moduslam.system_configs.map_manager.map_factories.lidar_map import (
     LidarMapFactoryConfig,
 )
-from moduslam.types.aliases import Matrix4x4
-from moduslam.types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
 
 logger = logging.getLogger(map_manager)
 
