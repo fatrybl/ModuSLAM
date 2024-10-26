@@ -7,7 +7,7 @@ import numpy as np
 from PIL.Image import Image, fromarray
 from PIL.ImageFile import ImageFile
 
-from moduslam.types.numpy import Matrix3x3, MatrixMxN, VectorN
+from moduslam.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
 from moduslam.utils.auxiliary_dataclasses import Position, VisualFeature
 from moduslam.utils.auxiliary_methods import matrix_to_vector_list
 

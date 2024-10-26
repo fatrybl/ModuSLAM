@@ -6,6 +6,9 @@ from typing import Any
 import gtsam
 import numpy as np
 
+from moduslam.custom_types.aliases import Matrix4x4, Vector3
+from moduslam.custom_types.numpy import Matrix3x3 as NumpyMatrix3x3
+from moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from moduslam.frontend_manager.edge_factories.utils import get_last_vertex
 from moduslam.frontend_manager.graph.base_vertices import BaseVertex
 from moduslam.frontend_manager.graph.custom_edges import ImuOdometry
@@ -21,9 +24,6 @@ from moduslam.frontend_manager.handlers.imu_data_preprocessor.line_parsers impor
 )
 from moduslam.frontend_manager.measurement_storage import Measurement
 from moduslam.logger.logging_config import frontend_manager
-from moduslam.types.aliases import Matrix4x4, Vector3
-from moduslam.types.numpy import Matrix3x3 as NumpyMatrix3x3
-from moduslam.types.numpy import Matrix4x4 as NumpyMatrix4x4
 from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)

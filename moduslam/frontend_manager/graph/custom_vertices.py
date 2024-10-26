@@ -1,11 +1,11 @@
 import gtsam
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
+from moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Point3D, Vector3
 from moduslam.frontend_manager.graph.base_vertices import (
     NotOptimizableVertex,
     OptimizableVertex,
 )
-from moduslam.types.aliases import Matrix3x3, Matrix4x4, Point3D, Vector3
 
 identity_matrix = (
     (1.0, 0.0, 0.0, 0.0),

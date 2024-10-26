@@ -2,6 +2,7 @@
 
 import logging
 
+from moduslam.custom_types.numpy import Vector3
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.frontend_manager.handlers.interface import Handler
 from moduslam.frontend_manager.measurement_storage import Measurement
@@ -10,7 +11,6 @@ from moduslam.setup_manager.sensors_factory.sensors import VrsGps
 from moduslam.system_configs.frontend_manager.handlers.vrs_gps import (
     VrsGpsHandlerConfig,
 )
-from moduslam.types.numpy import Vector3
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.auxiliary_methods import (
     create_empty_element,
