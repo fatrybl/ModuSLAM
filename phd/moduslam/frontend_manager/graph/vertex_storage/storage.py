@@ -4,12 +4,12 @@ from typing import Generic
 from moduslam.frontend_manager.graph.index_generator import IndexStorage
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.ordered_set import OrderedSet
+from phd.moduslam.frontend_manager.graph.vertex_storage.cluster import VertexCluster
 from phd.moduslam.frontend_manager.graph.vertices.base import (
     BaseVertex,
     NotOptimizableVertex,
     OptimizableVertex,
 )
-from phd.moduslam.frontend_manager.graph.vertices_storage.cluster import VertexCluster
 
 logger = logging.getLogger(frontend_manager)
 
@@ -118,7 +118,7 @@ class VertexStorage(Generic[BaseVertex]):
         #     msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
         #     logger.critical(msg)
         #     raise TypeError(msg)
-        ...
+        raise NotImplementedError
 
     def _add_to_tables(self, vertex: BaseVertex) -> None:
         # """Adds vertex to the tables:
@@ -138,7 +138,7 @@ class VertexStorage(Generic[BaseVertex]):
         #     self._index_vertices_table[vertex.index] = set()
         #
         # self._index_vertices_table[vertex.index].add(vertex)
-        ...
+        raise NotImplementedError
 
     def _remove_from_tables(self, vertex: BaseVertex) -> None:
         """Removes vertex from the tables:
@@ -163,7 +163,7 @@ class VertexStorage(Generic[BaseVertex]):
         #     if not self._index_vertices_table[vertex.index]:
         #         self._index_storage.remove(vertex.index)
         #         del self._index_vertices_table[vertex.index]
-        ...
+        raise NotImplementedError
 
     def _remove(self, vertex: BaseVertex) -> None:
         """Removes one vertex from the graph.
@@ -185,4 +185,4 @@ class VertexStorage(Generic[BaseVertex]):
         #     msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NotOptimizable."
         #     logger.critical(msg)
         #     raise TypeError(msg)
-        ...
+        raise NotImplementedError

@@ -2,7 +2,7 @@ from collections.abc import Iterable
 
 from moduslam.frontend_manager.graph.base_vertices import Vertex
 from moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.frontend_manager.graph.vertices_storage.cluster import VertexCluster
+from phd.moduslam.frontend_manager.graph.vertex_storage.cluster import VertexCluster
 
 
 class ClusterStorage:

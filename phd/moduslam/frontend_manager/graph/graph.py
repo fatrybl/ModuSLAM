@@ -5,10 +5,10 @@ from typing import Generic
 import gtsam
 
 from moduslam.logger.logging_config import frontend_manager
+from phd.moduslam.frontend_manager.graph.edge_storage.storage import EdgeStorage
 from phd.moduslam.frontend_manager.graph.edges.base import BaseEdge
-from phd.moduslam.frontend_manager.graph.edges_storage.storage import EdgeStorage
+from phd.moduslam.frontend_manager.graph.vertex_storage.storage import VertexStorage
 from phd.moduslam.frontend_manager.graph.vertices.base import BaseVertex
-from phd.moduslam.frontend_manager.graph.vertices_storage.storage import VertexStorage
 
 logger = logging.getLogger(frontend_manager)
 
