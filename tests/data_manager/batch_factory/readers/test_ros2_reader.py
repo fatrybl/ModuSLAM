@@ -30,7 +30,8 @@ def test_ros2_reader_2():
     with rosbag_reader as reader:
         assert reader is not None
 
-        assert hasattr(reader, "connections")
+        assert hasattr(reader, "_sensors_in_config")
+        assert hasattr(reader, "_dataset_directory")
 
 
 def test_ros2_reader_3():
