@@ -1,11 +1,10 @@
 from typing import Protocol
 
-from moduslam.frontend_manager.graph.base_edges import Edge
-from moduslam.frontend_manager.graph.base_vertices import Vertex
-from phd.bridge.objects.search_database import Database
+from phd.moduslam.frontend_manager.main_graph.element import GraphElement
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
 
 
 class EdgeFactory(Protocol):
     @classmethod
-    def create(cls, measurement, database: Database) -> tuple[list[Edge], list[Vertex]]:
+    def create(cls, measurement, graph: Graph) -> list[GraphElement]:
         """Creates edges for the given measurement."""

@@ -2,7 +2,7 @@ import functools
 import time
 
 import gtsam
-from graphviz import Source
+import numpy as np
 from gtsam.symbol_shorthand import X
 
 
@@ -31,22 +31,18 @@ init_values.insert_pose3(X(1), pose2)
 prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
 odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
 
-graph.addPriorPose3(X(0), pose1, prior_noise)
-
+prior = gtsam.PriorFactorPose3(X(0), pose1, prior_noise)
 odom = gtsam.BetweenFactorPose3(X(0), X(1), pose2, odom_noise)
 
-graph.add(odom)
-
-# k = gtsam.gtsam.Cal3_S2()
-# smart_f1 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
-# smart_f1.add(np.array([1, 1]), X(0))
+k = gtsam.gtsam.Cal3_S2()
+smart_f1 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+smart_f1.add(np.array([1, 1]), X(0))
 # smart_f2 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
 # smart_f2.add(np.array([1, 1]), X(0))
 # smart_f2.add(np.array([20, 20]), X(1))
-# graph.push_back(smart_f1)
-# print(graph)
-#
-# smart_f1.add(np.array([20, 20]), X(1))
+graph.add(prior)
+graph.add(odom)
+graph.add(smart_f1)
 
 params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
@@ -54,6 +50,19 @@ result = optimizer.optimizeSafely()
 
 print(graph)
 
-dot = graph.dot(result)
-source = Source(dot)
+graph.remove(2)
+
+smart_f1.add(np.array([2, 2]), X(1))
+
+print("==========================================")
+print(graph)
+
+graph.add(smart_f1)
+
+print("++++++++++++++++++++++++++++++++++++++++++++")
+print(smart_f1.linearize())
+
+
+# dot = graph.dot(result)
+# source = Source(dot)
 # source.render("graph", format="pdf", cleanup=True)

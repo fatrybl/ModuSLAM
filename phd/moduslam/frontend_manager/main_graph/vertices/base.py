@@ -20,6 +20,22 @@ class Vertex(ABC):
         """Index of the vertex."""
         return self._index
 
+    @index.setter
+    def index(self, value: int) -> None:
+        """Sets the index of the vertex.
+
+        Attention: the index is set automatically when the vertex is added to the graph.
+
+        Args:
+            value: new index.
+
+        Raises:
+            ValueError: if the index is negative.
+        """
+        if value < 0:
+            raise ValueError("Index must be non-negative")
+        self._index = value
+
     @property
     def value(self) -> Any:
         """Value of the vertex."""
@@ -38,7 +54,7 @@ class Vertex(ABC):
         """
 
 
-class NotOptimizableVertex(Vertex):
+class NonOptimizableVertex(Vertex):
     """Base class for not optimizable vertex of the Graph."""
 
     @abstractmethod

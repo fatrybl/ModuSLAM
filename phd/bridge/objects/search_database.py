@@ -1,5 +1,7 @@
-from phd.bridge.objects.vertices_cluster import Cluster
-from phd.moduslam.frontend_manager.graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
 
 
 class Database:
@@ -12,6 +14,6 @@ class Database:
         """
         self._graph = graph
 
-    def expand(self, cluster: Cluster):
+    def expand(self, cluster: VertexCluster):
         """Expands the database with the new cluster."""
         raise NotImplementedError

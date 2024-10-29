@@ -1,32 +1,25 @@
-from collections.abc import Iterable
-
-from moduslam.frontend_manager.graph.base_edges import Edge
-from moduslam.frontend_manager.graph.base_vertices import Vertex
 from phd.bridge.edges_builder.distributor import distribute
-from phd.bridge.objects.search_database import Database
-from phd.bridge.objects.vertices_cluster import Cluster as VerticesCluster
 from phd.external.objects.auxiliary_objects import ClustersWithLeftovers
 from phd.external.objects.measurements import Measurement
 from phd.external.objects.measurements_cluster import Cluster as MeasurementCluster
-from phd.moduslam.frontend_manager.graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.element import GraphElement
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
 
 
-def create_edges_and_vertices(
-    measurement: Measurement, database: Database
-) -> tuple[list[Edge], list[Vertex]]:
-    """Creates edges for the given measurement.
+def create_graph_elements(measurement: Measurement, graph: Graph) -> list[GraphElement]:
+    """Creates graph elements for the given measurement.
 
     Args:
-        measurement: measurement to create edges from.
+        measurement: a measurement to create edges from.
 
-        database: database to search vertices in.
+        graph: the graph to create elements for.
 
     Returns:
-        new edges and vertices.
+        new graph elements.
     """
     edge_factory = distribute(measurement)
-    edges, vertices = edge_factory.create(measurement, database)
-    return edges, vertices
+    new_elements = edge_factory.create(measurement, graph)
+    return new_elements
 
 
 def process_leftovers(
@@ -51,9 +44,4 @@ def process_leftovers(
 
 def solve(graph: Graph) -> float:
     """Solve the problem with the given graph."""
-    raise NotImplementedError
-
-
-def change_vertices(edges: Iterable[Edge], cluster: VerticesCluster) -> None:
-    """Changes the vertices of the given edge."""
     raise NotImplementedError

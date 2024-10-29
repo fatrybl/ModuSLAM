@@ -5,7 +5,7 @@ from typing import Generic, TypeVar
 import gtsam
 
 from moduslam.frontend_manager.measurement_storage import Measurement
-from phd.moduslam.frontend_manager.graph.vertices.base import BaseVertex
+from phd.moduslam.frontend_manager.main_graph.vertices.base import BaseVertex
 
 
 class Edge(ABC, Generic[BaseVertex]):
@@ -24,7 +24,7 @@ class Edge(ABC, Generic[BaseVertex]):
         """
         self._factor = factor
         self._noise_model = noise_model
-        self._index: int = 0
+        self._index: int | None = None
 
     @property
     def factor(self) -> gtsam.NonlinearFactor:
@@ -37,20 +37,18 @@ class Edge(ABC, Generic[BaseVertex]):
         return self._noise_model
 
     @property
-    def index(self) -> int:
+    def index(self) -> int | None:
         """Unique index of the edge.
 
-        Corresponds to the index of the factor in the factor graph.
+        Matches the index in GTSAM factor graph.
         """
         return self._index
 
     @index.setter
     def index(self, value: int) -> None:
-        """
-        Attention:
-            Set index only when you really need it.
-
-        Index is being set automatically when an edge is added to the graph.
+        """Attention:
+        the index is being set automatically when the corresponding edge is added to the graph.
+        Do not set it manually elsewhere.
 
         Args:
             value: new index.

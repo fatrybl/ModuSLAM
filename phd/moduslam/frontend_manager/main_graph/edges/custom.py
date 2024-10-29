@@ -3,13 +3,13 @@ from collections.abc import Sequence
 import gtsam
 
 from moduslam.frontend_manager.measurement_storage import Measurement
-from phd.moduslam.frontend_manager.graph.edges.base import (
+from phd.moduslam.frontend_manager.main_graph.edges.base import (
     BinaryEdge,
     MultiEdge,
     RadialEdge,
     UnaryEdge,
 )
-from phd.moduslam.frontend_manager.graph.vertices.custom import Feature3D, Pose
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import Feature3D, Pose
 
 
 class SmartVisualFeature(RadialEdge):

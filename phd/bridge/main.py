@@ -32,52 +32,30 @@
 
 from copy import deepcopy
 
-from phd.bridge.objects.graph_candidate import Candidate
-from phd.bridge.objects.search_database import Database
-from phd.bridge.objects.vertices_cluster import Cluster as VerticesCluster
-from phd.bridge.utils import (
-    change_vertices,
-    create_edges_and_vertices,
-    process_leftovers,
-    solve,
-)
+from phd.bridge.utils import create_graph_elements, process_leftovers, solve
 from phd.external.objects.auxiliary_objects import ClustersWithLeftovers
 from phd.external.objects.measurements import Measurement
 from phd.external.objects.measurements_cluster import Cluster as MeasurementCluster
-from phd.moduslam.frontend_manager.graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
 
 if __name__ == "__main__":
 
     graph: Graph = Graph()
     leftovers_db: list[Measurement] = []
     variants: list[list[MeasurementCluster] | ClustersWithLeftovers] = []
-    errors_table: dict[Candidate, float] = {}
+    errors_table: dict[Graph, float] = {}
 
     for variant in variants:
-        candidate = Candidate()
-        db = Database(graph)
+        current_graph = deepcopy(graph)
         measurements_clusters = process_leftovers(variant, leftovers_db)
 
-        for m_cluster in measurements_clusters:
-            new_edges = []
-            cluster = VerticesCluster()
+        for cluster in measurements_clusters:
+            for measurement in cluster.measurements:
 
-            for measurement in m_cluster.measurements:
-                edges, vertices = create_edges_and_vertices(measurement, db)
-                cluster.add(vertices)
-                new_edges += edges
+                new_elements = create_graph_elements(measurement, current_graph)
 
-            cluster.merge_vertices()
+                for element in new_elements:
+                    current_graph.add_element(element)
 
-            change_vertices(new_edges, cluster)
-
-            cluster.clear()
-
-            candidate.add_cluster(cluster)
-            candidate.add_edges(new_edges)
-            db.expand(cluster)
-
-        graph_copy = deepcopy(graph)
-        graph_copy.add_edges(candidate.edges)
-        error = solve(graph_copy)
-        errors_table.update({candidate: error})
+        error = solve(current_graph)
+        errors_table.update({current_graph: error})

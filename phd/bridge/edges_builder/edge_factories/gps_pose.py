@@ -1,9 +1,8 @@
-from moduslam.frontend_manager.graph.base_edges import Edge
-from moduslam.frontend_manager.graph.base_vertices import Vertex
 from moduslam.frontend_manager.graph.custom_vertices import Pose
 from phd.bridge.edges_builder.edge_factories.protocol import EdgeFactory
-from phd.bridge.objects.search_database import Database
 from phd.external.objects.measurements import Measurement
+from phd.moduslam.frontend_manager.main_graph.element import GraphElement
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
 
 
 class Factory(EdgeFactory):
@@ -11,9 +10,7 @@ class Factory(EdgeFactory):
     _vertex_type = Pose
 
     @classmethod
-    def create(
-        cls, measurement: Measurement, database: Database
-    ) -> tuple[list[Edge], list[Vertex]]:
+    def create(cls, measurement: Measurement, graph: Graph) -> list[GraphElement]:
         """
         1)  pose = graph.find_closest_vertex(Pose) - O(log(N)) or O(1)
 
