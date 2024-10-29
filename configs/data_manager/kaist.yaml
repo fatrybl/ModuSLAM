@@ -5,7 +5,7 @@ defaults:
 batch_factory:
 
   dataset:
-    directory: "/media/mark/New Volume/datasets/kaist/urban-26"
+    directory: "/home/lab/elza_mint/Urban26"
 
   regime:
     name: "TimeLimit"
