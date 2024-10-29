@@ -11,18 +11,19 @@ from moduslam.utils.exceptions import ItemNotFoundError
 
 def test_init_sensors():
     sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
-
     factory_config = SensorsFactoryConfig(sensors={sensor_config.name: sensor_config})
 
     SensorsFactory.init_sensors(factory_config)
+    sensors = SensorsFactory.get_all_sensors()
 
-    assert any(isinstance(sensor, Sensor) for sensor in SensorsFactory.get_all_sensors())
-    assert isinstance(SensorsFactory.get_sensor(sensor_config.name), Sensor)
+    expected_sensor = SensorsFactory.get_sensor("test_sensor")
+    assert expected_sensor.name == sensor_config.name
+    assert isinstance(expected_sensor, Sensor)
+    assert expected_sensor in sensors
 
 
 def test_get_sensor_not_found():
     sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
-
     factory_config = SensorsFactoryConfig(sensors={sensor_config.name: sensor_config})
 
     SensorsFactory.init_sensors(factory_config)
