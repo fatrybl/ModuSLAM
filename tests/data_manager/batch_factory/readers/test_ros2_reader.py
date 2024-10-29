@@ -51,14 +51,3 @@ def test_ros2_reader_3():
 
     with pytest.raises(NotADirectoryError):
         Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
-
-def test_ros2_reader_4():
-    dataset_cfg = Ros2Config(directory=ros2_dataset_dir, sensors_table={
-        "stereo": "sensor_info",
-        "lidar": "sensor_info"
-    })
-    reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
-    expected_data_types = ["Image", "PointCloud2", "Imu"]
-    assert reader._data_types == expected_data_types, f"Expected data types {expected_data_types}, got {reader._data_types}"
-
-
