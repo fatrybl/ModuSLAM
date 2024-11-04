@@ -34,6 +34,9 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
     def __repr__(self) -> str:
         return f"OrderedSet({set(self._items.keys())})"
 
+    def __bool__(self) -> bool:
+        return len(self) > 0
+
     @overload
     def __getitem__(self, index: int) -> T: ...
 

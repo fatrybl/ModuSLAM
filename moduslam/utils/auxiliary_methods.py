@@ -122,14 +122,9 @@ def equal_integers(n1: int, n2: int, epsilon: int) -> bool:
     return abs(n1 - n2) <= abs(epsilon)
 
 
-def create_vector_3(x, y, z) -> Vector3:
+def create_vector_3(x: int | float, y: int | float, z: int | float) -> Vector3:
     """Creates 3D float64 numpy array."""
     return np.array([x, y, z], dtype=np.float64)
-
-
-def create_vector_n(*args) -> VectorN:
-    """Creates N-dimensional float64 numpy array."""
-    return np.array(args, dtype=np.float64)
 
 
 def tuple_to_gtsam_pose3(values: tuple[float, float, float, float, float, float]) -> gtsam.Pose3:

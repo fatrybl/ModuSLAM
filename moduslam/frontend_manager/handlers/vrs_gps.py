@@ -1,6 +1,7 @@
 """Preprocesses the GPS data for VRS_GPS sensor of Kaist Urban dataset."""
 
 import logging
+from collections.abc import Sequence
 
 from moduslam.custom_types.numpy import Vector3
 from moduslam.data_manager.batch_factory.batch import Element
@@ -63,7 +64,7 @@ class VrsGpsPreprocessor(Handler):
 
         empty_element = self.create_empty_element(element)
 
-        position: Vector3 = create_vector_3(*position_str)
+        position = self._get_position(position_str)
 
         m = Measurement(
             time_range=t,
@@ -86,3 +87,11 @@ class VrsGpsPreprocessor(Handler):
             empty element without data.
         """
         return create_empty_element(element)
+
+    @staticmethod
+    def _get_position(data: Sequence[str]) -> Vector3:
+        x = to_float(data[0])
+        y = to_float(data[1])
+        z = to_float(data[2])
+        vector = create_vector_3(x, y, z)
+        return vector
