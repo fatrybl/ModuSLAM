@@ -60,6 +60,7 @@ class Builder:
         """
 
         while not data_batch.empty:
+
             element = data_batch.first
             data_batch.remove_first()
             new_measurement = self._process_element(element)
@@ -91,6 +92,7 @@ class Builder:
 
         for handler in self._handlers:
             if handler.sensor_type == type(sensor) and handler.sensor_name == sensor.name:
+
                 new_measurement = handler.process(element)
 
                 if new_measurement:

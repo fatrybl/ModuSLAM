@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
     ImuCovariance,
@@ -25,6 +25,23 @@ class Measurement(ABC):
 
 
 M = TypeVar("M", bound=Measurement)
+
+
+class VisualFeatures(Measurement):
+    def __init__(self):
+        raise NotImplementedError
+
+    @property
+    def elements(self) -> list[Element]:
+        raise NotImplementedError
+
+    @property
+    def timestamp(self) -> int:
+        raise NotImplementedError
+
+    @property
+    def features(self) -> list[VisualFeature]:
+        raise NotImplementedError
 
 
 class ContinuousMeasurement(Generic[M], Measurement):

@@ -1,8 +1,7 @@
-from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.utils.auxiliary_dataclasses import VisualFeature
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import create_new_vertex
-from phd.measurements.processed_measurements import Measurement
+from phd.measurements.processed_measurements import VisualFeatures
 from phd.moduslam.frontend_manager.main_graph.edges.custom import SmartVisualFeature
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
@@ -13,23 +12,6 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-
-
-class VisualFeatures(Measurement):
-    def __init__(self):
-        raise NotImplementedError
-
-    @property
-    def elements(self) -> list[Element]:
-        raise NotImplementedError
-
-    @property
-    def timestamp(self) -> int:
-        raise NotImplementedError
-
-    @property
-    def features(self) -> list[VisualFeature]:
-        raise NotImplementedError
 
 
 class Factory(EdgeFactory):

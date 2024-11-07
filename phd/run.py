@@ -2,7 +2,7 @@
 Author: Mark Griguletskii
 e-mail: mark.griguletskii@skoltech.ru.
 
-Main runner of the SLAM system.
+Main runner of the SLAM system with Suboptimal Graph Builder.
 """
 
 import hydra

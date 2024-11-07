@@ -1,6 +1,7 @@
 from typing import Any
 
-from phd.external.candidate_evaluator import Evaluator
+from phd.external.candidates_factory import Factory as CandidatesFactory
+from phd.external.metrics.candidate_evaluator import Evaluator
 from phd.measurements.measurement_storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import GraphCandidate
@@ -11,6 +12,7 @@ class Factory:
 
     def __init__(self):
         self._evaluator = Evaluator()
+        self._factory = CandidatesFactory
 
     @property
     def is_ready(self) -> bool:
@@ -31,7 +33,7 @@ class Factory:
             the best candidate.
         """
         results: dict[GraphCandidate, Any] = {}
-        candidates = self._create_candidates(graph, measurements_storage)
+        candidates = self._factory.create_candidates(graph, measurements_storage)
 
         for candidate in candidates:
             self._solve(candidate)
@@ -40,12 +42,6 @@ class Factory:
 
         best_candidate = self._choose_best(results)
         return best_candidate
-
-    def _create_candidates(
-        self, graph: Graph, measurements_storage: MeasurementStorage
-    ) -> list[GraphCandidate]:
-        """Creates all possible candidates."""
-        raise NotImplementedError
 
     def _solve(self, candidate: GraphCandidate) -> None:
         """Solves the graph candidate."""
