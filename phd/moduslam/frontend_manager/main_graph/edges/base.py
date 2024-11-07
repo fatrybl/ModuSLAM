@@ -1,14 +1,18 @@
 from abc import ABC, abstractmethod
-from collections.abc import Collection, Sequence
+from collections.abc import Collection
 from typing import Generic, TypeVar
 
 import gtsam
 
-from moduslam.frontend_manager.measurement_storage import Measurement
-from phd.moduslam.frontend_manager.main_graph.vertices.base import BaseVertex
+from phd.external.objects.measurements import Measurement
+from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+
+V = TypeVar("V", bound=Vertex)
+V1 = TypeVar("V1", bound=Vertex)
+V2 = TypeVar("V2", bound=Vertex)
 
 
-class Edge(ABC, Generic[BaseVertex]):
+class Edge(ABC):
     """Base abstract edge."""
 
     def __init__(
@@ -38,10 +42,13 @@ class Edge(ABC, Generic[BaseVertex]):
 
     @property
     def index(self) -> int | None:
-        """Unique index of the edge.
+        """Get the unique index of the edge.
 
-        Matches the index in GTSAM factor graph.
+        Matches the index in the GTSAM factor graph. Raises ValueError if index is not
+        set.
         """
+        if self._index is None:
+            raise ValueError("Index has not been set.")
         return self._index
 
     @index.setter
@@ -58,21 +65,20 @@ class Edge(ABC, Generic[BaseVertex]):
         """
         if value < 0:
             raise ValueError("Index should be non-negative.")
-
         self._index = value
 
-    @property
     @abstractmethod
-    def vertices(self) -> Collection[BaseVertex]:
+    @property
+    def vertices(self) -> Collection[Vertex]:
         """The vertices of an edge."""
 
 
-class UnaryEdge(Edge, Generic[BaseVertex]):
-    """Connects one vertex of the Graph (unary factor)."""
+class UnaryEdge(Generic[V], Edge):
+    """Unary edge for a single vertex."""
 
     def __init__(
         self,
-        vertex: BaseVertex,
+        vertex: V,
         measurement: Measurement,
         factor: gtsam.NonlinearFactor,
         noise_model: gtsam.noiseModel.Base,
@@ -92,28 +98,28 @@ class UnaryEdge(Edge, Generic[BaseVertex]):
         self._measurement = measurement
 
     @property
-    def vertex(self) -> BaseVertex:
-        """Vertices of the edge."""
+    def vertex(self) -> V:
+        """Vertex of the edge."""
         return self._vertex
+
+    @property
+    def vertices(self) -> list[V]:
+        """List with a single vertex."""
+        return [self._vertex]
 
     @property
     def measurement(self) -> Measurement:
         """Measurement which formed the edge."""
         return self._measurement
 
-    @property
-    def vertices(self) -> Collection[BaseVertex]:
-        """The vertices of an edge."""
-        return (self._vertex,)
 
-
-class BinaryEdge(Edge, Generic[BaseVertex]):
+class BinaryEdge(Generic[V1, V2], Edge):
     """Connects two vertices of the Graph."""
 
     def __init__(
         self,
-        vertex1: BaseVertex,
-        vertex2: BaseVertex,
+        vertex1: V1,
+        vertex2: V2,
         measurement: Measurement,
         factor: gtsam.NonlinearFactor,
         noise_model: gtsam.noiseModel.Base,
@@ -136,17 +142,17 @@ class BinaryEdge(Edge, Generic[BaseVertex]):
         self._measurement = measurement
 
     @property
-    def vertex1(self) -> BaseVertex:
+    def vertex1(self) -> V1:
         """First vertex of the edge."""
         return self._vertex1
 
     @property
-    def vertex2(self) -> BaseVertex:
+    def vertex2(self) -> V2:
         """Second vertex of the edge."""
         return self._vertex2
 
     @property
-    def vertices(self) -> tuple[BaseVertex, BaseVertex]:
+    def vertices(self) -> tuple[V1, V2]:
         """Vertices of the edge."""
         return self._vertex1, self._vertex2
 
@@ -156,14 +162,14 @@ class BinaryEdge(Edge, Generic[BaseVertex]):
         return self._measurement
 
 
-class RadialEdge(Edge, Generic[BaseVertex]):
+class RadialEdge(Generic[V1, V2], Edge):
     """Connects a vertex with multiple vertices."""
 
     def __init__(
         self,
-        center: BaseVertex,
-        radials: Sequence[BaseVertex],
-        measurements: Sequence[Measurement],
+        center: V1,
+        radials: list[V2],
+        measurements: list[Measurement],
         factor: gtsam.NonlinearFactor,
         noise_model: gtsam.noiseModel.Base,
     ) -> None:
@@ -185,32 +191,32 @@ class RadialEdge(Edge, Generic[BaseVertex]):
         self._measurements = measurements
 
     @property
-    def central_vertex(self) -> BaseVertex:
+    def central_vertex(self) -> V1:
         """Central vertex of the edge."""
         return self._center
 
     @property
-    def radial_vertices(self) -> Sequence[BaseVertex]:
+    def radial_vertices(self) -> list[V2]:
         """Radial vertices of the edge."""
         return self._radials
 
     @property
-    def vertices(self) -> tuple[BaseVertex, ...]:
+    def vertices(self) -> list[V1 | V2]:
         """Vertices of the edge."""
-        return self._center, *self._radials
+        return [self._center, *self._radials]
 
     @property
-    def measurements(self) -> Sequence[Measurement]:
+    def measurements(self) -> list[Measurement]:
         """Measurements which formed the edge."""
         return self._measurements
 
 
-class MultiEdge(Edge, Generic[BaseVertex]):
+class MultiEdge(Generic[V], Edge):
     """Connecting multiple vertices."""
 
     def __init__(
         self,
-        vertices: list[BaseVertex],
+        vertices: list[V],
         measurements: list[Measurement],
         factor: gtsam.NonlinearFactor,
         noise_model: gtsam.noiseModel.Base,
@@ -230,7 +236,7 @@ class MultiEdge(Edge, Generic[BaseVertex]):
         self._measurements = measurements
 
     @property
-    def vertices(self) -> list[BaseVertex]:
+    def vertices(self) -> list[V]:
         """Vertices of the edge."""
         return self._vertices
 
@@ -238,7 +244,3 @@ class MultiEdge(Edge, Generic[BaseVertex]):
     def measurements(self) -> list[Measurement]:
         """Measurements which formed the edge."""
         return self._measurements
-
-
-BaseEdge = TypeVar("BaseEdge", bound=Edge)
-"""TypeVar for GraphEdge."""

@@ -1,5 +1,5 @@
-from phd.external.objects.auxiliary_objects import Connection
-from phd.external.objects.measurements import CoreMeasurement
+from phd.external.objects.auxiliary_classes import PseudoMeasurement
+from phd.external.objects.auxiliary_dataclasses import Connection
 from phd.external.objects.measurements_cluster import Cluster
 from phd.external.utils import create_copy
 
@@ -16,8 +16,8 @@ def test_create_copy_with_empty_inputs():
 
 def test_create_copy_single_cluster_no_connections():
     cluster = Cluster()
-    measurement1 = CoreMeasurement(timestamp=1, value="a")
-    measurement2 = CoreMeasurement(timestamp=2, value="b")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
     cluster.add(measurement1)
     cluster.add(measurement2)
 
@@ -34,8 +34,8 @@ def test_create_copy_single_cluster_no_connections():
 
 def test_create_copy_single_connection_between_clusters():
     cluster1, cluster2 = Cluster(), Cluster()
-    measurement1 = CoreMeasurement(timestamp=1, value="a")
-    measurement2 = CoreMeasurement(timestamp=2, value="b")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
 
     cluster1.add(measurement1)
     cluster2.add(measurement2)
@@ -61,9 +61,9 @@ def test_create_copy_single_connection_between_clusters():
 
 def test_create_copy_multiple_connections_between_multiple_clusters():
     cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
-    measurement1 = CoreMeasurement(timestamp=1, value="a")
-    measurement2 = CoreMeasurement(timestamp=2, value="b")
-    measurement3 = CoreMeasurement(timestamp=3, value="c")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
+    measurement3 = PseudoMeasurement(3, "c")
 
     cluster1.add(measurement1)
     cluster2.add(measurement2)
@@ -97,9 +97,9 @@ def test_create_copy_multiple_connections_between_multiple_clusters():
 
 def test_create_copy_maintains_order():
     cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
-    measurement1 = CoreMeasurement(timestamp=1, value="a")
-    measurement2 = CoreMeasurement(timestamp=2, value="b")
-    measurement3 = CoreMeasurement(timestamp=3, value="c")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
+    measurement3 = PseudoMeasurement(3, "c")
 
     cluster1.add(measurement1)
     cluster2.add(measurement2)
@@ -128,8 +128,8 @@ def test_create_copy_maintains_order():
 
 def test_create_copy_modifying_copies_does_not_affect_originals():
     cluster1, cluster2 = Cluster(), Cluster()
-    measurement1 = CoreMeasurement(timestamp=1, value="a")
-    measurement2 = CoreMeasurement(timestamp=2, value="b")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
 
     cluster1.add(measurement1)
     cluster2.add(measurement2)
@@ -140,14 +140,22 @@ def test_create_copy_modifying_copies_does_not_affect_originals():
     connections = [connection]
 
     copied_clusters, copied_connections = create_copy(clusters, connections)
+    copy_cluster1 = copied_clusters[0]
+    copy_cluster2 = copied_clusters[1]
 
-    copied_clusters[0].add(CoreMeasurement(timestamp=3, value="c"))
-    copied_connections[0].cluster1 = copied_clusters[1]
+    copy_cluster1.add(PseudoMeasurement(3, "c"))
 
     assert len(cluster1.measurements) == 1
     assert len(cluster2.measurements) == 1
-    assert cluster1.measurements[0].value == "a"
-    assert cluster2.measurements[0].value == "b"
+    assert len(copy_cluster1.measurements) == 2
+
+    assert isinstance(copy_cluster1.measurements[0], PseudoMeasurement)
+    assert isinstance(copy_cluster2.measurements[0], PseudoMeasurement)
+
+    assert copy_cluster1.measurements[0].value == "a"
+    assert copy_cluster2.measurements[0].value == "b"
 
     assert connection.cluster1 == cluster1
     assert connection.cluster2 == cluster2
+    assert connection.cluster1 != copy_cluster1
+    assert connection.cluster2 != copy_cluster2

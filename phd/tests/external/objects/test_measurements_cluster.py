@@ -1,11 +1,8 @@
 import pytest
 
-from phd.external.objects.measurements import (
-    ContinuousMeasurement,
-    CoreMeasurement,
-    FakeMeasurement,
-)
+from phd.external.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
 from phd.external.objects.measurements_cluster import Cluster
+from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 
 
 def test_empty_cluster_initialization():
@@ -15,8 +12,10 @@ def test_empty_cluster_initialization():
     assert empty_cluster.continuous_measurements == []
     assert empty_cluster.fake_measurements == []
     assert empty_cluster.measurements == []
+
     with pytest.raises(ValueError):
         empty_cluster.timestamp
+
     with pytest.raises(ValueError):
         empty_cluster.time_range
 
@@ -25,8 +24,8 @@ def test_add_core_measurements():
     cluster = Cluster()
     timestamp = 2
     start, stop = 1, 2
-    core_measurement1 = CoreMeasurement(timestamp=start, value=1.0)
-    core_measurement2 = CoreMeasurement(timestamp=stop, value=2.0)
+    core_measurement1 = PseudoMeasurement(start, 1.0)
+    core_measurement2 = PseudoMeasurement(stop, 2.0)
 
     cluster.add(core_measurement1)
     cluster.add(core_measurement2)
@@ -41,9 +40,9 @@ def test_add_core_measurements():
 
 def test_add_continuous_measurements():
     cluster = Cluster()
-    elements = [CoreMeasurement(timestamp=1, value=1.0), CoreMeasurement(timestamp=2, value=2.0)]
-    measurement1 = ContinuousMeasurement(elements=elements)
-    measurement2 = ContinuousMeasurement(elements=elements)
+    measurements: list[Measurement] = [PseudoMeasurement(1, 1.0), PseudoMeasurement(2, 2.0)]
+    measurement1 = ContinuousMeasurement(measurements)
+    measurement2 = ContinuousMeasurement(measurements)
 
     cluster.add(measurement1)
     cluster.add(measurement2)
@@ -83,10 +82,10 @@ def test_add_fake_measurements():
 def test_cluster_timestamp():
     cluster = Cluster()
     core_measurements = [
-        CoreMeasurement(timestamp=1, value=1.0),
-        CoreMeasurement(timestamp=2, value=2.0),
-        CoreMeasurement(timestamp=4, value=3.0),
-        CoreMeasurement(timestamp=5, value=4.0),
+        PseudoMeasurement(1, 1.0),
+        PseudoMeasurement(2, 2.0),
+        PseudoMeasurement(4, 3.0),
+        PseudoMeasurement(5, 4.0),
     ]
 
     for core_measurement in core_measurements:
@@ -108,9 +107,9 @@ def test_cluster_timestamp():
 def test_cluster_time_range():
     cluster = Cluster()
     core_measurements = [
-        CoreMeasurement(timestamp=1, value=1.0),
-        CoreMeasurement(timestamp=2, value=2.0),
-        CoreMeasurement(timestamp=3, value=3.0),
+        PseudoMeasurement(1, 1.0),
+        PseudoMeasurement(2, 2.0),
+        PseudoMeasurement(3, 3.0),
     ]
 
     for core_measurement in core_measurements:
@@ -120,7 +119,7 @@ def test_cluster_time_range():
     assert cluster.time_range.stop == 3
 
     cluster = Cluster()
-    core_measurement = CoreMeasurement(timestamp=10, value=1.0)
+    core_measurement = PseudoMeasurement(10, 1.0)
     cluster.add(core_measurement)
 
     assert cluster.time_range.start == 10
@@ -129,9 +128,11 @@ def test_cluster_time_range():
 
 def test_add_mixture_of_measurements():
     cluster = Cluster()
-    core_measurement1 = CoreMeasurement(timestamp=1, value=1.0)
-    core_measurement2 = CoreMeasurement(timestamp=3, value=1.0)
-    continuous_measurement = ContinuousMeasurement(elements=[core_measurement1, core_measurement2])
+    core_measurement1 = PseudoMeasurement(1, 1.0)
+    core_measurement2 = PseudoMeasurement(3, 1.0)
+    continuous_measurement = ContinuousMeasurement(
+        measurements=[core_measurement1, core_measurement2]
+    )
     fake_measurement = FakeMeasurement(timestamp=2)
 
     cluster.add(core_measurement1)
@@ -149,9 +150,11 @@ def test_add_mixture_of_measurements():
 
 def test_remove_all_measurements():
     cluster = Cluster()
-    core_measurement1 = CoreMeasurement(timestamp=1, value=1.0)
-    core_measurement2 = CoreMeasurement(timestamp=2, value=2.0)
-    continuous_measurement = ContinuousMeasurement(elements=[core_measurement1, core_measurement2])
+    core_measurement1 = PseudoMeasurement(1, 1.0)
+    core_measurement2 = PseudoMeasurement(2, 2.0)
+    continuous_measurement = ContinuousMeasurement(
+        measurements=[core_measurement1, core_measurement2]
+    )
     fake_measurement = FakeMeasurement(timestamp=3)
 
     cluster.add(core_measurement1)
@@ -177,9 +180,11 @@ def test_remove_all_measurements():
 
 def test_remove_core_measurement():
     cluster = Cluster()
-    core_measurement1 = CoreMeasurement(timestamp=1, value=1.0)
-    core_measurement2 = CoreMeasurement(timestamp=2, value=2.0)
-    continuous_measurement = ContinuousMeasurement(elements=[core_measurement1, core_measurement2])
+    core_measurement1 = PseudoMeasurement(1, 1.0)
+    core_measurement2 = PseudoMeasurement(2, 2.0)
+    continuous_measurement = ContinuousMeasurement(
+        measurements=[core_measurement1, core_measurement2]
+    )
     fake_measurement = FakeMeasurement(timestamp=3)
 
     cluster.add(core_measurement1)

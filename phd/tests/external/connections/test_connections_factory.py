@@ -1,12 +1,12 @@
 from phd.external.connections.connections_factory import Factory
-from phd.external.objects.auxiliary_objects import Connection
-from phd.external.objects.measurements import CoreMeasurement
+from phd.external.objects.auxiliary_classes import PseudoMeasurement
+from phd.external.objects.auxiliary_dataclasses import Connection
 from phd.external.objects.measurements_cluster import Cluster
 
 
 def test_create_combinations_single_cluster():
     cluster = Cluster()
-    cluster.add(CoreMeasurement(1, "a"))
+    cluster.add(PseudoMeasurement(1, "a"))
     clusters = [cluster]
     result = Factory.create_combinations(clusters)
     assert result == []
@@ -14,9 +14,9 @@ def test_create_combinations_single_cluster():
 
 def test_create_combinations_encode_decode():
     cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
-    cluster1.add(CoreMeasurement(1, "a"))
-    cluster2.add(CoreMeasurement(2, "b"))
-    cluster3.add(CoreMeasurement(3, "c"))
+    cluster1.add(PseudoMeasurement(1, "a"))
+    cluster2.add(PseudoMeasurement(2, "b"))
+    cluster3.add(PseudoMeasurement(3, "c"))
     clusters = [cluster1, cluster2, cluster3]
 
     result = Factory.create_combinations(clusters)
@@ -34,12 +34,12 @@ def test_create_combinations_encode_decode():
 
 def test_create_combinations_multiple_clusters_multiple_measurements():
     cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
-    cluster1.add(CoreMeasurement(1, "a"))
-    cluster1.add(CoreMeasurement(2, "b"))
-    cluster2.add(CoreMeasurement(3, "c"))
-    cluster2.add(CoreMeasurement(4, "d"))
-    cluster3.add(CoreMeasurement(5, "e"))
-    cluster3.add(CoreMeasurement(6, "f"))
+    cluster1.add(PseudoMeasurement(1, "a"))
+    cluster1.add(PseudoMeasurement(2, "b"))
+    cluster2.add(PseudoMeasurement(3, "c"))
+    cluster2.add(PseudoMeasurement(4, "d"))
+    cluster3.add(PseudoMeasurement(5, "e"))
+    cluster3.add(PseudoMeasurement(6, "f"))
     clusters = [cluster1, cluster2, cluster3]
 
     result = Factory.create_combinations(clusters)
@@ -63,11 +63,11 @@ def test_create_combinations_multiple_clusters_multiple_measurements():
 
 def test_create_combinations_with_duplicate_measurements():
     cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
-    cluster1.add(CoreMeasurement(1, "a"))
-    cluster1.add(CoreMeasurement(2, "b"))
-    cluster2.add(CoreMeasurement(1, "a"))  # Duplicate measurement
-    cluster2.add(CoreMeasurement(3, "c"))
-    cluster3.add(CoreMeasurement(4, "d"))
+    cluster1.add(PseudoMeasurement(1, "a"))
+    cluster1.add(PseudoMeasurement(2, "b"))
+    cluster2.add(PseudoMeasurement(1, "a"))  # Duplicate measurement
+    cluster2.add(PseudoMeasurement(3, "c"))
+    cluster3.add(PseudoMeasurement(4, "d"))
     clusters = [cluster1, cluster2, cluster3]
 
     result = Factory.create_combinations(clusters)

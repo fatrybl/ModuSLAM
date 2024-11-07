@@ -11,7 +11,9 @@ GtsamInstance = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.im
 class Vertex(ABC):
     """Base absract vertex of the Graph."""
 
-    def __init__(self, index: int = 0, value: Any = None):
+    def __init__(self, index: int, value: Any = None):
+        if index < 0:
+            raise ValueError("Index must be non-negative.")
         self._index = index
         self._value = value
 
@@ -19,22 +21,6 @@ class Vertex(ABC):
     def index(self) -> int:
         """Index of the vertex."""
         return self._index
-
-    @index.setter
-    def index(self, value: int) -> None:
-        """Sets the index of the vertex.
-
-        Attention: the index is set automatically when the vertex is added to the graph.
-
-        Args:
-            value: new index.
-
-        Raises:
-            ValueError: if the index is negative.
-        """
-        if value < 0:
-            raise ValueError("Index must be non-negative")
-        self._index = value
 
     @property
     def value(self) -> Any:
@@ -76,5 +62,5 @@ class OptimizableVertex(Vertex):
         """Unique external backend index of an instance."""
 
 
-BaseVertex = TypeVar("BaseVertex", bound=Vertex)
+V = TypeVar("V", bound=Vertex)
 """TypeVar for the Graph vertices."""

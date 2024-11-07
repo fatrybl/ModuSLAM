@@ -30,32 +30,44 @@
         3.3) Кладём новые вершины в DB_t.
 """
 
+import logging
 from copy import deepcopy
 
-from phd.bridge.utils import create_graph_elements, process_leftovers, solve
-from phd.external.objects.auxiliary_objects import ClustersWithLeftovers
-from phd.external.objects.measurements import Measurement
+from phd.bridge.distributor import distribute
+from phd.bridge.utils import add_elements_to_graph, process_leftovers, solve
+from phd.exceptions import SkipItemException
+from phd.external.objects.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.external.objects.measurements_cluster import Cluster as MeasurementCluster
+from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
+
+logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 
     graph: Graph = Graph()
-    leftovers_db: list[Measurement] = []
+    leftovers: list[Measurement] = []
     variants: list[list[MeasurementCluster] | ClustersWithLeftovers] = []
     errors_table: dict[Graph, float] = {}
 
     for variant in variants:
         current_graph = deepcopy(graph)
-        measurements_clusters = process_leftovers(variant, leftovers_db)
+        measurements_clusters = process_leftovers(variant, leftovers)
 
-        for cluster in measurements_clusters:
-            for measurement in cluster.measurements:
+        for m_cluster in measurements_clusters:
+            current_cluster = VertexCluster()
 
-                new_elements = create_graph_elements(measurement, current_graph)
+            for measurement in m_cluster.measurements:
+                edge_factory = distribute(measurement)
+                try:
+                    new_elements = edge_factory.create(current_graph, current_cluster, measurement)
+                    add_elements_to_graph(current_graph, new_elements)
 
-                for element in new_elements:
-                    current_graph.add_element(element)
+                except SkipItemException:
+                    logger.warning(f"Skipping measurement:{measurement}")
 
         error = solve(current_graph)
         errors_table.update({current_graph: error})

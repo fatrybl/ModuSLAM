@@ -1,33 +1,25 @@
 from collections.abc import Iterable
 
-from phd.external.objects.measurements import (
-    ContinuousMeasurement,
-    FakeMeasurement,
-    Measurement,
-)
+from phd.external.objects.auxiliary_classes import FakeMeasurement
+from phd.measurements.processed_measurements import Measurement
 
 
 def add_fake_if_needed(
-    continuous_measurement: ContinuousMeasurement, measurements: list[Measurement]
+    measurements: list[Measurement], imu_measurements: list[Measurement]
 ) -> None:
-    t1 = continuous_measurement.time_range.start
-    t2 = measurements[0].timestamp
-    if t1 < t2:
-        fake = create_fake(continuous_measurement)
-        measurements.insert(0, fake)
-
-
-def create_fake(measurement: ContinuousMeasurement) -> FakeMeasurement:
-    """Creates a fake measurement.
+    """Adds a fake measurement inplace to the measurements if a start of the continuous
+    measurement is earlier then the 1-st measurement timestamp.
 
     Args:
-        measurement: measurement to be used for fake measurement.
+        measurements: a sequence of measurements.
 
-    Returns:
-        fake measurement.
+        imu_measurements: a sequence of measurements to be used for checking the start timestamp.
     """
-    t = measurement.time_range.start
-    return FakeMeasurement(t)
+    imu_start = imu_measurements[0].timestamp
+    others_start = measurements[0].timestamp
+    if imu_start < others_start:
+        fake = FakeMeasurement(imu_start)
+        measurements.insert(0, fake)
 
 
 def find_fake_measurement(measurements: Iterable[Measurement]) -> FakeMeasurement | None:
@@ -40,6 +32,6 @@ def find_fake_measurement(measurements: Iterable[Measurement]) -> FakeMeasuremen
         the 1-st fake measurement if found or None.
     """
     for m in measurements:
-        if m.value == FakeMeasurement.fake_value and isinstance(m, FakeMeasurement):
+        if isinstance(m, FakeMeasurement):
             return m
     return None

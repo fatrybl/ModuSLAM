@@ -1,6 +1,6 @@
 import pytest
 
-from phd.external.objects.measurements import CoreMeasurement
+from phd.external.objects.auxiliary_classes import PseudoMeasurement
 from phd.external.utils import get_subsequence
 
 
@@ -10,17 +10,17 @@ def test_get_subsequence_empty_sequence():
 
 
 def test_get_subsequence_start_greater_than_stop():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
 
     with pytest.raises(ValueError, match="Empty sequence or invalid limits."):
         get_subsequence([m1, m2], 2, 1)
 
 
 def test_get_subsequence_no_timestamps_in_range():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
 
     subsequence, start_idx, stop_idx = get_subsequence([m1, m2, m3], 4, 5)
 
@@ -30,9 +30,9 @@ def test_get_subsequence_no_timestamps_in_range():
 
 
 def test_get_subsequence_entire_sequence():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
     seq = [m1, m2, m3]
 
     subsequence, start_idx, stop_idx = get_subsequence(seq, 1, 4)
@@ -43,9 +43,9 @@ def test_get_subsequence_entire_sequence():
 
 
 def test_get_subsequence_single_element():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
 
     subsequence, start_idx, stop_idx = get_subsequence([m1, m2, m3], 2, 3)
 
@@ -55,9 +55,9 @@ def test_get_subsequence_single_element():
 
 
 def test_get_subsequence_equal_start_stop():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
 
     subsequence, start_idx, stop_idx = get_subsequence([m1, m2, m3], 2, 2)
 
@@ -67,10 +67,10 @@ def test_get_subsequence_equal_start_stop():
 
 
 def test_get_subsequence_with_duplicate_timestamps():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(2, "c")
-    m4 = CoreMeasurement(3, "d")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(2, "c")
+    m4 = PseudoMeasurement(3, "d")
 
     subsequence, start_idx, stop_idx = get_subsequence([m1, m2, m3, m4], 2, 3)
 
@@ -80,10 +80,10 @@ def test_get_subsequence_with_duplicate_timestamps():
 
 
 def test_get_subsequence_start_stop_outside_range():
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
-    m4 = CoreMeasurement(4, "d")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
+    m4 = PseudoMeasurement(4, "d")
 
     subsequence, start_idx, stop_idx = get_subsequence([m1, m2, m3, m4], 0, 5)
 

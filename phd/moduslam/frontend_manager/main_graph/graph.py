@@ -5,7 +5,7 @@ import gtsam
 from moduslam.logger.logging_config import frontend_manager
 from phd.moduslam.frontend_manager.main_graph.edge_storage.storage import EdgeStorage
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.element import GraphElement
+from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
@@ -45,6 +45,10 @@ class Graph:
     def connections(self) -> dict[Vertex, set[Edge]]:
         """Connections of vertices with edges."""
         return self._connections
+
+    @property
+    def backend_values(self) -> gtsam.Values:
+        raise NotImplementedError
 
     def get_connected_edges(self, vertex: Vertex) -> set[Edge]:
         """Gets all edges connected to the vertex.

@@ -1,5 +1,5 @@
 from phd.external.combinations_factory import Factory
-from phd.external.objects.measurements import CoreMeasurement, MeasurementGroup
+from phd.external.objects.auxiliary_classes import MeasurementGroup, PseudoMeasurement
 from phd.external.objects.measurements_cluster import Cluster
 
 
@@ -9,7 +9,7 @@ def test_combine_with_empty_iterable():
 
 
 def test_combine_with_single_measurement_group():
-    measurement = CoreMeasurement(1, "a")
+    measurement = PseudoMeasurement(1, "a")
     group = MeasurementGroup()
     group.add(measurement)
 
@@ -22,9 +22,9 @@ def test_combine_with_single_measurement_group():
 
 
 def test_combine_with_multiple_measurement_groups():
-    measurement1 = CoreMeasurement(1, "a")
-    measurement2 = CoreMeasurement(2, "b")
-    measurement3 = CoreMeasurement(3, "c")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
+    measurement3 = PseudoMeasurement(3, "c")
 
     group1, group2, group3 = MeasurementGroup(), MeasurementGroup(), MeasurementGroup()
 
@@ -82,9 +82,9 @@ def test_combine_with_multiple_measurement_groups():
 
 
 def test_combine_correctly_merge_adjacent_groups():
-    measurement1 = CoreMeasurement(1, "a")
-    measurement2 = CoreMeasurement(2, "b")
-    measurement3 = CoreMeasurement(3, "c")
+    measurement1 = PseudoMeasurement(1, "a")
+    measurement2 = PseudoMeasurement(2, "b")
+    measurement3 = PseudoMeasurement(3, "c")
 
     group1, group2, group3 = MeasurementGroup(), MeasurementGroup(), MeasurementGroup()
     group1.add(measurement1)

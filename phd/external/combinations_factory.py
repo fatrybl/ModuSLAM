@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from typing import TypeVar
 
-from phd.external.objects.measurements import CoreMeasurement, MeasurementGroup
+from phd.external.objects.auxiliary_classes import MeasurementGroup, PseudoMeasurement
 from phd.external.objects.measurements_cluster import Cluster
 
 T = TypeVar("T")
@@ -128,9 +128,9 @@ class Factory:
 
 
 if __name__ == "__main__":
-    m1 = CoreMeasurement(1, "a")
-    m2 = CoreMeasurement(2, "b")
-    m3 = CoreMeasurement(3, "c")
+    m1 = PseudoMeasurement(1, "a")
+    m2 = PseudoMeasurement(2, "b")
+    m3 = PseudoMeasurement(3, "c")
 
     g1, g2, g3 = MeasurementGroup(), MeasurementGroup(), MeasurementGroup()
 

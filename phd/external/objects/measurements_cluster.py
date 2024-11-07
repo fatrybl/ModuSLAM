@@ -1,11 +1,7 @@
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.external.metrics.utils import median
-from phd.external.objects.measurements import (
-    ContinuousMeasurement,
-    CoreMeasurement,
-    FakeMeasurement,
-    Measurement,
-)
+from phd.external.objects.auxiliary_classes import FakeMeasurement
+from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 
 
 class Cluster:
@@ -16,7 +12,7 @@ class Cluster:
     """
 
     def __init__(self):
-        self._core_measurements: list[CoreMeasurement] = []
+        self._core_measurements: list[Measurement] = []
         self._continuous_measurements: list[ContinuousMeasurement] = []
         self._fake_measurements: list[FakeMeasurement] = []
         self._timestamp: int | None = None
@@ -38,7 +34,12 @@ class Cluster:
         )
 
     @property
-    def core_measurements(self) -> list[CoreMeasurement]:
+    def measurements(self) -> list[Measurement]:
+        """All measurement in the cluster (except fake)."""
+        return [*self._core_measurements, *self._continuous_measurements]
+
+    @property
+    def core_measurements(self) -> list[Measurement]:
         """Discrete measurements in the cluster."""
         return self._core_measurements
 
@@ -51,11 +52,6 @@ class Cluster:
     def fake_measurements(self) -> list[FakeMeasurement]:
         """Fake measurements in the cluster."""
         return self._fake_measurements
-
-    @property
-    def measurements(self) -> list[CoreMeasurement | ContinuousMeasurement | FakeMeasurement]:
-        """All measurement in the cluster."""
-        return self._core_measurements + self._continuous_measurements + self._fake_measurements
 
     @property
     def timestamp(self) -> int:
@@ -86,46 +82,36 @@ class Cluster:
 
         Args:
             measurement: measurement to add.
-
-        Raises:
-            TypeError: wrong type of measurement.
         """
         if isinstance(measurement, ContinuousMeasurement):
             self._continuous_measurements.append(measurement)
+            return
 
-        elif isinstance(measurement, FakeMeasurement):
+        if isinstance(measurement, FakeMeasurement):
             self._fake_measurements.append(measurement)
+            return
 
-        elif isinstance(measurement, CoreMeasurement):
-            self._core_measurements.append(measurement)
-            self._timestamp = self._compute_timestamp()
-            self._time_range = self._compute_time_range()
-
-        else:
-            raise TypeError(f"Wrong type of measurement: {type(measurement)}")
+        self._core_measurements.append(measurement)
+        self._timestamp = self._compute_timestamp()
+        self._time_range = self._compute_time_range()
 
     def remove(self, measurement: Measurement) -> None:
         """Removes the measurement from the cluster.
 
         Args:
             measurement: measurement to be removed.
-
-        Raises:
-            TypeError: wrong type of measurement.
         """
-        if isinstance(measurement, CoreMeasurement):
-            self._core_measurements.remove(measurement)
-            self._timestamp = self._compute_timestamp()
-            self._time_range = self._compute_time_range()
-
-        elif isinstance(measurement, ContinuousMeasurement):
+        if isinstance(measurement, ContinuousMeasurement):
             self._continuous_measurements.remove(measurement)
+            return
 
-        elif isinstance(measurement, FakeMeasurement):
+        if isinstance(measurement, FakeMeasurement):
             self._fake_measurements.remove(measurement)
+            return
 
-        else:
-            raise TypeError(f"Wrong type of measurement: {type(measurement)}")
+        self._core_measurements.remove(measurement)
+        self._timestamp = self._compute_timestamp()
+        self._time_range = self._compute_time_range()
 
     def _compute_timestamp(self) -> int | None:
         timestamps = [m.timestamp for m in self._core_measurements]

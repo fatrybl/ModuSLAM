@@ -1,5 +1,6 @@
 import bisect
 import logging
+from typing import TypeVar
 
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.exceptions import ItemNotFoundError
@@ -15,16 +16,18 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
 
 logger = logging.getLogger(frontend_manager)
 
+V = TypeVar("V", bound=Vertex)
+
 
 class VertexStorage:
     """Stores vertices of the Graph."""
 
     def __init__(self):
-        self._vertices_table: dict[type[Vertex], OrderedSet[Vertex]] = {}
+        self._vertices_table: dict[type[Vertex], OrderedSet] = {}
         self._indices: dict[type[Vertex], int] = {}
         self._optimizable_vertices = OrderedSet[OptimizableVertex]()
         self._non_optimizable_vertices = OrderedSet[NonOptimizableVertex]()
-        self._clusters = list[VertexCluster]()
+        self._clusters: list[VertexCluster] = []
 
     @property
     def vertices(self) -> list[Vertex]:
@@ -49,7 +52,7 @@ class VertexStorage:
         """Non-optimizable vertices."""
         return self._non_optimizable_vertices
 
-    def add(self, cluster: VertexCluster, vertex: Vertex, timestamp: int) -> None:
+    def add(self, cluster: VertexCluster, vertex: V, timestamp: int) -> None:
         """Adds vertex to the corresponding cluster.
 
         TODO: optimize complexity. Now it take O(N) time to check "in".
@@ -65,9 +68,7 @@ class VertexStorage:
             TypeError: if the vertex is neither Optimizable nor NonOptimizable.
         """
         v_type = type(vertex)
-        new_index = self._indices.get(v_type, -1) + 1
-        vertex.index = new_index
-        self._indices.update({v_type: new_index})
+        self._indices.update({v_type: vertex.index})
 
         cluster.add(vertex, timestamp)
 
@@ -83,7 +84,7 @@ class VertexStorage:
         else:
             raise TypeError(f"Invalid vertex type: {type(vertex)}")
 
-    def remove(self, vertex: Vertex) -> None:
+    def remove(self, vertex: V) -> None:
         """Removes vertex.
 
         Args:
@@ -108,7 +109,7 @@ class VertexStorage:
         else:
             raise TypeError(f"Invalid vertex type: {type(vertex)}")
 
-    def get_vertices(self, vertex_type: type[Vertex]) -> OrderedSet[Vertex]:
+    def get_vertices(self, vertex_type: type[V]) -> OrderedSet[V]:
         """Gets vertices of the given type.
 
         Args:
@@ -117,12 +118,9 @@ class VertexStorage:
         Returns:
             vertices of the given type.
         """
-        if vertex_type not in self._vertices_table:
-            return OrderedSet[Vertex]()
-        else:
-            return self._vertices_table[vertex_type]
+        return self._vertices_table.get(vertex_type, OrderedSet())
 
-    def get_latest_vertex(self, vertex_type: type[Vertex]) -> Vertex | None:
+    def get_latest_vertex(self, vertex_type: type[V]) -> V | None:
         """Gets the vertex of the given type with the latest timestamp.
 
         Args:
@@ -156,6 +154,28 @@ class VertexStorage:
 
         logger.critical(f"Vertex {vertex} not found in any cluster.")
         raise ItemNotFoundError
+
+    def get_cluster(self, timestamp: int) -> VertexCluster | None:
+        """Gets the cluster which time range includes the given timestamp.
+
+        Args:
+            timestamp: a timestamp.
+
+        Returns:
+            cluster if exists or None.
+        """
+        raise NotImplementedError
+
+    def get_last_index(self, vertex_type: type[Vertex]) -> int:
+        """Gets the index of last added vertex of the given type.
+
+        Args:
+            vertex_type: type of the vertex.
+
+        Returns:
+            index.
+        """
+        raise NotImplementedError
 
     def _add_cluster(self, cluster: VertexCluster) -> None:
         """Adds cluster to the clusters list.
