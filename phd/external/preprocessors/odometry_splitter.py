@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 
-from phd.external.objects.measurements import Measurement, SplitPoseOdometry
-from phd.measurements.processed_measurements import PoseOdometry
+from phd.external.objects.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.processed_measurements import Measurement, PoseOdometry
 
 
 def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
