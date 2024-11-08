@@ -26,23 +26,20 @@ def add_elements_to_graph(
 
 
 def process_leftovers(
-    item: list[Cluster] | ClustersWithLeftovers, leftovers: list[Measurement]
-) -> list[Cluster]:
-    """Adds leftovers (if exist) to the database and returns clusters.
+    item: list[Cluster] | ClustersWithLeftovers,
+) -> tuple[list[Cluster], list[Measurement]]:
+    """Returns clusters and leftovers.
 
     Args:
-        item: clusters w or w/o leftovers.
-
-        leftovers: unused measurements.
+        item: list of clusters w or w/o leftovers.
 
     Returns:
-        clusters.
+        clusters, leftovers
     """
-    if isinstance(item, list):
-        return item
+    if isinstance(item, ClustersWithLeftovers):
+        return item.clusters, item.leftovers
     else:
-        leftovers.extend(item.leftovers)
-        return item.clusters
+        return item, []
 
 
 def solve(graph: Graph) -> float:

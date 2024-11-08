@@ -1,10 +1,23 @@
-from phd.bridge.objects.auxiliary_classes import MeasurementGroup
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.bridge.objects.measurements_cluster import Cluster
+import logging
+from collections.abc import Iterable
+from copy import deepcopy
+
+from phd.bridge.edge_factories.factory_protocol import EdgeFactory
+from phd.bridge.utils import add_elements_to_graph, process_leftovers
+from phd.exceptions import SkipItemException
+from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurements.measurement_storage import MeasurementStorage
-from phd.measurements.processed_measurements import Imu
+from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import GraphCandidate
+from phd.moduslam.frontend_manager.main_graph.objects import (
+    GraphCandidate,
+    GraphElement,
+)
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class Factory:
@@ -13,93 +26,56 @@ class Factory:
         """Creates graph candidates.
 
         Args:
-            graph: a main graph.
+            graph: a graph to create candidates for.
 
-            storage: a storage with the measurements.
+            storage: a storage with measurements.
         """
+        variants = VariantsFactory.create(storage)
+        candidates: list[GraphCandidate] = []
 
-        """
-        1. Separate IMU measurements (if present) from others. - [B]
-        2. Merge all other measurements into a common list. - [B]
-        3. Check if any PoseOdometry measurements are present. If so, split those
-            which start/stop are inside storage.time_range and replace then in the original list. - [B]
-        4. Sort measurements. - [B]
-        5. Combine measurements with equal timestamps to the MeasurementGroups - [B]
-        6. Create all possible groups combinations: list[list[Cluster]] - N. - [Ext]
-        7. Filter those combinations which have cycles determined by the SplitPoseOdometry measurements. - [B]
+        for variant in variants:
+            elements: list[GraphElement] = []
+            graph_copy = deepcopy(graph)
 
-                    IF IMU measurements are present:
-        8.1. Create all possible clusters with connections: ClustersWithConnections - M. - [Ext]
-        8.2. for each clusters` combination and all connections combinations: - [B]
-            - fill the connections with IMU measurements:
-            - process leftovers.
-        8.3. Process fake imu connections. - [B]
-        8.4. Create ClustersWithLeftovers. - [B]
+            measurements_clusters, leftovers = process_leftovers(variant)
 
-                    IF IMU measurements are not present:
-        9. create and return N or NxM graph candidates. - [B]
-        """
-        # =====================================
-        """
-        1. Prepare measurements: 1,2,3,4,5.
-        2. Create combinations with External module.
-        3. Filter out cycles.
-        4. IF IMU: create and fill connections: 8.1-8.4
-        5. Create ClustersWithLeftovers
-        6. Create GraphCandidates.
-        """
+            for m_cluster in measurements_clusters:
+                cluster = VertexCluster()
 
-        raise NotImplementedError
+                for measurement in m_cluster.measurements:
+                    edge_factory = cls._get_factory(measurement)
+
+                    try:
+                        item = edge_factory.create(graph_copy, cluster, measurement)
+                        add_elements_to_graph(graph_copy, item)
+                        cls._expand_elements(elements, item)
+
+                    except SkipItemException:
+                        logger.warning(f"Skipping measurement:{measurement}")
+
+            new_candidate = GraphCandidate(graph_copy, elements, leftovers)
+            candidates.append(new_candidate)
+
+        return candidates
 
     @staticmethod
-    def _prepare_measurements(storage: MeasurementStorage) -> list[MeasurementGroup]:
-        """Prepares measurements for further processing.
+    def _expand_elements(
+        elements: list[GraphElement], item: GraphElement | list[GraphElement]
+    ) -> None:
+        """Expands elements with a new item.
 
         Args:
-            storage: a storage with the measurements.
+            elements: a list to expand.
 
-        Returns:
-            groups of measurements.
+            item: a new item or a list of new items.
         """
-        raise NotImplementedError
+        if isinstance(item, Iterable):
+            for element in item:
+                elements.append(element)
+        else:
+            elements.append(item)
 
     @staticmethod
-    def _create_combinations(measurement_groups: list[MeasurementGroup]) -> list[list[Cluster]]:
-        """Creates all possible combinations of clusters.
-
-        Args:
-            measurement_groups: groups of measurements to combine.
-
-        Returns:
-            combinations of clusters.
-        """
-        raise NotImplementedError
-
-    @staticmethod
-    def _remove_cycles(combinations: list[list[Cluster]]) -> list[list[Cluster]]:
-        """Removes combinations containing cycles.
-        Cycle: a cluster with 2 SplitPoseOdometry measurements referencing the same PoseOdometry measurement.
-
-        Args:
-            combinations: combinations of clusters.
-
-        Returns:
-            combinations without cycles.
-        """
-        raise NotImplementedError
-
-    @staticmethod
-    def _process_continuous_measurements(
-        combinations: list[list[Cluster]], measurements: list[Imu]
-    ) -> list[ClustersWithLeftovers]:
-        """Processes continuous measurements.
-
-        Args:
-            combinations: combinations of clusters.
-
-            measurements: IMU measurements.
-
-        Returns:
-            clusters with unused measurements.
-        """
+    def _get_factory(measurement: Measurement) -> EdgeFactory:
+        """Gets the edge factory for a given measurement."""
         raise NotImplementedError

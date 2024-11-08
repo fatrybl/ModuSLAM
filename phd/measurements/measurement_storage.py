@@ -1,5 +1,6 @@
 import logging
 from collections.abc import Iterable
+from typing import Generic, TypeVar
 
 from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.auxiliary_dataclasses import TimeRange
@@ -9,12 +10,14 @@ from phd.measurements.processed_measurements import Measurement
 
 logger = logging.getLogger(frontend_manager)
 
+M = TypeVar("M", bound=Measurement)
 
-class MeasurementStorage:
+
+class MeasurementStorage(Generic[M]):
     """Storage for measurements."""
 
     def __init__(self) -> None:
-        self._data: dict[type[Measurement], OrderedSet[Measurement]] = {}
+        self._data: dict[type[M], OrderedSet[M]] = {}
 
         self._start_timestamp: int | None = None
         self._stop_timestamp: int | None = None
@@ -22,7 +25,7 @@ class MeasurementStorage:
         self._recent_measurement: Measurement | None = None
 
     @property
-    def data(self) -> dict[type[Measurement], OrderedSet[Measurement]]:
+    def data(self) -> dict[type[M], OrderedSet[M]]:
         """Dictionary with "handler -> measurements" pairs."""
         return self._data
 
@@ -60,7 +63,7 @@ class MeasurementStorage:
         """Checks if the storage is empty."""
         return not bool(self._data)
 
-    def add(self, measurement: Measurement | Iterable[Measurement]) -> None:
+    def add(self, measurement: M | Iterable[M]) -> None:
         """Adds measurement(s) to the storage.
 
         Args:
@@ -72,7 +75,7 @@ class MeasurementStorage:
         else:
             self._add(measurement)
 
-    def remove(self, measurement: Measurement | Iterable[Measurement]) -> None:
+    def remove(self, measurement: M | Iterable[M]) -> None:
         """Removes the measurement(s) from the storage.
 
         Args:
@@ -92,7 +95,7 @@ class MeasurementStorage:
         self._stop_timestamp = None
         self._data.clear()
 
-    def _add(self, measurement: Measurement) -> None:
+    def _add(self, measurement: M) -> None:
         """Adds new measurement to the storage.
 
         Args:
@@ -104,7 +107,7 @@ class MeasurementStorage:
         self._update_time_range(measurement.timestamp)
         self._update_recent_measurement(measurement)
 
-    def _remove(self, measurement: Measurement) -> None:
+    def _remove(self, measurement: M) -> None:
         """Removes the measurement from the storage.
 
         Args:

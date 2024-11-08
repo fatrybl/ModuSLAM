@@ -38,7 +38,7 @@ class Builder:
     ):
         self._analyzer = Analyzer()
         self._candidate_factory = Factory()
-        self._storage = MeasurementStorage()
+        self._storage = MeasurementStorage[Measurement]()
 
         handler1 = KaistUrbanImuDataPreprocessor(configs[0])
         handler2 = KaistUrbanVrsGpsPreprocessor(configs[1])

@@ -1,4 +1,5 @@
 from bisect import bisect_left
+from collections import defaultdict
 from collections.abc import Iterable
 from typing import TypeVar
 
@@ -117,23 +118,21 @@ def remove_duplicates(
     return unique_clusters_with_leftovers
 
 
-def group_by_timestamp(measurements: Iterable[Measurement]) -> dict[int, MeasurementGroup]:
+def group_by_timestamp(measurements: Iterable[Measurement]) -> list[MeasurementGroup]:
     """Groups measurements by timestamp.
 
     Args:
         measurements: measurements to group by timestamp.
 
     Returns:
-        grouped measurements by timestamp.
+         measurements` groups.
     """
-    groups: dict[int, MeasurementGroup] = {}
+    groups: dict[int, MeasurementGroup] = defaultdict(MeasurementGroup)
 
     for m in measurements:
-        if m.timestamp not in groups:
-            groups[m.timestamp] = MeasurementGroup()
         groups[m.timestamp].measurements.add(m)
 
-    return groups
+    return list(groups.values())
 
 
 def remove_loops(combinations: list[list[Cluster]]) -> list[list[Cluster]]:

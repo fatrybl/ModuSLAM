@@ -4,22 +4,17 @@ from phd.bridge.objects.auxiliary_classes import FakeMeasurement
 from phd.measurements.processed_measurements import Measurement
 
 
-def add_fake_if_needed(
-    measurements: list[Measurement], imu_measurements: list[Measurement]
-) -> None:
-    """Adds a fake measurement inplace to the measurements if a start of the continuous
-    measurement is earlier then the 1-st measurement timestamp.
+def add_fake_measurement(list_to_add: list[Measurement], timestamp: int) -> None:
+    """Adds a fake measurement inplace based on the condition.
 
     Args:
-        measurements: a sequence of measurements.
+        list_to_add: a list of measurements to add a fake in.
 
-        imu_measurements: a sequence of measurements to be used for checking the start timestamp.
+        timestamp: timestamp of the fake measurement.
     """
-    imu_start = imu_measurements[0].timestamp
-    others_start = measurements[0].timestamp
-    if imu_start < others_start:
-        fake = FakeMeasurement(imu_start)
-        measurements.insert(0, fake)
+    t1 = list_to_add[0].timestamp
+    if timestamp < t1:
+        list_to_add.insert(0, FakeMeasurement(timestamp))
 
 
 def find_fake_measurement(measurements: Iterable[Measurement]) -> FakeMeasurement | None:
