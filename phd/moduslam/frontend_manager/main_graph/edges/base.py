@@ -4,7 +4,7 @@ from typing import Generic, TypeVar
 
 import gtsam
 
-from phd.external.objects.measurements import Measurement
+from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 V = TypeVar("V", bound=Vertex)

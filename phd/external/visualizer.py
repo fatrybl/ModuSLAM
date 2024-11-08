@@ -4,12 +4,9 @@ from collections.abc import Sequence
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from phd.external.objects.auxiliary_classes import PseudoMeasurement
-from phd.external.objects.auxiliary_dataclasses import (
-    ClustersWithConnections,
-    Connection,
-)
-from phd.external.objects.measurements_cluster import Cluster
+from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
+from phd.bridge.objects.auxiliary_dataclasses import ClustersWithConnections, Connection
+from phd.bridge.objects.measurements_cluster import Cluster
 
 
 def visualize_graph_candidates(pairs: Sequence[ClustersWithConnections]) -> None:

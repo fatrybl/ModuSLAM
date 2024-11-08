@@ -1,6 +1,6 @@
 from typing import Any
 
-from phd.external.candidates_factory import Factory as CandidatesFactory
+from phd.bridge.candidates_factory import Factory as CandidatesFactory
 from phd.external.metrics.candidate_evaluator import Evaluator
 from phd.measurements.measurement_storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.graph import Graph

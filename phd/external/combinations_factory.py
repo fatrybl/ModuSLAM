@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 from typing import TypeVar
 
-from phd.external.objects.auxiliary_classes import MeasurementGroup, PseudoMeasurement
-from phd.external.objects.measurements_cluster import Cluster
+from phd.bridge.objects.auxiliary_classes import MeasurementGroup, PseudoMeasurement
+from phd.bridge.objects.measurements_cluster import Cluster
 
 T = TypeVar("T")
 

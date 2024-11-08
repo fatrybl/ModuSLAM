@@ -1,7 +1,10 @@
+from typing import cast
+
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.pose_odometry import Factory as OdometryFactory
+from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
 from phd.exceptions import SkipItemException
-from phd.external.objects.measurements import SplitPoseOdometry
+from phd.measurements.processed_measurements import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -33,7 +36,8 @@ class Factory(EdgeFactory):
             the parent measurement stop timestamp.
         """
         if measurement.timestamp == measurement.parent.time_range.stop:
-            element = OdometryFactory.create(graph, cluster, measurement)
+            odometry = cast(PoseOdometry, measurement)
+            element = OdometryFactory.create(graph, cluster, odometry)
             return element
 
         raise SkipItemException

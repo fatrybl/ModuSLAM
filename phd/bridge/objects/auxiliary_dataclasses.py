@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from phd.external.objects.measurements_cluster import Cluster
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.measurements.processed_measurements import Measurement
 
 

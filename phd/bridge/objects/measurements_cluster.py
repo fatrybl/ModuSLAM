@@ -1,6 +1,6 @@
 from moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.bridge.objects.auxiliary_classes import FakeMeasurement
 from phd.external.metrics.utils import median
-from phd.external.objects.auxiliary_classes import FakeMeasurement
 from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 
 

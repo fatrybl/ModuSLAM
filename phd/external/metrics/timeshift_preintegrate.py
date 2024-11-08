@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 
+from phd.bridge.objects.auxiliary_dataclasses import Connection
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.metrics.protocols import Metrics
-from phd.external.objects.auxiliary_dataclasses import Connection
-from phd.external.objects.measurements_cluster import Cluster
 
 
 class TotalTimeShift(Metrics):

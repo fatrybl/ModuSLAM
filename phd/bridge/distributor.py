@@ -1,7 +1,7 @@
 """Distributes measurement to the corresponding edges factory."""
 
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
-from phd.external.objects.measurements import Measurement
+from phd.measurements.processed_measurements import Measurement
 
 distribution_table: dict[object, object] = {}
 

@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from phd.external.objects.auxiliary_classes import FakeMeasurement
+from phd.bridge.objects.auxiliary_classes import FakeMeasurement
 from phd.measurements.processed_measurements import Measurement
 
 

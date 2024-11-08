@@ -1,6 +1,6 @@
-from phd.external.objects.auxiliary_classes import PseudoMeasurement
-from phd.external.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.external.objects.measurements_cluster import Cluster
+from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
+from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.utils import remove_duplicates
 from phd.measurements.processed_measurements import ContinuousMeasurement
 

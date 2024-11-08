@@ -1,12 +1,12 @@
-from phd.external.connections.connections_factory import Factory
-from phd.external.objects.auxiliary_classes import FakeMeasurement
-from phd.external.objects.auxiliary_dataclasses import (
+from phd.bridge.objects.auxiliary_classes import FakeMeasurement
+from phd.bridge.objects.auxiliary_dataclasses import (
     ClustersWithConnections,
     ClustersWithLeftovers,
     Connection,
 )
-from phd.external.objects.measurements_cluster import Cluster
-from phd.external.preprocessors.fake_measurement_factory import find_fake_measurement
+from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.preprocessors.fake_measurement_factory import find_fake_measurement
+from phd.external.connections.connections_factory import Factory
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
 from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 

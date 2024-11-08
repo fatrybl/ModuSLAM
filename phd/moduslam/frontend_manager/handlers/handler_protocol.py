@@ -2,7 +2,7 @@ from typing import Protocol, runtime_checkable
 
 from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
-from phd.external.objects.measurements import Measurement
+from phd.measurements.processed_measurements import Measurement
 
 
 @runtime_checkable

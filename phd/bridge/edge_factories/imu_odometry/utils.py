@@ -5,8 +5,7 @@ import gtsam
 import numpy as np
 
 from moduslam.logger.logging_config import frontend_manager
-from phd.external.objects.measurements import ContinuousMeasurement
-from phd.measurements.processed_measurements import Imu
+from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
 from phd.moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
 from phd.moduslam.frontend_manager.main_graph.edges.custom import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (

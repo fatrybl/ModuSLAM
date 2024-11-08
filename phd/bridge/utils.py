@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 
 from moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.external.objects.auxiliary_classes import SplitPoseOdometry
-from phd.external.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.external.objects.measurements_cluster import Cluster as MeasurementCluster
+from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
+from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.measurements.processed_measurements import Measurement, PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
@@ -26,8 +26,8 @@ def add_elements_to_graph(
 
 
 def process_leftovers(
-    item: list[MeasurementCluster] | ClustersWithLeftovers, leftovers: list[Measurement]
-) -> list[MeasurementCluster]:
+    item: list[Cluster] | ClustersWithLeftovers, leftovers: list[Measurement]
+) -> list[Cluster]:
     """Adds leftovers (if exist) to the database and returns clusters.
 
     Args:

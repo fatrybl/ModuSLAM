@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from phd.external.objects.auxiliary_classes import SplitPoseOdometry
+from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
 from phd.measurements.processed_measurements import Measurement, PoseOdometry
 
 

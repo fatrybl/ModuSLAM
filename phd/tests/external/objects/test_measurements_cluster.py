@@ -1,7 +1,7 @@
 import pytest
 
-from phd.external.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
-from phd.external.objects.measurements_cluster import Cluster
+from phd.bridge.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 
 

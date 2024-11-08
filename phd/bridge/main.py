@@ -34,10 +34,10 @@ import logging
 from copy import deepcopy
 
 from phd.bridge.distributor import distribute
+from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.bridge.utils import add_elements_to_graph, process_leftovers, solve
 from phd.exceptions import SkipItemException
-from phd.external.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.external.objects.measurements_cluster import Cluster as MeasurementCluster
 from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     graph: Graph = Graph()
     leftovers: list[Measurement] = []
-    variants: list[list[MeasurementCluster] | ClustersWithLeftovers] = []
+    variants: list[list[Cluster] | ClustersWithLeftovers] = []
     errors_table: dict[Graph, float] = {}
 
     for variant in variants:

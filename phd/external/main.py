@@ -1,11 +1,11 @@
 """Main algorithm."""
 
 from moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
+from phd.bridge.preprocessors.fake_measurement_factory import add_fake_if_needed
+from phd.bridge.preprocessors.odometry_splitter import find_and_split, remove_odometry
 from phd.external.combinations_factory import Factory
 from phd.external.connections.utils import get_clusters_and_leftovers
-from phd.external.objects.auxiliary_classes import PseudoMeasurement
-from phd.external.preprocessors.fake_measurement_factory import add_fake_if_needed
-from phd.external.preprocessors.odometry_splitter import find_and_split, remove_odometry
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
 from phd.measurements.processed_measurements import Measurement, PoseOdometry
 

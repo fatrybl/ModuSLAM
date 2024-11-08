@@ -25,4 +25,4 @@ class GraphElement(Generic[V]):
 class GraphCandidate:
     graph: Graph
     elements: list[GraphElement]
-    leftovers: list[Measurement]
+    leftovers: list[Measurement] | None = None

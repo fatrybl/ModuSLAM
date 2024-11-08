@@ -73,7 +73,9 @@ class Builder:
                 candidate = self._candidate_factory.create_best_candidate(graph, self._storage)
 
                 self._storage.clear()
-                self._storage.add(candidate.leftovers)
+
+                if candidate.leftovers:
+                    self._storage.add(candidate.leftovers)
 
                 return candidate.elements
 

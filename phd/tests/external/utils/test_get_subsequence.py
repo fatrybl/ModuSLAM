@@ -1,6 +1,6 @@
 import pytest
 
-from phd.external.objects.auxiliary_classes import PseudoMeasurement
+from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
 from phd.external.utils import get_subsequence
 
 
