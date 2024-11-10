@@ -1,9 +1,10 @@
+from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.ordered_set import OrderedSet
 from phd.bridge.objects.auxiliary_classes import MeasurementGroup
 from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.bridge.preprocessors.fake_measurement_factory import add_fake_measurement
-from phd.bridge.preprocessors.odometry_splitter import find_and_split
+from phd.bridge.preprocessors.pose_odometry import find_and_split
 from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
@@ -30,9 +31,10 @@ class Factory:
         other_measurements, imu_measurements = cls._separate_measurements(storage.data)
 
         if imu_measurements:
-            add_fake_measurement(other_measurements, imu_measurements[0].timestamp)
+            start = imu_measurements[0].timestamp
+            add_fake_measurement(other_measurements, start)
 
-        groups = cls._prepare_measurements(other_measurements)
+        groups = cls._prepare_measurements(other_measurements, storage.time_range)
         combinations = CombinationFactory.combine(groups)
         combinations = remove_loops(combinations)
 
@@ -69,16 +71,21 @@ class Factory:
         return other_measurements, imu_measurements
 
     @staticmethod
-    def _prepare_measurements(measurements: list[Measurement]) -> list[MeasurementGroup]:
+    def _prepare_measurements(
+        measurements: list[Measurement], t_range: TimeRange
+    ) -> list[MeasurementGroup]:
         """Prepares measurements for further processing.
 
         Args:
             measurements: different measurements.
 
+            t_range: a time range for measurements.
+
         Returns:
             groups of measurements.
         """
-        find_and_split(measurements)
+        split_odometry = find_and_split(measurements, t_range)
+        measurements.extend(split_odometry)
         measurements.sort(key=lambda x: x.timestamp)
         groups = group_by_timestamp(measurements)
         return groups

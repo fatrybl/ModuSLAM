@@ -1,11 +1,49 @@
 """Distributes measurement to the corresponding edges factory."""
 
+import logging
+
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
-from phd.measurements.processed_measurements import Measurement
+from phd.bridge.edge_factories.gps_position import Factory as GpsPositionFactory
+from phd.bridge.edge_factories.imu_odometry.imu import Factory as ImuOdometryFactory
+from phd.bridge.edge_factories.pose_odometry import Factory as PoseOdometryFactory
+from phd.bridge.edge_factories.split_pose_odometry import (
+    Factory as SplitPoseOdometryFactory,
+)
+from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.processed_measurements import (
+    ContinuousMeasurement,
+    Gps,
+    Imu,
+    Measurement,
+    PoseOdometry,
+)
 
-distribution_table: dict[object, object] = {}
+logger = logging.getLogger(__name__)
+
+# Add other measurement types and their corresponding factories here.
+distribution_table: dict[type[Measurement], type[EdgeFactory]] = {
+    PoseOdometry: PoseOdometryFactory,
+    SplitPoseOdometry: SplitPoseOdometryFactory,
+    ContinuousMeasurement[Imu]: ImuOdometryFactory,
+    Gps: GpsPositionFactory,
+}
 
 
-def distribute(measurement: Measurement) -> EdgeFactory:
-    """Distributes the measurement to the corresponding edges factory."""
-    raise NotImplementedError
+def get_factory(measurement_type: type[Measurement]) -> EdgeFactory:
+    """Returns an edge factory for the given measurement type if it has been defined.
+
+    Args:
+        measurement_type: a measurement type.
+
+    Returns:
+        edge factory.
+
+    Raises:
+        KeyError: if no edge factory has been defined for the given measurement type.
+    """
+    if measurement_type in distribution_table:
+        return distribution_table[measurement_type]
+    else:
+        msg = f"No edge factory for the given measurement type{measurement_type} has been defined."
+        logger.critical(msg)
+        raise KeyError(msg)

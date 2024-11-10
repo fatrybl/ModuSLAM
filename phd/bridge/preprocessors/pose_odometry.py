@@ -1,5 +1,6 @@
 from collections.abc import Iterable
 
+from moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
 from phd.measurements.processed_measurements import Measurement, PoseOdometry
 
@@ -16,37 +17,34 @@ def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
     return [m for m in measurements if not isinstance(m, PoseOdometry)]
 
 
-def find_and_split(measurements: Iterable[Measurement]) -> list[SplitPoseOdometry] | None:
+def find_and_split(
+    measurements: Iterable[Measurement], t_range: TimeRange
+) -> list[SplitPoseOdometry]:
     """Finds and splits odometry measurements in the sequence of measurements.
 
     Args:
         measurements: sequence of measurements.
 
-    Returns:
-        odometry measurements if found or None.
+        t_range: time range within which to split the measurements.
 
-    TODO: check if any odometry.time_range.start is inside the time range of all measurements.
-        if not: do not split.
+    Returns:
+        split measurements.
     """
-    odometry_measurements = get_odometry_measurements(measurements)
+    splits = []
+    odometry_measurements = []
+
+    for m in measurements:
+        if (
+            isinstance(m, PoseOdometry)
+            and m.time_range.start >= t_range.start
+            and m.time_range.stop <= t_range.stop
+        ):
+            odometry_measurements.append(m)
+
     if odometry_measurements:
         splits = split_multiple(odometry_measurements)
-        return splits
-    else:
-        return None
 
-
-def get_odometry_measurements(measurements: Iterable[Measurement]) -> list[PoseOdometry]:
-    """Finds all odometry measurements in the sequence of measurements.
-
-    Args:
-        measurements: sequence of measurements.
-
-    Returns:
-        odometry measurements.
-    """
-    odometry_measurements = [m for m in measurements if isinstance(m, PoseOdometry)]
-    return odometry_measurements
+    return splits
 
 
 def split_one(measurement: PoseOdometry) -> tuple[SplitPoseOdometry, SplitPoseOdometry]:
@@ -75,8 +73,10 @@ def split_multiple(measurements: Iterable[PoseOdometry]) -> list[SplitPoseOdomet
         list of children measurements.
     """
     new_measurements = []
+
     for m in measurements:
         m1, m2 = split_one(m)
         new_measurements.append(m1)
         new_measurements.append(m2)
+
     return new_measurements

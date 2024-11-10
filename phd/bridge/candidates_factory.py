@@ -2,12 +2,12 @@ import logging
 from collections.abc import Iterable
 from copy import deepcopy
 
-from phd.bridge.edge_factories.factory_protocol import EdgeFactory
+from phd.bridge.distributor import get_factory
+from phd.bridge.objects.measurements_cluster import Cluster
 from phd.bridge.utils import add_elements_to_graph, process_leftovers
 from phd.exceptions import SkipItemException
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurements.measurement_storage import MeasurementStorage
-from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import (
     GraphCandidate,
@@ -30,33 +30,51 @@ class Factory:
 
             storage: a storage with measurements.
         """
-        variants = VariantsFactory.create(storage)
         candidates: list[GraphCandidate] = []
 
+        variants = VariantsFactory.create(storage)
+
         for variant in variants:
-            elements: list[GraphElement] = []
             graph_copy = deepcopy(graph)
 
             measurements_clusters, leftovers = process_leftovers(variant)
 
-            for m_cluster in measurements_clusters:
-                cluster = VertexCluster()
+            elements = cls._process_variant(graph_copy, measurements_clusters)
 
-                for measurement in m_cluster.measurements:
-                    edge_factory = cls._get_factory(measurement)
-
-                    try:
-                        item = edge_factory.create(graph_copy, cluster, measurement)
-                        add_elements_to_graph(graph_copy, item)
-                        cls._expand_elements(elements, item)
-
-                    except SkipItemException:
-                        logger.warning(f"Skipping measurement:{measurement}")
-
-            new_candidate = GraphCandidate(graph_copy, elements, leftovers)
-            candidates.append(new_candidate)
+            candidates.append(GraphCandidate(graph_copy, elements, leftovers))
 
         return candidates
+
+    @classmethod
+    def _process_variant(cls, graph: Graph, clusters: list[Cluster]) -> list[GraphElement]:
+        """Creates graph elements for the given graph and list of clusters with
+        measurements.
+
+        Args:
+            graph: a graph to create elements for.
+
+            clusters: list of clusters with measurements.
+
+        Returns:
+            graph elements.
+        """
+        elements: list[GraphElement] = []
+
+        for m_cluster in clusters:
+            v_cluster = VertexCluster()
+
+            for measurement in m_cluster.measurements:
+                edge_factory = get_factory(type(measurement))
+
+                try:
+                    item = edge_factory.create(graph, v_cluster, measurement)
+                    add_elements_to_graph(graph, item)
+                    cls._expand_elements(elements, item)
+
+                except SkipItemException:
+                    logger.warning(f"Skipping measurement:{measurement}")
+
+        return elements
 
     @staticmethod
     def _expand_elements(
@@ -74,8 +92,3 @@ class Factory:
                 elements.append(element)
         else:
             elements.append(item)
-
-    @staticmethod
-    def _get_factory(measurement: Measurement) -> EdgeFactory:
-        """Gets the edge factory for a given measurement."""
-        raise NotImplementedError
