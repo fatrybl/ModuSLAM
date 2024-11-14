@@ -1,9 +1,8 @@
 import logging
 from typing import cast
 
-from moduslam.logger.logging_config import setup_manager
 from moduslam.utils.exceptions import ItemNotFoundError
-from phd.moduslam.setup_manager.sensors_factory.config import SensorsFactoryConfig
+from phd.logger.logging_config import setup_manager
 from phd.moduslam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
@@ -57,17 +56,29 @@ class SensorsFactory:
             raise ItemNotFoundError(msg)
 
     @classmethod
-    def init_sensors(cls, config: SensorsFactoryConfig) -> None:
+    def init_sensors(cls, sensors: dict[str, SensorConfig]) -> None:
         """Initializes sensors for the given configuration.
 
         Args:
-            config: sensors` configuration.
+            sensors: "sensor name <-> sensor config" table.
+
+        Raises:
+            ValueError: if sensor name does not match the name in the config.
+
+        TODO: add test to check the mismatch between sensor name and sensor config name
+            or remove name duplicates everywhere.
         """
         cls._sensors.clear()
         cls._sensors_table.clear()
 
-        for cfg in config.sensors.values():
-            sensor = cls.sensor_from_config(cfg)
+        for name, config in sensors.items():
+
+            if name != config.name:
+                msg = "sensor`s name does not match the name in the config."
+                logger.critical(msg)
+                raise ValueError(msg)
+
+            sensor = cls.sensor_from_config(config)
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
 

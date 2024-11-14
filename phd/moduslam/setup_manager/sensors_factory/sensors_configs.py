@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 
-from moduslam.setup_manager.sensors_factory.sensors import (
+from phd.moduslam.setup_manager.sensors_factory.sensors import (
     Imu,
     Lidar3D,
     Sensor,
     StereoCamera,
+    VrsGps,
 )
 
 
@@ -175,3 +176,8 @@ class Lidar3DConfig(SensorConfig):
         ],
         metadata={"help": "Transformation matrix base link -> sensor."},
     )
+
+
+@dataclass
+class VrsGpsConfig(SensorConfig):
+    type_name = VrsGps.__name__

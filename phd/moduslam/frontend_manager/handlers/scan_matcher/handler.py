@@ -3,18 +3,18 @@ import logging
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.logger.logging_config import frontend_manager
-from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
-from moduslam.utils.auxiliary_dataclasses import TimeRange
-from moduslam.utils.auxiliary_methods import create_empty_element
+from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import PoseOdometry
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
+from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.scan_matcher.config import (
     KissIcpScanMatcherConfig,
 )
+from phd.moduslam.setup_manager.sensors_factory.sensors import Lidar3D
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.auxiliary_methods import create_empty_element
 
 logger = logging.getLogger(frontend_manager)
 

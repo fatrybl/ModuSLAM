@@ -3,7 +3,7 @@ from typing import Any, TypeVar, Union
 
 import gtsam
 
-from moduslam.types.aliases import Vector3
+from phd.moduslam.custom_types.aliases import Vector3
 
 GtsamInstance = Union[gtsam.Pose3, gtsam.Rot3, Vector3, gtsam.NavState, gtsam.imuBias.ConstantBias]
 

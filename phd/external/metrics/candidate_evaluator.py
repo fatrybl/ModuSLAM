@@ -1,6 +1,6 @@
 import numpy as np
 
-from phd.moduslam.frontend_manager.main_graph.objects import GraphCandidate
+from phd.moduslam.frontend_manager.main_graph.graph import GraphCandidate
 
 
 class Evaluator:

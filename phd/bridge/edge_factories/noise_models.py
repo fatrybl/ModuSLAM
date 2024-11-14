@@ -4,8 +4,8 @@ import numpy as np
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 
 
-def position_noise_model(covariance: Matrix3x3) -> gtsam.noiseModel.Gaussian.Covariance:
-    """Gaussian noise model for position: [x, y, z].
+def covariance3x3_noise_model(covariance: Matrix3x3) -> gtsam.noiseModel.Gaussian.Covariance:
+    """Gaussian noise model with 3x3 covariance matrix.
 
     Args:
         covariance: 3x3 covariance matrix of the noise.
@@ -17,8 +17,8 @@ def position_noise_model(covariance: Matrix3x3) -> gtsam.noiseModel.Gaussian.Cov
     return noise
 
 
-def position_diagonal_noise_model(noise_variances: Vector3) -> gtsam.noiseModel.Diagonal.Variances:
-    """Diagonal Gaussian noise model for position: [x, y, z].
+def diagonal3x3_noise_model(noise_variances: Vector3) -> gtsam.noiseModel.Diagonal.Variances:
+    """Diagonal Gaussian noise model for 3D vector.
 
     Args:
         noise_variances: tuple of 3 floats representing the variances of the noise.
@@ -30,7 +30,7 @@ def position_diagonal_noise_model(noise_variances: Vector3) -> gtsam.noiseModel.
     return noise
 
 
-def pose_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:
+def se3_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:
     """Isotropic Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
 
     Args:
@@ -67,7 +67,7 @@ def pose_block_diagonal_noise_model(
     return noise
 
 
-def pixel_diagonal_noise_model(
+def diagonal2x2_noise_model(
     noise_variances: tuple[float, float]
 ) -> gtsam.noiseModel.Diagonal.Variances:
     """Diagonal Gaussian noise model for pixel: [u, v].

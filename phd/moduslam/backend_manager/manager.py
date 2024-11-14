@@ -2,7 +2,7 @@ import logging
 
 import gtsam
 
-from moduslam.logger.logging_config import backend_manager
+from phd.logger.logging_config import backend_manager
 from phd.moduslam.backend_manager.graph_solver import GraphSolver
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 

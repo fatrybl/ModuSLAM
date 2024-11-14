@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
-from phd.moduslam.custom_types.aliases import Matrix3x3
+from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 
 
 @dataclass
 class ImuData:
-    angular_velocity: tuple[float, float, float]
-    acceleration: tuple[float, float, float]
+    angular_velocity: Vector3
+    acceleration: Vector3
 
 
 @dataclass

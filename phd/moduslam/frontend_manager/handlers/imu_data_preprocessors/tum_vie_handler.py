@@ -16,12 +16,10 @@
 
 import logging
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.logger.logging_config import frontend_manager
-from moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from moduslam.utils.auxiliary_methods import create_empty_element
+from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Imu as ImuMeasurement
 from phd.moduslam.custom_types.aliases import Matrix4x4
+from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.config import (
     ImuHandlerConfig,
@@ -30,6 +28,8 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
     ImuCovariance,
     ImuData,
 )
+from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
+from phd.moduslam.utils.auxiliary_methods import create_empty_element
 
 logger = logging.getLogger(frontend_manager)
 

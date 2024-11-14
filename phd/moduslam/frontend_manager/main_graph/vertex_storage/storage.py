@@ -2,9 +2,8 @@ import bisect
 import logging
 from typing import TypeVar
 
-from moduslam.logger.logging_config import frontend_manager
-from moduslam.utils.exceptions import ItemNotFoundError
 from moduslam.utils.ordered_set import OrderedSet
+from phd.logger.logging_config import frontend_manager
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -13,6 +12,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
     OptimizableVertex,
     Vertex,
 )
+from phd.moduslam.utils.exceptions import ItemNotFoundError
 
 logger = logging.getLogger(frontend_manager)
 

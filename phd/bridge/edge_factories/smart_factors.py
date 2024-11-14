@@ -1,4 +1,3 @@
-from moduslam.utils.auxiliary_dataclasses import VisualFeature
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import create_new_vertex
 from phd.measurements.processed_measurements import VisualFeatures
@@ -12,6 +11,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature
 
 
 class Factory(EdgeFactory):

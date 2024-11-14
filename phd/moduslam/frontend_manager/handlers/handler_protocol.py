@@ -1,8 +1,8 @@
 from typing import Protocol, runtime_checkable
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.setup_manager.sensors_factory.sensors import Sensor
 from phd.measurements.processed_measurements import Measurement
+from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
 
 
 @runtime_checkable

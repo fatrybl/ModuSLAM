@@ -1,17 +1,34 @@
 import logging
+from collections.abc import Iterable
+from dataclasses import dataclass, field
+from typing import Generic, TypeAlias, TypeVar
 
 import gtsam
 
-from moduslam.logger.logging_config import frontend_manager
+from phd.logger.logging_config import frontend_manager
+from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.edge_storage.storage import EdgeStorage
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 logger = logging.getLogger(frontend_manager)
+
+V = TypeVar("V", bound=Vertex)
+
+VertexWithTimestamp: TypeAlias = tuple[V, int]
+VerticesTable: TypeAlias = dict[VertexCluster, list[VertexWithTimestamp[V]]]
+
+
+@dataclass
+class GraphElement(Generic[V]):
+    edge: Edge
+    new_vertices: VerticesTable[V] = field(default_factory=dict)
 
 
 class Graph:
@@ -76,6 +93,10 @@ class Graph:
             for vertex, timestamp in vertices_with_timestamps:
                 self._vertex_storage.add(cluster, vertex, timestamp)
                 self._add_connection(vertex, edge)
+
+    def add_elements(self, elements: Iterable[GraphElement]):
+        for element in elements:
+            self.add_element(element)
 
     def remove_edge(self, edge: Edge) -> None:
         """Removes an edge from the graph.
@@ -163,3 +184,10 @@ class Graph:
             edge: an edge to remove the connection for.
         """
         self._connections[vertex].remove(edge)
+
+
+@dataclass
+class GraphCandidate:
+    graph: Graph
+    elements: list[GraphElement]
+    leftovers: list[Measurement] | None = None

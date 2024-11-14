@@ -1,0 +1,16 @@
+defaults:
+  - /base_initializer
+  - /base_pose@priors.pose1
+  - /base_linear_velocity@priors.velocity1
+  - _self_
+
+priors:
+
+  pose1:
+    timestamp: 0
+    noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e-2, 1e-2, 1e-2 ] # x, y, z, roll, pith, yaw
+
+  velocity1:
+    timestamp: 0
+    noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
+    measurement: [ 0, 0, 0 ]

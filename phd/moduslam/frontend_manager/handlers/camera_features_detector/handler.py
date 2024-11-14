@@ -7,12 +7,9 @@ TODO: add/remove both stereo images.
 import logging
 from collections.abc import Sequence
 
-from moduslam.data_manager.batch_factory.batch import Element
 from moduslam.logger.logging_config import frontend_manager
-from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
-from moduslam.utils.auxiliary_dataclasses import VisualFeature
-from moduslam.utils.auxiliary_methods import create_empty_element
 from phd.measurements.processed_measurements import Measurement
+from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.camera_features_detector.config import (
     FeatureDetectorConfig,
 )
@@ -20,6 +17,9 @@ from phd.moduslam.frontend_manager.handlers.camera_features_detector.detector im
     KeypointDetector,
 )
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
+from phd.moduslam.setup_manager.sensors_factory.sensors import StereoCamera
+from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature
+from phd.moduslam.utils.auxiliary_methods import create_empty_element
 
 logger = logging.getLogger(frontend_manager)
 

@@ -1,27 +1,50 @@
 import logging
+from typing import Iterable, cast
 
-from moduslam.logger.logging_config import frontend_manager
-from phd.moduslam.frontend_manager.graph_initializer.config import (
-    GraphInitializerConfig,
-    PriorConfig,
+from hydra import compose, initialize
+from hydra.core.config_store import ConfigStore
+
+from phd.bridge.distributor import get_factory
+from phd.logger.logging_config import frontend_manager
+from phd.measurements.processed_measurements import Measurement
+from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
+    EdgeConfig,
+    InitializerConfig,
+    PriorLinearVelocity,
+    PriorPose,
 )
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
+from phd.moduslam.frontend_manager.graph_initializer.distributor import (
+    type_method_table,
+)
+from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+    VertexStorage,
+)
 
 logger = logging.getLogger(frontend_manager)
 
-FAKE_SENSOR_NAME = "Prior sensor"
+
+def register_configs():
+    cs = ConfigStore.instance()
+    cs.store(name="base_initializer", node=InitializerConfig)
+    cs.store(name="base_pose", node=PriorPose)
+    cs.store(name="base_linear_velocity", node=PriorLinearVelocity)
+
+
+register_configs()
 
 
 class GraphInitializer:
     """Initializes the graph with prior factors."""
 
-    def __init__(self, config: GraphInitializerConfig):
-        """
-        Args:
-            config: graph initializer configuration.
-        """
-        self._priors = config.priors.values()
+    def __init__(self):
+        with initialize(version_base=None, config_path="configs"):
+            cfg = compose(config_name="config")
+            config = cast(InitializerConfig, cfg)  # avoid MyPy warnings
+            self._priors = config.priors.values()
 
     def set_prior(self, graph: Graph) -> None:
         """Initializes the graph with prior factors.
@@ -31,32 +54,57 @@ class GraphInitializer:
         """
 
         for prior in self._priors:
-            element = self._create_element(graph, prior)
-            graph.add_element(element)
+            item = self._create_element(graph, prior)
+            if isinstance(item, Iterable):
+                graph.add_elements(item)
+            else:
+                graph.add_element(item)
 
-    def _create_element(self, graph: Graph, prior: PriorConfig) -> GraphElement:
+    @staticmethod
+    def _create_measurement(config: EdgeConfig) -> Measurement:
+        """Creates a measurement for the given configuration.
+
+        Args:
+            config: a configuration for the measurement.
+
+        Returns:
+            a new measurement.
+        """
+        create = type_method_table[config.vertex_type_name]
+        measurement = create(config)
+        return measurement
+
+    @staticmethod
+    def _get_cluster(storage: VertexStorage, timestamp: int) -> VertexCluster:
+        """Gets the existing cluster for the given timestamp or creates a new one.
+
+        Args:
+            storage: a vertex storage.
+
+            timestamp: a timestamp for which to get or create a cluster.
+
+        Returns:
+            a new or existing cluster.
+        """
+        existing_cluster = storage.get_cluster(timestamp)
+        if existing_cluster:
+            return existing_cluster
+        else:
+            return VertexCluster()
+
+    def _create_element(self, graph: Graph, prior: EdgeConfig) -> GraphElement | list[GraphElement]:
         """Creates an edge with a prior factor.
 
         Args:
-            graph: a graph to add the edge at.
+            graph: a graph to add prior factor(s) to.
 
-            prior: a prior configuration.
+            prior: a configuration for the edge.
 
         Returns:
-            list with 1 edge.
+            new graph element.
         """
-
-        # measurement = self._init_measurement(
-        #     prior.measurement,
-        #     prior.measurement_noise_covariance,
-        #     prior.timestamp,
-        #     prior.file_path,
-        # )
-        # edge_factory = self._get_edge_factory(prior.edge_factory_name)
-        # edge = edge_factory.create(
-        #     graph=graph,
-        #     measurements=OrderedSet((measurement,)),
-        #     timestamp=prior.timestamp,
-        # )
-        # return edge
-        raise NotImplementedError
+        cluster = self._get_cluster(graph.vertex_storage, prior.timestamp)
+        measurement = self._create_measurement(prior)
+        edge_factory = get_factory(type(measurement))
+        item = edge_factory.create(graph, cluster, measurement)
+        return item

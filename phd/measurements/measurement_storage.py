@@ -2,10 +2,10 @@ import logging
 from collections.abc import Iterable
 from typing import Generic, TypeVar
 
-from moduslam.logger.logging_config import frontend_manager
 from moduslam.utils.auxiliary_dataclasses import TimeRange
 from moduslam.utils.exceptions import EmptyStorageError
 from moduslam.utils.ordered_set import OrderedSet
+from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Measurement
 
 logger = logging.getLogger(frontend_manager)

@@ -1,8 +1,8 @@
-from moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.bridge.objects.auxiliary_classes import PseudoMeasurement, SplitPoseOdometry
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.utils import remove_loops
 from phd.measurements.processed_measurements import PoseOdometry
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
 class TestRemoveLoops:

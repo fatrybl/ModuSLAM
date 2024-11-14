@@ -8,8 +8,7 @@ from phd.measurements.processed_measurements import PoseOdometry as OdometryMeas
 from phd.moduslam.frontend_manager.main_graph.edges.custom import (
     PoseOdometry as OdometryEdge,
 )
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
+from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )

@@ -8,8 +8,8 @@ from phd.bridge.utils import add_elements_to_graph, process_leftovers
 from phd.exceptions import SkipItemException
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurements.measurement_storage import MeasurementStorage
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import (
+from phd.moduslam.frontend_manager.main_graph.graph import (
+    Graph,
     GraphCandidate,
     GraphElement,
 )

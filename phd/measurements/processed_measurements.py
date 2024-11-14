@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
+from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
     ImuCovariance,
     ImuData,
 )
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
 
 
 class Measurement(ABC):
@@ -90,7 +90,7 @@ class Imu(Measurement):
     """Represents an IMU measurement."""
 
     def __init__(
-        self, element: Element, data: ImuData, covariance: ImuCovariance, transformation: Matrix4x4
+        self, element: Element, data: ImuData, covariance: ImuCovariance, tf_base_sensor: Matrix4x4
     ):
         self._timestamp = element.timestamp
         self._acceleration = data.acceleration
@@ -100,7 +100,7 @@ class Imu(Measurement):
         self._integration_noise_covariance = covariance.integration_noise
         self._accelerometer_bias_covariance = covariance.accelerometer_bias
         self._gyroscope_bias_covariance = covariance.gyroscope_bias
-        self._tf = transformation
+        self._tf = tf_base_sensor
         self._elements = [element]
 
     @property
@@ -318,3 +318,127 @@ class PoseLandmark(Measurement):
     def descriptor(self) -> tuple[int, ...]:
         """Descriptor of the landmark."""
         return self._descriptor
+
+
+class Pose(Measurement):
+    def __init__(
+        self,
+        timestamp: int,
+        pose: Matrix4x4,
+        position_noise_covariance: Matrix3x3,
+        orientation_noise_covariance: Matrix3x3,
+        elements: list[Element],
+    ):
+        self._timestamp = timestamp
+        self._pose = pose
+        self._position_covariance = position_noise_covariance
+        self._orientation_covariance = orientation_noise_covariance
+        self._elements = elements
+
+    @property
+    def timestamp(self) -> int:
+        """Timestamp of the pose measurement."""
+        return self._timestamp
+
+    @property
+    def elements(self) -> list[Element]:
+        """Elements associated with the pose measurement."""
+        return self._elements
+
+    @property
+    def pose(self) -> Matrix4x4:
+        """SE(3) pose."""
+        return self._pose
+
+    @property
+    def position_noise_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the position [x, y, z] part."""
+        return self._position_covariance
+
+    @property
+    def orientation_noise_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the orientation [roll, pitch, yaw] part."""
+        return self._orientation_covariance
+
+
+class LinearVelocity(Measurement):
+    def __init__(
+        self,
+        timestamp: int,
+        velocity: Vector3,
+        noise_covariance: Matrix3x3,
+        elements: list[Element],
+    ):
+        self._timestamp = timestamp
+        self._velocity = velocity
+        self._covariance = noise_covariance
+        self._elements = elements
+
+    @property
+    def timestamp(self) -> int:
+        """Timestamp of the pose measurement."""
+        return self._timestamp
+
+    @property
+    def elements(self) -> list[Element]:
+        """Elements associated with the pose measurement."""
+        return self._elements
+
+    @property
+    def velocity(self) -> Vector3:
+        """Linear velocity [Vx, Vy, Vz]."""
+        return self._velocity
+
+    @property
+    def noise_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix."""
+        return self._covariance
+
+
+class ImuBias(Measurement):
+    def __init__(
+        self,
+        timestamp: int,
+        linear_acceleration_bias: Vector3,
+        linear_velocity_bias: Vector3,
+        linear_acceleration_noice_covariance: Matrix3x3,
+        angular_velocity_noice_covariance: Matrix3x3,
+        elements: list[Element],
+    ):
+
+        self._timestamp = timestamp
+        self._acceleration_bias = linear_acceleration_bias
+        self._linear_velocity_bias = linear_velocity_bias
+        self._acceleration_noise_covariance = linear_acceleration_noice_covariance
+        self._angular_velocity_noise_covariance = angular_velocity_noice_covariance
+        self._elements = elements
+
+    @property
+    def timestamp(self) -> int:
+        """Timestamp of the IMU bias measurement."""
+        return self._timestamp
+
+    @property
+    def elements(self) -> list[Element]:
+        """Elements associated with the IMU bias measurement."""
+        return self._elements
+
+    @property
+    def linear_acceleration_bias(self) -> Vector3:
+        """Linear acceleration bias [Bx, By, Bz]."""
+        return self._acceleration_bias
+
+    @property
+    def linear_velocity_bias(self) -> Vector3:
+        """Linear velocity bias [Vx, Vy, Vz]."""
+        return self._linear_velocity_bias
+
+    @property
+    def linear_acceleration_noise_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the linear acceleration bias [Bx, By, Bz]."""
+        return self._acceleration_noise_covariance
+
+    @property
+    def angular_velocity_noise_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the angular velocity bias [roll, pitch, yaw]."""
+        return self._angular_velocity_noise_covariance

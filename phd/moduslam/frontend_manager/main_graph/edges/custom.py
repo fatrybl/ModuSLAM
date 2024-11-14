@@ -1,10 +1,12 @@
 import gtsam
 
+from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
+from phd.measurements.processed_measurements import ImuBias as ImuBiasMeasurement
 from phd.measurements.processed_measurements import (
-    ContinuousMeasurement,
-    Imu,
-    Measurement,
+    LinearVelocity as LinearVelocityMeasurement,
 )
+from phd.measurements.processed_measurements import Measurement
+from phd.measurements.processed_measurements import Pose as PoseMeasurement
 from phd.measurements.processed_measurements import PoseLandmark as DetectedLandmark
 from phd.moduslam.frontend_manager.main_graph.edges.base import (
     BinaryEdge,
@@ -141,16 +143,47 @@ class PoseOdometry(BinaryEdge[Pose, Pose]):
         super().__init__(vertex1, vertex2, measurement, factor, noise_model)
 
 
-class VisualOdometry(BinaryEdge):
-    """Edge for Stereo Camera odometry."""
-
-
-class PriorPose(UnaryEdge):
+class PriorPose(UnaryEdge[Pose]):
     """Edge for prior pose."""
 
+    def __init__(
+        self,
+        vertex: Pose,
+        measurement: PoseMeasurement,
+        factor: gtsam.PriorFactorPose3,
+        noise_model: gtsam.noiseModel.Base,
+    ):
+        super().__init__(vertex, measurement, factor, noise_model)
 
-class PriorVelocity(UnaryEdge):
+
+class PriorVelocity(UnaryEdge[LinearVelocity]):
     """Edge for prior velocity."""
+
+    def __init__(
+        self,
+        vertex: LinearVelocity,
+        measurement: LinearVelocityMeasurement,
+        factor: gtsam.PriorFactorVector,
+        noise_model: gtsam.noiseModel.Base,
+    ):
+        super().__init__(vertex, measurement, factor, noise_model)
+
+
+class PriorBias(UnaryEdge[ImuBias]):
+    """Edge for prior IMU bias."""
+
+    def __init__(
+        self,
+        vertex: ImuBias,
+        measurement: ImuBiasMeasurement,
+        factor: gtsam.imuBias.ConstantBias,
+        noise_model: gtsam.noiseModel.Base,
+    ):
+        super().__init__(vertex, measurement, factor, noise_model)
+
+
+class VisualOdometry(BinaryEdge):
+    """Edge for Stereo Camera odometry."""
 
 
 class PriorNavState(UnaryEdge):

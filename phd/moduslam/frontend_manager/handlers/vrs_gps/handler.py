@@ -2,14 +2,14 @@
 
 import logging
 
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.logger.logging_config import frontend_manager
-from moduslam.setup_manager.sensors_factory.sensors import VrsGps
-from moduslam.utils.auxiliary_methods import create_empty_element, to_float, to_int
+from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Gps
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
+from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.vrs_gps.config import VrsGpsHandlerConfig
+from phd.moduslam.setup_manager.sensors_factory.sensors import VrsGps
+from phd.moduslam.utils.auxiliary_methods import create_empty_element, to_float, to_int
 
 logger = logging.getLogger(frontend_manager)
 

@@ -1,8 +1,11 @@
 from phd.measurements.measurement_storage import MeasurementStorage
 from phd.measurements.processed_measurements import PoseOdometry
+from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
+    StorageAnalyzer,
+)
 
 
-class Analyzer:
+class Analyzer(StorageAnalyzer):
 
     @staticmethod
     def check_storage(storage: MeasurementStorage) -> bool:

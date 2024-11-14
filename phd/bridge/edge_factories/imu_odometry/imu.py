@@ -12,8 +12,8 @@ from phd.bridge.edge_factories.imu_odometry.utils import (
 )
 from phd.bridge.edge_factories.utils import create_new_vertex
 from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import (
+from phd.moduslam.frontend_manager.main_graph.graph import (
+    Graph,
     GraphElement,
     VertexWithTimestamp,
     VerticesTable,

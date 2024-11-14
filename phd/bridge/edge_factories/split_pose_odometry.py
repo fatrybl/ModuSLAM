@@ -5,8 +5,7 @@ from phd.bridge.edge_factories.pose_odometry import Factory as OdometryFactory
 from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
 from phd.exceptions import SkipItemException
 from phd.measurements.processed_measurements import PoseOdometry
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
+from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )

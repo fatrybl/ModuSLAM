@@ -5,6 +5,8 @@ import logging
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.gps_position import Factory as GpsPositionFactory
 from phd.bridge.edge_factories.imu_odometry.imu import Factory as ImuOdometryFactory
+from phd.bridge.edge_factories.linear_velocity import Factory as VelocityFactory
+from phd.bridge.edge_factories.pose import Factory as PoseFactory
 from phd.bridge.edge_factories.pose_odometry import Factory as PoseOdometryFactory
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitPoseOdometryFactory,
@@ -14,7 +16,9 @@ from phd.measurements.processed_measurements import (
     ContinuousMeasurement,
     Gps,
     Imu,
+    LinearVelocity,
     Measurement,
+    Pose,
     PoseOdometry,
 )
 
@@ -26,6 +30,8 @@ distribution_table: dict[type[Measurement], type[EdgeFactory]] = {
     SplitPoseOdometry: SplitPoseOdometryFactory,
     ContinuousMeasurement[Imu]: ImuOdometryFactory,
     Gps: GpsPositionFactory,
+    Pose: PoseFactory,
+    LinearVelocity: VelocityFactory,
 }
 
 

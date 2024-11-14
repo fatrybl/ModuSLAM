@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from phd.moduslam.frontend_manager.graph_initializer.config import (
-    GraphInitializerConfig,
+from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
+    InitializerConfig,
 )
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.config import (
     ImuHandlerConfig,
@@ -22,4 +22,4 @@ class FrontendManagerConfig:
         KissIcpScanMatcherConfig,
         KissIcpScanMatcherConfig,
     ]
-    graph_initializer: GraphInitializerConfig
+    graph_initializer: InitializerConfig

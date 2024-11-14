@@ -1,0 +1,4 @@
+defaults:
+  - /handlers/base_imu_preprocessor@_here_
+
+sensor_name: 'imu'

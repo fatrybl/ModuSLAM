@@ -67,8 +67,8 @@ class Edge(ABC):
             raise ValueError("Index should be non-negative.")
         self._index = value
 
-    @abstractmethod
     @property
+    @abstractmethod
     def vertices(self) -> Collection[Vertex]:
         """The vertices of an edge."""
 
