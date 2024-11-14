@@ -72,7 +72,7 @@ class VertexStorage:
 
         cluster.add(vertex, timestamp)
 
-        self._vertices_table[v_type].add(vertex)
+        self._vertices_table.setdefault(v_type, OrderedSet()).add(vertex)
 
         if cluster not in self._clusters:
             self._add_cluster(cluster)
@@ -164,18 +164,27 @@ class VertexStorage:
         Returns:
             cluster if exists or None.
         """
-        raise NotImplementedError
+        for cluster in self._clusters:
+            start = cluster.time_range.start
+            stop = cluster.time_range.stop
+            if start <= timestamp <= stop:
+                return cluster
+
+        return None
 
     def get_last_index(self, vertex_type: type[Vertex]) -> int:
-        """Gets the index of last added vertex of the given type.
+        """Gets the index of the last added vertex of the given type.
 
         Args:
             vertex_type: type of the vertex.
 
         Returns:
             index.
+
+        Raises:
+            KeyError: if the vertex type is not found in the indices table.
         """
-        raise NotImplementedError
+        return self._indices[vertex_type]
 
     def _add_cluster(self, cluster: VertexCluster) -> None:
         """Adds cluster to the clusters list.

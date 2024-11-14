@@ -13,4 +13,5 @@ if __name__ == "__main__":
     cfg.level = "DEBUG"
     setup_logger(cfg)
 
-    main_manager = MainManager()
+    manager = MainManager()
+    manager.build_map()

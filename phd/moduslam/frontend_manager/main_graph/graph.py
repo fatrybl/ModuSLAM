@@ -63,9 +63,18 @@ class Graph:
         """Connections of vertices with edges."""
         return self._connections
 
-    @property
-    def backend_values(self) -> gtsam.Values:
-        raise NotImplementedError
+    def get_backend_instances(self) -> gtsam.Values:
+        """Gets backend instances for optimizable vertices.
+
+        Returns:
+            GTSAM backend instances.
+        """
+        values = gtsam.Values()
+
+        for vertex in self._vertex_storage.optimizable_vertices:
+            values.insert(vertex.backend_index, vertex.backend_instance)
+
+        return values
 
     def get_connected_edges(self, vertex: Vertex) -> set[Edge]:
         """Gets all edges connected to the vertex.

@@ -2,6 +2,7 @@ from typing import TypeVar
 
 from phd.external.metrics.utils import median
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 V = TypeVar("V", bound=Vertex)  # Method-specific vertex type for get_latest_vertex
 
@@ -49,14 +50,17 @@ class VertexCluster:
         raise ValueError("Timestamp does not exist for empty cluster.")
 
     @property
-    def time_range(self) -> tuple[int, int]:
+    def time_range(self) -> TimeRange:
         """Calculates the time range (start, stop) of the cluster.
 
         Raises:
             ValueError: If the cluster is empty.
         """
         if self._timestamps:
-            return min(self._timestamps), max(self._timestamps)
+            start = min(self._timestamps)
+            stop = max(self._timestamps)
+            return TimeRange(start, stop)
+
         raise ValueError("Time range does not exist for empty cluster.")
 
     def add(self, vertex: Vertex, timestamp: int) -> None:

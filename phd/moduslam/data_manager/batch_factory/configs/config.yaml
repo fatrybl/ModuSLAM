@@ -8,4 +8,4 @@ regime:
   start: 1544581170279399000
   stop: 1544581170380272000
 
-#batch_memory_percent: 50.0
+batch_memory_percent: 90.0

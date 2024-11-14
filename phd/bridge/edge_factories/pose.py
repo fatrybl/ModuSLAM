@@ -43,7 +43,9 @@ class Factory(EdgeFactory):
         noise = pose_block_diagonal_noise_model(
             measurement.position_noise_covariance, measurement.orientation_noise_covariance
         )
-        factor = gtsam.PriorFactorPose3(vertex.backend_index, measurement.pose, noise)
+
+        backend_pose = gtsam.Pose3(measurement.pose)
+        factor = gtsam.PriorFactorPose3(vertex.backend_index, backend_pose, noise)
         edge = PriorPose(vertex, measurement, factor, noise)
 
         if is_new_pose:

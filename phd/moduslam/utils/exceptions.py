@@ -25,6 +25,14 @@ class EmptyStorageError(Exception):
     """Raised when attempting to access an element of an empty storage."""
 
 
+class EmptySensorsFactoryError(EmptyStorageError):
+    """The sensors factory is empty."""
+
+
+class DataReaderConfigurationError(Exception):
+    """Invalid data reader configuration."""
+
+
 class ClosedSourceError(Exception):
     """Raised when attempting to access a source that is closed."""
 

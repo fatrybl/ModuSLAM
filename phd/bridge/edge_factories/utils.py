@@ -17,7 +17,11 @@ def create_new_vertex(vertex_type: type[T], graph: Graph) -> T:
     Returns:
         a new vertex.
     """
-    last_index = graph.vertex_storage.get_last_index(vertex_type)
+    try:
+        last_index = graph.vertex_storage.get_last_index(vertex_type)
+    except KeyError:
+        last_index = -1
+
     latest_pose = graph.vertex_storage.get_latest_vertex(vertex_type)
     new_index = last_index + 1
 

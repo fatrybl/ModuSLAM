@@ -35,6 +35,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.utils.exceptions import DataReaderConfigurationError
 
 logger = logging.getLogger(data_manager)
 
@@ -51,9 +52,9 @@ class TumVieReader(DataReader):
             dataset_params: dataset parameters.
 
         Raises:
-            FileNotFoundError: if any required file does not exist.
+            DataReaderConfigurationError: if a date reader is configured improperly.
 
-            NotADirectoryError: if the dataset directory does not exist.
+        TODO: modify tests for new exception type.
         """
         super().__init__(regime, dataset_params)
 
@@ -74,6 +75,11 @@ class TumVieReader(DataReader):
         }
 
         sensor_names = {sensor.name for sensor in SensorsFactory.get_all_sensors()}
+        if not sensor_names:
+            msg = "No sensors have been defined in the Sensors Factory to read the measurements of."
+            logger.critical(msg)
+            raise DataReaderConfigurationError(msg)
+
         self._data_sequence, indices = create_sequence(self._csv_files, regime, sensor_names)
         self._data_sequence_iterator = iter(self._data_sequence)
         for sensor_name, index in indices.items():
@@ -83,7 +89,9 @@ class TumVieReader(DataReader):
         used_sensors = set(indices.keys())
         self._sensor_source_table = filter_table(base_table, used_sensors)
         if not self._sensor_source_table:
-            logger.error("No measurements to read for the defined sensors and the regime.")
+            msg = "No measurements to read for the defined sensors and the regime."
+            logger.critical(msg)
+            raise DataReaderConfigurationError
 
     def __enter__(self):
         """Opens all files for reading and initializes iterators."""
