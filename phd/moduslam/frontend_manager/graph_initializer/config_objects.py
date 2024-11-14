@@ -22,7 +22,7 @@ class EdgeConfig:
 class InitializerConfig:
     """Base graph initializer configuration."""
 
-    priors: dict[str, EdgeConfig]
+    priors: dict[str, EdgeConfig] = field(default_factory=dict)
 
 
 @dataclass
