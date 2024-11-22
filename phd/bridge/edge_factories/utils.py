@@ -1,33 +1,47 @@
-from typing import TypeVar
+from collections.abc import Iterable
 
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from phd.bridge.edge_factories.factory_protocol import VertexWithStatus
+from phd.moduslam.frontend_manager.main_graph.graph import VerticesTable
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.exceptions import ItemNotFoundError
 
-T = TypeVar("T", bound=Vertex)
 
-
-def create_new_vertex(vertex_type: type[T], graph: Graph) -> T:
-    """Creates a new vertex of the given type.
+def get_new_items(items: Iterable[VertexWithStatus]) -> VerticesTable:
+    """Gets new vertices with the corresponding timestamps and the clusters.
 
     Args:
-        vertex_type: a type to create an instance of.
-
-        graph: a main graph to use.
+        items: vertices with statuses.
 
     Returns:
-        a new vertex.
+        a table of clusters with the corresponding lists of new vertices with timestamps.
     """
-    try:
-        last_index = graph.vertex_storage.get_last_index(vertex_type)
-    except KeyError:
-        last_index = -1
+    table: VerticesTable = {}
+    for item in items:
+        if item.is_new:
+            vertex_with_timestamp = (item.instance, item.timestamp)
+            table.update({item.cluster: [vertex_with_timestamp]})
+    return table
 
-    latest_pose = graph.vertex_storage.get_latest_vertex(vertex_type)
-    new_index = last_index + 1
 
-    if latest_pose:
-        vertex = vertex_type(new_index, latest_pose.value)
-    else:
-        vertex = vertex_type(new_index)
+def get_cluster(clusters: dict[VertexCluster, TimeRange], timestamp: int) -> VertexCluster:
+    """Gets the cluster which time range includes the given timestamp.
 
-    return vertex
+    Args:
+        clusters: clusters to find in.
+
+        timestamp: a timestamp of the cluster.
+
+    Returns:
+        a cluster containing the timestamp.
+
+    Raises:
+        ItemNotFoundError: if no cluster has been found for the given timestamp.
+    """
+    for cluster, time_range in clusters.items():
+        if time_range.start <= timestamp <= time_range.stop:
+            return cluster
+
+    raise ItemNotFoundError("No cluster has been found for the given timestamp.")

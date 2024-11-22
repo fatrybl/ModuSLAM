@@ -2,6 +2,27 @@ import gtsam
 import numpy as np
 
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
+from phd.moduslam.custom_types.numpy import Matrix6x6
+
+
+def create_block_diagonal_matrix(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
+    """Block diagonal matrix with two 3x3 blocks.
+
+    Args:
+        block1: 3x3 block matrix.
+
+        block2: 3x3 block matrix.
+
+    Returns:
+        Block diagonal numpy matrix.
+    """
+    position_cov_matrix = np.array(block1)
+    orientation_cov_matrix = np.array(block2)
+
+    block_matrix = np.block(
+        [[position_cov_matrix, np.zeros((3, 3))], [np.zeros((3, 3)), orientation_cov_matrix]]
+    )
+    return block_matrix
 
 
 def covariance3x3_noise_model(covariance: Matrix3x3) -> gtsam.noiseModel.Gaussian.Covariance:
@@ -56,13 +77,7 @@ def pose_block_diagonal_noise_model(
     Returns:
         gtsam noise model.
     """
-    position_cov_matrix = np.array(position_covariance)
-    orientation_cov_matrix = np.array(orientation_covariance)
-
-    bloc_matrix = np.block(
-        [[position_cov_matrix, np.zeros((3, 3))], [np.zeros((3, 3)), orientation_cov_matrix]]
-    )
-
+    bloc_matrix = create_block_diagonal_matrix(position_covariance, orientation_covariance)
     noise = gtsam.noiseModel.Diagonal.Covariance(bloc_matrix)
     return noise
 

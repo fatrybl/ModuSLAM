@@ -1,6 +1,4 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
-from phd.bridge.edge_factories.utils import create_new_vertex
-from phd.measurements.processed_measurements import VisualFeatures
 from phd.moduslam.frontend_manager.main_graph.edges.custom import SmartVisualFeature
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.objects import GraphElement
@@ -11,7 +9,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
 
 
 class Factory(EdgeFactory):
@@ -20,31 +18,35 @@ class Factory(EdgeFactory):
 
     @classmethod
     def create(
-        cls, graph: Graph, cluster: VertexCluster, measurement: VisualFeatures
+        cls,
+        graph: Graph,
+        clusters: dict[VertexCluster, TimeRange],
+        measurement: VisualFeature,
     ) -> list[GraphElement]:
-
-        elements: list[GraphElement] = []
-
-        existing_pose = cluster.get_latest_vertex(cls._vertex_type)
-
-        if existing_pose:
-            current_pose = existing_pose
-        else:
-            current_pose = create_new_vertex(cls._vertex_type, graph)
-
-        for feature in measurement.features:
-
-            similar_feature = cls._get_similar_point(feature, graph.vertex_storage)
-
-            if similar_feature:
-                new_edge = cls._modify_edge(similar_feature, feature, current_pose)
-            else:
-                new_edge = cls._create_new_edge(feature, current_pose)
-
-            element = cls._create_graph_element(new_edge, current_pose, measurement.timestamp)
-            elements.append(element)
-
-        return elements
+        #
+        # elements: list[GraphElement] = []
+        #
+        # existing_pose = cluster.get_latest_vertex(cls._vertex_type)
+        #
+        # if existing_pose:
+        #     current_pose = existing_pose
+        # else:
+        #     current_pose = create_new_vertex(cls._vertex_type, graph)
+        #
+        # for feature in measurement.features:
+        #
+        #     similar_feature = cls._get_similar_point(feature, graph.vertex_storage)
+        #
+        #     if similar_feature:
+        #         new_edge = cls._modify_edge(similar_feature, feature, current_pose)
+        #     else:
+        #         new_edge = cls._create_new_edge(feature, current_pose)
+        #
+        #     element = cls._create_graph_element(new_edge, current_pose, measurement.timestamp)
+        #     elements.append(element)
+        #
+        # return elements
+        raise NotImplementedError
 
     @classmethod
     def _create_new_edge(cls, feature: VisualFeature, current_pose: Pose) -> SmartVisualFeature:

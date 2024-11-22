@@ -26,6 +26,11 @@ class FrontendManager:
         """Main graph."""
         return self._graph
 
+    @graph.setter
+    def graph(self, graph: Graph) -> None:
+        """Sets main graph."""
+        self._graph = graph
+
     def set_prior(self) -> None:
         """Adds prior factors to the graph."""
         self._initializer.set_prior(self._graph)
@@ -37,4 +42,4 @@ class FrontendManager:
         Args:
             batch: data batch with elements.
         """
-        self._builder.create_graph(self._graph, batch)
+        self._graph = self._builder.create_graph(self._graph, batch)

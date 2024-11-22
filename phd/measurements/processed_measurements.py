@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Generic, Protocol, TypeVar, runtime_checkable
 
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.data_manager.batch_factory.batch import Element
@@ -7,7 +7,8 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
     ImuCovariance,
     ImuData,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature as FeaturePoint
 
 
 class Measurement(ABC):
@@ -24,7 +25,36 @@ class Measurement(ABC):
         """Raw elements used to form the measurement."""
 
 
+@runtime_checkable
+class TimeRangeMeasurement(Protocol):
+    """Protocol for measurements with a time range."""
+
+    @property
+    def time_range(self) -> TimeRange:
+        """Measurement`s time range."""
+
+
 M = TypeVar("M", bound=Measurement)
+
+
+class VisualFeature(Measurement):
+    def __init__(self, feature_point: FeaturePoint, element: Element):
+        self._feature_point = feature_point
+        self._element = element
+        self._timestamp = element.timestamp
+
+    @property
+    def elements(self) -> list[Element]:
+        return [self._element]
+
+    @property
+    def timestamp(self) -> int:
+        return self._timestamp
+
+    @property
+    def feature(self) -> FeaturePoint:
+        """Detected visual feature."""
+        return self._feature_point
 
 
 class VisualFeatures(Measurement):
@@ -50,17 +80,19 @@ class ContinuousMeasurement(Generic[M], Measurement):
     Consists of multiple measurements.
     """
 
-    def __init__(self, measurements: list[M]):
+    def __init__(self, measurements: list[M], time_range: TimeRange | None = None):
         """
         Args:
             measurements: sorted by timestamp measurements (assumed to be pre-integrated).
+
+            time_range (Optional): custom start/stop timestamps for the measurement.
         """
 
         if len(measurements) == 0:
             raise ValueError("Not enough elements to create a measurement.")
 
-        start = min(m.timestamp for m in measurements)
-        stop = max(m.timestamp for m in measurements)
+        start = min(m.timestamp for m in measurements) if time_range is None else time_range.start
+        stop = max(m.timestamp for m in measurements) if time_range is None else time_range.stop
         self._timestamp = stop
         self._time_range = TimeRange(start, stop)
         self._items = measurements
@@ -429,8 +461,8 @@ class ImuBias(Measurement):
         return self._acceleration_bias
 
     @property
-    def linear_velocity_bias(self) -> Vector3:
-        """Linear velocity bias [Vx, Vy, Vz]."""
+    def angular_velocity_bias(self) -> Vector3:
+        """Angular velocity bias [Wx, Wy, Wz]."""
         return self._linear_velocity_bias
 
     @property

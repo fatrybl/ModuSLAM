@@ -1,31 +1,27 @@
 import logging
 from collections.abc import Iterable
-from typing import Generic, TypeVar
 
-from moduslam.utils.auxiliary_dataclasses import TimeRange
-from moduslam.utils.exceptions import EmptyStorageError
-from moduslam.utils.ordered_set import OrderedSet
 from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Measurement
+from phd.measurements.time_updater import TimeRangeUpdate
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.exceptions import EmptyStorageError
+from phd.moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
-M = TypeVar("M", bound=Measurement)
 
-
-class MeasurementStorage(Generic[M]):
+class MeasurementStorage:
     """Storage for measurements."""
 
     def __init__(self) -> None:
-        self._data: dict[type[M], OrderedSet[M]] = {}
-
+        self._data: dict[type[Measurement], OrderedSet[Measurement]] = {}
         self._start_timestamp: int | None = None
         self._stop_timestamp: int | None = None
-
         self._recent_measurement: Measurement | None = None
 
     @property
-    def data(self) -> dict[type[M], OrderedSet[M]]:
+    def data(self) -> dict[type[Measurement], OrderedSet[Measurement]]:
         """Dictionary with "handler -> measurements" pairs."""
         return self._data
 
@@ -63,7 +59,7 @@ class MeasurementStorage(Generic[M]):
         """Checks if the storage is empty."""
         return not bool(self._data)
 
-    def add(self, measurement: M | Iterable[M]) -> None:
+    def add(self, measurement: Measurement | Iterable[Measurement]) -> None:
         """Adds measurement(s) to the storage.
 
         Args:
@@ -75,7 +71,7 @@ class MeasurementStorage(Generic[M]):
         else:
             self._add(measurement)
 
-    def remove(self, measurement: M | Iterable[M]) -> None:
+    def remove(self, measurement: Measurement | Iterable[Measurement]) -> None:
         """Removes the measurement(s) from the storage.
 
         Args:
@@ -87,15 +83,13 @@ class MeasurementStorage(Generic[M]):
         else:
             self._remove(measurement)
 
-        self._update_time_range_all()
-
     def clear(self) -> None:
         """Clears the storage."""
         self._start_timestamp = None
         self._stop_timestamp = None
         self._data.clear()
 
-    def _add(self, measurement: M) -> None:
+    def _add(self, measurement: Measurement) -> None:
         """Adds new measurement to the storage.
 
         Args:
@@ -104,10 +98,12 @@ class MeasurementStorage(Generic[M]):
         m_type = type(measurement)
         self._data.setdefault(m_type, OrderedSet()).add(measurement)
 
-        self._update_time_range(measurement.timestamp)
+        self._start_timestamp, self._stop_timestamp = TimeRangeUpdate.update_time_range_on_add(
+            measurement, self._start_timestamp, self._stop_timestamp
+        )
         self._update_recent_measurement(measurement)
 
-    def _remove(self, measurement: M) -> None:
+    def _remove(self, measurement: Measurement) -> None:
         """Removes the measurement from the storage.
 
         Args:
@@ -125,6 +121,10 @@ class MeasurementStorage(Generic[M]):
         if measurement == self._recent_measurement:
             self._recent_measurement = self._find_recent_measurement()
 
+        TimeRangeUpdate.update_time_range_on_removal(
+            self._data, measurement, self._start_timestamp, self._stop_timestamp
+        )
+
     def _update_recent_measurement(self, measurement: Measurement) -> None:
         """Updates the recent measurement in the storage by comparing the "stop"
         timestamp of measurement`s time range.
@@ -138,19 +138,6 @@ class MeasurementStorage(Generic[M]):
         ):
             self._recent_measurement = measurement
 
-    def _update_time_range(self, timestamp: int) -> None:
-        """Updates the time range of the storage.
-
-        Args:
-            timestamp: a new timestamp to update the time range.
-        """
-
-        if self._start_timestamp is None or timestamp < self._start_timestamp:
-            self._start_timestamp = timestamp
-
-        if self._stop_timestamp is None or timestamp > self._stop_timestamp:
-            self._stop_timestamp = timestamp
-
     def _find_recent_measurement(self) -> Measurement | None:
         """Finds the measurement with the latest "stop" timestamp in the storage."""
         if not self._data:
@@ -162,35 +149,3 @@ class MeasurementStorage(Generic[M]):
             default=None,
         )
         return recent_measurement
-
-    def _update_time_range_all(self) -> None:
-        """Updates the time range of the storage for all measurements.
-
-        TODO: think how to make faster.
-        """
-        if not self._data:
-            self._start_timestamp = None
-            self._stop_timestamp = None
-            return
-
-        all_measurements = (
-            measurement
-            for measurements_set in self._data.values()
-            for measurement in measurements_set
-        )
-
-        self._start_timestamp = min(
-            (measurement.timestamp for measurement in all_measurements),
-            default=None,
-        )
-
-        all_measurements = (
-            measurement
-            for measurements_set in self._data.values()
-            for measurement in measurements_set
-        )
-
-        self._stop_timestamp = max(
-            (measurement.timestamp for measurement in all_measurements),
-            default=None,
-        )

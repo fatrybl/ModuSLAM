@@ -1,0 +1,81 @@
+from gtsam import CombinedImuFactor, PreintegratedCombinedMeasurements
+
+from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
+from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
+    ImuBias,
+    LinearVelocity,
+    Pose,
+)
+
+
+class ImuOdometry(Edge):
+    """Edge for Imu pre-integrated odometry."""
+
+    def __init__(
+        self,
+        pose_i: Pose,
+        velocity_i: LinearVelocity,
+        bias_i: ImuBias,
+        pose_j: Pose,
+        velocity_j: LinearVelocity,
+        bias_j: ImuBias,
+        measurement: ContinuousMeasurement[Imu],
+        pim: PreintegratedCombinedMeasurements,
+    ) -> None:
+        """
+        Args:
+            pose_i: initial pose.
+
+            velocity_i: initial velocity.
+
+            bias_i: initial IMU bias.
+
+            pose_j: final pose.
+
+            velocity_j: final velocity.
+
+            bias_j: final IMU bias.
+
+            measurement: continuous IMU measurement.
+
+            pim: a GTSAM pre-integrated IMU measurements.
+        """
+        super().__init__()
+        self._pose_i = pose_i
+        self._velocity_i = velocity_i
+        self._bias_i = bias_i
+        self._pose_j = pose_j
+        self._velocity_j = velocity_j
+        self._bias_j = bias_j
+        self._vertices = (pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j)
+        self._measurement = measurement
+        self._factor = self._create_factor(self._vertices, pim)
+
+    @property
+    def factor(self) -> CombinedImuFactor:
+        """gtsam.CombinedImuFactor."""
+        return self._factor
+
+    @property
+    def vertices(self) -> tuple[Pose, LinearVelocity, ImuBias, Pose, LinearVelocity, ImuBias]:
+        """Vertices of the edge."""
+        return self._vertices
+
+    @property
+    def measurement(self) -> ContinuousMeasurement[Imu]:
+        """Measurement which formed the edge."""
+        return self._measurement
+
+    @staticmethod
+    def _create_factor(
+        vertices: tuple[Pose, LinearVelocity, ImuBias, Pose, LinearVelocity, ImuBias],
+        pim: PreintegratedCombinedMeasurements,
+    ) -> CombinedImuFactor:
+        pi = vertices[0].backend_index
+        vi = vertices[1].backend_index
+        bi = vertices[2].backend_index
+        pj = vertices[3].backend_index
+        vj = vertices[4].backend_index
+        bj = vertices[5].backend_index
+        return CombinedImuFactor(pi, vi, pj, vj, bi, bj, pim)

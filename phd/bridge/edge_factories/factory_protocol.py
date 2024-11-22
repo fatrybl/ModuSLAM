@@ -1,22 +1,38 @@
-from typing import Protocol
+from dataclasses import dataclass
+from typing import Generic, Protocol, TypeVar
 
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
+from phd.moduslam.frontend_manager.main_graph.vertices.base import OptimizableVertex
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+
+V = TypeVar("V", bound=OptimizableVertex)
+
+
+@dataclass
+class VertexWithStatus(Generic[V]):
+    instance: V
+    cluster: VertexCluster
+    timestamp: int
+    is_new: bool = False
 
 
 class EdgeFactory(Protocol):
     @classmethod
     def create(
-        cls, graph: Graph, cluster: VertexCluster, measurement
+        cls,
+        graph: Graph,
+        clusters: dict[VertexCluster, TimeRange],
+        measurement,
     ) -> GraphElement | list[GraphElement]:
         """Creates new element(s) for the graph based on the given measurement.
 
         Args:
             graph: a main graph.
 
-            cluster: a common cluster for new vertices.
+            clusters: clusters with time ranges.
 
             measurement: a measurement to create edge(s).
         """

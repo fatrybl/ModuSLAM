@@ -7,19 +7,25 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
     OptimizableVertex,
 )
 
-identity_matrix = (
+identity4x4 = (
     (1.0, 0.0, 0.0, 0.0),
     (0.0, 1.0, 0.0, 0.0),
     (0.0, 0.0, 1.0, 0.0),
     (0.0, 0.0, 0.0, 1.0),
 )
+identity3x3 = (
+    (1.0, 0.0, 0.0),
+    (0.0, 1.0, 0.0),
+    (0.0, 0.0, 1.0),
+)
+
 zero_vector = (0.0, 0.0, 0.0)
 
 
 class Pose(OptimizableVertex):
     """Pose vertex in Graph."""
 
-    def __init__(self, index: int, value: Matrix4x4 = identity_matrix):
+    def __init__(self, index: int, value: Matrix4x4 = identity4x4):
         """
         Args:
             index: index of the vertex.
@@ -64,6 +70,15 @@ class Pose(OptimizableVertex):
         self._value = self._backend_instance.matrix()
 
 
+class PoseLandmark(Pose):
+    """Landmark with the 3D Pose."""
+
+    @property
+    def backend_index(self) -> int:
+        """GTSAM instance index."""
+        return L(self._index)
+
+
 class LinearVelocity(OptimizableVertex):
     """Linear velocity vertex in Graph."""
 
@@ -105,9 +120,7 @@ class LinearVelocity(OptimizableVertex):
 class NavState(OptimizableVertex):
     """Navigation state vertex in Graph: pose & velocity."""
 
-    def __init__(
-        self, index: int, value: tuple[Matrix4x4, Vector3] = (identity_matrix, zero_vector)
-    ):
+    def __init__(self, index: int, value: tuple[Matrix4x4, Vector3] = (identity4x4, zero_vector)):
         """
         Args:
             index: index of the vertex.
@@ -234,54 +247,6 @@ class ImuBias(OptimizableVertex):
         """
         self._backend_instance = value.atConstantBias(self.backend_index)
         self._value = self._backend_instance.accelerometer(), self._backend_instance.gyroscope()
-
-
-class PoseLandmark(OptimizableVertex):
-    """Landmark with the 3D Pose."""
-
-    def __init__(self, index: int, value: Matrix4x4 = identity_matrix):
-        """
-        Args:
-            index: index of the vertex.
-
-            value: SE(3) pose.
-        """
-        super().__init__(index, value)
-        self._backend_instance = gtsam.Pose3(value)
-
-    @property
-    def backend_index(self) -> int:
-        """GTSAM instance index."""
-        return L(self._index)
-
-    @property
-    def backend_instance(self) -> gtsam.Pose3:
-        """GTSAM pose."""
-        return self._backend_instance
-
-    @property
-    def value(self) -> Matrix4x4:
-        """Pose SE(3) matrix."""
-        return self._value
-
-    @property
-    def position(self) -> Vector3:
-        """Translation part of the pose: x, y, z."""
-        return self._backend_instance.translation()
-
-    @property
-    def rotation(self) -> Matrix3x3:
-        """Rotation part of the pose: SO(3) matrix."""
-        return self._backend_instance.rotation().matrix()
-
-    def update(self, value: gtsam.Values) -> None:
-        """Updates the pose with the new value.
-
-        Args:
-            value: GTSAM values.
-        """
-        self._backend_instance = value.atPose3(self.backend_index)
-        self._value = self._backend_instance.matrix()
 
 
 class Feature3D(NonOptimizableVertex):

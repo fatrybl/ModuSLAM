@@ -5,6 +5,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
 class Factory(EdgeFactory):
@@ -12,14 +13,14 @@ class Factory(EdgeFactory):
 
     @classmethod
     def create(
-        cls, graph: Graph, cluster: VertexCluster, measurement: PoseMeasurement
+        cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: PoseMeasurement
     ) -> GraphElement:
         """Creates a new edge with prior IMU bias factor.
 
         Args:
             graph: a main graph.
 
-            cluster: a common cluster for new vertices.
+            clusters: clusters with time ranges.
 
             measurement: an angular velocity and linear acceleration initial biases.
 

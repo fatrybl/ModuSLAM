@@ -5,7 +5,7 @@ from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
 )
 
 
-class Analyzer(StorageAnalyzer):
+class SinglePoseOdometry(StorageAnalyzer):
 
     @staticmethod
     def check_storage(storage: MeasurementStorage) -> bool:
@@ -16,7 +16,23 @@ class Analyzer(StorageAnalyzer):
         Returns:
             check status.
         """
-        if storage.data[PoseOdometry]:
+        if PoseOdometry in storage.data:
+            return True
+        else:
+            return False
+
+
+class MultiplePoseOdometry(StorageAnalyzer):
+    @staticmethod
+    def check_storage(storage: MeasurementStorage) -> bool:
+        """Checks measurements storage if the criterion is satisfied.
+        Criterion:
+            2 PoseOdometry measurements exists.
+
+        Returns:
+            check status.
+        """
+        if PoseOdometry in storage.data and len(storage.data[PoseOdometry]) == 2:
             return True
         else:
             return False

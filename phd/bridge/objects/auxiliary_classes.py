@@ -10,7 +10,7 @@ class SplitPoseOdometry(Measurement):
         self._parent = parent
 
     def __repr__(self):
-        return f"odom:{self._parent.timestamp}"
+        return f"split odom:{self._timestamp}"
 
     @property
     def timestamp(self) -> int:

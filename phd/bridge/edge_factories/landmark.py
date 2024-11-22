@@ -1,69 +1,59 @@
-from phd.bridge.edge_factories.factory_protocol import EdgeFactory
-from phd.bridge.edge_factories.utils import create_new_vertex
+from phd.bridge.edge_factories.factory_protocol import EdgeFactory, VertexWithStatus
+from phd.bridge.edge_factories.utils import get_new_items
 from phd.measurements.processed_measurements import PoseLandmark as DetectedLandmark
-from phd.moduslam.frontend_manager.main_graph.edges.custom import PoseToLandmark
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
-from phd.moduslam.frontend_manager.main_graph.objects import GraphElement, VerticesTable
+from phd.moduslam.frontend_manager.main_graph.edges.pose2LandmarkPose import (
+    PoseToLandmark,
+)
+from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
-    VertexStorage,
-)
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose, PoseLandmark
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 
 class Factory(EdgeFactory):
 
-    _vertex_type1 = Pose
-    _vertex_type2 = PoseLandmark
-
     @classmethod
     def create(
-        cls, graph: Graph, cluster: VertexCluster, measurement: DetectedLandmark
+        cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: DetectedLandmark
     ) -> GraphElement:
+        """Creates a new edge between the pose and a new or existing landmark.
 
-        existing_pose = cluster.get_latest_vertex(cls._vertex_type1)
+        Args:
+            graph: a main graph.
 
-        if existing_pose:
-            current_pose = existing_pose
-        else:
-            current_pose = create_new_vertex(cls._vertex_type1, graph)
+            clusters: clusters with time ranges.
 
-        similar_landmark = cls._get_similar_landmark(measurement.descriptor, graph.vertex_storage)
+            measurement: a descriptor of the detected landmark.
 
-        if similar_landmark:
-            landmark = similar_landmark
-        else:
-            landmark = create_new_vertex(cls._vertex_type2, graph)
+        Returns:
+            a new element.
+        """
+        pose = cls._get_pose_with_status()
 
-        edge = cls._create_edge(current_pose, landmark, measurement)
+        landmark = cls._get_landmark_with_status()
 
-        new_vertices = cls._get_new_vertices()
+        edge = cls._create_edge(pose.instance, landmark.instance, measurement)
+
+        new_vertices = get_new_items([pose, landmark])
 
         element = GraphElement(edge, new_vertices)
         return element
 
     @classmethod
-    def _get_new_vertices(cls) -> VerticesTable:
+    def _get_pose_with_status(cls) -> VertexWithStatus[Pose]:
+        """Gets a new or existing pose vertex."""
         raise NotImplementedError
 
     @classmethod
-    def _get_similar_landmark(
-        cls, descriptor: tuple[int, ...], storage: VertexStorage
-    ) -> PoseLandmark:
-        """Finds a similar landmark in the graph based on the distance between the
-        landmarks."""
+    def _get_landmark_with_status(cls) -> VertexWithStatus[PoseLandmark]:
+        """Gets a new or existing landmark vertex."""
         raise NotImplementedError
 
     @classmethod
     def _create_edge(
         cls, pose: Pose, landmark: PoseLandmark, measurement: DetectedLandmark
     ) -> PoseToLandmark:
-        raise NotImplementedError
-
-    @classmethod
-    def _create_element(
-        cls, edge: PoseToLandmark, new_vertices: tuple[Pose | PoseLandmark, ...] | None = None
-    ) -> GraphElement:
+        """Creates a new edge with a new pose and the observed landmark."""
         raise NotImplementedError

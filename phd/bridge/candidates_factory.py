@@ -5,7 +5,6 @@ from copy import deepcopy
 from phd.bridge.distributor import get_factory
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.bridge.utils import add_elements_to_graph, process_leftovers
-from phd.exceptions import SkipItemException
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurements.measurement_storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.graph import (
@@ -16,6 +15,8 @@ from phd.moduslam.frontend_manager.main_graph.graph import (
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.exceptions import SkipItemException
 
 logger = logging.getLogger(__name__)
 
@@ -59,20 +60,23 @@ class Factory:
             graph elements.
         """
         elements: list[GraphElement] = []
+        local_db: dict[VertexCluster, TimeRange] = {}
 
         for m_cluster in clusters:
             v_cluster = VertexCluster()
+            local_db.update({v_cluster: m_cluster.time_range})
 
             for measurement in m_cluster.measurements:
                 edge_factory = get_factory(type(measurement))
 
                 try:
-                    item = edge_factory.create(graph, v_cluster, measurement)
-                    add_elements_to_graph(graph, item)
-                    cls._expand_elements(elements, item)
-
+                    item = edge_factory.create(graph, local_db, measurement)
                 except SkipItemException:
-                    logger.warning(f"Skipping measurement:{measurement}")
+                    logger.debug(f"Skipping measurement:{measurement}")
+                    continue
+
+                add_elements_to_graph(graph, item)
+                cls._expand_elements(elements, item)
 
         return elements
 

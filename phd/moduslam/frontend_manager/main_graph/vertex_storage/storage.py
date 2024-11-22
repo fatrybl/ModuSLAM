@@ -1,4 +1,3 @@
-import bisect
 import logging
 from typing import TypeVar
 
@@ -193,6 +192,24 @@ class VertexStorage:
         Args:
             cluster: a new cluster to be added.
         """
-        timestamps = [cluster.timestamp for cluster in self._clusters]
-        index = bisect.bisect_left(timestamps, cluster.timestamp)
-        self._clusters.insert(index, cluster)
+        if not self._clusters:
+            self._clusters.append(cluster)
+            return
+
+        last_cluster_timestamp = self._clusters[-1].timestamp
+        if cluster.timestamp > last_cluster_timestamp:
+            self._clusters.append(cluster)
+
+        elif cluster.timestamp == last_cluster_timestamp:
+            msg = "New cluster has the same timestamp as the last one."
+            logger.error(msg)
+            raise ValueError(msg)
+
+        else:
+            for i in range(len(self._clusters) - 1, -1, -1):
+                existing_cluster = self._clusters[i]
+                if cluster.timestamp > existing_cluster.timestamp:
+                    self._clusters.insert(i + 1, cluster)
+                    break
+            else:
+                self._clusters.insert(0, cluster)

@@ -43,3 +43,11 @@ class StateNotSetError(Exception):
 
 class UnfeasibleRequestError(Exception):
     """The request is unfeasible."""
+
+
+class SkipItemException(Exception):
+    """Raise when a specific item should be skipped."""
+
+
+class NotEnoughMeasurementsError(Exception):
+    """Raise when not enough measurements are available."""

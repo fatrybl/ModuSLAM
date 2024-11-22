@@ -1,6 +1,5 @@
 from collections.abc import Iterable
 
-from phd.exceptions import NotEnoughMeasurementsError
 from phd.measurements.measurement_storage import MeasurementStorage
 from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch, Element
@@ -8,6 +7,7 @@ from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
     StorageAnalyzer,
 )
+from phd.moduslam.utils.exceptions import NotEnoughMeasurementsError
 
 
 def distribute_element(handlers: Iterable[Handler], element: Element) -> Measurement | None:

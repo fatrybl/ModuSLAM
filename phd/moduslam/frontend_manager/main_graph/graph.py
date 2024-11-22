@@ -98,10 +98,12 @@ class Graph:
         self.edge_storage.add(edge)
         self.factor_graph.add(edge.factor)
 
+        for vertex in edge.vertices:
+            self._add_connection(vertex, edge)
+
         for cluster, vertices_with_timestamps in element.new_vertices.items():
             for vertex, timestamp in vertices_with_timestamps:
                 self._vertex_storage.add(cluster, vertex, timestamp)
-                self._add_connection(vertex, edge)
 
     def add_elements(self, elements: Iterable[GraphElement]):
         for element in elements:

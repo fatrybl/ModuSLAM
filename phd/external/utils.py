@@ -13,14 +13,13 @@ T = TypeVar("T", bound=Measurement)
 
 def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], int, int]:
     """Gets the sub-sequence of items within the given range for the sorted sequence.
-    Complexity: O(log n).
 
     Args:
         sequence: a sorted with timestamps sequence of items to get a sub-sequence of.
 
-        start: left timestamp limit (inclusive).
+        start: index of left timestamp limit (inclusive).
 
-        stop: right timestamp limit (exclusive).
+        stop: index of right timestamp limit (exclusive).
 
     Returns:
         a subsequence of the given range, start index, stop index.

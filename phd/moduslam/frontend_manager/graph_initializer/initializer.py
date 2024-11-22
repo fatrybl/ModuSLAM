@@ -20,9 +20,7 @@ from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
-    VertexStorage,
-)
+from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 logger = logging.getLogger(frontend_manager)
 
@@ -74,24 +72,6 @@ class GraphInitializer:
         measurement = create(config)
         return measurement
 
-    @staticmethod
-    def _get_cluster(storage: VertexStorage, timestamp: int) -> VertexCluster:
-        """Gets the existing cluster for the given timestamp or creates a new one.
-
-        Args:
-            storage: a vertex storage.
-
-            timestamp: a timestamp for which to get or create a cluster.
-
-        Returns:
-            a new or existing cluster.
-        """
-        existing_cluster = storage.get_cluster(timestamp)
-        if existing_cluster:
-            return existing_cluster
-        else:
-            return VertexCluster()
-
     def _create_element(self, graph: Graph, prior: EdgeConfig) -> GraphElement | list[GraphElement]:
         """Creates an edge with a prior factor.
 
@@ -103,8 +83,9 @@ class GraphInitializer:
         Returns:
             new graph element.
         """
-        cluster = self._get_cluster(graph.vertex_storage, prior.timestamp)
+        t = prior.timestamp
         measurement = self._create_measurement(prior)
         edge_factory = get_factory(type(measurement))
-        item = edge_factory.create(graph, cluster, measurement)
+        clusters = {VertexCluster(): TimeRange(t, t)}
+        item = edge_factory.create(graph, clusters, measurement)
         return item

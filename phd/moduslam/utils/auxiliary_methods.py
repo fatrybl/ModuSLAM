@@ -5,7 +5,8 @@ Any method used in multiple modules/packages may be defined here.
 
 import logging
 import re
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
+from functools import wraps
 from importlib import import_module
 from pathlib import Path
 from typing import Any, overload
@@ -28,6 +29,22 @@ from phd.moduslam.data_manager.batch_factory.batch import (
 from phd.moduslam.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(utils)
+
+
+def exception_handler(custom_exception: type[Exception], message: str) -> Callable:
+    """Decorator to handle exceptions and raise a custom exception."""
+
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                raise custom_exception(message) from e
+
+        return wrapper
+
+    return decorator
 
 
 def diagonal_matrix3x3(values: Vector3) -> Matrix3x3:

@@ -96,7 +96,7 @@ class DataReader(ABC):
         """
 
     @dispatch
-    def get_next_element(self, element=None):
+    def get_next_element(self, sensor=None):
         """
         @overload.
 
