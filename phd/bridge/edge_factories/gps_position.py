@@ -1,11 +1,21 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
+from phd.bridge.edge_factories.utils import (
+    create_vertex_i_with_status,
+    get_cluster,
+    get_new_items,
+)
 from phd.measurements.processed_measurements import Gps
+from phd.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
+from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
+    covariance3x3_noise_model,
+)
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.auxiliary_objects import identity4x4
 
 
 class Factory(EdgeFactory):
@@ -27,24 +37,14 @@ class Factory(EdgeFactory):
         Returns:
             a new element.
         """
-        # is_new_pose = False
-        # pose = cluster.get_latest_vertex(cls._vertex_type)
-        #
-        # if pose:
-        #     vertex = pose
-        # else:
-        #     is_new_pose = True
-        #     vertex = create_new_vertex(cls._vertex_type, graph)
-        #
-        # noise = covariance3x3_noise_model(measurement.covariance)
-        # factor = gtsam.GPSFactor(vertex.backend_index, measurement.position, noise)
-        # edge = GpsPosition(vertex, measurement, factor, noise)
-        #
-        # if is_new_pose:
-        #     new_vertices = {cluster: [(vertex, measurement.timestamp)]}
-        #     element = GraphElement(edge, new_vertices)
-        # else:
-        #     element = GraphElement(edge)
-        #
-        # return element
-        raise NotImplementedError
+        t = measurement.timestamp
+        cluster = get_cluster(clusters, t)
+        pose = create_vertex_i_with_status(Pose, graph.vertex_storage, cluster, t, identity4x4)
+
+        noise_model = covariance3x3_noise_model(measurement.covariance)
+
+        edge = GpsPosition(pose.instance, measurement, noise_model)
+
+        new_vertices = get_new_items([pose])
+
+        return GraphElement(edge, new_vertices)

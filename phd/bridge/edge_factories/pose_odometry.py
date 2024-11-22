@@ -1,5 +1,4 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory, VertexWithStatus
-from phd.bridge.edge_factories.noise_models import pose_block_diagonal_noise_model
 from phd.bridge.edge_factories.utils import (
     create_vertex,
     create_vertex_i_with_status,
@@ -8,6 +7,9 @@ from phd.bridge.edge_factories.utils import (
     get_new_items,
 )
 from phd.measurements.processed_measurements import PoseOdometry as OdometryMeasurement
+from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
+    pose_block_diagonal_noise_model,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -50,8 +52,7 @@ class Factory(EdgeFactory):
 
         edge = cls._create_edge(pose_i.instance, pose_j.instance, measurement)
 
-        element = GraphElement(edge, new_vertices)
-        return element
+        return GraphElement(edge, new_vertices)
 
     @classmethod
     def _get_pose_i_with_status(

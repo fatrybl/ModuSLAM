@@ -38,8 +38,7 @@ class Factory(EdgeFactory):
 
         new_vertices = get_new_items([pose, landmark])
 
-        element = GraphElement(edge, new_vertices)
-        return element
+        return GraphElement(edge, new_vertices)
 
     @classmethod
     def _get_pose_with_status(cls) -> VertexWithStatus[Pose]:

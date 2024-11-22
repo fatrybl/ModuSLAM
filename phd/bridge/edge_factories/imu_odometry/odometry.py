@@ -88,8 +88,7 @@ class Factory(EdgeFactory):
 
         new_vertices = get_new_items([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
 
-        element = GraphElement(edge, new_vertices)
-        return element
+        return GraphElement(edge, new_vertices)
 
     @classmethod
     def _get_pose_i_with_status(

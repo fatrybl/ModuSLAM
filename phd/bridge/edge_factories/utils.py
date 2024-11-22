@@ -84,7 +84,10 @@ def create_vertex(vertex_type: type[V], storage: VertexStorage, default_value: A
         a new vertex.
     """
     latest_vertex = storage.get_latest_vertex(vertex_type)
-    last_index = storage.get_last_index(vertex_type)
+    try:
+        last_index = storage.get_last_index(vertex_type)
+    except KeyError:
+        last_index = -1
 
     value = latest_vertex.value if latest_vertex else default_value
     index = last_index + 1
@@ -139,9 +142,9 @@ def create_vertex_i_with_status(
     vertex = cluster.get_latest_vertex(vertex_type)
     if vertex:
         return VertexWithStatus(vertex, cluster, timestamp)
-    else:
-        vertex = create_vertex(vertex_type, storage, default_value)
-        return VertexWithStatus(vertex, cluster, is_new=True, timestamp=timestamp)
+
+    vertex = create_vertex(vertex_type, storage, default_value)
+    return VertexWithStatus(vertex, cluster, is_new=True, timestamp=timestamp)
 
 
 def create_vertex_j_with_status(
