@@ -9,12 +9,9 @@ from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
-    Pose,
-    identity3x3,
-    identity4x4,
-)
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4
 
 
 @pytest.fixture

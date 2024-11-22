@@ -6,20 +6,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
     NonOptimizableVertex,
     OptimizableVertex,
 )
-
-identity4x4 = (
-    (1.0, 0.0, 0.0, 0.0),
-    (0.0, 1.0, 0.0, 0.0),
-    (0.0, 0.0, 1.0, 0.0),
-    (0.0, 0.0, 0.0, 1.0),
-)
-identity3x3 = (
-    (1.0, 0.0, 0.0),
-    (0.0, 1.0, 0.0),
-    (0.0, 0.0, 1.0),
-)
-
-zero_vector = (0.0, 0.0, 0.0)
+from phd.moduslam.utils.auxiliary_objects import identity4x4, zero_vector3
 
 
 class Pose(OptimizableVertex):
@@ -82,7 +69,7 @@ class PoseLandmark(Pose):
 class LinearVelocity(OptimizableVertex):
     """Linear velocity vertex in Graph."""
 
-    def __init__(self, index: int, value: Vector3 = zero_vector):
+    def __init__(self, index: int, value: Vector3 = zero_vector3):
         """
         Args:
             index: index of the vertex.
@@ -120,7 +107,7 @@ class LinearVelocity(OptimizableVertex):
 class NavState(OptimizableVertex):
     """Navigation state vertex in Graph: pose & velocity."""
 
-    def __init__(self, index: int, value: tuple[Matrix4x4, Vector3] = (identity4x4, zero_vector)):
+    def __init__(self, index: int, value: tuple[Matrix4x4, Vector3] = (identity4x4, zero_vector3)):
         """
         Args:
             index: index of the vertex.
@@ -167,7 +154,7 @@ class NavState(OptimizableVertex):
 
 
 class Point3D(OptimizableVertex):
-    def __init__(self, index: int, value: Vector3 = zero_vector):
+    def __init__(self, index: int, value: Vector3 = zero_vector3):
         """
         Args:
             index: index of the vertex.
@@ -204,7 +191,7 @@ class Point3D(OptimizableVertex):
 class ImuBias(OptimizableVertex):
     """Imu bias in Graph."""
 
-    def __init__(self, index: int, value: tuple[Vector3, Vector3] = (zero_vector, zero_vector)):
+    def __init__(self, index: int, value: tuple[Vector3, Vector3] = (zero_vector3, zero_vector3)):
         """
         Args:
             index: index of the vertex.
@@ -216,7 +203,7 @@ class ImuBias(OptimizableVertex):
 
     @property
     def value(self) -> tuple[Vector3, Vector3]:
-        """Accelerometer and gyroscope biases: (Bx, By, Bz), (Bx, By, Bz)."""
+        """Accelerometer and gyroscope biases: (Ax, Ay, Az), (Gx, Gy, Gz)."""
         return self._value
 
     @property
@@ -252,7 +239,7 @@ class ImuBias(OptimizableVertex):
 class Feature3D(NonOptimizableVertex):
     """Non-optimizable point in 3D."""
 
-    def __init__(self, index: int, value: Vector3 = zero_vector):
+    def __init__(self, index: int, value: Vector3 = zero_vector3):
         """
         Args:
             index: index of the vertex.
