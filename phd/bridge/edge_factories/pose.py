@@ -1,7 +1,7 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
-    get_cluster,
+    find_cluster,
     get_new_items,
 )
 from phd.measurements.processed_measurements import Pose as PoseMeasurement
@@ -39,9 +39,10 @@ class Factory(EdgeFactory):
         t = measurement.timestamp
         position_cov = measurement.position_noise_covariance
         orientation_cov = measurement.orientation_noise_covariance
+        storage = graph.vertex_storage
 
-        cluster = get_cluster(clusters, t)
-        pose = create_vertex_i_with_status(Pose, graph.vertex_storage, cluster, t, identity4x4)
+        cluster = find_cluster(storage, clusters, t)
+        pose = create_vertex_i_with_status(Pose, storage, cluster, t, identity4x4)
 
         noise = pose_block_diagonal_noise_model(position_cov, orientation_cov)
 

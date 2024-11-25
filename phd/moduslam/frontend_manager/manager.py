@@ -42,4 +42,4 @@ class FrontendManager:
         Args:
             batch: data batch with elements.
         """
-        self._graph = self._builder.create_graph(self._graph, batch)
+        self._builder.create_graph(self._graph, batch)

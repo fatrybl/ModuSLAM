@@ -1,7 +1,7 @@
 import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
-from typing import Generic, TypeAlias, TypeVar
+from typing import TypeAlias, TypeVar
 
 import gtsam
 
@@ -26,9 +26,9 @@ VerticesTable: TypeAlias = dict[VertexCluster, list[VertexWithTimestamp[V]]]
 
 
 @dataclass
-class GraphElement(Generic[V]):
+class GraphElement:
     edge: Edge
-    new_vertices: VerticesTable[V] = field(default_factory=dict)
+    new_vertices: VerticesTable = field(default_factory=dict)
 
 
 class Graph:

@@ -54,6 +54,29 @@ def get_cluster(clusters: dict[VertexCluster, TimeRange], timestamp: int) -> Ver
     raise ItemNotFoundError("No cluster has been found for the given timestamp.")
 
 
+def find_cluster(
+    storage: VertexStorage, clusters: dict[VertexCluster, TimeRange], timestamp: int
+) -> VertexCluster:
+    """Finds a cluster in the storage or in clusters by timestamp.
+
+    Args:
+        storage: a storage with clusters.
+
+        clusters: clusters to find in.
+
+        timestamp: a timestamp of the cluster.
+
+    Returns:
+        a cluster containing the timestamp.
+    """
+    existing = storage.get_cluster(timestamp)
+    if existing:
+        return existing
+
+    cluster = get_cluster(clusters, timestamp)
+    return cluster
+
+
 def get_closest_cluster(
     storage: VertexStorage, timestamp: int, threshold: float
 ) -> VertexCluster | None:

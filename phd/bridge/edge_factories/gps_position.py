@@ -1,7 +1,7 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
-    get_cluster,
+    find_cluster,
     get_new_items,
 )
 from phd.measurements.processed_measurements import Gps
@@ -38,8 +38,10 @@ class Factory(EdgeFactory):
             a new element.
         """
         t = measurement.timestamp
-        cluster = get_cluster(clusters, t)
-        pose = create_vertex_i_with_status(Pose, graph.vertex_storage, cluster, t, identity4x4)
+        storage = graph.vertex_storage
+        cluster = find_cluster(storage, clusters, t)
+
+        pose = create_vertex_i_with_status(Pose, storage, cluster, t, identity4x4)
 
         noise_model = covariance3x3_noise_model(measurement.covariance)
 

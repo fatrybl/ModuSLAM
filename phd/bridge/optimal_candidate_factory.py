@@ -43,7 +43,6 @@ class Factory:
             result = self._evaluator.compute_metrics(candidate)
             results.append((candidate, result))
 
-        exit()
         best_candidate = self._choose_best(results)
         return best_candidate
 

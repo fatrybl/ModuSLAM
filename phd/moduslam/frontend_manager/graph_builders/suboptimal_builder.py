@@ -10,7 +10,6 @@ from phd.moduslam.frontend_manager.measurement_storage_analyzers.analyzers impor
     MultiplePoseOdometry,
 )
 from phd.moduslam.frontend_manager.utils import fill_storage
-from phd.moduslam.utils.exceptions import EmptyStorageError
 
 logger = logging.getLogger(frontend_manager)
 
@@ -28,7 +27,7 @@ class Builder:
         self._candidate_factory = Factory()
         self._storage = MeasurementStorage()
 
-    def create_graph(self, graph: Graph, data_batch: DataBatch) -> Graph:
+    def create_graph(self, graph: Graph, data_batch: DataBatch) -> None:
         """Creates graph candidate using the measurements from the data batch.
 
         Args:
@@ -48,11 +47,8 @@ class Builder:
 
             self._storage.clear()
 
-            if candidate.leftovers:
-                self._storage.add(candidate.leftovers)
+            self._storage.add(candidate.leftovers) if candidate.leftovers else None
 
-            return candidate.graph
+            graph = candidate.graph
 
-        msg = "Input data batch is empty."
-        logger.error(msg)
-        raise EmptyStorageError(msg)
+        logger.info("Input data batch is empty.")

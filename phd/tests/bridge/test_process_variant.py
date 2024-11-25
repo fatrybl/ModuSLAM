@@ -1,8 +1,9 @@
+"""TODO: put this test to the proper place."""
+
 from typing import cast
 
 import pytest
 
-from moduslam.frontend_manager.noise_models import pose_diagonal_noise_model
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitOdometryFactory,
 )
@@ -10,6 +11,9 @@ from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.measurements.processed_measurements import Pose as PoseMeasurement
 from phd.measurements.processed_measurements import PoseOdometry
+from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
+    se3_isotropic_noise_model,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -26,7 +30,7 @@ def graph():
     graph = Graph()
     t1 = 0
     v1 = Pose(index=0)
-    noise = pose_diagonal_noise_model((1, 1, 1, 1, 1, 1))
+    noise = se3_isotropic_noise_model(1)
     m1 = PoseMeasurement(t1, identity4x4, identity3x3, identity3x3, [])
     edge1 = PriorPose(v1, m1, noise)
     new_vertices1 = {VertexCluster(): [(v1, t1)]}
