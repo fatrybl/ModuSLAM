@@ -1,7 +1,7 @@
 import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
-from typing import TypeAlias, TypeVar
+from typing import Generic, TypeAlias, TypeVar
 
 import gtsam
 
@@ -20,14 +20,15 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 logger = logging.getLogger(frontend_manager)
 
 V = TypeVar("V", bound=Vertex)
+E = TypeVar("E", bound=Edge)
 
 VertexWithTimestamp: TypeAlias = tuple[V, int]
 VerticesTable: TypeAlias = dict[VertexCluster, list[VertexWithTimestamp[V]]]
 
 
 @dataclass
-class GraphElement:
-    edge: Edge
+class GraphElement(Generic[E]):
+    edge: E
     new_vertices: VerticesTable = field(default_factory=dict)
 
 

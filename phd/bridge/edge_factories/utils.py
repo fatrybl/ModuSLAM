@@ -11,7 +11,6 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.exceptions import ItemNotFoundError
 
 V = TypeVar("V", bound=Vertex)
 
@@ -29,11 +28,13 @@ def get_new_items(items: Iterable[VertexWithStatus]) -> VerticesTable:
     for item in items:
         if item.is_new:
             vertex_with_timestamp = (item.instance, item.timestamp)
-            table.update({item.cluster: [vertex_with_timestamp]})
+            table.setdefault(item.cluster, []).append(vertex_with_timestamp)
     return table
 
 
-def get_cluster(clusters: dict[VertexCluster, TimeRange], timestamp: int) -> VertexCluster:
+def get_cluster_for_timestamp(
+    clusters: dict[VertexCluster, TimeRange], timestamp: int
+) -> VertexCluster | None:
     """Gets the cluster which time range includes the given timestamp.
 
     Args:
@@ -51,10 +52,10 @@ def get_cluster(clusters: dict[VertexCluster, TimeRange], timestamp: int) -> Ver
         if time_range.start <= timestamp <= time_range.stop:
             return cluster
 
-    raise ItemNotFoundError("No cluster has been found for the given timestamp.")
+    return None
 
 
-def find_cluster(
+def get_cluster(
     storage: VertexStorage, clusters: dict[VertexCluster, TimeRange], timestamp: int
 ) -> VertexCluster:
     """Finds a cluster in the storage or in clusters by timestamp.
@@ -73,13 +74,14 @@ def find_cluster(
     if existing:
         return existing
 
-    cluster = get_cluster(clusters, timestamp)
-    return cluster
+    cluster = get_cluster_for_timestamp(clusters, timestamp)
+    if cluster:
+        return cluster
+
+    return VertexCluster()
 
 
-def get_closest_cluster(
-    storage: VertexStorage, timestamp: int, threshold: float
-) -> VertexCluster | None:
+def get_closest_cluster(storage: VertexStorage, timestamp: int, threshold: int):
     """Gets the closest cluster for the given timestamp and threshold.
 
     Args:
@@ -87,9 +89,26 @@ def get_closest_cluster(
 
         timestamp: a timestamp.
 
-        threshold: a threshold in seconds for the distance between timestamps.
+        threshold: a threshold in nanoseconds for the distance between timestamps.
+
+    Returns:
+        The closest cluster if one exists within the threshold, otherwise None.
     """
-    raise NotImplementedError
+    for cluster in reversed(storage.clusters):
+
+        if abs(timestamp - cluster.time_range.stop) <= threshold:
+            return cluster
+
+        if abs(cluster.time_range.start - timestamp) <= threshold:
+            return cluster
+
+        if cluster.time_range.start <= timestamp <= cluster.time_range.stop:
+            return cluster
+
+        if abs(cluster.time_range.stop + threshold) < timestamp:
+            break
+
+    return None
 
 
 def create_vertex(vertex_type: type[V], storage: VertexStorage, default_value: Any) -> V:
@@ -106,13 +125,13 @@ def create_vertex(vertex_type: type[V], storage: VertexStorage, default_value: A
     Returns:
         a new vertex.
     """
-    latest_vertex = storage.get_latest_vertex(vertex_type)
+    last_vertex = storage.get_last_vertex(vertex_type)
     try:
         last_index = storage.get_last_index(vertex_type)
     except KeyError:
         last_index = -1
 
-    value = latest_vertex.value if latest_vertex else default_value
+    value = last_vertex.value if last_vertex else default_value
     index = last_index + 1
 
     return vertex_type(index, value)
@@ -162,12 +181,12 @@ def create_vertex_i_with_status(
     Returns:
         a new vertex with the status.
     """
-    vertex = cluster.get_latest_vertex(vertex_type)
+    vertex = cluster.get_last_vertex(vertex_type)
     if vertex:
         return VertexWithStatus(vertex, cluster, timestamp)
 
     vertex = create_vertex(vertex_type, storage, default_value)
-    return VertexWithStatus(vertex, cluster, is_new=True, timestamp=timestamp)
+    return VertexWithStatus(vertex, cluster, timestamp, is_new=True)
 
 
 def create_vertex_j_with_status(
@@ -191,9 +210,9 @@ def create_vertex_j_with_status(
         a new vertex with the status.
     """
     v_type = type(vertex_i.instance)
-    vertex = cluster.get_latest_vertex(v_type)
+    vertex = cluster.get_last_vertex(v_type)
     if vertex:
         return VertexWithStatus(vertex, cluster, timestamp)
     else:
         new_vertex = create_vertex_from_previous(storage, vertex_i)
-        return VertexWithStatus(new_vertex, cluster, is_new=True, timestamp=timestamp)
+        return VertexWithStatus(new_vertex, cluster, timestamp, is_new=True)

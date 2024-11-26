@@ -22,7 +22,7 @@ class Factory(EdgeFactory):
     @classmethod
     def create(
         cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: BiasMeasurement
-    ) -> GraphElement:
+    ) -> GraphElement[PriorBias]:
         """Creates a new edge with prior IMU bias factor.
 
         Args:
@@ -38,12 +38,12 @@ class Factory(EdgeFactory):
         t = measurement.timestamp
         storage = graph.vertex_storage
 
-        cluster = get_cluster(clusters, t)
+        cluster = get_cluster(storage, clusters, t)
         zero_bias = (zero_vector3, zero_vector3)
-        velocity = create_vertex_i_with_status(ImuBias, storage, cluster, t, zero_bias)
+        bias = create_vertex_i_with_status(ImuBias, storage, cluster, t, zero_bias)
 
-        edge = PriorBias(velocity.instance, measurement)
+        edge = PriorBias(bias.instance, measurement)
 
-        new_vertices = get_new_items([velocity])
+        new_vertices = get_new_items([bias])
 
         return GraphElement(edge, new_vertices)

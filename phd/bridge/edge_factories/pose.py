@@ -1,7 +1,7 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
-    find_cluster,
+    get_cluster,
     get_new_items,
 )
 from phd.measurements.processed_measurements import Pose as PoseMeasurement
@@ -23,7 +23,7 @@ class Factory(EdgeFactory):
     @classmethod
     def create(
         cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: PoseMeasurement
-    ) -> GraphElement:
+    ) -> GraphElement[PriorPose]:
         """Creates a new edge with prior SE(3) pose factor.
 
         Args:
@@ -41,7 +41,7 @@ class Factory(EdgeFactory):
         orientation_cov = measurement.orientation_noise_covariance
         storage = graph.vertex_storage
 
-        cluster = find_cluster(storage, clusters, t)
+        cluster = get_cluster(storage, clusters, t)
         pose = create_vertex_i_with_status(Pose, storage, cluster, t, identity4x4)
 
         noise = pose_block_diagonal_noise_model(position_cov, orientation_cov)

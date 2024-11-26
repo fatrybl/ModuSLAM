@@ -3,7 +3,10 @@ from dataclasses import dataclass
 
 @dataclass
 class TimeLimit:
-    """Data flow regime with limited time range."""
+    """Data flow regime with limited time range.
+
+    TODO: add check for negative values.
+    """
 
     start: int | float
     stop: int | float

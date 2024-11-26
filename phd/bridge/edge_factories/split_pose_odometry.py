@@ -1,7 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.pose_odometry import Factory as OdometryFactory
-from phd.bridge.edge_factories.utils import get_cluster
+from phd.bridge.edge_factories.utils import get_cluster_for_timestamp
 from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
+from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
@@ -22,7 +23,7 @@ class Factory(EdgeFactory):
         graph: Graph,
         clusters: dict[VertexCluster, TimeRange],
         measurement: SplitPoseOdometry,
-    ) -> GraphElement:
+    ) -> GraphElement[PoseOdometry]:
         """Create a new edge for split odometry if the measurement's timestamp matches
         the parent measurement stop timestamp.
 
@@ -66,34 +67,9 @@ class Factory(EdgeFactory):
 
             timestamp: a timestamp.
         """
-        cluster = get_cluster(clusters, timestamp)
-        pose = cls._find_pose_i(storage, cluster, timestamp)
-        if pose:
-            cluster.add(pose, timestamp)
-
-    @classmethod
-    def _find_pose_i(
-        cls, storage: VertexStorage, cluster: VertexCluster, timestamp: int
-    ) -> Pose | None:
-        """Finds the pose in the storage based on timestamp if it exists and not it the
-        given cluster.
-
-        Args:
-            storage: a storage with vertices.
-
-            cluster: a cluster to find the pose in.
-
-            timestamp: a timestamp.
-
-        Returns:
-            existing pose in the storage or None.
-        """
-        pose = cluster.get_latest_vertex(Pose)
-
-        if not pose:
-            existing_cluster = storage.get_cluster(timestamp)
-            if existing_cluster:
-                pose = existing_cluster.get_latest_vertex(Pose)
-                if pose:
-                    return pose
-        return None
+        current_cluster = get_cluster_for_timestamp(clusters, timestamp)
+        existing_cluster = storage.get_cluster(timestamp)
+        if existing_cluster:
+            existing_pose = existing_cluster.get_last_vertex(Pose)
+            if existing_pose and current_cluster:
+                current_cluster.add(existing_pose, timestamp)

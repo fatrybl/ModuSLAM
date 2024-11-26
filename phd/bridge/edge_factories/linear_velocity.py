@@ -31,7 +31,7 @@ class Factory(EdgeFactory):
         graph: Graph,
         clusters: dict[VertexCluster, TimeRange],
         measurement: VelocityMeasurement,
-    ) -> GraphElement:
+    ) -> GraphElement[PriorVelocity]:
         """Creates a new edge with prior linear velocity factor.
 
         Args:
@@ -47,7 +47,7 @@ class Factory(EdgeFactory):
         t = measurement.timestamp
         storage = graph.vertex_storage
 
-        cluster = get_cluster(clusters, t)
+        cluster = get_cluster(storage, clusters, t)
         velocity = create_vertex_i_with_status(LinearVelocity, storage, cluster, t, zero_vector3)
 
         noise_model = covariance3x3_noise_model(measurement.noise_covariance)

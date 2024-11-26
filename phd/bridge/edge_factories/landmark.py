@@ -17,7 +17,7 @@ class Factory(EdgeFactory):
     @classmethod
     def create(
         cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: DetectedLandmark
-    ) -> GraphElement:
+    ) -> GraphElement[PoseToLandmark]:
         """Creates a new edge between the pose and a new or existing landmark.
 
         Args:

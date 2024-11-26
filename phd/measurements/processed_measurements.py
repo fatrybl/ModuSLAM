@@ -75,24 +75,19 @@ class VisualFeatures(Measurement):
 
 
 class ContinuousMeasurement(Generic[M], Measurement):
-    """A measurement consisting of multiple measurements.
+    """A measurement consisting of multiple measurements."""
 
-    Consists of multiple measurements.
-    """
-
-    def __init__(self, measurements: list[M], time_range: TimeRange | None = None):
+    def __init__(self, measurements: list[M]):
         """
         Args:
-            measurements: sorted by timestamp measurements (assumed to be pre-integrated).
-
-            time_range (Optional): custom start/stop timestamps for the measurement.
+            measurements: sorted by timestamp measurements.
         """
 
         if len(measurements) == 0:
             raise ValueError("Not enough elements to create a measurement.")
 
-        start = min(m.timestamp for m in measurements) if time_range is None else time_range.start
-        stop = max(m.timestamp for m in measurements) if time_range is None else time_range.stop
+        start = measurements[0].timestamp
+        stop = measurements[-1].timestamp
         self._timestamp = stop
         self._time_range = TimeRange(start, stop)
         self._items = measurements
@@ -183,6 +178,26 @@ class Imu(Measurement):
     def gyroscope_bias_covariance(self) -> Matrix3x3:
         """Noise covariance matrix of the gyroscope bias (Random Walk process)."""
         return self._gyroscope_bias_covariance
+
+
+class ContinuousImuMeasurement(ContinuousMeasurement[Imu]):
+    """A continuous IMU measurement."""
+
+    def __init__(self, measurements: list[Imu], stop: int):
+        """
+        Args:
+            measurements: sorted by timestamp measurements (to be pre-integrated).
+
+            stop: limit timestamp margin for integration.
+        """
+
+        super().__init__(measurements)
+
+        start = measurements[0].timestamp
+        self._timestamp = stop
+        self._time_range = TimeRange(start, stop)
+        self._items = measurements
+        self._elements = [element for m in measurements for element in m.elements]
 
 
 class Gps(Measurement):

@@ -51,7 +51,12 @@ class VertexStorage:
         """Non-optimizable vertices."""
         return self._non_optimizable_vertices
 
-    def add(self, cluster: VertexCluster, vertex: V, timestamp: int) -> None:
+    def add(
+        self,
+        cluster: VertexCluster,
+        vertex: OptimizableVertex | NonOptimizableVertex,
+        timestamp: int,
+    ) -> None:
         """Adds vertex to the corresponding cluster.
 
         TODO: optimize complexity. Now it take O(N) time to check "in".
@@ -78,10 +83,8 @@ class VertexStorage:
 
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.add(vertex)
-        elif isinstance(vertex, NonOptimizableVertex):
-            self._non_optimizable_vertices.add(vertex)
         else:
-            raise TypeError(f"Invalid vertex type: {type(vertex)}")
+            self._non_optimizable_vertices.add(vertex)
 
     def remove(self, vertex: V) -> None:
         """Removes vertex.
@@ -119,22 +122,21 @@ class VertexStorage:
         """
         return self._vertices_table.get(vertex_type, OrderedSet())
 
-    def get_latest_vertex(self, vertex_type: type[V]) -> V | None:
-        """Gets the vertex of the given type with the latest timestamp.
+    def get_last_vertex(self, vertex_type: type[V]) -> V | None:
+        """Gets the last added vertex of the given type from the last added cluster.
 
         Args:
             vertex_type: type of the vertex.
 
         Returns:
             vertex if exists or None.
-
-        TODO: complexity: O(N^2).
         """
 
         for cluster in reversed(self._clusters):
-            vertex = cluster.get_latest_vertex(vertex_type)
+            vertex = cluster.get_last_vertex(vertex_type)
             if vertex:
                 return vertex
+
         return None
 
     def get_vertex_cluster(self, vertex: Vertex) -> VertexCluster:

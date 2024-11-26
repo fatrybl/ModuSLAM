@@ -11,3 +11,4 @@ identity3x3 = (
 )
 
 zero_vector3 = (0.0, 0.0, 0.0)
+one_vector3 = (1.0, 1.0, 1.0)

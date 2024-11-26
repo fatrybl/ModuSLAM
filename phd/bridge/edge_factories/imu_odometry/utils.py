@@ -162,7 +162,7 @@ def get_integrated_measurement(
     timestamp: int,
     time_scale: float,
     bias: ImuBias,
-) -> gtsam.PreintegratedImuMeasurements:
+) -> gtsam.PreintegratedCombinedMeasurements:
     """Integrates IMU measurements.
 
     Args:
@@ -177,7 +177,7 @@ def get_integrated_measurement(
         bias: IMU bias.
 
     Returns:
-        pre-integrated IMU measurement (gtsam instance).
+        pre-integrated IMU measurement (gtsam.PreintegratedCombinedMeasurements).
     """
     first_m = measurement.items[0]
     accel_sample_covariance, ang_vel_sample_covariance = compute_covariance(measurement.items)
@@ -195,7 +195,7 @@ def get_integrated_measurement(
         accel_bias_covariance,
         gyro_bias_covariance,
     )
-    pim = gtsam.PreintegratedImuMeasurements(integration_params)
-    pim.resetIntegrationAndSetBias(bias)
+    pim = gtsam.PreintegratedCombinedMeasurements(integration_params)
+    pim.resetIntegrationAndSetBias(bias.backend_instance)
     pim = integrate_measurements(pim, measurement.items, timestamp, time_scale)
     return pim

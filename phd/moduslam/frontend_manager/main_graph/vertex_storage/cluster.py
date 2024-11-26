@@ -3,15 +3,16 @@ from typing import TypeVar
 from phd.external.metrics.utils import median
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.ordered_set import OrderedSet
 
-V = TypeVar("V", bound=Vertex)  # Method-specific vertex type for get_latest_vertex
+V = TypeVar("V", bound=Vertex)
 
 
 class VertexCluster:
     """Stores vertices and their timestamps."""
 
     def __init__(self):
-        self._vertices: dict[type, list[Vertex]] = {}
+        self._vertices: dict[type, OrderedSet] = {}
         self._vertex_timestamp_table: dict[Vertex, int] = {}
         self._timestamps: list[int] = []
 
@@ -67,11 +68,12 @@ class VertexCluster:
         """Adds a vertex with an associated timestamp to the cluster.
 
         Args:
-            vertex: The vertex to add.
-            timestamp: The timestamp associated with the vertex.
+            vertex: a vertex to add.
+
+            timestamp: a timestamp associated with the vertex.
         """
         v_type = type(vertex)
-        self._vertices.setdefault(v_type, []).append(vertex)
+        self._vertices.setdefault(v_type, OrderedSet()).add(vertex)
         self._vertex_timestamp_table[vertex] = timestamp
         self._timestamps.append(timestamp)
 
@@ -97,18 +99,17 @@ class VertexCluster:
         """
         return [v for v in self._vertex_timestamp_table if isinstance(v, vertex_type)]
 
-    def get_latest_vertex(self, vertex_type: type[V]) -> V | None:
-        """Gets the vertex of the specified type with the latest timestamp.
+    def get_last_vertex(self, vertex_type: type[V]) -> V | None:
+        """Gets the last added vertex of the specified type.
 
         Args:
             vertex_type: a type of the vertex to retrieve.
 
         Returns:
-            The vertex with the latest timestamp or None if none exist.
+            the last added vertex or None if none exist.
         """
-        vertices_of_type = [
-            vertex for vertex in self._vertex_timestamp_table if isinstance(vertex, vertex_type)
-        ]
-        if not vertices_of_type:
+        try:
+            return self._vertices[vertex_type].last
+
+        except KeyError:
             return None
-        return max(vertices_of_type, key=lambda v: self._vertex_timestamp_table[v])

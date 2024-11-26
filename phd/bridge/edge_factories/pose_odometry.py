@@ -3,7 +3,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex,
     create_vertex_i_with_status,
     create_vertex_j_with_status,
-    get_cluster,
+    get_cluster_for_timestamp,
     get_new_items,
 )
 from phd.measurements.processed_measurements import PoseOdometry as OdometryMeasurement
@@ -32,7 +32,7 @@ class Factory(EdgeFactory):
         graph: Graph,
         clusters: dict[VertexCluster, TimeRange],
         measurement: OdometryMeasurement,
-    ) -> GraphElement:
+    ) -> GraphElement[PoseOdometry]:
         """Creates a new edge with SE(3) pose odometry factor.
 
         Args:
@@ -76,14 +76,14 @@ class Factory(EdgeFactory):
             item = create_vertex_i_with_status(Pose, storage, cluster, timestamp, identity4x4)
             return item
 
-        cluster = get_cluster(clusters, timestamp)
+        cluster = get_cluster_for_timestamp(clusters, timestamp)
         if cluster:
             item = create_vertex_i_with_status(Pose, storage, cluster, timestamp, identity4x4)
             return item
 
         cluster = VertexCluster()
         pose = create_vertex(Pose, storage, identity4x4)
-        return VertexWithStatus(pose, cluster=cluster, is_new=True, timestamp=timestamp)
+        return VertexWithStatus(pose, cluster, timestamp, is_new=True)
 
     @classmethod
     def _get_pose_j_with_status(
@@ -104,14 +104,19 @@ class Factory(EdgeFactory):
 
             vertex_i: a vertex with the status of the i-th pose.
         """
-        old_cluster = storage.get_cluster(timestamp)
-        if old_cluster:
-            cluster = old_cluster
-        else:
-            cluster = get_cluster(clusters, timestamp)
+        cluster = storage.get_cluster(timestamp)
+        if cluster:
+            item = create_vertex_j_with_status(storage, cluster, timestamp, vertex_i)
+            return item
 
-        vertex_j = create_vertex_j_with_status(storage, cluster, timestamp, vertex_i)
-        return vertex_j
+        cluster = get_cluster_for_timestamp(clusters, timestamp)
+        if cluster:
+            item = create_vertex_j_with_status(storage, cluster, timestamp, vertex_i)
+            return item
+
+        cluster = VertexCluster()
+        pose = create_vertex(Pose, storage, identity4x4)
+        return VertexWithStatus(pose, cluster, timestamp, is_new=True)
 
     @classmethod
     def _create_edge(

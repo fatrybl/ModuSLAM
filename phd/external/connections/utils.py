@@ -1,3 +1,5 @@
+from typing import cast
+
 from phd.bridge.objects.auxiliary_dataclasses import (
     ClustersWithConnections,
     ClustersWithLeftovers,
@@ -5,8 +7,12 @@ from phd.bridge.objects.auxiliary_dataclasses import (
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.connections.connections_factory import Factory
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
-from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.measurements.processed_measurements import (
+    ContinuousImuMeasurement,
+    ContinuousMeasurement,
+    Imu,
+    Measurement,
+)
 
 
 def fill_single_connection(
@@ -47,6 +53,8 @@ def fill_connections(
 
     Returns:
         clusters and unused measurements.
+
+    TODO: remove type cast.
     """
     used_measurements = set[Measurement]()
 
@@ -55,7 +63,8 @@ def fill_connections(
         start = connection.cluster1.timestamp
         stop = connection.cluster2.timestamp
         subsequence, _, _ = get_subsequence(measurements, start, stop)
-        m = ContinuousMeasurement(subsequence, TimeRange(start, stop))
+        imu_subsequence = cast(list[Imu], subsequence)
+        m = ContinuousImuMeasurement(imu_subsequence, stop)
         connection.cluster2.add(m)
 
         used_measurements.update(subsequence)

@@ -73,13 +73,7 @@ def test_2_vertices_2_clusters(graph):
             graph.add_element(new_element)
 
     vertices = graph.vertex_storage.vertices
-    (
-        x0,
-        x1,
-    ) = (
-        vertices[0],
-        vertices[1],
-    )
+    x0, x1 = vertices[0], vertices[1]
 
     assert len(graph.get_connected_edges(x0)) == 3
     assert len(graph.get_connected_edges(x1)) == 2

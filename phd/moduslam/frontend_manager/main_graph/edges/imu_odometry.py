@@ -67,6 +67,36 @@ class ImuOdometry(Edge):
         """Measurement which formed the edge."""
         return self._measurement
 
+    @property
+    def pose_i(self) -> Pose:
+        """Start pose."""
+        return self._pose_i
+
+    @property
+    def pose_j(self) -> Pose:
+        """Stop pose."""
+        return self._pose_j
+
+    @property
+    def velocity_i(self) -> LinearVelocity:
+        """Start velocity."""
+        return self._velocity_i
+
+    @property
+    def velocity_j(self) -> LinearVelocity:
+        """Stop velocity."""
+        return self._velocity_j
+
+    @property
+    def bias_i(self) -> ImuBias:
+        """Start IMU bias."""
+        return self._bias_i
+
+    @property
+    def bias_j(self) -> ImuBias:
+        """Stop IMU bias."""
+        return self._bias_j
+
     @staticmethod
     def _create_factor(
         vertices: tuple[Pose, LinearVelocity, ImuBias, Pose, LinearVelocity, ImuBias],
