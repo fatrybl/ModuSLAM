@@ -18,7 +18,7 @@ def test_create_graph_element_with_0_new_vertices_for_2_existing(graph2):
     graph2.add_element(new_element)
 
     assert len(graph2.vertex_storage.vertices) == 2
-    assert len(graph2.edge_storage.edges) == 3
+    assert len(graph2.edges) == 3
     assert len(graph2.vertex_storage.clusters) == 2
     assert len(graph2.connections) == 2
     for edges in graph2.connections.values():
@@ -34,7 +34,7 @@ def test_create_graph_element_with_0_new_vertices_for_1_existing(graph1):
     graph1.add_element(new_element)
 
     assert len(graph1.vertex_storage.vertices) == 2
-    assert len(graph1.edge_storage.edges) == 2
+    assert len(graph1.edges) == 2
     assert len(graph1.vertex_storage.clusters) == 2
     assert len(graph1.connections) == 2
 
@@ -51,7 +51,7 @@ def test_create_2_graph_elements_with_0_new_for_2_existing(graph2):
     graph2.add_element(new_element2)
 
     assert len(graph2.vertex_storage.vertices) == 2
-    assert len(graph2.edge_storage.edges) == 4
+    assert len(graph2.edges) == 4
     assert len(graph2.vertex_storage.clusters) == 2
     assert len(graph2.connections) == 2
 
@@ -69,7 +69,7 @@ def test_create_2_graph_elements_with_1_new_for_1_existing(graph1):
     graph1.add_element(new_element2)
 
     assert len(graph1.vertex_storage.vertices) == 2
-    assert len(graph1.edge_storage.edges) == 3
+    assert len(graph1.edges) == 3
     assert len(graph1.vertex_storage.clusters) == 2
     assert len(graph1.connections) == 2
 
@@ -83,7 +83,7 @@ def test_create_graph_element_with_1_new_vertex_for_2_existing(graph2):
     graph2.add_element(new_element)
 
     assert len(graph2.vertex_storage.vertices) == 3
-    assert len(graph2.edge_storage.edges) == 3
+    assert len(graph2.edges) == 3
     assert len(graph2.vertex_storage.clusters) == 3
     assert len(graph2.connections) == 3
 
@@ -97,7 +97,7 @@ def test_create_graph_element_with_1_new_vertex_for_1_existing(graph1):
     graph1.add_element(new_element)
 
     assert len(graph1.vertex_storage.vertices) == 2
-    assert len(graph1.edge_storage.edges) == 2
+    assert len(graph1.edges) == 2
     assert len(graph1.vertex_storage.clusters) == 2
     assert len(graph1.connections) == 2
 
@@ -113,7 +113,7 @@ def test_create_2_graph_elements_with_1_new_vertex_for_2_existing(graph2):
     graph2.add_element(new_element)
 
     assert len(graph2.vertex_storage.vertices) == 3
-    assert len(graph2.edge_storage.edges) == 4
+    assert len(graph2.edges) == 4
     assert len(graph2.vertex_storage.clusters) == 3
     assert len(graph2.connections) == 3
 
@@ -129,7 +129,7 @@ def test_create_2_graph_elements_with_1_new_vertex_for_1_existing(graph1):
     graph1.add_element(new_element)
 
     assert len(graph1.vertex_storage.vertices) == 2
-    assert len(graph1.edge_storage.edges) == 3
+    assert len(graph1.edges) == 3
     assert len(graph1.vertex_storage.clusters) == 2
     assert len(graph1.connections) == 2
 
@@ -148,7 +148,7 @@ def test_create_2_graph_elements_with_2_new_vertices_for_2_existing(graph2):
     graph2.add_element(new_element)
 
     assert len(graph2.vertex_storage.vertices) == 4
-    assert len(graph2.edge_storage.edges) == 4
+    assert len(graph2.edges) == 4
     assert len(graph2.vertex_storage.clusters) == 4
     assert len(graph2.connections) == 4
 
@@ -167,6 +167,6 @@ def test_create_2_graph_elements_with_2_new_vertices_for_1_existing(graph1):
     graph1.add_element(new_element)
 
     assert len(graph1.vertex_storage.vertices) == 3
-    assert len(graph1.edge_storage.edges) == 3
+    assert len(graph1.edges) == 3
     assert len(graph1.vertex_storage.clusters) == 3
     assert len(graph1.connections) == 3

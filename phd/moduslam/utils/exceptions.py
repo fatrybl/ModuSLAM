@@ -5,6 +5,10 @@ class ItemNotFoundError(Exception):
     """The given item has not been found."""
 
 
+class ItemExistsError(Exception):
+    """The given item does not exist."""
+
+
 class FileNotValid(Exception):
     """Invalid file: does not exist or is empty"""
 

@@ -7,7 +7,6 @@ import gtsam
 
 from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Measurement
-from phd.moduslam.frontend_manager.main_graph.edge_storage.storage import EdgeStorage
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
@@ -16,6 +15,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from phd.moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
@@ -41,7 +41,7 @@ class Graph:
     def __init__(self) -> None:
         self._factor_graph = gtsam.NonlinearFactorGraph()
         self._vertex_storage = VertexStorage()
-        self._edge_storage = EdgeStorage()
+        self._edges = OrderedSet[Edge]()
         self._connections: dict[Vertex, set[Edge]] = {}
 
     @property
@@ -55,9 +55,9 @@ class Graph:
         return self._vertex_storage
 
     @property
-    def edge_storage(self) -> EdgeStorage:
+    def edges(self) -> OrderedSet[Edge]:
         """Storage for the edges of the graph."""
-        return self._edge_storage
+        return self._edges
 
     @property
     def connections(self) -> dict[Vertex, set[Edge]]:
@@ -96,7 +96,7 @@ class Graph:
         """
         edge = element.edge
         edge.index = self._generate_index()
-        self.edge_storage.add(edge)
+        self.edges.add(edge)
         self.factor_graph.add(edge.factor)
 
         for vertex in edge.vertices:
@@ -118,7 +118,7 @@ class Graph:
         """
 
         self._factor_graph.remove(edge.index)
-        self._edge_storage.remove(edge)
+        self._edges.remove(edge)
 
         for vertex in edge.vertices:
             self._remove_connection(vertex, edge)

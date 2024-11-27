@@ -83,7 +83,7 @@ def test_2_vertices_2_clusters(graph):
     assert len(graph.factor_graph.keyVector()) == 2
 
     assert len(graph.vertex_storage.vertices) == 2
-    assert len(graph.edge_storage.edges) == 3
+    assert len(graph.edges) == 3
     assert len(graph.vertex_storage.clusters) == 2
     assert len(graph.connections) == 2
 
@@ -132,7 +132,7 @@ def test_4_vertices_4_clusters(graph):
     assert len(graph.get_connected_edges(x3)) == 1
 
     assert len(graph.vertex_storage.vertices) == 4
-    assert len(graph.edge_storage.edges) == 3
+    assert len(graph.edges) == 3
     assert len(graph.vertex_storage.clusters) == 4
     assert len(graph.connections) == 4
 
@@ -183,7 +183,7 @@ def test_3_vertices_3_clusters_common_mid(graph):
     assert len(graph.get_connected_edges(x2)) == 1
 
     assert len(graph.vertex_storage.vertices) == 3
-    assert len(graph.edge_storage.edges) == 3
+    assert len(graph.edges) == 3
     assert len(graph.vertex_storage.clusters) == 3
     assert len(graph.connections) == 3
 
@@ -234,7 +234,7 @@ def test_3_vertices_3_clusters_common_left(graph):
     assert len(graph.get_connected_edges(x2)) == 1
 
     assert len(graph.vertex_storage.vertices) == 3
-    assert len(graph.edge_storage.edges) == 3
+    assert len(graph.edges) == 3
     assert len(graph.vertex_storage.clusters) == 3
     assert len(graph.connections) == 3
 
@@ -285,7 +285,7 @@ def test_3_vertices_3_clusters_common_right(graph):
     assert len(graph.get_connected_edges(x2)) == 1
 
     assert len(graph.vertex_storage.vertices) == 3
-    assert len(graph.edge_storage.edges) == 3
+    assert len(graph.edges) == 3
     assert len(graph.vertex_storage.clusters) == 3
     assert len(graph.connections) == 3
 
