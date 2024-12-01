@@ -1,8 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
+    create_new_vertices,
     create_vertex_i_with_status,
     get_cluster,
-    get_new_items,
 )
 from phd.measurements.processed_measurements import ImuBias as BiasMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_bias import ImuBias as PriorBias
@@ -44,6 +44,6 @@ class Factory(EdgeFactory):
 
         edge = PriorBias(bias.instance, measurement)
 
-        new_vertices = get_new_items([bias])
+        new_vertices = create_new_vertices([bias])
 
         return GraphElement(edge, new_vertices)

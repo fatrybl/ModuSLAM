@@ -1,9 +1,4 @@
-"""Ordered-set data structure implementation.
-
-Complexity:
-    O(1): add, discard, remove, remove_first, remove_last, contains, first, last
-    O(N): __getitem__(index: int).
-"""
+"""Ordered-set data structure implementation."""
 
 from collections import OrderedDict
 from collections.abc import Iterable, Iterator, MutableSet, Sequence
@@ -13,14 +8,15 @@ T = TypeVar("T")
 
 
 class OrderedSet(MutableSet, Sequence, Generic[T]):
-    """OrderedSet is a combination of set and OrderedDict."""
+    """OrderedSet is a combination of set and OrderedDict.
 
-    def __init__(self, iterable: Iterable[T] | None = None):
+    Complexity:
+    O(1): add, discard, remove, remove_first, remove_last, contains, first, last
+    O(N): __getitem__(index), insert(item, index)
+    """
+
+    def __init__(self):
         self._items: OrderedDict[T, None] = OrderedDict()
-
-        if iterable:
-            for item in iterable:
-                self.add(item)
 
     def __contains__(self, item: object) -> bool:
         return item in self._items
@@ -44,8 +40,7 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
 
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        """
-        Attention: This method requires O(n) time complexity.
+        """Complexity: O(N)
 
         Args:
             index: index of an item or a slice.
@@ -132,6 +127,23 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
                 self._items[item] = None
             else:
                 raise TypeError(msg)
+
+    def insert(self, item: T, index: int) -> None:
+        """Inserts new item to the given position.
+        Complexity: O(N).
+
+        Args:
+            item: an item to be inserted.
+
+            index: index at which to insert the item.
+
+        TODO: add tests.
+        """
+        items_list = list(self._items)
+        items_list.insert(index, item)
+        self._items.clear()
+        for item in items_list:
+            self.add(item)
 
     def discard(self, item: T | Iterable[T]) -> None:
         """Removes an item from the OrderedSet if it is present.

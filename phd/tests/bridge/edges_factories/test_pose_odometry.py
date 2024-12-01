@@ -18,12 +18,14 @@ def test_create_graph_element_with_2_new_vertices_for_empty_graph(empty_graph: G
 
     edge_vertex1 = new_element.edge.vertex1
     edge_vertex2 = new_element.edge.vertex2
-
-    cluster1 = list(new_element.new_vertices.keys())[0]
-    cluster2 = list(new_element.new_vertices.keys())[1]
-
-    pose1, t1 = new_element.new_vertices[cluster1][0]
-    pose2, t2 = new_element.new_vertices[cluster2][0]
+    new_vertex1 = new_element.new_vertices[0]
+    new_vertex2 = new_element.new_vertices[1]
+    pose1 = new_vertex1.instance
+    pose2 = new_vertex2.instance
+    t1 = new_vertex1.timestamp
+    t2 = new_vertex2.timestamp
+    cluster1 = new_vertex1.cluster
+    cluster2 = new_vertex2.cluster
 
     assert len(new_element.new_vertices) == 2
     assert edge_vertex1.index == 0
@@ -44,18 +46,18 @@ def test_create_graph_element_with_1_new_vertex_for_1_existing(graph1):
 
     new_element = Factory.create(graph1, clusters, measurement)
 
+    new_vertex = new_element.new_vertices[0]
     edge_vertex1 = new_element.edge.vertex1
     edge_vertex2 = new_element.edge.vertex2
+    new_cluster = new_vertex.cluster
+    pose1 = new_vertex.instance
+    t1 = new_vertex.timestamp
 
     assert len(new_element.new_vertices) == 1
 
     existing_vertex = graph1.vertex_storage.vertices[0]
-    new_cluster = list(new_element.new_vertices.keys())[0]
 
     assert new_cluster is cluster
-
-    pose1, t1 = new_element.new_vertices[cluster][0]
-
     assert edge_vertex1 is existing_vertex
     assert edge_vertex2 is not existing_vertex
     assert edge_vertex2 is pose1

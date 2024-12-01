@@ -1,23 +1,23 @@
-"""Deque-set data structure implementation.
-
-Complexity:
-    O(1): add(), contains(item: T), remove_first(), remove_last(), __getitem__(index: int).
-    O(N): remove(item: T)
-"""
+"""Deque-set data structure implementation."""
 
 from collections import deque
-from collections.abc import Iterable
-from typing import Any, Callable, Generic, TypeVar
+from collections.abc import Iterable, Sequence
+from typing import Any, Callable, Generic, TypeVar, overload
 
 T = TypeVar("T")
 
 
-class DequeSet(Generic[T]):
-    """DequeSet is a combination of set and deque."""
+class DequeSet(Sequence, Generic[T]):
+    """DequeSet is a combination of set and deque.
+
+    Complexity:
+    O(1): add, contains(item), remove_first, remove_last, __getitem__(index).
+    O(N): remove(item)
+    """
 
     def __init__(self):
-        self._deque: deque[T] = deque()
-        self._set: set[T] = set()
+        self._deque = deque[T]()
+        self._set = set[T]()
 
     def __contains__(self, item) -> bool:
         return item in self._set
@@ -28,8 +28,27 @@ class DequeSet(Generic[T]):
     def __iter__(self):
         return iter(self._deque)
 
-    def __getitem__(self, item) -> T:
-        return self._deque[item]
+    @overload
+    def __getitem__(self, index: int) -> T: ...
+
+    @overload
+    def __getitem__(self, index: slice) -> Sequence[T]: ...
+
+    def __getitem__(self, index: int | slice) -> T | Sequence[T]:
+        """Complexity: O(K) for slice, O(1) for index access.
+
+        Args:
+            index: index of an item or a slice.
+
+        Returns:
+            item or a sequence of items.
+
+        Raises:
+            TypeError: invalid argument type.
+
+        TODO: add tests
+        """
+        return self._deque[index]  # type: ignore
 
     def __eq__(self, other: Any) -> bool:
         """Compares if this DequeSet is equal to another DequeSet. Two DequeSets are
@@ -56,7 +75,7 @@ class DequeSet(Generic[T]):
         """Empty status of deque-set."""
         return not (bool(self._set) and bool(self._deque))
 
-    def add(self, item: T | Iterable[T]) -> None:
+    def append(self, item: T | Iterable[T]) -> None:
         """
         Adds new item:
             1) Add to set to avoid duplicates.\n
@@ -75,14 +94,23 @@ class DequeSet(Generic[T]):
                 self._set.add(item)
                 self._deque.append(item)
 
+    def insert(self, item: T, index: int):
+        """Inserts new item to the given position.
+
+        Args:
+            item: an item to be inserted.
+
+            index: index at which to insert the item.
+        """
+        if item not in self._set:
+            self._set.add(item)
+            self._deque.insert(index, item)
+
     def remove(self, item: T) -> None:
         """Removes item from set and deque.
 
         Args:
             item: item to be removed.
-
-        Raises:
-            KeyError: if item is not in deque-set.
         """
 
         if isinstance(item, Iterable):
@@ -95,20 +123,12 @@ class DequeSet(Generic[T]):
             self._deque.remove(item)
 
     def remove_first(self) -> None:
-        """Removes first item from deque-set.
-
-        Raises:
-            KeyError: if deque is empty
-        """
+        """Removes first item from deque-set."""
         item = self._deque.popleft()
         self._set.remove(item)
 
     def remove_last(self) -> None:
-        """Removes last item from deque-set.
-
-        Raises:
-            KeyError: if deque-set is empty
-        """
+        """Removes last item from deque-set."""
         item = self._deque.pop()
         self._set.remove(item)
 
@@ -117,6 +137,7 @@ class DequeSet(Generic[T]):
 
         Args:
             key: key function to sort deque.
+
             reverse: reverse sorting order.
         """
         self._deque = deque(sorted(self._deque, key=key, reverse=reverse))

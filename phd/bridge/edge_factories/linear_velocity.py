@@ -1,8 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
+    create_new_vertices,
     create_vertex_i_with_status,
     get_cluster,
-    get_new_items,
 )
 from phd.measurements.processed_measurements import (
     LinearVelocity as VelocityMeasurement,
@@ -53,6 +53,6 @@ class Factory(EdgeFactory):
         noise_model = covariance3x3_noise_model(measurement.noise_covariance)
         edge = PriorVelocity(velocity.instance, measurement, noise_model)
 
-        new_vertices = get_new_items([velocity])
+        new_vertices = create_new_vertices([velocity])
 
         return GraphElement(edge, new_vertices)

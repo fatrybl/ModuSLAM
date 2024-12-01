@@ -16,6 +16,7 @@ from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
 )
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
+from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -33,8 +34,8 @@ def graph():
     noise = se3_isotropic_noise_model(1)
     m1 = PoseMeasurement(t1, identity4x4, identity3x3, identity3x3, [])
     edge1 = PriorPose(v1, m1, noise)
-    new_vertices1 = {VertexCluster(): [(v1, t1)]}
-    element1 = GraphElement(edge1, new_vertices1)
+    cluster = VertexCluster()
+    element1 = GraphElement(edge1, [NewVertex(v1, cluster, t1)])
     graph.add_element(element1)
     return graph
 
@@ -281,8 +282,8 @@ def test_3_vertices_3_clusters_common_right(graph):
     x0, x1, x2 = vertices[0], vertices[1], vertices[2]
 
     assert len(graph.get_connected_edges(x0)) == 2
-    assert len(graph.get_connected_edges(x1)) == 2
-    assert len(graph.get_connected_edges(x2)) == 1
+    assert len(graph.get_connected_edges(x1)) == 1
+    assert len(graph.get_connected_edges(x2)) == 2
 
     assert len(graph.vertex_storage.vertices) == 3
     assert len(graph.edges) == 3

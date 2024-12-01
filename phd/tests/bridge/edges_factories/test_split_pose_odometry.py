@@ -25,7 +25,8 @@ def test_create_empty_graph_1_split(empty_graph: Graph):
 
 def test_create_empty_graph_2_splits(empty_graph: Graph):
     parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
-    split1, split2 = SplitPoseOdometry(0, parent), SplitPoseOdometry(1, parent)
+    split1 = SplitPoseOdometry(0, parent)
+    split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     clusters = {cluster1: TimeRange(0, 0), cluster2: TimeRange(1, 1)}
     measurements = [split1, split2]
@@ -37,16 +38,16 @@ def test_create_empty_graph_2_splits(empty_graph: Graph):
 
     edge_vertex1 = new_element.edge.vertex1
     edge_vertex2 = new_element.edge.vertex2
-    new_vertex1, t1 = new_element.new_vertices[cluster1][0]
-    new_vertex2, t2 = new_element.new_vertices[cluster2][0]
+    new_vertex1 = new_element.new_vertices[0]
+    new_vertex2 = new_element.new_vertices[1]
 
     assert len(new_element.new_vertices) == 2
     assert edge_vertex1.index == 0
     assert edge_vertex2.index == 1
-    assert edge_vertex1 is new_vertex1
-    assert edge_vertex2 is new_vertex2
-    assert t1 == 0
-    assert t2 == 1
+    assert edge_vertex1 is new_vertex1.instance
+    assert edge_vertex2 is new_vertex2.instance
+    assert new_vertex1.timestamp == 0
+    assert new_vertex2.timestamp == 1
 
 
 def test_create_graph_1_split(graph1: Graph):
@@ -66,7 +67,8 @@ def test_create_graph_1_split(graph1: Graph):
 
 def test_create_graph_2_splits(graph1: Graph):
     parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
-    split1, split2 = SplitPoseOdometry(0, parent), SplitPoseOdometry(1, parent)
+    split1 = SplitPoseOdometry(0, parent)
+    split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     clusters = {cluster1: TimeRange(0, 0), cluster2: TimeRange(1, 1)}
     measurements = [split1, split2]
@@ -83,7 +85,7 @@ def test_create_graph_2_splits(graph1: Graph):
 
     edge_vertex1 = new_element.edge.vertex1
     edge_vertex2 = new_element.edge.vertex2
-    new_vertex, t = new_element.new_vertices[cluster2][0]
+    t = new_element.new_vertices[0].timestamp
 
     assert len(new_element.new_vertices) == 1
     assert edge_vertex1.index == 0
@@ -94,7 +96,8 @@ def test_create_graph_2_splits(graph1: Graph):
 
 def test_create_graph_with_2_vertices_2_splits(graph2: Graph):
     parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
-    split1, split2 = SplitPoseOdometry(0, parent), SplitPoseOdometry(1, parent)
+    split1 = SplitPoseOdometry(0, parent)
+    split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     clusters = {cluster1: TimeRange(0, 0), cluster2: TimeRange(1, 1)}
     measurements = [split1, split2]

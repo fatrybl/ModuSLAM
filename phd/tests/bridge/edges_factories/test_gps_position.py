@@ -36,14 +36,14 @@ def test_create_empty_graph(empty_graph: Graph, gps: Gps):
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
 
-    new_element = Factory.create(empty_graph, clusters, gps)
-    edge_vertex = new_element.edge.vertex
-    new_pose, timestamp = new_element.new_vertices[cluster][0]
+    element = Factory.create(empty_graph, clusters, gps)
+    edge_vertex = element.edge.vertex
+    new_vertex = element.new_vertices[0]
 
-    assert len(new_element.new_vertices) == 1
-    assert new_pose.index == 0
-    assert timestamp == t
-    assert edge_vertex is new_pose
+    assert len(element.new_vertices) == 1
+    assert new_vertex.instance.index == 0
+    assert new_vertex.timestamp == t
+    assert edge_vertex is new_vertex.instance
 
 
 def test_create_graph_with_1_existing_vertex(graph1: Graph, gps: Gps):
@@ -64,9 +64,9 @@ def test_create_graph_with_1_existing_1_new_vertex(graph1: Graph, gps_at_1: Gps)
     existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
 
     new_element = Factory.create(graph1, clusters, gps_at_1)
-    vertex, timestamp = new_element.new_vertices[cluster][0]
+    new_vertex = new_element.new_vertices[0]
 
     assert len(new_element.new_vertices) == 1
-    assert vertex is not existing_vertex
-    assert vertex.index == 1
-    assert timestamp == t
+    assert new_vertex.instance is not existing_vertex
+    assert new_vertex.instance.index == 1
+    assert new_vertex.timestamp == t

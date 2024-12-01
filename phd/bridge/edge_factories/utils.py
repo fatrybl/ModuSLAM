@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from typing import Any, TypeVar
 
 from phd.bridge.edge_factories.factory_protocol import VertexWithStatus
-from phd.moduslam.frontend_manager.main_graph.graph import VerticesTable
+from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -15,21 +15,23 @@ from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 V = TypeVar("V", bound=Vertex)
 
 
-def get_new_items(items: Iterable[VertexWithStatus]) -> VerticesTable:
-    """Gets new vertices with the corresponding timestamps and the clusters.
+def create_new_vertices(vertices: Iterable[VertexWithStatus]) -> list[NewVertex]:
+    """Creates new vertices based on the status of the given ones.
 
     Args:
-        items: vertices with statuses.
+        vertices: vertices with statuses.
 
     Returns:
         a table of clusters with the corresponding lists of new vertices with timestamps.
     """
-    table: VerticesTable = {}
-    for item in items:
+    new_vertices: list[NewVertex] = []
+
+    for item in vertices:
         if item.is_new:
-            vertex_with_timestamp = (item.instance, item.timestamp)
-            table.setdefault(item.cluster, []).append(vertex_with_timestamp)
-    return table
+            vertex = NewVertex(item.instance, item.cluster, item.timestamp)
+            new_vertices.append(vertex)
+
+    return new_vertices
 
 
 def get_cluster_for_timestamp(

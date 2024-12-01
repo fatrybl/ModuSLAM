@@ -1,42 +1,29 @@
 import logging
 from collections.abc import Iterable
-from dataclasses import dataclass, field
-from typing import Generic, TypeAlias, TypeVar
+from dataclasses import dataclass
 
 import gtsam
 
 from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed_measurements import Measurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
-    VertexCluster,
-)
+from phd.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from phd.moduslam.utils.exceptions import (
+    ItemExistsError,
+    ItemNotExistsError,
+    ValidationError,
+)
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
-V = TypeVar("V", bound=Vertex)
-E = TypeVar("E", bound=Edge)
-
-VertexWithTimestamp: TypeAlias = tuple[V, int]
-VerticesTable: TypeAlias = dict[VertexCluster, list[VertexWithTimestamp[V]]]
-
-
-@dataclass
-class GraphElement(Generic[E]):
-    edge: E
-    new_vertices: VerticesTable = field(default_factory=dict)
-
 
 class Graph:
-    """High-level Graph.
-
-    Includes gtsam.NonlinearFactorGraph.
-    """
+    """High-level Graph with gtsam.NonlinearFactorGraph."""
 
     def __init__(self) -> None:
         self._factor_graph = gtsam.NonlinearFactorGraph()
@@ -93,20 +80,35 @@ class Graph:
 
         Args:
             element: a new element to add.
+
+        Raises:
+            ValidationError: if the validation of an element fails.
         """
         edge = element.edge
+
+        try:
+            self._validate_graph_element(element)
+        except (ItemExistsError, ItemNotExistsError) as e:
+            msg = f"Validation failed: {e}"
+            logger.error(msg)
+            raise ValidationError(msg)
+
         edge.index = self._generate_index()
         self.edges.add(edge)
         self.factor_graph.add(edge.factor)
 
+        for new_vertex in element.new_vertices:
+            self._vertex_storage.add(new_vertex)
+
         for vertex in edge.vertices:
             self._add_connection(vertex, edge)
 
-        for cluster, vertices_with_timestamps in element.new_vertices.items():
-            for vertex, timestamp in vertices_with_timestamps:
-                self._vertex_storage.add(cluster, vertex, timestamp)
-
     def add_elements(self, elements: Iterable[GraphElement]):
+        """Adds multiple elements.
+
+        Args:
+            elements: multiple elements to add.
+        """
         for element in elements:
             self.add_element(element)
 
@@ -117,14 +119,23 @@ class Graph:
             edge: an edge to be removed.
         """
 
+        try:
+            self._validate_removing_edge(edge)
+
+        except ItemNotExistsError as e:
+            msg = f"Validation failed: {e}"
+            logger.error(msg)
+            raise ValidationError(msg)
+
         self._factor_graph.remove(edge.index)
         self._edges.remove(edge)
 
         for vertex in edge.vertices:
-            self._remove_connection(vertex, edge)
+            self._connections[vertex].remove(edge)
 
             if not self._connections[vertex]:
                 self._vertex_storage.remove(vertex)
+                del self._connections[vertex]
 
     def replace_edge(self, edge: Edge, element: GraphElement) -> None:
         """Replaces an existing edge with a new element.
@@ -175,8 +186,64 @@ class Graph:
         """
         return self.factor_graph.size()
 
+    def _validate_graph_element(self, element: GraphElement) -> None:
+        """Validates a new graph element before adding.
+
+        Args:
+            element: a graph element to validate.
+
+        Raises:
+            ItemExistsError:
+                1. if an edge already exists.
+                2. if a vertex from new vertices already exists in the graph.
+                3. if a vertex of the edge exists in the graph and in new vertices.
+                4. if a GTSAM factor exists in the GTSAM factor graph.
+
+            ItemNotExistsError:
+                1. if a vertex of the edge does not exist in the graph and in new vertices.
+        """
+        edge = element.edge
+        new_vertices_set = {v.instance for v in element.new_vertices}
+
+        if edge in self._edges:
+            raise ItemExistsError(f"Edge {edge} already exists.")
+
+        if edge.index and self._factor_graph.exists(edge.index):
+            raise ItemExistsError(f"Factor {edge.factor} already exists in the factor graph.")
+
+        for vertex in new_vertices_set:
+            if vertex in self._vertex_storage:
+                raise ItemExistsError(f"Vertex {vertex} already exists in the graph.")
+
+        for vertex in edge.vertices:
+            if vertex in self._vertex_storage and vertex in new_vertices_set:
+                raise ItemExistsError(
+                    f"Vertex {vertex} is already present in the graph and cannot be added."
+                )
+
+            if vertex not in self._vertex_storage and vertex not in new_vertices_set:
+                raise ItemNotExistsError(
+                    f"Vertex {vertex} is neither present in the graph nor in the new vertices."
+                )
+
+    def _validate_removing_edge(self, edge: Edge) -> None:
+        """Validates removing an edge from the graph.
+
+        Args:
+            edge: edge to be removed.
+
+        Raises:
+            ItemNotExistsError: if the edge does not exist.
+        """
+        if edge not in self._edges:
+            raise ItemNotExistsError(f"Edge {edge} does not exist.")
+
+        if not self._factor_graph.exists(edge.index):
+            raise ItemNotExistsError(f"No edge with index{edge.index} in GTSAM factor graph.")
+
     def _add_connection(self, vertex: Vertex, edge: Edge) -> None:
         """Adds edge to the connection with the vertex.
+
         Args:
             vertex: vertex to which the edge is added.
 
@@ -186,16 +253,6 @@ class Graph:
             self._connections[vertex] = {edge}
         else:
             self._connections[vertex].add(edge)
-
-    def _remove_connection(self, vertex: Vertex, edge: Edge) -> None:
-        """Removes the connection between a vertex and an edge.
-
-        Args:
-            vertex: a vertex to remove the connection for.
-
-            edge: an edge to remove the connection for.
-        """
-        self._connections[vertex].remove(edge)
 
 
 @dataclass

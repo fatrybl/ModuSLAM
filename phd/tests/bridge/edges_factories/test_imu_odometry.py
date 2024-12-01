@@ -22,6 +22,7 @@ from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
 )
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
+from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -68,10 +69,9 @@ def graph_2_poses():
     m2 = PoseMeasurement(t2, identity4x4, identity3x3, identity3x3, [])
     edge1 = PriorPose(v1, m1, noise)
     edge2 = PriorPose(v2, m2, noise)
-    new_vertices1 = {VertexCluster(): [(v1, t1)]}
-    new_vertices2 = {VertexCluster(): [(v2, t2)]}
-    element1 = GraphElement(edge1, new_vertices1)
-    element2 = GraphElement(edge2, new_vertices2)
+    cluster1, cluster2 = VertexCluster(), VertexCluster()
+    element1 = GraphElement(edge1, [NewVertex(v1, cluster1, t1)])
+    element2 = GraphElement(edge2, [NewVertex(v2, cluster2, t2)])
     graph.add_element(element1)
     graph.add_element(element2)
     return graph
@@ -88,10 +88,9 @@ def graph_2_velocities():
     m2 = VelocityMeasurement(t2, zero_vector3, identity3x3, [])
     edge1 = PriorVelocity(v1, m1, noise)
     edge2 = PriorVelocity(v2, m2, noise)
-    new_vertices1 = {VertexCluster(): [(v1, t1)]}
-    new_vertices2 = {VertexCluster(): [(v2, t2)]}
-    element1 = GraphElement(edge1, new_vertices1)
-    element2 = GraphElement(edge2, new_vertices2)
+    cluster1, cluster2 = VertexCluster(), VertexCluster()
+    element1 = GraphElement(edge1, [NewVertex(v1, cluster1, t1)])
+    element2 = GraphElement(edge2, [NewVertex(v2, cluster2, t2)])
     graph.add_element(element1)
     graph.add_element(element2)
     return graph
@@ -105,13 +104,11 @@ def test_create_empty_graph(empty_graph: Graph, measurement: ContinuousImuMeasur
     new_element = Factory.create(empty_graph, clusters, measurement)
 
     edge = new_element.edge
-    cluster1, items1 = list(new_element.new_vertices.items())[0]
-    cluster2, items2 = list(new_element.new_vertices.items())[1]
+    new_pose_j = new_element.new_vertices[3]
+    cluster2 = new_pose_j.cluster
 
     assert cluster2 is cluster
-    assert len(new_element.new_vertices) == 2
-    assert len(items1) == len(items2) == 3
-    assert len(edge.vertices) == 6
+    assert len(new_element.new_vertices) == len(edge.vertices) == 6
     assert edge.pose_i.index == 0
     assert edge.pose_i is not edge.pose_j
     assert edge.pose_j.index == 1
@@ -121,12 +118,6 @@ def test_create_empty_graph(empty_graph: Graph, measurement: ContinuousImuMeasur
     assert edge.bias_i.index == 0
     assert edge.bias_i is not edge.bias_j
     assert edge.bias_j.index == 1
-
-    for item in items1:
-        assert item[1] == 0
-
-    for item in items2:
-        assert item[1] == t
 
 
 def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: ContinuousImuMeasurement):
@@ -137,15 +128,14 @@ def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: Continuou
     new_element = Factory.create(graph1, clusters, measurement)
 
     edge = new_element.edge
-    cluster1, items1 = list(new_element.new_vertices.items())[0]
-    cluster2, items2 = list(new_element.new_vertices.items())[1]
+    new_pose_j = new_element.new_vertices[2]
+    cluster2 = new_pose_j.cluster
     existing_pose = graph1.vertex_storage.vertices[0]
 
     assert cluster2 is cluster
-    assert len(new_element.new_vertices) == 2
-    assert len(items1) == 2
-    assert len(items2) == 3
+    assert len(new_element.new_vertices) == 5
     assert len(edge.vertices) == 6
+    assert new_pose_j.instance is not existing_pose
     assert edge.pose_i is existing_pose
     assert edge.pose_i.index == 0
     assert edge.pose_i is not edge.pose_j
@@ -156,12 +146,6 @@ def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: Continuou
     assert edge.bias_i.index == 0
     assert edge.bias_i is not edge.bias_j
     assert edge.bias_j.index == 1
-
-    for item in items1:
-        assert item[1] == 0
-
-    for item in items2:
-        assert item[1] == t
 
 
 def test_create_graph_with_2_existing_poses(
@@ -174,16 +158,14 @@ def test_create_graph_with_2_existing_poses(
     new_element = Factory.create(graph_2_poses, clusters, measurement)
 
     edge = new_element.edge
-    cluster1, items1 = list(new_element.new_vertices.items())[0]
-    cluster2, items2 = list(new_element.new_vertices.items())[1]
     existing_pose_1 = graph_2_poses.vertex_storage.vertices[0]
     existing_pose_2 = graph_2_poses.vertex_storage.vertices[1]
+    cluster1 = new_element.new_vertices[0].cluster
+    cluster2 = new_element.new_vertices[2].cluster
 
     assert cluster1 is not cluster
     assert cluster2 is not cluster
-    assert len(new_element.new_vertices) == 2
-    assert len(items1) == 2
-    assert len(items2) == 2
+    assert len(new_element.new_vertices) == 4
     assert len(edge.vertices) == 6
     assert edge.pose_i is existing_pose_1
     assert edge.pose_i.index == 0
@@ -197,12 +179,6 @@ def test_create_graph_with_2_existing_poses(
     assert edge.bias_i is not edge.bias_j
     assert edge.bias_j.index == 1
 
-    for item in items1:
-        assert item[1] == 0
-
-    for item in items2:
-        assert item[1] == t
-
 
 def test_create_graph_with_2_existing_velocities(
     graph_2_velocities: Graph, measurement: ContinuousImuMeasurement
@@ -214,16 +190,14 @@ def test_create_graph_with_2_existing_velocities(
     new_element = Factory.create(graph_2_velocities, clusters, measurement)
 
     edge = new_element.edge
-    cluster1, items1 = list(new_element.new_vertices.items())[0]
-    cluster2, items2 = list(new_element.new_vertices.items())[1]
     existing_velocity_1 = graph_2_velocities.vertex_storage.vertices[0]
     existing_velocity_2 = graph_2_velocities.vertex_storage.vertices[1]
+    cluster1 = new_element.new_vertices[0].cluster
+    cluster2 = new_element.new_vertices[2].cluster
 
     assert cluster1 is not cluster
     assert cluster2 is not cluster
-    assert len(new_element.new_vertices) == 2
-    assert len(items1) == 2
-    assert len(items2) == 2
+    assert len(new_element.new_vertices) == 4
     assert len(edge.vertices) == 6
     assert edge.pose_i.index == 0
     assert edge.pose_i is not edge.pose_j
@@ -236,9 +210,3 @@ def test_create_graph_with_2_existing_velocities(
     assert edge.bias_i.index == 0
     assert edge.bias_i is not edge.bias_j
     assert edge.bias_j.index == 1
-
-    for item in items1:
-        assert item[1] == 0
-
-    for item in items2:
-        assert item[1] == t

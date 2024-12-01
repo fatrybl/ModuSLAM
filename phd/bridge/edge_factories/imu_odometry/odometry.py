@@ -5,11 +5,11 @@ import gtsam
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.imu_odometry.utils import get_integrated_measurement
 from phd.bridge.edge_factories.utils import (
+    create_new_vertices,
     create_vertex_i_with_status,
     create_vertex_j_with_status,
     get_closest_cluster,
     get_cluster_for_timestamp,
-    get_new_items,
 )
 from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
@@ -91,7 +91,7 @@ class Factory(EdgeFactory):
             pim,
         )
 
-        new_vertices = get_new_items([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
+        new_vertices = create_new_vertices([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
 
         return GraphElement(edge, new_vertices)
 

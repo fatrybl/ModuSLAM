@@ -1,5 +1,5 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory, VertexWithStatus
-from phd.bridge.edge_factories.utils import get_new_items
+from phd.bridge.edge_factories.utils import create_new_vertices
 from phd.measurements.processed_measurements import PoseLandmark as DetectedLandmark
 from phd.moduslam.frontend_manager.main_graph.edges.pose2LandmarkPose import (
     PoseToLandmark,
@@ -36,7 +36,7 @@ class Factory(EdgeFactory):
 
         edge = cls._create_edge(pose.instance, landmark.instance, measurement)
 
-        new_vertices = get_new_items([pose, landmark])
+        new_vertices = create_new_vertices([pose, landmark])
 
         return GraphElement(edge, new_vertices)
 

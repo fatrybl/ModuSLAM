@@ -1,8 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
+    create_new_vertices,
     create_vertex_i_with_status,
     get_cluster,
-    get_new_items,
 )
 from phd.measurements.processed_measurements import Gps
 from phd.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
@@ -48,6 +48,6 @@ class Factory(EdgeFactory):
 
         edge = GpsPosition(pose.instance, measurement, noise_model)
 
-        new_vertices = get_new_items([pose])
+        new_vertices = create_new_vertices([pose])
 
         return GraphElement(edge, new_vertices)

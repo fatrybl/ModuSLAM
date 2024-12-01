@@ -1,8 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.utils import (
+    create_new_vertices,
     create_vertex_i_with_status,
     get_cluster,
-    get_new_items,
 )
 from phd.measurements.processed_measurements import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
@@ -48,6 +48,6 @@ class Factory(EdgeFactory):
 
         edge = PriorPose(pose.instance, measurement, noise)
 
-        new_vertices = get_new_items([pose])
+        new_vertices = create_new_vertices([pose])
 
         return GraphElement(edge, new_vertices)

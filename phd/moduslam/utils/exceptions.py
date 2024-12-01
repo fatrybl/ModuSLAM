@@ -5,8 +5,16 @@ class ItemNotFoundError(Exception):
     """The given item has not been found."""
 
 
+class ValidationError(Exception):
+    """Validations has failed."""
+
+
 class ItemExistsError(Exception):
     """The given item does not exist."""
+
+
+class ItemNotExistsError(Exception):
+    """The given item does exist."""
 
 
 class FileNotValid(Exception):
