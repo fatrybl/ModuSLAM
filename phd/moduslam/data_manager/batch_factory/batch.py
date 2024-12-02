@@ -3,10 +3,10 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any
 
-from moduslam.utils.deque_set import DequeSet
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.locations import Location
 from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.utils.deque_set import DequeSet
 
 logger = logging.getLogger(data_manager)
 
@@ -70,7 +70,7 @@ class DataBatch:
         Args:
             new_element: element to be added.
         """
-        self._deque_set.add(new_element)
+        self._deque_set.append(new_element)
 
     def remove_first(self) -> None:
         """Deletes the first(left) element of the batch."""
