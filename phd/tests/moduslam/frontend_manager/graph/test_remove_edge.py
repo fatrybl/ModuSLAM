@@ -35,7 +35,7 @@ from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4, zero_
 from phd.moduslam.utils.exceptions import ValidationError
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def imu() -> ImuMeasurement:
     measurement = RawMeasurement(ImuSensor(ImuConfig(name="imu")), values=None)
     element = Element(0, measurement, Location())

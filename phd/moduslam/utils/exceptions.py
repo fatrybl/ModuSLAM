@@ -21,7 +21,7 @@ class FileNotValid(Exception):
     """Invalid file: does not exist or is empty"""
 
 
-class NotSubset(Exception):
+class NotSubsetError(Exception):
     """The set is not a subset of another set."""
 
 

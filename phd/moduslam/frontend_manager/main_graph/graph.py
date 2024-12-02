@@ -15,6 +15,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.utils.exceptions import (
     ItemExistsError,
     ItemNotExistsError,
+    NotSubsetError,
     ValidationError,
 )
 from phd.moduslam.utils.ordered_set import OrderedSet
@@ -137,16 +138,32 @@ class Graph:
                 self._vertex_storage.remove(vertex)
                 del self._connections[vertex]
 
-    def replace_edge(self, edge: Edge, element: GraphElement) -> None:
-        """Replaces an existing edge with a new element.
+    def replace_edge(self, edge: Edge, new_edge: Edge) -> None:
+        """Replaces an existing edge with a new one of the same type.
 
         Args:
             edge: an edge to be replaced.
 
-            element: a new element to replace the old edge.
+            new_edge: a new edge.
+
+        Raises:
+            ValidationError: if the validation fails.
         """
-        self.remove_edge(edge)
-        self.add_element(element)
+        try:
+            self._validate_replace_edge(edge, new_edge)
+        except (ItemNotExistsError, ItemExistsError, TypeError, NotSubsetError) as e:
+            msg = f"Validation failed: {e}"
+            logger.error(msg)
+            raise ValidationError(msg)
+
+        new_edge.index = edge.index
+        self._edges.remove(edge)
+        self._edges.add(new_edge)
+        self._factor_graph.replace(edge.index, new_edge.factor)
+
+        for vertex in edge.vertices:
+            self._connections[vertex].remove(edge)
+            self._connections[vertex].add(new_edge)
 
     def remove_vertex(self, vertex: Vertex) -> None:
         """Removes vertex from the graph.
@@ -240,6 +257,33 @@ class Graph:
 
         if not self._factor_graph.exists(edge.index):
             raise ItemNotExistsError(f"No edge with index{edge.index} in GTSAM factor graph.")
+
+    def _validate_replace_edge(self, edge: Edge, new_edge: Edge):
+        """Validates replacing an edge with a new element.
+
+        Args:
+            edge: an edge to be replaced.
+
+            new_edge: a new edge.
+
+        Raises:
+            ItemNotExistsError: if the edge to be replaced does not exist.
+
+            ItemExistsError: if a new edge already exists.
+
+            TypeError: if the types of the existing edge and the new edge do not match.
+        """
+        if edge not in self._edges:
+            raise ItemNotExistsError(f"Edge {edge} does not exist.")
+
+        if new_edge in self._edges:
+            raise ItemExistsError(f"Edge {new_edge} already exists.")
+
+        if type(edge) is not type(new_edge):
+            raise TypeError("Type mismatch between the existing edge and the new edge.")
+
+        if edge.vertices != new_edge.vertices:
+            raise NotSubsetError("Vertices of the new edge do not match with the existing edge.")
 
     def _add_connection(self, vertex: Vertex, edge: Edge) -> None:
         """Adds edge to the connection with the vertex.
