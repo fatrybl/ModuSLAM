@@ -66,6 +66,19 @@ class VertexCluster:
 
         raise ValueError("Time range does not exist for empty cluster.")
 
+    def timestamp_exists(self, timestamp: int) -> bool:
+        """Checks if a timestamp exists in the cluster.
+
+        TODO: improve O(N) complexity.
+
+        Args:
+            timestamp: timestamp to check.
+
+        Returns:
+            check status.
+        """
+        return timestamp in self._timestamps
+
     def add(self, vertex: Vertex, timestamp: int) -> None:
         """Adds a vertex with an associated timestamp to the cluster.
 
@@ -128,6 +141,22 @@ class VertexCluster:
         """
         try:
             return self._vertices[vertex_type].last
-
         except KeyError:
             return None
+
+    def get_timestamp(self, vertex: Vertex) -> int:
+        """Gets the timestamp of the vertex.
+
+        Args:
+            vertex: a vertex whose timestamp to retrieve.
+
+        Returns:
+            a timestamp of the vertex.
+
+        Raises:
+            ItemNotExistsError: if the vertex does not exist in the cluster.
+        """
+        try:
+            return self._vertex_timestamp_table[vertex]
+        except KeyError:
+            raise ItemNotExistsError(f"No timestamp exists for vertex{vertex}")

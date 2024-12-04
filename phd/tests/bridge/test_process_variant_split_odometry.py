@@ -282,8 +282,8 @@ def test_3_vertices_3_clusters_common_right(graph):
     x0, x1, x2 = vertices[0], vertices[1], vertices[2]
 
     assert len(graph.get_connected_edges(x0)) == 2
-    assert len(graph.get_connected_edges(x1)) == 1
-    assert len(graph.get_connected_edges(x2)) == 2
+    assert len(graph.get_connected_edges(x1)) == 2
+    assert len(graph.get_connected_edges(x2)) == 1
 
     assert len(graph.vertex_storage.vertices) == 3
     assert len(graph.edges) == 3

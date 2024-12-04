@@ -8,40 +8,33 @@ class Cluster:
     """Stores measurements.
 
     TODO: make timestamp and time range properties calculation more efficient.
-          now it takes O(n).
+          now it takes O(N*log(N)) cause of sorting.
     """
 
     def __init__(self):
-        self._core_measurements: list[Measurement] = []
+        self._measurements: list[Measurement] = []
         self._continuous_measurements: list[ContinuousMeasurement] = []
-        self._fake_measurements: list[FakeMeasurement] = []
         self._timestamp: int | None = None
         self._time_range: TimeRange | None = None
 
     def __repr__(self):
-        return str(
-            self._core_measurements + self._continuous_measurements + self._fake_measurements
-        )
+        return str(self._measurements + self._continuous_measurements)
 
     @property
     def is_empty(self) -> bool:
         """Checks if a cluster has measurements."""
-        return (
-            len(self._core_measurements)
-            + len(self._continuous_measurements)
-            + len(self._fake_measurements)
-            == 0
-        )
+        return len(self._measurements) + len(self._continuous_measurements) == 0
 
     @property
     def measurements(self) -> list[Measurement]:
-        """All measurement in the cluster (except fake)."""
-        return [*self._core_measurements, *self._continuous_measurements]
+        """All measurements in the cluster: core + fake + continuous."""
+        return [*self._measurements, *self._continuous_measurements]
 
     @property
     def core_measurements(self) -> list[Measurement]:
-        """Discrete measurements in the cluster."""
-        return self._core_measurements
+        """Non-fake discrete measurements in the cluster."""
+        cores = [m for m in self._measurements if not isinstance(m, FakeMeasurement)]
+        return cores
 
     @property
     def continuous_measurements(self) -> list[ContinuousMeasurement]:
@@ -51,7 +44,8 @@ class Cluster:
     @property
     def fake_measurements(self) -> list[FakeMeasurement]:
         """Fake measurements in the cluster."""
-        return self._fake_measurements
+        fakes = [m for m in self._measurements if isinstance(m, FakeMeasurement)]
+        return fakes
 
     @property
     def timestamp(self) -> int:
@@ -87,11 +81,7 @@ class Cluster:
             self._continuous_measurements.append(measurement)
             return
 
-        if isinstance(measurement, FakeMeasurement):
-            self._fake_measurements.append(measurement)
-            return
-
-        self._core_measurements.append(measurement)
+        self._measurements.append(measurement)
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
 
@@ -105,25 +95,21 @@ class Cluster:
             self._continuous_measurements.remove(measurement)
             return
 
-        if isinstance(measurement, FakeMeasurement):
-            self._fake_measurements.remove(measurement)
-            return
-
-        self._core_measurements.remove(measurement)
+        self._measurements.remove(measurement)
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
 
     def _compute_timestamp(self) -> int | None:
-        timestamps = [m.timestamp for m in self._core_measurements]
+        timestamps = sorted([m.timestamp for m in self._measurements])
         if timestamps:
             return median(timestamps)
         else:
             return None
 
     def _compute_time_range(self) -> TimeRange | None:
-        if self._core_measurements:
-            start = min((m.timestamp for m in self._core_measurements))
-            stop = max((m.timestamp for m in self._core_measurements))
+        if self._measurements:
+            start = min((m.timestamp for m in self._measurements))
+            stop = max((m.timestamp for m in self._measurements))
             return TimeRange(start, stop)
         else:
             return None

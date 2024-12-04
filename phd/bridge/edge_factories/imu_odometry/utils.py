@@ -5,7 +5,11 @@ import gtsam
 import numpy as np
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
+from phd.measurements.processed_measurements import (
+    ContinuousImuMeasurement,
+    ContinuousMeasurement,
+    Imu,
+)
 from phd.moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
@@ -158,7 +162,7 @@ def integrate_measurements(
 
 def get_integrated_measurement(
     integration_params: gtsam.PreintegrationCombinedParams,
-    measurement: ContinuousMeasurement[Imu],
+    measurement: ContinuousImuMeasurement,
     timestamp: int,
     time_scale: float,
     bias: ImuBias,

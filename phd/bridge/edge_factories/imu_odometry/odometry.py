@@ -11,7 +11,7 @@ from phd.bridge.edge_factories.utils import (
     get_closest_cluster,
     get_cluster_for_timestamp,
 )
-from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
+from phd.measurements.processed_measurements import ContinuousImuMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -35,7 +35,6 @@ VerticesWithFlags: TypeAlias = tuple[
 
 class Factory(EdgeFactory):
 
-    timestamp_threshold_sec: int = 10000000  # 0.01 seconds in nanoseconds
     timescale_factor: float = 1e-9
     _gravity: float = 9.81
     _params = gtsam.PreintegrationCombinedParams.MakeSharedU(_gravity)
@@ -45,7 +44,7 @@ class Factory(EdgeFactory):
         cls,
         graph: Graph,
         clusters: dict[VertexCluster, TimeRange],
-        measurement: ContinuousMeasurement[Imu],
+        measurement: ContinuousImuMeasurement,
     ) -> GraphElement[ImuOdometry]:
         """Creates a new ImuOdometry edge with pre-integrated IMU factor.
 
@@ -119,7 +118,7 @@ class Factory(EdgeFactory):
         if cluster:
             return cluster
 
-        cluster = get_closest_cluster(storage, timestamp, cls.timestamp_threshold_sec)
+        cluster = get_closest_cluster(storage, timestamp)
         if cluster:
             return cluster
 

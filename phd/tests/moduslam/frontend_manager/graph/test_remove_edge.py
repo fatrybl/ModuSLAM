@@ -253,9 +253,9 @@ def test_remove_edge_with_vertex_in_cluster_updates_cluster():
 def test_remove_3_edges(imu: ImuMeasurement):
     graph = Graph()
     t1, t2, t3 = 0, 1, 2
-    p1, p2, p3 = PoseVertex(1), PoseVertex(2), PoseVertex(3)
-    v1, v2 = VelocityVertex(1), VelocityVertex(2)
-    b1, b2 = ImuBiasVertex(1), ImuBiasVertex(2)
+    p1, p2, p3 = PoseVertex(0), PoseVertex(1), PoseVertex(2)
+    v1, v2 = VelocityVertex(0), VelocityVertex(1)
+    b1, b2 = ImuBiasVertex(0), ImuBiasVertex(1)
     cluster1, cluster2, cluster3 = VertexCluster(), VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
@@ -268,7 +268,7 @@ def test_remove_3_edges(imu: ImuMeasurement):
     measurement3 = PoseOdometryMeasurement(
         t2, TimeRange(t1, t3), identity4x4, identity3x3, identity3x3, []
     )
-    measurement6 = ContinuousImuMeasurement([imu], t3)
+    measurement6 = ContinuousImuMeasurement([imu], start=t1, stop=t3)
 
     gravity = (9.81, 0, 0)
     params = gtsam.PreintegrationCombinedParams(gravity)
@@ -286,7 +286,7 @@ def test_remove_3_edges(imu: ImuMeasurement):
         edge4,
         [
             NewVertex(v1, cluster1, t1),
-            NewVertex(v2, cluster1, t1),
+            NewVertex(v2, cluster3, t3),
             NewVertex(b1, cluster1, t1),
             NewVertex(b2, cluster3, t3),
         ],

@@ -6,7 +6,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from phd.moduslam.utils.exceptions import ValidationError
+from phd.moduslam.utils.exceptions import ItemExistsError, ValidationError
 
 E = TypeVar("E", bound=Edge)
 V = TypeVar("V", bound=Vertex)
@@ -17,6 +17,10 @@ class NewVertex(Generic[V]):
     instance: V
     cluster: VertexCluster
     timestamp: int
+
+    def __post_init__(self):
+        if self.instance in self.cluster:
+            raise ItemExistsError(f"Vertex{self.instance} already exists in cluster")
 
 
 @dataclass

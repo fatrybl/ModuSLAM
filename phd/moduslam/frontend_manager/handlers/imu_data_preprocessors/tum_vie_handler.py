@@ -29,7 +29,7 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
     ImuData,
 )
 from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.utils.auxiliary_methods import create_empty_element
+from phd.moduslam.utils.auxiliary_methods import create_empty_element, to_float
 
 logger = logging.getLogger(frontend_manager)
 
@@ -44,7 +44,7 @@ class TumVieImuDataPreprocessor(Handler):
     @property
     def sensor_name(self) -> str:
         """Unique handler name."""
-        return self.sensor_name
+        return self._sensor_name
 
     @property
     def sensor_type(self) -> type[ImuSensor]:
@@ -93,7 +93,7 @@ class TumVieImuDataPreprocessor(Handler):
         return create_empty_element(element)
 
     @staticmethod
-    def _parse_line(values: tuple[float, ...]) -> ImuData:
+    def _parse_line(values: tuple[str, ...]) -> ImuData:
         """Extracts IMU raw data from an element created with the TUM VIE dataset.
 
         Args:
@@ -102,14 +102,18 @@ class TumVieImuDataPreprocessor(Handler):
         Returns:
             IMU data.
         """
-        angular_velocity = values[0], values[1], values[2]
-        acceleration = values[3], values[4], values[5]
-        return ImuData(angular_velocity, acceleration)
+        wx = to_float(values[0])
+        wy = to_float(values[1])
+        wz = to_float(values[2])
+        ax = to_float(values[3])
+        ay = to_float(values[4])
+        az = to_float(values[5])
+        return ImuData((wx, wy, wz), (ax, ay, az))
 
     @staticmethod
     def _create_tf(sensor: ImuSensor) -> Matrix4x4:
         tf = sensor.tf_base_sensor
-        pose: Matrix4x4 = (
+        pose = (
             (tf[0][0], tf[0][1], tf[0][2], tf[0][3]),
             (tf[1][0], tf[1][1], tf[1][2], tf[1][3]),
             (tf[2][0], tf[2][1], tf[2][2], tf[2][3]),

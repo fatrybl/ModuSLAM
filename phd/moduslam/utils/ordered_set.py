@@ -28,7 +28,7 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
         return len(self._items.keys())
 
     def __repr__(self) -> str:
-        return f"OrderedSet({set(self._items.keys())})"
+        return f"OrderedSet with {len(self._items)} items)"
 
     def __bool__(self) -> bool:
         return len(self) > 0

@@ -183,17 +183,17 @@ class Imu(Measurement):
 class ContinuousImuMeasurement(ContinuousMeasurement[Imu]):
     """A continuous IMU measurement."""
 
-    def __init__(self, measurements: list[Imu], stop: int):
+    def __init__(self, measurements: list[Imu], start: int, stop: int):
         """
         Args:
             measurements: sorted by timestamp measurements (to be pre-integrated).
 
-            stop: limit timestamp margin for integration.
+            start: left timestamp limit.
+
+            stop: right timestamp limit.
         """
 
         super().__init__(measurements)
-
-        start = measurements[0].timestamp
         self._timestamp = stop
         self._time_range = TimeRange(start, stop)
         self._items = measurements

@@ -36,7 +36,7 @@ class PseudoMeasurement(Measurement):
         self._value = value
 
     def __repr__(self):
-        return f"core:{self._timestamp}"
+        return f"pseudo at:{self._timestamp}"
 
     @property
     def timestamp(self) -> int:

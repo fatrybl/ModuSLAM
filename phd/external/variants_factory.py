@@ -1,3 +1,5 @@
+from typing import cast
+
 from phd.bridge.objects.auxiliary_classes import MeasurementGroup
 from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.bridge.objects.measurements_cluster import Cluster
@@ -27,7 +29,8 @@ class Factory:
             combinations of clusters w or w/o leftover measurements.
         """
 
-        other_measurements, imu_measurements = cls._separate_measurements(storage.data)
+        other_measurements, measurements = cls._separate_measurements(storage.data)
+        imu_measurements = cast(list[Imu], measurements)
 
         groups = cls._prepare_measurements(other_measurements)
         combinations = CombinationFactory.combine(groups)
@@ -84,14 +87,14 @@ class Factory:
 
     @staticmethod
     def _combine_with_continuous(
-        combinations: list[list[Cluster]], measurements: list[Measurement]
+        combinations: list[list[Cluster]], measurements: list[Imu]
     ) -> list[ClustersWithLeftovers]:
         """Processes continuous measurements.
 
         Args:
             combinations: combinations of clusters.
 
-            measurements: continuous measurements.
+            measurements: discrete IMU measurements.
 
         Returns:
             clusters with unused measurements.

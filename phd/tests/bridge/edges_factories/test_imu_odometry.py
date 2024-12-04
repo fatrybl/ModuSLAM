@@ -55,7 +55,7 @@ def measurement() -> ContinuousImuMeasurement:
     imu1 = ImuMeasurement(el1, data1, cov, tf)
     imu2 = ImuMeasurement(el2, data2, cov, tf)
     imu3 = ImuMeasurement(el3, data3, cov, tf)
-    return ContinuousImuMeasurement([imu1, imu2, imu3], stop=3)
+    return ContinuousImuMeasurement([imu1, imu2, imu3], start=0, stop=3)
 
 
 @pytest.fixture

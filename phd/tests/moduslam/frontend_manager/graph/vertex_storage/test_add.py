@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
@@ -7,8 +9,13 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
+from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Feature3D, Pose
 from phd.moduslam.utils.exceptions import ValidationError
+
+
+class FakeVertex(Vertex):
+    def update(self, value: Any): ...
 
 
 def test_add():
@@ -87,6 +94,18 @@ def test_add_same_vertex_twice():
         storage.add(new)
 
 
+def test_add_vertex_of_incorrect_type():
+    storage = VertexStorage()
+    cluster = VertexCluster()
+    v = FakeVertex(0)
+    t = 0
+
+    new = NewVertex(v, cluster, t)
+
+    with pytest.raises(TypeError):
+        storage.add(new)
+
+
 def test_add_updates_indices():
     storage = VertexStorage()
     cluster = VertexCluster()
@@ -96,8 +115,11 @@ def test_add_updates_indices():
 
     storage.add(new)
 
+    last_pose = storage.get_last_vertex(Pose)
+
     assert v in storage
-    assert storage._indices[type(v)] == v.index
+    assert last_pose is not None
+    assert last_pose.index == 0
 
 
 def test_add_multiple_clusters_with_equal_timestamp():

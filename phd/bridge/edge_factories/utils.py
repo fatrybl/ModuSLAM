@@ -83,32 +83,22 @@ def get_cluster(
     return VertexCluster()
 
 
-def get_closest_cluster(storage: VertexStorage, timestamp: int, threshold: int):
-    """Gets the closest cluster for the given timestamp and threshold.
+def get_closest_cluster(storage: VertexStorage, timestamp: int):
+    """Gets the closest cluster for the given timestamp.
 
     Args:
         storage: a storage with clusters.
 
         timestamp: a timestamp.
 
-        threshold: a threshold in nanoseconds for the distance between timestamps.
-
     Returns:
         The closest cluster if one exists within the threshold, otherwise None.
+
+    TODO: avoid iterations over all clusters when no need.
     """
     for cluster in reversed(storage.clusters):
-
-        if abs(timestamp - cluster.time_range.stop) <= threshold:
-            return cluster
-
-        if abs(cluster.time_range.start - timestamp) <= threshold:
-            return cluster
-
         if cluster.time_range.start <= timestamp <= cluster.time_range.stop:
             return cluster
-
-        if abs(cluster.time_range.stop + threshold) < timestamp:
-            break
 
     return None
 
@@ -128,15 +118,12 @@ def create_vertex(vertex_type: type[V], storage: VertexStorage, default_value: A
         a new vertex.
     """
     last_vertex = storage.get_last_vertex(vertex_type)
-    try:
-        last_index = storage.get_last_index(vertex_type)
-    except KeyError:
-        last_index = -1
+    last_index = storage.get_last_index(vertex_type)
 
+    index = last_index if last_index is not None else -1
     value = last_vertex.value if last_vertex else default_value
-    index = last_index + 1
 
-    return vertex_type(index, value)
+    return vertex_type(index + 1, value)
 
 
 def create_vertex_from_previous(storage: VertexStorage, previous: VertexWithStatus[V]) -> V:
@@ -152,12 +139,12 @@ def create_vertex_from_previous(storage: VertexStorage, previous: VertexWithStat
     """
     v_type = type(previous.instance)
     if previous.is_new:
-        new_idx = previous.instance.index + 1
+        index = previous.instance.index
     else:
         last_idx = storage.get_last_index(v_type)
-        new_idx = last_idx + 1
+        index = last_idx if last_idx is not None else -1
 
-    return v_type(new_idx, previous.instance.value)
+    return v_type(index + 1, previous.instance.value)
 
 
 def create_vertex_i_with_status(

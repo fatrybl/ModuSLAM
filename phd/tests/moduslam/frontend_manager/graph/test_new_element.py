@@ -8,9 +8,10 @@ from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
 from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4
-from phd.moduslam.utils.exceptions import ValidationError
+from phd.moduslam.utils.exceptions import ItemExistsError, ValidationError
 
 
 def test_graph_element_no_validation_error():
@@ -52,3 +53,26 @@ def test_graph_element_no_validation_error_with_empty_new_vertices():
 
     element = GraphElement(e)
     assert element is not None
+
+
+def test_new_vertex_item_exists_error():
+    t = 0
+    v = Pose(0)
+    cluster = VertexCluster()
+    cluster.add(v, t)
+
+    with pytest.raises(ItemExistsError):
+        NewVertex(v, cluster, t)
+
+
+def test_new_vertex_creation_success():
+    t = 0
+    v = Pose(0)
+    cluster = VertexCluster()
+
+    new_vertex = NewVertex(v, cluster, t)
+
+    assert new_vertex.instance == v
+    assert new_vertex.cluster == cluster
+    assert new_vertex.timestamp == t
+    assert new_vertex.instance not in new_vertex.cluster

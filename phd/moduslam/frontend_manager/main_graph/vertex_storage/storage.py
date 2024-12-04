@@ -13,7 +13,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
 )
 from phd.moduslam.utils.exceptions import (
     ItemExistsError,
-    ItemNotFoundError,
+    ItemNotExistsError,
     ValidationError,
 )
 from phd.moduslam.utils.ordered_set import OrderedSet
@@ -30,13 +30,13 @@ class VertexStorage:
         self._clusters = OrderedSet[VertexCluster]()
         self._optimizable_vertices = OrderedSet[OptimizableVertex]()
         self._non_optimizable_vertices = OrderedSet[NonOptimizableVertex]()
-        self._vertices_table: dict[type[Vertex], OrderedSet] = {}
-        self._indices: dict[type[Vertex], int] = {}
+        self._type_vertices_table: dict[type[Vertex], OrderedSet] = {}
+        self._vertex_cluster_table: dict[Vertex, VertexCluster] = {}
         self._timestamp_cluster_table: dict[int, VertexCluster] = {}
 
     def __contains__(self, item: Any) -> bool:
         """Checks if an item is in the storage."""
-        return item in self._optimizable_vertices or item in self._non_optimizable_vertices
+        return item in self._vertex_cluster_table
 
     @property
     def vertices(self) -> list[Vertex]:
@@ -44,11 +44,7 @@ class VertexStorage:
 
         Complexity: O(N).
         """
-        vertices = []
-        for cluster in self._clusters:
-            vertices.extend(cluster.vertices)
-
-        return vertices
+        return list(self._vertex_cluster_table.keys())
 
     @property
     def clusters(self) -> OrderedSet[VertexCluster]:
@@ -76,23 +72,21 @@ class VertexStorage:
 
             TypeError: if a vertex is neither OptimizableVertex nor NonOptimizableVertex.
         """
-        v = vertex.instance
-        t = vertex.timestamp
-        cluster = vertex.cluster
-        v_type = type(v)
-
         try:
             self._validate_new_vertex(vertex)
         except ItemExistsError as e:
             logger.error(f"Validation failed: {e}")
             raise ValidationError(e)
 
+        v = vertex.instance
+        v_type = type(v)
+        t = vertex.timestamp
+        cluster = vertex.cluster
+
         cluster.add(v, t)
-
         self._timestamp_cluster_table[t] = cluster
-        self._indices.update({v_type: v.index})
-        self._vertices_table.setdefault(v_type, OrderedSet()).add(v)
-
+        self._vertex_cluster_table[v] = cluster
+        self._type_vertices_table.setdefault(v_type, OrderedSet()).add(v)
         self._process_cluster(cluster, self._clusters)
 
         if isinstance(v, OptimizableVertex):
@@ -100,7 +94,9 @@ class VertexStorage:
         elif isinstance(v, NonOptimizableVertex):
             self._non_optimizable_vertices.add(v)
         else:
-            raise TypeError("A new vertex is neither OptimizableVertex nor NonOptimizableVertex")
+            msg = f"Vertex {vertex!r} of type {type(vertex)!r} is neither Optimizable nor NonOptimizable."
+            logger.error(msg)
+            raise TypeError(msg)
 
     def remove(self, vertex: Vertex) -> None:
         """Removes vertex.
@@ -109,27 +105,33 @@ class VertexStorage:
             vertex: a vertex to be removed.
 
         Raises:
-            TypeError: if a vertex is neither OptimizableVertex nor NonOptimizableVertex.
+            ValidationError: if a validation has failed.
         """
+        try:
+            self._validate_removal_vertex(vertex)
+        except ItemNotExistsError as e:
+            logger.error(f"Validation failed: {e}")
+            raise ValidationError(e)
+
         v_type = type(vertex)
-        self._vertices_table[v_type].remove(vertex)
+        cluster = self._vertex_cluster_table[vertex]
+        timestamp = cluster.get_timestamp(vertex)
 
-        cluster = self.get_vertex_cluster(vertex)
+        self._type_vertices_table[v_type].remove(vertex)
+        del self._vertex_cluster_table[vertex]
+
         cluster.remove(vertex)
-
         if cluster.empty:
             self._clusters.remove(cluster)
+
+        if not cluster.timestamp_exists(timestamp):
+            del self._timestamp_cluster_table[timestamp]
 
         if isinstance(vertex, OptimizableVertex):
             self._optimizable_vertices.remove(vertex)
 
-        elif isinstance(vertex, NonOptimizableVertex):
+        if isinstance(vertex, NonOptimizableVertex):
             self._non_optimizable_vertices.remove(vertex)
-
-        else:
-            raise TypeError(
-                "A vertex to be removed is neither OptimizableVertex nor NonOptimizableVertex"
-            )
 
     def get_vertices(self, vertex_type: type[V]) -> OrderedSet[V]:
         """Gets vertices of the given type.
@@ -140,7 +142,7 @@ class VertexStorage:
         Returns:
             vertices of the given type.
         """
-        return self._vertices_table.get(vertex_type, OrderedSet())
+        return self._type_vertices_table.get(vertex_type, OrderedSet())
 
     def get_last_vertex(self, vertex_type: type[V]) -> V | None:
         """Gets the last added vertex of the given type from the last added cluster.
@@ -159,22 +161,21 @@ class VertexStorage:
 
         return None
 
-    def get_vertex_cluster(self, vertex: Vertex) -> VertexCluster:
-        """Returns the cluster that contains the given vertex.
+    def get_vertex_cluster(self, vertex: Vertex) -> VertexCluster | None:
+        """Gets the cluster that contains the given vertex.
 
         Args:
-            vertex: a vertex.
+            vertex: a vertex to get a cluster for.
 
         Returns:
-            cluster.
+            cluster if exists or None.
         """
-
-        for cluster in self._clusters:
-            if vertex in cluster:
-                return cluster
-
-        logger.critical(f"Vertex {vertex} not found in any cluster.")
-        raise ItemNotFoundError
+        try:
+            return self._vertex_cluster_table[vertex]
+        except KeyError:
+            msg = f"Vertex{vertex} does not exist in the storage."
+            logger.error(msg)
+            raise ItemNotExistsError(msg)
 
     def get_cluster(self, timestamp: int) -> VertexCluster | None:
         """Gets the cluster which time range includes the given timestamp.
@@ -193,19 +194,23 @@ class VertexStorage:
 
         return None
 
-    def get_last_index(self, vertex_type: type[Vertex]) -> int:
+    def get_last_index(self, vertex_type: type[Vertex]) -> int | None:
         """Gets the index of the last added vertex of the given type.
 
         Args:
             vertex_type: type of the vertex.
 
         Returns:
-            index.
-
-        Raises:
-            KeyError: if the vertex type is not found in the indices table.
+            index if exists or None.
         """
-        return self._indices[vertex_type]
+        try:
+            item = self._type_vertices_table[vertex_type].last
+            return item.index
+
+        except KeyError:
+            msg = f"No vertex of the type{vertex_type} exists in the storage."
+            logger.error(msg)
+            return None
 
     @staticmethod
     def _process_cluster(cluster: VertexCluster, clusters: OrderedSet[VertexCluster]) -> None:
@@ -242,13 +247,34 @@ class VertexStorage:
                 2. if a new timestamp is already included in another cluster.
         """
         t = vertex.timestamp
-        cluster = vertex.cluster
-        v = vertex.instance
-
         existing_cluster = self._timestamp_cluster_table.get(t, None)
 
-        if v in cluster:
-            raise ItemExistsError(f"Vertex{v} is already in cluster")
+        if vertex.instance in self._vertex_cluster_table:
+            raise ItemExistsError(f"Vertex{vertex} already exists in the cluster.")
 
-        if existing_cluster and existing_cluster is not cluster:
+        if existing_cluster and existing_cluster is not vertex.cluster:
             raise ItemExistsError(f"A timestamp{t} can not belong to different clusters.")
+
+    def _validate_removal_vertex(self, vertex: Vertex) -> None:
+        """Validates a vertex to be removed.
+
+        Args:
+            vertex: a vertex to be removed.
+
+        Raises:
+            ItemNotExistsError: if the vertex does not exist in one of containers.
+        """
+        v_type = type(vertex)
+        if (
+            vertex not in self._optimizable_vertices
+            and vertex not in self._non_optimizable_vertices
+        ):
+            raise ItemNotExistsError(
+                f"Vertex {vertex} is neither in optimizable vertices nor in non-optimizable."
+            )
+
+        if v_type not in self._type_vertices_table:
+            raise ItemNotExistsError(f"Vertex of type{v_type } does not exist in the storage.")
+
+        if vertex not in self._vertex_cluster_table:
+            raise ItemNotExistsError(f"Vertex {vertex} is not in the storage.")

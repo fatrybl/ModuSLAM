@@ -7,6 +7,7 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.tum_vie_handler import (
     TumVieImuDataPreprocessor,
 )
+from phd.moduslam.utils.auxiliary_methods import to_float
 
 
 class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):
@@ -15,13 +16,8 @@ class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):
     def __init__(self, config: ImuHandlerConfig):
         super().__init__(config)
 
-    @property
-    def sensor_name(self) -> str:
-        """Unique handler name."""
-        return self._sensor_name
-
     @staticmethod
-    def _parse_line(values: tuple[float, ...]) -> ImuData:
+    def _parse_line(values: tuple[str, ...]) -> ImuData:
         """Extracts IMU data from a line of Kaist Urban dataset.
 
         Args:
@@ -30,6 +26,10 @@ class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):
         Returns:
             IMU data.
         """
-        angular_velocity = values[7], values[8], values[9]
-        acceleration = values[10], values[11], values[12]
-        return ImuData(angular_velocity, acceleration)
+        wx = to_float(values[7])
+        wy = to_float(values[8])
+        wz = to_float(values[9])
+        ax = to_float(values[10])
+        ay = to_float(values[11])
+        az = to_float(values[12])
+        return ImuData((wx, wy, wz), (ax, ay, az))
