@@ -8,7 +8,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.exceptions import ItemNotExistsError, ValidationError
+from phd.moduslam.utils.exceptions import ValidationError
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 
@@ -38,8 +38,7 @@ def test_remove_existing_vertex():
     assert len(storage.non_optimizable_vertices) == 0
     assert storage.get_last_vertex(Pose) is None
     assert storage.get_vertices(Pose) == OrderedSet()
-    with pytest.raises(ItemNotExistsError):
-        assert storage.get_vertex_cluster(v)
+    assert storage.get_vertex_cluster(v) is None
 
 
 def test_remove_correct_timestamp_from_timestamp_cluster_table():
@@ -84,8 +83,7 @@ def test_remove_vertex_when_multiple_vertices_of_same_type_exist():
     assert storage.get_last_vertex(Pose) == v2
     assert storage.get_vertices(Pose) == final_set
     assert storage.get_vertex_cluster(v2) == cluster
-    with pytest.raises(ItemNotExistsError):
-        assert storage.get_vertex_cluster(v1)
+    assert storage.get_vertex_cluster(v1) is None
 
 
 def test_remove_vertex_with_non_matching_timestamp():

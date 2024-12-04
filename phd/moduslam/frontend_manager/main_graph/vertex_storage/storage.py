@@ -173,9 +173,7 @@ class VertexStorage:
         try:
             return self._vertex_cluster_table[vertex]
         except KeyError:
-            msg = f"Vertex{vertex} does not exist in the storage."
-            logger.error(msg)
-            raise ItemNotExistsError(msg)
+            return None
 
     def get_cluster(self, timestamp: int) -> VertexCluster | None:
         """Gets the cluster which time range includes the given timestamp.
