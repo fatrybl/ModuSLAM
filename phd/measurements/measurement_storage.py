@@ -22,7 +22,7 @@ class MeasurementStorage:
 
     @property
     def data(self) -> dict[type[Measurement], OrderedSet[Measurement]]:
-        """Dictionary with "handler -> measurements" pairs."""
+        """Dictionary with typed OrderedSets."""
         return self._data
 
     @property

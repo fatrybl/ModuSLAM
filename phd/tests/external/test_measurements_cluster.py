@@ -7,7 +7,7 @@ from phd.measurements.processed_measurements import ContinuousMeasurement, Measu
 
 def test_empty_cluster_initialization():
     empty_cluster = Cluster()
-    assert empty_cluster.is_empty
+    assert empty_cluster.empty
     assert empty_cluster.core_measurements == []
     assert empty_cluster.continuous_measurements == []
     assert empty_cluster.fake_measurements == []
@@ -55,7 +55,7 @@ def test_add_continuous_measurements():
     assert cluster.continuous_measurements[1] == measurement2
     assert len(cluster.core_measurements) == 0
     assert len(cluster.fake_measurements) == 0
-    assert not cluster.is_empty
+    assert not cluster.empty
     with pytest.raises(ValueError):
         cluster.timestamp
     with pytest.raises(ValueError):
@@ -75,7 +75,7 @@ def test_add_fake_measurements():
     assert cluster.fake_measurements[1] == measurement2
     assert len(cluster.core_measurements) == 0
     assert len(cluster.continuous_measurements) == 0
-    assert not cluster.is_empty
+    assert not cluster.empty
     assert cluster.timestamp == 2
     assert cluster.time_range.start == 1
     assert cluster.time_range.stop == 2
@@ -168,7 +168,7 @@ def test_remove_all_measurements():
     assert len(cluster.core_measurements) == 2
     assert len(cluster.continuous_measurements) == 1
     assert len(cluster.fake_measurements) == 1
-    assert not cluster.is_empty
+    assert not cluster.empty
 
     cluster.remove(core_measurement1)
     cluster.remove(continuous_measurement)
@@ -182,7 +182,7 @@ def test_remove_all_measurements():
         == len(cluster.fake_measurements)
         == 0
     )
-    assert cluster.is_empty
+    assert cluster.empty
 
 
 def test_remove_core_measurement():

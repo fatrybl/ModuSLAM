@@ -117,4 +117,4 @@ def test_combine_with_empty_measurement_groups():
 
     for clusters in result:
         for cluster in clusters:
-            assert cluster.is_empty is True
+            assert cluster.empty is True

@@ -2,6 +2,12 @@ from phd.bridge.objects.auxiliary_classes import FakeMeasurement
 from phd.external.metrics.utils import median
 from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.utils.exceptions import (
+    ItemExistsError,
+    ItemNotExistsError,
+    ValidationError,
+)
+from phd.moduslam.utils.ordered_set import OrderedSet
 
 
 class Cluster:
@@ -12,23 +18,26 @@ class Cluster:
     """
 
     def __init__(self):
-        self._measurements: list[Measurement] = []
-        self._continuous_measurements: list[ContinuousMeasurement] = []
+        self._measurements = OrderedSet[Measurement]()
+        self._continuous_measurements = OrderedSet[ContinuousMeasurement]()
         self._timestamp: int | None = None
         self._time_range: TimeRange | None = None
 
+    def __contains__(self, item) -> bool:
+        return item in self._measurements or item in self._continuous_measurements
+
     def __repr__(self):
-        return str(self._measurements + self._continuous_measurements)
+        return str(self._measurements.items + self._continuous_measurements.items)
 
     @property
-    def is_empty(self) -> bool:
+    def empty(self) -> bool:
         """Checks if a cluster has measurements."""
-        return len(self._measurements) + len(self._continuous_measurements) == 0
+        return not bool(self._continuous_measurements) and not bool(self._measurements)
 
     @property
     def measurements(self) -> list[Measurement]:
         """All measurements in the cluster: core + fake + continuous."""
-        return [*self._measurements, *self._continuous_measurements]
+        return [*self._measurements.items, *self._continuous_measurements.items]
 
     @property
     def core_measurements(self) -> list[Measurement]:
@@ -39,7 +48,7 @@ class Cluster:
     @property
     def continuous_measurements(self) -> list[ContinuousMeasurement]:
         """Continuous measurements in the cluster."""
-        return self._continuous_measurements
+        return [*self._continuous_measurements.items]
 
     @property
     def fake_measurements(self) -> list[FakeMeasurement]:
@@ -76,12 +85,20 @@ class Cluster:
 
         Args:
             measurement: measurement to add.
+
+        Raises:
+            ValidationError: if measurement is already present in the cluster.
         """
+        try:
+            self._validate_new_measurement(measurement)
+        except ItemExistsError as e:
+            raise ValidationError(e)
+
         if isinstance(measurement, ContinuousMeasurement):
-            self._continuous_measurements.append(measurement)
+            self._continuous_measurements.add(measurement)
             return
 
-        self._measurements.append(measurement)
+        self._measurements.add(measurement)
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
 
@@ -90,7 +107,15 @@ class Cluster:
 
         Args:
             measurement: measurement to be removed.
+
+        Raises:
+            ValueError: if measurement is not present in the cluster.
         """
+        try:
+            self._validate_removing_measurement(measurement)
+        except ItemNotExistsError as e:
+            raise ValidationError(e)
+
         if isinstance(measurement, ContinuousMeasurement):
             self._continuous_measurements.remove(measurement)
             return
@@ -98,6 +123,33 @@ class Cluster:
         self._measurements.remove(measurement)
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
+
+    def _validate_new_measurement(self, measurement: Measurement):
+        """Validates a new measurement before adding.
+
+        Args:
+            measurement: a measurement to be added.
+
+        Raises:
+            ItemExistsError: if a measurement is already present in the cluster.
+        """
+        if measurement in self._measurements or measurement in self._continuous_measurements:
+            raise ItemExistsError(f"Measurement {measurement} already exists in the cluster.")
+
+    def _validate_removing_measurement(self, measurement: Measurement):
+        """Validates a measurement before removing.
+
+        Args:
+            measurement: a measurement to be removed.
+
+        Raises:
+            ItemNotExistsError: if a measurement is not present in the cluster.
+        """
+        if (
+            measurement not in self._measurements
+            and measurement not in self._continuous_measurements
+        ):
+            raise ItemNotExistsError(f"Measurement {measurement} is not present in the cluster.")
 
     def _compute_timestamp(self) -> int | None:
         timestamps = sorted([m.timestamp for m in self._measurements])
