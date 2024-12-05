@@ -94,7 +94,7 @@ class ContinuousMeasurement(Generic[M], Measurement):
         self._elements = [element for m in measurements for element in m.elements]
 
     def __repr__(self):
-        return f"num elements: {len(self._items)}"
+        return f"continuous with: {len(self._items)} elements"
 
     @property
     def timestamp(self) -> int:
@@ -198,6 +198,9 @@ class ContinuousImuMeasurement(ContinuousMeasurement[Imu]):
         self._time_range = TimeRange(start, stop)
         self._items = measurements
         self._elements = [element for m in measurements for element in m.elements]
+
+    def __repr__(self):
+        return f"continuous IMU with: {len(self._items)} elements"
 
 
 class Gps(Measurement):

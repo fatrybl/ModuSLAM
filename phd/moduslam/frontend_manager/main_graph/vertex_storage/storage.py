@@ -145,7 +145,7 @@ class VertexStorage:
         return self._type_vertices_table.get(vertex_type, OrderedSet())
 
     def get_last_vertex(self, vertex_type: type[V]) -> V | None:
-        """Gets the last added vertex of the given type from the last added cluster.
+        """Gets the last added vertex of the given type.
 
         Args:
             vertex_type: type of the vertex.
@@ -153,13 +153,12 @@ class VertexStorage:
         Returns:
             vertex if exists or None.
         """
-
-        for cluster in reversed(self._clusters):
-            vertex = cluster.get_last_vertex(vertex_type)
-            if vertex:
-                return vertex
-
-        return None
+        try:
+            return self._type_vertices_table[vertex_type].last
+        except KeyError:
+            msg = f"No vertex of the type{vertex_type} exists in the storage."
+            logger.warning(msg)
+            return None
 
     def get_vertex_cluster(self, vertex: Vertex) -> VertexCluster | None:
         """Gets the cluster that contains the given vertex.
@@ -207,7 +206,7 @@ class VertexStorage:
 
         except KeyError:
             msg = f"No vertex of the type{vertex_type} exists in the storage."
-            logger.error(msg)
+            logger.warning(msg)
             return None
 
     @staticmethod

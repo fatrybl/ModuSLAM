@@ -170,9 +170,15 @@ class Graph:
 
         Args:
             vertex: vertex to be deleted from the graph.
+
+        Raises:
+            ValidationError: if the vertex is not present in the graph.
         """
+        if vertex not in self._vertex_storage:
+            raise ValidationError(f"Vertex {vertex} is not present in the graph.")
+
         edges = self._connections[vertex]
-        for edge in edges:
+        for edge in edges.copy():  # copy to avoid set changes during iterations.
             self.remove_edge(edge)
 
     def update_vertices(self, values: gtsam.Values) -> None:
@@ -244,7 +250,7 @@ class Graph:
                 )
 
     def _validate_removing_edge(self, edge: Edge) -> None:
-        """Validates removing an edge from the graph.
+        """Validates an edge before removing from the graph.
 
         Args:
             edge: edge to be removed.
@@ -259,7 +265,7 @@ class Graph:
             raise ItemNotExistsError(f"No edge with index{edge.index} in GTSAM factor graph.")
 
     def _validate_replace_edge(self, edge: Edge, new_edge: Edge):
-        """Validates replacing an edge with a new element.
+        """Validates an edge with a new element before replacing.
 
         Args:
             edge: an edge to be replaced.

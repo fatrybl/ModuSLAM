@@ -116,7 +116,7 @@ def integrate_measurements(
     measurements: Sequence[Imu],
     timestamp: int,
     time_scale: float,
-) -> gtsam.PreintegratedCombinedMeasurements:
+) -> None:
     """Integrates the IMU measurements.
 
     Args:
@@ -128,13 +128,8 @@ def integrate_measurements(
 
         time_scale: timescale factor.
 
-    Returns:
-        integrated IMU measurements.
-
     Raises:
         ValueError: if the measurements sequence is empty.
-
-    TODO: check if the integration process is correct: dt is computed properly.
     """
     num_elements = len(measurements)
 
@@ -143,21 +138,19 @@ def integrate_measurements(
         logger.critical(msg)
         raise ValueError(msg)
 
-    for idx, measurement in enumerate(measurements):
+    for i, measurement in enumerate(measurements):
 
-        if idx == num_elements - 1:
-            dt_nanosec = timestamp - measurement.timestamp
+        if i == num_elements - 1:
+            dt = timestamp - measurement.timestamp
 
         else:
-            dt_nanosec = measurements[idx + 1].timestamp - measurements[idx].timestamp
+            dt = measurements[i + 1].timestamp - measurements[i].timestamp
 
         acc = np.array(measurement.acceleration)
         omega = np.array(measurement.angular_velocity)
-        dt_secs = dt_nanosec * time_scale
+        dt_secs = dt * time_scale
 
         pim.integrateMeasurement(acc, omega, dt_secs)
-
-    return pim
 
 
 def get_integrated_measurement(
@@ -201,5 +194,5 @@ def get_integrated_measurement(
     )
     pim = gtsam.PreintegratedCombinedMeasurements(integration_params)
     pim.resetIntegrationAndSetBias(bias.backend_instance)
-    pim = integrate_measurements(pim, measurement.items, timestamp, time_scale)
+    integrate_measurements(pim, measurement.items, timestamp, time_scale)
     return pim
