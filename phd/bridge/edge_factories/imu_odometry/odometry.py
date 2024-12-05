@@ -8,8 +8,8 @@ from phd.bridge.edge_factories.utils import (
     create_new_vertices,
     create_vertex_i_with_status,
     create_vertex_j_with_status,
-    get_closest_cluster,
-    get_cluster_for_timestamp,
+    get_cluster_for_timestamp_from_dict,
+    get_cluster_for_timestamp_from_iterable,
 )
 from phd.measurements.processed_measurements import ContinuousImuMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
@@ -114,11 +114,11 @@ class Factory(EdgeFactory):
         if cluster:
             return cluster
 
-        cluster = get_cluster_for_timestamp(clusters, timestamp)
+        cluster = get_cluster_for_timestamp_from_dict(clusters, timestamp)
         if cluster:
             return cluster
 
-        cluster = get_closest_cluster(storage, timestamp)
+        cluster = get_cluster_for_timestamp_from_iterable(reversed(storage.clusters), timestamp)
         if cluster:
             return cluster
 

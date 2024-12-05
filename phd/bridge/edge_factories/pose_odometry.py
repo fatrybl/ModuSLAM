@@ -4,7 +4,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex,
     create_vertex_i_with_status,
     create_vertex_j_with_status,
-    get_cluster_for_timestamp,
+    get_cluster_for_timestamp_from_dict,
 )
 from phd.measurements.processed_measurements import PoseOdometry as OdometryMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
@@ -76,7 +76,7 @@ class Factory(EdgeFactory):
             item = create_vertex_i_with_status(Pose, storage, cluster, timestamp, identity4x4)
             return item
 
-        cluster = get_cluster_for_timestamp(clusters, timestamp)
+        cluster = get_cluster_for_timestamp_from_dict(clusters, timestamp)
         if cluster:
             item = create_vertex_i_with_status(Pose, storage, cluster, timestamp, identity4x4)
             return item
@@ -109,7 +109,7 @@ class Factory(EdgeFactory):
             item = create_vertex_j_with_status(storage, cluster, timestamp, vertex_i)
             return item
 
-        cluster = get_cluster_for_timestamp(clusters, timestamp)
+        cluster = get_cluster_for_timestamp_from_dict(clusters, timestamp)
         if cluster:
             item = create_vertex_j_with_status(storage, cluster, timestamp, vertex_i)
             return item

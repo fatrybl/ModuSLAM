@@ -34,13 +34,13 @@ def create_new_vertices(vertices: Iterable[VertexWithStatus]) -> list[NewVertex]
     return new_vertices
 
 
-def get_cluster_for_timestamp(
-    clusters: dict[VertexCluster, TimeRange], timestamp: int
+def get_cluster_for_timestamp_from_dict(
+    clusters_with_time_ranges: dict[VertexCluster, TimeRange], timestamp: int
 ) -> VertexCluster | None:
     """Gets the cluster which time range includes the given timestamp.
 
     Args:
-        clusters: clusters to find in.
+        clusters_with_time_ranges: a table with clusters and time ranges to find in.
 
         timestamp: a timestamp of the cluster.
 
@@ -50,22 +50,42 @@ def get_cluster_for_timestamp(
     Raises:
         ItemNotFoundError: if no cluster has been found for the given timestamp.
     """
-    for cluster, time_range in clusters.items():
+    for cluster, time_range in clusters_with_time_ranges.items():
         if time_range.start <= timestamp <= time_range.stop:
             return cluster
 
     return None
 
 
+def get_cluster_for_timestamp_from_iterable(clusters: Iterable[VertexCluster], timestamp: int):
+    """Gets the cluster which coverts the given timestamp.
+
+    Args:
+        clusters: clusters to find in.
+
+        timestamp: a timestamp.
+
+    Returns:
+        the cluster if exists or None.
+    """
+    for cluster in clusters:
+        if cluster.time_range.start <= timestamp <= cluster.time_range.stop:
+            return cluster
+
+    return None
+
+
 def get_cluster(
-    storage: VertexStorage, clusters: dict[VertexCluster, TimeRange], timestamp: int
+    storage: VertexStorage,
+    clusters_with_time_ranges: dict[VertexCluster, TimeRange],
+    timestamp: int,
 ) -> VertexCluster:
     """Finds a cluster in the storage or in clusters by timestamp.
 
     Args:
         storage: a storage with clusters.
 
-        clusters: clusters to find in.
+        clusters_with_time_ranges: a table of clusters with time ranges to find in.
 
         timestamp: a timestamp of the cluster.
 
@@ -76,31 +96,11 @@ def get_cluster(
     if existing:
         return existing
 
-    cluster = get_cluster_for_timestamp(clusters, timestamp)
+    cluster = get_cluster_for_timestamp_from_dict(clusters_with_time_ranges, timestamp)
     if cluster:
         return cluster
 
     return VertexCluster()
-
-
-def get_closest_cluster(storage: VertexStorage, timestamp: int):
-    """Gets the closest cluster for the given timestamp.
-
-    Args:
-        storage: a storage with clusters.
-
-        timestamp: a timestamp.
-
-    Returns:
-        The closest cluster if one exists within the threshold, otherwise None.
-
-    TODO: avoid iterations over all clusters when no need.
-    """
-    for cluster in reversed(storage.clusters):
-        if cluster.time_range.start <= timestamp <= cluster.time_range.stop:
-            return cluster
-
-    return None
 
 
 def create_vertex(vertex_type: type[V], storage: VertexStorage, default_value: Any) -> V:
