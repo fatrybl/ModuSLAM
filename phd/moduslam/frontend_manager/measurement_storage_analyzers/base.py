@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from phd.measurements.measurement_storage import MeasurementStorage
+from phd.measurements.storage import MeasurementStorage
 
 
 class StorageAnalyzer(Protocol):

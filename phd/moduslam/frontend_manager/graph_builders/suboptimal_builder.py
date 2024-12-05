@@ -2,7 +2,7 @@ import logging
 
 from phd.bridge.optimal_candidate_factory import Factory
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.measurement_storage import MeasurementStorage
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.main_graph.graph import Graph

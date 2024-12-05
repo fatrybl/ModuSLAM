@@ -121,7 +121,7 @@ def microsec2nanosec(microseconds: int | float) -> int:
 
 @overload
 def microsec2nanosec(microseconds: str) -> int:
-    microsec_float = to_float(microseconds)
+    microsec_float = str_to_float(microseconds)
     return int(microsec_float * 1e3)
 
 
@@ -181,48 +181,28 @@ def tuple_to_gtsam_pose3(values: tuple[float, float, float, float, float, float]
     return pose
 
 
-def to_float(value: str) -> float:
-    """Converts value to float.
+def str_to_float(string: str) -> float:
+    """Converts string to float.
 
     Args:
-        value: input value.
+        string: an input string.
 
     Returns:
         float value.
-
-    Raises:
-        ValueError: if the value can not be converted to float.
     """
-    try:
-        float_value = float(value)
-        return float_value
-
-    except ValueError:
-        msg = f"Could not convert value {value} of type {type(value)} to float."
-        logger.critical(msg)
-        raise
+    return float(string)
 
 
-def to_int(value: str) -> int:
-    """Converts value to int.
+def str_to_int(string: str) -> int:
+    """Converts string to int.
 
     Args:
-        value: input value.
+        string: input value.
 
     Returns:
         int value.
-
-    Raises:
-        ValueError: if the value can not be converted to int.
     """
-    try:
-        int_value = int(value)
-        return int_value
-
-    except ValueError:
-        msg = f"Could not convert value {value} of type {type(value)} to string."
-        logger.critical(msg)
-        raise
+    return int(string)
 
 
 def check_dimensionality(array: np.ndarray, shape: tuple[int, ...]) -> None:
@@ -381,7 +361,7 @@ def sort_files_numerically(files: list[Path]) -> list[Path]:
 
     def extract_number(file: Path) -> int:
         match = re.search(r"\d+", file.stem)
-        return to_int(match.group()) if match else 0
+        return str_to_int(match.group()) if match else 0
 
     return sorted(files, key=extract_number)
 
@@ -393,9 +373,7 @@ def matrix_to_vector_list(matrix: MatrixMxN) -> list[VectorN]:
         matrix: The input NumPy array of shape (N, M).
 
     Returns:
-        a list of N arrays, each of shape (1, M).
-
-    TODO: add tests
+        a list of N arrays of shape (1, M).
     """
     num_rows, _ = matrix.shape
     list_of_arrays = [matrix[i : i + 1, :] for i in range(num_rows)]

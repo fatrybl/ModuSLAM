@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 
-from phd.measurements.measurement_storage import MeasurementStorage
 from phd.measurements.processed_measurements import Measurement
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (

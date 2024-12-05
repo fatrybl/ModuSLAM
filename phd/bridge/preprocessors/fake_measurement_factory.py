@@ -10,15 +10,14 @@ def add_fake_cluster(list_to_add: list[Cluster], timestamp: int) -> None:
     condition.
 
     Args:
-        list_to_add: a list of clusters to add a new cluster in.
+        list_to_add: a list of clusters to add a new cluster to.
 
         timestamp: timestamp of the fake measurement.
-
-    TODO: check if correct start timestamp in used for the cluster:
-        maybe we should use time_range.start instead of timestamp?
     """
-    t1 = list_to_add[0].timestamp
-    if timestamp < t1:
+    first_cluster = list_to_add[0]
+    cluster_timestamp = first_cluster.timestamp
+
+    if timestamp < cluster_timestamp:
         cluster = Cluster()
         fake_measurement = FakeMeasurement(timestamp)
         cluster.add(fake_measurement)

@@ -1,5 +1,5 @@
-from phd.measurements.measurement_storage import MeasurementStorage
 from phd.measurements.processed_measurements import Imu, PoseOdometry
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
     StorageAnalyzer,
 )

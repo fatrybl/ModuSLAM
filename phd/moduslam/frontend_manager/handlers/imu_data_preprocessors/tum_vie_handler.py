@@ -29,7 +29,7 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
     ImuData,
 )
 from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.utils.auxiliary_methods import create_empty_element, to_float
+from phd.moduslam.utils.auxiliary_methods import create_empty_element, str_to_float
 
 logger = logging.getLogger(frontend_manager)
 
@@ -102,12 +102,12 @@ class TumVieImuDataPreprocessor(Handler):
         Returns:
             IMU data.
         """
-        wx = to_float(values[0])
-        wy = to_float(values[1])
-        wz = to_float(values[2])
-        ax = to_float(values[3])
-        ay = to_float(values[4])
-        az = to_float(values[5])
+        wx = str_to_float(values[0])
+        wy = str_to_float(values[1])
+        wz = str_to_float(values[2])
+        ax = str_to_float(values[3])
+        ay = str_to_float(values[4])
+        az = str_to_float(values[5])
         return ImuData((wx, wy, wz), (ax, ay, az))
 
     @staticmethod

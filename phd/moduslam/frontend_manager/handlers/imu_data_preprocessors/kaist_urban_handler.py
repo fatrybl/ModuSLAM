@@ -7,7 +7,7 @@ from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects impor
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.tum_vie_handler import (
     TumVieImuDataPreprocessor,
 )
-from phd.moduslam.utils.auxiliary_methods import to_float
+from phd.moduslam.utils.auxiliary_methods import str_to_float
 
 
 class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):
@@ -26,10 +26,10 @@ class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):
         Returns:
             IMU data.
         """
-        wx = to_float(values[7])
-        wy = to_float(values[8])
-        wz = to_float(values[9])
-        ax = to_float(values[10])
-        ay = to_float(values[11])
-        az = to_float(values[12])
+        wx = str_to_float(values[7])
+        wy = str_to_float(values[8])
+        wz = str_to_float(values[9])
+        ax = str_to_float(values[10])
+        ay = str_to_float(values[11])
+        az = str_to_float(values[12])
         return ImuData((wx, wy, wz), (ax, ay, az))

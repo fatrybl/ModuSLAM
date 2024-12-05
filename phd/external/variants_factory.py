@@ -1,5 +1,3 @@
-from typing import cast
-
 from phd.bridge.objects.auxiliary_classes import MeasurementGroup
 from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.bridge.objects.measurements_cluster import Cluster
@@ -8,8 +6,8 @@ from phd.bridge.preprocessors.pose_odometry import find_and_replace
 from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
-from phd.measurements.measurement_storage import MeasurementStorage
 from phd.measurements.processed_measurements import Imu, Measurement
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 
@@ -29,10 +27,8 @@ class Factory:
             combinations of clusters w or w/o leftover measurements.
         """
 
-        other_measurements, measurements = cls._separate_measurements(storage.data)
-        imu_measurements = cast(list[Imu], measurements)
-
-        groups = cls._prepare_measurements(other_measurements)
+        core_measurements, imu_measurements = cls._separate_measurements(storage.data)
+        groups = cls._prepare_measurements(core_measurements)
         combinations = CombinationFactory.combine(groups)
         combinations = remove_loops(combinations)
 
@@ -50,8 +46,8 @@ class Factory:
     @staticmethod
     def _separate_measurements(
         data: dict[type[Measurement], OrderedSet[Measurement]]
-    ) -> tuple[list[Measurement], list[Measurement]]:
-        """Splits data into IMU measurements and others.
+    ) -> tuple[list[Measurement], list[Imu]]:
+        """Splits data into core and IMU measurements.
 
         Args:
             data: a dictionary with measurements.
@@ -59,16 +55,16 @@ class Factory:
         Returns:
             Non-IMU and IMU measurements.
         """
-        imu_measurements: list[Measurement] = []
-        other_measurements: list[Measurement] = []
+        imu_measurements: list[Imu] = []
+        core_measurements: list[Measurement] = []
 
         for m_type, m_set in data.items():
             if m_type == Imu:
                 imu_measurements.extend(m_set.items)
             else:
-                other_measurements.extend(m_set.items)
+                core_measurements.extend(m_set.items)
 
-        return other_measurements, imu_measurements
+        return core_measurements, imu_measurements
 
     @staticmethod
     def _prepare_measurements(measurements: list[Measurement]) -> list[MeasurementGroup]:

@@ -2,7 +2,7 @@ from typing import Any
 
 from phd.bridge.candidates_factory import Factory as CandidatesFactory
 from phd.external.metrics.candidate_evaluator import Evaluator
-from phd.measurements.measurement_storage import MeasurementStorage
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.backend_manager.graph_solver import GraphSolver
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
 from phd.moduslam.map_manager.graph_saver import GraphSaver

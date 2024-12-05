@@ -6,7 +6,7 @@ from phd.bridge.distributor import get_factory
 from phd.bridge.objects.measurements_cluster import Cluster
 from phd.bridge.utils import add_elements_to_graph, process_leftovers
 from phd.external.variants_factory import Factory as VariantsFactory
-from phd.measurements.measurement_storage import MeasurementStorage
+from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.graph import (
     Graph,
     GraphCandidate,

@@ -7,10 +7,7 @@ class Evaluator:
 
     @staticmethod
     def compute_metrics(candidate: GraphCandidate):
-        """
-        TODO: implement
-        """
-        pass
+        raise NotImplementedError
 
 
 def evaluate(items: list, metrics: list, weights: np.ndarray):

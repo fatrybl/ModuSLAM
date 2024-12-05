@@ -10,10 +10,7 @@ logger = logging.getLogger(data_manager)
 
 
 class DataManager:
-    """Manages all data processes.
-
-    TODO: get BatchFactoryConfig to init the batch factory.
-    """
+    """Manages all data processes."""
 
     def __init__(self) -> None:
         self._batch_factory = BatchFactory()

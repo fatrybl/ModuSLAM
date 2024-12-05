@@ -44,11 +44,16 @@ class DequeSet(Sequence, Generic[T]):
             item or a sequence of items.
 
         Raises:
-            TypeError: invalid argument type.
-
-        TODO: add tests
+            IndexError: if index is out of range.
         """
-        return self._deque[index]  # type: ignore
+        if isinstance(index, slice):
+            return [self._deque[i] for i in range(*index.indices(len(self._deque)))]
+
+        if isinstance(index, int):
+            try:
+                return self._deque[index]
+            except IndexError:
+                raise IndexError("Index out of range.")
 
     def __eq__(self, other: Any) -> bool:
         """Compares if this DequeSet is equal to another DequeSet. Two DequeSets are

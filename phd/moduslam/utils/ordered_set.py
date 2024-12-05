@@ -129,15 +129,13 @@ class OrderedSet(MutableSet, Sequence, Generic[T]):
                 raise TypeError(msg)
 
     def insert(self, item: T, index: int) -> None:
-        """Inserts new item to the given position.
+        """Inserts a new item by index. Identical to insert in a list.
         Complexity: O(N).
 
         Args:
             item: an item to be inserted.
 
             index: index at which to insert the item.
-
-        TODO: add tests.
         """
         items_list = list(self._items)
         items_list.insert(index, item)

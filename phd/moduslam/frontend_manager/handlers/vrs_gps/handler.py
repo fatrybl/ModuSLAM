@@ -9,7 +9,11 @@ from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.vrs_gps.config import VrsGpsHandlerConfig
 from phd.moduslam.setup_manager.sensors_factory.sensors import VrsGps
-from phd.moduslam.utils.auxiliary_methods import create_empty_element, to_float, to_int
+from phd.moduslam.utils.auxiliary_methods import (
+    create_empty_element,
+    str_to_float,
+    str_to_int,
+)
 
 logger = logging.getLogger(frontend_manager)
 
@@ -52,7 +56,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
             logger.error(msg)
             raise TypeError(msg)
 
-        fix_status = to_int(element.measurement.values[5])
+        fix_status = str_to_int(element.measurement.values[5])
         if fix_status not in self._fix_statuses:
             return None
 
@@ -86,7 +90,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
             x, y, z coordinates.
         """
         d = data[2:5]
-        position_xyz = (to_float(d[0]), to_float(d[1]), to_float(d[2]))
+        position_xyz = (str_to_float(d[0]), str_to_float(d[1]), str_to_float(d[2]))
         return position_xyz
 
     @staticmethod
@@ -100,9 +104,9 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
             covariance matrix.
         """
         standard_deviation_str = data[8:11]
-        sigma_x = to_float(standard_deviation_str[0])
-        sigma_y = to_float(standard_deviation_str[1])
-        sigma_z = to_float(standard_deviation_str[2])
+        sigma_x = str_to_float(standard_deviation_str[0])
+        sigma_y = str_to_float(standard_deviation_str[1])
+        sigma_z = str_to_float(standard_deviation_str[2])
         return (
             (sigma_x**2, 0.0, 0.0),
             (0.0, sigma_y**2, 0.0),
