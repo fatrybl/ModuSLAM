@@ -2,7 +2,7 @@ import logging
 
 from phd.logger.logging_config import frontend_manager
 from phd.measurements.processed import Measurement
-from phd.measurements.time_updater import TimeRangeUpdate
+from phd.measurements.time_limits_updater import Updater
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.moduslam.utils.exceptions import (
     EmptyStorageError,
@@ -85,7 +85,7 @@ class MeasurementStorage:
         m_type = type(measurement)
         self._data.setdefault(m_type, OrderedSet()).add(measurement)
 
-        self._start_timestamp, self._stop_timestamp = TimeRangeUpdate.update_time_range_on_add(
+        self._start_timestamp, self._stop_timestamp = Updater.update_start_stop_on_adding(
             measurement, self._start_timestamp, self._stop_timestamp
         )
         self._update_recent_measurement(measurement)
@@ -114,7 +114,7 @@ class MeasurementStorage:
         if measurement == self._recent_measurement:
             self._recent_measurement = self._find_recent_measurement()
 
-        self._start_timestamp, self._stop_timestamp = TimeRangeUpdate.update_time_range_on_removal(
+        self._start_timestamp, self._stop_timestamp = Updater.update_start_stop_on_removing(
             self._data, measurement, self._start_timestamp, self._stop_timestamp
         )
 
