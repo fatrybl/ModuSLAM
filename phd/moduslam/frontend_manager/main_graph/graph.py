@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import gtsam
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import Measurement
+from phd.measurements.processed import Measurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
 from phd.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (

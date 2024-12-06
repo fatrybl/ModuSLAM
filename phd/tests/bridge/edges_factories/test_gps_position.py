@@ -1,7 +1,7 @@
 import pytest
 
 from phd.bridge.edge_factories.gps_position import Factory
-from phd.measurements.processed_measurements import Gps
+from phd.measurements.processed import Gps
 from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from phd.moduslam.data_manager.batch_factory.readers.locations import Location
 from phd.moduslam.frontend_manager.main_graph.graph import Graph

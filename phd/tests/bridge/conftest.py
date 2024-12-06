@@ -1,6 +1,6 @@
 import pytest
 
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     se3_isotropic_noise_model,
 )

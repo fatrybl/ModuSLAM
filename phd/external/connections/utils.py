@@ -1,17 +1,13 @@
 from typing import cast
 
-from phd.bridge.objects.auxiliary_dataclasses import (
+from phd.bridge.auxiliary_dataclasses import (
     ClustersWithConnections,
     ClustersWithLeftovers,
 )
-from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.connections.connections_factory import Factory
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
-from phd.measurements.processed_measurements import (
-    ContinuousImuMeasurement,
-    Imu,
-    Measurement,
-)
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousImuMeasurement, Imu, Measurement
 
 
 def fill_one_connection_with_imu(

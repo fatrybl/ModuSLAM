@@ -4,7 +4,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
     get_cluster,
 )
-from phd.measurements.processed_measurements import ImuBias as BiasMeasurement
+from phd.measurements.processed import ImuBias as BiasMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_bias import ImuBias as PriorBias
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (

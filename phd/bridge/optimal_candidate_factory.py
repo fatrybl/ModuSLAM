@@ -40,8 +40,7 @@ class Factory:
 
         for i, candidate in enumerate(candidates):
             self._solve(candidate.graph, i)
-            result = self._evaluator.compute_metrics(candidate)
-            results.append((candidate, result))
+            results.append((candidate, None))
 
         best_candidate = self._choose_best(results)
         return best_candidate

@@ -1,9 +1,9 @@
-from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
-from phd.bridge.objects.auxiliary_dataclasses import Connection
-from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.metrics.protocols import Metrics
 from phd.external.utils import get_subsequence
-from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
+from phd.measurements.auxiliary_classes import PseudoMeasurement
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousMeasurement, Measurement
 
 
 class EdgeConsistency(Metrics):

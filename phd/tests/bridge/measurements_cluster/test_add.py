@@ -1,8 +1,8 @@
 import pytest
 
-from phd.bridge.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
-from phd.bridge.objects.measurements_cluster import Cluster
-from phd.measurements.processed_measurements import ContinuousMeasurement
+from phd.measurements.auxiliary_classes import FakeMeasurement, PseudoMeasurement
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousMeasurement
 from phd.moduslam.utils.exceptions import ValidationError
 
 

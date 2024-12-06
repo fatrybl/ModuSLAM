@@ -17,7 +17,7 @@
 import logging
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import Imu as ImuMeasurement
+from phd.measurements.processed import Imu as ImuMeasurement
 from phd.moduslam.custom_types.aliases import Matrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
@@ -38,7 +38,6 @@ class TumVieImuDataPreprocessor(Handler):
     """Tum Vie IMU data preprocessor."""
 
     def __init__(self, config: ImuHandlerConfig):
-        """TODO: maybe remove HadlerConfig  and add constant name for TumVie dataset handler ?"""
         self._sensor_name = config.sensor_name
 
     @property

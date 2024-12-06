@@ -1,14 +1,10 @@
 from typing import cast
 
-from phd.bridge.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithConnections, Connection
-from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.auxiliary_dataclasses import ClustersWithConnections, Connection
 from phd.external.connections.utils import fill_connections_with_imu
-from phd.measurements.processed_measurements import (
-    ContinuousImuMeasurement,
-    Imu,
-    Measurement,
-)
+from phd.measurements.auxiliary_classes import FakeMeasurement, PseudoMeasurement
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousImuMeasurement, Imu, Measurement
 
 
 def test_fill_connections_1_connection_in_between():

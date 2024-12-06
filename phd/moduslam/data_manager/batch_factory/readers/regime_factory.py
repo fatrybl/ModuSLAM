@@ -1,6 +1,6 @@
-from moduslam.utils.auxiliary_methods import to_float, to_int
 from phd.moduslam.data_manager.batch_factory.base_configs import DataRegimeConfig
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from phd.moduslam.utils.auxiliary_methods import str_to_float, str_to_int
 
 
 class Factory:
@@ -25,8 +25,8 @@ class Factory:
                 return Stream()
 
             case TimeLimit.name:
-                start = to_int(regime_config.start)
-                stop = to_int(regime_config.stop)
+                start = str_to_int(regime_config.start)
+                stop = str_to_int(regime_config.stop)
                 return TimeLimit(start, stop)
 
             case _:
@@ -52,8 +52,8 @@ class Factory:
                 return Stream()
 
             case TimeLimit.name:
-                start = to_float(regime_config.start)
-                stop = to_float(regime_config.stop)
+                start = str_to_float(regime_config.start)
+                stop = str_to_float(regime_config.stop)
                 return TimeLimit(start, stop)
 
             case _:

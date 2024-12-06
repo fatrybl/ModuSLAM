@@ -1,20 +1,20 @@
 """Custom exceptions."""
 
 
-class ItemNotFoundError(Exception):
-    """The given item has not been found."""
-
-
 class ValidationError(Exception):
     """Validations has failed."""
 
 
+class ItemNotFoundError(Exception):
+    """The item has not been found."""
+
+
 class ItemExistsError(Exception):
-    """The given item does not exist."""
+    """The item already exists."""
 
 
 class ItemNotExistsError(Exception):
-    """The given item does exist."""
+    """The item does not exist."""
 
 
 class FileNotValid(Exception):

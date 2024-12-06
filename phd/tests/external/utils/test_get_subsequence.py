@@ -1,7 +1,7 @@
 import pytest
 
-from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
 from phd.external.utils import get_subsequence
+from phd.measurements.auxiliary_classes import PseudoMeasurement
 
 
 def test_get_subsequence_empty_sequence():

@@ -1,6 +1,6 @@
 import gtsam
 
-from phd.measurements.processed_measurements import ImuBias as ImuBiasMeasurement
+from phd.measurements.processed import ImuBias as ImuBiasMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias as BiasVertex,

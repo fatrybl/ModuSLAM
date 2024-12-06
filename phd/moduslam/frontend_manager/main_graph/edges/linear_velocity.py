@@ -1,9 +1,7 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed_measurements import (
-    LinearVelocity as LinearVelocityMeasurement,
-)
+from phd.measurements.processed import LinearVelocity as LinearVelocityMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity as VelocityVertex,

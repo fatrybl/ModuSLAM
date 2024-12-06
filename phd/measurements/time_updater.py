@@ -1,8 +1,11 @@
-from phd.measurements.processed_measurements import Measurement, TimeRangeMeasurement
+from phd.measurements.processed import Measurement, TimeRangeMeasurement
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 
 class TimeRangeUpdate:
+    """
+    TODO: add tests.
+    """
 
     @staticmethod
     def update_time_range_on_add(
@@ -36,7 +39,7 @@ class TimeRangeUpdate:
         start: int | None,
         stop: int | None,
     ) -> tuple[int | None, int | None]:
-        """Efficiently updates the time range when a measurement is removed.
+        """Calculates new start & stop timestamps when a measurement is removed.
 
         Args:
             data: a dictionary with measurements.

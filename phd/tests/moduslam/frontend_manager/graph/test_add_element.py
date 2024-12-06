@@ -1,8 +1,8 @@
 import gtsam.noiseModel
 import pytest
 
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
-from phd.measurements.processed_measurements import PoseOdometry as OdometryMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
+from phd.measurements.processed import PoseOdometry as OdometryMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement

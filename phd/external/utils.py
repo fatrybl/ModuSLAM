@@ -3,10 +3,10 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import TypeVar
 
-from phd.bridge.objects.auxiliary_classes import MeasurementGroup, SplitPoseOdometry
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers, Connection
-from phd.bridge.objects.measurements_cluster import Cluster
-from phd.measurements.processed_measurements import ContinuousMeasurement, Measurement
+from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers, Connection
+from phd.measurements.auxiliary_classes import MeasurementGroup, SplitPoseOdometry
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousMeasurement, Measurement
 
 T = TypeVar("T", bound=Measurement)
 

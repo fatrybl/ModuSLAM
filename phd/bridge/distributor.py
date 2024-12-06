@@ -13,8 +13,8 @@ from phd.bridge.edge_factories.pose_odometry import Factory as PoseOdometryFacto
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitPoseOdometryFactory,
 )
-from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
-from phd.measurements.processed_measurements import (
+from phd.measurements.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.processed import (
     ContinuousImuMeasurement,
     Gps,
     LinearVelocity,

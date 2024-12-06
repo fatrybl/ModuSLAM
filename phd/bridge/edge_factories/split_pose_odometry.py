@@ -1,7 +1,7 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
 from phd.bridge.edge_factories.pose_odometry import Factory as OdometryFactory
 from phd.bridge.edge_factories.utils import get_cluster_for_timestamp_from_dict
-from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.auxiliary_classes import SplitPoseOdometry
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (

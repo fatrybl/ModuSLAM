@@ -3,7 +3,6 @@ from pathlib import Path
 import numpy as np
 
 from moduslam.utils.auxiliary_dataclasses import Message
-from moduslam.utils.auxiliary_methods import to_int
 from phd.moduslam.data_manager.batch_factory.readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,
@@ -15,6 +14,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     read_csv_file,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from phd.moduslam.utils.auxiliary_methods import str_to_int
 
 
 def read_binary(file: Path) -> tuple[float, ...]:
@@ -86,7 +86,7 @@ def process_csv_line(row: list[str]):
     Args:
         row: a row of a csv file.
     """
-    timestamp = to_int(row[0])
+    timestamp = str_to_int(row[0])
     sensor_name = row[1]
     return timestamp, sensor_name
 

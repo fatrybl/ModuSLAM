@@ -5,7 +5,7 @@ import gtsam
 import numpy as np
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import (
+from phd.measurements.processed import (
     ContinuousImuMeasurement,
     ContinuousMeasurement,
     Imu,

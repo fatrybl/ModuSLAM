@@ -2,7 +2,7 @@ from typing import cast
 
 import gtsam
 
-from phd.measurements.processed_measurements import ImuBias, LinearVelocity, Pose
+from phd.measurements.processed import ImuBias, LinearVelocity, Pose
 from phd.moduslam.custom_types.aliases import Matrix4x4, Vector6
 from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
     PriorImuBias,

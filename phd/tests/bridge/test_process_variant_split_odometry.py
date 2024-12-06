@@ -7,10 +7,10 @@ import pytest
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitOdometryFactory,
 )
-from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
-from phd.bridge.objects.measurements_cluster import Cluster
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
-from phd.measurements.processed_measurements import PoseOdometry
+from phd.measurements.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import Pose as PoseMeasurement
+from phd.measurements.processed import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     se3_isotropic_noise_model,
 )

@@ -1,12 +1,12 @@
-from phd.bridge.objects.auxiliary_classes import MeasurementGroup
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.bridge.preprocessors.fake_measurement_factory import add_fake_cluster
 from phd.bridge.preprocessors.pose_odometry import find_and_replace
 from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
-from phd.measurements.processed_measurements import Imu, Measurement
+from phd.measurements.auxiliary_classes import MeasurementGroup
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import Imu, Measurement
 from phd.measurements.storage import MeasurementStorage
 from phd.moduslam.utils.ordered_set import OrderedSet
 

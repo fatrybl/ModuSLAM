@@ -1,5 +1,5 @@
-from phd.bridge.objects.auxiliary_classes import FakeMeasurement, PseudoMeasurement
 from phd.bridge.preprocessors.fake_measurement_factory import find_fake_measurement
+from phd.measurements.auxiliary_classes import FakeMeasurement, PseudoMeasurement
 
 
 def test_find_fake_measurement_empty_iterable():

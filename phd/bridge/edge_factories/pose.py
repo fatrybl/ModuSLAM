@@ -4,7 +4,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
     get_cluster,
 )
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     pose_block_diagonal_noise_model,
 )

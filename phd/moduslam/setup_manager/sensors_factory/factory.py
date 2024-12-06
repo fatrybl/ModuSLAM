@@ -1,7 +1,6 @@
 import logging
 from typing import cast
 
-from moduslam.utils.exceptions import ItemNotFoundError
 from phd.logger.logging_config import setup_manager
 from phd.moduslam.setup_manager.sensors_factory.sensors import (
     Altimeter,
@@ -21,6 +20,7 @@ from phd.moduslam.setup_manager.sensors_factory.sensors_configs import (
     SensorConfig,
     StereoCameraConfig,
 )
+from phd.moduslam.utils.exceptions import ItemNotExistsError
 
 logger = logging.getLogger(setup_manager)
 
@@ -47,13 +47,13 @@ class SensorsFactory:
             sensor.
 
         Raises:
-            ItemNotFoundError: if no sensor with the given name.
+            ItemNotExistsError: no sensor exists with the given name.
         """
         try:
             return cls._sensors_table[name]
         except KeyError:
             msg = f"No sensor with the name {name!r} in {cls._sensors}."
-            raise ItemNotFoundError(msg)
+            raise ItemNotExistsError(msg)
 
     @classmethod
     def init_sensors(cls, sensors: dict[str, SensorConfig]) -> None:
@@ -63,10 +63,7 @@ class SensorsFactory:
             sensors: "sensor name <-> sensor config" table.
 
         Raises:
-            ValueError: if sensor name does not match the name in the config.
-
-        TODO: add test to check the mismatch between sensor name and sensor config name
-            or remove name duplicates everywhere.
+            ValueError: if sensor`s name does not match the name in the config.
         """
         cls._sensors.clear()
         cls._sensors_table.clear()
@@ -74,7 +71,7 @@ class SensorsFactory:
         for name, config in sensors.items():
 
             if name != config.name:
-                msg = "sensor`s name does not match the name in the config."
+                msg = "Sensor`s name does not match the name in the config."
                 logger.critical(msg)
                 raise ValueError(msg)
 
@@ -93,7 +90,7 @@ class SensorsFactory:
             sensor.
 
         Raises:
-            ValueError: if sensor type is not supported.
+            TypeError: if sensor`s type is not supported.
         """
 
         sensor_type: str = config.type_name
@@ -126,6 +123,6 @@ class SensorsFactory:
             case _:
                 msg = f"Unsupported sensor type: {sensor_type}"
                 logger.critical(msg)
-                raise ValueError(msg)
+                raise TypeError(msg)
 
         return sensor

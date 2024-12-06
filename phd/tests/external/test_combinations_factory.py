@@ -1,6 +1,6 @@
-from phd.bridge.objects.auxiliary_classes import MeasurementGroup, PseudoMeasurement
-from phd.bridge.objects.measurements_cluster import Cluster
 from phd.external.combinations_factory import Factory
+from phd.measurements.auxiliary_classes import MeasurementGroup, PseudoMeasurement
+from phd.measurements.cluster import Cluster
 
 
 def test_combine_with_empty_iterable():

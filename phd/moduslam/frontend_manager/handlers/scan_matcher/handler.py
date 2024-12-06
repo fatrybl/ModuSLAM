@@ -4,7 +4,7 @@ import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import PoseOdometry
+from phd.measurements.processed import PoseOdometry
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element

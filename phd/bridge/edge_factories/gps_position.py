@@ -4,7 +4,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
     get_cluster,
 )
-from phd.measurements.processed_measurements import Gps
+from phd.measurements.processed import Gps
 from phd.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     covariance3x3_noise_model,

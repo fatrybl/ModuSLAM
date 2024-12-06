@@ -1,7 +1,7 @@
-from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
-from phd.bridge.objects.auxiliary_dataclasses import Connection
-from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.utils import create_copy
+from phd.measurements.auxiliary_classes import PseudoMeasurement
+from phd.measurements.cluster import Cluster
 
 
 def test_create_copy_with_empty_inputs():

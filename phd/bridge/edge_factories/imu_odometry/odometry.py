@@ -11,7 +11,7 @@ from phd.bridge.edge_factories.utils import (
     get_cluster_for_timestamp_from_dict,
     get_cluster_for_timestamp_from_iterable,
 )
-from phd.measurements.processed_measurements import ContinuousImuMeasurement
+from phd.measurements.processed import ContinuousImuMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (

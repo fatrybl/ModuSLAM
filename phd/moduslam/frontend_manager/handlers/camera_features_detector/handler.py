@@ -1,14 +1,13 @@
-"""Detects ORB keypoints and creates a measurement with visual features. The same
-measurement noise covariance is used for every keypoint.
+"""Detects ORB keypoints and creates a measurement with visual features.
 
-TODO: add/remove both stereo images.
+The same measurement noise covariance is used for every keypoint.
 """
 
 import logging
 from collections.abc import Sequence
 
 from moduslam.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import Measurement
+from phd.measurements.processed import Measurement
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.camera_features_detector.config import (
     FeatureDetectorConfig,

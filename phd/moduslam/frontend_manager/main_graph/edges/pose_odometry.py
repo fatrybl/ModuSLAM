@@ -1,7 +1,7 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed_measurements import PoseOdometry as OdometryMeasurement
+from phd.measurements.processed import PoseOdometry as OdometryMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 

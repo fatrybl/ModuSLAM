@@ -47,7 +47,9 @@ class Builder:
 
             self._storage.clear()
 
-            self._storage.add(candidate.leftovers) if candidate.leftovers else None
+            if candidate.leftovers:
+                for measurement in candidate.leftovers:
+                    self._storage.add(measurement)
 
             graph = candidate.graph
 

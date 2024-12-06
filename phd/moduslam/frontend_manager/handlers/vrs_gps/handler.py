@@ -3,7 +3,7 @@
 import logging
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed_measurements import Gps
+from phd.measurements.processed import Gps
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler

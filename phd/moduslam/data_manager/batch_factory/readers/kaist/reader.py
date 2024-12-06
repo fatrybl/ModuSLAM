@@ -7,7 +7,6 @@ from typing import overload
 
 from plum import dispatch
 
-from moduslam.utils.auxiliary_methods import to_int
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from phd.moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
@@ -34,6 +33,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.utils.auxiliary_methods import str_to_int
 from phd.moduslam.utils.exceptions import DataReaderConfigurationError
 
 logger = logging.getLogger(data_manager)
@@ -179,7 +179,7 @@ class KaistReader(DataReader):
         source = self._sensor_source_table[sensor.name]
         message, location = get_next_measurement(source)
         measurement = RawMeasurement(sensor, message.data)
-        msg_timestamp = to_int(message.timestamp)
+        msg_timestamp = str_to_int(message.timestamp)
         if timestamp != msg_timestamp:
             msg = (
                 f"There is no real measurement for the sensor {sensor_name} at the timestamp {timestamp}."
@@ -217,7 +217,7 @@ class KaistReader(DataReader):
             return None
 
         measurement = RawMeasurement(sensor, message.data)
-        timestamp = to_int(message.timestamp)
+        timestamp = str_to_int(message.timestamp)
         element = Element(timestamp, measurement, location)
         return element
 

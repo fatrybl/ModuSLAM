@@ -1,6 +1,6 @@
 from typing import Any
 
-from phd.measurements.processed_measurements import Measurement, PoseOdometry
+from phd.measurements.processed import Measurement, PoseOdometry
 from phd.moduslam.data_manager.batch_factory.batch import Element
 
 

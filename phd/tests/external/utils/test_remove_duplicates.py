@@ -1,8 +1,8 @@
-from phd.bridge.objects.auxiliary_classes import PseudoMeasurement
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.bridge.objects.measurements_cluster import Cluster
+from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.external.utils import remove_duplicates
-from phd.measurements.processed_measurements import ContinuousMeasurement
+from phd.measurements.auxiliary_classes import PseudoMeasurement
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import ContinuousMeasurement
 
 
 def test_remove_duplicates_empty_input():

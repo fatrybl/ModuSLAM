@@ -1,6 +1,6 @@
 from gtsam import CombinedImuFactor, PreintegratedCombinedMeasurements
 
-from phd.measurements.processed_measurements import ContinuousMeasurement, Imu
+from phd.measurements.processed import ContinuousMeasurement, Imu
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,

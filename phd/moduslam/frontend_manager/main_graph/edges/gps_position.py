@@ -1,7 +1,7 @@
 import gtsam
 from gtsam.gtsam.noiseModel import Base
 
-from phd.measurements.processed_measurements import Gps
+from phd.measurements.processed import Gps
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 

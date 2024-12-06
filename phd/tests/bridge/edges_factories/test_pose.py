@@ -1,5 +1,5 @@
 from phd.bridge.edge_factories.pose import Factory
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,

@@ -1,8 +1,8 @@
 import gtsam.noiseModel
 import pytest
 
-from phd.measurements.processed_measurements import Gps as GpsMeasurement
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
+from phd.measurements.processed import Gps as GpsMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
 from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from phd.moduslam.data_manager.batch_factory.readers.locations import Location
 from phd.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition

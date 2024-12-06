@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from phd.bridge.objects.measurements_cluster import Cluster
-from phd.measurements.processed_measurements import Measurement
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import Measurement
 
 
 @dataclass

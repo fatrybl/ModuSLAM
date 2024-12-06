@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 
-from phd.bridge.objects.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.bridge.objects.measurements_cluster import Cluster
-from phd.measurements.processed_measurements import Measurement
+from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
+from phd.measurements.cluster import Cluster
+from phd.measurements.processed import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 
 

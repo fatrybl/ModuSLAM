@@ -1,8 +1,8 @@
 import pytest
 
 from phd.bridge.edge_factories.split_pose_odometry import Factory
-from phd.bridge.objects.auxiliary_classes import SplitPoseOdometry
-from phd.measurements.processed_measurements import PoseOdometry
+from phd.measurements.auxiliary_classes import SplitPoseOdometry
+from phd.measurements.processed import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,

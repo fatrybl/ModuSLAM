@@ -4,9 +4,7 @@ from phd.bridge.edge_factories.utils import (
     create_vertex_i_with_status,
     get_cluster,
 )
-from phd.measurements.processed_measurements import (
-    LinearVelocity as VelocityMeasurement,
-)
+from phd.measurements.processed import LinearVelocity as VelocityMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
     LinearVelocity as PriorVelocity,
 )

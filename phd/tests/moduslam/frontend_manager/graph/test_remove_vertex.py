@@ -1,9 +1,9 @@
 import gtsam
 import pytest
 
-from phd.measurements.processed_measurements import Imu as ImuMeasurement
-from phd.measurements.processed_measurements import Pose as PoseMeasurement
-from phd.measurements.processed_measurements import PoseOdometry as Odometry
+from phd.measurements.processed import Imu as ImuMeasurement
+from phd.measurements.processed import Pose as PoseMeasurement
+from phd.measurements.processed import PoseOdometry as Odometry
 from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
 from phd.moduslam.data_manager.batch_factory.readers.locations import Location
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
