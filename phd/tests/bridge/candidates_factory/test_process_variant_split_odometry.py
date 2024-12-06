@@ -1,5 +1,3 @@
-"""TODO: put this test to the proper place."""
-
 from typing import cast
 
 import pytest

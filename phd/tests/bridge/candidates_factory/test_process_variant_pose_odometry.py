@@ -1,5 +1,3 @@
-"""TODO: put these tests somewhere in proper place."""
-
 from phd.bridge.edge_factories.pose_odometry import Factory
 from phd.measurements.processed import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
