@@ -15,13 +15,6 @@ class KissIcpScanMatcherConfig(HandlerConfig):
     deskew: bool = False
     preprocess: bool = False
     measurement_noise_covariance: tuple[float, float, float, float, float, float] = field(
-        default_factory=lambda: (
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-        ),
+        default_factory=lambda: (1, 1, 1, 1, 1, 1),
         metadata={"help": "Measurement noise covariance [x, y, z, roll, pitch, yaw]"},
     )

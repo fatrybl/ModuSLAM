@@ -1,3 +1,5 @@
+"""TODO: fix __main__ example or remove."""
+
 import math
 from collections.abc import Sequence
 

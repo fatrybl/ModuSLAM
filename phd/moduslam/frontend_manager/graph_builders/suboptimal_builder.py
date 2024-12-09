@@ -7,7 +7,7 @@ from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
-    SingleLidarOdometryWithImu,
+    SinglePoseOdometry,
 )
 from phd.moduslam.frontend_manager.utils import fill_storage
 
@@ -23,7 +23,7 @@ class Builder:
             handlers: handlers for creating measurements.
         """
         self._handlers = handlers
-        self._analyzer = SingleLidarOdometryWithImu()
+        self._analyzer = SinglePoseOdometry()
         self._candidate_factory = Factory()
         self._storage = MeasurementStorage()
 

@@ -1,4 +1,4 @@
-from phd.external.metrics.protocols import Metrics
+from phd.external.metrics.base_metric_protocol import Metrics
 
 
 class TotalTimeShift(Metrics):

@@ -11,7 +11,7 @@ class SinglePoseOdometry(StorageAnalyzer):
     def check_storage(storage: MeasurementStorage) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
-            1 PoseOdometry measurement exists.
+            1 pose odometry.
 
         Returns:
             check status.
@@ -22,12 +22,12 @@ class SinglePoseOdometry(StorageAnalyzer):
             return False
 
 
-class MultiplePoseOdometry(StorageAnalyzer):
+class DoublePoseOdometry(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: MeasurementStorage) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
-            2 PoseOdometry measurements exists.
+            2 pose odometries.
 
         Returns:
             check status.
@@ -38,12 +38,12 @@ class MultiplePoseOdometry(StorageAnalyzer):
             return False
 
 
-class SingleLidarOdometryWithImu(StorageAnalyzer):
+class SinglePoseOdometryWithImu(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: MeasurementStorage) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
-            1 lidar PoseOdometry and IMU measurements.
+            1 pose odometry and IMU measurements.
 
         Returns:
             check status.
@@ -52,6 +52,27 @@ class SingleLidarOdometryWithImu(StorageAnalyzer):
             PoseOdometry in storage.data
             and Imu in storage.data
             and len(storage.data[PoseOdometry]) == 1
+            and len(storage.data[Imu]) > 0
+        ):
+            return True
+        else:
+            return False
+
+
+class DoublePoseOdometryWithImu(StorageAnalyzer):
+    @staticmethod
+    def check_storage(storage: MeasurementStorage) -> bool:
+        """Checks measurements storage if the criterion is satisfied.
+        Criterion:
+            2 pose odometries and IMU measurements.
+
+        Returns:
+            check status.
+        """
+        if (
+            PoseOdometry in storage.data
+            and Imu in storage.data
+            and len(storage.data[PoseOdometry]) == 2
             and len(storage.data[Imu]) > 0
         ):
             return True

@@ -1,5 +1,5 @@
 from phd.bridge.auxiliary_dataclasses import Connection
-from phd.external.metrics.protocols import Metrics
+from phd.external.metrics.base_metric_protocol import Metrics
 from phd.external.utils import get_subsequence
 from phd.measurements.auxiliary_classes import PseudoMeasurement
 from phd.measurements.cluster import Cluster
