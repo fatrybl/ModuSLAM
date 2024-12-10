@@ -10,7 +10,6 @@ from tests_data_generators.ros2_dataset.data import elements
 from tests_data_generators.utils import generate_sensors_factory_config
 
 # TODO: Optimize cases for Ros2 because the test is taking too long to run
-
 el1 = elements[0]
 el2 = elements[1]
 el3 = elements[2]
@@ -73,20 +72,12 @@ timestamp4 = 1698927496898641344  # 60 sensor readings
 timestamp5 = 1698927497046583719  # 80 sensor readings
 timestamp6 = 1698927497190095250  # 100 sensor readings
 
+#TODO: check elements and timestamps, sort by timestamp
 elements_0_20 = [e for e in elements if e.timestamp >= timestamp1 and e.timestamp < timestamp2]
 elements20_40 = [e for e in elements if e.timestamp >= timestamp2 and e.timestamp < timestamp3]
 elements40_60 = [e for e in elements if e.timestamp >= timestamp3 and e.timestamp < timestamp4]
 elements60_80 = [e for e in elements if e.timestamp >= timestamp4 and e.timestamp < timestamp5]
 elements80_100 = [e for e in elements if e.timestamp >= timestamp5 and e.timestamp < timestamp6]
-
-# TODO: check test with elements 40_60 and 60_80 due to test fail
-
-timelimit20 = TimeLimit(start=timestamp1, stop=timestamp2)
-timelimit20_40 = TimeLimit(start=timestamp2, stop=timestamp3)
-timelimit40_60 = TimeLimit(start=timestamp3, stop=timestamp4)
-timelimit60_80 = TimeLimit(start=timestamp4, stop=timestamp5)
-timelimit80_100 = TimeLimit(start=timestamp5, stop=timestamp6)
-
 
 sensors_table1 = {
     "stereo_camera_left": "left",
@@ -96,30 +87,121 @@ sensors_table1 = {
     "lidar_right": "vlp16r",
     "lidar_center": "vlp32c",
 }
+sensors_table_stereo_camera_left = {
+     "stereo_camera_left": "left",
+}
+sensors_table_stereo_camera_right = {
+     "stereo_camera_right": "right",
+}
+sensors_table_imu = {
+    "imu": "xsens",
+}
+sensors_table_lidar_left = {
+    "lidar_left": "vlp16l",
+}
+sensors_table_lidar_right = {
+    "lidar_right": "vlp16r",
+}
+sensors_table_lidar_center = {
+    "lidar_center": "vlp32c",
+}
 
+sensors_table_e1_e10 = {
+    "imu": "xsens",
+    "lidar_left": "vlp16l",
+}
+incorrect_sensors_table_e1_e10 = {
+    "stereo_camera_left": "left",
+    "stereo_camera_right": "right",
+    "lidar_right": "vlp16r",
+    "lidar_center": "vlp32c",
+}
 
 sensors1 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table1.keys())]
+sensors2 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_stereo_camera_left.keys())]
+sensors3 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_stereo_camera_right.keys())]
+sensors4 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_imu.keys())]
+sensors5 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_lidar_left.keys())]
+sensors6 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_lidar_right.keys())]
+sensors7 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_lidar_center.keys())]
+
+sensors_e1_e10 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_e1_e10.keys())]
+incorrect_sensors_e1_e10 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(incorrect_sensors_table_e1_e10.keys())]
 
 dataset_cfg1 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table1)
+dataset_cfg_e1_e10 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table_e1_e10)
+incorrect_dataset_cfg_e1_e10 = Ros2Config(directory=ros2_dataset_dir, sensors_table=incorrect_sensors_table_e1_e10)
 
 stream = Stream()
 
+# TODO: check test with elements 40_60 and 60_80 due to test fail  upd: 40_60 fix
+timelimit20 = TimeLimit(start=timestamp1, stop=timestamp2)
+timelimit20_40 = TimeLimit(start=timestamp2, stop=timestamp3)
+timelimit40_60 = TimeLimit(start=timestamp3, stop=timestamp4)
+timelimit60_80 = TimeLimit(start=timestamp4, stop=timestamp5)
+timelimit80_100 = TimeLimit(start=timestamp5, stop=timestamp6)
+
 sensors_factory_config1 = generate_sensors_factory_config(sensors1)
+sensors_factory_config2 = generate_sensors_factory_config(sensors2)
+sensors_factory_config3 = generate_sensors_factory_config(sensors3)
+sensors_factory_config4 = generate_sensors_factory_config(sensors4)
+sensors_factory_config5 = generate_sensors_factory_config(sensors5)
+sensors_factory_config6 = generate_sensors_factory_config(sensors6)
+sensors_factory_config7 = generate_sensors_factory_config(sensors7)
 
-
+sensors_factory_config_e1_e10 = generate_sensors_factory_config(sensors_e1_e10)
+invalid_sensors_factory_config_e1_e10 = generate_sensors_factory_config(sensors_e1_e10)
 incorrect_sensors_factory_config = generate_sensors_factory_config([])
 
-# TODO: Create valid stream scenarios to test
+# TODO: Test with ROS2DataReader fails when the first element is missing
+# TODO: Test with ROS2DataReader for GPS check
 valid_stream_scenarios = (
     (sensors_factory_config1, dataset_cfg1, stream, Ros2DataReader, elements),
+    (sensors_factory_config2, dataset_cfg1, stream, Ros2DataReader, [el23, el40]), # stereo_camera_left
+    (sensors_factory_config3, dataset_cfg1, stream, Ros2DataReader, [el33, el54]), # stereo_camera_right
+    (sensors_factory_config4, dataset_cfg1, stream, Ros2DataReader, [el1, el3, el4]), # imu
+    (sensors_factory_config5, dataset_cfg1, stream, Ros2DataReader, [el2, el20, el35, el49]), # lidar_left
+    (sensors_factory_config6, dataset_cfg1, stream, Ros2DataReader, [el15, el29, el44]), # lidar_right
+    (sensors_factory_config7, dataset_cfg1, stream, Ros2DataReader, [el14, el27, el42]),  # lidar_center
+    (sensors_factory_config_e1_e10, dataset_cfg_e1_e10, stream, Ros2DataReader, [el1, el2, el3]), # imu, lidar_left, imu
 )
-
-valid_time_limit_scenarios = (
+# TODO: More tests with different invalid configs
+invalid_stream_scenarios = (
+    (incorrect_sensors_factory_config, dataset_cfg1, stream, Ros2DataReader, [None]),
+#     (invalid_sensors_factory_config_e1_e10, incorrect_dataset_cfg_e1_e10, stream, Ros2DataReader, [el1, el2, el3]),
+#     (sensors_factory_config_e1_e10, incorrect_dataset_cfg_e1_e10, stream, Ros2DataReader, [el1, el2, el3]),
+#     (sensors_factory_config_e1_e10, dataset_cfg_e1_e10, stream, Ros2DataReader, [el23, el40]),
+)
+# TODO: elements 60_80 due to test fail
+valid_timelimit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit20, Ros2DataReader, elements_0_20),
     (sensors_factory_config1, dataset_cfg1, timelimit20_40, Ros2DataReader, elements20_40),
+    (sensors_factory_config1, dataset_cfg1, timelimit40_60, Ros2DataReader, elements40_60),
+    # (sensors_factory_config1, dataset_cfg1, timelimit60_80, Ros2DataReader, elements60_80),
     (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
-# TODO: Create invalid stream and time limit scenarios to test
+invalid_timelimit_scenarios = (
+    (incorrect_sensors_factory_config, dataset_cfg1, timelimit20, Ros2DataReader, [None]),
+    # (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, [None]),
+    # (sensors_factory_config2, dataset_cfg1, timelimit20, Ros2DataReader, [None]),
+    # (incorrect_sensors_factory_config, dataset_cfg1, timelimit20_40, Ros2DataReader, [None]),
+    # (incorrect_sensors_factory_config, dataset_cfg1, timelimit40_60, Ros2DataReader, [None]),
+    # (incorrect_sensors_factory_config, dataset_cfg1, timelimit60_80, Ros2DataReader, [None]),
+    # (incorrect_sensors_factory_config, dataset_cfg1, timelimit80_100, Ros2DataReader, [None]),
+)
+# TODO: Hardcoded topics for Bag: Ros2DataReader `self._data_types = ["Image", "PointCloud2", "Imu"]`
+stream_scenarios = (
+    *valid_stream_scenarios,
+    *invalid_stream_scenarios,
+)
+time_limit_scenarios = (
+    *valid_timelimit_scenarios,
+    *invalid_timelimit_scenarios,
+)
 
-ros2_case1 = (*valid_time_limit_scenarios,)
+ros2_case1 = (
+    *stream_scenarios,
+    *time_limit_scenarios,
+)
+
