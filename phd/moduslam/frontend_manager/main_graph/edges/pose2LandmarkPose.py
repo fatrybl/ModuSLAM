@@ -1,7 +1,9 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed import PoseLandmark as DetectedLandmark
+from phd.measurement_storage.measurements.with_raw_elements import (
+    PoseLandmark as DetectedLandmark,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (

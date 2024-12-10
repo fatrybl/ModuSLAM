@@ -1,20 +1,21 @@
 import pytest
 
 from phd.bridge.edge_factories.split_pose_odometry import Factory
-from phd.measurements.auxiliary_classes import SplitPoseOdometry
-from phd.measurements.processed import PoseOdometry
+from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
+from phd.measurement_storage.measurements.pose_odometry import Odometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4
+from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
 from phd.moduslam.utils.exceptions import SkipItemException
 
 
 def test_create_empty_graph_1_split(empty_graph: Graph):
-    parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
+    parent = Odometry(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
     measurement = SplitPoseOdometry(0, parent)
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(0, 0)}
@@ -24,7 +25,7 @@ def test_create_empty_graph_1_split(empty_graph: Graph):
 
 
 def test_create_empty_graph_2_splits(empty_graph: Graph):
-    parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
+    parent = Odometry(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
     split1 = SplitPoseOdometry(0, parent)
     split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
@@ -51,7 +52,7 @@ def test_create_empty_graph_2_splits(empty_graph: Graph):
 
 
 def test_create_graph_1_split(graph1: Graph):
-    parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
+    parent = Odometry(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
     measurement = SplitPoseOdometry(0, parent)
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(0, 0)}
@@ -66,7 +67,7 @@ def test_create_graph_1_split(graph1: Graph):
 
 
 def test_create_graph_2_splits(graph1: Graph):
-    parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
+    parent = Odometry(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
     split1 = SplitPoseOdometry(0, parent)
     split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
@@ -95,7 +96,7 @@ def test_create_graph_2_splits(graph1: Graph):
 
 
 def test_create_graph_with_2_vertices_2_splits(graph2: Graph):
-    parent = PoseOdometry(1, TimeRange(0, 1), identity4x4, identity3x3, identity3x3, [])
+    parent = Odometry(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
     split1 = SplitPoseOdometry(0, parent)
     split2 = SplitPoseOdometry(1, parent)
     cluster1, cluster2 = VertexCluster(), VertexCluster()

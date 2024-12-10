@@ -19,6 +19,9 @@ class SensorConfig:
 
 @dataclass
 class StereoCameraConfig(SensorConfig):
+
+    type_name: str = StereoCamera.__name__
+
     camera_matrix_left: list[list[float]] = field(
         default_factory=lambda: [
             [1.0, 0.0, 0.0],
@@ -96,14 +99,12 @@ class StereoCameraConfig(SensorConfig):
     distortion_model_left: str = "plumb_bob"
     distortion_model_right: str = "plumb_bob"
 
-    type_name: str = StereoCamera.__name__
-
 
 @dataclass
 class ImuConfig(SensorConfig):
     """IMU sensor configuration."""
 
-    type_name: str = field(default=Imu.__name__, metadata={"help": "Name of sensor`s type."})
+    type_name: str = Imu.__name__
 
     tf_base_sensor: list[list[float]] = field(
         default_factory=lambda: [
@@ -155,7 +156,7 @@ class ImuConfig(SensorConfig):
 class Lidar3DConfig(SensorConfig):
     """Lidar 3D sensor configuration."""
 
-    type_name: str = field(default=Lidar3D.__name__, metadata={"help": "Name of sensor`s type."})
+    type_name: str = Lidar3D.__name__
 
     max_range: float = 100.0
     min_range: float = 0.0
@@ -180,4 +181,15 @@ class Lidar3DConfig(SensorConfig):
 
 @dataclass
 class VrsGpsConfig(SensorConfig):
+
     type_name = VrsGps.__name__
+
+    tf_base_sensor: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ],
+        metadata={"help": "Transformation matrix base link -> sensor."},
+    )

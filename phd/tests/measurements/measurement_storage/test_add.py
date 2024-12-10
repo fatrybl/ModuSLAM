@@ -1,7 +1,7 @@
 import pytest
 
-from phd.measurements.auxiliary_classes import FakeMeasurement
-from phd.measurements.storage import MeasurementStorage
+from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
+from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.utils.exceptions import ValidationError
 from phd.moduslam.utils.ordered_set import OrderedSet
 

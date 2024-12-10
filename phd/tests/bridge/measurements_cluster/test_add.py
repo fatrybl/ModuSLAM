@@ -1,8 +1,11 @@
 import pytest
 
-from phd.measurements.auxiliary_classes import FakeMeasurement, PseudoMeasurement
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import ContinuousMeasurement
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import (
+    FakeMeasurement,
+    PseudoMeasurement,
+)
+from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.moduslam.utils.exceptions import ValidationError
 
 
@@ -31,9 +34,9 @@ def test_add_continuous():
     assert cluster.core_measurements == []
     assert cluster.empty is False
     with pytest.raises(ValueError):
-        cluster.timestamp
+        _ = cluster.timestamp
     with pytest.raises(ValueError):
-        cluster.time_range
+        _ = cluster.time_range
 
 
 def test_add_fake():

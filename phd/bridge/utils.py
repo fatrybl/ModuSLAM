@@ -1,9 +1,17 @@
 from collections.abc import Iterable
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import Measurement
-from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
+from phd.external.metrics.candidate_connectivity import (
+    check_connectivity,
+    get_old_vertices,
+)
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.base import Measurement
+from phd.moduslam.frontend_manager.main_graph.graph import (
+    Graph,
+    GraphCandidate,
+    GraphElement,
+)
 
 
 def add_elements_to_graph(
@@ -37,3 +45,33 @@ def process_leftovers(
         return item.clusters, item.leftovers
     else:
         return item, []
+
+
+def remove_unconnected_candidates(candidates: list[GraphCandidate]) -> list[GraphCandidate]:
+    """Removes candidates which new vertices are not fully connected with the main
+    graph.
+
+    Args:
+        candidates: candidates to remove unconnected.
+
+    Returns:
+        new list of graph candidates.
+    """
+    new_candidates: list[GraphCandidate] = []
+
+    for candidate in candidates:
+
+        edges = [element.edge for element in candidate.elements]
+        new_vertices = {
+            new_vertex.instance
+            for element in candidate.elements
+            for new_vertex in element.new_vertices
+        }
+        old_vertices = get_old_vertices(candidate.graph, new_vertices)
+
+        is_connected = check_connectivity(edges, old_vertices, new_vertices)
+
+        if is_connected:
+            new_candidates.append(candidate)
+
+    return new_candidates

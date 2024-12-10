@@ -11,16 +11,21 @@ from phd.moduslam.setup_manager.sensors_factory.sensors_configs import (
     Lidar3DConfig,
     SensorConfig,
     StereoCameraConfig,
+    VrsGpsConfig,
 )
 
 logger = logging.getLogger(setup_manager)
 
 
 def register_configs():
+    """Registers base config_objects for Hydra validation schema:
+    https://hydra.cc/docs/tutorials/structured_config/schema/
+    """
     cs = ConfigStore.instance()
-    cs.store(name="base_lidar3D", node=Lidar3DConfig)
     cs.store(name="base_imu", node=ImuConfig)
+    cs.store(name="base_lidar3D", node=Lidar3DConfig)
     cs.store(name="base_stereo_camera", node=StereoCameraConfig)
+    cs.store(name="base_vrs_gps", node=VrsGpsConfig)
 
 
 register_configs()

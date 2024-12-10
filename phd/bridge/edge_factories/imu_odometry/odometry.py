@@ -1,5 +1,3 @@
-from typing import TypeAlias
-
 import gtsam
 
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
@@ -11,7 +9,7 @@ from phd.bridge.edge_factories.utils import (
     get_cluster_for_timestamp_from_dict,
     get_cluster_for_timestamp_from_iterable,
 )
-from phd.measurements.processed import ContinuousImuMeasurement
+from phd.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -28,10 +26,6 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.moduslam.utils.auxiliary_objects import identity4x4, zero_vector3
 
-VerticesWithFlags: TypeAlias = tuple[
-    tuple[Pose, bool], tuple[LinearVelocity, bool], tuple[ImuBias, bool]
-]
-
 
 class Factory(EdgeFactory):
 
@@ -44,7 +38,7 @@ class Factory(EdgeFactory):
         cls,
         graph: Graph,
         clusters: dict[VertexCluster, TimeRange],
-        measurement: ContinuousImuMeasurement,
+        measurement: ContinuousImu[ProcessedImu],
     ) -> GraphElement[ImuOdometry]:
         """Creates a new ImuOdometry edge with pre-integrated IMU factor.
 

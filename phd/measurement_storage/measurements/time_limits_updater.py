@@ -1,4 +1,4 @@
-from phd.measurements.processed import Measurement, TimeRangeMeasurement
+from phd.measurement_storage.measurements.base import Measurement, TimeRangeMeasurement
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 

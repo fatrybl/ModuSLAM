@@ -1,6 +1,6 @@
 import gtsam
 
-from phd.measurements.processed import ImuBias as ImuBiasMeasurement
+from phd.measurement_storage.measurements.imu_bias import Bias as BiasMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias as BiasVertex,
@@ -13,7 +13,7 @@ class ImuBias(UnaryEdge):
     def __init__(
         self,
         imu_bias: BiasVertex,
-        measurement: ImuBiasMeasurement,
+        measurement: BiasMeasurement,
     ):
         super().__init__()
         self._vertex = imu_bias
@@ -32,7 +32,7 @@ class ImuBias(UnaryEdge):
         return self._vertex
 
     @property
-    def measurement(self) -> ImuBiasMeasurement:
+    def measurement(self) -> BiasMeasurement:
         return self._measurement
 
     @property

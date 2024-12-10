@@ -1,7 +1,9 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed import LinearVelocity as LinearVelocityMeasurement
+from phd.measurement_storage.measurements.linear_velocity import (
+    Velocity as VelocityMeasurement,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity as VelocityVertex,
@@ -14,7 +16,7 @@ class LinearVelocity(UnaryEdge):
     def __init__(
         self,
         velocity: VelocityVertex,
-        measurement: LinearVelocityMeasurement,
+        measurement: VelocityMeasurement,
         noise_model: Base,
     ):
         super().__init__()
@@ -38,5 +40,5 @@ class LinearVelocity(UnaryEdge):
         return (self._velocity,)
 
     @property
-    def measurement(self) -> LinearVelocityMeasurement:
+    def measurement(self) -> VelocityMeasurement:
         return self._measurement

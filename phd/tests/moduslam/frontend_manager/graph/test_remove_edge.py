@@ -1,15 +1,15 @@
 import gtsam.noiseModel
 import pytest
 
-from phd.measurements.processed import ContinuousImuMeasurement
-from phd.measurements.processed import Imu as ImuMeasurement
-from phd.measurements.processed import Pose as PoseMeasurement
-from phd.measurements.processed import PoseOdometry as PoseOdometryMeasurement
-from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
-from phd.moduslam.data_manager.batch_factory.readers.locations import Location
-from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
+from phd.measurement_storage.measurements.imu import (
+    ContinuousImu,
     ImuCovariance,
     ImuData,
+)
+from phd.measurement_storage.measurements.imu import ProcessedImu as ImuMeasurement
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from phd.measurement_storage.measurements.pose_odometry import (
+    Odometry as OdometryMeasurement,
 )
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
@@ -26,8 +26,6 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity as VelocityVertex,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.setup_manager.sensors_factory.sensors_configs import ImuConfig
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4, zero_vector3
 from phd.moduslam.utils.exceptions import ValidationError
@@ -35,11 +33,9 @@ from phd.moduslam.utils.exceptions import ValidationError
 
 @pytest.fixture
 def imu() -> ImuMeasurement:
-    measurement = RawMeasurement(ImuSensor(ImuConfig(name="imu")), values=None)
-    element = Element(0, measurement, Location())
     data = ImuData(zero_vector3, zero_vector3)
     covariance = ImuCovariance(identity3x3, identity3x3, identity3x3, identity3x3, identity3x3)
-    return ImuMeasurement(element, data, covariance, identity4x4)
+    return ImuMeasurement(0, data, covariance, identity4x4)
 
 
 def test_remove_existing_edge():
@@ -48,7 +44,7 @@ def test_remove_existing_edge():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
 
     element = GraphElement(edge=e, new_vertices=[NewVertex(v, cluster, t)])
@@ -68,7 +64,7 @@ def test_remove_nonexistent_edge():
     t = 0
     v = PoseVertex(t)
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
 
     with pytest.raises(ValidationError):
@@ -81,7 +77,7 @@ def test_remove_edge_invalid_index():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
     element = GraphElement(e, [NewVertex(v, cluster, t)])
 
@@ -100,7 +96,7 @@ def test_remove_edge_with_multiple_vertices():
     v1, v2 = PoseVertex(t1), PoseVertex(t2)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseOdometryMeasurement(t1, t_range, identity4x4, identity3x3, identity3x3, [])
+    measurement = OdometryMeasurement(t1, t_range, identity4x4, identity3x3, identity3x3)
     e = PoseOdometry(v1, v2, measurement, noise_model)
 
     element = GraphElement(e, [NewVertex(v1, cluster1, t1), NewVertex(v2, cluster2, t2)])
@@ -123,15 +119,11 @@ def test_remove_specific_edge_from_multiple():
     cluster1, cluster2, cluster3 = VertexCluster(), VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
-    measurement1 = PoseOdometryMeasurement(
-        t1, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3, []
-    )
-    measurement2 = PoseOdometryMeasurement(
-        t2, TimeRange(t2, t3), identity4x4, identity3x3, identity3x3, []
-    )
+    m1 = OdometryMeasurement(t1, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3)
+    m2 = OdometryMeasurement(t2, TimeRange(t2, t3), identity4x4, identity3x3, identity3x3)
 
-    edge1 = PoseOdometry(v1, v2, measurement1, noise_model)
-    edge2 = PoseOdometry(v2, v3, measurement2, noise_model)
+    edge1 = PoseOdometry(v1, v2, m1, noise_model)
+    edge2 = PoseOdometry(v2, v3, m2, noise_model)
 
     element1 = GraphElement(edge1, [NewVertex(v1, cluster1, t1), NewVertex(v2, cluster2, t2)])
     element2 = GraphElement(edge2, [NewVertex(v3, cluster3, t3)])
@@ -159,7 +151,7 @@ def test_remove_edge_updates_factor_graph():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
 
     element = GraphElement(e, [NewVertex(v, cluster, t)])
@@ -178,7 +170,7 @@ def test_remove_edge_with_single_vertex_removes_vertex():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
 
     element = GraphElement(e, [NewVertex(v, cluster, t)])
@@ -203,8 +195,8 @@ def test_remove_edge_with_duplicate_vertices():
     cluster1 = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
-    measurement1 = PoseMeasurement(t1, identity4x4, identity3x3, identity3x3, [])
-    measurement2 = PoseMeasurement(t2, identity4x4, identity3x3, identity3x3, [])
+    measurement1 = PoseMeasurement(t1, identity4x4, identity3x3, identity3x3)
+    measurement2 = PoseMeasurement(t2, identity4x4, identity3x3, identity3x3)
     edge1 = PriorPose(v, measurement1, noise_model)
     edge2 = PriorPose(v, measurement2, noise_model)
 
@@ -230,7 +222,7 @@ def test_remove_edge_with_vertex_in_cluster_updates_cluster():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(t, identity4x4, identity3x3, identity3x3)
     e = PriorPose(v, measurement, noise_model)
 
     element = GraphElement(e, [NewVertex(v, cluster, t)])
@@ -257,25 +249,19 @@ def test_remove_3_edges(imu: ImuMeasurement):
     cluster1, cluster2, cluster3 = VertexCluster(), VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
-    measurement1 = PoseOdometryMeasurement(
-        t1, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3, []
-    )
-    measurement2 = PoseOdometryMeasurement(
-        t2, TimeRange(t2, t3), identity4x4, identity3x3, identity3x3, []
-    )
-    measurement3 = PoseOdometryMeasurement(
-        t2, TimeRange(t1, t3), identity4x4, identity3x3, identity3x3, []
-    )
-    measurement6 = ContinuousImuMeasurement([imu], start=t1, stop=t3)
+    m1 = OdometryMeasurement(t1, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3)
+    m2 = OdometryMeasurement(t2, TimeRange(t2, t3), identity4x4, identity3x3, identity3x3)
+    m3 = OdometryMeasurement(t2, TimeRange(t1, t3), identity4x4, identity3x3, identity3x3)
+    m4 = ContinuousImu([imu], start=t1, stop=t3)
 
     gravity = (9.81, 0, 0)
     params = gtsam.PreintegrationCombinedParams(gravity)
     pim = gtsam.PreintegratedCombinedMeasurements(params)
 
-    edge1 = PoseOdometry(p1, p2, measurement1, noise_model)
-    edge2 = PoseOdometry(p2, p3, measurement2, noise_model)
-    edge3 = PoseOdometry(p1, p3, measurement3, noise_model)
-    edge4 = ImuOdometry(p1, v1, b1, p3, v2, b2, measurement6, pim)
+    edge1 = PoseOdometry(p1, p2, m1, noise_model)
+    edge2 = PoseOdometry(p2, p3, m2, noise_model)
+    edge3 = PoseOdometry(p1, p3, m3, noise_model)
+    edge4 = ImuOdometry(p1, v1, b1, p3, v2, b2, m4, pim)
 
     element1 = GraphElement(edge1, [NewVertex(p1, cluster1, t1), NewVertex(p2, cluster2, t2)])
     element2 = GraphElement(edge2, [NewVertex(p3, cluster3, t3)])

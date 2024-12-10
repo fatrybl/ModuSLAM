@@ -2,4 +2,4 @@ defaults:
   - /handlers/base_vrs_gps_preprocessor@_here_
 
 sensor_name: "vrs"
-fix_statuses: [ 4, 5 ]
+fix_statuses: [ 4 ]

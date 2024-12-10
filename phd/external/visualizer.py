@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithConnections, Connection
-from phd.measurements.auxiliary_classes import PseudoMeasurement
-from phd.measurements.cluster import Cluster
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
 def visualize_graph_candidates(pairs: Sequence[ClustersWithConnections]) -> None:

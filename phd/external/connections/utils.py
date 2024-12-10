@@ -6,8 +6,9 @@ from phd.bridge.auxiliary_dataclasses import (
 )
 from phd.external.connections.connections_factory import Factory
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import ContinuousImuMeasurement, Imu, Measurement
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.imu import ContinuousImu, Imu
 
 
 def fill_one_connection_with_imu(
@@ -30,7 +31,7 @@ def fill_one_connection_with_imu(
     subsequence, _, _ = get_subsequence(measurements, start, stop)
     subsequence_set = set(subsequence)
     leftovers = [m for m in measurements if m not in subsequence_set]
-    new_measurement = ContinuousImuMeasurement(subsequence, start, stop)
+    new_measurement = ContinuousImu(subsequence, start, stop)
     cluster_copy.add(new_measurement)
     return cluster_copy, leftovers
 
@@ -55,7 +56,7 @@ def fill_connections_with_imu(
         start = connection.cluster1.timestamp
         stop = connection.cluster2.timestamp
         subsequence, _, _ = get_subsequence(measurements, start, stop)
-        m = ContinuousImuMeasurement(subsequence, start, stop)
+        m = ContinuousImu(subsequence, start, stop)
         connection.cluster2.add(m)
 
         used_measurements.update(subsequence)

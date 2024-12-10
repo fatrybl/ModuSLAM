@@ -1,6 +1,6 @@
-from phd.measurements.auxiliary_classes import FakeMeasurement
-from phd.measurements.processed import TimeRangeMeasurement
-from phd.measurements.time_limits_updater import Updater
+from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
+from phd.measurement_storage.measurements.base import TimeRangeMeasurement
+from phd.measurement_storage.measurements.time_limits_updater import Updater
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 
 

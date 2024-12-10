@@ -1,7 +1,7 @@
 import gtsam.noiseModel
 import pytest
 
-from phd.measurements.processed import Pose as PoseMeasurement
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.graph import GraphElement
 from phd.moduslam.frontend_manager.main_graph.new_element import NewVertex
@@ -10,7 +10,8 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4
+from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
 from phd.moduslam.utils.exceptions import ItemExistsError, ValidationError
 
 
@@ -19,7 +20,7 @@ def test_graph_element_no_validation_error():
     v1 = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, i4x4, i3x3, i3x3)
 
     e = PriorPose(v1, measurement, noise_model)
 
@@ -33,7 +34,7 @@ def test_graph_element_validation_error():
     v1, v2 = PoseVertex(t), PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, i4x4, i3x3, i3x3)
 
     e = PriorPose(v1, measurement, noise_model)
 
@@ -47,7 +48,7 @@ def test_graph_element_no_validation_error_with_empty_new_vertices():
     t = 0
     v1 = PoseVertex(t)
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, i4x4, i3x3, i3x3)
 
     e = PriorPose(v1, measurement, noise_model)
 

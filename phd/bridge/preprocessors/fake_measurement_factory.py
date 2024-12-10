@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 
-from phd.measurements.auxiliary_classes import FakeMeasurement
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import Measurement
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
+from phd.measurement_storage.measurements.base import Measurement
 
 
 def add_fake_cluster(list_to_add: list[Cluster], timestamp: int) -> None:

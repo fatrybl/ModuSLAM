@@ -1,15 +1,8 @@
 import gtsam
 import pytest
 
-from phd.measurements.processed import Imu as ImuMeasurement
-from phd.measurements.processed import Pose as PoseMeasurement
-from phd.measurements.processed import PoseOdometry as Odometry
-from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
-from phd.moduslam.data_manager.batch_factory.readers.locations import Location
-from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
-    ImuCovariance,
-    ImuData,
-)
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from phd.measurement_storage.measurements.pose_odometry import Odometry
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
@@ -18,20 +11,10 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.setup_manager.sensors_factory.sensors_configs import ImuConfig
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4, zero_vector3
+from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
 from phd.moduslam.utils.exceptions import ValidationError
-
-
-@pytest.fixture
-def imu() -> ImuMeasurement:
-    measurement = RawMeasurement(ImuSensor(ImuConfig(name="imu")), values=None)
-    element = Element(0, measurement, Location())
-    data = ImuData(zero_vector3, zero_vector3)
-    covariance = ImuCovariance(identity3x3, identity3x3, identity3x3, identity3x3, identity3x3)
-    return ImuMeasurement(element, data, covariance, identity4x4)
 
 
 def test_remove_vertex_empty_graph():
@@ -48,7 +31,7 @@ def test_remove_vertex_with_1_edge():
     v = PoseVertex(t)
     cluster = VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    measurement = PoseMeasurement(0, identity4x4, identity3x3, identity3x3, [])
+    measurement = PoseMeasurement(0, i4x4, i3x3, i3x3)
     e = PriorPose(v, measurement, noise_model)
     element = GraphElement(e, new_vertices=[NewVertex(v, cluster, t)])
 
@@ -70,8 +53,8 @@ def test_remove_vertex_with_multiple_edges():
     cluster1, cluster2, cluster3 = VertexCluster(), VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
-    measurement1 = Odometry(t2, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3, [])
-    measurement2 = Odometry(t3, TimeRange(t1, t3), identity4x4, identity3x3, identity3x3, [])
+    measurement1 = Odometry(t2, TimeRange(t1, t2), i4x4, i3x3, i3x3)
+    measurement2 = Odometry(t3, TimeRange(t1, t3), i4x4, i3x3, i3x3)
 
     e1 = PoseOdometry(v1, v2, measurement1, noise_model)
     e2 = PoseOdometry(v1, v3, measurement2, noise_model)
@@ -104,9 +87,9 @@ def test_remove_vertex_in_cycle():
     cluster1, cluster2, cluster3 = VertexCluster(), VertexCluster(), VertexCluster()
     noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
 
-    measurement1 = Odometry(t2, TimeRange(t1, t2), identity4x4, identity3x3, identity3x3, [])
-    measurement2 = Odometry(t3, TimeRange(t2, t3), identity4x4, identity3x3, identity3x3, [])
-    measurement3 = Odometry(t3, TimeRange(t1, t3), identity4x4, identity3x3, identity3x3, [])
+    measurement1 = Odometry(t2, TimeRange(t1, t2), i4x4, i3x3, i3x3)
+    measurement2 = Odometry(t3, TimeRange(t2, t3), i4x4, i3x3, i3x3)
+    measurement3 = Odometry(t3, TimeRange(t1, t3), i4x4, i3x3, i3x3)
 
     e1 = PoseOdometry(v1, v2, measurement1, noise_model)
     e2 = PoseOdometry(v2, v3, measurement2, noise_model)

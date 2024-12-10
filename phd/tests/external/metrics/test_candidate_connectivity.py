@@ -2,8 +2,10 @@ import gtsam
 import pytest
 
 from phd.external.metrics.candidate_connectivity import check_connectivity
-from phd.measurements.processed import Pose as PoseMeasurement
-from phd.measurements.processed import PoseOdometry as OdometryMeasurement
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from phd.measurement_storage.measurements.pose_odometry import (
+    Odometry as OdometryMeasurement,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge, RadialEdge
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
@@ -40,7 +42,7 @@ class MultiVertexEdge(RadialEdge):
 
     @property
     def measurement(self) -> PoseMeasurement:
-        return PoseMeasurement(1, i4x4, i3x3, i3x3, [])
+        return PoseMeasurement(1, i4x4, i3x3, i3x3)
 
 
 @pytest.fixture
@@ -50,7 +52,7 @@ def noise() -> gtsam.noiseModel.Isotropic:
 
 @pytest.fixture
 def measurement() -> OdometryMeasurement:
-    return OdometryMeasurement(1, TimeRange(0, 1), i4x4, i3x3, i3x3, [])
+    return OdometryMeasurement(1, TimeRange(0, 1), i4x4, i3x3, i3x3)
 
 
 def test_no_old_vertices(noise: gtsam.noiseModel.Isotropic, measurement: OdometryMeasurement):
@@ -124,7 +126,7 @@ def test_not_connected_vertices(
 
 def test_connected_vertices_with_unary_edges(noise: gtsam.noiseModel.Isotropic):
     pose1, pose2 = Pose(0), Pose(1)
-    m = PoseMeasurement(1, i4x4, i3x3, i3x3, [])
+    m = PoseMeasurement(1, i4x4, i3x3, i3x3)
     e1 = PriorPose(pose1, m, noise)
     e2 = PriorPose(pose2, m, noise)
     edges: list[Edge] = [e1, e2]

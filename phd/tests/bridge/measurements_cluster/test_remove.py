@@ -1,8 +1,8 @@
 import pytest
 
-from phd.measurements.auxiliary_classes import FakeMeasurement
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import ContinuousMeasurement
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
+from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.moduslam.utils.exceptions import ValidationError
 
 
@@ -28,9 +28,9 @@ def test_remove_existing():
     assert cluster.fake_measurements == []
 
     with pytest.raises(ValueError):
-        cluster.timestamp
+        _ = cluster.timestamp
     with pytest.raises(ValueError):
-        cluster.time_range
+        _ = cluster.time_range
 
 
 def test_remove_continuous_measurement():
@@ -47,9 +47,9 @@ def test_remove_continuous_measurement():
     assert cluster.continuous_measurements == []
 
     with pytest.raises(ValueError):
-        cluster.timestamp
+        _ = cluster.timestamp
     with pytest.raises(ValueError):
-        cluster.time_range
+        _ = cluster.time_range
 
 
 def test_remove_last_measurement_updates_timestamp():
@@ -68,9 +68,9 @@ def test_remove_last_measurement_updates_timestamp():
     assert cluster.fake_measurements == []
 
     with pytest.raises(ValueError):
-        cluster.timestamp
+        _ = cluster.timestamp
     with pytest.raises(ValueError):
-        cluster.time_range
+        _ = cluster.time_range
 
 
 def test_remove_and_readd_same_measurement():
@@ -91,9 +91,9 @@ def test_remove_and_readd_same_measurement():
     assert cluster.measurements == []
     assert cluster.fake_measurements == []
     with pytest.raises(ValueError):
-        cluster.timestamp
+        _ = cluster.timestamp
     with pytest.raises(ValueError):
-        cluster.time_range
+        _ = cluster.time_range
 
     cluster.add(m1)
     assert cluster.empty is False

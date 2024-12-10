@@ -3,17 +3,13 @@
 import logging
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import Gps
+from phd.measurement_storage.measurements.gps import Gps
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.vrs_gps.config import VrsGpsHandlerConfig
 from phd.moduslam.setup_manager.sensors_factory.sensors import VrsGps
-from phd.moduslam.utils.auxiliary_methods import (
-    create_empty_element,
-    str_to_float,
-    str_to_int,
-)
+from phd.moduslam.utils.auxiliary_methods import str_to_float, str_to_int
 
 logger = logging.getLogger(frontend_manager)
 
@@ -49,7 +45,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
             measurement with GPS data or None.
 
         Raises:
-            TypeError: If the sensor of the measurement is not VrsGps.
+            TypeError: if the sensor of the measurement is not VrsGps.
         """
         if not isinstance(element.measurement.sensor, VrsGps):
             msg = f"Expected sensor of type {VrsGps}, got {type(element.measurement.sensor)}"
@@ -63,21 +59,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         position = self._get_position(element.measurement.values)
         covariance = self._get_covariance(element.measurement.values)
 
-        empty_element = self.create_empty_element(element)
-
-        return Gps(empty_element, position, covariance)
-
-    @staticmethod
-    def create_empty_element(element: Element) -> Element:
-        """
-        Creates an empty element with the same timestamp, location and sensor as the input element.
-        Args:
-            element: element of a data batch with raw data.
-
-        Returns:
-            empty element without data.
-        """
-        return create_empty_element(element)
+        return Gps(element.timestamp, position, covariance)
 
     @staticmethod
     def _get_position(data: list[str]) -> Vector3:
@@ -103,10 +85,10 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         Returns:
             covariance matrix.
         """
-        standard_deviation_str = data[8:11]
-        sigma_x = str_to_float(standard_deviation_str[0])
-        sigma_y = str_to_float(standard_deviation_str[1])
-        sigma_z = str_to_float(standard_deviation_str[2])
+        std = data[8:11]
+        sigma_x = str_to_float(std[0])
+        sigma_y = str_to_float(std[1])
+        sigma_z = str_to_float(std[2])
         return (
             (sigma_x**2, 0.0, 0.0),
             (0.0, sigma_y**2, 0.0),

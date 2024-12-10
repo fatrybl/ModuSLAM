@@ -6,7 +6,9 @@ from phd.bridge.edge_factories.utils import (
     create_vertex_j_with_status,
     get_cluster_for_timestamp_from_dict,
 )
-from phd.measurements.processed import PoseOdometry as OdometryMeasurement
+from phd.measurement_storage.measurements.pose_odometry import (
+    Odometry as OdometryMeasurement,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     pose_block_diagonal_noise_model,
 )

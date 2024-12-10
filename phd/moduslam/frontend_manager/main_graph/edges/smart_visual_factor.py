@@ -1,7 +1,10 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed import VisualFeature, VisualFeatures
+from phd.measurement_storage.measurements.with_raw_elements import (
+    VisualFeature,
+    VisualFeatures,
+)
 from phd.moduslam.custom_types.aliases import Matrix4x4
 from phd.moduslam.frontend_manager.main_graph.edges.base import RadialEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (

@@ -1,6 +1,7 @@
 from phd.external.metrics.utils import median
-from phd.measurements.auxiliary_classes import FakeMeasurement
-from phd.measurements.processed import ContinuousMeasurement, Measurement
+from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.moduslam.utils.exceptions import (
     ItemExistsError,

@@ -1,16 +1,16 @@
 import pytest
 
 from phd.bridge.edge_factories.imu_odometry.odometry import Factory
-from phd.measurements.processed import ContinuousImuMeasurement
-from phd.measurements.processed import Imu as ImuMeasurement
-from phd.measurements.processed import LinearVelocity as VelocityMeasurement
-from phd.measurements.processed import Pose as PoseMeasurement
-from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
-from phd.moduslam.data_manager.batch_factory.readers.locations import Location
-from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
+from phd.measurement_storage.measurements.imu import (
+    ContinuousImu,
     ImuCovariance,
     ImuData,
+    ProcessedImu,
 )
+from phd.measurement_storage.measurements.linear_velocity import (
+    Velocity as VelocityMeasurement,
+)
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
     LinearVelocity as PriorVelocity,
 )
@@ -28,32 +28,20 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity,
     Pose,
 )
-from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.setup_manager.sensors_factory.sensors_configs import ImuConfig
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import (
-    identity3x3,
-    identity4x4,
-    one_vector3,
-    zero_vector3,
-)
+from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.moduslam.utils.auxiliary_objects import one_vector3, zero_vector3
 
 
 @pytest.fixture
-def measurement() -> ContinuousImuMeasurement:
-    tf = identity4x4
-    measurement = RawMeasurement(ImuSensor(ImuConfig(name="imu")), None)
-    el1 = Element(0, measurement, Location())
-    el2 = Element(1, measurement, Location())
-    el3 = Element(2, measurement, Location())
-    data1 = ImuData(one_vector3, one_vector3)
-    data2 = ImuData(one_vector3, one_vector3)
-    data3 = ImuData(one_vector3, one_vector3)
-    cov = ImuCovariance(identity3x3, identity3x3, identity3x3, identity3x3, identity3x3)
-    imu1 = ImuMeasurement(el1, data1, cov, tf)
-    imu2 = ImuMeasurement(el2, data2, cov, tf)
-    imu3 = ImuMeasurement(el3, data3, cov, tf)
-    return ContinuousImuMeasurement([imu1, imu2, imu3], start=0, stop=3)
+def measurement() -> ContinuousImu[ProcessedImu]:
+    data = ImuData(one_vector3, one_vector3)
+    cov = ImuCovariance(i3x3, i3x3, i3x3, i3x3, i3x3)
+    imu1 = ProcessedImu(0, data, cov, i4x4)
+    imu2 = ProcessedImu(1, data, cov, i4x4)
+    imu3 = ProcessedImu(2, data, cov, i4x4)
+    return ContinuousImu([imu1, imu2, imu3], start=0, stop=3)
 
 
 @pytest.fixture
@@ -63,10 +51,8 @@ def graph_2_poses():
     idx1, idx2 = 0, 1
     v1, v2 = Pose(index=idx1), Pose(index=idx2)
     noise = se3_isotropic_noise_model(1)
-    m1 = PoseMeasurement(t1, identity4x4, identity3x3, identity3x3, [])
-    m2 = PoseMeasurement(t2, identity4x4, identity3x3, identity3x3, [])
-    edge1 = PriorPose(v1, m1, noise)
-    edge2 = PriorPose(v2, m2, noise)
+    m1, m2 = PoseMeasurement(t1, i4x4, i3x3, i3x3), PoseMeasurement(t2, i4x4, i3x3, i3x3)
+    edge1, edge2 = PriorPose(v1, m1, noise), PriorPose(v2, m2, noise)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     element1 = GraphElement(edge1, [NewVertex(v1, cluster1, t1)])
     element2 = GraphElement(edge2, [NewVertex(v2, cluster2, t2)])
@@ -78,14 +64,13 @@ def graph_2_poses():
 @pytest.fixture
 def graph_2_velocities():
     graph = Graph()
+    noise = diagonal3x3_noise_model((1, 1, 1))
     t1, t2 = 0, 3
     idx1, idx2 = 0, 1
     v1, v2 = LinearVelocity(idx1), LinearVelocity(idx2)
-    noise = diagonal3x3_noise_model((1, 1, 1))
-    m1 = VelocityMeasurement(t1, zero_vector3, identity3x3, [])
-    m2 = VelocityMeasurement(t2, zero_vector3, identity3x3, [])
-    edge1 = PriorVelocity(v1, m1, noise)
-    edge2 = PriorVelocity(v2, m2, noise)
+    m1 = VelocityMeasurement(t1, zero_vector3, i3x3)
+    m2 = VelocityMeasurement(t2, zero_vector3, i3x3)
+    edge1, edge2 = PriorVelocity(v1, m1, noise), PriorVelocity(v2, m2, noise)
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     element1 = GraphElement(edge1, [NewVertex(v1, cluster1, t1)])
     element2 = GraphElement(edge2, [NewVertex(v2, cluster2, t2)])
@@ -94,7 +79,7 @@ def graph_2_velocities():
     return graph
 
 
-def test_create_empty_graph(empty_graph: Graph, measurement: ContinuousImuMeasurement):
+def test_create_empty_graph(empty_graph: Graph, measurement: ContinuousImu):
     t = 3
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
@@ -118,7 +103,7 @@ def test_create_empty_graph(empty_graph: Graph, measurement: ContinuousImuMeasur
     assert edge.bias_j.index == 1
 
 
-def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: ContinuousImuMeasurement):
+def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: ContinuousImu[ProcessedImu]):
     t = 3
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
@@ -147,7 +132,7 @@ def test_create_graph_with_1_existing_pose(graph1: Graph, measurement: Continuou
 
 
 def test_create_graph_with_2_existing_poses(
-    graph_2_poses: Graph, measurement: ContinuousImuMeasurement
+    graph_2_poses: Graph, measurement: ContinuousImu[ProcessedImu]
 ):
     t = 3
     cluster = VertexCluster()
@@ -179,7 +164,7 @@ def test_create_graph_with_2_existing_poses(
 
 
 def test_create_graph_with_2_existing_velocities(
-    graph_2_velocities: Graph, measurement: ContinuousImuMeasurement
+    graph_2_velocities: Graph, measurement: ContinuousImu[ProcessedImu]
 ):
     t = 3
     cluster = VertexCluster()

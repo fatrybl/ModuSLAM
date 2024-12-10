@@ -1,8 +1,8 @@
 import logging
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import Measurement
-from phd.measurements.time_limits_updater import Updater
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.time_limits_updater import Updater
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 from phd.moduslam.utils.exceptions import (
     EmptyStorageError,

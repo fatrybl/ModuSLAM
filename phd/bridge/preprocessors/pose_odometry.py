@@ -1,7 +1,8 @@
 from collections.abc import Iterable
 
-from phd.measurements.auxiliary_classes import SplitPoseOdometry
-from phd.measurements.processed import Measurement, PoseOdometry
+from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.pose_odometry import Odometry
 
 
 def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
@@ -13,7 +14,7 @@ def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
     Returns:
         measurements without odometry measurements.
     """
-    return [m for m in measurements if not isinstance(m, PoseOdometry)]
+    return [m for m in measurements if not isinstance(m, Odometry)]
 
 
 def find_and_replace(measurements: Iterable[Measurement]) -> list[Measurement]:
@@ -45,7 +46,7 @@ def split(measurements: Iterable[Measurement]) -> list[SplitPoseOdometry]:
     splits = []
 
     for m in measurements:
-        if isinstance(m, PoseOdometry):
+        if isinstance(m, Odometry):
             m1 = SplitPoseOdometry(m.time_range.start, m)
             m2 = SplitPoseOdometry(m.time_range.stop, m)
             splits.append(m1)

@@ -1,6 +1,6 @@
 from gtsam import CombinedImuFactor, PreintegratedCombinedMeasurements
 
-from phd.measurements.processed import ContinuousMeasurement, Imu
+from phd.measurement_storage.measurements.imu import ContinuousImu
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
@@ -20,7 +20,7 @@ class ImuOdometry(Edge):
         pose_j: Pose,
         velocity_j: LinearVelocity,
         bias_j: ImuBias,
-        measurement: ContinuousMeasurement[Imu],
+        measurement: ContinuousImu,
         pim: PreintegratedCombinedMeasurements,
     ) -> None:
         """
@@ -63,7 +63,7 @@ class ImuOdometry(Edge):
         return self._vertices
 
     @property
-    def measurement(self) -> ContinuousMeasurement[Imu]:
+    def measurement(self) -> ContinuousImu:
         """Measurement which formed the edge."""
         return self._measurement
 

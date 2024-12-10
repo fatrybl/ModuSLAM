@@ -17,19 +17,19 @@
 import logging
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import Imu as ImuMeasurement
+from phd.measurement_storage.measurements.imu import (
+    ImuCovariance,
+    ImuData,
+    ProcessedImu,
+)
 from phd.moduslam.custom_types.aliases import Matrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.config import (
     ImuHandlerConfig,
 )
-from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
-    ImuCovariance,
-    ImuData,
-)
 from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.utils.auxiliary_methods import create_empty_element, str_to_float
+from phd.moduslam.utils.auxiliary_methods import str_to_float
 
 logger = logging.getLogger(frontend_manager)
 
@@ -50,7 +50,7 @@ class TumVieImuDataPreprocessor(Handler):
         """IMU sensor type."""
         return ImuSensor
 
-    def process(self, element: Element) -> ImuMeasurement | None:
+    def process(self, element: Element) -> ProcessedImu | None:
         """Processes the element with raw IMU data and returns the measurement.
 
         Args:
@@ -75,21 +75,7 @@ class TumVieImuDataPreprocessor(Handler):
 
         covariance = self._create_covariance(sensor)
 
-        empty_element = self.create_empty_element(element)
-
-        return ImuMeasurement(empty_element, imu_data, covariance, tf)
-
-    @staticmethod
-    def create_empty_element(element: Element) -> Element:
-        """
-        Creates an empty element with the same timestamp, location and sensor as the input element.
-        Args:
-            element: element of a data batch with raw data.
-
-        Returns:
-            empty element without data.
-        """
-        return create_empty_element(element)
+        return ProcessedImu(element.timestamp, imu_data, covariance, tf)
 
     @staticmethod
     def _parse_line(values: tuple[str, ...]) -> ImuData:
@@ -133,7 +119,7 @@ class TumVieImuDataPreprocessor(Handler):
         g = sensor.gyroscope_noise_covariance
         a_bias = sensor.accelerometer_bias_noise_covariance
         g_bias = sensor.gyroscope_bias_noise_covariance
-        integ = sensor.integration_noise_covariance
+        integration = sensor.integration_noise_covariance
 
         accel_cov = (
             (a[0][0], a[0][1], a[0][2]),
@@ -157,9 +143,9 @@ class TumVieImuDataPreprocessor(Handler):
         )
 
         integr_cov = (
-            (integ[0][0], integ[0][1], integ[0][2]),
-            (integ[1][0], integ[1][1], integ[1][2]),
-            (integ[2][0], integ[2][1], integ[2][2]),
+            (integration[0][0], integration[0][1], integration[0][2]),
+            (integration[1][0], integration[1][1], integration[1][2]),
+            (integration[2][0], integration[2][1], integration[2][2]),
         )
 
         covariances = ImuCovariance(accel_cov, gyro_cov, accel_bias_cov, gyro_bias_cov, integr_cov)

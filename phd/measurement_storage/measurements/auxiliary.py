@@ -1,11 +1,13 @@
+"""Auxiliary measurements used for different purposes."""
+
 from typing import Any
 
-from phd.measurements.processed import Measurement, PoseOdometry
-from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.pose_odometry import Odometry
 
 
 class SplitPoseOdometry(Measurement):
-    def __init__(self, timestamp: int, parent: PoseOdometry):
+    def __init__(self, timestamp: int, parent: Odometry):
         self._timestamp = timestamp
         self._parent = parent
 
@@ -17,11 +19,7 @@ class SplitPoseOdometry(Measurement):
         return self._timestamp
 
     @property
-    def elements(self) -> list[Element]:
-        return self._parent.elements
-
-    @property
-    def parent(self) -> PoseOdometry:
+    def parent(self) -> Odometry:
         return self._parent
 
 
@@ -43,10 +41,6 @@ class PseudoMeasurement(Measurement):
         return self._timestamp
 
     @property
-    def elements(self) -> list[Element]:
-        return []
-
-    @property
     def value(self) -> Any:
         return self._value
 
@@ -64,26 +58,5 @@ class FakeMeasurement(Measurement):
         return self._timestamp
 
     @property
-    def elements(self) -> list[Element]:
-        return []
-
-    @property
     def value(self) -> str:
         return "fake"
-
-
-class MeasurementGroup:
-    """Stores measurements of equal timestamps."""
-
-    def __init__(self):
-        self._measurements: set[Measurement] = set()
-
-    @property
-    def measurements(self) -> set[Measurement]:
-        return self._measurements
-
-    def add(self, measurement: Measurement):
-        self._measurements.add(measurement)
-
-    def remove(self, measurement: Measurement):
-        self._measurements.remove(measurement)

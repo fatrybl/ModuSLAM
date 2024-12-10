@@ -1,8 +1,6 @@
+from phd.measurement_storage.measurements.imu import ImuData
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.config import (
     ImuHandlerConfig,
-)
-from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.objects import (
-    ImuData,
 )
 from phd.moduslam.frontend_manager.handlers.imu_data_preprocessors.tum_vie_handler import (
     TumVieImuDataPreprocessor,

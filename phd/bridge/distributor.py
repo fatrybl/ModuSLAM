@@ -13,26 +13,24 @@ from phd.bridge.edge_factories.pose_odometry import Factory as PoseOdometryFacto
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitPoseOdometryFactory,
 )
-from phd.measurements.auxiliary_classes import SplitPoseOdometry
-from phd.measurements.processed import (
-    ContinuousImuMeasurement,
-    Gps,
-    LinearVelocity,
-    Measurement,
-    Pose,
-    PoseOdometry,
-)
+from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.gps import Gps
+from phd.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
+from phd.measurement_storage.measurements.linear_velocity import Velocity
+from phd.measurement_storage.measurements.pose import Pose
+from phd.measurement_storage.measurements.pose_odometry import OdometryWithElements
 
 logger = logging.getLogger(__name__)
 
 # Add other measurement types and their corresponding factories here.
 distribution_table: dict[type[Measurement], type[EdgeFactory]] = {
-    PoseOdometry: PoseOdometryFactory,
+    OdometryWithElements: PoseOdometryFactory,
     SplitPoseOdometry: SplitPoseOdometryFactory,
-    ContinuousImuMeasurement: ImuOdometryFactory,
+    ContinuousImu[ProcessedImu]: ImuOdometryFactory,
     Gps: GpsPositionFactory,
     Pose: PoseFactory,
-    LinearVelocity: VelocityFactory,
+    Velocity: VelocityFactory,
 }
 
 

@@ -5,11 +5,7 @@ import gtsam
 import numpy as np
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import (
-    ContinuousImuMeasurement,
-    ContinuousMeasurement,
-    Imu,
-)
+from phd.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
 from phd.moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
 from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
@@ -31,7 +27,7 @@ def create_edge(
     pose_j: Pose,
     velocity_j: LinearVelocity,
     bias_j: ImuBias,
-    measurement: ContinuousMeasurement,
+    measurement: ContinuousImu,
     pim: gtsam.PreintegratedCombinedMeasurements,
 ) -> ImuOdometry:
     """Creates new edge of type ImuOdometry."""
@@ -44,7 +40,7 @@ def create_edge(
 
 
 def compute_covariance(
-    measurements: Sequence[Imu],
+    measurements: Sequence[ProcessedImu],
 ) -> tuple[Matrix3x3, Matrix3x3]:
     """Computes the covariance of the accelerometer and gyroscope measurements [x,y,z].
     If only one measurement is available, the default covariance is used.
@@ -68,7 +64,7 @@ def compute_covariance(
         gyro_cov = np.array(measurements[0].angular_velocity_covariance)
 
     else:
-        accelerations = np.array([m.acceleration for m in measurements])
+        accelerations = np.array([m.linear_acceleration for m in measurements])
         angular_velocities = np.array([m.angular_velocity for m in measurements])
 
         acc_cov = np.cov(accelerations, rowvar=False)
@@ -113,7 +109,7 @@ def set_parameters(
 
 def integrate_measurements(
     pim: gtsam.PreintegratedCombinedMeasurements,
-    measurements: Sequence[Imu],
+    measurements: Sequence[ProcessedImu],
     timestamp: int,
     time_scale: float,
 ) -> None:
@@ -146,7 +142,7 @@ def integrate_measurements(
         else:
             dt = measurements[i + 1].timestamp - measurements[i].timestamp
 
-        acc = np.array(measurement.acceleration)
+        acc = np.array(measurement.linear_acceleration)
         omega = np.array(measurement.angular_velocity)
         dt_secs = dt * time_scale
 
@@ -155,7 +151,7 @@ def integrate_measurements(
 
 def get_integrated_measurement(
     integration_params: gtsam.PreintegrationCombinedParams,
-    measurement: ContinuousImuMeasurement,
+    measurement: ContinuousImu[ProcessedImu],
     timestamp: int,
     time_scale: float,
     bias: ImuBias,

@@ -1,6 +1,8 @@
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory, VertexWithStatus
 from phd.bridge.edge_factories.utils import create_new_vertices
-from phd.measurements.processed import PoseLandmark as DetectedLandmark
+from phd.measurement_storage.measurements.with_raw_elements import (
+    PoseLandmark as DetectedLandmark,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.pose2LandmarkPose import (
     PoseToLandmark,
 )

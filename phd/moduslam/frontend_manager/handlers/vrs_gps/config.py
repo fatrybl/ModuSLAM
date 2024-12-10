@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from phd.moduslam.frontend_manager.handlers.base_config import HandlerConfig
+from phd.moduslam.frontend_manager.handlers.handler_protocol import HandlerConfig
 
 
 @dataclass

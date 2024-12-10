@@ -2,8 +2,8 @@ from collections.abc import Iterable
 from typing import Any
 
 from phd.bridge.auxiliary_dataclasses import Connection
-from phd.measurements.auxiliary_classes import PseudoMeasurement
-from phd.measurements.cluster import Cluster
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
 class Factory:

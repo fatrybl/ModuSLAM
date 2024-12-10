@@ -6,7 +6,7 @@ from hydra.core.config_store import ConfigStore
 
 from phd.bridge.distributor import get_factory
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import Measurement
+from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
     EdgeConfig,
     InitializerConfig,

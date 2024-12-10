@@ -1,7 +1,7 @@
 from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.connections.connections_factory import Factory
-from phd.measurements.auxiliary_classes import PseudoMeasurement
-from phd.measurements.cluster import Cluster
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
 def test_create_combinations_single_cluster():

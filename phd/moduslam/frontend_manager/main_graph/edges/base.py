@@ -3,7 +3,7 @@ from collections.abc import Collection
 
 import gtsam
 
-from phd.measurements.processed import Measurement
+from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 

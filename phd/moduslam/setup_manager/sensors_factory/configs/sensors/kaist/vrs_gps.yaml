@@ -1,3 +1,5 @@
+defaults:
+  - /base_vrs_gps@vrs
 vrs:
   name: "vrs"
   type_name: "VrsGps"

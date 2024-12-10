@@ -2,12 +2,12 @@ import logging
 
 from phd.bridge.optimal_candidate_factory import Factory
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.storage import MeasurementStorage
+from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
-    SinglePoseOdometry,
+    PoseOdometryWithGps,
 )
 from phd.moduslam.frontend_manager.utils import fill_storage
 
@@ -23,7 +23,7 @@ class Builder:
             handlers: handlers for creating measurements.
         """
         self._handlers = handlers
-        self._analyzer = SinglePoseOdometry()
+        self._analyzer = PoseOdometryWithGps()
         self._candidate_factory = Factory()
         self._storage = MeasurementStorage()
 

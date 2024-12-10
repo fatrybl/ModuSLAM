@@ -1,7 +1,7 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from phd.measurements.processed import Pose as PoseMeasurement
+from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
 

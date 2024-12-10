@@ -1,17 +1,18 @@
 from phd.bridge.edge_factories.pose_odometry import Factory
-from phd.measurements.processed import PoseOdometry
+from phd.measurement_storage.measurements.pose_odometry import Odometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4
+from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
 
 
 def test_create_graph_element_with_2_new_vertices_for_empty_graph(empty_graph: Graph):
     cluster = VertexCluster()
     t = 1
-    measurement = PoseOdometry(t, TimeRange(0, t), identity4x4, identity3x3, identity3x3, [])
+    measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters = {cluster: TimeRange(t, t)}
 
     new_element = Factory.create(empty_graph, clusters, measurement)
@@ -41,7 +42,7 @@ def test_create_graph_element_with_2_new_vertices_for_empty_graph(empty_graph: G
 def test_create_graph_element_with_1_new_vertex_for_1_existing(graph1):
     t = 1
     cluster = VertexCluster()
-    measurement = PoseOdometry(t, TimeRange(0, t), identity4x4, identity3x3, identity3x3, [])
+    measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters = {cluster: TimeRange(t, t)}
 
     new_element = Factory.create(graph1, clusters, measurement)
@@ -68,7 +69,7 @@ def test_create_graph_element_with_1_new_vertex_for_1_existing(graph1):
 
 def test_create_graph_element_with_0_new_vertices_for_2_existing(graph2: Graph):
     t = 1
-    measurement = PoseOdometry(t, TimeRange(0, t), identity4x4, identity3x3, identity3x3, [])
+    measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters: dict[VertexCluster, TimeRange] = {VertexCluster(): TimeRange(t, t)}
 
     new_element = Factory.create(graph2, clusters, measurement)

@@ -7,7 +7,7 @@ import logging
 from collections.abc import Sequence
 
 from moduslam.logger.logging_config import frontend_manager
-from phd.measurements.processed import Measurement
+from phd.measurement_storage.measurements.with_raw_elements import Measurement
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.camera_features_detector.config import (
     FeatureDetectorConfig,

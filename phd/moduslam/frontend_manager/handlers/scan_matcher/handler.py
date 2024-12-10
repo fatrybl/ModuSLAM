@@ -4,8 +4,8 @@ import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
 from phd.logger.logging_config import frontend_manager
-from phd.measurements.processed import PoseOdometry
-from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
+from phd.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
@@ -52,7 +52,7 @@ class ScanMatcher(Handler):
         """Lidar 3D sensor type."""
         return Lidar3D
 
-    def process(self, element: Element) -> PoseOdometry | None:
+    def process(self, element: Element) -> OdometryWithElements | None:
         """Computes the transformation SE(3) matrix between 2 point clouds. Always
         returns None for the very first element, as the transformation can not be
         computed for a single point cloud.
@@ -153,7 +153,7 @@ class ScanMatcher(Handler):
         arr = arr.reshape(-1, self._num_channels)
         return arr[:, :3]
 
-    def _create_measurement(self, tf: NumpyMatrix4x4) -> PoseOdometry:
+    def _create_measurement(self, tf: NumpyMatrix4x4) -> OdometryWithElements:
         """Creates the measurement with the computed transformation matrix.
 
         Args:
@@ -173,12 +173,13 @@ class ScanMatcher(Handler):
 
         t_range = TimeRange(start, stop)
 
-        position_covariance = self._get_diagonal_matrix(self._measurement_noise_covariance[:3])
-        orientation_covariance = self._get_diagonal_matrix(self._measurement_noise_covariance[3:])
+        cov = self._measurement_noise_covariance
+        position_covariance = self._get_diagonal_matrix(cov[0], cov[1], cov[2])
+        orientation_covariance = self._get_diagonal_matrix(cov[3], cov[4], cov[5])
 
         pose = self._numpy_matrix_4x4_to_matrix_4x4(tf)
 
-        m = PoseOdometry(
+        m = OdometryWithElements(
             stop,
             t_range,
             pose,
@@ -206,12 +207,11 @@ class ScanMatcher(Handler):
         self._elements_queue.pop(0)
 
     @staticmethod
-    def _get_diagonal_matrix(values: Vector3) -> Matrix3x3:
-        v = values
+    def _get_diagonal_matrix(v1: float, v2: float, v3: float) -> Matrix3x3:
         return (
-            (v[0], 0.0, 0.0),
-            (0.0, v[1], 0.0),
-            (0.0, 0.0, v[2]),
+            (v1, 0.0, 0.0),
+            (0.0, v2, 0.0),
+            (0.0, 0.0, v3),
         )
 
     @staticmethod

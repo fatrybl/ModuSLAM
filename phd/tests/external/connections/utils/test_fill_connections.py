@@ -2,15 +2,19 @@ from typing import cast
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithConnections, Connection
 from phd.external.connections.utils import fill_connections_with_imu
-from phd.measurements.auxiliary_classes import FakeMeasurement, PseudoMeasurement
-from phd.measurements.cluster import Cluster
-from phd.measurements.processed import ContinuousImuMeasurement, Imu, Measurement
+from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.measurements.auxiliary import (
+    FakeMeasurement,
+    PseudoMeasurement,
+)
+from phd.measurement_storage.measurements.base import Measurement
+from phd.measurement_storage.measurements.imu import ContinuousImu, Imu, ImuData
+from phd.moduslam.utils.auxiliary_objects import zero_vector3
 
 
 def test_fill_connections_1_connection_in_between():
     t1, t2, t3, t4, t5 = 0, 1, 2, 3, 4
-    core1 = PseudoMeasurement(t1)
-    core2 = PseudoMeasurement(t5)
+    core1, core2 = PseudoMeasurement(t1), PseudoMeasurement(t5)
     cluster1, cluster2 = Cluster(), Cluster()
     cluster1.add(core1)
     cluster2.add(core2)
@@ -18,7 +22,7 @@ def test_fill_connections_1_connection_in_between():
     clusters = [cluster1, cluster2]
     connections = [con1]
     item = ClustersWithConnections(clusters, connections)
-    measurements: list[Measurement] = [PseudoMeasurement(t) for t in [t2, t3, t4]]
+    measurements = [Imu(t, ImuData(zero_vector3, zero_vector3)) for t in [t2, t3, t4]]
     imu_measurements = cast(list[Imu], measurements)
 
     filled_clusters, leftovers = fill_connections_with_imu(item, imu_measurements)
@@ -35,7 +39,7 @@ def test_fill_connections_1_connection_in_between():
     assert filled1.measurements[0] is core1
     assert len(filled2.measurements) == 2
     assert filled2.measurements[0] is core2
-    assert isinstance(continuous, ContinuousImuMeasurement)
+    assert isinstance(continuous, ContinuousImu)
     assert filled1.timestamp == t1
     assert filled2.timestamp == t5
     assert filled1.time_range.start == filled1.time_range.stop == t1
@@ -77,7 +81,7 @@ def test_fill_connections_1_connection_with_left_tail_1():
     assert filled2.measurements[0] is core2
     assert len(filled1.measurements) == 1
     assert len(filled2.measurements) == 2
-    assert isinstance(continuous, ContinuousImuMeasurement)
+    assert isinstance(continuous, ContinuousImu)
     assert filled1.timestamp == t2
     assert filled2.timestamp == t5
     assert filled1.time_range.start == filled1.time_range.stop == t2
@@ -119,8 +123,8 @@ def test_fill_connections_with_left_tail_2():
     assert filled2.measurements[0] is core2
     assert len(filled1.measurements) == 2
     assert len(filled2.measurements) == 2
-    assert isinstance(continuous1, ContinuousImuMeasurement)
-    assert isinstance(continuous2, ContinuousImuMeasurement)
+    assert isinstance(continuous1, ContinuousImu)
+    assert isinstance(continuous2, ContinuousImu)
     assert filled1.timestamp == t2
     assert filled2.timestamp == t5
     assert filled1.time_range.start == filled1.time_range.stop == t2
@@ -168,8 +172,8 @@ def test_fill_connections_with_left_tail_and_leftover():
     assert filled2.measurements[0] is core2
     assert len(filled1.measurements) == 2
     assert len(filled2.measurements) == 2
-    assert isinstance(continuous1, ContinuousImuMeasurement)
-    assert isinstance(continuous2, ContinuousImuMeasurement)
+    assert isinstance(continuous1, ContinuousImu)
+    assert isinstance(continuous2, ContinuousImu)
     assert filled1.timestamp == t2
     assert filled2.timestamp == t5
     assert filled1.time_range.start == filled1.time_range.stop == t2

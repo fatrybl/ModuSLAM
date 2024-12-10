@@ -2,7 +2,9 @@ from typing import cast
 
 import gtsam
 
-from phd.measurements.processed import ImuBias, LinearVelocity, Pose
+from phd.measurement_storage.measurements.imu_bias import Bias
+from phd.measurement_storage.measurements.linear_velocity import Velocity
+from phd.measurement_storage.measurements.pose import Pose
 from phd.moduslam.custom_types.aliases import Matrix4x4, Vector6
 from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
     PriorImuBias,
@@ -38,13 +40,14 @@ def create_pose(config: PriorPose) -> Pose:
     Returns:
         a pose measurement.
     """
+    cov = config.noise_covariance
     se3_pose = pose_se3_from_tuple(config.measurement)
-    position_covariance = diagonal_matrix3x3(config.noise_covariance[:3])
-    orientation_covariance = diagonal_matrix3x3(config.noise_covariance[3:])
-    return Pose(config.timestamp, se3_pose, position_covariance, orientation_covariance, [])
+    position_covariance = diagonal_matrix3x3((cov[0], cov[1], cov[2]))
+    orientation_covariance = diagonal_matrix3x3((cov[3], cov[4], cov[5]))
+    return Pose(config.timestamp, se3_pose, position_covariance, orientation_covariance)
 
 
-def create_linear_velocity(config: PriorLinearVelocity) -> LinearVelocity:
+def create_linear_velocity(config: PriorLinearVelocity) -> Velocity:
     """Creates a linear velocity measurement from the given config.
 
     Args:
@@ -54,10 +57,10 @@ def create_linear_velocity(config: PriorLinearVelocity) -> LinearVelocity:
         a linear velocity measurement.
     """
     covariance_matrix = diagonal_matrix3x3(config.noise_covariance)
-    return LinearVelocity(config.timestamp, config.measurement, covariance_matrix, [])
+    return Velocity(config.timestamp, config.measurement, covariance_matrix)
 
 
-def create_imu_bias(config: PriorImuBias) -> ImuBias:
+def create_imu_bias(config: PriorImuBias) -> Bias:
     """Creates an imu bias measurement from the given config.
 
     Args:
@@ -66,13 +69,17 @@ def create_imu_bias(config: PriorImuBias) -> ImuBias:
     Returns:
         an imu bias measurement.
     """
-    accel_bias_covariance_matrix = diagonal_matrix3x3(config.noise_covariance[:3])
-    vel_bias_covariance_matrix = diagonal_matrix3x3(config.noise_covariance[3:])
-    return ImuBias(
+    m = config.measurement
+    cov = config.noise_covariance
+    acceleration = (m[0], m[1], m[2])
+    velocity = (m[3], m[4], m[5])
+    accel_bias_covariance_matrix = diagonal_matrix3x3((cov[0], cov[1], cov[2]))
+    vel_bias_covariance_matrix = diagonal_matrix3x3((cov[3], cov[4], cov[5]))
+
+    return Bias(
         config.timestamp,
-        config.measurement[:3],
-        config.measurement[3:],
+        acceleration,
+        velocity,
         accel_bias_covariance_matrix,
         vel_bias_covariance_matrix,
-        [],
     )

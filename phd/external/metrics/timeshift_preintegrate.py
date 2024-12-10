@@ -2,7 +2,7 @@ from collections.abc import Sequence
 
 from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.metrics.base_metric_protocol import Metrics
-from phd.measurements.cluster import Cluster
+from phd.measurement_storage.cluster import Cluster
 
 
 class TotalTimeShift(Metrics):
