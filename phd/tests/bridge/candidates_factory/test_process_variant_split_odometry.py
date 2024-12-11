@@ -5,7 +5,7 @@ import pytest
 from phd.bridge.edge_factories.split_pose_odometry import (
     Factory as SplitOdometryFactory,
 )
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
 from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.measurement_storage.measurements.pose_odometry import Odometry
@@ -50,7 +50,7 @@ def test_2_vertices_2_clusters(graph):
     split_odom_2_1 = SplitPoseOdometry(1, m2)
     split_odom_1_2 = SplitPoseOdometry(2, m1)
     split_odom_2_2 = SplitPoseOdometry(3, m2)
-    m_cluster1, m_cluster2 = Cluster(), Cluster()
+    m_cluster1, m_cluster2 = MeasurementCluster(), MeasurementCluster()
     m_cluster1.add(split_odom_1_1)
     m_cluster1.add(split_odom_2_1)
     m_cluster2.add(split_odom_1_2)
@@ -96,7 +96,12 @@ def test_4_vertices_4_clusters(graph):
     split_odom_2_1 = SplitPoseOdometry(1, m2)
     split_odom_1_2 = SplitPoseOdometry(2, m1)
     split_odom_2_2 = SplitPoseOdometry(3, m2)
-    m_cluster1, m_cluster2, m_cluster3, m_cluster4 = Cluster(), Cluster(), Cluster(), Cluster()
+    m_cluster1, m_cluster2, m_cluster3, m_cluster4 = (
+        MeasurementCluster(),
+        MeasurementCluster(),
+        MeasurementCluster(),
+        MeasurementCluster(),
+    )
     m_cluster1.add(split_odom_1_1)
     m_cluster2.add(split_odom_2_1)
     m_cluster3.add(split_odom_1_2)
@@ -143,7 +148,11 @@ def test_3_vertices_3_clusters_common_mid(graph):
     split_odom_2_1 = SplitPoseOdometry(1, m2)
     split_odom_1_2 = SplitPoseOdometry(2, m1)
     split_odom_2_2 = SplitPoseOdometry(3, m2)
-    m_cluster1, m_cluster2, m_cluster3 = Cluster(), Cluster(), Cluster()
+    m_cluster1, m_cluster2, m_cluster3 = (
+        MeasurementCluster(),
+        MeasurementCluster(),
+        MeasurementCluster(),
+    )
     m_cluster1.add(split_odom_1_1)
     m_cluster2.add(split_odom_2_1)
     m_cluster2.add(split_odom_1_2)
@@ -188,7 +197,11 @@ def test_3_vertices_3_clusters_common_left(graph):
     split_odom_2_1 = SplitPoseOdometry(1, m2)
     split_odom_1_2 = SplitPoseOdometry(2, m1)
     split_odom_2_2 = SplitPoseOdometry(3, m2)
-    m_cluster1, m_cluster2, m_cluster3 = Cluster(), Cluster(), Cluster()
+    m_cluster1, m_cluster2, m_cluster3 = (
+        MeasurementCluster(),
+        MeasurementCluster(),
+        MeasurementCluster(),
+    )
     m_cluster1.add(split_odom_1_1)
     m_cluster1.add(split_odom_2_1)
     m_cluster2.add(split_odom_1_2)
@@ -233,7 +246,11 @@ def test_3_vertices_3_clusters_common_right(graph):
     split_odom_2_1 = SplitPoseOdometry(1, m2)
     split_odom_1_2 = SplitPoseOdometry(2, m1)
     split_odom_2_2 = SplitPoseOdometry(3, m2)
-    m_cluster1, m_cluster2, m_cluster3 = Cluster(), Cluster(), Cluster()
+    m_cluster1, m_cluster2, m_cluster3 = (
+        MeasurementCluster(),
+        MeasurementCluster(),
+        MeasurementCluster(),
+    )
     m_cluster1.add(split_odom_1_1)
     m_cluster2.add(split_odom_2_1)
     m_cluster3.add(split_odom_1_2)

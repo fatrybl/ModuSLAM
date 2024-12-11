@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithConnections, Connection
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
@@ -65,9 +65,9 @@ if __name__ == "__main__":
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
     m3 = PseudoMeasurement(3, "c")
-    c1 = Cluster()
-    c2 = Cluster()
-    c3 = Cluster()
+    c1 = MeasurementCluster()
+    c2 = MeasurementCluster()
+    c3 = MeasurementCluster()
 
     c1.add(m1)
     c2.add(m2)

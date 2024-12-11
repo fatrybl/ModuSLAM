@@ -1,17 +1,15 @@
 from collections.abc import Iterable
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
-from phd.external.metrics.candidate_connectivity import (
-    check_connectivity,
-    get_old_vertices,
-)
-from phd.measurement_storage.cluster import Cluster
+from phd.external.metrics.vertices_connectivity import check_connectivity
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import (
     Graph,
     GraphCandidate,
     GraphElement,
 )
+from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 
 def add_elements_to_graph(
@@ -31,8 +29,8 @@ def add_elements_to_graph(
 
 
 def process_leftovers(
-    item: list[Cluster] | ClustersWithLeftovers,
-) -> tuple[list[Cluster], list[Measurement]]:
+    item: list[MeasurementCluster] | ClustersWithLeftovers,
+) -> tuple[list[MeasurementCluster], list[Measurement]]:
     """Returns clusters and leftovers.
 
     Args:
@@ -45,6 +43,21 @@ def process_leftovers(
         return item.clusters, item.leftovers
     else:
         return item, []
+
+
+def get_old_vertices(graph: Graph, new_vertices: set[Vertex]) -> set[Vertex]:
+    """Gets vertices of the graph which are not in new vertices.
+
+    Args:
+        graph: a graph to get vertices from.
+
+        new_vertices: new vertices to find the old ones.
+
+    Returns:
+        old vertices.
+    """
+    all_vertices = set(graph.connections.keys())
+    return all_vertices - new_vertices
 
 
 def remove_unconnected_candidates(candidates: list[GraphCandidate]) -> list[GraphCandidate]:

@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from typing import Any
 
 from phd.bridge.auxiliary_dataclasses import Connection
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
@@ -13,7 +13,7 @@ class Factory:
     _splitter_2: str = ","
 
     @classmethod
-    def create_combinations(cls, clusters: list[Cluster]) -> list[list[Connection]]:
+    def create_combinations(cls, clusters: list[MeasurementCluster]) -> list[list[Connection]]:
         """Creates combinations of connections.
 
         Args:
@@ -136,9 +136,9 @@ if __name__ == "__main__":
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
     m3 = PseudoMeasurement(3, "c")
-    c1 = Cluster()
-    c2 = Cluster()
-    c3 = Cluster()
+    c1 = MeasurementCluster()
+    c2 = MeasurementCluster()
+    c3 = MeasurementCluster()
 
     c1.add(m1)
     c2.add(m2)

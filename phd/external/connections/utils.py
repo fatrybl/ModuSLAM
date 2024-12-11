@@ -6,14 +6,14 @@ from phd.bridge.auxiliary_dataclasses import (
 )
 from phd.external.connections.connections_factory import Factory
 from phd.external.utils import copy_cluster, create_copy, get_subsequence
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.imu import ContinuousImu, Imu
 
 
 def fill_one_connection_with_imu(
-    cluster: Cluster, measurements: list[Imu]
-) -> tuple[Cluster, list[Imu]]:
+    cluster: MeasurementCluster, measurements: list[Imu]
+) -> tuple[MeasurementCluster, list[Imu]]:
     """Creates a new cluster and adds a continuous measurement to it.
 
     Args:
@@ -38,7 +38,7 @@ def fill_one_connection_with_imu(
 
 def fill_connections_with_imu(
     item: ClustersWithConnections, measurements: list[Imu]
-) -> tuple[list[Cluster], list[Imu]]:
+) -> tuple[list[MeasurementCluster], list[Imu]]:
     """Replaces virtual connections with continuous IMU measurements.
 
     Args:
@@ -70,7 +70,7 @@ def fill_connections_with_imu(
 
 
 def get_clusters_and_leftovers(
-    clusters_combinations: list[list[Cluster]], measurements: list[Imu]
+    clusters_combinations: list[list[MeasurementCluster]], measurements: list[Imu]
 ) -> list[ClustersWithLeftovers]:
     """Creates combinations of clusters and unused measurements.
 

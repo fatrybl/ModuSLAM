@@ -4,8 +4,8 @@ from collections.abc import Iterable
 from typing import TypeVar
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers, Connection
-from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurementgroup import MeasurementGroup
+from phd.measurement_storage.cluster import MeasurementCluster
+from phd.measurement_storage.group import MeasurementGroup
 from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
@@ -36,7 +36,7 @@ def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], 
     return sequence[start_idx:stop_idx], start_idx, stop_idx
 
 
-def copy_cluster(cluster: Cluster) -> Cluster:
+def copy_cluster(cluster: MeasurementCluster) -> MeasurementCluster:
     """Creates a cluster with the same measurements as in the given cluster.
 
     Args:
@@ -45,15 +45,15 @@ def copy_cluster(cluster: Cluster) -> Cluster:
     Returns:
         new cluster with the same measurements.
     """
-    new_cluster = Cluster()
+    new_cluster = MeasurementCluster()
     for m in cluster.measurements:
         new_cluster.add(m)
     return new_cluster
 
 
 def create_copy(
-    clusters: list[Cluster], connections: list[Connection]
-) -> tuple[list[Cluster], list[Connection]]:
+    clusters: list[MeasurementCluster], connections: list[Connection]
+) -> tuple[list[MeasurementCluster], list[Connection]]:
     """Copies clusters and connections.
 
     Args:
@@ -136,7 +136,7 @@ def group_by_timestamp(measurements: Iterable[Measurement]) -> list[MeasurementG
     return list(groups.values())
 
 
-def remove_loops(combinations: list[list[Cluster]]) -> list[list[Cluster]]:
+def remove_loops(combinations: list[list[MeasurementCluster]]) -> list[list[MeasurementCluster]]:
     """Removes combinations which have clusters with loops.
     Loop - a cluster which has multiple SplitPoseOdometry measurements with the same parent.
 

@@ -1,11 +1,11 @@
 from collections.abc import Iterable
 
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.base import Measurement
 
 
-def add_fake_cluster(list_to_add: list[Cluster], timestamp: int) -> None:
+def add_fake_cluster(list_to_add: list[MeasurementCluster], timestamp: int) -> None:
     """Adds a cluster with a fake measurement to the beginning of the list based on the
     condition.
 
@@ -18,7 +18,7 @@ def add_fake_cluster(list_to_add: list[Cluster], timestamp: int) -> None:
     cluster_timestamp = first_cluster.timestamp
 
     if timestamp < cluster_timestamp:
-        cluster = Cluster()
+        cluster = MeasurementCluster()
         fake_measurement = FakeMeasurement(timestamp)
         cluster.add(fake_measurement)
         list_to_add.insert(0, cluster)

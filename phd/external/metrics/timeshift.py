@@ -1,36 +1,32 @@
-from phd.external.metrics.base_metric_protocol import Metrics
+from collections.abc import Iterable
+
+from phd.external.metrics.base import Metrics
+from phd.measurement_storage.cluster import MeasurementCluster
 
 
-class TotalTimeShift(Metrics):
+class TimeShift(Metrics):
 
     @classmethod
-    def compute(cls) -> int:
-        """Sum of time shifts of the measurements.
+    def compute(cls, clusters: Iterable[MeasurementCluster]) -> int:
+        """Calculates the accumulative time shift for the clusters.
+
+        Args:
+            clusters: clusters with measurements.
 
         Returns:
-            metrics value.
+            accumulative times shift.
         """
-        raise NotImplementedError
+        time_shift: int = 0
 
-    #
-    # @staticmethod
-    # def _accumulative_time_shift_vertices(clusters: list[Cluster]) -> int:
-    #     """Calculates accumulative time shift for the merged vertices.
-    #
-    #     Args:
-    #         clusters: clusters with measurements.
-    #
-    #     Returns:
-    #         accumulative times shift.
-    #     """
-    #     total_shift = 0
-    #
-    #     for cluster in clusters:
-    #         median_value = median(cluster)
-    #         total_shift += sum_of_differences(cluster.measurements, median_value)
-    #
-    #     return total_shift
+        for cluster in clusters:
+            start, stop = cluster.time_range.start, cluster.time_range.stop
+            time_shift += stop - start
 
+            # compute for continuous separately as it is not counted in cluster`s time_range.
+            # only left border is taken into account.
+            for m in cluster.continuous_measurements:
+                first = m.items[0].timestamp
+                start = m.time_range.start
+                time_shift += first - start
 
-if __name__ == "__main__":
-    ...
+        return time_shift

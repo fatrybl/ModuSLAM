@@ -1,6 +1,6 @@
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.external.utils import remove_duplicates
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 
@@ -11,7 +11,7 @@ def test_remove_duplicates_empty_input():
 
 
 def test_remove_duplicates_all_unique():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
 
     cluster1.add(PseudoMeasurement(1, "a"))
     cluster2.add(PseudoMeasurement(2, "b"))
@@ -28,7 +28,7 @@ def test_remove_duplicates_all_unique():
 
 
 def test_remove_duplicates_with_identical_measurements_and_leftovers():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
 
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
@@ -48,7 +48,7 @@ def test_remove_duplicates_with_identical_measurements_and_leftovers():
 
 
 def test_remove_duplicates_with_continuous_measurements():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
 
     m1 = PseudoMeasurement(1, 1)
     m2 = PseudoMeasurement(2, 1)
@@ -74,7 +74,7 @@ def test_remove_duplicates_with_continuous_measurements():
 
 
 def test_remove_duplicates_all_duplicates():
-    cluster1 = Cluster()
+    cluster1 = MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
 
     cluster1.add(measurement1)
@@ -91,7 +91,7 @@ def test_remove_duplicates_all_duplicates():
 
 
 def test_remove_duplicates_identical_measurements_different_leftovers():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
 
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
@@ -111,7 +111,7 @@ def test_remove_duplicates_identical_measurements_different_leftovers():
 
 
 def test_remove_duplicates_identical_continuous_different_core_measurements():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     pseudo1, pseudo2 = PseudoMeasurement(1, 1), PseudoMeasurement(2, 1)
     continuous = ContinuousMeasurement(measurements=[pseudo1, pseudo2])
     core1 = PseudoMeasurement(3, "a")

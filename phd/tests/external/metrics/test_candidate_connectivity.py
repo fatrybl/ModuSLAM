@@ -1,7 +1,7 @@
 import gtsam
 import pytest
 
-from phd.external.metrics.candidate_connectivity import check_connectivity
+from phd.external.metrics.vertices_connectivity import check_connectivity
 from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.measurement_storage.measurements.pose_odometry import (
     Odometry as OdometryMeasurement,

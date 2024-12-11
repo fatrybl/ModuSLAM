@@ -115,9 +115,15 @@ class ContinuousImu(ContinuousMeasurement[I]):
             start: left timestamp limit.
 
             stop: right timestamp limit.
+
+        Raises:
+            ValueError: if the first measurement's timestamp is less than start.
         """
+        if measurements[0].timestamp < start:
+            raise ValueError("Start timestamp is less than the first measurement's timestamp.")
 
         super().__init__(measurements)
+
         self._timestamp = stop
         self._time_range = TimeRange(start, stop)
 

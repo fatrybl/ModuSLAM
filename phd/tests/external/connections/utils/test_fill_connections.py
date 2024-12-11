@@ -2,7 +2,7 @@ from typing import cast
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithConnections, Connection
 from phd.external.connections.utils import fill_connections_with_imu
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import (
     FakeMeasurement,
     PseudoMeasurement,
@@ -15,7 +15,7 @@ from phd.moduslam.utils.auxiliary_objects import zero_vector3
 def test_fill_connections_1_connection_in_between():
     t1, t2, t3, t4, t5 = 0, 1, 2, 3, 4
     core1, core2 = PseudoMeasurement(t1), PseudoMeasurement(t5)
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     cluster1.add(core1)
     cluster2.add(core2)
     con1 = Connection(cluster1, cluster2)
@@ -55,7 +55,7 @@ def test_fill_connections_1_connection_with_left_tail_1():
     fake = FakeMeasurement(t1)
     core1 = PseudoMeasurement(t2)
     core2 = PseudoMeasurement(t5)
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(fake)
     cluster2.add(core1)
     cluster3.add(core2)
@@ -94,7 +94,7 @@ def test_fill_connections_with_left_tail_2():
     fake = FakeMeasurement(t1)
     core1 = PseudoMeasurement(t2)
     core2 = PseudoMeasurement(t5)
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(fake)
     cluster2.add(core1)
     cluster3.add(core2)
@@ -141,7 +141,7 @@ def test_fill_connections_with_left_tail_and_leftover():
     fake = FakeMeasurement(t1)
     core1 = PseudoMeasurement(t2)
     core2 = PseudoMeasurement(t5)
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(fake)
     cluster2.add(core1)
     cluster3.add(core2)

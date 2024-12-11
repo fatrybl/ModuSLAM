@@ -1,7 +1,6 @@
 from typing import Any
 
 from phd.bridge.candidates_factory import Factory as CandidatesFactory
-from phd.bridge.utils import remove_unconnected_candidates
 from phd.external.metrics.candidate_evaluator import Evaluator
 from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.backend_manager.graph_solver import GraphSolver
@@ -39,7 +38,7 @@ class Factory:
         results: list[tuple[GraphCandidate, Any]] = []
         candidates = self._factory.create_candidates(graph, measurements_storage)
 
-        candidates = remove_unconnected_candidates(candidates)
+        # candidates = remove_unconnected_candidates(candidates)
 
         for i, candidate in enumerate(candidates):
             self._solve(candidate.graph, i)

@@ -1,13 +1,13 @@
 import pytest
 
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.moduslam.utils.exceptions import ValidationError
 
 
 def test_remove_non_existing():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
 
     with pytest.raises(ValidationError):
         cluster.remove(FakeMeasurement(0))
@@ -16,7 +16,7 @@ def test_remove_non_existing():
 def test_remove_existing():
     t1 = 1
     m1 = FakeMeasurement(t1)
-    cluster = Cluster()
+    cluster = MeasurementCluster()
 
     cluster.add(m1)
 
@@ -36,7 +36,7 @@ def test_remove_existing():
 def test_remove_continuous_measurement():
     t1 = 1
     continuous_measurement = ContinuousMeasurement([FakeMeasurement(t1)])
-    cluster = Cluster()
+    cluster = MeasurementCluster()
 
     cluster.add(continuous_measurement)
 
@@ -55,7 +55,7 @@ def test_remove_continuous_measurement():
 def test_remove_last_measurement_updates_timestamp():
     t1 = 1
     m1 = FakeMeasurement(t1)
-    cluster = Cluster()
+    cluster = MeasurementCluster()
 
     cluster.add(m1)
     assert cluster.timestamp == t1
@@ -76,7 +76,7 @@ def test_remove_last_measurement_updates_timestamp():
 def test_remove_and_readd_same_measurement():
     t1 = 1
     m1 = FakeMeasurement(t1)
-    cluster = Cluster()
+    cluster = MeasurementCluster()
 
     cluster.add(m1)
 

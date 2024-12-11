@@ -4,8 +4,8 @@ from phd.bridge.preprocessors.pose_odometry import find_and_replace
 from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
-from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurementgroup import MeasurementGroup
+from phd.measurement_storage.cluster import MeasurementCluster
+from phd.measurement_storage.group import MeasurementGroup
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.imu import Imu
 from phd.measurement_storage.storage import MeasurementStorage
@@ -18,7 +18,7 @@ class Factory:
     @classmethod
     def create(
         cls, storage: MeasurementStorage
-    ) -> list[ClustersWithLeftovers] | list[list[Cluster]]:
+    ) -> list[ClustersWithLeftovers] | list[list[MeasurementCluster]]:
         """Creates combinations of clusters w or w/o leftover measurements.
 
         Args:
@@ -84,7 +84,7 @@ class Factory:
 
     @staticmethod
     def _combine_with_continuous(
-        combinations: list[list[Cluster]], measurements: list[Imu]
+        combinations: list[list[MeasurementCluster]], measurements: list[Imu]
     ) -> list[ClustersWithLeftovers]:
         """Processes continuous measurements.
 

@@ -1,11 +1,11 @@
 from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.connections.connections_factory import Factory
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
 def test_create_combinations_single_cluster():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     cluster.add(PseudoMeasurement(1, "a"))
     clusters = [cluster]
     result = Factory.create_combinations(clusters)
@@ -13,7 +13,7 @@ def test_create_combinations_single_cluster():
 
 
 def test_create_combinations_encode_decode():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(PseudoMeasurement(1, "a"))
     cluster2.add(PseudoMeasurement(2, "b"))
     cluster3.add(PseudoMeasurement(3, "c"))
@@ -33,7 +33,7 @@ def test_create_combinations_encode_decode():
 
 
 def test_create_combinations_multiple_clusters_multiple_measurements():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(PseudoMeasurement(1, "a"))
     cluster1.add(PseudoMeasurement(2, "b"))
     cluster2.add(PseudoMeasurement(3, "c"))
@@ -62,7 +62,7 @@ def test_create_combinations_multiple_clusters_multiple_measurements():
 
 
 def test_create_combinations_with_duplicate_measurements():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(PseudoMeasurement(1, "a"))
     cluster1.add(PseudoMeasurement(2, "b"))
     cluster2.add(PseudoMeasurement(1, "a"))  # Duplicate measurement

@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 from typing import TypeVar
 
-from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurementgroup import MeasurementGroup
+from phd.measurement_storage.cluster import MeasurementCluster
+from phd.measurement_storage.group import MeasurementGroup
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 T = TypeVar("T")
@@ -14,7 +14,7 @@ class Factory:
     _encoder_mask: str = "item_"
 
     @classmethod
-    def combine(cls, groups: Iterable[MeasurementGroup]) -> list[list[Cluster]]:
+    def combine(cls, groups: Iterable[MeasurementGroup]) -> list[list[MeasurementCluster]]:
         """Creates combinations of clusters by merging adjacent measurements.
 
         Args:
@@ -23,7 +23,7 @@ class Factory:
         Returns:
             combinations of clusters.
         """
-        combinations: list[list[Cluster]] = []
+        combinations: list[list[MeasurementCluster]] = []
         encoded_items, mask = cls._encode_items(groups)
         encoded_combinations = cls._create_combinations(encoded_items)
 
@@ -31,7 +31,7 @@ class Factory:
             groups_combinations = cls._decode_items(encoded_comb, mask)
             clusters = []
             for combination in groups_combinations:
-                cluster = Cluster()
+                cluster = MeasurementCluster()
                 for group in combination:
                     for measurement in group.measurements:
                         cluster.add(measurement)

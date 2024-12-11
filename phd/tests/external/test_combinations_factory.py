@@ -1,6 +1,6 @@
 from phd.external.combinations_factory import Factory
-from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurementgroup import MeasurementGroup
+from phd.measurement_storage.cluster import MeasurementCluster
+from phd.measurement_storage.group import MeasurementGroup
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
@@ -33,28 +33,28 @@ def test_combine_with_multiple_measurement_groups():
     group2.add(measurement2)
     group3.add(measurement3)
 
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     cluster1.add(measurement1)
     cluster2.add(measurement2)
     cluster3.add(measurement3)
 
     comb1 = [cluster1, cluster2, cluster3]
 
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     cluster.add(measurement1)
     cluster.add(measurement2)
     cluster.add(measurement3)
 
     comb2 = [cluster]
 
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     cluster1.add(measurement1)
     cluster2.add(measurement2)
     cluster2.add(measurement3)
 
     comb3 = [cluster1, cluster2]
 
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     cluster1.add(measurement1)
     cluster1.add(measurement2)
     cluster2.add(measurement3)
@@ -96,7 +96,7 @@ def test_combine_correctly_merge_adjacent_groups():
 
     assert len(result) == 4, "Expected 4 combinations"
 
-    expected_cluster = Cluster()
+    expected_cluster = MeasurementCluster()
     expected_cluster.add(measurement1)
     expected_cluster.add(measurement2)
     expected_cluster.add(measurement3)

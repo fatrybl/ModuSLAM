@@ -1,7 +1,7 @@
 """Checks if a Graph Candidate is fully connected with the main graph."""
 
+from phd.external.metrics.base import Metrics
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 
@@ -66,25 +66,10 @@ class UnionFind:
                 self._rank[root_v1] += 1
 
 
-def get_old_vertices(graph: Graph, new_vertices: set[Vertex]) -> set[Vertex]:
-    """Gets vertices of the graph which are not in new vertices.
-
-    Args:
-        graph: a graph to get vertices from.
-
-        new_vertices: new vertices to find the old ones.
-
-    Returns:
-        old vertices.
-    """
-    all_vertices = set(graph.connections.keys())
-    return all_vertices - new_vertices
-
-
 def check_connectivity(
     edges: list[Edge], old_vertices: set[Vertex], new_vertices: set[Vertex]
 ) -> bool:
-    """Checks the connectivity of new vertices with old vertices by the given edges.
+    """Checks the connectivity of new vertices with old vertices by the edges.
 
     Args:
         edges: edges to check the connectivity.
@@ -113,3 +98,25 @@ def check_connectivity(
     old_components = {uf.find(v) for v in old_vertices}
 
     return all(uf.find(v) in old_components for v in new_vertices)
+
+
+class VerticesConnectivity(Metrics):
+
+    @classmethod
+    def compute(
+        cls, edges: list[Edge], old_vertices: set[Vertex], new_vertices: set[Vertex]
+    ) -> bool:
+        """Checks the connectivity of new vertices with old vertices by the edges.
+
+        Args:
+            edges: edges to check the connectivity.
+
+            old_vertices: vertices of the main graph which are not in new vertices.
+
+            new_vertices: new vertices to check connectivity of.
+
+        Returns:
+            connectivity status.
+        """
+        status = check_connectivity(edges, old_vertices, new_vertices)
+        return status

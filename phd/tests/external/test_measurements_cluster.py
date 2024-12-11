@@ -1,6 +1,6 @@
 import pytest
 
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import (
     FakeMeasurement,
     PseudoMeasurement,
@@ -9,7 +9,7 @@ from phd.measurement_storage.measurements.continuous import ContinuousMeasuremen
 
 
 def test_empty_cluster_initialization():
-    empty_cluster = Cluster()
+    empty_cluster = MeasurementCluster()
     assert empty_cluster.empty
     assert empty_cluster.core_measurements == []
     assert empty_cluster.continuous_measurements == []
@@ -24,7 +24,7 @@ def test_empty_cluster_initialization():
 
 
 def test_add_core_measurements():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     timestamp = 2
     start, stop = 1, 2
     m1, m2 = PseudoMeasurement(start, 1.0), PseudoMeasurement(stop, 2.0)
@@ -41,7 +41,7 @@ def test_add_core_measurements():
 
 
 def test_add_continuous_measurements():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     measurements = [PseudoMeasurement(1, 1.0), PseudoMeasurement(2, 2.0)]
     continuous1 = ContinuousMeasurement(measurements)
     continuous2 = ContinuousMeasurement(measurements)
@@ -62,7 +62,7 @@ def test_add_continuous_measurements():
 
 
 def test_add_fake_measurements():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     m1, m2 = FakeMeasurement(timestamp=1), FakeMeasurement(timestamp=2)
 
     cluster.add(m1)
@@ -80,7 +80,7 @@ def test_add_fake_measurements():
 
 
 def test_cluster_timestamp():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core_measurements = [
         PseudoMeasurement(1, 1.0),
         PseudoMeasurement(2, 2.0),
@@ -95,7 +95,7 @@ def test_cluster_timestamp():
     assert cluster.time_range.stop == 5
     assert cluster.timestamp == 4
 
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     for core_measurement in core_measurements[:-1]:
         cluster.add(core_measurement)
 
@@ -105,7 +105,7 @@ def test_cluster_timestamp():
 
 
 def test_cluster_time_range():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core_measurements = [
         PseudoMeasurement(1, 1.0),
         PseudoMeasurement(2, 2.0),
@@ -118,7 +118,7 @@ def test_cluster_time_range():
     assert cluster.time_range.start == 1
     assert cluster.time_range.stop == 3
 
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core_measurement = PseudoMeasurement(10, 1.0)
     cluster.add(core_measurement)
 
@@ -127,7 +127,7 @@ def test_cluster_time_range():
 
 
 def test_add_mixture_of_measurements():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core1 = PseudoMeasurement(1, 1.0)
     core2 = PseudoMeasurement(3, 1.0)
     continuous = ContinuousMeasurement(measurements=[core1, core2])
@@ -148,7 +148,7 @@ def test_add_mixture_of_measurements():
 
 
 def test_remove_all_measurements():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core1 = PseudoMeasurement(1, 1.0)
     core2 = PseudoMeasurement(2, 2.0)
     continuous = ContinuousMeasurement(measurements=[core1, core2])
@@ -180,7 +180,7 @@ def test_remove_all_measurements():
 
 
 def test_remove_core_measurement():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     core1 = PseudoMeasurement(1, 1.0)
     core2 = PseudoMeasurement(2, 2.0)
     continuous = ContinuousMeasurement(measurements=[core1, core2])

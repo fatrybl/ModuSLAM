@@ -5,7 +5,7 @@ from copy import deepcopy
 from phd.bridge.distributor import get_factory
 from phd.bridge.utils import add_elements_to_graph, process_leftovers
 from phd.external.variants_factory import Factory as VariantsFactory
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.graph import (
     Graph,
@@ -47,7 +47,9 @@ class Factory:
         return candidates
 
     @classmethod
-    def _process_variant(cls, graph: Graph, clusters: list[Cluster]) -> list[GraphElement]:
+    def _process_variant(
+        cls, graph: Graph, clusters: list[MeasurementCluster]
+    ) -> list[GraphElement]:
         """Creates graph elements for the given graph and list of clusters with
         measurements.
 

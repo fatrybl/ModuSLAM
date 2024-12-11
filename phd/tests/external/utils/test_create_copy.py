@@ -1,11 +1,11 @@
 from phd.bridge.auxiliary_dataclasses import Connection
 from phd.external.utils import create_copy
-from phd.measurement_storage.cluster import Cluster
+from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import PseudoMeasurement
 
 
 def test_create_copy_with_empty_inputs():
-    clusters: list[Cluster] = []
+    clusters: list[MeasurementCluster] = []
     connections: list[Connection] = []
 
     copied_clusters, copied_connections = create_copy(clusters, connections)
@@ -15,7 +15,7 @@ def test_create_copy_with_empty_inputs():
 
 
 def test_create_copy_single_cluster_no_connections():
-    cluster = Cluster()
+    cluster = MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
     cluster.add(measurement1)
@@ -33,7 +33,7 @@ def test_create_copy_single_cluster_no_connections():
 
 
 def test_create_copy_single_connection_between_clusters():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
 
@@ -60,7 +60,7 @@ def test_create_copy_single_connection_between_clusters():
 
 
 def test_create_copy_multiple_connections_between_multiple_clusters():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
     measurement3 = PseudoMeasurement(3, "c")
@@ -96,7 +96,7 @@ def test_create_copy_multiple_connections_between_multiple_clusters():
 
 
 def test_create_copy_maintains_order():
-    cluster1, cluster2, cluster3 = Cluster(), Cluster(), Cluster()
+    cluster1, cluster2, cluster3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
     measurement3 = PseudoMeasurement(3, "c")
@@ -127,7 +127,7 @@ def test_create_copy_maintains_order():
 
 
 def test_create_copy_modifying_copies_does_not_affect_originals():
-    cluster1, cluster2 = Cluster(), Cluster()
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
     measurement1 = PseudoMeasurement(1, "a")
     measurement2 = PseudoMeasurement(2, "b")
 

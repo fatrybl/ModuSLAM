@@ -11,7 +11,7 @@ from phd.moduslam.utils.exceptions import (
 from phd.moduslam.utils.ordered_set import OrderedSet
 
 
-class Cluster:
+class MeasurementCluster:
     """Stores measurements.
 
     TODO: make timestamp and time range properties calculation more efficient.
