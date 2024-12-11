@@ -5,7 +5,7 @@ from typing import TypeVar
 
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers, Connection
 from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurement_group import Group
+from phd.measurement_storage.measurementgroup import MeasurementGroup
 from phd.measurement_storage.measurements.auxiliary import SplitPoseOdometry
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
@@ -119,7 +119,7 @@ def remove_duplicates(
     return unique_clusters_with_leftovers
 
 
-def group_by_timestamp(measurements: Iterable[Measurement]) -> list[Group]:
+def group_by_timestamp(measurements: Iterable[Measurement]) -> list[MeasurementGroup]:
     """Groups measurements by timestamp.
 
     Args:
@@ -128,7 +128,7 @@ def group_by_timestamp(measurements: Iterable[Measurement]) -> list[Group]:
     Returns:
          measurements` groups.
     """
-    groups: dict[int, Group] = defaultdict(Group)
+    groups: dict[int, MeasurementGroup] = defaultdict(MeasurementGroup)
 
     for m in measurements:
         groups[m.timestamp].measurements.add(m)

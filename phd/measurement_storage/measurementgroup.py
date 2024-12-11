@@ -1,7 +1,7 @@
 from phd.measurement_storage.measurements.base import Measurement
 
 
-class Group:
+class MeasurementGroup:
     """Stores measurements of equal timestamps."""
 
     def __init__(self):

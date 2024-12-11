@@ -142,11 +142,13 @@ class TumVieImuDataPreprocessor(Handler):
             (g_bias[2][0], g_bias[2][1], g_bias[2][2]),
         )
 
-        integr_cov = (
+        integration_cov = (
             (integration[0][0], integration[0][1], integration[0][2]),
             (integration[1][0], integration[1][1], integration[1][2]),
             (integration[2][0], integration[2][1], integration[2][2]),
         )
 
-        covariances = ImuCovariance(accel_cov, gyro_cov, accel_bias_cov, gyro_bias_cov, integr_cov)
+        covariances = ImuCovariance(
+            accel_cov, gyro_cov, accel_bias_cov, gyro_bias_cov, integration_cov
+        )
         return covariances

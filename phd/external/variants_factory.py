@@ -5,7 +5,7 @@ from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
 from phd.measurement_storage.cluster import Cluster
-from phd.measurement_storage.measurement_group import Group
+from phd.measurement_storage.measurementgroup import MeasurementGroup
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.imu import Imu
 from phd.measurement_storage.storage import MeasurementStorage
@@ -68,7 +68,7 @@ class Factory:
         return core_measurements, imu_measurements
 
     @staticmethod
-    def _prepare_measurements(measurements: list[Measurement]) -> list[Group]:
+    def _prepare_measurements(measurements: list[Measurement]) -> list[MeasurementGroup]:
         """Prepares measurements for further processing.
 
         Args:
