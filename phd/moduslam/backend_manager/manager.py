@@ -23,5 +23,5 @@ class BackendManager:
         Args:
             graph: contains factor graph to be solved.
         """
-        self._result_values = self._graph_solver.solve(graph)
+        self._result_values, _ = self._graph_solver.solve(graph)
         graph.update_vertices(self._result_values)

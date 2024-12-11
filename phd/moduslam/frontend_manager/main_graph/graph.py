@@ -1,6 +1,5 @@
 import logging
 from collections.abc import Iterable
-from dataclasses import dataclass
 
 import gtsam
 
@@ -305,8 +304,10 @@ class Graph:
             self._connections[vertex].add(edge)
 
 
-@dataclass
 class GraphCandidate:
-    graph: Graph
-    elements: list[GraphElement]
-    leftovers: list[Measurement] | None = None
+    def __init__(
+        self, graph: Graph, elements: list[GraphElement], leftovers: list[Measurement] | None = None
+    ):
+        self.graph = graph
+        self.elements = elements
+        self.leftovers = leftovers

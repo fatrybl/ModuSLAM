@@ -1,18 +1,17 @@
-from typing import Any
-
 from phd.bridge.candidates_factory import Factory as CandidatesFactory
-from phd.external.metrics.candidate_evaluator import Evaluator
+from phd.external.metrics.storage import MetricsStorage
+from phd.external.metrics.vertices_connectivity import VerticesConnectivity
 from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.backend_manager.graph_solver import GraphSolver
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
 from phd.moduslam.map_manager.graph_saver import GraphSaver
+from phd.moduslam.utils.exceptions import ItemNotExistsError
 
 
 class Factory:
     """Creates suboptimal graph candidate."""
 
     def __init__(self):
-        self._evaluator = Evaluator()
         self._solver = GraphSolver()
         self._factory = CandidatesFactory
         self._graph_saver = GraphSaver()
@@ -35,26 +34,36 @@ class Factory:
         Returns:
             the best candidate.
         """
-        results: list[tuple[GraphCandidate, Any]] = []
         candidates = self._factory.create_candidates(graph, measurements_storage)
 
-        # candidates = remove_unconnected_candidates(candidates)
-
         for i, candidate in enumerate(candidates):
-            self._solve(candidate.graph, i)
-            results.append((candidate, None))
+            error = self._solve(candidate.graph, i)
+            connectivity = VerticesConnectivity.compute(candidate.graph, candidate.elements)
 
-        best_candidate = self._choose_best(results)
+            MetricsStorage.add_error(candidate, error)
+            MetricsStorage.add_connectivity(candidate, connectivity)
+
+        best_candidate = self._choose_best()
+        self._graph_saver.save_to_pdf(best_candidate.graph, name="best")
         return best_candidate
 
-    def _solve(self, graph: Graph, index: int) -> None:
+    def _solve(self, graph: Graph, index: int) -> float:
         """Solves and updates the graph."""
-        values = self._solver.solve(graph)
-        print(f"VARIANT {index}: {values}")
+        values, error = self._solver.solve(graph)
         graph.update_vertices(values)
+
         self._graph_saver.save_to_pdf(graph, name=str(index))
+        print(f"VARIANT {index}: {values}")
+        return error
 
     @staticmethod
-    def _choose_best(candidates_with_metrics: list[tuple[GraphCandidate, Any]]) -> GraphCandidate:
+    def _choose_best() -> GraphCandidate:
         """Chooses the best candidate."""
-        return candidates_with_metrics[0][0]
+        table = MetricsStorage.get_timeshift_table()
+        candidates = sorted(table, key=lambda k: table[k])
+        for candidate in candidates:
+            connectivity = MetricsStorage.get_connectivity_status(candidate)
+            if connectivity:
+                return candidate
+
+        raise ItemNotExistsError("No best candidate exists.")

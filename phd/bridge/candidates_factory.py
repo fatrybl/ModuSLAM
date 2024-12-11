@@ -4,6 +4,8 @@ from copy import deepcopy
 
 from phd.bridge.distributor import get_factory
 from phd.bridge.utils import add_elements_to_graph, process_leftovers
+from phd.external.metrics.storage import MetricsStorage
+from phd.external.metrics.timeshift import TimeShift
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.storage import MeasurementStorage
@@ -42,7 +44,12 @@ class Factory:
 
             elements = cls._process_variant(graph_copy, measurements_clusters)
 
-            candidates.append(GraphCandidate(graph_copy, elements, leftovers))
+            candidate = GraphCandidate(graph_copy, elements, leftovers)
+            timeshift = TimeShift.compute(measurements_clusters)
+
+            MetricsStorage.add_timeshift(candidate, timeshift)
+
+            candidates.append(candidate)
 
         return candidates
 
