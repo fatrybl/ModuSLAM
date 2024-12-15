@@ -3,13 +3,10 @@ from pathlib import Path
 
 import open3d as o3d
 
-from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.maps.pointcloud import PointcloudMap
-from moduslam.map_manager.protocols import MapLoader
-from moduslam.system_configs.map_manager.map_loaders.lidar_map import (
-    LidarMapLoaderConfig,
-)
-from moduslam.utils.exceptions import ExternalModuleException
+from phd.logger.logging_config import map_manager
+from phd.moduslam.map_manager.maps.pointcloud import PointCloudMap
+from phd.moduslam.map_manager.protocols import MapLoader
+from phd.moduslam.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(map_manager)
 
@@ -17,7 +14,7 @@ logger = logging.getLogger(map_manager)
 class LidarMapLoader(MapLoader):
     """Lidar pointcloud map loader."""
 
-    def __init__(self, config: LidarMapLoaderConfig) -> None:
+    def __init__(self, config) -> None:
         """
         Args:
             config: configuration for the loader.
@@ -31,7 +28,7 @@ class LidarMapLoader(MapLoader):
         self._remove_nan: bool = config.remove_nan
         self._remove_infinity: bool = config.remove_infinity
 
-    def save(self, lidar_map: PointcloudMap) -> None:
+    def save(self, lidar_map: PointCloudMap) -> None:
         """Saves lidar pointcloud map to the file.
 
         Args:
@@ -55,7 +52,7 @@ class LidarMapLoader(MapLoader):
             logger.critical(msg)
             raise ExternalModuleException(msg)
 
-    def load(self) -> PointcloudMap:
+    def load(self) -> PointCloudMap:
         """Loads the map.
 
         Returns:
@@ -80,6 +77,6 @@ class LidarMapLoader(MapLoader):
             logger.critical(msg)
             raise ExternalModuleException(msg)
         else:
-            lidar_map = PointcloudMap()
+            lidar_map = PointCloudMap()
             lidar_map.pointcloud = pointcloud
             return lidar_map

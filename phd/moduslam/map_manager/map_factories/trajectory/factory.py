@@ -1,14 +1,14 @@
-from moduslam.frontend_manager.graph.custom_vertices import Pose
-from moduslam.frontend_manager.graph.vertex_storage import VertexStorage
-from moduslam.map_manager.maps.trajectory import TrajectoryMap
-from moduslam.map_manager.protocols import MapFactory
+from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+    VertexStorage,
+)
+from phd.moduslam.map_manager.maps.trajectory import TrajectoryMap
+from phd.moduslam.map_manager.protocols import MapFactory
 
 
 class TrajectoryMapFactory(MapFactory):
 
-    def __init__(self, pose_type: type[Pose] = Pose):
+    def __init__(self):
         self._map = TrajectoryMap()
-        self._pose_type = pose_type
 
     @property
     def map(self) -> TrajectoryMap:
@@ -21,8 +21,5 @@ class TrajectoryMapFactory(MapFactory):
             vertex_storage: storage of graph vertices.
         """
 
-        vertices = vertex_storage.get_vertices(self._pose_type)
-        for vertex in vertices:
-            t = vertex.timestamp
-            p = vertex.value
-            self._map.add(t, p)
+        # vertices = vertex_storage.get_vertices(Pose)
+        raise NotImplementedError

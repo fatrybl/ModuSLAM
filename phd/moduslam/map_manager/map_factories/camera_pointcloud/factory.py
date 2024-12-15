@@ -4,32 +4,25 @@ from collections import deque
 import numpy as np
 from PIL.Image import Image
 
-from moduslam.custom_types.aliases import Matrix4x4
-from moduslam.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.data_manager.batch_factory.factory import BatchFactory
-from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
-from moduslam.frontend_manager.graph.custom_vertices import CameraPose
-from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.map_factories.camera_pointcloud.depth_estimator import (
+from phd.logger.logging_config import map_manager
+from phd.moduslam.custom_types.aliases import Matrix4x4
+from phd.moduslam.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
+from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from phd.moduslam.map_manager.map_factories.camera_pointcloud.depth_estimator import (
     DepthEstimator,
 )
-from moduslam.map_manager.map_factories.camera_pointcloud.utils import (
-    create_vertex_elements_table,
+from phd.moduslam.map_manager.map_factories.camera_pointcloud.utils import (
     pointcloud_from_image,
 )
-from moduslam.map_manager.map_factories.utils import (
+from phd.moduslam.map_manager.map_factories.utils import (
     convert_pointcloud,
-    create_vertex_edges_table,
-    fill_elements,
     transform_pointcloud,
 )
-from moduslam.map_manager.maps.pointcloud import PointcloudMap
-from moduslam.setup_manager.sensors_factory.sensors import StereoCamera
-from moduslam.system_configs.map_manager.map_factories.lidar_map import (
-    LidarMapFactoryConfig,
-)
+from phd.moduslam.map_manager.maps.pointcloud import PointCloudMap
+from phd.moduslam.setup_manager.sensors_factory.sensors import StereoCamera
 
 logger = logging.getLogger(map_manager)
 
@@ -37,25 +30,23 @@ logger = logging.getLogger(map_manager)
 class CameraPointcloudMapFactory:
     """Factory for camera-based pointlcoud map."""
 
-    def __init__(self, config: LidarMapFactoryConfig) -> None:
+    def __init__(self) -> None:
         """
         Args:
             config: configuration of the factory.
         """
-        self._map = PointcloudMap()
+        self._map = PointCloudMap()
         self._depth_estimator = DepthEstimator()
-        self._num_channels: int = config.num_channels
-        self._min_range: float = config.min_range
-        self._max_range: float = config.max_range
+        # self._num_channels: int = config.num_channels
+        # self._min_range: float = config.min_range
+        # self._max_range: float = config.max_range
 
     @property
-    def map(self) -> PointcloudMap:
+    def map(self) -> PointCloudMap:
         """Camera-based pointcloud map."""
         return self._map
 
-    def create(
-        self, graph: Graph[CameraPose, SmartVisualFeature], batch_factory: BatchFactory
-    ) -> None:
+    def create(self, graph: Graph, batch_factory: BatchFactory) -> None:
         """Creates camera-based point cloud map.
 
         Args:
@@ -63,22 +54,16 @@ class CameraPointcloudMapFactory:
 
             batch_factory: factory to create a data batch.
         """
-        vertices = graph.vertex_storage.get_vertices(CameraPose)
-        vertex_edges_table = create_vertex_edges_table(graph, vertices, SmartVisualFeature)
-        table1 = create_vertex_elements_table(vertices, vertex_edges_table)
-        table2 = fill_elements(table1, batch_factory)
-        points_map = self._create_points_map(table2)
-        points_map = points_map.T
-        self._map.set_points(points_map)
+        raise NotImplementedError
 
     def _create_pointcloud(
         self,
         pose: Matrix4x4,
-        tf: list[list[float]],
+        tf: Matrix4x4,
         values: tuple[Image, Image],
         camera_matrix: Matrix3x3,
     ) -> Matrix4xN:
-        """Creates a pointcloud from the given image(s) and transforms it according to
+        """Creates a point cloud from the given image(s) and transforms it according to
         the camera pose and base -> camera transformation.
 
         Args:
@@ -100,9 +85,7 @@ class CameraPointcloudMapFactory:
         result = transform_pointcloud(pose_array, tf_array, pointcloud)
         return result
 
-    def _create_points_map(
-        self, vertex_elements_table: dict[CameraPose, deque[Element]]
-    ) -> MatrixNx3:
+    def _create_points_map(self, vertex_elements_table: dict[Pose, deque[Element]]) -> MatrixNx3:
         """Creates points map from the given "vertex -> elements" table.
 
         Args:

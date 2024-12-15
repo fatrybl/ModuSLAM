@@ -1,20 +1,20 @@
-from collections import defaultdict, deque
-from collections.abc import Iterable
+from collections import defaultdict
+from typing import TypeVar
 
 import numpy as np
 
-from moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.data_manager.batch_factory.factory import BatchFactory
-from moduslam.frontend_manager.graph.base_edges import BaseEdge
-from moduslam.frontend_manager.graph.base_vertices import BaseVertex
-from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.utils.auxiliary_methods import check_dimensionality
+from phd.moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
+from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
+from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from phd.moduslam.utils.auxiliary_methods import check_dimensionality
+
+V = TypeVar("V", bound=Vertex)
 
 
 def fill_elements(
-    vertex_elements_table: dict[BaseVertex, set[Element]], batch_factory: BatchFactory
-) -> dict[BaseVertex, deque[Element]]:
+    vertex_elements_table: dict[V, set[Element]], batch_factory: BatchFactory
+) -> dict[V, list[Element]]:
     """Gets elements with raw lidar point cloud measurements and assign to the
     corresponding vertices.
 
@@ -22,15 +22,16 @@ def fill_elements(
         vertex_elements_table: "vertices -> elements" table.
                                 Elements do not contain raw lidar point cloud measurements.
 
-        batch_factory (BatchFactory): factory to create a batch.
+        batch_factory: a factory to create the batch.
 
     Returns:
-        "vertices -> elements" table.
+        "pose -> elements" table.
     """
-    table: dict[BaseVertex, deque[Element]] = defaultdict(deque)
+    table: dict[V, list[Element]] = defaultdict(list)
     for vertex, elements in vertex_elements_table.items():
-        batch_factory.fill_batch_with_elements(elements)  # type: ignore
-        table[vertex] = batch_factory.batch.data
+        elements_list = list(elements)
+        batch_factory.fill_batch_with_elements(elements_list)
+        table[vertex] = list(batch_factory.batch.data)
         batch_factory.batch.clear()
 
     return table
@@ -88,32 +89,3 @@ def convert_pointcloud(pointcloud: MatrixNx3) -> Matrix4xN:
     ones = np.ones((1, pointcloud.shape[1]))
     pointcloud_homogeneous = np.vstack((pointcloud, ones))
     return pointcloud_homogeneous
-
-
-def create_vertex_edges_table(
-    graph: Graph, vertices: Iterable[BaseVertex], edge_type: type[BaseEdge]
-) -> dict[BaseVertex, set[BaseEdge]]:
-    """Creates a table with vertices and corresponding edges of the given type.
-
-    Args:
-        graph: graph to create a table from.
-
-        vertices: vertices to create a table for.
-
-        edge_type: edge type to filter.
-
-    Returns:
-        "vertex -> edges" table.
-    """
-    table: dict[BaseVertex, set[BaseEdge]] = {}
-
-    for vertex in vertices:
-        edges = graph.get_connected_edges(vertex)
-        for edge in edges:
-            if isinstance(edge, edge_type):
-                if vertex not in table:
-                    table[vertex] = {edge}
-                else:
-                    table[vertex].add(edge)
-
-    return table

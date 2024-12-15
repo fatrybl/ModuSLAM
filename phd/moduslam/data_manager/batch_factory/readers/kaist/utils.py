@@ -2,7 +2,6 @@ from pathlib import Path
 
 import numpy as np
 
-from moduslam.utils.auxiliary_dataclasses import Message
 from phd.moduslam.data_manager.batch_factory.readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,
@@ -14,6 +13,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     read_csv_file,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from phd.moduslam.utils.auxiliary_dataclasses import Message
 from phd.moduslam.utils.auxiliary_methods import str_to_int
 
 
@@ -157,8 +157,7 @@ def process_stream(
 def process_timelimit(
     file: Path, used_sensors: set[str], start: int, stop: int
 ) -> tuple[list[tuple[int, str, int]], dict[str, int]]:
-    """Creates a list of tuples containing the timestamp, sensor name and index for the
-    TimeLimit regime.
+    """Creates a list of tuples containing the timestamp, sensor name and index.
 
     Args:
         file: csv file path.

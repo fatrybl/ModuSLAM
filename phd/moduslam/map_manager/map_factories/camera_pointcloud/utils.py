@@ -3,7 +3,8 @@ from collections.abc import Sequence
 import cv2
 import numpy as np
 
-from moduslam.custom_types.numpy import (
+from moduslam.frontend_manager.graph.custom_vertices import CameraPose
+from phd.moduslam.custom_types.numpy import (
     Matrix3x3,
     Matrix4x4,
     MatrixMxN,
@@ -11,29 +12,17 @@ from moduslam.custom_types.numpy import (
     MatrixNx3,
     VectorN,
 )
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.frontend_manager.graph.custom_edges import SmartVisualFeature
-from moduslam.frontend_manager.graph.custom_vertices import CameraPose
+from phd.moduslam.data_manager.batch_factory.batch import Element
 
 
-def create_vertex_elements_table(
-    vertices: Sequence[CameraPose],
-    vertex_edges_table: dict[CameraPose, set[SmartVisualFeature]],
-) -> dict[CameraPose, set[Element]]:
+def create_vertex_elements_table() -> dict[CameraPose, set[Element]]:
     """Creates "vertex -> elements" table.
-
-    Args:
-        vertices: vertices to get elements for.
-
-        vertex_edges_table: "vertex -> edges" table.
 
     Returns:
         "vertex -> elements" table.
 
     TODO: add implementation.
     """
-
-    # table: dict[CameraPose, set[Element]] = defaultdict(set)
     raise NotImplementedError("This function is not implemented yet.")
 
 

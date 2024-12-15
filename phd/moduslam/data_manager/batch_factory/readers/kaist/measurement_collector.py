@@ -3,11 +3,10 @@
 import logging
 from collections.abc import Callable
 
-from moduslam.utils.auxiliary_dataclasses import Message
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.data_sources import (
     CsvData,
-    PointcloudData,
+    PointCloudData,
     Source,
     StereoImageData,
 )
@@ -27,6 +26,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     get_csv_message,
     get_images,
 )
+from phd.moduslam.utils.auxiliary_dataclasses import Message
 
 logger = logging.getLogger(data_manager)
 
@@ -47,7 +47,7 @@ def get_next_measurement(
     """
     source_getter_table: dict[type, tuple[Callable, str]] = {
         CsvData: (get_csv_measurement, "CSV data has finished."),
-        PointcloudData: (get_pointcloud_measurement, "Pointcloud data has finished."),
+        PointCloudData: (get_pointcloud_measurement, "Pointcloud data has finished."),
         StereoImageData: (get_stereo_measurement, "Stereo images have finished."),
     }
 
@@ -69,10 +69,7 @@ def get_measurement(location: Location) -> Message:
         location: Data location.
 
     Returns:
-        message.
-
-    Raises:
-        TypeError: if the location type is unknown.
+        a message.
     """
     location_method_table: dict[type, Callable] = {
         CsvDataLocation: get_csv_message_by_location,
@@ -106,17 +103,17 @@ def get_csv_measurement(source: CsvData) -> tuple[Message, CsvDataLocation]:
     return message, location
 
 
-def get_pointcloud_measurement(source: PointcloudData) -> tuple[Message, BinaryDataLocation]:
-    """Gets the next pointcloud measurement.
+def get_pointcloud_measurement(source: PointCloudData) -> tuple[Message, BinaryDataLocation]:
+    """Gets the next point cloud measurement.
 
     Args:
-        source: Pointcloud data source.
+        source: point cloud data source.
 
     Returns:
         message and location.
 
     Raises:
-        StopIteration: if the pointcloud data has finished.
+        StopIteration: if the point cloud data has finished.
     """
     try:
         file = next(source)

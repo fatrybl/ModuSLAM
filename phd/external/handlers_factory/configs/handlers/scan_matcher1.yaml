@@ -1,0 +1,6 @@
+defaults:
+  - /base_scan_matcher@_here_
+
+sensor_name: "velodyne_left"
+min_range: 7.0
+measurement_noise_covariance: [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]

@@ -1,56 +1,63 @@
 import logging
-from collections import deque
+from typing import cast
 
 import numpy as np
+from hydra import compose, initialize
+from hydra.core.config_store import ConfigStore
 
-from moduslam.custom_types.aliases import Matrix4x4
-from moduslam.data_manager.batch_factory.batch import Element
-from moduslam.data_manager.batch_factory.factory import BatchFactory
-from moduslam.frontend_manager.graph.custom_edges import LidarOdometry
-from moduslam.frontend_manager.graph.custom_vertices import LidarPose
-from moduslam.frontend_manager.graph.graph import Graph
-from moduslam.logger.logging_config import map_manager
-from moduslam.map_manager.map_factories.lidar_map.utils import (
+from phd.logger.logging_config import map_manager
+from phd.moduslam.custom_types.aliases import Matrix4x4
+from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
+from phd.moduslam.frontend_manager.main_graph.graph import Graph
+from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from phd.moduslam.map_manager.map_factories.lidar_map.config import (
+    LidarPointCloudConfig,
+)
+from phd.moduslam.map_manager.map_factories.lidar_map.utils import (
+    create_vertex_edges_table,
     map_elements2vertices,
     values_to_array,
 )
-from moduslam.map_manager.map_factories.utils import (
-    create_vertex_edges_table,
+from phd.moduslam.map_manager.map_factories.utils import (
     fill_elements,
     filter_array,
     transform_pointcloud,
 )
-from moduslam.map_manager.maps.pointcloud import PointcloudMap
-from moduslam.map_manager.protocols import MapFactory
-from moduslam.setup_manager.sensors_factory.sensors import Lidar3D
-from moduslam.system_configs.map_manager.map_factories.lidar_map import (
-    LidarMapFactoryConfig,
-)
+from phd.moduslam.map_manager.maps.pointcloud import PointCloudMap
+from phd.moduslam.map_manager.protocols import MapFactory
+from phd.moduslam.setup_manager.sensors_factory.sensors import Lidar3D
 
 logger = logging.getLogger(map_manager)
 
 
-class LidarMapFactory(MapFactory):
-    """Factory for a lidar map."""
+def register_configs():
+    cs = ConfigStore.instance()
+    cs.store(name="base_lidar_pointcloud", node=LidarPointCloudConfig)
 
-    def __init__(self, config: LidarMapFactoryConfig) -> None:
-        """
-        Args:
-            config: configuration of the factory.
-        """
-        self._map = PointcloudMap()
-        self._num_channels: int = config.num_channels
-        self._min_range: float = config.min_range
-        self._max_range: float = config.max_range
+
+register_configs()
+
+
+class LidarMapFactory(MapFactory):
+    """Factory for the lidar map."""
+
+    def __init__(self) -> None:
+        with initialize(version_base=None, config_path="../configs"):
+            cfg = compose(config_name="lidar_pointcloud")
+            config = cast(LidarPointCloudConfig, cfg)
+
+        self._map = PointCloudMap()
+        self._num_channels = config.num_channels
+        self._min_range = config.min_range
+        self._max_range = config.max_range
 
     @property
-    def map(self) -> PointcloudMap:
+    def map(self) -> PointCloudMap:
         """Lidar point cloud map instance."""
         return self._map
 
-    def create_map(
-        self, graph: Graph[LidarPose, LidarOdometry], batch_factory: BatchFactory
-    ) -> None:
+    def create_map(self, graph: Graph, batch_factory: BatchFactory) -> None:
         """Creates a lidar point cloud map.
 
         Args:
@@ -58,20 +65,18 @@ class LidarMapFactory(MapFactory):
 
             batch_factory: factory to create a data batch.
         """
-        vertices = graph.vertex_storage.get_vertices(LidarPose)
-        vertex_edges_table = create_vertex_edges_table(graph, vertices, LidarOdometry)
+        vertices = graph.vertex_storage.get_vertices(Pose)
+        vertex_edges_table = create_vertex_edges_table(graph, vertices)
         table1 = map_elements2vertices(vertex_edges_table)
         table2 = fill_elements(table1, batch_factory)
         points_map = self._create_points_map(table2)
         self._map.set_points(points_map)
 
-    def _create_points_map(
-        self, vertex_elements_table: dict[LidarPose, deque[Element]]
-    ) -> np.ndarray:
+    def _create_points_map(self, pose_elements_table: dict[Pose, list[Element]]) -> np.ndarray:
         """Creates a points map from the given "vertex -> elements" table.
 
         Args:
-            vertex_elements_table: "vertex -> elements" table.
+            pose_elements_table: "pose -> elements" table.
 
         Returns:
             Points map array [N,3].
@@ -81,31 +86,33 @@ class LidarMapFactory(MapFactory):
         """
         pointcloud_map = np.empty(shape=(4, 0))
 
-        for vertex, elements in vertex_elements_table.items():
+        for pose, elements in pose_elements_table.items():
             for element in elements:
-                sensor = element.measurement.sensor
-
-                if isinstance(sensor, Lidar3D):
-                    pointcloud = self._create_pointcloud(
-                        vertex.value, sensor.tf_base_sensor, element.measurement.values
-                    )
-                    pointcloud_map = np.concatenate((pointcloud_map, pointcloud), axis=1)
-
-                else:
-                    msg = (
-                        f"Sensor is of type {type(sensor).__name__!r} but not {Lidar3D.__name__!r}"
-                    )
-                    logger.error(msg)
-                    raise TypeError(msg)
+                pointcloud = self._get_cloud(pose.value, element)
+                pointcloud_map = np.concatenate((pointcloud_map, pointcloud), axis=1)
 
         pointcloud_map = pointcloud_map[:3, :].T  # ignore intensity values.
         return pointcloud_map
 
+    def _get_cloud(self, pose: Matrix4x4, element: Element) -> np.ndarray:
+        sensor = element.measurement.sensor
+        values = element.measurement.values
+
+        if isinstance(sensor, Lidar3D):
+            tf = sensor.tf_base_sensor
+            pointcloud = self._create_pointcloud(pose, tf, values)
+            return pointcloud
+
+        else:
+            msg = f"Sensor is of type {type(sensor).__name__!r} but not {Lidar3D.__name__!r}"
+            logger.error(msg)
+            raise TypeError(msg)
+
     def _create_pointcloud(
-        self, pose: Matrix4x4, tf: list[list[float]], values: tuple[float, ...]
+        self, pose: Matrix4x4, tf: Matrix4x4, values: tuple[float, ...]
     ) -> np.ndarray:
-        """Creates a pointcloud from the given values and transforms it according to the
-        vertex pose and base -> lidar transformation. Ignores intensity values.
+        """Creates a point cloud in global coordinate system by applying
+        transformations. Ignores intensity values.
 
         Args:
             pose: pose SE(3).

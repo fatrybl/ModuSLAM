@@ -37,7 +37,7 @@ class GraphSaver:
         source = Source(dot)
         source.render(name, format="pdf", cleanup=True)
 
-    def view(self, graph: Graph) -> None:
+    def save_and_view(self, graph: Graph) -> None:
         """Visualizes the .pdf file with the graph.
 
         Args:

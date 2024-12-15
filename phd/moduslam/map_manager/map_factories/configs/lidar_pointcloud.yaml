@@ -1,0 +1,7 @@
+defaults:
+  - /base_lidar_pointcloud
+  - _self_
+
+num_channels: 4
+min_range: 5
+max_range: 120

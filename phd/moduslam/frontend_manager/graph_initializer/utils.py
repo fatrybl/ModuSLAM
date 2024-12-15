@@ -6,7 +6,7 @@ from phd.measurement_storage.measurements.imu_bias import Bias
 from phd.measurement_storage.measurements.linear_velocity import Velocity
 from phd.measurement_storage.measurements.pose import Pose
 from phd.moduslam.custom_types.aliases import Matrix4x4, Vector6
-from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
+from phd.moduslam.frontend_manager.graph_initializer.configs import (
     PriorImuBias,
     PriorLinearVelocity,
     PriorPose,

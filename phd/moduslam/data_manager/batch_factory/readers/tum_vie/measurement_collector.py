@@ -3,7 +3,6 @@ from collections.abc import Callable
 
 from PIL.Image import Image
 
-from moduslam.utils.auxiliary_dataclasses import Message
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.data_sources import Source
 from phd.moduslam.data_manager.batch_factory.readers.locations import (
@@ -12,8 +11,8 @@ from phd.moduslam.data_manager.batch_factory.readers.locations import (
     StereoImagesLocation,
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.source import (
-    TumCsvData,
-    TumStereoImageData,
+    TumVieCsvData,
+    TumVieStereoImageData,
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.utils import (
     get_csv_data_by_location,
@@ -23,6 +22,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     get_csv_message,
     get_images,
 )
+from phd.moduslam.utils.auxiliary_dataclasses import Message
 
 logger = logging.getLogger(data_manager)
 
@@ -42,8 +42,8 @@ def get_next_measurement(
         StopIteration: if the data source has exhausted.
     """
     source_getter_table: dict[type, tuple[Callable, str]] = {
-        TumCsvData: (get_csv_measurement, "CSV data has finished."),
-        TumStereoImageData: (get_stereo_measurement, "Stereo images have finished."),
+        TumVieCsvData: (get_csv_measurement, "CSV data has finished."),
+        TumVieStereoImageData: (get_stereo_measurement, "Stereo images have finished."),
     }
 
     message_getter, msg = source_getter_table[type(source)]
@@ -75,7 +75,7 @@ def get_measurement(location: Location) -> tuple[str, ...] | tuple[Image, Image]
     return data
 
 
-def get_csv_measurement(source: TumCsvData) -> tuple[Message, CsvDataLocation]:
+def get_csv_measurement(source: TumVieCsvData) -> tuple[Message, CsvDataLocation]:
     """Gets the next CSV measurement.
 
     Args:
@@ -97,7 +97,7 @@ def get_csv_measurement(source: TumCsvData) -> tuple[Message, CsvDataLocation]:
     return message, location
 
 
-def get_stereo_measurement(source: TumStereoImageData) -> tuple[Message, StereoImagesLocation]:
+def get_stereo_measurement(source: TumVieStereoImageData) -> tuple[Message, StereoImagesLocation]:
     """Gets the next stereo image measurement.
 
     Args:

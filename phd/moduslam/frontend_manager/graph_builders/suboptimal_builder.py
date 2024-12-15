@@ -1,10 +1,10 @@
 import logging
 
 from phd.bridge.optimal_candidate_factory import Factory
+from phd.external.handlers_factory.handlers.handler_protocol import Handler
 from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
-from phd.moduslam.frontend_manager.handlers.handler_protocol import Handler
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
     DoublePoseOdometry,
@@ -27,23 +27,23 @@ class Builder:
         self._candidate_factory = Factory()
         self._storage = MeasurementStorage()
 
-    def create_graph(self, graph: Graph, data_batch: DataBatch) -> None:
+    def create_graph(self, graph: Graph, data_batch: DataBatch) -> Graph:
         """Creates graph candidate using the measurements from the data batch.
 
         Args:
-            graph: a main graph to use.
+            graph: a main graph.
 
             data_batch: a data batch with elements.
 
         Returns:
-            new graph elements.
+            a new graph.
         """
-
+        new_graph = graph
         while not data_batch.empty:
 
             fill_storage(self._storage, data_batch, self._handlers, self._analyzer)
 
-            candidate = self._candidate_factory.create_best_candidate(graph, self._storage)
+            candidate = self._candidate_factory.create_candidate(new_graph, self._storage)
 
             self._storage.clear()
 
@@ -51,6 +51,7 @@ class Builder:
                 for measurement in candidate.leftovers:
                     self._storage.add(measurement)
 
-            graph = candidate.graph
+            new_graph = candidate.graph
 
         logger.info("Input data batch is empty.")
+        return new_graph

@@ -1,50 +1,28 @@
 import logging
 from collections.abc import Sequence
 
-from hydra import compose, initialize
-from hydra.core.config_store import ConfigStore
-
 from phd.logger.logging_config import data_manager
-from phd.moduslam.data_manager.batch_factory.base_configs import BatchFactoryConfig
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch, Element
-from phd.moduslam.data_manager.batch_factory.memory_analyzer import MemoryAnalyzer
-from phd.moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
-from phd.moduslam.data_manager.batch_factory.readers.data_reader_factory import (
+from phd.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
+from phd.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
+from phd.moduslam.data_manager.batch_factory.readers.reader_factory import (
     DataReaderFactory,
 )
-from phd.moduslam.data_manager.batch_factory.readers.kaist.config_objects.base import (
-    KaistConfig,
-)
-from phd.moduslam.data_manager.batch_factory.readers.tum_vie.config_objects.base import (
-    TumVieConfig,
-)
+from phd.moduslam.data_manager.memory_analyzer import MemoryAnalyzer
 from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
-from phd.moduslam.utils.exceptions import ItemNotFoundError, UnfeasibleRequestError
+from phd.moduslam.utils.exceptions import StateNotSetError, UnfeasibleRequestError
 
 logger = logging.getLogger(data_manager)
-
-
-def register_configs():
-    cs = ConfigStore.instance()
-    cs.store(name="base_factory", node=BatchFactoryConfig)
-    cs.store(name="base_kaist_urban_dataset", node=KaistConfig)
-    cs.store(name="base_tum_vie_dataset", node=TumVieConfig)
-
-
-register_configs()
 
 
 class BatchFactory:
     """Factory for creating and managing data batch."""
 
-    def __init__(self) -> None:
+    def __init__(self, config: BatchFactoryConfig) -> None:
         self._all_data_processed: bool = False
         self._batch = DataBatch()
-
-        with initialize(version_base=None, config_path="configs"):
-            config = compose(config_name="config")
-            self._memory_analyzer = MemoryAnalyzer(config.batch_memory_percent)
-            self._data_reader = DataReaderFactory.create(config.dataset, config.regime)
+        self._memory_analyzer = MemoryAnalyzer(config.batch_memory_percent)
+        self._data_reader = DataReaderFactory.create(config.dataset, config.regime)
 
     @property
     def batch(self) -> DataBatch:
@@ -53,11 +31,7 @@ class BatchFactory:
 
     def fill_batch_sequentially(self) -> None:
         """Adds elements with raw sensor measurements to the batch sequentially from the
-        dataset.
-
-        Raises:
-            MemoryError: memory limit exceeded.
-        """
+        dataset."""
 
         with self._data_reader as reader:
             while not self._all_data_processed:
@@ -79,9 +53,6 @@ class BatchFactory:
 
         Args:
             elements: sequence of elements w/o raw sensor measurements.
-
-        Raises:
-            MemoryError: memory limit exceeded.
         """
 
         elements = sorted(elements, key=lambda x: x.timestamp)
@@ -104,11 +75,10 @@ class BatchFactory:
 
         Raises:
             UnfeasibleRequestError: can not fulfill the request.
-
-            MemoryError.
         """
 
         with self._data_reader as reader:
+
             elements = self._fulfill_request(reader, request)
 
             if elements:
@@ -131,20 +101,15 @@ class BatchFactory:
 
         Returns:
             list of elements or None.
-
-        Raises:
-            MemoryError: memory limit exceeded.
         """
         sensor = request.sensor
         start, stop = request.period.start, request.period.stop
-        elements = []
-        current_timestamp = -1
+        elements: list[Element] = []
+        current_timestamp: int = -1
 
         try:
             reader.set_initial_state(sensor, start)
-        except ItemNotFoundError:
-            msg = f"Can not set the initial state for sensor {sensor} at {start}."
-            logger.error(msg)
+        except StateNotSetError:
             return None
 
         while current_timestamp < stop:

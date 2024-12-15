@@ -1,4 +1,4 @@
-"""Auxiliary methods for the moduslam package.
+"""Auxiliary methods for the ModuSLAM package.
 
 Any method used in multiple modules/packages may be defined here.
 """
@@ -17,15 +17,10 @@ from PIL.Image import Image
 from plum import dispatch
 
 from phd.logger.logging_config import utils
-from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
+from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.custom_types.numpy import MatrixMxN
 from phd.moduslam.custom_types.numpy import Vector3 as NumpyVector3
 from phd.moduslam.custom_types.numpy import VectorN
-from phd.moduslam.data_manager.batch_factory.batch import (
-    DataBatch,
-    Element,
-    RawMeasurement,
-)
 from phd.moduslam.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(utils)
@@ -47,6 +42,53 @@ def exception_handler(custom_exception: type[Exception], message: str) -> Callab
     return decorator
 
 
+def matrix4x4_list_to_tuple(matrix: list[list[float]]) -> Matrix4x4:
+    """Converts SE(3) transformation matrix represented as a list of lists of floats
+    into the tuple of tuples of floats of the fixed shape.
+
+    Args:
+        matrix: SE(3) matrix represented as a list of lists of floats.
+
+    Returns:
+        Matrix4x4 representing the SE(3) transformation.
+
+    Raises:
+        DimensionalityError: if the input matrix has incompatible dimensions.
+    """
+    if len(matrix) != 4 or any(len(row) != 4 for row in matrix):
+        raise DimensionalityError("Input matrix must be 4x4.")
+
+    return (
+        (matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]),
+        (matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]),
+        (matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]),
+        (matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]),
+    )
+
+
+def matrix3x3_list_to_tuple(matrix: list[list[float]]) -> Matrix3x3:
+    """Converts SE(3) transformation matrix represented as a list of lists of floats
+    into the tuple of tuples of floats of the fixed shape.
+
+    Args:
+        matrix: SE(3) matrix represented as a list of lists of floats.
+
+    Returns:
+        Matrix4x4 representing the SE(3) transformation.
+
+    Raises:
+        DimensionalityError: if the input matrix has incompatible dimensions.
+    """
+    if len(matrix) != 3 or any(len(row) != 3 for row in matrix):
+        raise DimensionalityError("Input matrix must be 3x3.")
+
+    return (
+        (matrix[0][0], matrix[0][1], matrix[0][2]),
+        (matrix[1][0], matrix[1][1], matrix[1][2]),
+        (matrix[2][0], matrix[2][1], matrix[2][2]),
+    )
+
+
 def diagonal_matrix3x3(values: Vector3) -> Matrix3x3:
     return (
         (values[0], 0.0, 0.0),
@@ -59,23 +101,6 @@ def make_iterable(obj: Any) -> Iterable[Any]:
     if isinstance(obj, Iterable) and not isinstance(obj, (str, bytes)):
         return obj  # Already iterable, return as is
     return [obj]  # Wrap single item in a list
-
-
-def create_empty_element(element: Element) -> Element:
-    """Creates an empty element with the same timestamp, location and sensor as the input element.
-    Args:
-        element: input element with data.
-
-    Returns:
-        element without data.
-    """
-    empty_measurement = RawMeasurement(sensor=element.measurement.sensor, values=())
-    empty_element = Element(
-        timestamp=element.timestamp,
-        measurement=empty_measurement,
-        location=element.location,
-    )
-    return empty_element
 
 
 def sec2nanosec(seconds: int | float) -> int:
@@ -158,7 +183,7 @@ def equal_integers(n1: int, n2: int, epsilon: int) -> bool:
         logger.critical(msg)
         raise ValueError(msg)
 
-    return abs(n1 - n2) <= abs(epsilon)
+    return abs(n1 - n2) <= epsilon
 
 
 def create_numpy_vector_3(x: int | float, y: int | float, z: int | float) -> NumpyVector3:
@@ -249,67 +274,6 @@ def equal_images(imgs_1: tuple[Image, ...], imgs_2: tuple[Image, ...]) -> bool:
         array_img1 = np.asarray(img1)
         array_img2 = np.asarray(img2)
         if np.array_equal(array_img1, array_img2) is False:
-            return False
-
-    return True
-
-
-def equal_elements(el1: Element | None, el2: Element | None) -> bool:
-    """Compares two elements.
-
-    If the values are of type Image, they are compared separately with equal_images() method.
-
-    Args:
-        el1: 1-st element.
-
-        el2: 2-nd element.
-
-    Returns:
-        comparison result.
-    """
-    if el1 is None and el2 is None:
-        return True
-
-    elif el1 is not None and el2 is not None:
-        if isinstance(el1.measurement.values[0], Image):
-            if equal_images(el1.measurement.values, el2.measurement.values) is False:
-                return False
-        else:
-            if el1.measurement.values != el2.measurement.values:
-                return False
-
-        if el1.timestamp != el2.timestamp:
-            return False
-        if el1.location != el2.location:
-            return False
-        if el1.measurement.sensor != el2.measurement.sensor:
-            return False
-
-    else:
-        return False
-
-    return True
-
-
-def equal_batches(batch1: DataBatch, batch2: DataBatch) -> bool:
-    """Compares two data batches.
-
-    Args:
-        batch1: 1-st data batch.
-
-        batch2: 2-nd data batch.
-
-    Returns:
-        comparison result.
-    """
-    if batch1.empty and batch2.empty:
-        return True
-
-    if len(batch1.data) != len(batch2.data):
-        return False
-
-    for el1, el2 in zip(batch1.data, batch2.data):
-        if not equal_elements(el1, el2):
             return False
 
     return True

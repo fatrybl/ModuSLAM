@@ -21,8 +21,8 @@ class DirectoryIterator:
         self._extension = file_extension
         self._files: list[Path] = list(directory.glob(f"*{file_extension}"))
         self._files = sort_files_numerically(self._files)
-        self._index: int = self._start_index
         self._num_files: int = len(self._files)
+        self._index: int = self._start_index
 
     def __iter__(self):
         return self
@@ -35,8 +35,18 @@ class DirectoryIterator:
 
     @property
     def index(self) -> int:
-        """Index of the current file."""
-        self._is_empty()
+        """Index of the current file.
+
+        Raises:
+            IndexError:
+                1. if the directory is empty.
+                2. if no iterations has been performed.
+        """
+        if self._is_empty():
+            msg = f"No files of type{self._extension} in the directory."
+            logger.error(msg)
+            raise IndexError(msg)
+
         if self._index == self._start_index:
             msg = "Index does not exist: no iteration has been done yet."
             logger.error(msg)
@@ -46,8 +56,17 @@ class DirectoryIterator:
 
     @property
     def file(self) -> Path:
-        """Current file."""
-        self._is_empty()
+        """Current file.
+
+        Raises:
+            FileExistsError: if no files of the specified type exist in the directory.
+
+            ValueError: if no iteration has been performed yet.
+        """
+        if self._is_empty():
+            msg = f"No files of type{self._extension} in the directory."
+            logger.error(msg)
+            raise FileExistsError(msg)
         try:
             file = self._files[self.index]
         except IndexError:
@@ -61,8 +80,10 @@ class DirectoryIterator:
         """Resets the index to the initial state."""
         self._index = self._start_index
 
-    def _is_empty(self) -> None:
-        if self._num_files == 0:
-            msg = f"No files of type{self._extension} in the directory."
-            logger.error(msg)
-            raise FileExistsError(msg)
+    def _is_empty(self) -> bool:
+        """Checks if any files are present in the directory.
+
+        Returns:
+              check status.
+        """
+        return self._num_files == 0

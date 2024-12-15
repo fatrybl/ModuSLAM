@@ -1,0 +1,64 @@
+"""Tests for DataReaderFactory.
+
+For any Data Reader a valid dataset must be provided.
+
+Test cases:
+1) Both dataset and regime configs are valid -> DataReader
+2) Dataset config is invalid: incorrect name of the data reader -> NotImplementedError
+3) Regime config is invalid: incorrect name of the regime -> ValueError
+"""
+
+from pytest import mark, raises
+
+from phd.moduslam.data_manager.batch_factory.configs import (
+    DataRegimeConfig,
+    DatasetConfig,
+)
+from phd.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
+from phd.moduslam.data_manager.batch_factory.readers.reader_factory import (
+    DataReaderFactory,
+)
+from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
+from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from phd.tests.moduslam.data_manager.batch_factory.data_reader_factory.scenarios import (
+    invalid_dataset,
+    invalid_regime,
+    valid_readers,
+)
+
+valid_scenarios = (*valid_readers,)
+
+
+@mark.parametrize(
+    "dataset_config, regime_config, sensors_config, reference_reader",
+    [*valid_scenarios],
+)
+def test_get_reader(
+    dataset_config: DatasetConfig,
+    regime_config: DataRegimeConfig,
+    sensors_config: dict[str, SensorConfig],
+    reference_reader: type[DataReader],
+):
+    SensorsFactory.init_sensors(sensors_config)
+
+    reader = DataReaderFactory.create(dataset_config, regime_config)
+
+    assert isinstance(reader, reference_reader)
+
+
+@mark.parametrize(
+    "dataset_config, regime_config",
+    [invalid_dataset],
+)
+def test_get_reader_invalid_dataset(dataset_config: DatasetConfig, regime_config: DataRegimeConfig):
+    with raises(NotImplementedError):
+        DataReaderFactory.create(dataset_config, regime_config)
+
+
+@mark.parametrize(
+    "dataset_config, regime_config",
+    [invalid_regime],
+)
+def test_get_reader_invalid_regime(dataset_config: DatasetConfig, regime_config: DataRegimeConfig):
+    with raises(ValueError):
+        DataReaderFactory.create(dataset_config, regime_config)

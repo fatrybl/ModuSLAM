@@ -142,7 +142,7 @@ class VertexStorage:
         Returns:
             vertices of the given type.
         """
-        return self._type_vertices_table.get(vertex_type, OrderedSet())
+        return self._type_vertices_table.get(vertex_type, OrderedSet[V]())
 
     def get_last_vertex(self, vertex_type: type[V]) -> V | None:
         """Gets the last added vertex of the given type.

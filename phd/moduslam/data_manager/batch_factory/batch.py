@@ -1,38 +1,11 @@
 import logging
 from collections import deque
-from dataclasses import dataclass
-from typing import Any
 
 from phd.logger.logging_config import data_manager
-from phd.moduslam.data_manager.batch_factory.readers.locations import Location
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.data_manager.batch_factory.data_objects import Element
 from phd.moduslam.utils.deque_set import DequeSet
 
 logger = logging.getLogger(data_manager)
-
-
-@dataclass(frozen=True, eq=True)
-class RawMeasurement:
-    """Raw sensor measurement.
-
-    Hash() calculation ignores values because some of them might not be hashable,
-    i.e.PIL.Image.
-    """
-
-    sensor: Sensor
-    values: Any
-
-    def __hash__(self) -> int:
-        return hash(self.sensor)
-
-
-@dataclass(frozen=True, eq=True)
-class Element:
-    """Element of a data batch."""
-
-    timestamp: int
-    measurement: RawMeasurement
-    location: Location
 
 
 class DataBatch:

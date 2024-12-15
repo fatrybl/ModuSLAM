@@ -6,38 +6,43 @@ from pathlib import Path
 import PIL
 from PIL.Image import Image
 
-from moduslam.utils.auxiliary_dataclasses import Message
-from moduslam.utils.exceptions import ExternalModuleException, ItemNotFoundError
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.data_sources import Source
+from phd.moduslam.utils.auxiliary_dataclasses import Message
+from phd.moduslam.utils.exceptions import ExternalModuleException, ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
 
 
 def set_state(
-    sensor_name: str,
-    timestamp: int,
-    data_sequence: Sequence[tuple[int, str, int]],
-    sensor_source_table: dict[str, Source],
+    sensor_name: str, timestamp: int, data_sequence: Sequence[tuple[int, str, int]], source: Source
 ) -> None:
     """Sets the iterator position for the given sensor and timestamp.
 
     Args:
         sensor_name: name of sensor to set the iterator position.
+
         timestamp: timestamp to set the iterator position.
+
         data_sequence: sequence of data.
-        sensor_source_table: table of sensors and their sources.
+
+        source: table of sensors and their sources.
 
     Raises:
         ItemNotFoundError: if no measurement found for the sensor at the given timestamp.
+
+    TODO: add tests
     """
-    for t, name, index in data_sequence:
+    for t, name, position in data_sequence:
         if t == timestamp and name == sensor_name:
-            src = sensor_source_table[sensor_name]
-            [next(src) for _ in range(index - 1)]
+            for _ in range(position - 1):
+                next(source)
             return
 
-    msg = f"Can not set the initial state for sensor {sensor_name} at {timestamp}. No measurement found."
+    msg = (
+        f"Can not set the initial state for sensor {sensor_name} at {timestamp}. "
+        f"No measurement has been found."
+    )
     logger.error(msg)
     raise ItemNotFoundError(msg)
 
@@ -97,6 +102,14 @@ def check_files(files: Iterable[Path]) -> None:
 
 
 def check_directory(directory_path: Path) -> None:
+    """Checks if a directory exists for the given path.
+
+    Args:
+        directory_path: path to the directory.
+
+    Raises:
+        NotADirectoryError: if the path is not a directory path or the directory does not exist.
+    """
     if not directory_path.exists() or not directory_path.is_dir():
         msg = f"The path {directory_path!r} either does not exist or is not a directory"
         logger.error(msg)
@@ -178,7 +191,13 @@ def filter_table(table: Mapping[str, Source], sensors: set[str]) -> dict[str, So
 
 
 def apply_state(sensor_source_table: dict[str, Source], state: dict[str, int]) -> None:
-    """Applies the latest state of the iterators for the sequential reading."""
+    """Applies the latest state of the iterators for the sequential reading.
+
+    Args:
+        sensor_source_table: a dictionary of "sensor <-> source" pairs.
+
+        state: a dictionary of current state for each sensor.
+    """
     for sensor, source in sensor_source_table.items():
         num_steps = state[sensor]
         for _ in range(num_steps):

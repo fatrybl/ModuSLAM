@@ -7,11 +7,10 @@ from typing import overload
 
 from plum import dispatch
 
-from moduslam.utils.auxiliary_methods import microsec2nanosec
 from phd.logger.logging_config import data_manager
-from phd.moduslam.data_manager.batch_factory.batch import Element, RawMeasurement
-from phd.moduslam.data_manager.batch_factory.readers.data_reader_ABC import DataReader
-from phd.moduslam.data_manager.batch_factory.readers.tum_vie.config_objects.base import (
+from phd.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from phd.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
+from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.measurement_collector import (
@@ -19,8 +18,8 @@ from phd.moduslam.data_manager.batch_factory.readers.tum_vie.measurement_collect
     get_next_measurement,
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.source import (
-    TumCsvData,
-    TumStereoImageData,
+    TumVieCsvData,
+    TumVieStereoImageData,
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.utils import (
     create_sequence,
@@ -35,7 +34,12 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
 from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
-from phd.moduslam.utils.exceptions import DataReaderConfigurationError
+from phd.moduslam.utils.auxiliary_methods import microsec2nanosec
+from phd.moduslam.utils.exceptions import (
+    DataReaderConfigurationError,
+    ItemNotFoundError,
+    StateNotSetError,
+)
 
 logger = logging.getLogger(data_manager)
 
@@ -52,14 +56,21 @@ class TumVieReader(DataReader):
             dataset_params: dataset parameters.
 
         Raises:
-            DataReaderConfigurationError: if a date reader is configured improperly.
-
-        TODO: modify tests for new exception type.
+            DataReaderConfigurationError: if a date reader is configured improperly:
+                1. a data directory does not exist.
+                2. csv files have not been found in the dataset directory.
+                3. Sensors Factory is empty.
+                4. No measurements can be read for the defined regime and sensors.
         """
         super().__init__(regime, dataset_params)
 
         dataset_dir = dataset_params.directory
-        check_directory(dataset_dir)
+
+        try:
+            check_directory(dataset_dir)
+        except NotADirectoryError as e:
+            logger.critical(e)
+            raise DataReaderConfigurationError(e)
 
         self._imu = dataset_params.imu_name
         self._stereo = dataset_params.stereo_name
@@ -67,7 +78,12 @@ class TumVieReader(DataReader):
         self._stereo_data_dirs = dataset_params.stereo_data_dirs
 
         self._set_root_path(dataset_dir)
-        check_files(self._csv_files.values())
+        try:
+            check_files(self._csv_files.values())
+
+        except FileNotFoundError as e:
+            logger.critical(e)
+            raise DataReaderConfigurationError(e)
 
         self._state: dict[str, int] = {
             self._imu: 0,
@@ -91,13 +107,14 @@ class TumVieReader(DataReader):
         if not self._sensor_source_table:
             msg = "No measurements to read for the defined sensors and the regime."
             logger.critical(msg)
-            raise DataReaderConfigurationError
+            raise DataReaderConfigurationError(msg)
 
     def __enter__(self):
         """Opens all files for reading and initializes iterators."""
         self._in_context = True
         for src in self._sensor_source_table.values():
             src.open()
+
         apply_state(self._sensor_source_table, self._state)
         return self
 
@@ -110,7 +127,7 @@ class TumVieReader(DataReader):
         """Closes all opened files."""
         self._in_context = False
         for src in self._sensor_source_table.values():
-            src.flush()
+            src.close()
 
     def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
         """Sets the iterator position for the given sensor and timestamp.
@@ -121,16 +138,24 @@ class TumVieReader(DataReader):
             timestamp: timestamp to set the iterator position.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            StateNotSetError: if no measurement for the given sensor and timestamp has been found.
 
-            ItemNotFoundError: if no measurement found for the sensor at the given timestamp.
+        TODO: add tests
         """
+        try:
+            source = self._sensor_source_table[sensor.name]
+        except KeyError:
+            msg = f"No source has been found for the sensor {sensor.name}."
+            logger.error(msg)
+            raise StateNotSetError(msg)
 
-        if not self._in_context:
-            logger.critical(self._context_error_msg)
-            raise RuntimeError(self._context_error_msg)
+        source.open()
 
-        set_state(sensor.name, timestamp, self._data_sequence, self._sensor_source_table)
+        try:
+            set_state(sensor.name, timestamp, self._data_sequence, source)
+        except ItemNotFoundError as e:
+            logger.error(e)
+            raise StateNotSetError(e)
 
     @overload
     def get_next_element(self) -> Element | None:
@@ -208,6 +233,8 @@ class TumVieReader(DataReader):
 
         Raises:
             RuntimeError: if the method is called outside the context manager.
+
+        TODO: add exception when get_measurement() fails.
         """
         if not self._in_context:
             logger.critical(self._context_error_msg)
@@ -227,11 +254,11 @@ class TumVieReader(DataReader):
         self._csv_files = {sensor: root_path / path for sensor, path in self._csv_files.items()}
         self._stereo_data_dirs = [root_path / path for path in self._stereo_data_dirs]
 
-    def _base_sensor_source_table(self) -> dict[str, TumCsvData | TumStereoImageData]:
+    def _base_sensor_source_table(self) -> dict[str, TumVieCsvData | TumVieStereoImageData]:
         """Creates base "sensors <-> source" table."""
         return {
-            self._imu: TumCsvData(self._csv_files[self._imu]),
-            self._stereo: TumStereoImageData(
+            self._imu: TumVieCsvData(self._csv_files[self._imu]),
+            self._stereo: TumVieStereoImageData(
                 self._csv_files[self._stereo],
                 self._stereo_data_dirs[0],
                 self._stereo_data_dirs[1],

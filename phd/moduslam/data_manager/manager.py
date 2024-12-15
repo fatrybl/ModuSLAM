@@ -3,6 +3,7 @@ from collections.abc import Sequence
 
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.data_manager.batch_factory.config_factory import get_config
 from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
 from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
@@ -13,7 +14,8 @@ class DataManager:
     """Manages all data processes."""
 
     def __init__(self) -> None:
-        self._batch_factory = BatchFactory()
+        config = get_config()
+        self._batch_factory = BatchFactory(config)
         logger.debug("Data Manager has been configured.")
 
     @property

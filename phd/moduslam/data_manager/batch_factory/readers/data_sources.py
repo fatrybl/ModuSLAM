@@ -16,25 +16,23 @@ from phd.moduslam.data_manager.batch_factory.readers.directory_iterator import (
 class Source(ABC):
     @abstractmethod
     def __next__(self):
-        """Returns the next data element.
+        """Returns the next data element."""
 
-        Raises:
-            StopIteration: If the source is exhausted.
-        """
-
-    def open(self) -> None:
+    @abstractmethod
+    def open(self, *args, **kwargs) -> None:
         """Opens the source: initializes files, iterators, etc..."""
 
-    def flush(self) -> None:
-        """Flushes the source: closes files, resets iterators, etc..."""
+    @abstractmethod
+    def close(self, *args, **kwargs) -> None:
+        """Closes and resets the source."""
 
 
 class CsvData(Source):
     """CSV data source."""
 
     def __init__(self, file_path: Path) -> None:
-        self._source: TextIO | None = None
         self._file = file_path
+        self._source: TextIO | None = None
         self._index: int = 0
 
     def __next__(self):
@@ -58,17 +56,21 @@ class CsvData(Source):
     def open(self) -> None:
         """Opens the file."""
         self._source = open(self._file, "r")
+        self._reset()
 
-    def flush(self) -> None:
+    def close(self) -> None:
         """Closes the file."""
         if self._source is not None:
             self._source.close()
             self._source = None
-            self._index = 0
+            self._reset()
+
+    def _reset(self) -> None:
+        self._index = 0
 
 
-class PointcloudData(Source):
-    """Source of pointcloud data."""
+class PointCloudData(Source):
+    """Source of point cloud data."""
 
     def __init__(self, directory_path: Path, file_extension: str) -> None:
         self._iter = DirectoryIterator(directory_path, file_extension)
@@ -79,11 +81,14 @@ class PointcloudData(Source):
 
     @property
     def file(self) -> Path:
-        """Pointcloud data file."""
+        """Point cloud data file."""
         return self._iter.file
 
     def open(self) -> None:
-        """Opens the source."""
+        self._iter.reset_index()
+
+    def close(self) -> None:
+        """Resets directory iterator."""
         self._iter.reset_index()
 
 
@@ -105,6 +110,12 @@ class StereoImageData(Source):
         return self._left_images.file, self._right_images.file
 
     def open(self) -> None:
-        """Opens the source."""
+        self._reset()
+
+    def close(self) -> None:
+        """Resets directory iterators."""
+        self._reset()
+
+    def _reset(self):
         self._left_images.reset_index()
         self._right_images.reset_index()

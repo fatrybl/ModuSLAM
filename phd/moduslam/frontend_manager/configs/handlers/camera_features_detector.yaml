@@ -1,4 +1,0 @@
-defaults:
-  - /handlers/camera_features_detector
-
-noise_variance: [ 1, 1 ]

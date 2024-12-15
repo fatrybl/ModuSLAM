@@ -2,6 +2,12 @@ import logging
 from typing import cast
 
 from phd.logger.logging_config import setup_manager
+from phd.moduslam.setup_manager.sensors_factory.configs import (
+    ImuConfig,
+    Lidar3DConfig,
+    SensorConfig,
+    StereoCameraConfig,
+)
 from phd.moduslam.setup_manager.sensors_factory.sensors import (
     Altimeter,
     Encoder,
@@ -13,12 +19,6 @@ from phd.moduslam.setup_manager.sensors_factory.sensors import (
     Sensor,
     StereoCamera,
     VrsGps,
-)
-from phd.moduslam.setup_manager.sensors_factory.sensors_configs import (
-    ImuConfig,
-    Lidar3DConfig,
-    SensorConfig,
-    StereoCameraConfig,
 )
 from phd.moduslam.utils.exceptions import ItemNotExistsError
 
@@ -79,6 +79,12 @@ class SensorsFactory:
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
 
+    @classmethod
+    def clear(cls) -> None:
+        """Deletes all sensors from the factory."""
+        cls._sensors.clear()
+        cls._sensors_table.clear()
+
     @staticmethod
     def sensor_from_config(config: SensorConfig) -> Sensor:
         """Creates sensor with the given configuration.
@@ -98,7 +104,7 @@ class SensorsFactory:
         match sensor_type:
 
             case Sensor.__name__:
-                sensor = Sensor(config)
+                sensor = Sensor(config.name)
             case Imu.__name__:
                 config = cast(ImuConfig, config)
                 sensor = Imu(config)

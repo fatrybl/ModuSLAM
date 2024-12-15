@@ -1,9 +1,9 @@
 from open3d import geometry, utility
 
-from moduslam.custom_types.numpy import MatrixNx3
+from phd.moduslam.custom_types.numpy import MatrixNx3
 
 
-class PointcloudMap:
+class PointCloudMap:
     """A point cloud map."""
 
     def __init__(self) -> None:

@@ -1,18 +1,11 @@
 import logging
-from typing import Iterable, cast
-
-from hydra import compose, initialize
-from hydra.core.config_store import ConfigStore
+from typing import Iterable
 
 from phd.bridge.distributor import get_factory
 from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.measurements.base import Measurement
-from phd.moduslam.frontend_manager.graph_initializer.config_objects import (
-    EdgeConfig,
-    InitializerConfig,
-    PriorLinearVelocity,
-    PriorPose,
-)
+from phd.moduslam.frontend_manager.graph_initializer.config_factory import get_config
+from phd.moduslam.frontend_manager.graph_initializer.configs import EdgeConfig
 from phd.moduslam.frontend_manager.graph_initializer.distributor import (
     type_method_table,
 )
@@ -25,24 +18,12 @@ from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
 logger = logging.getLogger(frontend_manager)
 
 
-def register_configs():
-    cs = ConfigStore.instance()
-    cs.store(name="base_initializer", node=InitializerConfig)
-    cs.store(name="base_pose", node=PriorPose)
-    cs.store(name="base_linear_velocity", node=PriorLinearVelocity)
-
-
-register_configs()
-
-
 class GraphInitializer:
     """Initializes the graph with prior factors."""
 
     def __init__(self):
-        with initialize(version_base=None, config_path="configs"):
-            cfg = compose(config_name="config")
-            config = cast(InitializerConfig, cfg)  # avoid MyPy warnings
-            self._priors = config.priors.values()
+        config = get_config()
+        self._priors = config.values()
 
     def set_prior(self, graph: Graph) -> None:
         """Initializes the graph with prior factors.
