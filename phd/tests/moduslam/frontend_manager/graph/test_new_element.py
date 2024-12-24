@@ -10,9 +10,9 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
-from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
-from phd.moduslam.utils.exceptions import ItemExistsError, ValidationError
+from phd.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.utils.exceptions import ItemExistsError, ValidationError
 
 
 def test_graph_element_no_validation_error():

@@ -3,6 +3,7 @@ measurement."""
 
 from collections.abc import Callable
 
+from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.graph_initializer.utils import (
     create_imu_bias,
     create_linear_velocity,
@@ -16,7 +17,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
 
-type_method_table: dict[str, Callable] = {
+type_method_table: dict[str, Callable[..., Measurement]] = {
     PoseVertex.__name__: create_pose,
     VelocityVertex.__name__: create_linear_velocity,
     ImuBiasVertex.__name__: create_imu_bias,

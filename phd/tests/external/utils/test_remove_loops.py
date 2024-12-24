@@ -5,9 +5,9 @@ from phd.measurement_storage.measurements.auxiliary import (
     SplitPoseOdometry,
 )
 from phd.measurement_storage.measurements.pose_odometry import Odometry as PoseOdometry
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
-from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.utils.auxiliary_objects import identity4x4 as i4x4
 
 
 def test_remove_loops_with_empty_list():

@@ -6,14 +6,17 @@ from phd.bridge.edge_factories.utils import (
 )
 from phd.measurement_storage.measurements.imu_bias import Bias as BiasMeasurement
 from phd.moduslam.frontend_manager.main_graph.edges.imu_bias import ImuBias as PriorBias
+from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
+    pose_block_diagonal_noise_model,
+)
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import ImuBias
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import zero_vector3
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import zero_vector3
 
 
 class Factory(EdgeFactory):
@@ -39,10 +42,14 @@ class Factory(EdgeFactory):
         storage = graph.vertex_storage
 
         cluster = get_cluster(storage, clusters, t)
-        zero_bias = (zero_vector3, zero_vector3)
-        bias = create_vertex_i_with_status(ImuBias, storage, cluster, t, zero_bias)
+        default_bias = (zero_vector3, zero_vector3)
+        bias = create_vertex_i_with_status(ImuBias, storage, cluster, t, default_bias)
 
-        edge = PriorBias(bias.instance, measurement)
+        cov1 = measurement.linear_acceleration_noise_covariance
+        cov2 = measurement.angular_velocity_noise_covariance
+        noise = pose_block_diagonal_noise_model(cov1, cov2)
+
+        edge = PriorBias(bias.instance, measurement, noise)
 
         new_vertices = create_new_vertices([bias])
 

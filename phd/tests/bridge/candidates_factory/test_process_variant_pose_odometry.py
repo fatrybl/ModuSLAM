@@ -3,9 +3,9 @@ from phd.measurement_storage.measurements.pose_odometry import Odometry
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
-from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.utils.auxiliary_objects import identity4x4 as i4x4
 
 
 def test_create_graph_element_with_0_new_vertices_for_2_existing(graph2):

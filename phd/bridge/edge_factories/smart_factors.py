@@ -4,7 +4,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange, VisualFeature
+from phd.utils.auxiliary_dataclasses import TimeRange, VisualFeature
 
 
 class Factory(EdgeFactory):

@@ -1,6 +1,7 @@
 import pytest
 
 from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from phd.measurement_storage.storage import MeasurementStorage
 from phd.moduslam.frontend_manager.main_graph.edges.noise_models import (
     se3_isotropic_noise_model,
 )
@@ -11,8 +12,13 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
-from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.utils.auxiliary_objects import identity4x4 as i4x4
+
+
+@pytest.fixture()
+def clean_storage():
+    MeasurementStorage.clear()
 
 
 @pytest.fixture

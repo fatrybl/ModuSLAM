@@ -3,7 +3,7 @@ import pytest
 from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
-from phd.moduslam.utils.exceptions import ValidationError
+from phd.utils.exceptions import ValidationError
 
 
 def test_remove_non_existing():

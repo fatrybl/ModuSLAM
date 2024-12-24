@@ -9,7 +9,7 @@ from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.configs import DatasetConfig
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger(data_manager)
 

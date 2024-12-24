@@ -1,15 +1,13 @@
 from phd.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from phd.bridge.preprocessors.fake_measurement_factory import add_fake_cluster
-from phd.bridge.preprocessors.pose_odometry import find_and_replace
+from phd.bridge.preprocessors.pose_odometry import split_odometry
 from phd.external.combinations_factory import Factory as CombinationFactory
 from phd.external.connections.utils import get_clusters_and_leftovers
 from phd.external.utils import group_by_timestamp, remove_duplicates, remove_loops
 from phd.measurement_storage.cluster import MeasurementCluster
-from phd.measurement_storage.group import MeasurementGroup
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.imu import Imu
-from phd.measurement_storage.storage import MeasurementStorage
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.ordered_set import OrderedSet
 
 
 class Factory:
@@ -17,26 +15,32 @@ class Factory:
 
     @classmethod
     def create(
-        cls, storage: MeasurementStorage
+        cls, data: dict[type[Measurement], OrderedSet[Measurement]]
     ) -> list[ClustersWithLeftovers] | list[list[MeasurementCluster]]:
         """Creates combinations of clusters w or w/o leftover measurements.
 
         Args:
-            storage: a storage with measurements.
+            data: table of typed Ordered Sets with measurements.
 
         Returns:
             combinations of clusters w or w/o leftover measurements.
-        """
 
-        core_measurements, imu_measurements = cls._separate_measurements(storage.data)
-        groups = cls._prepare_measurements(core_measurements)
+        TODO: add tests !!!.
+        """
+        core_measurements, imu_measurements = cls._separate_measurements(data)
+        core_measurements = cls._prepare_measurements(core_measurements)
+        groups = group_by_timestamp(core_measurements)
+
         combinations = CombinationFactory.combine(groups)
         combinations = remove_loops(combinations)
 
         if imu_measurements:
-            start = imu_measurements[0].timestamp
-            for combination in combinations:
-                add_fake_cluster(combination, start)
+            first_imu_t = imu_measurements[0].timestamp
+            first_core_t = core_measurements[0].timestamp
+
+            if first_imu_t < first_core_t:
+                for combination in combinations:
+                    add_fake_cluster(combination, first_imu_t)
 
             combs_with_leftovers = cls._combine_with_continuous(combinations, imu_measurements)
             return combs_with_leftovers
@@ -60,7 +64,7 @@ class Factory:
         core_measurements: list[Measurement] = []
 
         for m_type, m_set in data.items():
-            if m_type == Imu:
+            if issubclass(m_type, Imu):
                 imu_measurements.extend(m_set.items)
             else:
                 core_measurements.extend(m_set.items)
@@ -68,19 +72,18 @@ class Factory:
         return core_measurements, imu_measurements
 
     @staticmethod
-    def _prepare_measurements(measurements: list[Measurement]) -> list[MeasurementGroup]:
+    def _prepare_measurements(measurements: list[Measurement]) -> list[Measurement]:
         """Prepares measurements for further processing.
 
         Args:
             measurements: different measurements.
 
         Returns:
-            groups of measurements.
+            sorted and split measurements.
         """
-        measurements = find_and_replace(measurements)
+        measurements = split_odometry(measurements)
         measurements.sort(key=lambda x: x.timestamp)
-        groups = group_by_timestamp(measurements)
-        return groups
+        return measurements
 
     @staticmethod
     def _combine_with_continuous(

@@ -6,5 +6,9 @@ from phd.measurement_storage.storage import MeasurementStorage
 class StorageAnalyzer(Protocol):
 
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
-        """Checks if a storage has enough measurements."""
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
+        """Checks if a storage has enough measurements.
+
+        Args:
+            storage: a storage to check.
+        """

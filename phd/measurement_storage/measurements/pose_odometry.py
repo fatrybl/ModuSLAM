@@ -4,7 +4,7 @@ from phd.measurement_storage.measurements.base import (
 )
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 
 class Odometry(TimeRangeMeasurement):

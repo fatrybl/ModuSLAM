@@ -2,7 +2,7 @@ from PIL.Image import Image
 
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from phd.moduslam.utils.auxiliary_methods import equal_images
+from phd.utils.auxiliary_methods import equal_images
 
 
 def create_empty_element(element: Element) -> Element:

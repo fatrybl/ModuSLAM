@@ -8,7 +8,6 @@ from phd.moduslam.data_manager.batch_factory.readers.kaist.configs.base import (
     KaistConfig,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.utils.exceptions import UnfeasibleRequestError
 from phd.tests.conftest import kaist_custom_dataset_dir
 from phd.tests.moduslam.data_manager.batch_factory.test_cases.kaist.data import (
     all_elements_batch,
@@ -48,6 +47,7 @@ from phd.tests.moduslam.data_manager.batch_factory.test_cases.kaist.data import 
     stereo_request3,
 )
 from phd.tests_data_generators.utils import generate_sensors_factory_config
+from phd.utils.exceptions import UnfeasibleRequestError
 
 dataset_cfg = KaistConfig(directory=kaist_custom_dataset_dir)
 

@@ -2,8 +2,8 @@
 
 from collections.abc import Sequence
 
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.sensors import Sensor
 
 
 def generate_sensors_factory_config(sensors: Sequence[Sensor]) -> dict[str, SensorConfig]:

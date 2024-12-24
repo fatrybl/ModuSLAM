@@ -5,7 +5,7 @@ from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.config_factory import get_config
 from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
-from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
+from phd.utils.auxiliary_dataclasses import PeriodicDataRequest
 
 logger = logging.getLogger(data_manager)
 

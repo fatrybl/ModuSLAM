@@ -5,7 +5,7 @@ from phd.moduslam.data_manager.batch_factory.readers.data_sources import (
     CsvData,
     StereoImageData,
 )
-from phd.moduslam.utils.exceptions import ClosedSourceError
+from phd.utils.exceptions import ClosedSourceError
 
 
 class TumVieCsvData(CsvData):

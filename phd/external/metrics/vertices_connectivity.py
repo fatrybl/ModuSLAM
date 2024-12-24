@@ -1,8 +1,9 @@
 """Checks if a Graph Candidate is fully connected with the main graph."""
 
+from collections.abc import Iterable
+
 from phd.external.metrics.base import Metrics
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
@@ -68,21 +69,6 @@ class UnionFind:
                 self._rank[root_v1] += 1
 
 
-def get_old_vertices(graph: Graph, new_vertices: set[Vertex]) -> set[Vertex]:
-    """Gets vertices of the graph which are not in new vertices.
-
-    Args:
-        graph: a graph to get old vertices from.
-
-        new_vertices: new vertices.
-
-    Returns:
-        old vertices.
-    """
-    all_vertices = set(graph.connections.keys())
-    return all_vertices - new_vertices
-
-
 def check_connectivity(
     edges: list[Edge], old_vertices: set[Vertex], new_vertices: set[Vertex]
 ) -> bool:
@@ -120,11 +106,11 @@ def check_connectivity(
 class VerticesConnectivity(Metrics):
 
     @classmethod
-    def compute(cls, graph: Graph, elements: list[GraphElement]) -> bool:
+    def compute(cls, vertices: Iterable[Vertex], elements: list[GraphElement]) -> bool:
         """Checks the connectivity of new vertices with old vertices by the edges.
 
         Args:
-            graph: a graph with vertices.
+            vertices: graph vertices.
 
             elements: new elements to check the connectivity with the graph.
 
@@ -135,7 +121,8 @@ class VerticesConnectivity(Metrics):
         new_vertices: set[Vertex] = {
             new_vertex.instance for element in elements for new_vertex in element.new_vertices
         }
-        old_vertices: set[Vertex] = get_old_vertices(graph, new_vertices)
+        all_vertices = set(vertices)
+        old_vertices = all_vertices - new_vertices
 
         status = check_connectivity(edges, old_vertices, new_vertices)
         return status

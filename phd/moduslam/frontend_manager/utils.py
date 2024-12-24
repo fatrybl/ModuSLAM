@@ -7,7 +7,7 @@ from phd.moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
     StorageAnalyzer,
 )
-from phd.moduslam.utils.exceptions import NotEnoughMeasurementsError
+from phd.utils.exceptions import NotEnoughMeasurementsError
 
 
 def distribute_element(handlers: Iterable[Handler], element: Element) -> Measurement | None:
@@ -35,7 +35,7 @@ def distribute_element(handlers: Iterable[Handler], element: Element) -> Measure
 
 
 def fill_storage(
-    storage: MeasurementStorage,
+    storage: type[MeasurementStorage],
     data: DataBatch,
     handlers: Iterable[Handler],
     analyzer: StorageAnalyzer,
@@ -44,7 +44,7 @@ def fill_storage(
     The storage is filled based on the analyzer`s decision.
 
     Args:
-        storage: a storage to add measurements to.
+        storage: a storage to fill in.
 
         data: a data batch with elements.
 

@@ -22,7 +22,7 @@ from phd.moduslam.map_manager.map_factories.utils import (
     transform_pointcloud,
 )
 from phd.moduslam.map_manager.maps.pointcloud import PointCloudMap
-from phd.moduslam.setup_manager.sensors_factory.sensors import StereoCamera
+from phd.moduslam.sensors_factory.sensors import StereoCamera
 
 logger = logging.getLogger(map_manager)
 

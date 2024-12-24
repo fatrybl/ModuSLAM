@@ -13,8 +13,8 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     read_csv_file,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.utils.auxiliary_dataclasses import Message
-from phd.moduslam.utils.auxiliary_methods import str_to_int
+from phd.utils.auxiliary_dataclasses import Message
+from phd.utils.auxiliary_methods import str_to_int
 
 
 def read_binary(file: Path) -> tuple[float, ...]:

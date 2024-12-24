@@ -11,7 +11,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Feature3D, Pose
-from phd.moduslam.utils.exceptions import ValidationError
+from phd.utils.exceptions import ValidationError
 
 
 class FakeVertex(Vertex):

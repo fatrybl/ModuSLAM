@@ -3,11 +3,14 @@ from typing import Sequence, TypeVar
 
 import gtsam
 import numpy as np
+from gtsam import PreintegratedCombinedMeasurements, PreintegratedImuMeasurements
 
 from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
 from phd.moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
-from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
+from phd.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+    ImuOdometry,
+)
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
@@ -73,7 +76,7 @@ def compute_covariance(
     return acc_cov, gyro_cov
 
 
-def set_parameters(
+def set_combined_parameters(
     params: gtsam.PreintegrationCombinedParams,
     tf_base_sensor: Matrix4x4,
     acc_cov: Matrix3x3,
@@ -107,8 +110,34 @@ def set_parameters(
     params.setBiasOmegaCovariance(bias_omega_cov)
 
 
+def set_parameters(
+    params: gtsam.PreintegrationParams,
+    tf_base_sensor: Matrix4x4,
+    acc_cov: Matrix3x3,
+    gyro_cov: Matrix3x3,
+    integration_cov: Matrix3x3,
+) -> None:
+    """Sets the parameters for the IMU measurements pre-integration.
+
+    Args:
+        params: GTSAM integration parameters.
+
+        tf_base_sensor: transformation matrix from base to sensor frame.
+
+        acc_cov: accelerometer noise covariance.
+
+        gyro_cov: gyroscope noise covariance.
+
+        integration_cov: integration noise covariance.
+    """
+    params.setBodyPSensor(gtsam.Pose3(tf_base_sensor))
+    params.setAccelerometerCovariance(acc_cov)
+    params.setGyroscopeCovariance(gyro_cov)
+    params.setIntegrationCovariance(integration_cov)
+
+
 def integrate_measurements(
-    pim: gtsam.PreintegratedCombinedMeasurements,
+    pim: gtsam.PreintegratedCombinedMeasurements | gtsam.PreintegratedImuMeasurements,
     measurements: Sequence[ProcessedImu],
     timestamp: int,
     time_scale: float,
@@ -149,13 +178,57 @@ def integrate_measurements(
         pim.integrateMeasurement(acc, omega, dt_secs)
 
 
-def get_integrated_measurement(
+def get_combined_integrated_measurement(
     integration_params: gtsam.PreintegrationCombinedParams,
     measurement: ContinuousImu[ProcessedImu],
     timestamp: int,
     time_scale: float,
     bias: ImuBias,
 ) -> gtsam.PreintegratedCombinedMeasurements:
+    """Integrates IMU measurements.
+
+    Args:
+        integration_params: GTSAM combined integration parameters.
+
+        measurement: IMU measurement.
+
+        timestamp: integration time limit.
+
+        time_scale: timescale factor.
+
+        bias: IMU bias.
+
+    Returns:
+        pre-integrated combined IMU measurement (gtsam.PreintegratedCombinedMeasurements).
+    """
+    first_m = measurement.items[0]
+    tf = np.array(first_m.tf_base_sensor)
+    accel_sample_covariance, ang_vel_sample_covariance = compute_covariance(measurement.items)
+    integration_noise_covariance = np.array(first_m.integration_noise_covariance)
+    accel_bias_covariance = np.array(first_m.accelerometer_bias_covariance)
+    gyro_bias_covariance = np.array(first_m.gyroscope_bias_covariance)
+
+    set_combined_parameters(
+        integration_params,
+        tf,
+        accel_sample_covariance,
+        ang_vel_sample_covariance,
+        integration_noise_covariance,
+        accel_bias_covariance,
+        gyro_bias_covariance,
+    )
+    pim = PreintegratedCombinedMeasurements(integration_params, bias.backend_instance)
+    integrate_measurements(pim, measurement.items, timestamp, time_scale)
+    return pim
+
+
+def get_integrated_measurement(
+    integration_params: gtsam.PreintegrationParams,
+    measurement: ContinuousImu[ProcessedImu],
+    timestamp: int,
+    time_scale: float,
+    bias: ImuBias,
+) -> gtsam.PreintegratedImuMeasurements:
     """Integrates IMU measurements.
 
     Args:
@@ -170,14 +243,12 @@ def get_integrated_measurement(
         bias: IMU bias.
 
     Returns:
-        pre-integrated IMU measurement (gtsam.PreintegratedCombinedMeasurements).
+        pre-integrated IMU measurement (gtsam.PreintegratedImuMeasurements).
     """
     first_m = measurement.items[0]
     accel_sample_covariance, ang_vel_sample_covariance = compute_covariance(measurement.items)
     tf = np.array(first_m.tf_base_sensor)
     integration_noise_covariance = np.array(first_m.integration_noise_covariance)
-    accel_bias_covariance = np.array(first_m.accelerometer_bias_covariance)
-    gyro_bias_covariance = np.array(first_m.gyroscope_bias_covariance)
 
     set_parameters(
         integration_params,
@@ -185,10 +256,7 @@ def get_integrated_measurement(
         accel_sample_covariance,
         ang_vel_sample_covariance,
         integration_noise_covariance,
-        accel_bias_covariance,
-        gyro_bias_covariance,
     )
-    pim = gtsam.PreintegratedCombinedMeasurements(integration_params)
-    pim.resetIntegrationAndSetBias(bias.backend_instance)
+    pim = PreintegratedImuMeasurements(integration_params, bias.backend_instance)
     integrate_measurements(pim, measurement.items, timestamp, time_scale)
     return pim

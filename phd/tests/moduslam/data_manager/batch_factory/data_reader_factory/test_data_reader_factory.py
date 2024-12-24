@@ -18,8 +18,8 @@ from phd.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReade
 from phd.moduslam.data_manager.batch_factory.readers.reader_factory import (
     DataReaderFactory,
 )
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from phd.moduslam.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.factory import SensorsFactory
 from phd.tests.moduslam.data_manager.batch_factory.data_reader_factory.scenarios import (
     invalid_dataset,
     invalid_regime,

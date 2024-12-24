@@ -3,11 +3,11 @@ from typing import TypeVar
 
 import numpy as np
 
-from phd.moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3
+from phd.moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3, MatrixNx4
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from phd.moduslam.utils.auxiliary_methods import check_dimensionality
+from phd.utils.auxiliary_methods import check_dimensionality
 
 V = TypeVar("V", bound=Vertex)
 
@@ -15,17 +15,15 @@ V = TypeVar("V", bound=Vertex)
 def fill_elements(
     vertex_elements_table: dict[V, set[Element]], batch_factory: BatchFactory
 ) -> dict[V, list[Element]]:
-    """Gets elements with raw lidar point cloud measurements and assign to the
-    corresponding vertices.
+    """Creates a table with vertices and elements with raw measurements.
 
     Args:
-        vertex_elements_table: "vertices -> elements" table.
-                                Elements do not contain raw lidar point cloud measurements.
+        vertex_elements_table: a table of vertices and elements w/o raw measurements.
 
-        batch_factory: a factory to create the batch.
+        batch_factory: a factory to create get raw measurements for elements.
 
     Returns:
-        "pose -> elements" table.
+        "vertex -> elements" table.
     """
     table: dict[V, list[Element]] = defaultdict(list)
     for vertex, elements in vertex_elements_table.items():
@@ -37,55 +35,55 @@ def fill_elements(
     return table
 
 
-def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, pointcloud: np.ndarray) -> np.ndarray:
-    """Transforms points` coordinates to the global coordinate frame based
-        on the given vertex pose and transformation: base -> sensor.
+def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4) -> MatrixNx4:
+    """Applies transformations to the point cloud.
 
     Args:
         tf1: transformation matrix SE(3).
 
         tf2: transformation matrix SE(3).
 
-        pointcloud: pointcloud array [4, N] to transform.
+        point_cloud: point cloud array [N, 4] to transform.
 
     Returns:
-        Transformed pointcloud array [4, N].
+        transformed point_cloud array [N, 4].
     """
-    result = tf1 @ tf2 @ pointcloud
-    return result
+    result = tf1 @ tf2 @ point_cloud.T
+    return result.T
 
 
-def filter_array(array: np.ndarray, lower_bound: float, upper_bound: float) -> np.ndarray:
-    """Filters 2D array [4, N] with lower/upper bounds. If a column has at least one
+def filter_array(array: MatrixNx4, lower_bound: float, upper_bound: float) -> MatrixNx4:
+    """Filters 2D array [N, 4] with lower/upper bounds. If a column has at least one
     value outside the bounds, the whole column is removed.
 
     Args:
-        array: array [4, N] of points to filter.
+        array: array [N, 4] of points to filter.
 
         lower_bound: lower bound value.
 
         upper_bound: upper bound value.
 
     Returns:
-        filtered array [4, K].
+        filtered array [K, 4].
     """
-    check_dimensionality(array, shape=(4, array.shape[1]))
+    n, m = array.shape[0], 4
+    check_dimensionality(array, shape=(n, m))
 
-    mask = np.any((array[:3, :] >= lower_bound) & (array[:3, :] <= upper_bound), axis=0)
-    filtered_arr = array[:, mask]
+    mask = np.any((array[:, :-1] >= lower_bound) & (array[:, :-1] <= upper_bound), axis=1)
+    filtered_arr = array[mask, :]
     return filtered_arr
 
 
-def convert_pointcloud(pointcloud: MatrixNx3) -> Matrix4xN:
-    """Converts a 3D pointcloud to homogeneous coordinates.
+def convert_pointcloud(point_cloud: MatrixNx3) -> Matrix4xN:
+    """Converts a 3D point cloud to homogeneous coordinates.
 
     Args:
-        pointcloud: pointcloud array [N, 3].
+        point_cloud: point cloud array [N, 3].
 
     Returns:
-        Homogeneous pointcloud array [4, N].
+        homogeneous point cloud array [4, N].
     """
-    pointcloud = pointcloud.T
-    ones = np.ones((1, pointcloud.shape[1]))
-    pointcloud_homogeneous = np.vstack((pointcloud, ones))
+    point_cloud = point_cloud.T
+    ones = np.ones((1, point_cloud.shape[1]))
+    pointcloud_homogeneous = np.vstack((point_cloud, ones))
     return pointcloud_homogeneous

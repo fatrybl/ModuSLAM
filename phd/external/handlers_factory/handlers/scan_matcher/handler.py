@@ -13,8 +13,8 @@ from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.utils import create_empty_element
-from phd.moduslam.setup_manager.sensors_factory.sensors import Lidar3D
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.moduslam.sensors_factory.sensors import Lidar3D
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 logger = logging.getLogger(frontend_manager)
 
@@ -37,7 +37,8 @@ class ScanMatcher(Handler):
         cfg = self._to_kiss_icp_config(config)
         self._scan_matcher = KissICP(cfg)
         self._elements_queue: list[Element] = []
-        self._measurement_noise_covariance = config.measurement_noise_covariance
+        self._noise_covariance = config.measurement_noise_covariance
+        self._previous_pose: NumpyMatrix4x4 = np.eye(4)
 
         # self._visualizer = RegistrationVisualizer()
         # self._visualizer.global_view = True
@@ -82,24 +83,24 @@ class ScanMatcher(Handler):
 
         timestamp = element.timestamp
 
-        source, keypoints = self._scan_matcher.register_frame(
-            frame=point_cloud, timestamps=[timestamp]
-        )
+        _, _ = self._scan_matcher.register_frame(frame=point_cloud, timestamps=[timestamp])
 
         # self._visualizer.update(
         #     source, keypoints, self._scan_matcher.local_map, self._scan_matcher.poses[-1]
         # )
 
         if len(self._elements_queue) == self._elements_queue_size:
-            prev_pose = self._scan_matcher.poses[-2]
-            cur_pose = self._scan_matcher.poses[-1]
 
-            tf_local = self._transformation(prev_pose, cur_pose)
+            current_pose = self._scan_matcher.last_pose
+
+            tf_local = self._transformation(self._previous_pose, current_pose)
             tf_base = tf_base_sensor @ tf_local @ tf_base_sensor_inv
 
             new_measurement = self._create_measurement(tf_base)
 
-            self._update_queues()
+            self._elements_queue.pop(0)
+
+            self._previous_pose = current_pose
 
             return new_measurement
 
@@ -122,7 +123,6 @@ class ScanMatcher(Handler):
         kiss_cfg.data.min_range = config.min_range
         kiss_cfg.data.max_range = config.max_range
         kiss_cfg.data.deskew = config.deskew
-        kiss_cfg.data.preprocess = config.preprocess
         return kiss_cfg
 
     @staticmethod
@@ -173,7 +173,7 @@ class ScanMatcher(Handler):
 
         t_range = TimeRange(start, stop)
 
-        cov = self._measurement_noise_covariance
+        cov = self._noise_covariance
         position_covariance = self._get_diagonal_matrix(cov[0], cov[1], cov[2])
         orientation_covariance = self._get_diagonal_matrix(cov[3], cov[4], cov[5])
 
@@ -188,11 +188,6 @@ class ScanMatcher(Handler):
             elements=[empty_pre_last_element, empty_last_element],
         )
         return m
-
-    def _update_queues(self):
-        """Remove the oldest element and pose from the queue."""
-        self._scan_matcher.poses.pop(0)
-        self._elements_queue.pop(0)
 
     @staticmethod
     def _get_diagonal_matrix(v1: float, v2: float, v3: float) -> Matrix3x3:

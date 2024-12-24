@@ -1,3 +1,5 @@
+"""TODO: fix example in _main_."""
+
 from collections.abc import Iterable
 from typing import TypeVar
 
@@ -129,6 +131,7 @@ class Factory:
 
 
 if __name__ == "__main__":
+
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
     m3 = PseudoMeasurement(3, "c")

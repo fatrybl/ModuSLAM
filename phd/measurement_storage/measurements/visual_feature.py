@@ -1,6 +1,6 @@
 from phd.measurement_storage.measurements.base import WithRawElements
 from phd.moduslam.data_manager.batch_factory.batch import Element
-from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature as FeaturePoint
+from phd.utils.auxiliary_dataclasses import VisualFeature as FeaturePoint
 
 
 class Feature(WithRawElements):

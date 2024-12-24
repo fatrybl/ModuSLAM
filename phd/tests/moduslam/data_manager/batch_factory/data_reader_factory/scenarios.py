@@ -13,7 +13,7 @@ from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.configs import SensorConfig
 from phd.tests.conftest import kaist_custom_dataset_dir, tum_vie_dataset_dir
 
 sensor_factory_kaist = {"encoder": SensorConfig("encoder")}

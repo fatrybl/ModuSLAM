@@ -2,9 +2,9 @@ from typing import Any, TypeVar
 
 from phd.external.metrics.utils import median
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.exceptions import ItemExistsError, ItemNotExistsError
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.exceptions import ItemExistsError, ItemNotExistsError
+from phd.utils.ordered_set import OrderedSet
 
 V = TypeVar("V", bound=Vertex)
 

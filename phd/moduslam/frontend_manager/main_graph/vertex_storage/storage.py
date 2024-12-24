@@ -11,12 +11,8 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
     OptimizableVertex,
     Vertex,
 )
-from phd.moduslam.utils.exceptions import (
-    ItemExistsError,
-    ItemNotExistsError,
-    ValidationError,
-)
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.exceptions import ItemExistsError, ItemNotExistsError, ValidationError
+from phd.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
@@ -133,6 +129,9 @@ class VertexStorage:
         if isinstance(vertex, NonOptimizableVertex):
             self._non_optimizable_vertices.remove(vertex)
 
+        if len(self._clusters) > len(self.vertices):
+            raise ValueError("The number of clusters bigger than the number of vertices.")
+
     def get_vertices(self, vertex_type: type[V]) -> OrderedSet[V]:
         """Gets vertices of the given type.
 
@@ -156,8 +155,6 @@ class VertexStorage:
         try:
             return self._type_vertices_table[vertex_type].last
         except KeyError:
-            msg = f"No vertex of the type{vertex_type} exists in the storage."
-            logger.warning(msg)
             return None
 
     def get_vertex_cluster(self, vertex: Vertex) -> VertexCluster | None:
@@ -205,8 +202,6 @@ class VertexStorage:
             return item.index
 
         except KeyError:
-            msg = f"No vertex of the type{vertex_type} exists in the storage."
-            logger.warning(msg)
             return None
 
     @staticmethod

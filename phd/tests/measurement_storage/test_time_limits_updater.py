@@ -1,7 +1,7 @@
 from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.base import TimeRangeMeasurement
 from phd.measurement_storage.measurements.time_limits_updater import Updater
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 
 class FakeTimeRangeMeasurement(FakeMeasurement, TimeRangeMeasurement):

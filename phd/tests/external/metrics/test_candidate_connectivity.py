@@ -11,9 +11,9 @@ from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPos
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3 as i3x3
-from phd.moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import identity3x3 as i3x3
+from phd.utils.auxiliary_objects import identity4x4 as i4x4
 
 
 class MultiVertexEdge(RadialEdge):

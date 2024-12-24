@@ -6,7 +6,7 @@ from phd.measurement_storage.measurements.auxiliary import (
 )
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.measurement_storage.measurements.imu import ContinuousImu, Imu, ImuData
-from phd.moduslam.utils.auxiliary_objects import zero_vector3
+from phd.utils.auxiliary_objects import zero_vector3
 
 
 def test_timeshift():

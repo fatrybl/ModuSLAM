@@ -29,10 +29,6 @@ jobs:
       - name: Set Test Data Directory
         run: echo "TEST_DATA_DIR=$(pwd)/tests_data" >> $GITHUB_ENV
 
-      - name: Run ModuSLAM tests
-        run: |
-          poetry run pytest
-
       - name: Run PhD tests
         run: |
-          poetry run pytest phd/tests  # Runs tests from the 'phd/tests' directory
+          poetry run pytest phd/tests

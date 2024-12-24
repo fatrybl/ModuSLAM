@@ -7,10 +7,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import TextIO
 
-from moduslam.utils.exceptions import ClosedSourceError
 from phd.moduslam.data_manager.batch_factory.readers.directory_iterator import (
     DirectoryIterator,
 )
+from phd.utils.exceptions import ClosedSourceError
 
 
 class Source(ABC):

@@ -3,71 +3,67 @@ import logging
 from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.time_limits_updater import Updater
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.exceptions import (
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.exceptions import (
     EmptyStorageError,
     ItemExistsError,
     ItemNotExistsError,
     ValidationError,
 )
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
 
 class MeasurementStorage:
-    """Storage for measurements."""
+    """Global Storage for the processed measurements."""
 
-    def __init__(self) -> None:
-        self._data: dict[type[Measurement], OrderedSet[Measurement]] = {}
-        self._start_timestamp: int | None = None
-        self._stop_timestamp: int | None = None
-        self._recent_measurement: Measurement | None = None
+    _data: dict[type[Measurement], OrderedSet[Measurement]] = {}
+    _start_timestamp: int | None = None
+    _stop_timestamp: int | None = None
+    _recent_measurement: Measurement | None = None
 
-    def __contains__(self, item) -> bool:
-        t_item = type(item)
-        return t_item in self._data and item in self._data[t_item]
-
-    @property
-    def data(self) -> dict[type[Measurement], OrderedSet[Measurement]]:
+    @classmethod
+    def data(cls) -> dict[type[Measurement], OrderedSet[Measurement]]:
         """Dictionary with typed OrderedSets."""
-        return self._data
+        return cls._data
 
-    @property
-    def recent_measurement(self) -> Measurement:
+    @classmethod
+    def recent_measurement(cls) -> Measurement:
         """A measurement with the latest "stop" timestamp in the storage.
 
         Raises:
             EmptyStorageError: recent measurement does not exist in empty storage.
         """
-        if self._recent_measurement:
-            return self._recent_measurement
+        if cls._recent_measurement:
+            return cls._recent_measurement
         else:
             msg = "Recent measurement does not exist in empty storage."
             logger.error(msg)
             raise EmptyStorageError(msg)
 
-    @property
-    def time_range(self) -> TimeRange:
+    @classmethod
+    def time_range(cls) -> TimeRange:
         """Start & stop time margins to cover all measurements in the storage.
 
         Raises:
             EmptyStorageError: time range does not exist for empty storage.
         """
-        if self._start_timestamp is not None and self._stop_timestamp is not None:
-            return TimeRange(self._start_timestamp, self._stop_timestamp)
+        if cls._start_timestamp is not None and cls._stop_timestamp is not None:
+            return TimeRange(cls._start_timestamp, cls._stop_timestamp)
 
         else:
             msg = "Time range does not exist for empty storage."
             logger.error(msg)
             raise EmptyStorageError(msg)
 
-    @property
-    def empty(self) -> bool:
+    @classmethod
+    def empty(cls) -> bool:
         """Checks if the storage is empty."""
-        return not bool(self._data)
+        return not bool(cls._data)
 
-    def add(self, measurement: Measurement) -> None:
+    @classmethod
+    def add(cls, measurement: Measurement) -> None:
         """Adds new measurement to the storage.
 
         Args:
@@ -77,20 +73,21 @@ class MeasurementStorage:
             ValidationError: if measurement is already present in the storage.
         """
         try:
-            self._validate_new_measurement(measurement)
+            cls._validate_new_measurement(measurement)
         except ItemExistsError as e:
             logger.error(e)
             raise ValidationError(e)
 
         m_type = type(measurement)
-        self._data.setdefault(m_type, OrderedSet()).add(measurement)
+        cls._data.setdefault(m_type, OrderedSet()).add(measurement)
 
-        self._start_timestamp, self._stop_timestamp = Updater.update_start_stop_on_adding(
-            measurement, self._start_timestamp, self._stop_timestamp
+        cls._start_timestamp, cls._stop_timestamp = Updater.update_start_stop_on_adding(
+            measurement, cls._start_timestamp, cls._stop_timestamp
         )
-        self._update_recent_measurement(measurement)
+        cls._update_recent_measurement(measurement)
 
-    def remove(self, measurement: Measurement) -> None:
+    @classmethod
+    def remove(cls, measurement: Measurement) -> None:
         """Removes the measurement from the storage.
 
         Args:
@@ -100,31 +97,34 @@ class MeasurementStorage:
             ValidationError: if measurement is not present in the storage.
         """
         try:
-            self._validate_removing_measurement(measurement)
+            cls._validate_removing_measurement(measurement)
         except ItemNotExistsError as e:
             logger.error(e)
             raise ValidationError(e)
 
         m_type = type(measurement)
-        self._data[m_type].remove(measurement)
+        cls._data[m_type].remove(measurement)
 
-        if not self._data[m_type]:
-            del self._data[m_type]
+        if not cls._data[m_type]:
+            del cls._data[m_type]
 
-        if measurement == self._recent_measurement:
-            self._recent_measurement = self._find_recent_measurement()
+        if measurement == cls._recent_measurement:
+            cls._recent_measurement = cls._find_recent_measurement()
 
-        self._start_timestamp, self._stop_timestamp = Updater.update_start_stop_on_removing(
-            self._data, measurement, self._start_timestamp, self._stop_timestamp
+        cls._start_timestamp, cls._stop_timestamp = Updater.update_start_stop_on_removing(
+            cls._data, measurement, cls._start_timestamp, cls._stop_timestamp
         )
 
-    def clear(self) -> None:
+    @classmethod
+    def clear(cls) -> None:
         """Clears the storage."""
-        self._start_timestamp = None
-        self._stop_timestamp = None
-        self._data.clear()
+        cls._start_timestamp = None
+        cls._stop_timestamp = None
+        cls._recent_measurement = None
+        cls._data.clear()
 
-    def _update_recent_measurement(self, measurement: Measurement) -> None:
+    @classmethod
+    def _update_recent_measurement(cls, measurement: Measurement) -> None:
         """Updates the recent measurement in the storage by comparing the "stop"
         timestamp of measurement`s time range.
 
@@ -132,24 +132,26 @@ class MeasurementStorage:
             measurement: new measurement to compare with.
         """
         if (
-            self._recent_measurement is None
-            or measurement.timestamp > self._recent_measurement.timestamp
+            cls._recent_measurement is None
+            or measurement.timestamp > cls._recent_measurement.timestamp
         ):
-            self._recent_measurement = measurement
+            cls._recent_measurement = measurement
 
-    def _find_recent_measurement(self) -> Measurement | None:
+    @classmethod
+    def _find_recent_measurement(cls) -> Measurement | None:
         """Finds the measurement with the latest "stop" timestamp in the storage."""
-        if not self._data:
+        if not cls._data:
             return None
 
         recent_measurement = max(
-            (measurement for measurements in self._data.values() for measurement in measurements),
+            (measurement for measurements in cls._data.values() for measurement in measurements),
             key=lambda measurement: measurement.timestamp,
             default=None,
         )
         return recent_measurement
 
-    def _validate_new_measurement(self, measurement: Measurement) -> None:
+    @classmethod
+    def _validate_new_measurement(cls, measurement: Measurement) -> None:
         """Validates a new measurement before adding.
 
         Args:
@@ -160,10 +162,11 @@ class MeasurementStorage:
         """
         m_type = type(measurement)
 
-        if m_type in self._data and measurement in self._data[m_type]:
+        if m_type in cls._data and measurement in cls._data[m_type]:
             raise ItemExistsError(f"Measurement {measurement} already exists in the storage.")
 
-    def _validate_removing_measurement(self, measurement: Measurement) -> None:
+    @classmethod
+    def _validate_removing_measurement(cls, measurement: Measurement) -> None:
         """Validates a measurement before removing.
 
         Args:
@@ -174,5 +177,5 @@ class MeasurementStorage:
         """
         m_type = type(measurement)
 
-        if m_type not in self._data or measurement not in self._data[m_type]:
+        if m_type not in cls._data or measurement not in cls._data[m_type]:
             raise ItemNotExistsError(f"Measurement {measurement} does not exist in the storage.")

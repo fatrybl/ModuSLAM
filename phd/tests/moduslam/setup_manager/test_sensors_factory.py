@@ -2,10 +2,10 @@
 
 import pytest
 
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
-from phd.moduslam.utils.exceptions import ItemNotExistsError
+from phd.moduslam.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.factory import SensorsFactory
+from phd.moduslam.sensors_factory.sensors import Sensor
+from phd.utils.exceptions import ItemNotExistsError
 
 
 def test_init_sensors():

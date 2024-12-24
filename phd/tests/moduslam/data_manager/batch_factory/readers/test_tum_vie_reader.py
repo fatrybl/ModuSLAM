@@ -14,10 +14,10 @@ from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.setup_manager.sensors_factory.configs import ImuConfig
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
-from phd.moduslam.utils.exceptions import DataReaderConfigurationError
+from phd.moduslam.sensors_factory.configs import ImuConfig
+from phd.moduslam.sensors_factory.factory import SensorsFactory
 from phd.tests.conftest import tum_vie_dataset_dir
+from phd.utils.exceptions import DataReaderConfigurationError
 
 
 def test_tum_vie_reader_successful_creation():

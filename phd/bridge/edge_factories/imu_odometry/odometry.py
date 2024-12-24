@@ -1,3 +1,5 @@
+"""TODO: add tests and check integration with bias. Values are strange."""
+
 import gtsam
 
 from phd.bridge.edge_factories.factory_protocol import EdgeFactory
@@ -23,15 +25,15 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity,
     Pose,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity4x4, zero_vector3
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import identity4x4, zero_vector3
 
 
 class Factory(EdgeFactory):
 
     timescale_factor: float = 1e-9
     _gravity: float = 9.81
-    _params = gtsam.PreintegrationCombinedParams.MakeSharedU(_gravity)
+    _params = gtsam.PreintegrationParams.MakeSharedU(_gravity)
 
     @classmethod
     def create(
@@ -67,7 +69,6 @@ class Factory(EdgeFactory):
         )
         velocity_j = create_vertex_j_with_status(storage, cluster_j, stop, velocity_i)
         bias_i = create_vertex_i_with_status(ImuBias, storage, cluster_i, start, zero_bias)
-        bias_j = create_vertex_j_with_status(storage, cluster_j, stop, bias_i)
 
         pim = get_integrated_measurement(
             cls._params, measurement, stop, cls.timescale_factor, bias_i.instance
@@ -79,12 +80,11 @@ class Factory(EdgeFactory):
             bias_i.instance,
             pose_j.instance,
             velocity_j.instance,
-            bias_j.instance,
             measurement,
             pim,
         )
 
-        new_vertices = create_new_vertices([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
+        new_vertices = create_new_vertices([pose_i, velocity_i, bias_i, pose_j, velocity_j])
 
         return GraphElement(edge, new_vertices)
 
@@ -102,7 +102,7 @@ class Factory(EdgeFactory):
             timestamp: a timestamp of the cluster.
 
         Returns:
-            cluster.
+            cluster with vertices.
         """
         cluster = storage.get_cluster(timestamp)
         if cluster:

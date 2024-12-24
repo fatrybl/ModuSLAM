@@ -5,7 +5,7 @@ from phd.external.handlers_factory.handlers.imu_data_preprocessors.tum_vie_handl
     TumVieImuDataPreprocessor,
 )
 from phd.measurement_storage.measurements.imu import ImuData
-from phd.moduslam.utils.auxiliary_methods import str_to_float
+from phd.utils.auxiliary_methods import str_to_float
 
 
 class KaistUrbanImuDataPreprocessor(TumVieImuDataPreprocessor):

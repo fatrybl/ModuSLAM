@@ -1,5 +1,5 @@
 from phd.measurement_storage.measurements.base import Measurement, TimeRangeMeasurement
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.ordered_set import OrderedSet
 
 
 class Updater:

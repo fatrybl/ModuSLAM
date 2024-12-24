@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from phd.moduslam.setup_manager.sensors_factory.sensors import (
+from phd.moduslam.sensors_factory.sensors import (
     Imu,
     Lidar3D,
     Sensor,

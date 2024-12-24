@@ -3,7 +3,6 @@ from pathlib import Path
 
 from PIL.Image import Image
 
-from moduslam.utils.auxiliary_methods import microsec2nanosec
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.locations import (
     CsvDataLocation,
@@ -14,6 +13,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     read_csv_file,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from phd.utils.auxiliary_methods import microsec2nanosec
 
 logger = logging.getLogger(data_manager)
 

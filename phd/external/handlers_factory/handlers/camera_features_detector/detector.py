@@ -8,8 +8,8 @@ from PIL.Image import Image, fromarray
 from PIL.ImageFile import ImageFile
 
 from phd.moduslam.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
-from phd.moduslam.utils.auxiliary_dataclasses import Position, VisualFeature
-from phd.moduslam.utils.auxiliary_methods import matrix_to_vector_list
+from phd.utils.auxiliary_dataclasses import Position, VisualFeature
+from phd.utils.auxiliary_methods import matrix_to_vector_list
 
 
 class KeypointDetector:

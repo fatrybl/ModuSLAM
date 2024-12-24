@@ -3,7 +3,6 @@ import time
 
 import gtsam
 import numpy as np
-from graphviz import Source
 from gtsam.symbol_shorthand import X
 
 
@@ -33,11 +32,7 @@ init_values.insert_pose3(X(2), pose2)
 position_cov_matrix = np.eye(4)
 orientation_cov_matrix = np.eye(4)
 
-bloc_matrix = np.block(
-    [[position_cov_matrix, np.zeros((3, 3))], [np.zeros((3, 3)), orientation_cov_matrix]]
-)
-
-noise = gtsam.noiseModel.Diagonal.Covariance(bloc_matrix)
+noise = gtsam.noiseModel.Diagonal.Sigmas([1, 1, 1, 1, 1, 1])
 
 prior = gtsam.PriorFactorPose3(X(0), pose1, noise)
 odom1 = gtsam.BetweenFactorPose3(X(0), X(1), pose2, noise)
@@ -57,13 +52,14 @@ params = gtsam.LevenbergMarquardtParams()
 optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
 result = optimizer.optimizeSafely()
 
-print(graph)
-formatting = gtsam.GraphvizFormatting()
-formatting.paperHorizontalAxis = gtsam.GraphvizFormatting.Axis.X
-formatting.paperVerticalAxis = gtsam.GraphvizFormatting.Axis.Y
-dot = graph.dot(result, writer=formatting)
-source = Source(dot)
-source.render("graph", format="pdf", cleanup=True)
+
+# print(graph)
+# formatting = gtsam.GraphvizFormatting()
+# formatting.paperHorizontalAxis = gtsam.GraphvizFormatting.Axis.X
+# formatting.paperVerticalAxis = gtsam.GraphvizFormatting.Axis.Y
+# dot = graph.dot(result, writer=formatting)
+# source = Source(dot)
+# source.render("graph", format="pdf", cleanup=True)
 
 
 # smart_f1.add(np.array([2, 2]), X(1))

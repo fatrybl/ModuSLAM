@@ -26,7 +26,7 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     get_csv_message,
     get_images,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import Message
+from phd.utils.auxiliary_dataclasses import Message
 
 logger = logging.getLogger(data_manager)
 

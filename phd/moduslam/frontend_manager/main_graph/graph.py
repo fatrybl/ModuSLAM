@@ -11,13 +11,13 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from phd.moduslam.utils.exceptions import (
+from phd.utils.exceptions import (
     ItemExistsError,
     ItemNotExistsError,
     NotSubsetError,
     ValidationError,
 )
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 

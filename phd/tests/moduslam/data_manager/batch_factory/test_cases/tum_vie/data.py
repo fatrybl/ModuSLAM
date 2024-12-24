@@ -2,9 +2,9 @@ from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
     TumVieConfig,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 from phd.tests.conftest import tum_vie_dataset_dir
 from phd.tests_data_generators.tum_vie_dataset.data import Data
+from phd.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 data = Data(dataset_cfg)

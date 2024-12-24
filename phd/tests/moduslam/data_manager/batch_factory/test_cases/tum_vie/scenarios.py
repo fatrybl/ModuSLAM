@@ -8,8 +8,6 @@ from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import
     TumVieConfig,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.utils.auxiliary_methods import nanosec2microsec
-from phd.moduslam.utils.exceptions import UnfeasibleRequestError
 from phd.tests.conftest import tum_vie_dataset_dir
 from phd.tests.moduslam.data_manager.batch_factory.test_cases.tum_vie.data import (
     all_elements_batch,
@@ -37,6 +35,8 @@ from phd.tests.moduslam.data_manager.batch_factory.test_cases.tum_vie.data impor
     stereo_request3,
 )
 from phd.tests_data_generators.utils import generate_sensors_factory_config
+from phd.utils.auxiliary_methods import nanosec2microsec
+from phd.utils.exceptions import UnfeasibleRequestError
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 

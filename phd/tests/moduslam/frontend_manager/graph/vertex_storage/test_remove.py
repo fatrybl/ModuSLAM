@@ -8,8 +8,8 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.exceptions import ValidationError
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.exceptions import ValidationError
+from phd.utils.ordered_set import OrderedSet
 
 
 def test_remove_non_existing_vertex_raises_validation_error():

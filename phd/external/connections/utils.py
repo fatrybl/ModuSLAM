@@ -25,14 +25,17 @@ def fill_one_connection_with_imu(
         new cluster and unused measurements.
     """
     cluster_copy = copy_cluster(cluster)
-
     start = measurements[0].timestamp
     stop = cluster_copy.timestamp
+    leftovers = measurements[:]
+
     subsequence, _, _ = get_subsequence(measurements, start, stop)
-    subsequence_set = set(subsequence)
-    leftovers = [m for m in measurements if m not in subsequence_set]
-    new_measurement = ContinuousImu(subsequence, start, stop)
-    cluster_copy.add(new_measurement)
+    if subsequence:
+        subsequence_set = set(subsequence)
+        leftovers = [m for m in measurements if m not in subsequence_set]
+        new_measurement = ContinuousImu(subsequence, start, stop)
+        cluster_copy.add(new_measurement)
+
     return cluster_copy, leftovers
 
 
@@ -49,13 +52,16 @@ def fill_connections_with_imu(
     Returns:
         clusters and unused discrete IMU measurements.
     """
-    used_measurements = set[Measurement]()
+    used_measurements = set[Imu]()
 
     for connection in item.connections:
 
         start = connection.cluster1.timestamp
         stop = connection.cluster2.timestamp
         subsequence, _, _ = get_subsequence(measurements, start, stop)
+        if not subsequence:
+            continue
+
         m = ContinuousImu(subsequence, start, stop)
         connection.cluster2.add(m)
 
@@ -65,7 +71,6 @@ def fill_connections_with_imu(
             item.clusters.remove(connection.cluster1)
 
     leftovers = [m for m in measurements if m not in used_measurements]
-    leftovers.sort(key=lambda el: el.timestamp)
     return item.clusters, leftovers
 
 

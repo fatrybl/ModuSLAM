@@ -9,8 +9,8 @@ from phd.moduslam.data_manager.batch_factory.readers.reader_factory import (
     DataReaderFactory,
 )
 from phd.moduslam.data_manager.memory_analyzer import MemoryAnalyzer
-from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
-from phd.moduslam.utils.exceptions import StateNotSetError, UnfeasibleRequestError
+from phd.utils.auxiliary_dataclasses import PeriodicDataRequest
+from phd.utils.exceptions import StateNotSetError, UnfeasibleRequestError
 
 logger = logging.getLogger(data_manager)
 

@@ -3,7 +3,7 @@ from typing import cast
 from hydra import compose, initialize
 from hydra.core.config_store import ConfigStore
 
-from phd.moduslam.setup_manager.sensors_factory.configs import (
+from phd.moduslam.sensors_factory.configs import (
     ImuConfig,
     Lidar3DConfig,
     SensorConfig,

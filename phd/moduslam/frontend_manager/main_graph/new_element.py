@@ -6,7 +6,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from phd.moduslam.utils.exceptions import ItemExistsError, ValidationError
+from phd.utils.exceptions import ItemExistsError, ValidationError
 
 E = TypeVar("E", bound=Edge)
 V = TypeVar("V", bound=Vertex)

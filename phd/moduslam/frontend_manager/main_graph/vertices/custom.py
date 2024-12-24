@@ -6,7 +6,7 @@ from phd.moduslam.frontend_manager.main_graph.vertices.base import (
     NonOptimizableVertex,
     OptimizableVertex,
 )
-from phd.moduslam.utils.auxiliary_objects import identity4x4, zero_vector3
+from phd.utils.auxiliary_objects import identity4x4, zero_vector3
 
 
 class Pose(OptimizableVertex):

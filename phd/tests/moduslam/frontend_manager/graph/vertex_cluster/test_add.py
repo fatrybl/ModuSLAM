@@ -4,7 +4,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.exceptions import ItemExistsError
+from phd.utils.exceptions import ItemExistsError
 
 
 def test_add():

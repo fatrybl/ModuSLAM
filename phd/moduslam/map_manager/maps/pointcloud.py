@@ -27,6 +27,6 @@ class PointCloudMap:
         """Sets points to the map instance.
 
         Args:
-            points:array [N, 3] of points to set.
+            points: array [N, 3] of points to set.
         """
         self._pointcloud.points = utility.Vector3dVector(points)

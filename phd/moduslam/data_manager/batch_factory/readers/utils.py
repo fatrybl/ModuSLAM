@@ -8,8 +8,8 @@ from PIL.Image import Image
 
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.readers.data_sources import Source
-from phd.moduslam.utils.auxiliary_dataclasses import Message
-from phd.moduslam.utils.exceptions import ExternalModuleException, ItemNotFoundError
+from phd.utils.auxiliary_dataclasses import Message
+from phd.utils.exceptions import ExternalModuleException, ItemNotFoundError
 
 logger = logging.getLogger(data_manager)
 

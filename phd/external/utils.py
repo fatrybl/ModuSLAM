@@ -133,7 +133,8 @@ def group_by_timestamp(measurements: Iterable[Measurement]) -> list[MeasurementG
     for m in measurements:
         groups[m.timestamp].measurements.add(m)
 
-    return list(groups.values())
+    sorted_groups = {k: v for k, v in sorted(groups.items())}
+    return list(sorted_groups.values())
 
 
 def remove_loops(combinations: list[list[MeasurementCluster]]) -> list[list[MeasurementCluster]]:

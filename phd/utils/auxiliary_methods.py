@@ -21,7 +21,7 @@ from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from phd.moduslam.custom_types.numpy import MatrixMxN
 from phd.moduslam.custom_types.numpy import Vector3 as NumpyVector3
 from phd.moduslam.custom_types.numpy import VectorN
-from phd.moduslam.utils.exceptions import DimensionalityError
+from phd.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(utils)
 

@@ -10,7 +10,7 @@ from phd.moduslam.frontend_manager.measurement_storage_analyzers.base import (
 class SinglePoseOdometry(StorageAnalyzer):
 
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
             1 pose odometry.
@@ -18,7 +18,8 @@ class SinglePoseOdometry(StorageAnalyzer):
         Returns:
             check status.
         """
-        if OdometryWithElements in storage.data:
+        data = storage.data()
+        if OdometryWithElements in data:
             return True
 
         return False
@@ -26,7 +27,7 @@ class SinglePoseOdometry(StorageAnalyzer):
 
 class DoublePoseOdometry(StorageAnalyzer):
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
             2 pose odometries.
@@ -34,7 +35,8 @@ class DoublePoseOdometry(StorageAnalyzer):
         Returns:
             check status.
         """
-        if OdometryWithElements in storage.data and len(storage.data[OdometryWithElements]) == 2:
+        data = storage.data()
+        if OdometryWithElements in data and len(data[OdometryWithElements]) == 2:
             return True
 
         return False
@@ -42,7 +44,7 @@ class DoublePoseOdometry(StorageAnalyzer):
 
 class SinglePoseOdometryWithImu(StorageAnalyzer):
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
             1 pose odometry and IMU measurements.
@@ -50,11 +52,12 @@ class SinglePoseOdometryWithImu(StorageAnalyzer):
         Returns:
             check status.
         """
+        data = storage.data()
         if (
-            OdometryWithElements in storage.data
-            and ProcessedImu in storage.data
-            and len(storage.data[OdometryWithElements]) == 1
-            and len(storage.data[ProcessedImu]) > 0
+            OdometryWithElements in data
+            and ProcessedImu in data
+            and len(data[OdometryWithElements]) == 1
+            and len(data[ProcessedImu]) > 0
         ):
             return True
 
@@ -63,7 +66,7 @@ class SinglePoseOdometryWithImu(StorageAnalyzer):
 
 class DoublePoseOdometryWithImu(StorageAnalyzer):
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
             2 pose odometries and IMU measurements.
@@ -71,11 +74,12 @@ class DoublePoseOdometryWithImu(StorageAnalyzer):
         Returns:
             check status.
         """
+        data = storage.data()
         if (
-            OdometryWithElements in storage.data
-            and ProcessedImu in storage.data
-            and len(storage.data[OdometryWithElements]) == 2
-            and len(storage.data[ProcessedImu]) > 0
+            OdometryWithElements in data
+            and ProcessedImu in data
+            and len(data[OdometryWithElements]) == 2
+            and len(data[ProcessedImu]) > 0
         ):
             return True
 
@@ -84,7 +88,7 @@ class DoublePoseOdometryWithImu(StorageAnalyzer):
 
 class PoseOdometryWithGps(StorageAnalyzer):
     @staticmethod
-    def check_storage(storage: MeasurementStorage) -> bool:
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
         Criterion:
             1 pose odometry and GPS measurements.
@@ -92,11 +96,12 @@ class PoseOdometryWithGps(StorageAnalyzer):
         Returns:
             check status.
         """
+        data = storage.data()
         if (
-            OdometryWithElements in storage.data
-            and Gps in storage.data
-            and len(storage.data[OdometryWithElements]) == 1
-            and len(storage.data[Gps]) == 1
+            OdometryWithElements in data
+            and Gps in data
+            and len(data[OdometryWithElements]) == 1
+            and len(data[Gps]) == 1
         ):
             return True
 

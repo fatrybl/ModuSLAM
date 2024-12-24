@@ -21,7 +21,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose, identity4x4
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 
 class Factory(EdgeFactory):

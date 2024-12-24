@@ -17,8 +17,8 @@ from phd.external.handlers_factory.handlers.handler_protocol import Handler
 from phd.measurement_storage.measurements.base import WithRawElements
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.utils import create_empty_element
-from phd.moduslam.setup_manager.sensors_factory.sensors import StereoCamera
-from phd.moduslam.utils.auxiliary_dataclasses import VisualFeature
+from phd.moduslam.sensors_factory.sensors import StereoCamera
+from phd.utils.auxiliary_dataclasses import VisualFeature
 
 logger = logging.getLogger(frontend_manager)
 

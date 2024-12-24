@@ -4,7 +4,7 @@ from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from phd.moduslam.utils.exceptions import ItemNotExistsError
+from phd.utils.exceptions import ItemNotExistsError
 
 
 def test_remove_single_vertex():

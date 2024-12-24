@@ -12,7 +12,7 @@ from phd.moduslam.data_manager.batch_factory.readers.locations import (
     CsvDataLocation,
     StereoImagesLocation,
 )
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.sensors_factory.sensors import Sensor
 from phd.tests_data_generators.kaist_dataset.structure import DatasetStructure
 
 

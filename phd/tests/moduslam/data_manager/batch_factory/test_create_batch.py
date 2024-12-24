@@ -66,10 +66,8 @@ from phd.moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from phd.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
 from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
 from phd.moduslam.data_manager.batch_factory.utils import equal_batches
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
-from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
-from phd.moduslam.utils.exceptions import UnfeasibleRequestError
+from phd.moduslam.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.factory import SensorsFactory
 from phd.tests.moduslam.data_manager.batch_factory.test_cases.kaist.scenarios import (
     kaist_scenarios1_fail,
     kaist_scenarios1_success,
@@ -85,6 +83,8 @@ from phd.tests.moduslam.data_manager.batch_factory.test_cases.tum_vie.scenarios 
     tum_vie_scenarios3_fail,
     tum_vie_scenarios3_success,
 )
+from phd.utils.auxiliary_dataclasses import PeriodicDataRequest
+from phd.utils.exceptions import UnfeasibleRequestError
 
 test_cases_1_success = (*kaist_scenarios1_success, *tum_vie_scenarios1_success)
 test_cases_2_success = (*kaist_scenarios2_success, *tum_vie_scenarios2_success)

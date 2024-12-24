@@ -1,7 +1,7 @@
 from typing import Generic, TypeVar
 
 from phd.measurement_storage.measurements.base import Measurement, TimeRangeMeasurement
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 M = TypeVar("M", bound=Measurement, covariant=True)
 

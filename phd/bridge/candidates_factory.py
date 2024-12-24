@@ -8,7 +8,7 @@ from phd.external.metrics.storage import MetricsStorage
 from phd.external.metrics.timeshift import TimeShift
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurement_storage.cluster import MeasurementCluster
-from phd.measurement_storage.storage import MeasurementStorage
+from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import (
     Graph,
     GraphCandidate,
@@ -17,35 +17,38 @@ from phd.moduslam.frontend_manager.main_graph.graph import (
 from phd.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.exceptions import SkipItemException
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.exceptions import SkipItemException
+from phd.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(__name__)
 
 
 class Factory:
     @classmethod
-    def create_candidates(cls, graph: Graph, storage: MeasurementStorage) -> list[GraphCandidate]:
+    def create_candidates(
+        cls, graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
+    ) -> list[GraphCandidate]:
         """Creates graph candidates.
 
         Args:
             graph: a graph to create candidates for.
 
-            storage: a storage with measurements.
+            data: a table of typed Ordered Sets with measurements.
         """
         candidates: list[GraphCandidate] = []
 
-        variants = VariantsFactory.create(storage)
+        variants = VariantsFactory.create(data)
 
         for variant in variants:
             graph_copy = deepcopy(graph)
 
-            measurements_clusters, leftovers = process_leftovers(variant)
+            measurement_clusters, leftovers = process_leftovers(variant)
 
-            elements = cls._process_variant(graph_copy, measurements_clusters)
+            elements = cls._process_variant(graph_copy, measurement_clusters)
 
             candidate = GraphCandidate(graph_copy, elements, leftovers)
-            timeshift = TimeShift.compute(measurements_clusters)
+            timeshift = TimeShift.compute(measurement_clusters)
 
             MetricsStorage.add_timeshift(candidate, timeshift)
 

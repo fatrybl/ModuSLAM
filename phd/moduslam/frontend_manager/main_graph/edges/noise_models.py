@@ -5,7 +5,7 @@ from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 from phd.moduslam.custom_types.numpy import Matrix6x6
 
 
-def create_block_diagonal_matrix6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
+def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
     """Block diagonal matrix with two 3x3 blocks.
 
     Args:
@@ -77,8 +77,8 @@ def pose_block_diagonal_noise_model(
     Returns:
         gtsam noise model.
     """
-    bloc_matrix = create_block_diagonal_matrix6x6(position_covariance, orientation_covariance)
-    noise = gtsam.noiseModel.Diagonal.Covariance(bloc_matrix)
+    block_matrix = create_block_diagonal_matrix_6x6(position_covariance, orientation_covariance)
+    noise = gtsam.noiseModel.Gaussian.Covariance(block_matrix)
     return noise
 
 

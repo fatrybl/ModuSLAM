@@ -6,7 +6,7 @@ import open3d as o3d
 from phd.logger.logging_config import map_manager
 from phd.moduslam.map_manager.maps.pointcloud import PointCloudMap
 from phd.moduslam.map_manager.protocols import MapLoader
-from phd.moduslam.utils.exceptions import ExternalModuleException
+from phd.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(map_manager)
 

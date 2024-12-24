@@ -3,10 +3,10 @@ from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import
 )
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.utils.auxiliary_methods import nanosec2microsec
 from phd.tests.conftest import tum_vie_dataset_dir
 from phd.tests_data_generators.tum_vie_dataset.data import Data
 from phd.tests_data_generators.utils import generate_sensors_factory_config
+from phd.utils.auxiliary_methods import nanosec2microsec
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 data = Data(dataset_cfg)

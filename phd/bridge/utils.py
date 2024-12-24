@@ -58,7 +58,8 @@ def remove_unconnected_candidates(candidates: list[GraphCandidate]) -> list[Grap
 
     for candidate in candidates:
 
-        is_connected = VerticesConnectivity.compute(candidate.graph, candidate.elements)
+        all_vertices = candidate.graph.vertex_storage.vertices
+        is_connected = VerticesConnectivity.compute(all_vertices, candidate.elements)
 
         if is_connected:
             new_candidates.append(candidate)

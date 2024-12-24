@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 
 from phd.moduslam.data_manager.batch_factory.batch import Element
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 
 class Measurement(ABC):

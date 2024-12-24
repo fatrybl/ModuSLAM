@@ -4,7 +4,7 @@ from typing import TypeVar
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_dataclasses import TimeRange
 
 
 @dataclass
@@ -118,6 +118,8 @@ class ContinuousImu(ContinuousMeasurement[I]):
 
         Raises:
             ValueError: if the first measurement's timestamp is less than start.
+
+        TODO: change list to tuple for better type checking ?
         """
         if measurements[0].timestamp < start:
             raise ValueError("Start timestamp is less than the first measurement's timestamp.")

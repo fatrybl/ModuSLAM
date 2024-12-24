@@ -11,7 +11,7 @@ from phd.moduslam.frontend_manager.graph_initializer.configs import (
     PriorLinearVelocity,
     PriorPose,
 )
-from phd.moduslam.utils.auxiliary_methods import diagonal_matrix3x3
+from phd.utils.auxiliary_methods import diagonal_matrix3x3
 
 
 def pose_se3_from_tuple(values: Vector6) -> Matrix4x4:

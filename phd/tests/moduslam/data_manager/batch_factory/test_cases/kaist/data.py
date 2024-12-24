@@ -3,9 +3,9 @@
 import itertools
 
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
-from phd.moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 from phd.tests.conftest import kaist_custom_dataset_dir
 from phd.tests_data_generators.kaist_dataset.data import Data
+from phd.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
 
 data = Data(kaist_custom_dataset_dir)
 elements = data.elements

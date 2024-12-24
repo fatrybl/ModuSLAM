@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from phd.moduslam.data_manager.batch_factory.readers.locations import Location
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.sensors_factory.sensors import Sensor
 
 
 @dataclass(frozen=True, eq=True)

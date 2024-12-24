@@ -1,5 +1,5 @@
 from phd.moduslam.frontend_manager.main_graph.graph import GraphCandidate
-from phd.moduslam.utils.exceptions import ItemNotExistsError
+from phd.utils.exceptions import ItemNotExistsError
 
 
 class MetricsStorage:
@@ -8,6 +8,12 @@ class MetricsStorage:
     _timeshift_table: dict[GraphCandidate, int] = {}
     _error_table: dict[GraphCandidate, float] = {}
     _connectivity_table: dict[GraphCandidate, bool] = {}
+    _mom_table: dict[GraphCandidate, float] = {}
+
+    @classmethod
+    def add_mom(cls, candidate: GraphCandidate, value: float) -> None:
+        """Adds MOM-metric value to the table."""
+        cls._mom_table[candidate] = value
 
     @classmethod
     def add_connectivity(cls, candidate: GraphCandidate, value: bool) -> None:
@@ -25,32 +31,26 @@ class MetricsStorage:
         cls._error_table[candidate] = value
 
     @classmethod
-    def get_error_table(cls) -> dict[GraphCandidate, float]:
-        """Gets the table with candidates and errors.
+    def get_mom_table(cls) -> dict[GraphCandidate, float]:
+        """The table with candidates and MOM values."""
+        return cls._mom_table
 
-        Returns:
-            the table with candidates and errors.
-        """
+    @classmethod
+    def get_error_table(cls) -> dict[GraphCandidate, float]:
+        """The table with candidates and solver error values."""
         return cls._error_table
 
     @classmethod
     def get_timeshift_table(cls) -> dict[GraphCandidate, int]:
-        """Gets the table with candidates and errors.
-
-        Returns:
-            the table with candidates and errors.
-        """
+        """The table with candidates and accumulative time shifts."""
         return cls._timeshift_table
 
     @classmethod
     def get_connectivity_status(cls, candidate: GraphCandidate) -> bool:
-        """Returns connectivity status for the given candidate.
+        """The connectivity status of the candidate.
 
         Args:
-            candidate: a graph candidate to get the status for.
-
-        Returns:
-            connectivity status.
+            candidate: a candidate to get connectivity status for.
 
         Raises:
             ItemNotExistsError: if no connectivity status exists for the given candidate.
@@ -62,7 +62,8 @@ class MetricsStorage:
 
     @classmethod
     def clear(cls) -> None:
-        """Clears all metrics from the storage."""
+        """Clears all metrics in the storage."""
         cls._timeshift_table.clear()
         cls._error_table.clear()
         cls._connectivity_table.clear()
+        cls._mom_table.clear()

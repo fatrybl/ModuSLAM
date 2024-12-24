@@ -2,8 +2,10 @@ import logging
 
 from phd.external.handlers_factory.factory import Factory
 from phd.logger.logging_config import frontend_manager
+from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.data_manager.batch_factory.batch import DataBatch
 from phd.moduslam.frontend_manager.graph_builders.suboptimal_builder import Builder
+from phd.moduslam.frontend_manager.graph_initializer.config_factory import get_config
 from phd.moduslam.frontend_manager.graph_initializer.initializer import GraphInitializer
 from phd.moduslam.frontend_manager.main_graph.graph import Graph
 
@@ -18,7 +20,6 @@ class FrontendManager:
         handlers = Factory.get_handlers()
         self._graph = Graph()
         self._builder = Builder(handlers)
-        self._initializer = GraphInitializer()
         logger.debug("Frontend Manager has been configured.")
 
     @property
@@ -31,10 +32,17 @@ class FrontendManager:
         """Sets main graph."""
         self._graph = graph
 
-    def set_prior(self) -> None:
-        """Adds prior factors to the graph."""
-        self._initializer.set_prior(self._graph)
-        logger.debug("Prior factors have been added.")
+    @staticmethod
+    def create_prior_measurements() -> list[Measurement]:
+        """Create prior measurements.
+
+        Returns:
+            prior measurements.
+        """
+        config = get_config()
+        priors = config.values()
+        measurements = GraphInitializer.create_measurements(priors)
+        return measurements
 
     def create_graph(self, batch: DataBatch) -> None:
         """Creates main graph by merging sub-graphs (graph candidates).

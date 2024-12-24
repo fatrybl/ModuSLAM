@@ -2,13 +2,13 @@ import logging
 from typing import cast
 
 from phd.logger.logging_config import setup_manager
-from phd.moduslam.setup_manager.sensors_factory.configs import (
+from phd.moduslam.sensors_factory.configs import (
     ImuConfig,
     Lidar3DConfig,
     SensorConfig,
     StereoCameraConfig,
 )
-from phd.moduslam.setup_manager.sensors_factory.sensors import (
+from phd.moduslam.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,
@@ -20,7 +20,7 @@ from phd.moduslam.setup_manager.sensors_factory.sensors import (
     StereoCamera,
     VrsGps,
 )
-from phd.moduslam.utils.exceptions import ItemNotExistsError
+from phd.utils.exceptions import ItemNotExistsError
 
 logger = logging.getLogger(setup_manager)
 

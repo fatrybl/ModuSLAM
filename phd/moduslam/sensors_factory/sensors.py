@@ -9,11 +9,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
-from phd.moduslam.utils.auxiliary_methods import matrix3x3_list_to_tuple as tuple3x3
-from phd.moduslam.utils.auxiliary_methods import matrix4x4_list_to_tuple as tuple4x4
+from phd.utils.auxiliary_methods import matrix3x3_list_to_tuple as tuple3x3
+from phd.utils.auxiliary_methods import matrix4x4_list_to_tuple as tuple4x4
 
 if TYPE_CHECKING:
-    from phd.moduslam.setup_manager.sensors_factory.configs import (
+    from phd.moduslam.sensors_factory.configs import (
         ImuConfig,
         Lidar3DConfig,
         SensorConfig,

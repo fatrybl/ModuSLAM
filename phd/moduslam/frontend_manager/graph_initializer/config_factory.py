@@ -5,6 +5,7 @@ from hydra.core.config_store import ConfigStore
 
 from phd.moduslam.frontend_manager.graph_initializer.configs import (
     EdgeConfig,
+    PriorImuBias,
     PriorLinearVelocity,
     PriorPose,
 )
@@ -14,6 +15,7 @@ def get_config() -> dict[str, EdgeConfig]:
     cs = ConfigStore.instance()
     cs.store(name="base_pose", node=PriorPose)
     cs.store(name="base_linear_velocity", node=PriorLinearVelocity)
+    cs.store(name="base_imu_bias", node=PriorImuBias)
 
     with initialize(version_base=None, config_path="configs"):
         cfg = compose(config_name="config")

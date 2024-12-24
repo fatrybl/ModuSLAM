@@ -5,23 +5,18 @@ from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.base import Measurement
 
 
-def add_fake_cluster(list_to_add: list[MeasurementCluster], timestamp: int) -> None:
+def add_fake_cluster(clusters: list[MeasurementCluster], timestamp: int) -> None:
     """Adds a cluster with a fake measurement to the beginning of the list based on the
     condition.
 
     Args:
-        list_to_add: a list of clusters to add a new cluster to.
+        clusters: a list of clusters to add a new cluster to.
 
         timestamp: timestamp of the fake measurement.
     """
-    first_cluster = list_to_add[0]
-    cluster_timestamp = first_cluster.timestamp
-
-    if timestamp < cluster_timestamp:
-        cluster = MeasurementCluster()
-        fake_measurement = FakeMeasurement(timestamp)
-        cluster.add(fake_measurement)
-        list_to_add.insert(0, cluster)
+    cluster = MeasurementCluster()
+    cluster.add(FakeMeasurement(timestamp))
+    clusters.insert(0, cluster)
 
 
 def find_fake_measurement(measurements: Iterable[Measurement]) -> FakeMeasurement | None:

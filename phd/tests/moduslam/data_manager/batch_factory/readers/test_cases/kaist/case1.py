@@ -3,7 +3,7 @@ from phd.moduslam.data_manager.batch_factory.readers.kaist.configs.base import (
 )
 from phd.moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
+from phd.moduslam.sensors_factory.sensors import Sensor
 from phd.tests.conftest import kaist_custom_dataset_dir
 from phd.tests_data_generators.kaist_dataset.data import Data
 from phd.tests_data_generators.utils import generate_sensors_factory_config

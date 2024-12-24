@@ -1,14 +1,13 @@
 import logging
 from collections import defaultdict
-from collections.abc import Iterable
 
 import numpy as np
 
 from phd.logger.logging_config import map_manager
 from phd.measurement_storage.measurements.pose_odometry import OdometryWithElements
 from phd.moduslam.data_manager.batch_factory.batch import Element
+from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from phd.moduslam.frontend_manager.main_graph.graph import Graph
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 
 logger = logging.getLogger(map_manager)
@@ -17,10 +16,10 @@ logger = logging.getLogger(map_manager)
 def map_elements2vertices(
     vertex_edges_table: dict[Pose, set[PoseOdometry]]
 ) -> dict[Pose, set[Element]]:
-    """Creates "vertex -> elements" table.
+    """Creates "pose -> elements" table.
 
     Args:
-        vertex_edges_table: "vertex -> edges" table.
+        vertex_edges_table: poses with PoseOdometry edges.
 
     Returns:
         "pose -> elements" table.
@@ -51,36 +50,34 @@ def map_elements2vertices(
 
 
 def values_to_array(values: tuple[float, ...], num_channels: int) -> np.ndarray:
-    """Converts values to pointcloud np.ndarray [num_channels, N].
+    """Converts raw values to point cloud arrays [N, num_channels].
 
     Args:
         values: values to convert.
 
-        num_channels: number of channels in pointcloud.
+        num_channels: a number of channels in point cloud.
 
     Returns:
-        Values as array [num_channels, N].
+        array [N, num_channels].
     """
-    array = np.array(values).reshape((-1, num_channels)).T
+    array = np.array(values).reshape((-1, num_channels))
     return array
 
 
-def create_vertex_edges_table(
-    graph: Graph, vertices: Iterable[Pose]
+def create_pose_edges_table(
+    pose_edges_table: dict[Pose, set[Edge]]
 ) -> dict[Pose, set[PoseOdometry]]:
-    """Creates a table with vertices and corresponding edges.
+    """Creates a table with poses and edges containing data elements.
 
     Args:
-        graph: graph to create a table from.
+        pose_edges_table: "pose -> edges" table.
 
-        vertices: vertices to create a table for.
     Returns:
         "pose -> pose odometries" table.
     """
     table: dict[Pose, set[PoseOdometry]] = {}
 
-    for vertex in vertices:
-        edges = graph.get_connected_edges(vertex)
+    for vertex, edges in pose_edges_table.items():
         for edge in edges:
             if isinstance(edge, PoseOdometry) and isinstance(
                 edge.measurement, OdometryWithElements

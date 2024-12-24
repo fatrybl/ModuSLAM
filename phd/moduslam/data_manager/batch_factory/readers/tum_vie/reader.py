@@ -32,10 +32,10 @@ from phd.moduslam.data_manager.batch_factory.readers.utils import (
     set_state,
 )
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
-from phd.moduslam.utils.auxiliary_methods import microsec2nanosec
-from phd.moduslam.utils.exceptions import (
+from phd.moduslam.sensors_factory.factory import SensorsFactory
+from phd.moduslam.sensors_factory.sensors import Sensor
+from phd.utils.auxiliary_methods import microsec2nanosec
+from phd.utils.exceptions import (
     DataReaderConfigurationError,
     ItemNotFoundError,
     StateNotSetError,

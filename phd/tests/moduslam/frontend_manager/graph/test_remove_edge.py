@@ -11,7 +11,9 @@ from phd.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from phd.measurement_storage.measurements.pose_odometry import (
     Odometry as OdometryMeasurement,
 )
-from phd.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
+from phd.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+    ImuOdometry,
+)
 from phd.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
@@ -26,9 +28,9 @@ from phd.moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity as VelocityVertex,
 )
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.auxiliary_objects import identity3x3, identity4x4, zero_vector3
-from phd.moduslam.utils.exceptions import ValidationError
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.auxiliary_objects import identity3x3, identity4x4, zero_vector3
+from phd.utils.exceptions import ValidationError
 
 
 @pytest.fixture

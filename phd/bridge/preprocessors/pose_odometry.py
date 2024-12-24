@@ -17,7 +17,7 @@ def remove_odometry(measurements: list[Measurement]) -> list[Measurement]:
     return [m for m in measurements if not isinstance(m, Odometry)]
 
 
-def find_and_replace(measurements: Iterable[Measurement]) -> list[Measurement]:
+def split_odometry(measurements: Iterable[Measurement]) -> list[Measurement]:
     """Finds and replaces odometry measurements in the sequence of measurements.
 
     Args:

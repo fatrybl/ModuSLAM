@@ -28,8 +28,8 @@ from phd.measurement_storage.measurements.imu import (
 )
 from phd.moduslam.custom_types.aliases import Matrix4x4
 from phd.moduslam.data_manager.batch_factory.batch import Element
-from phd.moduslam.setup_manager.sensors_factory.sensors import Imu as ImuSensor
-from phd.moduslam.utils.auxiliary_methods import str_to_float
+from phd.moduslam.sensors_factory.sensors import Imu as ImuSensor
+from phd.utils.auxiliary_methods import str_to_float
 
 logger = logging.getLogger(frontend_manager)
 
@@ -73,7 +73,7 @@ class TumVieImuDataPreprocessor(Handler):
 
         tf = self._create_tf(sensor)
 
-        covariance = self._create_covariance(sensor)
+        covariance = self._get_covariance(sensor)
 
         return ProcessedImu(element.timestamp, imu_data, covariance, tf)
 
@@ -107,7 +107,7 @@ class TumVieImuDataPreprocessor(Handler):
         return pose
 
     @staticmethod
-    def _create_covariance(sensor: ImuSensor) -> ImuCovariance:
+    def _get_covariance(sensor: ImuSensor) -> ImuCovariance:
         """Creates IMU covariances using the given sensor.
 
         Args:

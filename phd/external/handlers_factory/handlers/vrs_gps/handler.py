@@ -8,8 +8,8 @@ from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.measurements.gps import Gps
 from phd.moduslam.custom_types.aliases import Matrix3x3, Vector3
 from phd.moduslam.data_manager.batch_factory.batch import Element
-from phd.moduslam.setup_manager.sensors_factory.sensors import VrsGps
-from phd.moduslam.utils.auxiliary_methods import str_to_float, str_to_int
+from phd.moduslam.sensors_factory.sensors import VrsGps
+from phd.utils.auxiliary_methods import str_to_float, str_to_int
 
 logger = logging.getLogger(frontend_manager)
 

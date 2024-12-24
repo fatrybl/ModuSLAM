@@ -6,8 +6,8 @@ TODO: add tests.
 import logging
 from pathlib import Path
 
-from moduslam.utils.auxiliary_methods import sort_files_numerically
 from phd.logger.logging_config import data_manager
+from phd.utils.auxiliary_methods import sort_files_numerically
 
 logger = logging.getLogger(data_manager)
 

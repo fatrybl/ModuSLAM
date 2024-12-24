@@ -2,13 +2,9 @@ from phd.external.metrics.utils import median
 from phd.measurement_storage.measurements.auxiliary import FakeMeasurement
 from phd.measurement_storage.measurements.base import Measurement
 from phd.measurement_storage.measurements.continuous import ContinuousMeasurement
-from phd.moduslam.utils.auxiliary_dataclasses import TimeRange
-from phd.moduslam.utils.exceptions import (
-    ItemExistsError,
-    ItemNotExistsError,
-    ValidationError,
-)
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.auxiliary_dataclasses import TimeRange
+from phd.utils.exceptions import ItemExistsError, ItemNotExistsError, ValidationError
+from phd.utils.ordered_set import OrderedSet
 
 
 class MeasurementCluster:

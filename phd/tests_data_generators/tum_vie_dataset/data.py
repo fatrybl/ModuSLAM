@@ -19,8 +19,8 @@ from phd.moduslam.data_manager.batch_factory.readers.locations import (
 from phd.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
     TumVieConfig,
 )
-from phd.moduslam.setup_manager.sensors_factory.sensors import Sensor
-from phd.moduslam.utils.auxiliary_methods import microsec2nanosec
+from phd.moduslam.sensors_factory.sensors import Sensor
+from phd.utils.auxiliary_methods import microsec2nanosec
 
 
 class Data:

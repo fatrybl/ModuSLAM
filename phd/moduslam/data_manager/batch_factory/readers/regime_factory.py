@@ -1,6 +1,6 @@
 from phd.moduslam.data_manager.batch_factory.configs import DataRegimeConfig
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from phd.moduslam.utils.auxiliary_methods import str_to_float, str_to_int
+from phd.utils.auxiliary_methods import str_to_float, str_to_int
 
 
 class Factory:

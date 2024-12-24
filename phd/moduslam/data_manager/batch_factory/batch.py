@@ -3,7 +3,7 @@ from collections import deque
 
 from phd.logger.logging_config import data_manager
 from phd.moduslam.data_manager.batch_factory.data_objects import Element
-from phd.moduslam.utils.deque_set import DequeSet
+from phd.utils.deque_set import DequeSet
 
 logger = logging.getLogger(data_manager)
 

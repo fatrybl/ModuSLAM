@@ -2,7 +2,7 @@
 
 import pytest
 
-from phd.moduslam.utils.deque_set import DequeSet
+from phd.utils.deque_set import DequeSet
 
 
 def test_append():

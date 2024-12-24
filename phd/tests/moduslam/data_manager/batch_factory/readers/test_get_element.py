@@ -19,8 +19,8 @@ from phd.moduslam.data_manager.batch_factory.configs import DatasetConfig
 from phd.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
 from phd.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from phd.moduslam.data_manager.batch_factory.utils import equal_elements
-from phd.moduslam.setup_manager.sensors_factory.configs import SensorConfig
-from phd.moduslam.setup_manager.sensors_factory.factory import SensorsFactory
+from phd.moduslam.sensors_factory.configs import SensorConfig
+from phd.moduslam.sensors_factory.factory import SensorsFactory
 from phd.tests.moduslam.data_manager.batch_factory.readers.test_cases.kaist.case3 import (
     kaist_invalid_element,
     kaist_out_of_context,

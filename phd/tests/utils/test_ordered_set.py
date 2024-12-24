@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from phd.moduslam.utils.ordered_set import OrderedSet
+from phd.utils.ordered_set import OrderedSet
 
 
 def test_add():
