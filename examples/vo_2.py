@@ -15,7 +15,6 @@ import numpy as np
 import open3d as o3d
 import PIL.Image as Image
 from gtsam.symbol_shorthand import X
-from PIL.ImageFile import ImageFile
 
 from moduslam.frontend_manager.edge_factories.smart_visual_features.feature_matcher import (
     FeatureMatcher,
@@ -27,16 +26,16 @@ from moduslam.frontend_manager.handlers.camera_features_detector.detector import
     KeypointDetector,
 )
 
-img1: ImageFile = Image.open(
+img1 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00055.jpg"
 )
-img2: ImageFile = Image.open(
+img2 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00060.jpg"
 )
-img3: ImageFile = Image.open(
+img3 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00065.jpg"
 )
-img4: ImageFile = Image.open(
+img4 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00070.jpg"
 )
 

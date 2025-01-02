@@ -13,15 +13,14 @@ import open3d as o3d
 import PIL.Image as Image
 from graphviz import Source
 from gtsam.symbol_shorthand import X
-from PIL.ImageFile import ImageFile
 
-image1: ImageFile = Image.open(
+image1 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00055.jpg"
 )
-image2: ImageFile = Image.open(
+image2 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00060.jpg"
 )
-image3: ImageFile = Image.open(
+image3 = Image.open(
     "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00065.jpg"
 )
 

@@ -1,4 +1,9 @@
-from phd.bridge.candidates_factory_no_copy import Factory as CandidatesFactory
+# from phd.bridge.candidates_factory_no_copy import Factory as CandidatesFactory
+from collections.abc import Iterable
+
+from phd.bridge.auxiliary_dataclasses import CandidateWithClusters
+from phd.bridge.candidates_factory import Factory as CandidatesFactory
+from phd.external.metrics.factory import MetricsFactory
 from phd.external.metrics.storage import MetricsStorage
 from phd.measurement_storage.measurements.base import Measurement
 from phd.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
@@ -10,17 +15,14 @@ class Factory:
     """Creates suboptimal graph candidate."""
 
     def __init__(self):
-        self._factory = CandidatesFactory()
-
-    @property
-    def is_ready(self) -> bool:
-        """Checks if the candidate is ready for processing."""
-        raise NotImplementedError
+        self._candidates_factory = CandidatesFactory()
+        self._metrics_factory = MetricsFactory()
+        self._metrics_storage = MetricsStorage()
 
     def create_candidate(
         self, graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
     ) -> GraphCandidate:
-        """Creates the best candidate.
+        """Creates optimal graph candidate.
 
         Args:
             graph: a main graph.
@@ -28,25 +30,54 @@ class Factory:
             data: a table of measurements grouped by type.
 
         Returns:
-            the best candidate.
+            optimal candidate.
         """
-        _ = self._factory.create_candidates(graph, data)
-        best_candidate = self._choose_best()
+        candidates_with_clusters = self._candidates_factory.create_candidates(graph, data)
+        self._evaluate(candidates_with_clusters)
+        best_candidate = self._choose_best(self._metrics_storage)
+
+        shift = self._metrics_storage.get_timeshift_table()[best_candidate]
+        mom = self._metrics_storage.get_mom_table()[best_candidate]
+        error = self._metrics_storage.get_error_table()[best_candidate]
+
+        print(f"Best candidate metrics: mom={mom}, error={error}, shift={shift}\n")
+
+        self._metrics_storage.clear()
+
         return best_candidate
 
+    def _evaluate(self, items: Iterable[CandidateWithClusters]) -> None:
+        """Evaluates candidates.
+
+        Args:
+            items: graph candidates with measurement clusters.
+        """
+
+        for item in items:
+            can = item.candidate
+
+            result = self._metrics_factory.evaluate(item)
+
+            self._metrics_storage.add_mom(can, result.mom)
+            self._metrics_storage.add_connectivity(can, result.connectivity)
+            self._metrics_storage.add_timeshift(can, result.timeshift)
+            self._metrics_storage.add_solver_error(can, result.solver_error)
+
     @staticmethod
-    def _choose_best() -> GraphCandidate:
+    def _choose_best(storage: MetricsStorage) -> GraphCandidate:
         """Chooses the best candidate.
+
+        Args:
+            storage: a storage with metrics.
 
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = MetricsStorage.get_mom_table()
+        table = storage.get_mom_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
-            connectivity = MetricsStorage.get_connectivity_status(candidate)
+            connectivity = storage.get_connectivity_status(candidate)
             if connectivity:
-                MetricsStorage.clear()
                 return candidate
 
         raise ItemNotExistsError("No best candidate exists.")

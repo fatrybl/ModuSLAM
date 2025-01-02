@@ -9,6 +9,11 @@ from phd.moduslam.map_manager.map_factories.lidar_map.config import (
 
 
 def get_config() -> LidarPointCloudConfig:
+    """Initializes and validates a Hydra-based configuration for processing point clouds.
+
+    Returns:
+        a configuration.
+    """
     cs = ConfigStore.instance()
     cs.store(name="base_lidar_pointcloud", node=LidarPointCloudConfig)
 

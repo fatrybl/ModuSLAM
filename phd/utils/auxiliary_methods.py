@@ -3,8 +3,10 @@
 Any method used in multiple modules/packages may be defined here.
 """
 
+import functools
 import logging
 import re
+import time
 from collections.abc import Callable, Iterable
 from functools import wraps
 from importlib import import_module
@@ -24,6 +26,19 @@ from phd.moduslam.custom_types.numpy import VectorN
 from phd.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(utils)
+
+
+def timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        value = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        run_time = end_time - start_time
+        print("Finished {} in {} secs".format(repr(func.__name__), run_time))
+        return value
+
+    return wrapper
 
 
 def exception_handler(custom_exception: type[Exception], message: str) -> Callable:

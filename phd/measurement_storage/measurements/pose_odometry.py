@@ -13,14 +13,14 @@ class Odometry(TimeRangeMeasurement):
         self,
         timestamp: int,
         time_range: TimeRange,
-        pose: Matrix4x4,
-        position_covariance: Matrix3x3,
+        transformation: Matrix4x4,
+        transition_covariance: Matrix3x3,
         orientation_covariance: Matrix3x3,
     ):
         self._timestamp = timestamp
         self._time_range = time_range
-        self._pose = pose
-        self._position_covariance = position_covariance
+        self._tf = transformation
+        self._trans_covariance = transition_covariance
         self._orientation_covariance = orientation_covariance
 
     @property
@@ -34,14 +34,14 @@ class Odometry(TimeRangeMeasurement):
         return self._time_range
 
     @property
-    def pose(self) -> Matrix4x4:
-        """SE(3) pose."""
-        return self._pose
+    def transformation(self) -> Matrix4x4:
+        """SE(3) transformation."""
+        return self._tf
 
     @property
-    def position_covariance(self) -> Matrix3x3:
-        """Noise covariance matrix of the position [x, y, z] part."""
-        return self._position_covariance
+    def transition_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the transition [x, y, z] part."""
+        return self._trans_covariance
 
     @property
     def orientation_covariance(self) -> Matrix3x3:
@@ -55,12 +55,14 @@ class OdometryWithElements(Odometry, WithRawElements):
         self,
         timestamp: int,
         time_range: TimeRange,
-        pose: Matrix4x4,
-        position_covariance: Matrix3x3,
+        transformation: Matrix4x4,
+        transition_covariance: Matrix3x3,
         orientation_covariance: Matrix3x3,
         elements: list[Element],
     ):
-        super().__init__(timestamp, time_range, pose, position_covariance, orientation_covariance)
+        super().__init__(
+            timestamp, time_range, transformation, transition_covariance, orientation_covariance
+        )
         self._elements = elements
 
     @property

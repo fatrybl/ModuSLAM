@@ -1,30 +1,26 @@
-from collections.abc import Iterable
+import logging
+from collections.abc import Iterable, Sequence
 
 import numpy as np
 import open3d as o3d
-from map_metrics.config import LidarConfig
-from map_metrics.metrics import mom
 
 from phd.external.metrics.base import Metrics
+from phd.logger.logging_config import frontend_manager
+from phd.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from phd.modified_mom.config import LidarConfig
+from phd.modified_mom.metrics import mom
 from phd.moduslam.custom_types.aliases import Matrix4x4
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from phd.moduslam.custom_types.numpy import MatrixNx3
-from phd.moduslam.data_manager.batch_factory.config_factory import (
-    get_config as get_bf_config,
-)
 from phd.moduslam.data_manager.batch_factory.data_objects import Element
 from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
 from phd.moduslam.frontend_manager.main_graph.edges.base import Edge
-from phd.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
-    VertexStorage,
-)
+from phd.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
+from phd.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from phd.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from phd.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from phd.moduslam.map_manager.map_factories.lidar_map.config import (
     LidarPointCloudConfig,
-)
-from phd.moduslam.map_manager.map_factories.lidar_map.config_factory import (
-    get_config as get_pointcloud_config,
 )
 from phd.moduslam.map_manager.map_factories.lidar_map.utils import (
     create_pose_edges_table,
@@ -39,60 +35,95 @@ from phd.moduslam.map_manager.map_factories.utils import (
 from phd.moduslam.sensors_factory.sensors import Lidar3D
 from phd.utils.auxiliary_objects import identity4x4
 from phd.utils.exceptions import ExternalModuleException
+from phd.utils.ordered_set import OrderedSet
+
+logger = logging.getLogger(frontend_manager)
 
 
 class PlaneOrthogonality(Metrics):
+    """Computes the MOM metrics:
+    https://www.researchgate.net/publication/352572583_Be_your_own_Benchmark_No-Reference_Trajectory_Metric_on_Registered_Point_Clouds.
+    """
 
-    def __init__(self):
-        bf_config = get_bf_config()
-        self._point_cloud_config = get_pointcloud_config()
+    def __init__(self, point_cloud_config: LidarPointCloudConfig, batch_factory: BatchFactory):
+        """
+        Args:
+            point_cloud_config: a configuration for processing point clouds.
+
+            batch_factory: a factory for creating elements.
+        """
+        self._point_cloud_config = point_cloud_config
         self._mom_config = LidarConfig()
-        self._batch_factory = BatchFactory(bf_config)
+        self._mom_config.EIGEN_SCALE = 10
+        self._mom_config.MIN_CLUST_SIZE = 5
+        self._mom_config.KNN_RAD = 1.5
 
-    def compute(self, storage: VertexStorage, connections: dict[Vertex, set[Edge]]) -> float:
+        self._batch_factory = batch_factory
+
+    def compute(self, connections: dict[Vertex, set[Edge]], elements: list[GraphElement]) -> float:
         """Computes the MOM metrics.
 
         Args:
-            storage: a storage with vertices.
-
             connections: connections between vertices.
+
+            elements: new graph elements.
 
         Returns:
             MOM metric value.
         """
+        new_edges = [el.edge for el in elements]
+        poses = self._get_poses(new_edges)
 
-        poses = storage.get_vertices(Pose)
-        pose_arrays = [np.array(pose.value) for pose in poses]
+        pose_arrays = [np.array(p.value) for p in poses]
 
-        point_clouds = self._create_point_clouds(poses, connections)
+        poses_with_edges = {p: connections[p] for p in poses}
+
+        point_clouds = self._create_point_clouds(poses_with_edges)
 
         value = self._compute_mom(pose_arrays, point_clouds, self._mom_config)
         return value
 
+    @staticmethod
+    def _get_poses(edges: Sequence[Edge]) -> OrderedSet[Pose]:
+        """Gets poses used to create the edges with Lidar odometry.
+
+        Args:
+            edges: graph edges.
+
+        Returns:
+            poses.
+        """
+        poses = OrderedSet[Pose]()
+
+        for edge in edges:
+            m = edge.measurement
+
+            if isinstance(edge, PoseOdometry) and isinstance(m, OdometryWithElements):
+                poses.add(edge.vertex1)
+                poses.add(edge.vertex2)
+
+        return poses
+
     def _create_point_clouds(
-        self, poses: Iterable[Pose], connections: dict[Vertex, set[Edge]]
+        self, connections: dict[Pose, set[Edge]]
     ) -> list[o3d.geometry.PointCloud]:
         """Creates clouds of raw lidar points for the given poses.
 
         Args:
-            poses: poses to create point clouds for.
-
-            connections: connections between vertices.
+            connections: table of poses and connected edges.
 
         Returns:
             point clouds.
         """
-        table1 = {p: connections[p] for p in poses}
+        table1 = create_pose_edges_table(connections)
 
-        table2 = create_pose_edges_table(table1)
+        table2 = map_elements2vertices(table1)
 
-        table3 = map_elements2vertices(table2)
-
-        table4 = fill_elements(table3, self._batch_factory)
+        table3 = fill_elements(table2, self._batch_factory)
 
         point_clouds: list[o3d.geometry.PointCloud] = []
 
-        for pose, elements in table4.items():
+        for pose, elements in table3.items():
             cloud = self._create_point_cloud(elements, self._point_cloud_config)
             point_clouds.append(cloud)
 
@@ -173,7 +204,7 @@ class PlaneOrthogonality(Metrics):
         """
         try:
             value = mom(point_clouds, poses, config=config)
-        except Exception:
-            raise ExternalModuleException
+        except Exception as e:
+            raise ExternalModuleException(e)
 
         return value

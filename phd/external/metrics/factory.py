@@ -1,39 +1,58 @@
+from dataclasses import dataclass
+
+from phd.bridge.auxiliary_dataclasses import CandidateWithClusters
 from phd.external.metrics.orthogonality import PlaneOrthogonality
-from phd.external.metrics.storage import MetricsStorage
+from phd.external.metrics.solver_error import SolverError
 from phd.external.metrics.timeshift import TimeShift
 from phd.external.metrics.vertices_connectivity import VerticesConnectivity
-from phd.measurement_storage.cluster import MeasurementCluster
-from phd.moduslam.backend_manager.graph_solver import GraphSolver
-from phd.moduslam.frontend_manager.main_graph.graph import GraphCandidate
+from phd.moduslam.data_manager.batch_factory.config_factory import (
+    get_config as get_bf_config,
+)
+from phd.moduslam.data_manager.batch_factory.factory import BatchFactory
+from phd.moduslam.map_manager.map_factories.lidar_map.config_factory import (
+    get_config as get_pcd_config,
+)
+
+
+@dataclass
+class MetricsResult:
+    """Metrics result."""
+
+    mom: float
+    solver_error: float
+    connectivity: bool
+    timeshift: int
 
 
 class MetricsFactory:
     """Manages all metrics."""
 
     def __init__(self):
-        self._mom = PlaneOrthogonality()
+        bf_config = get_bf_config()
+        pcd_config = get_pcd_config()
+        bf = BatchFactory(bf_config)
+        self._mom = PlaneOrthogonality(pcd_config, bf)
+        self._solver_error = SolverError()
 
-    def evaluate(self, candidate: GraphCandidate, clusters: list[MeasurementCluster]) -> None:
+    def evaluate(self, item: CandidateWithClusters) -> MetricsResult:
         """Evaluates a candidate with measurement clusters.
 
         Args:
-            candidate: a candidate to evaluate.
+            item: a candidate with clusters of measurements to evaluate.
 
-            clusters: measurement clusters for the candidate.
+        Returns:
+            metrics result.
         """
-        graph = candidate.graph
+        graph = item.candidate.graph
+        elements = item.candidate.elements
         connections = graph.connections
         all_vertices = connections.keys()
 
-        solver = GraphSolver()
-        values, error = solver.solve(graph)
+        values, error = self._solver_error.compute(graph)
         graph.update_vertices(values)
 
-        timeshift = TimeShift.compute(clusters)
-        connectivity = VerticesConnectivity.compute(all_vertices, candidate.elements)
-        map_orthogonality = self._mom.compute(graph.vertex_storage, connections)
-
-        MetricsStorage.add_mom(candidate, map_orthogonality)
-        MetricsStorage.add_error(candidate, error)
-        MetricsStorage.add_connectivity(candidate, connectivity)
-        MetricsStorage.add_timeshift(candidate, timeshift)
+        timeshift = TimeShift.compute(item.clusters)
+        connectivity = VerticesConnectivity.compute(all_vertices, elements)
+        mom = self._mom.compute(connections, elements)
+        # mom = 0
+        return MetricsResult(mom, error, connectivity, timeshift)

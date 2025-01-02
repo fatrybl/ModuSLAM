@@ -11,6 +11,7 @@ from phd.logger.logging_config import frontend_manager
 from phd.measurement_storage.measurements.pose_odometry import OdometryWithElements
 from phd.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
 from phd.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
+from phd.moduslam.custom_types.numpy import MatrixNx3
 from phd.moduslam.data_manager.batch_factory.batch import Element
 from phd.moduslam.data_manager.batch_factory.utils import create_empty_element
 from phd.moduslam.sensors_factory.sensors import Lidar3D
@@ -33,15 +34,11 @@ class ScanMatcher(Handler):
         Args:
             config: handler configuration with parameters for Kiss-ICP scan matcher.
         """
-        self._sensor_name = config.sensor_name
         cfg = self._to_kiss_icp_config(config)
+        self._sensor_name = config.sensor_name
+        self._noise_covariance = config.measurement_noise_covariance
         self._scan_matcher = KissICP(cfg)
         self._elements_queue: list[Element] = []
-        self._noise_covariance = config.measurement_noise_covariance
-        self._previous_pose: NumpyMatrix4x4 = np.eye(4)
-
-        # self._visualizer = RegistrationVisualizer()
-        # self._visualizer.global_view = True
 
     @property
     def sensor_name(self) -> str:
@@ -59,7 +56,7 @@ class ScanMatcher(Handler):
         computed for a single point cloud.
 
         Args:
-            element: element with raw pointcloud data.
+            element: element with raw point cloud data.
 
         Returns:
             measurement or None.
@@ -79,28 +76,21 @@ class ScanMatcher(Handler):
 
         self._elements_queue.append(element)
 
-        point_cloud: np.ndarray = self._tuple_to_array(element.measurement.values)
+        point_cloud = self._tuple_to_array(element.measurement.values)
 
-        timestamp = element.timestamp
+        t = element.timestamp
 
-        _, _ = self._scan_matcher.register_frame(frame=point_cloud, timestamps=[timestamp])
-
-        # self._visualizer.update(
-        #     source, keypoints, self._scan_matcher.local_map, self._scan_matcher.poses[-1]
-        # )
+        self._scan_matcher.register_frame(frame=point_cloud, timestamps=[t])
 
         if len(self._elements_queue) == self._elements_queue_size:
 
-            current_pose = self._scan_matcher.last_pose
+            d_tf = self._scan_matcher.last_delta
 
-            tf_local = self._transformation(self._previous_pose, current_pose)
-            tf_base = tf_base_sensor @ tf_local @ tf_base_sensor_inv
+            d_tf_base = tf_base_sensor @ d_tf @ tf_base_sensor_inv
 
-            new_measurement = self._create_measurement(tf_base)
+            new_measurement = self._create_measurement(d_tf_base)
 
             self._elements_queue.pop(0)
-
-            self._previous_pose = current_pose
 
             return new_measurement
 
@@ -125,22 +115,7 @@ class ScanMatcher(Handler):
         kiss_cfg.data.deskew = config.deskew
         return kiss_cfg
 
-    @staticmethod
-    def _transformation(pose_i: NumpyMatrix4x4, pose_j: NumpyMatrix4x4) -> NumpyMatrix4x4:
-        """Computes the transformation between two poses: T = inv(Pi) @ Pj.
-
-        Args:
-            pose_i: SE(3) matrix.
-
-            pose_j: SE(3) matrix.
-
-        Returns:
-            transformation matrix SE(3).
-        """
-        tf = np.linalg.inv(pose_i) @ pose_j
-        return tf
-
-    def _tuple_to_array(self, values: tuple[float, ...]) -> np.ndarray:
+    def _tuple_to_array(self, values: tuple[float, ...]) -> MatrixNx3:
         """Converts raw lidar data to numpy array of shape [N,3].
 
         Args:

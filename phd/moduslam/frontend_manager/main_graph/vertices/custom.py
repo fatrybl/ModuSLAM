@@ -150,7 +150,10 @@ class NavState(OptimizableVertex):
             value: GTSAM values.
         """
         self._backend_instance = value.atNavState(self.backend_index)
-        self._value = self._backend_instance.pose().matrix(), self._backend_instance.velocity()
+        self._value = (
+            self._backend_instance.transformation().matrix(),
+            self._backend_instance.velocity(),
+        )
 
 
 class Point3D(OptimizableVertex):

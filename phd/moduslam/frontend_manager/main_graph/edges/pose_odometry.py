@@ -26,10 +26,10 @@ class PoseOdometry(BinaryEdge):
         """
 
         super().__init__()
-        self._vertex1 = pose_i
-        self._vertex2 = pose_j
+        self._pose_i = pose_i
+        self._pose_j = pose_j
         self._measurement = measurement
-        tf = gtsam.Pose3(measurement.pose)
+        tf = gtsam.Pose3(measurement.transformation)
         self._factor = gtsam.BetweenFactorPose3(
             pose_i.backend_index, pose_j.backend_index, tf, noise_model
         )
@@ -41,15 +41,15 @@ class PoseOdometry(BinaryEdge):
 
     @property
     def vertex1(self) -> Pose:
-        return self._vertex1
+        return self._pose_i
 
     @property
     def vertex2(self) -> Pose:
-        return self._vertex2
+        return self._pose_j
 
     @property
     def vertices(self) -> tuple[Pose, Pose]:
-        return self._vertex1, self._vertex2
+        return self._pose_i, self._pose_j
 
     @property
     def measurement(self) -> OdometryMeasurement:

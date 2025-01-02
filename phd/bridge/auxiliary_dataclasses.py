@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.base import Measurement
+from phd.moduslam.frontend_manager.main_graph.graph import GraphCandidate
 from phd.utils.exceptions import ValidationError
 
 
@@ -29,3 +30,11 @@ class ClustersWithConnections:
 class ClustersWithLeftovers:
     clusters: list[MeasurementCluster]
     leftovers: list[Measurement]
+
+
+@dataclass
+class CandidateWithClusters:
+    """Graph candidate with clusters of measurements."""
+
+    candidate: GraphCandidate
+    clusters: list[MeasurementCluster]

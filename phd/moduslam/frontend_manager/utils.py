@@ -31,6 +31,8 @@ def distribute_element(handlers: Iterable[Handler], element: Element) -> Measure
             if new_measurement:
                 return new_measurement
 
+            break
+
     return None
 
 
@@ -56,6 +58,7 @@ def fill_storage(
         NotEnoughMeasurementsError: not enough data to fill the storage.
     """
     enough_measurements = False
+
     while not enough_measurements and not data.empty:
         element = data.first
         data.remove_first()

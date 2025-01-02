@@ -5,7 +5,6 @@ from collections.abc import Iterable, Sequence
 import cv2
 import numpy as np
 from PIL.Image import Image, fromarray
-from PIL.ImageFile import ImageFile
 
 from moduslam.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
 from moduslam.utils.auxiliary_dataclasses import Position, VisualFeature
@@ -32,7 +31,7 @@ class KeypointDetector:
         return keypoints, descriptors
 
     @staticmethod
-    def undistort_image(image: ImageFile, camera_matrix: Matrix3x3, dist_coeffs: VectorN) -> Image:
+    def undistort_image(image: Image, camera_matrix: Matrix3x3, dist_coeffs: VectorN) -> Image:
         """Removes distortion of an image and recomputes the camera matrix.
 
         Args:
@@ -110,7 +109,7 @@ class KeypointDetector:
             features.append(feature)
         return features
 
-    def get_visual_features(self, image: ImageFile | Image) -> list[VisualFeature]:
+    def get_visual_features(self, image: Image) -> list[VisualFeature]:
         """Gets visual features from an image.
 
         Args:

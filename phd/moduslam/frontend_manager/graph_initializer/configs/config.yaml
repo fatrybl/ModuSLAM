@@ -6,7 +6,8 @@ defaults:
   - _self_
 
 pose1:
-  timestamp: 1544581170279399000
+  #  timestamp: 1544581170279399000
+  timestamp: 1544581170343974000
   noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
 
 #pose2:
@@ -16,8 +17,8 @@ pose1:
 #
 #velocity1:
 #  timestamp: 1544581170279399000
-#  noise_covariance: [ 1e-1, 1e-1, 1e-1 ] # Vx, Vy, Vz
-#  measurement: [ 1.3, 0, 0 ]
+#  noise_covariance: [ 1e-1, 1e-1, 1e-2 ] # Vx, Vy, Vz
+#  measurement: [ 1.1, 0, 0 ]
 
 #bias1:
 #  timestamp: 1544581170279399000

@@ -25,27 +25,25 @@ def map_elements2vertices(
         "pose -> elements" table.
 
     Raises:
-        TypeError: if odometry measurement is not of type OdometryWithElements".
+        LookupError: none of edge`s vertices is a key in the input table.
     """
-    used_edges: set[PoseOdometry] = set()
     table: dict[Pose, set[Element]] = defaultdict(set)
 
-    for vertex, edges in vertex_edges_table.items():
+    for current_pose, edges in vertex_edges_table.items():
         for edge in edges:
-            if edge not in used_edges:
-                v1 = edge.vertex1
-                v2 = edge.vertex2
+            measurement = edge.measurement
+            pose1, pose2 = edge.vertex1, edge.vertex2
 
-                measurement = edge.measurement
-                if isinstance(measurement, OdometryWithElements):
-                    first_element = measurement.elements[0]
-                    second_element = measurement.elements[1]
-                    table[v1].add(first_element)
-                    table[v2].add(second_element)
-                    used_edges.add(edge)
+            if isinstance(measurement, OdometryWithElements):
+                el1 = measurement.elements[0]
+                el2 = measurement.elements[1]
+
+                if current_pose is pose1:
+                    table[current_pose].add(el1)
+                elif current_pose is pose2:
+                    table[current_pose].add(el2)
                 else:
-                    raise TypeError(f"Measurement{measurement} is not of type OdometryWithElements")
-
+                    raise LookupError(f"Current pose {current_pose} is not in the edge {edge}")
     return table
 
 
@@ -75,16 +73,12 @@ def create_pose_edges_table(
     Returns:
         "pose -> pose odometries" table.
     """
-    table: dict[Pose, set[PoseOdometry]] = {}
+    table: defaultdict[Pose, set[PoseOdometry]] = defaultdict(set)
 
     for vertex, edges in pose_edges_table.items():
         for edge in edges:
-            if isinstance(edge, PoseOdometry) and isinstance(
-                edge.measurement, OdometryWithElements
-            ):
-                if vertex not in table:
-                    table[vertex] = {edge}
-                else:
-                    table[vertex].add(edge)
+            m = edge.measurement
+            if isinstance(edge, PoseOdometry) and isinstance(m, OdometryWithElements):
+                table[vertex].add(edge)
 
     return table

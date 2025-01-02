@@ -27,11 +27,6 @@ class FrontendManager:
         """Main graph."""
         return self._graph
 
-    @graph.setter
-    def graph(self, graph: Graph) -> None:
-        """Sets main graph."""
-        self._graph = graph
-
     @staticmethod
     def create_prior_measurements() -> list[Measurement]:
         """Create prior measurements.

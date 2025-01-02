@@ -33,7 +33,7 @@ class PoseToLandmark(BinaryEdge):
         self._vertex2 = landmark
         self._measurement = measurement
         self._factor = gtsam.BetweenFactorPose3(
-            pose.backend_index, landmark.backend_index, measurement.pose, noise_model
+            pose.backend_index, landmark.backend_index, measurement.transformation, noise_model
         )
 
     @property

@@ -138,6 +138,6 @@ class Factory(EdgeFactory):
         """
 
         noise = pose_block_diagonal_noise_model(
-            measurement.position_covariance, measurement.orientation_covariance
+            measurement.transition_covariance, measurement.orientation_covariance
         )
         return PoseOdometry(pose_i, pose_j, measurement, noise)

@@ -27,7 +27,7 @@ def add_elements_to_graph(
         graph.add_element(new_elements)
 
 
-def process_leftovers(
+def get_clusters_and_leftovers(
     item: list[MeasurementCluster] | ClustersWithLeftovers,
 ) -> tuple[list[MeasurementCluster], list[Measurement]]:
     """Returns clusters and leftovers.

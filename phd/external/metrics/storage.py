@@ -5,48 +5,41 @@ from phd.utils.exceptions import ItemNotExistsError
 class MetricsStorage:
     """Stores metrics for graph candidates."""
 
-    _timeshift_table: dict[GraphCandidate, int] = {}
-    _error_table: dict[GraphCandidate, float] = {}
-    _connectivity_table: dict[GraphCandidate, bool] = {}
-    _mom_table: dict[GraphCandidate, float] = {}
+    def __init__(self):
+        self._timeshift_table: dict[GraphCandidate, int] = {}
+        self._error_table: dict[GraphCandidate, float] = {}
+        self._connectivity_table: dict[GraphCandidate, bool] = {}
+        self._mom_table: dict[GraphCandidate, float] = {}
 
-    @classmethod
-    def add_mom(cls, candidate: GraphCandidate, value: float) -> None:
+    def add_mom(self, candidate: GraphCandidate, value: float) -> None:
         """Adds MOM-metric value to the table."""
-        cls._mom_table[candidate] = value
+        self._mom_table[candidate] = value
 
-    @classmethod
-    def add_connectivity(cls, candidate: GraphCandidate, value: bool) -> None:
+    def add_connectivity(self, candidate: GraphCandidate, value: bool) -> None:
         """Adds connectivity value to the table."""
-        cls._connectivity_table[candidate] = value
+        self._connectivity_table[candidate] = value
 
-    @classmethod
-    def add_timeshift(cls, candidate: GraphCandidate, value: int) -> None:
+    def add_timeshift(self, candidate: GraphCandidate, value: int) -> None:
         """Adds timeshift value to the table."""
-        cls._timeshift_table[candidate] = value
+        self._timeshift_table[candidate] = value
 
-    @classmethod
-    def add_error(cls, candidate: GraphCandidate, value: float) -> None:
-        """Adds error value to the table."""
-        cls._error_table[candidate] = value
+    def add_solver_error(self, candidate: GraphCandidate, value: float) -> None:
+        """Adds solver error value to the table."""
+        self._error_table[candidate] = value
 
-    @classmethod
-    def get_mom_table(cls) -> dict[GraphCandidate, float]:
+    def get_mom_table(self) -> dict[GraphCandidate, float]:
         """The table with candidates and MOM values."""
-        return cls._mom_table
+        return self._mom_table
 
-    @classmethod
-    def get_error_table(cls) -> dict[GraphCandidate, float]:
+    def get_error_table(self) -> dict[GraphCandidate, float]:
         """The table with candidates and solver error values."""
-        return cls._error_table
+        return self._error_table
 
-    @classmethod
-    def get_timeshift_table(cls) -> dict[GraphCandidate, int]:
+    def get_timeshift_table(self) -> dict[GraphCandidate, int]:
         """The table with candidates and accumulative time shifts."""
-        return cls._timeshift_table
+        return self._timeshift_table
 
-    @classmethod
-    def get_connectivity_status(cls, candidate: GraphCandidate) -> bool:
+    def get_connectivity_status(self, candidate: GraphCandidate) -> bool:
         """The connectivity status of the candidate.
 
         Args:
@@ -56,14 +49,13 @@ class MetricsStorage:
             ItemNotExistsError: if no connectivity status exists for the given candidate.
         """
         try:
-            return cls._connectivity_table[candidate]
+            return self._connectivity_table[candidate]
         except KeyError:
             raise ItemNotExistsError("No connectivity status exists for the candidate.")
 
-    @classmethod
-    def clear(cls) -> None:
+    def clear(self) -> None:
         """Clears all metrics in the storage."""
-        cls._timeshift_table.clear()
-        cls._error_table.clear()
-        cls._connectivity_table.clear()
-        cls._mom_table.clear()
+        self._timeshift_table.clear()
+        self._error_table.clear()
+        self._connectivity_table.clear()
+        self._mom_table.clear()

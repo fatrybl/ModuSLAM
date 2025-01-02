@@ -31,7 +31,6 @@ scikit-learn = "*"
 opencv-python = "*"
 transformers = "*"
 torch = "*"
-map-metrics = { path = "../map-metrics", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -47,6 +46,7 @@ isort = "*"
 doc8 = "*"
 types-pillow = "*"
 types-psutil = "^6.1.0.20241102"
+polyscope = "^2.3.0"
 
 [build-system]
 requires = ["poetry-core"]

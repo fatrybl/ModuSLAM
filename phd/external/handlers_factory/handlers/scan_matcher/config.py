@@ -7,10 +7,10 @@ from phd.external.handlers_factory.handlers.handler_protocol import HandlerConfi
 class KissIcpScanMatcherConfig(HandlerConfig):
     """Configuration for the KISS ICP odometry."""
 
-    max_points_per_voxel: int = 20
-    voxel_size: float = 1.0
-    adaptive_initial_threshold: float = 2.0
-    min_range: float = 5
+    max_points_per_voxel: int = 5
+    voxel_size: float = 3.0
+    adaptive_initial_threshold: float = 3.0
+    min_range: float = 3
     max_range: float = 120
     deskew: bool = False
     measurement_noise_covariance: tuple[float, float, float, float, float, float] = field(

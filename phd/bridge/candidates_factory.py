@@ -1,11 +1,9 @@
-import logging
 from collections.abc import Iterable
 from copy import deepcopy
 
+from phd.bridge.auxiliary_dataclasses import CandidateWithClusters
 from phd.bridge.distributor import get_factory
-from phd.bridge.utils import add_elements_to_graph, process_leftovers
-from phd.external.metrics.storage import MetricsStorage
-from phd.external.metrics.timeshift import TimeShift
+from phd.bridge.utils import add_elements_to_graph, get_clusters_and_leftovers
 from phd.external.variants_factory import Factory as VariantsFactory
 from phd.measurement_storage.cluster import MeasurementCluster
 from phd.measurement_storage.measurements.base import Measurement
@@ -21,43 +19,44 @@ from phd.utils.auxiliary_dataclasses import TimeRange
 from phd.utils.exceptions import SkipItemException
 from phd.utils.ordered_set import OrderedSet
 
-logger = logging.getLogger(__name__)
-
 
 class Factory:
+    """Creates all possible graph candidates."""
+
     @classmethod
     def create_candidates(
         cls, graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
-    ) -> list[GraphCandidate]:
+    ) -> list[CandidateWithClusters]:
         """Creates graph candidates.
 
         Args:
             graph: a graph to create candidates for.
 
             data: a table of typed Ordered Sets with measurements.
+
+        Returns:
+            graph candidates with clusters of measurements.
         """
-        candidates: list[GraphCandidate] = []
+        items: list[CandidateWithClusters] = []
 
         variants = VariantsFactory.create(data)
 
         for variant in variants:
             graph_copy = deepcopy(graph)
 
-            measurement_clusters, leftovers = process_leftovers(variant)
+            measurement_clusters, leftovers = get_clusters_and_leftovers(variant)
 
-            elements = cls._process_variant(graph_copy, measurement_clusters)
+            elements = cls._create_graph_elements(graph_copy, measurement_clusters)
 
-            candidate = GraphCandidate(graph_copy, elements, leftovers)
-            timeshift = TimeShift.compute(measurement_clusters)
+            graph_candidate = GraphCandidate(graph_copy, elements, leftovers)
+            item = CandidateWithClusters(graph_candidate, measurement_clusters)
 
-            MetricsStorage.add_timeshift(candidate, timeshift)
+            items.append(item)
 
-            candidates.append(candidate)
-
-        return candidates
+        return items
 
     @classmethod
-    def _process_variant(
+    def _create_graph_elements(
         cls, graph: Graph, clusters: list[MeasurementCluster]
     ) -> list[GraphElement]:
         """Creates graph elements for the given graph and list of clusters with
@@ -84,7 +83,6 @@ class Factory:
                 try:
                     item = edge_factory.create(graph, local_db, measurement)
                 except SkipItemException:
-                    logger.debug(f"Skipping measurement:{measurement}")
                     continue
 
                 add_elements_to_graph(graph, item)
