@@ -19,6 +19,37 @@ from src.moduslam.custom_types.numpy import Matrix4x4
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
+def _get_orthogonal_clouds(
+    clouds: list[Cloud], config: BaseConfig, subsets: Iterable[Cloud] | None
+) -> list[np.ndarray]:
+    """Extracts numpy arrays form point clouds.
+
+    Args:
+        clouds: 3D point clouds.
+
+        config: normals estimator parameters.
+
+        subsets: mutually orthogonal subsets.
+
+    Returns:
+        list of matrices.
+    """
+    if subsets:
+        arrays = [np.asarray(cloud.points) for cloud in subsets]
+
+    else:
+        length = len(clouds)
+        if length > 1:
+            idx = length // 2 - 1 if length % 2 == 0 else length // 2
+            pcd = clouds[idx]
+        else:
+            pcd = clouds[0]
+
+        arrays, _, _ = extract_orthogonal_subsets(pcd, normals_config=config)
+
+    return arrays
+
+
 def mom(
     clouds: list[Cloud],
     ts: list[Matrix4x4],
@@ -39,33 +70,24 @@ def mom(
 
     Returns:
         MOM value.
+
+    TODO: add tests.
     """
     pc_map = aggregate_map(clouds, ts)
     points = np.asarray(pc_map.points)
     nn_model = NearestNeighbors(radius=config.knn_rad)
     nn_model.fit(points)
 
-    if subsets:
-        matrices_list = [np.asarray(cloud.points) for cloud in subsets]
-
-    else:
-        length = len(clouds)
-        if length > 1:
-            idx = length // 2 - 1 if length % 2 == 0 else length // 2
-            pcd = clouds[idx]
-        else:
-            pcd = clouds[0]
-
-        matrices_list, _, _ = extract_orthogonal_subsets(pcd, normals_config=config)
+    orth_clouds = _get_orthogonal_clouds(clouds, config, subsets)
 
     orth_axes_stats = []
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [
             executor.submit(
-                compute_variances, matrix, points, nn_model, config.knn_rad, config.min_neighbours
+                compute_variances, cloud, points, nn_model, config.knn_rad, config.min_neighbours
             )
-            for matrix in matrices_list
+            for cloud in orth_clouds
         ]
         for future in concurrent.futures.as_completed(futures):
             orth_axes_stats.append(future.result())
