@@ -1,2 +1,2 @@
-gtsam # latest gtsam for running tests
-open3d
+gtsam==4.2
+open3d==0.18.0

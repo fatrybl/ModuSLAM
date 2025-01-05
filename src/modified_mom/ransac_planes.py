@@ -9,7 +9,6 @@ import torch
 from torch_ransac3d.plane import plane_fit
 
 from src.moduslam.custom_types.numpy import MatrixNx3
-from src.utils.auxiliary_methods import timer
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
@@ -145,7 +144,6 @@ def get_max_clique(planes_with_points: Sequence[PlaneWithPoints], eps: float = 1
     return cliques[max_ind]
 
 
-@timer
 def extract_orthogonal_subsets(pcd: Cloud, eps: float = 1e-1) -> list[MatrixNx3]:
     """Extracts point clouds which mean norman vectors are mutually orthogonal.
 

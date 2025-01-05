@@ -60,7 +60,3 @@ class LidarConfig(BaseConfig):
     MAX_NN: int = 100
     MIN_KNN: int = 10
     EIGEN_SCALE: float = 20
-    # KNN_RAD: float = 1.0
-    # MIN_CLUST_SIZE: int = 5
-    # MAX_NN: int = 30
-    # MIN_KNN: int = 5
