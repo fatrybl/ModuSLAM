@@ -27,7 +27,7 @@ jobs:
           poetry run pip install -r .github/requirements.txt
 
       - name: Set Test Data Directory
-        run: echo "TEST_DATA_DIR=${GITHUB_WORKSPACE}/tests_data" >> $GITHUB_ENV
+        run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
