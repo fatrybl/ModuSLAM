@@ -24,7 +24,7 @@ jobs:
 
       - name: Install pip dependencies
         run: |
-          poetry pip install -r .github/requirements.txt
+          poetry run pip install -r .github/requirements.txt
 
       - name: Set Test Data Directory
         run: echo "TEST_DATA_DIR=$(pwd)/tests_data" >> $GITHUB_ENV

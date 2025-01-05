@@ -5,10 +5,10 @@ import numpy as np
 import open3d as o3d
 
 from src.external.metrics.base import Metrics
+from src.external.metrics.modified_mom.config import LidarConfig
+from src.external.metrics.modified_mom.metrics import mom
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.modified_mom.config import LidarConfig
-from src.modified_mom.metrics import mom
 from src.moduslam.custom_types.aliases import Matrix4x4
 from src.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from src.moduslam.custom_types.numpy import MatrixNx3

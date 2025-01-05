@@ -4,9 +4,9 @@ from pathlib import Path
 import numpy as np
 import open3d as o3d
 
-from src.modified_mom.config import LidarConfig
-from src.modified_mom.metrics import mom
-from src.modified_mom.utils import extract_orthogonal_subsets
+from src.external.metrics.modified_mom.config import LidarConfig
+from src.external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
+from src.external.metrics.modified_mom.metrics import mom
 from src.moduslam.custom_types.numpy import Matrix4x4, MatrixNx3
 from src.moduslam.map_manager.utils import read_4_channel_bin_pcd
 from src.utils.exceptions import DimensionalityError
@@ -222,10 +222,10 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 # Example Usage
 if __name__ == "__main__":
     config = LidarConfig()
-    config.EIGEN_SCALE = 30
-    config.MIN_CLUST_SIZE = 10
-    config.KNN_RAD = 1.5
-    config.MIN_KNN = 10
+    config.eigen_scale = 30
+    config.min_cluster_size = 10
+    config.knn_rad = 1.5
+    config.min_knn = 10
 
     bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_left/1544581170279399000.bin"
     bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170243112000.bin"

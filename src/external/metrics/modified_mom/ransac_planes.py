@@ -15,6 +15,8 @@ Cloud: TypeAlias = o3d.geometry.PointCloud
 
 @dataclass
 class PlaneWithPoints:
+    """Plane (coefficients) with inliers points."""
+
     coefficients: tuple[float, float, float, float]
     points: MatrixNx3
 
@@ -107,7 +109,7 @@ def detect_multiple_planes(
     return result
 
 
-def get_max_clique(planes_with_points: Sequence[PlaneWithPoints], eps: float = 1e-1):
+def find_max_clique(planes_with_points: Sequence[PlaneWithPoints], eps: float = 1e-1):
     """Finds the maximum clique in the graph of planes.
 
     Args:
@@ -158,7 +160,7 @@ def extract_orthogonal_subsets(pcd: Cloud, eps: float = 1e-1) -> list[MatrixNx3]
     points = np.array(pcd.points)
     planes_with_points = detect_multiple_planes(points)
 
-    max_clique = get_max_clique(planes_with_points, eps=eps)
+    max_clique = find_max_clique(planes_with_points, eps=eps)
 
     orth_subset = [planes_with_points[i].points for i in max_clique]
 

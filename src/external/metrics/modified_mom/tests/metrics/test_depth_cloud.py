@@ -6,11 +6,11 @@ import pytest
 from map_metrics.config import DepthConfig as old_depth_config
 from map_metrics.metrics import mom as old_mom
 
-from src.modified_mom.config import DepthConfig
-from src.modified_mom.metrics import mme
-from src.modified_mom.metrics import mom as new_mom
-from src.modified_mom.metrics import mpv
-from src.modified_mom.utils import read_orthogonal_subset
+from src.external.metrics.modified_mom.config import DepthConfig
+from src.external.metrics.modified_mom.metrics import mme
+from src.external.metrics.modified_mom.metrics import mom as new_mom
+from src.external.metrics.modified_mom.metrics import mpv
+from src.external.metrics.modified_mom.utils import read_orthogonal_subset
 
 
 @pytest.fixture

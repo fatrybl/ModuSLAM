@@ -1,61 +1,98 @@
 from typing import TypeAlias
 
-import networkx as nx
 import numpy as np
 import open3d as o3d
-from sklearn.cluster import HDBSCAN
 
-from src.modified_mom.config import BaseConfig
-from src.modified_mom.normals_filter import filter_normals
-from src.moduslam.custom_types.numpy import Matrix4x4, MatrixNx3, Vector3, VectorN
+from src.external.metrics.modified_mom.normals_filter import filter_normals
+from src.moduslam.custom_types.numpy import Matrix4x4, MatrixNx3, VectorN
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
-def extract_orthogonal_subsets(
-    pc: Cloud, config: BaseConfig = BaseConfig()
-) -> tuple[list[MatrixNx3], list[MatrixNx3], list[Vector3]]:
-    """Extracts point clouds which mean norman vectors are mutually orthogonal.
+def aggregate_map(pcs: list[Cloud], ts: list[Matrix4x4]) -> Cloud:
+    """Builds a map from point clouds with their poses.
 
     Args:
-        pc: point cloud.
+        pcs: point clouds obtained from sensors.
 
-        config: configuration for the algorithm.
+        ts: transformation matrices list (i.e., Point Cloud poses).
 
     Returns:
-        orthogonal clouds , normals, clique normals.
+        pc_map: a map aggregated from point clouds.
+
+    Raises:
+        ValueError: the number of point clouds does not match the number of poses.
     """
-    pc_cut = estimate_normals(pc, config.KNN_RAD, config.MAX_NN, config.EIGEN_SCALE)
-    normals = np.asarray(pc_cut.normals)
+    if len(pcs) != len(ts):
+        raise ValueError("Number of point clouds does not match number of poses")
 
-    clustering = HDBSCAN(
-        min_cluster_size=config.MIN_CLUST_SIZE,
-        cluster_selection_epsilon=0.2,
-        alpha=1.5,
-        n_jobs=-1,
-    )
+    pc_map = o3d.geometry.PointCloud()
 
-    clustering.fit(normals)
-    labels = clustering.labels_
+    first_ts_inv = np.linalg.inv(ts[0])
+    new_ts = [first_ts_inv @ T for T in ts]
 
-    cluster_means, cluster_means_ind = filter_clusters(
-        labels, normals, min_clust_size=config.MIN_CLUST_SIZE
-    )
+    for cloud, ts in zip(pcs, new_ts):
+        pc_map += cloud.transform(ts)
 
-    max_clique = find_max_clique(
-        labels, cluster_means, cluster_means_ind, eps=config.ORTHOGONALITY_EPS
-    )
+    return pc_map
 
-    pc_points = np.asarray(pc_cut.points)
-    pc_normals = np.asarray(pc_cut.normals)
 
-    masks = [labels == cluster_means_ind[i] for i in max_clique]
+def compute_plane_variance(points: MatrixNx3) -> float:
+    """Computes plane variance of given points.
 
-    orth_subset = [pc_points[mask] for mask in masks]
-    orth_normals = [pc_normals[mask] for mask in masks]
-    clique_normals = [cluster_means[i] for i in max_clique]
+    Args:
+        points: array of 3D points.
 
-    return orth_subset, orth_normals, clique_normals
+    Returns:
+        points plane variance.
+    """
+    cov = np.cov(points.T)
+    eigenvalues, _ = np.linalg.eigh(cov)
+    return np.min(eigenvalues)
+
+
+def compute_entropy(points: MatrixNx3) -> float | None:
+    """Computes entropy of given points.
+
+    Args:
+        points: array of 3D points.
+
+    Returns:
+        points entropy if computed.
+    """
+    cov = np.cov(points.T)
+    det = np.linalg.det(2 * np.pi * np.e * cov)
+    if det > 0:
+        return 0.5 * np.log(det)
+
+    return None
+
+
+def compute_variances(target_points, source_points, nn_model, knn_rad: float, min_neighbours: int):
+    """Computes plane variances of the clouds made of neighbouring points.
+
+    Args:
+        target_points: target points to find neighbours of.
+
+        source_points: all points.
+
+        nn_model: nearest neighbors model.
+
+        knn_rad: k-nearest neighbors radius.
+
+        min_neighbours: minimum number of neighbours per cloud.
+
+    Returns:
+        median of plane variances.
+    """
+    indices = nn_model.radius_neighbors(target_points, radius=knn_rad, return_distance=False)
+
+    valid_indices = [idx for idx in indices if len(idx) > min_neighbours]
+    if not valid_indices:
+        return np.median([])
+
+    metrics = np.array([compute_plane_variance(source_points[idx]) for idx in valid_indices])
+    return np.median(metrics)
 
 
 def estimate_normals(pc: Cloud, knn_rad: float, max_nn: int, eigen_scale: float) -> Cloud:
@@ -123,43 +160,6 @@ def filter_clusters(
     means = means / np.linalg.norm(means, axis=1)[:, None]
 
     return means, cluster_means_ind
-
-
-def find_max_clique(
-    labels: VectorN, cluster_means: MatrixNx3, cluster_means_ind: list[int], eps: float
-) -> list[int]:
-    """Finds the maximum clique in the graph of cluster mean normals.
-
-    Args:
-        labels: cluster labels.
-
-        cluster_means: cluster mean normals.
-
-        cluster_means_ind: cluster mean indices.
-
-        eps: epsilon value.
-
-    Returns:
-        maximum clique.
-    """
-    dot_products = np.abs(np.dot(cluster_means, cluster_means.T))
-    adj_matrix = (dot_products < eps).astype(int)
-    np.fill_diagonal(adj_matrix, 0)
-
-    D = nx.Graph(adj_matrix)
-    cliques = list(nx.algorithms.clique.find_cliques(D))
-
-    cliques = [clique for clique in cliques if len(clique) > 2]
-    if not cliques:
-        raise ValueError("No cliques of size > 2 found.")
-
-    cliques_sizes = []
-    for clique in cliques:
-        clique_size = sum(np.sum(labels == cluster_means_ind[j]) for j in clique)
-        cliques_sizes.append(clique_size)
-
-    max_ind = np.argmax(cliques_sizes)
-    return cliques[max_ind]
 
 
 def read_orthogonal_subset(subset_path: str, pose_path: str, ts: list[Matrix4x4]):
