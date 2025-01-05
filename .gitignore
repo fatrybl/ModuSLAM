@@ -3,7 +3,5 @@ moduslam.egg-info
 .vscode
 __pycache__
 logs
-data
 dist
-outputs
 *.pdf

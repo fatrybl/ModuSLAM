@@ -1,0 +1,2 @@
+gtsam # latest gtsam for running tests
+open3d
