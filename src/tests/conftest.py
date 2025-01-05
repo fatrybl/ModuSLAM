@@ -2,6 +2,9 @@ import os
 from pathlib import Path
 
 env_var: str | None = os.getenv("TEST_DATA_DIR")
+
+print(f"MY ENV VAAAR: {env_var} ")
+
 if env_var is not None:
     test_data_dir = Path(env_var)
 else:
