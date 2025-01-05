@@ -31,6 +31,7 @@ scikit-learn = "*"
 opencv-python = "*"
 transformers = "*"
 torch = "*"
+torch-ransac3d = "^1.0.36"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

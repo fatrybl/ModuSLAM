@@ -1,4 +1,0 @@
-# @package _global_
-defaults:
-  - override /setup_manager: vrs_imu
-  - override /frontend_manager: vrs_imu
