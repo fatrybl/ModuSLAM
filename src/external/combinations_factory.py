@@ -1,5 +1,4 @@
-"""TODO: fix example in _main_."""
-
+from collections import OrderedDict
 from collections.abc import Iterable
 from typing import TypeVar
 
@@ -46,31 +45,31 @@ class Factory:
 
     @classmethod
     def _create_combinations(cls, items: list[str]) -> list[list[str]]:
-        """Creates all possible merges.
+        """Creates all possible merges in deterministic order.
 
         Args:
             items: items to create combinations of.
 
         Returns:
-            list of combinations.
+            list of combinations in deterministic order.
         """
-
         if len(items) == 1:
             return [items]
 
-        unique_results = set()
+        unique_results = OrderedDict[tuple[str, ...], None]()
         queue = [items]
 
-        unique_results.add(tuple(items))
+        unique_results[tuple(items)] = None
 
         while queue:
-            current = queue.pop()
+            current = queue.pop(0)  # Process in FIFO order for consistency
             merged_results = cls._merge_adjacent(current)
-            unique_results.update(merged_results)
 
             for merged_seq in merged_results:
-                if len(merged_seq) > 1:  # Continue merging if more than one element
-                    queue.append(list(merged_seq))
+                merged_tuple = tuple(merged_seq)
+                if merged_tuple not in unique_results:
+                    unique_results[merged_tuple] = None
+                    queue.append(merged_seq)
 
         return [list(seq) for seq in unique_results]
 
@@ -113,20 +112,20 @@ class Factory:
         return decoded_sequence
 
     @classmethod
-    def _merge_adjacent(cls, items: list[str]) -> set[tuple[str, ...]]:
-        """Merges adjacent items.
+    def _merge_adjacent(cls, items: list[str]) -> list[list[str]]:
+        """Merges adjacent items deterministically.
 
         Args:
             items: items to merge.
 
         Returns:
-            unique merges.
+            unique merges in deterministic order.
         """
-        results = set()
+        results = []
         num_items = len(items)
         for i in range(num_items - 1):
             merged = items[:i] + [f"{items[i]}{cls._splitter}{items[i + 1]}"] + items[i + 2 :]
-            results.add(tuple(merged))  # Use tuple to store in a set
+            results.append(merged)
         return results
 
 
@@ -142,9 +141,7 @@ if __name__ == "__main__":
     g2.add(m2)
     g3.add(m3)
 
-    sequence = (g1, g2, g3)
-
-    combinations = Factory.combine(sequence)
+    combinations = Factory.combine((g1, g2, g3))
 
     for c in combinations:
         print(c)

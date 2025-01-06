@@ -1,5 +1,3 @@
-"""TODO: fix __main__ example or remove."""
-
 import math
 from collections.abc import Sequence
 
@@ -65,9 +63,7 @@ if __name__ == "__main__":
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
     m3 = PseudoMeasurement(3, "c")
-    c1 = MeasurementCluster()
-    c2 = MeasurementCluster()
-    c3 = MeasurementCluster()
+    c1, c2, c3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
 
     c1.add(m1)
     c2.add(m2)

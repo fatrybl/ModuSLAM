@@ -1,3 +1,5 @@
+from typing import cast
+
 from src.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from src.bridge.preprocessors.fake_measurement_factory import add_fake_cluster
 from src.bridge.preprocessors.pose_odometry import split_odometry
@@ -16,37 +18,103 @@ class Factory:
     @classmethod
     def create(
         cls, data: dict[type[Measurement], OrderedSet[Measurement]]
-    ) -> list[ClustersWithLeftovers] | list[list[MeasurementCluster]]:
-        """Creates combinations of clusters w or w/o leftover measurements.
+    ) -> list[ClustersWithLeftovers]:
+        """Creates combinations of clusters with leftover measurements.
 
         Args:
             data: table of typed Ordered Sets with measurements.
 
         Returns:
-            combinations of clusters w or w/o leftover measurements.
-
-        TODO: add tests !!!.
+            combinations of clusters with leftover measurements.
         """
         core_measurements, imu_measurements = cls._separate_measurements(data)
-        core_measurements = cls._prepare_measurements(core_measurements)
+
+        if not core_measurements:
+            return []
+
+        core_measurements = cls._split_and_sort(core_measurements)
+        imu_measurements = sorted(imu_measurements, key=lambda x: x.timestamp)
+
         groups = group_by_timestamp(core_measurements)
 
-        combinations = CombinationFactory.combine(groups)
-        combinations = remove_loops(combinations)
+        core_combinations = CombinationFactory.combine(groups)
+        core_combinations = remove_loops(core_combinations)
 
-        if imu_measurements:
-            first_imu_t = imu_measurements[0].timestamp
-            first_core_t = core_measurements[0].timestamp
+        start = core_measurements[0].timestamp
+        stop = core_measurements[-1].timestamp
 
-            if first_imu_t < first_core_t:
-                for combination in combinations:
-                    add_fake_cluster(combination, first_imu_t)
+        items = cls._fill_combinations(core_combinations, imu_measurements, start, stop)
 
-            combs_with_leftovers = cls._combine_with_continuous(combinations, imu_measurements)
-            return combs_with_leftovers
+        return items
+
+    @staticmethod
+    def _fill_combinations(
+        core_combinations: list[list[MeasurementCluster]],
+        imu_measurements: list[Imu],
+        start: int,
+        stop: int,
+    ) -> list[ClustersWithLeftovers]:
+        """Combines clusters` combinations with imu measurements (if available).
+
+        Args:
+            core_combinations: combinations of clusters with core measurements.
+
+            imu_measurements: IMU measurements.
+
+            start: start timestamp.
+
+            stop: stop timestamp.
+
+        Returns:
+            combinations with leftover imu measurements (if available).
+        """
+        if not imu_measurements:
+            combinations = Factory._create_cluster_with_leftovers(core_combinations)
 
         else:
-            return combinations
+            first_imu_t = imu_measurements[0].timestamp
+
+            if first_imu_t < start:
+                for comb in core_combinations:
+                    add_fake_cluster(comb, first_imu_t)
+
+            if first_imu_t >= stop:
+                combinations = Factory._create_cluster_with_leftovers(
+                    core_combinations, imu_measurements
+                )
+            else:
+                combinations = Factory._combine_with_continuous(core_combinations, imu_measurements)
+
+        return combinations
+
+    @staticmethod
+    def _create_cluster_with_leftovers(
+        combinations: list[list[MeasurementCluster]],
+        imu_measurements: list[Imu] | None = None,
+    ) -> list[ClustersWithLeftovers]:
+        """Creates clusters with leftover measurements.
+
+        Args:
+            combinations: combinations of clusters.
+
+            imu_measurements: IMU measurements.
+
+        Returns:
+            clusters with leftover measurements.
+        """
+
+        items: list[ClustersWithLeftovers] = []
+
+        for comb in combinations:
+            if comb:
+                if imu_measurements:
+                    leftovers = cast(list[Measurement], imu_measurements)  # avoid MyPy error
+                else:
+                    leftovers = []
+
+                items.append(ClustersWithLeftovers(comb, leftovers))
+
+        return items
 
     @staticmethod
     def _separate_measurements(
@@ -72,11 +140,11 @@ class Factory:
         return core_measurements, imu_measurements
 
     @staticmethod
-    def _prepare_measurements(measurements: list[Measurement]) -> list[Measurement]:
-        """Prepares measurements for further processing.
+    def _split_and_sort(measurements: list[Measurement]) -> list[Measurement]:
+        """Splits and sorts measurements by timestamps.
 
         Args:
-            measurements: different measurements.
+            measurements: list of measurements.
 
         Returns:
             sorted and split measurements.

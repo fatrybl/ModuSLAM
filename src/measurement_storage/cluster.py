@@ -24,7 +24,8 @@ class MeasurementCluster:
         return item in self._measurements or item in self._continuous_measurements
 
     def __repr__(self):
-        return str(self._measurements.items + self._continuous_measurements.items)
+        measurement = list(self._measurements.items) + list(self._continuous_measurements.items)
+        return str(measurement)
 
     @property
     def empty(self) -> bool:
@@ -32,25 +33,27 @@ class MeasurementCluster:
         return not bool(self._continuous_measurements) and not bool(self._measurements)
 
     @property
-    def measurements(self) -> list[Measurement]:
+    def measurements(self) -> tuple[Measurement, ...]:
         """All measurements in the cluster: core + fake + continuous."""
-        return [*self._measurements.items, *self._continuous_measurements.items]
+        tup1 = tuple(self._measurements.items)
+        tup2 = tuple(self._continuous_measurements.items)
+        return tup1 + tup2
 
     @property
-    def core_measurements(self) -> list[Measurement]:
+    def core_measurements(self) -> tuple[Measurement, ...]:
         """Non-fake discrete measurements in the cluster."""
-        cores = [m for m in self._measurements if not isinstance(m, FakeMeasurement)]
+        cores = tuple(m for m in self._measurements if not isinstance(m, FakeMeasurement))
         return cores
 
     @property
-    def continuous_measurements(self) -> list[ContinuousMeasurement]:
+    def continuous_measurements(self) -> tuple[ContinuousMeasurement, ...]:
         """Continuous measurements in the cluster."""
-        return [*self._continuous_measurements.items]
+        return tuple(self._continuous_measurements.items)
 
     @property
-    def fake_measurements(self) -> list[FakeMeasurement]:
+    def fake_measurements(self) -> tuple[FakeMeasurement, ...]:
         """Fake measurements in the cluster."""
-        fakes = [m for m in self._measurements if isinstance(m, FakeMeasurement)]
+        fakes = tuple(m for m in self._measurements if isinstance(m, FakeMeasurement))
         return fakes
 
     @property

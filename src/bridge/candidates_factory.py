@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.distributor import get_factory
-from src.bridge.utils import add_elements_to_graph, get_clusters_and_leftovers
+from src.bridge.utils import add_elements_to_graph
 from src.external.variants_factory import Factory as VariantsFactory
 from src.measurement_storage.cluster import MeasurementCluster
 from src.measurement_storage.measurements.base import Measurement
@@ -44,12 +44,10 @@ class Factory:
         for variant in variants:
             graph_copy = deepcopy(graph)
 
-            measurement_clusters, leftovers = get_clusters_and_leftovers(variant)
+            elements = cls._create_graph_elements(graph_copy, variant.clusters)
 
-            elements = cls._create_graph_elements(graph_copy, measurement_clusters)
-
-            graph_candidate = GraphCandidate(graph_copy, elements, leftovers)
-            item = CandidateWithClusters(graph_candidate, measurement_clusters)
+            graph_candidate = GraphCandidate(graph_copy, elements, variant.leftovers)
+            item = CandidateWithClusters(graph_candidate, variant.clusters)
 
             items.append(item)
 

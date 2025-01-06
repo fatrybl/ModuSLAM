@@ -24,8 +24,8 @@ def test_remove_existing():
 
     assert cluster.empty is True
     assert m1 not in cluster
-    assert cluster.measurements == []
-    assert cluster.fake_measurements == []
+    assert cluster.measurements == ()
+    assert cluster.fake_measurements == ()
 
     with pytest.raises(ValueError):
         _ = cluster.timestamp
@@ -44,7 +44,7 @@ def test_remove_continuous_measurement():
 
     assert cluster.empty is True
     assert continuous_measurement not in cluster
-    assert cluster.continuous_measurements == []
+    assert cluster.continuous_measurements == ()
 
     with pytest.raises(ValueError):
         _ = cluster.timestamp
@@ -64,8 +64,8 @@ def test_remove_last_measurement_updates_timestamp():
 
     assert cluster.empty is True
     assert m1 not in cluster
-    assert cluster.measurements == []
-    assert cluster.fake_measurements == []
+    assert cluster.measurements == ()
+    assert cluster.fake_measurements == ()
 
     with pytest.raises(ValueError):
         _ = cluster.timestamp
@@ -88,8 +88,8 @@ def test_remove_and_readd_same_measurement():
 
     assert cluster.empty is True
     assert m1 not in cluster
-    assert cluster.measurements == []
-    assert cluster.fake_measurements == []
+    assert cluster.measurements == ()
+    assert cluster.fake_measurements == ()
     with pytest.raises(ValueError):
         _ = cluster.timestamp
     with pytest.raises(ValueError):

@@ -11,10 +11,10 @@ from src.measurement_storage.measurements.continuous import ContinuousMeasuremen
 def test_empty_cluster_initialization():
     empty_cluster = MeasurementCluster()
     assert empty_cluster.empty
-    assert empty_cluster.core_measurements == []
-    assert empty_cluster.continuous_measurements == []
-    assert empty_cluster.fake_measurements == []
-    assert empty_cluster.measurements == []
+    assert empty_cluster.core_measurements == ()
+    assert empty_cluster.continuous_measurements == ()
+    assert empty_cluster.fake_measurements == ()
+    assert empty_cluster.measurements == ()
 
     with pytest.raises(ValueError):
         _ = empty_cluster.timestamp

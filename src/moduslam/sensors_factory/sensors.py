@@ -25,10 +25,9 @@ class Sensor:
     """Base sensor."""
 
     def __init__(self, name: str):
-        """Base sensor object.
-
+        """
         Args:
-            name: unique sensor`s name.
+            name: unique sensor name.
         """
         self._name = name
 

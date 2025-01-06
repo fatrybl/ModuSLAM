@@ -118,8 +118,6 @@ class ContinuousImu(ContinuousMeasurement[I]):
 
         Raises:
             ValueError: if the first measurement's timestamp is less than start.
-
-        TODO: change list to tuple for better type checking ?
         """
         if measurements[0].timestamp < start:
             raise ValueError("Start timestamp is less than the first measurement's timestamp.")

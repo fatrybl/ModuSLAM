@@ -1,10 +1,8 @@
-"""TODO: add tests."""
+"""Edge consistency check."""
 
 from src.bridge.auxiliary_dataclasses import Connection
 from src.external.metrics.base import Metrics
 from src.external.utils import get_subsequence
-from src.measurement_storage.cluster import MeasurementCluster
-from src.measurement_storage.measurements.auxiliary import PseudoMeasurement
 from src.measurement_storage.measurements.base import Measurement
 from src.measurement_storage.measurements.continuous import ContinuousMeasurement
 
@@ -35,8 +33,7 @@ class EdgeConsistency(Metrics):
 
     @staticmethod
     def _get_num_elements_between(measurements: list[Measurement], start: int, stop: int) -> int:
-        """Counts the number of elements in a sorted sequence that are within the range
-        [start, stop].
+        """Get number of elements in a sorted sequence which are in the range [start, stop].
 
         Args:
             measurements: discrete measurements sorted by timestamp.
@@ -50,40 +47,3 @@ class EdgeConsistency(Metrics):
         """
         _, start_idx, stop_idx = get_subsequence(measurements, start, stop)
         return stop_idx - start_idx
-
-
-if __name__ == "__main__":
-
-    """Correct consistency example."""
-
-    d1 = PseudoMeasurement(1, "a")
-    d2 = PseudoMeasurement(4, "b")
-    d3 = PseudoMeasurement(7, "c")
-
-    m1 = PseudoMeasurement(1, 1)
-    m2 = PseudoMeasurement(2, 1)
-    m3 = PseudoMeasurement(5, 1)
-    measurement = ContinuousMeasurement(measurements=[m1, m2, m3])
-
-    c1, c2, c3 = MeasurementCluster(), MeasurementCluster(), MeasurementCluster()
-
-    c1.add(d1)
-    c2.add(d2)
-    c3.add(d3)
-
-    con1, con2 = Connection(c1, c2), Connection(c2, c3)
-    connections = [con1, con2]
-
-    consistency = EdgeConsistency.compute(connections, measurement)
-    print(f"Consistency status: {consistency}")
-    """Incorrect consistency example."""
-
-    m1 = PseudoMeasurement(4, 1)
-    m2 = PseudoMeasurement(5, 1)
-    m3 = PseudoMeasurement(6, 1)
-    measurement = ContinuousMeasurement(measurements=[m1, m2, m3])
-
-    connections = [Connection(c1, c2)]
-
-    consistency = EdgeConsistency.compute(connections, measurement)
-    print(f"Consistency status: {consistency}")

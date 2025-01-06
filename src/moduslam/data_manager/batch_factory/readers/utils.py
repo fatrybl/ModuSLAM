@@ -1,6 +1,6 @@
 import csv
 import logging
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+from collections.abc import Iterable, Iterator, Mapping
 from pathlib import Path
 
 import PIL
@@ -15,7 +15,7 @@ logger = logging.getLogger(data_manager)
 
 
 def set_state(
-    sensor_name: str, timestamp: int, data_sequence: Sequence[tuple[int, str, int]], source: Source
+    sensor_name: str, timestamp: int, data_sequence: Iterable[tuple[int, str, int]], source: Source
 ) -> None:
     """Sets the iterator position for the given sensor and timestamp.
 
@@ -30,8 +30,6 @@ def set_state(
 
     Raises:
         ItemNotFoundError: if no measurement found for the sensor at the given timestamp.
-
-    TODO: add tests
     """
     for t, name, position in data_sequence:
         if t == timestamp and name == sensor_name:

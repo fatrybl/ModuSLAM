@@ -28,6 +28,8 @@ class ClustersWithConnections:
 
 @dataclass
 class ClustersWithLeftovers:
+    """Clusters with leftover measurements."""
+
     clusters: list[MeasurementCluster]
     leftovers: list[Measurement]
 

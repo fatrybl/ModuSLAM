@@ -1,3 +1,5 @@
+"""TODO: add tests"""
+
 import concurrent.futures
 from collections.abc import Callable, Iterable
 from typing import TypeAlias
