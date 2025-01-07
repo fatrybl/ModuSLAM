@@ -1,6 +1,5 @@
-from moduslam.custom_types.aliases import Matrix3x3
 from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.custom_types.aliases import Vector3
+from src.moduslam.custom_types.aliases import Matrix3x3, Vector3
 
 
 class Bias(Measurement):

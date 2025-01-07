@@ -1,11 +1,6 @@
 from collections.abc import Iterable
 
-from src.external.metrics.vertices_connectivity import VerticesConnectivity
-from src.moduslam.frontend_manager.main_graph.graph import (
-    Graph,
-    GraphCandidate,
-    GraphElement,
-)
+from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 
 
 def add_elements_to_graph(
@@ -24,24 +19,16 @@ def add_elements_to_graph(
         graph.add_element(new_elements)
 
 
-def remove_unconnected_candidates(candidates: list[GraphCandidate]) -> list[GraphCandidate]:
-    """Removes candidates which new vertices are not fully connected with the main
-    graph.
+def expand_elements(elements: list[GraphElement], item: GraphElement | list[GraphElement]) -> None:
+    """Expands elements with a new item.
 
     Args:
-        candidates: candidates to remove unconnected.
+        elements: a list to expand.
 
-    Returns:
-        new list of graph candidates.
+        item: a new item or a list of new items.
     """
-    new_candidates: list[GraphCandidate] = []
-
-    for candidate in candidates:
-
-        all_vertices = candidate.graph.vertex_storage.vertices
-        is_connected = VerticesConnectivity.compute(all_vertices, candidate.elements)
-
-        if is_connected:
-            new_candidates.append(candidate)
-
-    return new_candidates
+    if isinstance(item, Iterable):
+        for element in item:
+            elements.append(element)
+    else:
+        elements.append(item)

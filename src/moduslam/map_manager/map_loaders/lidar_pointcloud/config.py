@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class LidarMapLoaderConfig:
     """Configuration for lidar pointcloud map loader."""
 
-    directory: str = "/home/mark/Desktop/PhD/ModuSLAM/src/maps/"
+    directory: str = "/home/mark/Desktop/PhD/ModuSLAM/experiments/"
     name: str = "lidar_map"
     file_extension: str = "ply"
     compress: bool = False

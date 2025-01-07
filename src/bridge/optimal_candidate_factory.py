@@ -1,21 +1,24 @@
 # from src.bridge.candidates_factory_no_copy import Factory as CandidatesFactory
+import logging
 from collections.abc import Iterable
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
-from src.bridge.candidates_factory import Factory as CandidatesFactory
+from src.bridge.candidates_factory import create_candidates_with_clusters
 from src.external.metrics.factory import MetricsFactory
 from src.external.metrics.storage import MetricsStorage
+from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.base import Measurement
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
 from src.utils.exceptions import ItemNotExistsError
 from src.utils.ordered_set import OrderedSet
+
+logger = logging.getLogger(frontend_manager)
 
 
 class Factory:
     """Creates suboptimal graph candidate."""
 
     def __init__(self):
-        self._candidates_factory = CandidatesFactory()
         self._metrics_factory = MetricsFactory()
         self._metrics_storage = MetricsStorage()
 
@@ -32,7 +35,7 @@ class Factory:
         Returns:
             optimal candidate.
         """
-        candidates_with_clusters = self._candidates_factory.create_candidates(graph, data)
+        candidates_with_clusters = create_candidates_with_clusters(graph, data)
         self._evaluate(candidates_with_clusters)
         best_candidate = self._choose_best(self._metrics_storage)
 
@@ -40,7 +43,7 @@ class Factory:
         mom = self._metrics_storage.get_mom_table()[best_candidate]
         error = self._metrics_storage.get_error_table()[best_candidate]
 
-        print(f"Best candidate metrics: mom={mom}, error={error}, shift={shift}\n")
+        logger.debug(f"Best candidate metrics: mom={mom}, error={error}, shift={shift}")
 
         self._metrics_storage.clear()
 

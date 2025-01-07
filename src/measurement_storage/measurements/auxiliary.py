@@ -24,10 +24,7 @@ class SplitPoseOdometry(Measurement):
 
 
 class PseudoMeasurement(Measurement):
-    """Pseudo measurement with timestamp and value.
-
-    Does not contain data batch elements.
-    """
+    """Pseudo measurement with timestamp and value."""
 
     def __init__(self, timestamp: int, value: Any = "some value"):
         self._timestamp = timestamp
@@ -42,6 +39,7 @@ class PseudoMeasurement(Measurement):
 
     @property
     def value(self) -> Any:
+        """Value of the measurement."""
         return self._value
 
 

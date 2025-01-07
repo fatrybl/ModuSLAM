@@ -1,9 +1,8 @@
-from collections.abc import Iterable
 from copy import deepcopy
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.distributor import get_factory
-from src.bridge.utils import add_elements_to_graph
+from src.bridge.utils import add_elements_to_graph, expand_elements
 from src.external.variants_factory import Factory as VariantsFactory
 from src.measurement_storage.cluster import MeasurementCluster
 from src.measurement_storage.measurements.base import Measurement
@@ -20,87 +19,62 @@ from src.utils.exceptions import SkipItemException
 from src.utils.ordered_set import OrderedSet
 
 
-class Factory:
-    """Creates all possible graph candidates."""
+def create_graph_elements(graph: Graph, clusters: list[MeasurementCluster]) -> list[GraphElement]:
+    """Creates graph elements for the given graph and list of clusters with
+    measurements.
 
-    @classmethod
-    def create_candidates(
-        cls, graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
-    ) -> list[CandidateWithClusters]:
-        """Creates graph candidates.
+    Args:
+        graph: a graph to create elements for.
 
-        Args:
-            graph: a graph to create candidates for.
+        clusters: list of clusters with measurements.
 
-            data: a table of typed Ordered Sets with measurements.
+    Returns:
+        graph elements.
+    """
+    elements: list[GraphElement] = []
+    local_db: dict[VertexCluster, TimeRange] = {}
 
-        Returns:
-            graph candidates with clusters of measurements.
-        """
-        items: list[CandidateWithClusters] = []
+    for m_cluster in clusters:
+        v_cluster = VertexCluster()
+        local_db.update({v_cluster: m_cluster.time_range})
 
-        variants = VariantsFactory.create(data)
+        for measurement in m_cluster.measurements:
+            edge_factory = get_factory(type(measurement))
 
-        for variant in variants:
-            graph_copy = deepcopy(graph)
+            try:
+                item = edge_factory.create(graph, local_db, measurement)
+            except SkipItemException:
+                continue
 
-            elements = cls._create_graph_elements(graph_copy, variant.clusters)
+            add_elements_to_graph(graph, item)
+            expand_elements(elements, item)
 
-            graph_candidate = GraphCandidate(graph_copy, elements, variant.leftovers)
-            item = CandidateWithClusters(graph_candidate, variant.clusters)
+    return elements
 
-            items.append(item)
 
-        return items
+def create_candidates_with_clusters(
+    graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
+) -> list[CandidateWithClusters]:
+    """Creates graph candidates.
 
-    @classmethod
-    def _create_graph_elements(
-        cls, graph: Graph, clusters: list[MeasurementCluster]
-    ) -> list[GraphElement]:
-        """Creates graph elements for the given graph and list of clusters with
-        measurements.
+    Args:
+        graph: a graph to create candidates for.
 
-        Args:
-            graph: a graph to create elements for.
+        data: a table of typed Ordered Sets with measurements.
 
-            clusters: list of clusters with measurements.
+    Returns:
+        graph candidates with clusters of measurements.
+    """
+    items: list[CandidateWithClusters] = []
 
-        Returns:
-            graph elements.
-        """
-        elements: list[GraphElement] = []
-        local_db: dict[VertexCluster, TimeRange] = {}
+    variants = VariantsFactory.create(data)
 
-        for m_cluster in clusters:
-            v_cluster = VertexCluster()
-            local_db.update({v_cluster: m_cluster.time_range})
+    for variant in variants:
+        graph_copy = deepcopy(graph)
 
-            for measurement in m_cluster.measurements:
-                edge_factory = get_factory(type(measurement))
+        elements = create_graph_elements(graph_copy, variant.clusters)
 
-                try:
-                    item = edge_factory.create(graph, local_db, measurement)
-                except SkipItemException:
-                    continue
+        graph_candidate = GraphCandidate(graph_copy, elements, variant.leftovers)
+        items.append(CandidateWithClusters(graph_candidate, variant.clusters))
 
-                add_elements_to_graph(graph, item)
-                cls._expand_elements(elements, item)
-
-        return elements
-
-    @staticmethod
-    def _expand_elements(
-        elements: list[GraphElement], item: GraphElement | list[GraphElement]
-    ) -> None:
-        """Expands elements with a new item.
-
-        Args:
-            elements: a list to expand.
-
-            item: a new item or a list of new items.
-        """
-        if isinstance(item, Iterable):
-            for element in item:
-                elements.append(element)
-        else:
-            elements.append(item)
+    return items
