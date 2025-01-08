@@ -14,7 +14,7 @@ def test_no_data(empty_graph: Graph):
     assert elements == []
 
 
-def test_2_measurements_empty_graph(empty_graph: Graph):
+def test_2_measurements(empty_graph: Graph):
     m1 = PoseMeasurement(0, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(1, i4x4, i3x3, i3x3)
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
@@ -47,7 +47,7 @@ def test_2_measurements_empty_graph(empty_graph: Graph):
     assert v1.instance.value == v2.instance.value == i4x4
 
 
-def test_2_measurements_equal_time_empty_graph(empty_graph: Graph):
+def test_2_measurements_equal_time(empty_graph: Graph):
     m1 = PoseMeasurement(0, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(0, i4x4, i3x3, i3x3)
     cluster = MeasurementCluster()
@@ -104,7 +104,7 @@ def test_2_measurements_equal_time_graph1(graph1: Graph):
     assert v1 is v2 is existing_v
 
 
-def test_2_measurements_different_time_graph1(graph1: Graph):
+def test_2_measurements_different_time(graph1: Graph):
     m1 = PoseMeasurement(1, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(2, i4x4, i3x3, i3x3)
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
@@ -138,7 +138,7 @@ def test_2_measurements_different_time_graph1(graph1: Graph):
     assert e2.vertex is v2.instance
 
 
-def test_2_measurements_no_new_vertices_graph2(graph2: Graph):
+def test_2_measurements_0_new_vertices(graph2: Graph):
     m1 = PoseMeasurement(0, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(1, i4x4, i3x3, i3x3)
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
@@ -168,7 +168,7 @@ def test_2_measurements_no_new_vertices_graph2(graph2: Graph):
     assert v2 is existing_v2
 
 
-def test_2_measurements_1_new_vertex_graph2(graph2: Graph):
+def test_2_measurements_1_new_vertex(graph2: Graph):
     m1 = PoseMeasurement(1, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(2, i4x4, i3x3, i3x3)
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
@@ -199,7 +199,7 @@ def test_2_measurements_1_new_vertex_graph2(graph2: Graph):
     assert v2 is not existing_v1 and v2 is not existing_v2
 
 
-def test_2_measurements_2_new_vertices_graph2(graph2: Graph):
+def test_2_measurements_2_new_vertices(graph2: Graph):
     m1 = PoseMeasurement(2, i4x4, i3x3, i3x3)
     m2 = PoseMeasurement(3, i4x4, i3x3, i3x3)
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
@@ -230,3 +230,63 @@ def test_2_measurements_2_new_vertices_graph2(graph2: Graph):
     assert v2 is not existing_v1 and v2 is not existing_v2
     assert v1.index == 2
     assert v2.index == 3
+
+
+def test_2_measurements_in_1_cluster_0_new_vertices(graph2: Graph):
+    m1 = PoseMeasurement(0, i4x4, i3x3, i3x3)
+    m2 = PoseMeasurement(1, i4x4, i3x3, i3x3)
+    cluster = MeasurementCluster()
+    cluster.add(m1)
+    cluster.add(m2)
+    existing_v1 = graph2.vertex_storage.vertices[0]
+    existing_v2 = graph2.vertex_storage.vertices[1]
+
+    elements = create_graph_elements(graph2, [cluster])
+
+    assert len(elements) == 2
+    elem1, elem2 = elements[0], elements[1]
+    e1, e2 = elem1.edge, elem2.edge
+
+    assert elem1 is not elem2
+    assert elem1.new_vertices == elem2.new_vertices == []
+
+    assert e1 is not e2
+    assert e1.index == 2
+    assert e2.index == 3
+
+    v1 = elem1.edge.vertices[0]
+    v2 = elem2.edge.vertices[0]
+
+    assert v1 is not v2
+    assert v1 is existing_v1
+    assert v2 is existing_v2
+
+
+def test_2_measurements_in_1_cluster_1_new_vertex(graph2: Graph):
+    m1 = PoseMeasurement(1, i4x4, i3x3, i3x3)
+    m2 = PoseMeasurement(2, i4x4, i3x3, i3x3)
+    cluster = MeasurementCluster()
+    cluster.add(m1)
+    cluster.add(m2)
+    existing_v2 = graph2.vertex_storage.vertices[1]
+
+    elements = create_graph_elements(graph2, [cluster])
+
+    assert len(elements) == 2
+    elem1, elem2 = elements[0], elements[1]
+    e1, e2 = elem1.edge, elem2.edge
+
+    assert elem1 is not elem2
+    assert not elem1.new_vertices
+    assert len(elem2.new_vertices) == 1
+
+    assert e1 is not e2
+    assert e1.index == 2
+    assert e2.index == 3
+
+    v1 = elem1.edge.vertices[0]
+    v2 = elem2.edge.vertices[0]
+
+    assert v1 is not v2
+    assert v1 is existing_v2
+    assert v2 is not existing_v2

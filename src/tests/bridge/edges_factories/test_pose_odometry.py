@@ -9,7 +9,7 @@ from src.utils.auxiliary_objects import identity3x3 as i3x3
 from src.utils.auxiliary_objects import identity4x4 as i4x4
 
 
-def test_create_element_no_new_vertices(graph1: Graph):
+def test_create_no_new_vertices(graph1: Graph):
     t = 1
     measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters: dict[VertexCluster, TimeRange] = {VertexCluster(): TimeRange(t, t)}
@@ -37,7 +37,7 @@ def test_create_element_no_new_vertices(graph1: Graph):
     assert new_t == t
 
 
-def test_create_element_no_new_vertices_for_2_existing(graph2: Graph):
+def test_create_no_new_vertices_for_2_existing(graph2: Graph):
     t = 1
     measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters: dict[VertexCluster, TimeRange] = {VertexCluster(): TimeRange(t, t)}
@@ -56,7 +56,7 @@ def test_create_element_no_new_vertices_for_2_existing(graph2: Graph):
     assert v2 is existing_v2
 
 
-def test_create_element_with_2_new_vertices(empty_graph: Graph):
+def test_create_with_2_new_vertices(empty_graph: Graph):
     t = 1
     cluster = VertexCluster()
     measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
@@ -88,7 +88,7 @@ def test_create_element_with_2_new_vertices(empty_graph: Graph):
     assert t2 == t
 
 
-def test_create_graph_element_with_1_new_1_existing(graph1: Graph):
+def test_create_with_1_new_1_existing(graph1: Graph):
     t = 1
     cluster = VertexCluster()
     measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
@@ -116,7 +116,7 @@ def test_create_graph_element_with_1_new_1_existing(graph1: Graph):
     assert t1 == t
 
 
-def test_create_graph_element_with_1_new_2_existing(graph2: Graph):
+def test_create_with_1_new_2_existing(graph2: Graph):
     t = 2
     measurement = Odometry(t, TimeRange(0, t), i4x4, i3x3, i3x3)
     clusters: dict[VertexCluster, TimeRange] = {VertexCluster(): TimeRange(t, t)}
@@ -135,7 +135,7 @@ def test_create_graph_element_with_1_new_2_existing(graph2: Graph):
     assert v2 is not existing_v2
 
 
-def test_create_element_with_2_new_2_existing(graph2: Graph):
+def test_create_with_2_new_2_existing(graph2: Graph):
     measurement1 = Odometry(3, TimeRange(2, 3), i4x4, i3x3, i3x3)
     clusters: dict[VertexCluster, TimeRange] = {VertexCluster(): TimeRange(2, 3)}
     existing_v1 = graph2.vertex_storage.vertices[0]

@@ -17,17 +17,17 @@ from src.utils.auxiliary_objects import identity4x4 as i4x4
 
 
 @pytest.fixture()
-def clean_storage():
+def clean_storage() -> None:
     MeasurementStorage.clear()
 
 
 @pytest.fixture
-def empty_graph():
+def empty_graph() -> Graph:
     return Graph()
 
 
 @pytest.fixture
-def graph1():
+def graph1() -> Graph:
     graph = Graph()
     t1, idx1 = 0, 0
     v1 = Pose(index=idx1)
@@ -41,7 +41,7 @@ def graph1():
 
 
 @pytest.fixture
-def graph2():
+def graph2() -> Graph:
     graph = Graph()
     t1, t2 = 0, 1
     idx1, idx2 = 0, 1

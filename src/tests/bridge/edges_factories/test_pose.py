@@ -16,45 +16,108 @@ def test_create_empty_graph(empty_graph: Graph):
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
 
-    new_element = Factory.create(empty_graph, clusters, measurement)
+    element = Factory.create(empty_graph, clusters, measurement)
 
-    edge_vertex = new_element.edge.vertex
-    new_vertex = new_element.new_vertices[0]
-    new_pose = new_vertex.instance
-    timestamp = new_vertex.timestamp
-    assert len(new_element.new_vertices) == 1
-    assert new_pose.index == 0
-    assert timestamp == t
-    assert edge_vertex is new_pose
+    assert element.edge.index is None
+    assert len(element.new_vertices) == 1
+    new_v = element.new_vertices[0]
+    pose = new_v.instance
+
+    assert new_v.cluster is cluster
+    assert pose.index == 0
+    assert new_v.timestamp == t
+    assert element.edge.vertex is pose
 
 
-def test_create_graph_with_1_existing_vertex(graph1: Graph):
+def test_create_0_new_vertices(graph1: Graph):
     t = 0
     measurement = PoseMeasurement(t, i4x4, i3x3, i3x3)
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
-    existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
+    existing_v = graph1.vertex_storage.get_last_vertex(Pose)
 
-    new_element = Factory.create(graph1, clusters, measurement)
+    element = Factory.create(graph1, clusters, measurement)
 
-    vertex = new_element.edge.vertex
-    assert not new_element.new_vertices
-    assert vertex is existing_vertex
+    assert element.edge.index is None
+    assert not element.new_vertices
+    assert element.edge.vertex is existing_v
 
 
-def test_create_graph_with_1_existing_1_new_vertex(graph1: Graph):
+def test_create_1_existing_1_new_vertex(graph1: Graph):
     t = 1
     measurement = PoseMeasurement(t, i4x4, i3x3, i3x3)
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
     existing_pose = graph1.vertex_storage.get_last_vertex(Pose)
 
-    new_element = Factory.create(graph1, clusters, measurement)
+    element = Factory.create(graph1, clusters, measurement)
 
-    new_vertex = new_element.new_vertices[0]
-    pose = new_vertex.instance
-    timestamp = new_vertex.timestamp
-    assert len(new_element.new_vertices) == 1
+    assert element.edge.index is None
+    assert len(element.new_vertices) == 1
+
+    new_v = element.new_vertices[0]
+    pose = new_v.instance
+
+    assert new_v.cluster is cluster
     assert pose is not existing_pose
     assert pose.index == 1
-    assert timestamp == t
+    assert new_v.timestamp == t
+
+
+def test_create_2_existing_0_new_vertex(graph2: Graph):
+    t = 1
+    measurement = PoseMeasurement(t, i4x4, i3x3, i3x3)
+    cluster = VertexCluster()
+    clusters = {cluster: TimeRange(t, t)}
+    existing_v1 = graph2.vertex_storage.vertices[0]
+    existing_v2 = graph2.vertex_storage.vertices[1]
+
+    element = Factory.create(graph2, clusters, measurement)
+
+    v = element.edge.vertex
+
+    assert element.edge.index is None
+    assert len(element.new_vertices) == 0
+    assert v is existing_v2
+    assert v is not existing_v1
+
+
+def test_create_2_existing_1_new_vertex(graph2: Graph):
+    t = 2
+    measurement = PoseMeasurement(t, i4x4, i3x3, i3x3)
+    cluster = VertexCluster()
+    clusters = {cluster: TimeRange(t, t)}
+    existing_v1 = graph2.vertex_storage.vertices[0]
+    existing_v2 = graph2.vertex_storage.vertices[1]
+
+    element = Factory.create(graph2, clusters, measurement)
+
+    assert len(element.new_vertices) == 1
+
+    new_v = element.new_vertices[0]
+    v = element.edge.vertex
+
+    assert new_v.cluster is cluster
+    assert v is new_v.instance
+    assert element.edge.index is None
+    assert v is not existing_v2
+    assert v is not existing_v1
+
+
+def test_create_2_existing_0_new_vertex_wide_time_range(graph2: Graph):
+    t1, t2 = 0, 1
+    measurement = PoseMeasurement(t2, i4x4, i3x3, i3x3)
+    cluster = VertexCluster()
+    clusters = {cluster: TimeRange(t1, t2)}
+    existing_v1 = graph2.vertex_storage.vertices[0]
+    existing_v2 = graph2.vertex_storage.vertices[1]
+
+    element = Factory.create(graph2, clusters, measurement)
+
+    assert not element.new_vertices
+
+    v = element.edge.vertex
+
+    assert element.edge.index is None
+    assert v is existing_v2
+    assert v is not existing_v1
