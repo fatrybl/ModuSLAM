@@ -1,13 +1,19 @@
 defaults:
-  - /base_pose@pose1
+  #  - /base_pose@pose1
+  #  - /base_position@position1
   #  - /base_pose@pose2
   #  - /base_linear_velocity@velocity1
   #  - /base_imu_bias@bias1
   - _self_
 
-pose1:
-  timestamp: 1544581170279399000
-  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
+#pose1:
+#  timestamp: 1544580706878165036
+#  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
+
+#position1:
+#  timestamp: 1544580706889302000
+#  noise_covariance: [ 0.001225, 0.000841, 0.00864714 ] # x, y, z
+#  measurement: [ 330096.41562497173436, 4118151.5854207249358, 35.731699999999996464 ]
 
 #pose2:
 #  timestamp: 1544581170343974000

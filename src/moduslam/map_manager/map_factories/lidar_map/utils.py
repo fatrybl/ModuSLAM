@@ -3,9 +3,9 @@ from collections import defaultdict
 
 import numpy as np
 
+from src.custom_types.numpy import MatrixMxN
 from src.logger.logging_config import map_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.moduslam.custom_types.numpy import MatrixMxN
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry

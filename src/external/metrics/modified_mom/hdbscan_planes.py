@@ -5,9 +5,9 @@ import numpy as np
 import open3d as o3d
 from sklearn.cluster import HDBSCAN
 
+from src.custom_types.numpy import MatrixNx3, Vector3, VectorN
 from src.external.metrics.modified_mom.config import BaseConfig, HdbscanConfig
 from src.external.metrics.modified_mom.utils import estimate_normals, filter_clusters
-from src.moduslam.custom_types.numpy import MatrixNx3, Vector3, VectorN
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 

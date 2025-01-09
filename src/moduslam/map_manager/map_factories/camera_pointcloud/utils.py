@@ -3,8 +3,7 @@ from collections.abc import Sequence
 import cv2
 import numpy as np
 
-from moduslam.frontend_manager.graph.custom_vertices import CameraPose
-from src.moduslam.custom_types.numpy import (
+from src.custom_types.numpy import (
     Matrix3x3,
     Matrix4x4,
     MatrixMxN,
@@ -13,9 +12,10 @@ from src.moduslam.custom_types.numpy import (
     VectorN,
 )
 from src.moduslam.data_manager.batch_factory.batch import Element
+from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 
 
-def create_vertex_elements_table() -> dict[CameraPose, set[Element]]:
+def create_vertex_elements_table() -> dict[Pose, set[Element]]:
     """Creates "vertex -> elements" table.
 
     Returns:

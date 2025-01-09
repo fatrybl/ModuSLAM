@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import TypeVar
 
+from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from src.measurement_storage.measurements.base import Measurement
 from src.measurement_storage.measurements.continuous import ContinuousMeasurement
-from src.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from src.utils.auxiliary_dataclasses import TimeRange
 
 

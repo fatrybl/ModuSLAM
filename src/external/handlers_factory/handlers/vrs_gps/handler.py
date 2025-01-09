@@ -2,11 +2,11 @@
 
 import logging
 
+from src.custom_types.aliases import Matrix3x3, Vector3
 from src.external.handlers_factory.handlers.handler_protocol import Handler
 from src.external.handlers_factory.handlers.vrs_gps.config import VrsGpsHandlerConfig
 from src.logger.logging_config import frontend_manager
-from src.measurement_storage.measurements.gps import Gps
-from src.moduslam.custom_types.aliases import Matrix3x3, Vector3
+from src.measurement_storage.measurements.position import Position
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.sensors_factory.sensors import VrsGps
 from src.utils.auxiliary_methods import str_to_float, str_to_int
@@ -35,7 +35,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         """Type of VRS GPS sensor."""
         return VrsGps
 
-    def process(self, element: Element) -> Gps | None:
+    def process(self, element: Element) -> Position | None:
         """Preprocesses the GPS data.
 
         Args:
@@ -59,7 +59,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         position = self._get_position(element.measurement.values)
         covariance = self._get_covariance(element.measurement.values)
 
-        return Gps(element.timestamp, position, covariance)
+        return Position(element.timestamp, position, covariance)
 
     @staticmethod
     def _get_position(data: list[str]) -> Vector3:

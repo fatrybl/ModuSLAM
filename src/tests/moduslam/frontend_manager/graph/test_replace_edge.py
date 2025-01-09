@@ -1,8 +1,8 @@
 import gtsam.noiseModel
 import pytest
 
-from src.measurement_storage.measurements.gps import Gps as GpsMeasurement
 from src.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from src.measurement_storage.measurements.position import Position as GpsMeasurement
 from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
 from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement

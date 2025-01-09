@@ -8,6 +8,7 @@ import numpy as np
 import open3d as o3d
 from sklearn.neighbors import NearestNeighbors
 
+from src.custom_types.numpy import Matrix4x4
 from src.external.metrics.modified_mom.config import BaseConfig
 from src.external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
 from src.external.metrics.modified_mom.utils import (
@@ -16,7 +17,6 @@ from src.external.metrics.modified_mom.utils import (
     compute_plane_variance,
     compute_variances,
 )
-from src.moduslam.custom_types.numpy import Matrix4x4
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 

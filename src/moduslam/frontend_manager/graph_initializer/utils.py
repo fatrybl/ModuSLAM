@@ -2,14 +2,16 @@ from typing import cast
 
 import gtsam
 
+from src.custom_types.aliases import Matrix4x4, Vector6
 from src.measurement_storage.measurements.imu_bias import Bias
 from src.measurement_storage.measurements.linear_velocity import Velocity
 from src.measurement_storage.measurements.pose import Pose
-from src.moduslam.custom_types.aliases import Matrix4x4, Vector6
+from src.measurement_storage.measurements.position import Position
 from src.moduslam.frontend_manager.graph_initializer.configs import (
     PriorImuBias,
     PriorLinearVelocity,
     PriorPose,
+    PriorPosition,
 )
 from src.utils.auxiliary_methods import diagonal_matrix3x3
 
@@ -29,6 +31,19 @@ def pose_se3_from_tuple(values: Vector6) -> Matrix4x4:
     pose_tuple = tuple(map(tuple, pose_numpy))
     pose = cast(Matrix4x4, pose_tuple)
     return pose
+
+
+def create_position(config: PriorPosition) -> Position:
+    """Creates a pose measurement from the given config.
+
+    Args:
+        config: a configuration to create a measurement from.
+
+    Returns:
+        a pose measurement.
+    """
+    position_covariance = diagonal_matrix3x3(config.noise_covariance)
+    return Position(config.timestamp, config.measurement, position_covariance)
 
 
 def create_pose(config: PriorPose) -> Pose:

@@ -1,6 +1,6 @@
-from src.measurement_storage.measurements.gps import Gps
 from src.measurement_storage.measurements.imu import ProcessedImu
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from src.measurement_storage.measurements.position import Position
 from src.measurement_storage.storage import MeasurementStorage
 from src.moduslam.frontend_manager.measurement_storage_analyzers.base import (
     StorageAnalyzer,
@@ -99,9 +99,9 @@ class PoseOdometryWithGps(StorageAnalyzer):
         data = storage.data()
         if (
             OdometryWithElements in data
-            and Gps in data
+            and Position in data
             and len(data[OdometryWithElements]) == 1
-            and len(data[Gps]) == 1
+            and len(data[Position]) == 1
         ):
             return True
 

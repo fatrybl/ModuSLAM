@@ -17,11 +17,12 @@ import numpy as np
 from PIL.Image import Image
 from plum import dispatch
 
+from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
+from src.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
+from src.custom_types.numpy import MatrixMxN
+from src.custom_types.numpy import Vector3 as NumpyVector3
+from src.custom_types.numpy import VectorN
 from src.logger.logging_config import utils
-from src.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
-from src.moduslam.custom_types.numpy import MatrixMxN
-from src.moduslam.custom_types.numpy import Vector3 as NumpyVector3
-from src.moduslam.custom_types.numpy import VectorN
 from src.utils.exceptions import DimensionalityError
 
 logger = logging.getLogger(utils)
@@ -100,6 +101,29 @@ def matrix3x3_list_to_tuple(matrix: list[list[float]]) -> Matrix3x3:
         (matrix[0][0], matrix[0][1], matrix[0][2]),
         (matrix[1][0], matrix[1][1], matrix[1][2]),
         (matrix[2][0], matrix[2][1], matrix[2][2]),
+    )
+
+
+def numpy_array4x4_to_tuple4x4(matrix: NumpyMatrix4x4) -> Matrix4x4:
+    """Converts numpy matrix of size 4x4 to tuple of tuples of size 4x4.
+
+    Args:
+        matrix: numpy matrix of size 4x4.
+
+    Returns:
+        tuple of tuples of size 4x4.
+
+    Raises:
+        ValueError: if the input array has wrong shape.
+    """
+    if matrix.shape != (4, 4):
+        raise ValueError("Input array must have shape (4, 4)")
+    m = matrix
+    return (
+        (m[0, 0], m[0, 1], m[0, 2], m[0, 3]),
+        (m[1, 0], m[1, 1], m[1, 2], m[1, 3]),
+        (m[2, 0], m[2, 1], m[2, 2], m[2, 3]),
+        (m[3, 0], m[3, 1], m[3, 2], m[3, 3]),
     )
 
 

@@ -1,11 +1,8 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.with_raw_elements import (
-    VisualFeature,
-    VisualFeatures,
-)
-from src.moduslam.custom_types.aliases import Matrix4x4
+from src.custom_types.aliases import Matrix4x4
+from src.measurement_storage.measurements.visual_feature import Feature, Features
 from src.moduslam.frontend_manager.main_graph.edges.base import RadialEdge
 from src.moduslam.frontend_manager.main_graph.vertices.custom import (
     Feature3D,
@@ -40,7 +37,7 @@ class SmartVisualFeature(RadialEdge):
         super().__init__()
         self._feature = feature
         self._poses: list[Pose] = []
-        self._measurements: list[VisualFeature] = []
+        self._measurements: list[Feature] = []
         tf = gtsam.Pose3(tf_base_sensor)
         self._factor = gtsam.SmartProjectionPose3Factor(
             noise_model, camera_model, tf, projection_params
@@ -60,14 +57,14 @@ class SmartVisualFeature(RadialEdge):
         return self._poses
 
     @property
-    def measurement(self) -> VisualFeatures:
+    def measurement(self) -> Features:
         raise NotImplementedError
 
     @property
     def vertices(self) -> list[Feature3D | Pose]:
         return [self._feature, *self._poses]
 
-    def add_measurement(self, pose: Pose, measurement: VisualFeature) -> None:
+    def add_measurement(self, pose: Pose, measurement: Feature) -> None:
         """Adds a measurement of the feature from different pose.
 
         Args:

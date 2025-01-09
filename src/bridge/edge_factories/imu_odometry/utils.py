@@ -5,9 +5,9 @@ import gtsam
 import numpy as np
 from gtsam import PreintegratedCombinedMeasurements, PreintegratedImuMeasurements
 
+from src.custom_types.numpy import Matrix3x3, Matrix4x4
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
-from src.moduslam.custom_types.numpy import Matrix3x3, Matrix4x4
 from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
     ImuOdometry,
 )

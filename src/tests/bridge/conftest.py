@@ -54,3 +54,17 @@ def graph2() -> Graph:
     element2 = GraphElement(edge2, [NewVertex(v2, cluster2, t2)])
     graph.add_elements([element1, element2])
     return graph
+
+
+@pytest.fixture
+def graph3() -> Graph:
+    graph = Graph()
+    t1, idx1 = 1, 0
+    v1 = Pose(index=idx1)
+    noise = se3_isotropic_noise_model(1)
+    m1 = PoseMeasurement(t1, i4x4, i3x3, i3x3)
+    edge1 = PriorPose(v1, m1, noise)
+    cluster = VertexCluster()
+    element1 = GraphElement(edge1, [NewVertex(v1, cluster, t1)])
+    graph.add_element(element1)
+    return graph

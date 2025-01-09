@@ -1,7 +1,7 @@
 import gtsam
 from gtsam.gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.gps import Gps
+from src.measurement_storage.measurements.position import Position
 from src.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 
@@ -9,7 +9,7 @@ from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 class GpsPosition(UnaryEdge):
     """Edge for GPS position."""
 
-    def __init__(self, pose: Pose, measurement: Gps, noise_model: Base):
+    def __init__(self, pose: Pose, measurement: Position, noise_model: Base):
         """
         Args:
             pose: a pose vertex.
@@ -33,7 +33,7 @@ class GpsPosition(UnaryEdge):
         return self._pose
 
     @property
-    def measurement(self) -> Gps:
+    def measurement(self) -> Position:
         return self._measurement
 
     @property

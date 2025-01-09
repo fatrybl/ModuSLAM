@@ -1,5 +1,5 @@
 from src.bridge.edge_factories.gps_position import Factory
-from src.measurement_storage.measurements.gps import Gps
+from src.measurement_storage.measurements.position import Position
 from src.moduslam.frontend_manager.main_graph.graph import Graph
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
@@ -13,7 +13,7 @@ def test_create_empty_graph(empty_graph: Graph):
     t = 0
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
-    measurement = Gps(t, zero_vector3, identity3x3)
+    measurement = Position(t, zero_vector3, identity3x3)
 
     element = Factory.create(empty_graph, clusters, measurement)
 
@@ -29,7 +29,7 @@ def test_create_graph_with_1_existing_vertex(graph1: Graph):
     t = 0
     clusters = {VertexCluster(): TimeRange(t, t)}
     existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
-    measurement = Gps(t, zero_vector3, identity3x3)
+    measurement = Position(t, zero_vector3, identity3x3)
 
     new_element = Factory.create(graph1, clusters, measurement)
 
@@ -43,7 +43,7 @@ def test_create_graph_with_1_existing_1_new_vertex(graph1: Graph):
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
     existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
-    measurement = Gps(t, zero_vector3, identity3x3)
+    measurement = Position(t, zero_vector3, identity3x3)
 
     new_element = Factory.create(graph1, clusters, measurement)
 

@@ -3,19 +3,20 @@ import logging
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
+from src.custom_types.aliases import Matrix3x3
+from src.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
+from src.custom_types.numpy import MatrixNx3
 from src.external.handlers_factory.handlers.handler_protocol import Handler
 from src.external.handlers_factory.handlers.scan_matcher.config import (
     KissIcpScanMatcherConfig,
 )
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
-from src.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
-from src.moduslam.custom_types.numpy import MatrixNx3
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.utils import create_empty_element
 from src.moduslam.sensors_factory.sensors import Lidar3D
 from src.utils.auxiliary_dataclasses import TimeRange
+from src.utils.auxiliary_methods import numpy_array4x4_to_tuple4x4
 
 logger = logging.getLogger(frontend_manager)
 
@@ -152,7 +153,7 @@ class ScanMatcher(Handler):
         position_covariance = self._get_diagonal_matrix(cov[0], cov[1], cov[2])
         orientation_covariance = self._get_diagonal_matrix(cov[3], cov[4], cov[5])
 
-        pose = self._numpy_matrix_4x4_to_matrix_4x4(tf)
+        pose = numpy_array4x4_to_tuple4x4(tf)
 
         m = OdometryWithElements(
             stop,
@@ -170,24 +171,4 @@ class ScanMatcher(Handler):
             (v1, 0.0, 0.0),
             (0.0, v2, 0.0),
             (0.0, 0.0, v3),
-        )
-
-    @staticmethod
-    def _numpy_matrix_4x4_to_matrix_4x4(matrix: NumpyMatrix4x4) -> Matrix4x4:
-        """Converts numpy matrix of size 4x4 to tuple of tuples of size 4x4.
-
-        Args:
-            matrix: numpy matrix of size 4x4.
-
-        Returns:
-            tuple of tuples of size 4x4.
-        """
-        if matrix.shape != (4, 4):
-            raise ValueError("Input array must have shape (4, 4)")
-        m = matrix
-        return (
-            (m[0, 0], m[0, 1], m[0, 2], m[0, 3]),
-            (m[1, 0], m[1, 1], m[1, 2], m[1, 3]),
-            (m[2, 0], m[2, 1], m[2, 2], m[2, 3]),
-            (m[3, 0], m[3, 1], m[3, 2], m[3, 3]),
         )

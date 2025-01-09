@@ -26,7 +26,6 @@ from src.measurement_storage.measurements.imu import (
     ImuData,
     ProcessedImu,
 )
-from src.moduslam.custom_types.aliases import Matrix4x4
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.sensors_factory.sensors import Imu as ImuSensor
 from src.utils.auxiliary_methods import str_to_float
@@ -71,11 +70,9 @@ class TumVieImuDataPreprocessor(Handler):
 
         imu_data = self._parse_line(element.measurement.values)
 
-        tf = self._create_tf(sensor)
-
         covariance = self._get_covariance(sensor)
 
-        return ProcessedImu(element.timestamp, imu_data, covariance, tf)
+        return ProcessedImu(element.timestamp, imu_data, covariance, sensor.tf_base_sensor)
 
     @staticmethod
     def _parse_line(values: tuple[str, ...]) -> ImuData:
@@ -94,17 +91,6 @@ class TumVieImuDataPreprocessor(Handler):
         ay = str_to_float(values[4])
         az = str_to_float(values[5])
         return ImuData((wx, wy, wz), (ax, ay, az))
-
-    @staticmethod
-    def _create_tf(sensor: ImuSensor) -> Matrix4x4:
-        tf = sensor.tf_base_sensor
-        pose = (
-            (tf[0][0], tf[0][1], tf[0][2], tf[0][3]),
-            (tf[1][0], tf[1][1], tf[1][2], tf[1][3]),
-            (tf[2][0], tf[2][1], tf[2][2], tf[2][3]),
-            (0.0, 0.0, 0.0, 1.0),
-        )
-        return pose
 
     @staticmethod
     def _get_covariance(sensor: ImuSensor) -> ImuCovariance:

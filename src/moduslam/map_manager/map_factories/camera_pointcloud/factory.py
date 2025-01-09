@@ -4,9 +4,9 @@ from collections import deque
 import numpy as np
 from PIL.Image import Image
 
+from src.custom_types.aliases import Matrix4x4
+from src.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
 from src.logger.logging_config import map_manager
-from src.moduslam.custom_types.aliases import Matrix4x4
-from src.moduslam.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph

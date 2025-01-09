@@ -8,7 +8,7 @@ import open3d as o3d
 import torch
 from torch_ransac3d.plane import plane_fit
 
-from src.moduslam.custom_types.numpy import MatrixNx3
+from src.custom_types.numpy import MatrixNx3
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 

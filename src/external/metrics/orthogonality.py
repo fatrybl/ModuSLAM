@@ -4,14 +4,14 @@ from collections.abc import Iterable, Sequence
 import numpy as np
 import open3d as o3d
 
+from src.custom_types.aliases import Matrix4x4
+from src.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
+from src.custom_types.numpy import MatrixNx3
 from src.external.metrics.base import Metrics
 from src.external.metrics.modified_mom.config import LidarConfig
 from src.external.metrics.modified_mom.metrics import mom
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.moduslam.custom_types.aliases import Matrix4x4
-from src.moduslam.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
-from src.moduslam.custom_types.numpy import MatrixNx3
 from src.moduslam.data_manager.batch_factory.data_objects import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
@@ -68,20 +68,20 @@ class PlaneOrthogonality(Metrics):
         Returns:
             MOM metric value.
         """
-        # new_edges = [el.edge for el in elements]
-        # poses = self._get_poses(new_edges)
-        #
-        # pose_arrays = [np.array(p.value) for p in poses]
-        #
-        # poses_with_edges = {p: connections[p] for p in poses}
-        #
-        # point_clouds = self._create_point_clouds(poses_with_edges)
-        #
-        # logger.debug(f"Num clouds: {len(point_clouds)}, num poses: {len(poses)}")
-        #
-        # value = self._compute_mom(pose_arrays, point_clouds, self._mom_config)
+        new_edges = [el.edge for el in elements]
+        poses = self._get_poses(new_edges)
 
-        return 0
+        pose_arrays = [np.array(p.value) for p in poses]
+
+        poses_with_edges = {p: connections[p] for p in poses}
+
+        point_clouds = self._create_point_clouds(poses_with_edges)
+
+        logger.debug(f"Num clouds: {len(point_clouds)}, num poses: {len(poses)}")
+
+        value = self._compute_mom(pose_arrays, point_clouds, self._mom_config)
+
+        return value
 
     @staticmethod
     def _get_poses(edges: Sequence[Edge]) -> OrderedSet[Pose]:
@@ -143,7 +143,7 @@ class PlaneOrthogonality(Metrics):
         Returns:
             a 3D point cloud array [Nx3].
         """
-        point_cloud = np.empty(shape=(0, 3))
+        point_clouds = []
 
         for element in elements:
             sensor = element.measurement.sensor
@@ -151,11 +151,12 @@ class PlaneOrthogonality(Metrics):
 
             if isinstance(sensor, Lidar3D) and values is not None:
                 tf = sensor.tf_base_sensor
-                points = PlaneOrthogonality._create_3d_points(tf, values, config)
-                point_cloud = np.vstack((point_cloud, points))
+                cloud = PlaneOrthogonality._create_3d_points(tf, values, config)
+                point_clouds.append(cloud)
 
+        pcd_array = np.vstack(point_clouds)
         o3d_cloud = o3d.geometry.PointCloud()
-        o3d_cloud.points = o3d.utility.Vector3dVector(point_cloud)
+        o3d_cloud.points = o3d.utility.Vector3dVector(pcd_array)
         return o3d_cloud
 
     @staticmethod
@@ -177,10 +178,10 @@ class PlaneOrthogonality(Metrics):
         i4x4 = np.array(identity4x4)
         tf_array = np.array(tf)
         points = values_to_array(values, config.num_channels)
+        points = filter_array(points, config.min_range, config.max_range)
         points[:, 3] = 1  # ignore intensity channel and make SE(3) compatible.
         points = transform_pointcloud(i4x4, tf_array, points)
         points = points[:, :-1]  # remove unnecessary 4-th dimension.
-        points = filter_array(points, config.min_range, config.max_range)
         return points
 
     @staticmethod

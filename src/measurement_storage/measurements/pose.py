@@ -1,5 +1,5 @@
+from src.custom_types.aliases import Matrix3x3, Matrix4x4
 from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
 
 
 class Pose(Measurement):

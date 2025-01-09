@@ -7,7 +7,7 @@ import numpy as np
 from PIL.Image import Image, fromarray
 from PIL.ImageFile import ImageFile
 
-from src.moduslam.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
+from src.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
 from src.utils.auxiliary_dataclasses import Position, VisualFeature
 from src.utils.auxiliary_methods import matrix_to_vector_list
 

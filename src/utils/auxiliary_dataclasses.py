@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 import cv2
 
-from src.moduslam.custom_types.numpy import VectorN
+from src.custom_types.numpy import VectorN
 from src.moduslam.sensors_factory.sensors import Sensor
 
 
@@ -52,7 +52,7 @@ class Message:
 
 @dataclass
 class Position:
-    """3D position of the point."""
+    """x, y, z point coordinates."""
 
     x: float
     y: float

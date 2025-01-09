@@ -2,9 +2,9 @@ import logging
 
 import numpy as np
 
+from src.custom_types.aliases import Matrix4x4
+from src.custom_types.numpy import MatrixNx3
 from src.logger.logging_config import map_manager
-from src.moduslam.custom_types.aliases import Matrix4x4
-from src.moduslam.custom_types.numpy import MatrixNx3
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph
@@ -71,14 +71,15 @@ class LidarMapFactory(MapFactory):
         Raises:
             TypeError: if the sensor is not of type Lidar3D.
         """
-        pointcloud_map = np.empty(shape=(0, 3))
+        point_clouds = []
 
         for pose, elements in pose_elements_table.items():
             for element in elements:
-                pointcloud = self._get_cloud(pose.value, element)
-                pointcloud_map = np.vstack((pointcloud_map, pointcloud))
+                cloud = self._get_cloud(pose.value, element)
+                point_clouds.append(cloud)
 
-        return pointcloud_map
+        pcd_array = np.vstack(point_clouds)
+        return pcd_array
 
     def _get_cloud(self, pose: Matrix4x4, element: Element) -> np.ndarray:
         sensor = element.measurement.sensor
@@ -113,8 +114,8 @@ class LidarMapFactory(MapFactory):
         tf_array = np.array(tf)
         pose_array = np.array(pose)
         pointcloud = values_to_array(values, self._num_channels)
+        pointcloud = filter_array(pointcloud, self._min_range, self._max_range)
         pointcloud[:, 3] = 1  # make SE(3) compatible.
         pointcloud = transform_pointcloud(pose_array, tf_array, pointcloud)
         pointcloud = pointcloud[:, :3]  # ignore 4-th channel,
-        pointcloud = filter_array(pointcloud, self._min_range, self._max_range)
         return pointcloud

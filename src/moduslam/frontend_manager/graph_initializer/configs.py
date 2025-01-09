@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
 
-from src.moduslam.custom_types.aliases import Vector3, Vector6
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
-    ImuBias,
-    LinearVelocity,
-    Pose,
-)
+from src.custom_types.aliases import Vector3, Vector6
+from src.measurement_storage.measurements.imu_bias import Bias
+from src.measurement_storage.measurements.linear_velocity import Velocity
+from src.measurement_storage.measurements.pose import Pose
+from src.measurement_storage.measurements.position import Position
 
 
 @dataclass
@@ -13,17 +12,26 @@ class EdgeConfig:
     """Base prior configuration."""
 
     timestamp: int
-    vertex_type_name: str
+    measurement_type_name: str
     noise_covariance: tuple[float, ...]
     measurement: tuple[float, ...]
+
+
+@dataclass
+class PriorPosition(EdgeConfig):
+    """Position configuration."""
+
+    measurement_type_name: str = field(default=Position.__name__)
+    noise_covariance: Vector3 = (1e-3, 1e-3, 1e-3)
+    measurement: Vector3 = (0, 0, 0)
 
 
 @dataclass
 class PriorPose(EdgeConfig):
     """Pose configuration."""
 
-    vertex_type_name: str = field(default=Pose.__name__)
-    noise_covariance: Vector6 = (1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5)
+    measurement_type_name: str = field(default=Pose.__name__)
+    noise_covariance: Vector6 = (1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3)
     measurement: Vector6 = (0, 0, 0, 0, 0, 0)
 
 
@@ -31,8 +39,8 @@ class PriorPose(EdgeConfig):
 class PriorLinearVelocity(EdgeConfig):
     """Linear velocity configuration."""
 
-    vertex_type_name: str = field(default=LinearVelocity.__name__)
-    noise_covariance: Vector3 = (1e-5, 1e-5, 1e-5)
+    measurement_type_name: str = field(default=Velocity.__name__)
+    noise_covariance: Vector3 = (1e-3, 1e-3, 1e-3)
     measurement: Vector3 = (0, 0, 0)
 
 
@@ -40,6 +48,6 @@ class PriorLinearVelocity(EdgeConfig):
 class PriorImuBias(EdgeConfig):
     """IMU bias configuration."""
 
-    vertex_type_name: str = field(default=ImuBias.__name__)
-    noise_covariance: Vector6 = (1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5)
+    measurement_type_name: str = field(default=Bias.__name__)
+    noise_covariance: Vector6 = (1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3)
     measurement: Vector6 = (0, 0, 0, 0, 0, 0)

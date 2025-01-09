@@ -8,6 +8,7 @@ from src.moduslam.frontend_manager.graph_initializer.configs import (
     PriorImuBias,
     PriorLinearVelocity,
     PriorPose,
+    PriorPosition,
 )
 
 
@@ -16,6 +17,7 @@ def get_config() -> dict[str, EdgeConfig]:
     cs.store(name="base_pose", node=PriorPose)
     cs.store(name="base_linear_velocity", node=PriorLinearVelocity)
     cs.store(name="base_imu_bias", node=PriorImuBias)
+    cs.store(name="base_position", node=PriorPosition)
 
     with initialize(version_base=None, config_path="configs"):
         cfg = compose(config_name="config")

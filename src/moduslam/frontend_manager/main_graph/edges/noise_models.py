@@ -1,12 +1,12 @@
 import gtsam
 import numpy as np
 
-from src.moduslam.custom_types.aliases import Matrix3x3, Vector3
-from src.moduslam.custom_types.numpy import Matrix6x6
+from src.custom_types.aliases import Matrix3x3, Vector3
+from src.custom_types.numpy import Matrix6x6
 
 
 def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
-    """Block diagonal matrix with two 3x3 blocks.
+    """Numpy block-diagonal matrix with two 3x3 blocks.
 
     Args:
         block1: 3x3 block matrix.
@@ -14,7 +14,7 @@ def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Ma
         block2: 3x3 block matrix.
 
     Returns:
-        Block diagonal numpy matrix.
+        numpy block-diagonal matrix.
     """
     position_cov_matrix = np.array(block1)
     orientation_cov_matrix = np.array(block2)

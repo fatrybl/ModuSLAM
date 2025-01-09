@@ -1,7 +1,7 @@
 import gtsam
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
-from src.moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
+from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from src.moduslam.frontend_manager.main_graph.vertices.base import (
     NonOptimizableVertex,
     OptimizableVertex,

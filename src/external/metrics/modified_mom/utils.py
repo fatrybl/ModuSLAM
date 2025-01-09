@@ -5,8 +5,8 @@ from typing import TypeAlias
 import numpy as np
 import open3d as o3d
 
+from src.custom_types.numpy import Matrix4x4, MatrixNx3, VectorN
 from src.external.metrics.modified_mom.normals_filter import filter_normals
-from src.moduslam.custom_types.numpy import Matrix4x4, MatrixNx3, VectorN
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 

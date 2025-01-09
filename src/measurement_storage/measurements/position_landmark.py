@@ -1,5 +1,5 @@
+from src.custom_types.aliases import Matrix3x3, Vector3
 from src.measurement_storage.measurements.base import WithRawElements
-from src.moduslam.custom_types.aliases import Matrix3x3, Vector3
 from src.moduslam.data_manager.batch_factory.batch import Element
 
 

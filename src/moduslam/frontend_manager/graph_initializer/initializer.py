@@ -43,7 +43,7 @@ class GraphInitializer:
             ItemNotExistsError: if no method exists to create a measurement for the configuration.
         """
         try:
-            create = type_method_table[config.vertex_type_name]
+            create = type_method_table[config.measurement_type_name]
         except KeyError:
             msg = f"No method exists to create a measurement for the configuration {config}"
             logger.error(msg)

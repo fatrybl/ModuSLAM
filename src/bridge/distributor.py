@@ -16,12 +16,12 @@ from src.bridge.edge_factories.split_pose_odometry import (
 )
 from src.measurement_storage.measurements.auxiliary import SplitPoseOdometry
 from src.measurement_storage.measurements.base import Measurement
-from src.measurement_storage.measurements.gps import Gps
 from src.measurement_storage.measurements.imu import ContinuousImu
 from src.measurement_storage.measurements.imu_bias import Bias
 from src.measurement_storage.measurements.linear_velocity import Velocity
 from src.measurement_storage.measurements.pose import Pose
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from src.measurement_storage.measurements.position import Position
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ distribution_table: dict[type[Measurement], type[EdgeFactory]] = {
     OdometryWithElements: PoseOdometryFactory,
     SplitPoseOdometry: SplitPoseOdometryFactory,
     ContinuousImu: ImuOdometryFactory,
-    Gps: GpsPositionFactory,
+    Position: GpsPositionFactory,
     Pose: PoseFactory,
     Velocity: VelocityFactory,
     Bias: ImuBiasFactory,
