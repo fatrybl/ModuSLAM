@@ -2,7 +2,7 @@ defaults:
   - /base_pose@pose1
   #  - /base_position@position1
   #  - /base_pose@pose2
-  #  - /base_linear_velocity@velocity1
+  - /base_linear_velocity@velocity1
   #  - /base_imu_bias@bias1
   - _self_
 
@@ -20,7 +20,12 @@ pose1:
 #  timestamp: 1544581170343974000
 #  measurement: [ 0.05, 0.0, 0.0, 0.0, 0.0, 0.0 ]
 #  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
-#
+
+velocity1:
+  timestamp: 1544580712839874000
+  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
+  measurement: [ 0, 0, 0 ]
+
 #velocity1:
 #  timestamp: 1544581170279399000
 #  noise_covariance: [ 1e-0, 1e-1, 1e-2 ] # Vx, Vy, Vz

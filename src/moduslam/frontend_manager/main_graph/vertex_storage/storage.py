@@ -20,7 +20,10 @@ V = TypeVar("V", bound=Vertex)
 
 
 class VertexStorage:
-    """Stores vertices of the Graph."""
+    """Stores vertices of the Graph.
+
+    TODO: need to avoid sorting clusters each time.
+    """
 
     def __init__(self):
         self._clusters = OrderedSet[VertexCluster]()

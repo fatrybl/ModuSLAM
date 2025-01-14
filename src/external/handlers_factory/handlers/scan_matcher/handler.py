@@ -74,14 +74,13 @@ class ScanMatcher(Handler):
 
         tf_base_sensor = np.array(sensor.tf_base_sensor)
         tf_base_sensor_inv = np.linalg.inv(tf_base_sensor)
+        timestamps = np.array([element.timestamp])
 
         self._elements_queue.append(element)
 
         point_cloud = self._tuple_to_array(element.measurement.values)
 
-        t = element.timestamp
-
-        self._scan_matcher.register_frame(frame=point_cloud, timestamps=[t])
+        self._scan_matcher.register_frame(point_cloud, timestamps)
 
         if len(self._elements_queue) == self._elements_queue_size:
 
