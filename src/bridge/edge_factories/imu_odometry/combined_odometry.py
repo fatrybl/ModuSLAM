@@ -22,6 +22,7 @@ from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
 from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
+from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from src.moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
     LinearVelocity,
@@ -92,7 +93,16 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
 
-        return GraphElement(edge, new_vertices)
+        table: dict[Vertex, int] = {
+            pose_i.instance: start,
+            velocity_i.instance: start,
+            bias_i.instance: start,
+            pose_j.instance: stop,
+            velocity_j.instance: stop,
+            bias_j.instance: stop,
+        }
+
+        return GraphElement(edge, table, new_vertices)
 
     @classmethod
     def _get_cluster(

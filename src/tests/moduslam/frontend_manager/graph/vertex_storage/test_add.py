@@ -2,36 +2,46 @@ from typing import Any
 
 import pytest
 
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from src.moduslam.frontend_manager.main_graph.vertices.base import (
+    NonOptimizableVertex,
+    OptimizableVertex,
+    Vertex,
+)
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Feature3D, Pose
 from src.utils.exceptions import ValidationError
+from src.utils.ordered_set import OrderedSet
 
 
 class FakeVertex(Vertex):
     def update(self, value: Any): ...
 
 
-def test_add():
+def test_add_1_vertex():
     storage = VertexStorage()
     cluster = VertexCluster()
     v = Pose(0)
     t = 0
-
+    cluster_set = OrderedSet[VertexCluster]()
+    opt_vertices_set = OrderedSet[OptimizableVertex]()
+    non_opt_vertices_set = OrderedSet[NonOptimizableVertex]()
+    cluster_set.add(cluster)
+    opt_vertices_set.add(v)
     new = NewVertex(v, cluster, t)
+
     storage.add(new)
 
     assert v in cluster
-    assert len(storage.clusters) == 1
-    assert len(storage.vertices) == 1
-    assert len(storage.optimizable_vertices) == 1
-    assert len(storage.non_optimizable_vertices) == 0
+    assert storage.clusters == cluster_set
+    assert storage.vertices == (v,)
+    assert storage.optimizable_vertices == opt_vertices_set
+    assert storage.non_optimizable_vertices == non_opt_vertices_set
 
 
 def test_add_non_optimizable_vertex():
@@ -39,14 +49,19 @@ def test_add_non_optimizable_vertex():
     cluster = VertexCluster()
     v = Feature3D(0)
     t = 0
-
+    cluster_set = OrderedSet[VertexCluster]()
+    opt_vertices_set = OrderedSet[OptimizableVertex]()
+    non_opt_vertices_set = OrderedSet[NonOptimizableVertex]()
+    cluster_set.add(cluster)
+    non_opt_vertices_set.add(v)
     vertex = NewVertex(v, cluster, t)
+
     storage.add(vertex)
 
-    assert len(storage.clusters) == 1
-    assert len(storage.vertices) == 1
-    assert len(storage.optimizable_vertices) == 0
-    assert len(storage.non_optimizable_vertices) == 1
+    assert storage.clusters == cluster_set
+    assert storage.vertices == (v,)
+    assert storage.optimizable_vertices == opt_vertices_set
+    assert storage.non_optimizable_vertices == non_opt_vertices_set
     assert v in storage.non_optimizable_vertices
 
 
@@ -55,7 +70,13 @@ def test_add_multiple_vertices_of_same_type():
     storage = VertexStorage()
     cluster = VertexCluster()
     v1, v2, v3 = Pose(0), Pose(1), Pose(2)
-
+    cluster_set = OrderedSet[VertexCluster]()
+    opt_vertices_set = OrderedSet[OptimizableVertex]()
+    non_opt_vertices_set = OrderedSet[NonOptimizableVertex]()
+    cluster_set.add(cluster)
+    opt_vertices_set.add(v1)
+    opt_vertices_set.add(v2)
+    opt_vertices_set.add(v3)
     new1 = NewVertex(v1, cluster, t)
     new2 = NewVertex(v2, cluster, t)
     new3 = NewVertex(v3, cluster, t)
@@ -64,13 +85,11 @@ def test_add_multiple_vertices_of_same_type():
     storage.add(new2)
     storage.add(new3)
 
-    assert v1 in cluster
-    assert v2 in cluster
-    assert v3 in cluster
-    assert len(storage.clusters) == 1
-    assert len(storage.vertices) == 3
-    assert len(storage.optimizable_vertices) == 3
-    assert len(storage.non_optimizable_vertices) == 0
+    assert v1 in cluster and v2 in cluster and v3 in cluster
+    assert storage.clusters == cluster_set
+    assert storage.vertices == (v1, v2, v3)
+    assert storage.optimizable_vertices == opt_vertices_set
+    assert storage.non_optimizable_vertices == non_opt_vertices_set
     assert v1 in storage.optimizable_vertices
     assert v2 in storage.optimizable_vertices
     assert v3 in storage.optimizable_vertices

@@ -19,7 +19,6 @@ from src.utils.auxiliary_objects import identity4x4
 
 
 class Factory(EdgeFactory):
-    _vertex_type = Pose
 
     @classmethod
     def create(
@@ -50,4 +49,4 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([pose])
 
-        return GraphElement(edge, new_vertices)
+        return GraphElement(edge, {pose.instance: t}, new_vertices)

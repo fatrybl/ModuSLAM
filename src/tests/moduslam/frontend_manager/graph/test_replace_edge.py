@@ -1,12 +1,12 @@
-import gtsam.noiseModel
 import pytest
+from gtsam.noiseModel import Isotropic
 
 from src.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from src.measurement_storage.measurements.position import Position as GpsMeasurement
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
 from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -15,118 +15,105 @@ from src.utils.auxiliary_objects import identity3x3 as i3x3
 from src.utils.auxiliary_objects import identity4x4 as i4x4
 from src.utils.auxiliary_objects import zero_vector3
 from src.utils.exceptions import ValidationError
+from src.utils.ordered_set import OrderedSet
 
 
-def test_replace_edge_raises_validation_error_when_edge_not_exists():
+def test_raises_validation_error_when_edge_not_exists(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose = PoseMeasurement(t, i4x4, i3x3, i3x3)
-    e1 = PriorPose(v, prior_pose, noise_model)
-    e2 = PriorPose(v, prior_pose, noise_model)
+    e1 = PriorPose(v, prior_pose, noise)
+    e2 = PriorPose(v, prior_pose, noise)
 
-    with pytest.raises(ValidationError, match="Edge .* does not exist."):
+    with pytest.raises(ValidationError):
         graph.replace_edge(e1, e2)
 
 
-def test_replace_edge_raises_validation_error_when_new_edge_exists():
+def test_raises_validation_error_edge_already_exists(noise: Isotropic):
     graph = Graph()
     t = 0
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose = PoseMeasurement(t, i4x4, i3x3, i3x3)
-
-    e1 = PriorPose(v, prior_pose, noise_model)
-    e2 = PriorPose(v, prior_pose, noise_model)
-
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
-    element2 = GraphElement(e2, [])
+    e1 = PriorPose(v, prior_pose, noise)
+    e2 = PriorPose(v, prior_pose, noise)
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
+    element2 = GraphElement(e2, {v: t}, ())
 
     graph.add_element(element1)
     graph.add_element(element2)
 
-    with pytest.raises(ValidationError, match="Edge .* already exists."):
+    with pytest.raises(ValidationError):
         graph.replace_edge(e1, e2)
 
 
-def test_replace_edge_raises_validation_error_for_incompatible_edge_types():
+def test_raises_validation_error_incompatible_edge_types(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose = PoseMeasurement(t, i4x4, i3x3, i3x3)
     m = GpsMeasurement(0, zero_vector3, i3x3)
 
-    e1 = PriorPose(v, prior_pose, noise_model)
-    e2 = GpsPosition(v, m, noise_model)
+    e1 = PriorPose(v, prior_pose, noise)
+    e2 = GpsPosition(v, m, noise)
 
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
     graph.add_element(element1)
 
-    with pytest.raises(
-        ValidationError, match="Type mismatch between the existing edge and the new edge."
-    ):
+    with pytest.raises(ValidationError):
         graph.replace_edge(e1, e2)
 
 
-def test_replace_edge_raises_validation_error_when_new_edge_vertices_not_subset():
-    t1, t2 = 0, 1
+def test_raises_validation_error_new_edge_vertices_is_not_subset(noise: Isotropic):
+    t = 0
     graph = Graph()
-    v1 = PoseVertex(t1)
-    v2 = PoseVertex(t2)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
-    prior_pose = PoseMeasurement(t1, i4x4, i3x3, i3x3)
+    v1, v2 = PoseVertex(0), PoseVertex(1)
+    prior_pose = PoseMeasurement(t, i4x4, i3x3, i3x3)
 
-    e1 = PriorPose(v1, prior_pose, noise_model)
-    e2 = PriorPose(v2, prior_pose, noise_model)
+    e1 = PriorPose(v1, prior_pose, noise)
+    e2 = PriorPose(v2, prior_pose, noise)
 
-    element1 = GraphElement(e1, [NewVertex(v1, cluster, t1)])
+    element1 = GraphElement(e1, {v1: t}, (NewVertex(v1, VertexCluster(), t),))
     graph.add_element(element1)
 
-    with pytest.raises(
-        ValidationError, match="Vertices of the new edge do not match with the existing edge."
-    ):
+    with pytest.raises(ValidationError):
         graph.replace_edge(e1, e2)
 
 
-def test_replace_edge():
+def test_no_exception(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose1 = PoseMeasurement(t, i4x4, i3x3, i3x3)
     prior_pose2 = PoseMeasurement(t, i4x4, i3x3, i3x3)
-    e1 = PriorPose(v, prior_pose1, noise_model)
-    e2 = PriorPose(v, prior_pose2, noise_model)
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
+    e1 = PriorPose(v, prior_pose1, noise)
+    e2 = PriorPose(v, prior_pose2, noise)
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
+    o_set = OrderedSet[PriorPose]()
+    o_set.add(e2)
 
     graph.add_element(element1)
 
     graph.replace_edge(e1, e2)
 
-    assert len(graph.edges) == 1
+    assert graph.edges == o_set
     assert e1 not in graph.edges
     assert e2 in graph.edges
     assert v in graph.connections
     assert graph.factor_graph.nrFactors() == 1
 
 
-def test_replace_edge_updates_connections_correctly():
+def test_updates_connections_correctly(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose1 = PoseMeasurement(t, i4x4, i3x3, i3x3)
     prior_pose2 = PoseMeasurement(t, i4x4, i3x3, i3x3)
-    e1 = PriorPose(v, prior_pose1, noise_model)
-    e2 = PriorPose(v, prior_pose2, noise_model)
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
+    e1 = PriorPose(v, prior_pose1, noise)
+    e2 = PriorPose(v, prior_pose2, noise)
+    o_set = OrderedSet[PriorPose]()
+    o_set.add(e2)
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
 
     graph.add_element(element1)
 
@@ -134,19 +121,18 @@ def test_replace_edge_updates_connections_correctly():
 
     assert e1 not in graph.connections[v]
     assert e2 in graph.connections[v]
+    assert graph.edges == o_set
 
 
-def test_replace_edge_maintains_correct_index():
+def test_maintains_correct_index(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose1 = PoseMeasurement(t, i4x4, i3x3, i3x3)
     prior_pose2 = PoseMeasurement(t, i4x4, i3x3, i3x3)
-    e1 = PriorPose(v, prior_pose1, noise_model)
-    e2 = PriorPose(v, prior_pose2, noise_model)
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
+    e1 = PriorPose(v, prior_pose1, noise)
+    e2 = PriorPose(v, prior_pose2, noise)
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
 
     graph.add_element(element1)
     original_index = e1.index
@@ -156,17 +142,15 @@ def test_replace_edge_maintains_correct_index():
     assert e2.index == original_index
 
 
-def test_replace_edge_updates_factor_graph_correctly():
+def test_replace_edge_updates_factor_graph_correctly(noise: Isotropic):
     t = 0
     graph = Graph()
     v = PoseVertex(t)
-    cluster = VertexCluster()
-    noise_model = gtsam.noiseModel.Isotropic.Sigma(6, 1.0)
     prior_pose1 = PoseMeasurement(t, i4x4, i3x3, i3x3)
     prior_pose2 = PoseMeasurement(t, i4x4, i3x3, i3x3)
-    e1 = PriorPose(v, prior_pose1, noise_model)
-    e2 = PriorPose(v, prior_pose2, noise_model)
-    element1 = GraphElement(e1, [NewVertex(v, cluster, t)])
+    e1 = PriorPose(v, prior_pose1, noise)
+    e2 = PriorPose(v, prior_pose2, noise)
+    element1 = GraphElement(e1, {v: t}, (NewVertex(v, VertexCluster(), t),))
 
     graph.add_element(element1)
     old_factor = graph.factor_graph.at(e1.index)

@@ -3,8 +3,8 @@
 from collections.abc import Iterable
 
 from src.external.metrics.base import Metrics
+from src.moduslam.frontend_manager.main_graph.data_classes import GraphElement
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 
 

@@ -1,12 +1,13 @@
 import pytest
 
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
+from src.moduslam.frontend_manager.main_graph.vertices.base import OptimizableVertex
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from src.utils.exceptions import ValidationError
 from src.utils.ordered_set import OrderedSet
@@ -32,12 +33,12 @@ def test_remove_existing_vertex():
     storage.remove(v)
 
     assert v not in storage
-    assert len(storage.clusters) == 0
-    assert len(storage.vertices) == 0
-    assert len(storage.optimizable_vertices) == 0
-    assert len(storage.non_optimizable_vertices) == 0
-    assert storage.get_last_vertex(Pose) is None
+    assert storage.clusters == OrderedSet()
+    assert storage.vertices == ()
+    assert storage.optimizable_vertices == OrderedSet()
+    assert storage.non_optimizable_vertices == OrderedSet()
     assert storage.get_vertices(Pose) == OrderedSet()
+    assert storage.get_last_vertex(Pose) is None
     assert storage.get_vertex_cluster(v) is None
 
 
@@ -62,11 +63,16 @@ def test_remove_vertex_when_multiple_vertices_of_same_type_exist():
     cluster = VertexCluster()
     v1, v2 = Pose(0), Pose(1)
     t1, t2 = 0, 1
+    cluster_set = OrderedSet[VertexCluster]()
+    opt_vertices_set = OrderedSet[OptimizableVertex]()
+    poses_set = OrderedSet[Pose]()
+    cluster_set.add(cluster)
+    opt_vertices_set.add(v1)
+    opt_vertices_set.add(v2)
+    poses_set.add(v2)
 
     new1 = NewVertex(v1, cluster, t1)
     new2 = NewVertex(v2, cluster, t2)
-    final_set = OrderedSet[Pose]()
-    final_set.add(v2)
 
     storage.add(new1)
     storage.add(new2)
@@ -78,10 +84,10 @@ def test_remove_vertex_when_multiple_vertices_of_same_type_exist():
 
     assert v1 not in storage
     assert v2 in storage
-    assert len(storage.clusters) == 1
-    assert len(storage.vertices) == 1
+    assert storage.clusters == cluster_set
+    assert storage.vertices == (v2,)
     assert storage.get_last_vertex(Pose) == v2
-    assert storage.get_vertices(Pose) == final_set
+    assert storage.get_vertices(Pose) == poses_set
     assert storage.get_vertex_cluster(v2) == cluster
     assert storage.get_vertex_cluster(v1) is None
 

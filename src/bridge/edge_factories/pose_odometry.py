@@ -54,7 +54,7 @@ class Factory(EdgeFactory):
 
         edge = cls._create_edge(pose_i.instance, pose_j.instance, measurement)
 
-        return GraphElement(edge, new_vertices)
+        return GraphElement(edge, {pose_i.instance: start, pose_j.instance: stop}, new_vertices)
 
     @classmethod
     def _get_pose_i_with_status(

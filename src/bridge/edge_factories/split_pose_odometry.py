@@ -36,7 +36,7 @@ class Factory(EdgeFactory):
 
         Raises:
             SkipItemException: if the measurement's timestamp does not match
-            the parent measurement stop timestamp.
+                the parent measurement stop timestamp.
         """
         stop = measurement.parent.time_range.stop
 

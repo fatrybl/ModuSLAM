@@ -9,20 +9,21 @@ from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.auxiliary_objects import identity3x3, zero_vector3
 
 
-def test_create_empty_graph(empty_graph: Graph):
+def test_create_empty_graph(graph0: Graph):
     t = 0
     cluster = VertexCluster()
     clusters = {cluster: TimeRange(t, t)}
     measurement = Position(t, zero_vector3, identity3x3)
 
-    element = Factory.create(empty_graph, clusters, measurement)
+    element = Factory.create(graph0, clusters, measurement)
 
-    edge_vertex = element.edge.vertex
+    vertex = element.edge.vertex
     new_vertex = element.new_vertices[0]
+    assert vertex is new_vertex.instance
     assert len(element.new_vertices) == 1
     assert new_vertex.instance.index == 0
     assert new_vertex.timestamp == t
-    assert edge_vertex is new_vertex.instance
+    assert element.vertex_timestamp_table == {vertex: t}
 
 
 def test_create_graph_with_1_existing_vertex(graph1: Graph):
@@ -31,11 +32,12 @@ def test_create_graph_with_1_existing_vertex(graph1: Graph):
     existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
     measurement = Position(t, zero_vector3, identity3x3)
 
-    new_element = Factory.create(graph1, clusters, measurement)
+    element = Factory.create(graph1, clusters, measurement)
 
-    vertex = new_element.edge.vertex
-    assert not new_element.new_vertices
+    vertex = element.edge.vertex
+    assert not element.new_vertices
     assert vertex is existing_vertex
+    assert element.vertex_timestamp_table == {vertex: t}
 
 
 def test_create_graph_with_1_existing_1_new_vertex(graph1: Graph):
@@ -45,10 +47,12 @@ def test_create_graph_with_1_existing_1_new_vertex(graph1: Graph):
     existing_vertex = graph1.vertex_storage.get_last_vertex(Pose)
     measurement = Position(t, zero_vector3, identity3x3)
 
-    new_element = Factory.create(graph1, clusters, measurement)
+    element = Factory.create(graph1, clusters, measurement)
 
-    new_vertex = new_element.new_vertices[0]
-    assert len(new_element.new_vertices) == 1
-    assert new_vertex.instance is not existing_vertex
-    assert new_vertex.instance.index == 1
+    new_vertex = element.new_vertices[0]
+    vertex = element.edge.vertex
+    assert len(element.new_vertices) == 1
+    assert vertex is not existing_vertex
+    assert vertex.index == 1
     assert new_vertex.timestamp == t
+    assert element.vertex_timestamp_table == {vertex: t}

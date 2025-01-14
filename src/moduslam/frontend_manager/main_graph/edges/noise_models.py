@@ -95,3 +95,16 @@ def diagonal2x2_noise_model(
     """
     noise = gtsam.noiseModel.Diagonal.Variances(noise_variances)
     return noise
+
+
+def isotropic_3d_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:
+    """Isotropic Gaussian noise model for 3D vector.
+
+    Args:
+        variance: float representing the standard deviation of the noise.
+
+    Returns:
+        gtsam noise model.
+    """
+    noise = gtsam.noiseModel.Isotropic.Variance(3, variance)
+    return noise

@@ -23,7 +23,6 @@ from src.utils.auxiliary_objects import zero_vector3
 
 
 class Factory(EdgeFactory):
-    _vertex_type = LinearVelocity
 
     @classmethod
     def create(
@@ -55,4 +54,4 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([velocity])
 
-        return GraphElement(edge, new_vertices)
+        return GraphElement(edge, {velocity.instance: t}, new_vertices)

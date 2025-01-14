@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from typing import Any, TypeVar
 
 from src.bridge.edge_factories.factory_protocol import VertexWithStatus
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -15,14 +15,14 @@ from src.utils.auxiliary_dataclasses import TimeRange
 V = TypeVar("V", bound=Vertex)
 
 
-def create_new_vertices(vertices: Iterable[VertexWithStatus]) -> list[NewVertex]:
+def create_new_vertices(vertices: Iterable[VertexWithStatus]) -> tuple[NewVertex, ...]:
     """Creates new vertices based on the status of the given ones.
 
     Args:
         vertices: vertices with statuses.
 
     Returns:
-        a table of clusters with the corresponding lists of new vertices with timestamps.
+        new vertices.
     """
     new_vertices: list[NewVertex] = []
 
@@ -31,7 +31,7 @@ def create_new_vertices(vertices: Iterable[VertexWithStatus]) -> list[NewVertex]
             vertex = NewVertex(item.instance, item.cluster, item.timestamp)
             new_vertices.append(vertex)
 
-    return new_vertices
+    return tuple(new_vertices)
 
 
 def get_cluster_for_timestamp_from_dict(
@@ -170,7 +170,7 @@ def create_vertex_i_with_status(
     Returns:
         a new vertex with the status.
     """
-    vertex = cluster.get_last_vertex(vertex_type)
+    vertex = cluster.get_vertex_of_type(vertex_type)
     if vertex:
         return VertexWithStatus(vertex, cluster, timestamp)
 
@@ -199,7 +199,7 @@ def create_vertex_j_with_status(
         a new vertex with the status.
     """
     v_type = type(vertex_i.instance)
-    vertex = cluster.get_last_vertex(v_type)
+    vertex = cluster.get_vertex_of_type(v_type)
     if vertex:
         return VertexWithStatus(vertex, cluster, timestamp)
     else:

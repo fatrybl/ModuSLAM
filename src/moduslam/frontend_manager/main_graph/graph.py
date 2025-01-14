@@ -5,12 +5,16 @@ import gtsam
 
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.base import Measurement
+from src.moduslam.frontend_manager.main_graph.data_classes import (
+    GraphElement,
+    NewVertex,
+)
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from src.moduslam.frontend_manager.utils import get_vertices_with_measurement_timestamps
 from src.utils.exceptions import (
     ItemExistsError,
     ItemNotExistsError,
@@ -85,6 +89,8 @@ class Graph:
             ValidationError: if the validation of an element fails.
         """
         edge = element.edge
+        table = element.vertex_timestamp_table
+        new_vertices = element.new_vertices
 
         try:
             self._validate_graph_element(element)
@@ -97,11 +103,13 @@ class Graph:
         self.edges.add(edge)
         self.factor_graph.add(edge.factor)
 
-        for new_vertex in element.new_vertices:
-            self._vertex_storage.add(new_vertex)
+        for new_v in new_vertices:
+            self._vertex_storage.add(new_v)
 
-        for vertex in edge.vertices:
-            self._add_connection(vertex, edge)
+        for v in edge.vertices:
+            self._add_connection(v, edge)
+
+        self._update_timestamps(table, new_vertices)
 
     def add_elements(self, elements: Iterable[GraphElement]):
         """Adds multiple elements.
@@ -127,42 +135,48 @@ class Graph:
             logger.error(msg)
             raise ValidationError(msg)
 
-        self._factor_graph.remove(edge.index)
+        table = get_vertices_with_measurement_timestamps(edge)
+
         self._edges.remove(edge)
+        self._factor_graph.remove(edge.index)
+
+        for v, t in table.items():
+            self._vertex_storage.remove_vertex_timestamp(v, t)
 
         for vertex in edge.vertices:
             self._connections[vertex].remove(edge)
 
             if not self._connections[vertex]:
-                self._vertex_storage.remove(vertex)
                 del self._connections[vertex]
 
-    def replace_edge(self, edge: Edge, new_edge: Edge) -> None:
+    def replace_edge(self, existing: Edge, new: Edge) -> None:
         """Replaces an existing edge with a new one of the same type.
 
         Args:
-            edge: an edge to be replaced.
+            existing: an edge to be replaced.
 
-            new_edge: a new edge.
+            new: a new edge.
 
         Raises:
             ValidationError: if the validation fails.
+
+        TODO: check if vertex cluster time range should be squeezed if an edge is replaced.
         """
         try:
-            self._validate_replace_edge(edge, new_edge)
+            self._validate_replace_edge(existing, new)
         except (ItemNotExistsError, ItemExistsError, TypeError, NotSubsetError) as e:
             msg = f"Validation failed: {e}"
             logger.error(msg)
             raise ValidationError(msg)
 
-        new_edge.index = edge.index
-        self._edges.remove(edge)
-        self._edges.add(new_edge)
-        self._factor_graph.replace(edge.index, new_edge.factor)
+        new.index = existing.index
+        self._edges.remove(existing)
+        self._edges.add(new)
+        self._factor_graph.replace(existing.index, new.factor)
 
-        for vertex in edge.vertices:
-            self._connections[vertex].remove(edge)
-            self._connections[vertex].add(new_edge)
+        for vertex in existing.vertices:
+            self._connections[vertex].remove(existing)
+            self._connections[vertex].add(new)
 
     def remove_vertex(self, vertex: Vertex) -> None:
         """Removes vertex from the graph.
@@ -303,8 +317,30 @@ class Graph:
         else:
             self._connections[vertex].add(edge)
 
+    def _update_timestamps(
+        self, table: dict[Vertex, int], new_vertices: tuple[NewVertex, ...]
+    ) -> None:
+        """Updates the timestamps in clusters for corresponding vertices.
+
+        Args:
+            table: a table with vertices and timestamps.
+
+            new_vertices: new vertices
+        """
+        new_vertices_set = {v.instance for v in new_vertices}
+        unused_items = {}
+
+        for v, t in table.items():
+            if v not in new_vertices_set:
+                unused_items[v] = t
+
+        for v, t in unused_items.items():
+            self._vertex_storage.add_vertex_timestamp(v, t)
+
 
 class GraphCandidate:
+    """TODO: maybe make dataclass ?"""
+
     def __init__(
         self, graph: Graph, elements: list[GraphElement], leftovers: list[Measurement] | None = None
     ):

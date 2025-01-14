@@ -1,4 +1,4 @@
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )

@@ -14,13 +14,11 @@ from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from src.moduslam.frontend_manager.main_graph.vertices.custom import ImuBias
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
 from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.auxiliary_objects import zero_vector3
 
 
 class Factory(EdgeFactory):
-    _vertex_type = PoseVertex
 
     @classmethod
     def create(
@@ -53,4 +51,4 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([bias])
 
-        return GraphElement(edge, new_vertices)
+        return GraphElement(edge, {bias.instance: t}, new_vertices)

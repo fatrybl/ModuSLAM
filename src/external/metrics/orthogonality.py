@@ -14,9 +14,9 @@ from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
 from src.moduslam.data_manager.batch_factory.data_objects import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
+from src.moduslam.frontend_manager.main_graph.data_classes import GraphElement
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from src.moduslam.frontend_manager.main_graph.new_element import GraphElement
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from src.moduslam.map_manager.map_factories.lidar_map.config import (

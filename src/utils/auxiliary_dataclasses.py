@@ -11,7 +11,7 @@ from src.custom_types.numpy import VectorN
 from src.moduslam.sensors_factory.sensors import Sensor
 
 
-@dataclass(frozen=True, eq=True)
+@dataclass
 class TimeRange:
     """Represents time range with start/stop timestamps."""
 

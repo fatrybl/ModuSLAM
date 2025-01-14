@@ -26,7 +26,9 @@ def pose_se3_from_tuple(values: Vector6) -> Matrix4x4:
         a pose SE(3) matrix.
     """
     trans = values[:3]
-    rot = gtsam.Rot3.Ypr(*values[3:])
+    rpy = values[3:]
+    ypr = (rpy[2], rpy[1], rpy[0])
+    rot = gtsam.Rot3.Ypr(*ypr)
     pose_numpy = gtsam.Pose3(rot, trans).matrix()
     pose_tuple = tuple(map(tuple, pose_numpy))
     pose = cast(Matrix4x4, pose_tuple)

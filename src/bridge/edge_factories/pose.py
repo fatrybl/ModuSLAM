@@ -50,4 +50,4 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([pose])
 
-        return GraphElement(edge, new_vertices)
+        return GraphElement(edge, {pose.instance: t}, new_vertices)

@@ -1,10 +1,8 @@
 from typing import Any, TypeVar
 
-from src.external.metrics.utils import median
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.exceptions import ItemExistsError, ItemNotExistsError
-from src.utils.ordered_set import OrderedSet
 
 V = TypeVar("V", bound=Vertex)
 
@@ -13,44 +11,31 @@ class VertexCluster:
     """Stores vertices and their timestamps."""
 
     def __init__(self):
-        self._vertices: dict[type[Vertex], OrderedSet] = {}
-        self._vertex_timestamp_table: dict[Vertex, int] = {}
-        self._timestamps: list[int] = []
+        self._vertex_timestamps_table: dict[Vertex, dict[int, int]] = {}
+        self._t_range: TimeRange | None = None
 
     def __repr__(self) -> str:
-        types = list(self._vertices.keys())
-        return f"Cluster with types: {types}"
+        vertices = self._vertex_timestamps_table.keys()
+        return f"Cluster with: {vertices}"
 
     def __contains__(self, item: Any) -> bool:
-        """Checks if a vertex is in the cluster."""
-        return item in self._vertex_timestamp_table
+        """Checks if an item is in the cluster."""
+        return item in self._vertex_timestamps_table
 
     @property
     def empty(self) -> bool:
-        """Checks if the cluster is empty."""
-        return not bool(self._vertices)
+        """Cluster empty status."""
+        return not bool(self._vertex_timestamps_table)
 
     @property
-    def vertices(self) -> list[Vertex]:
-        """Returns all vertices in the cluster."""
-        return list(self._vertex_timestamp_table.keys())
+    def vertices(self) -> tuple[Vertex, ...]:
+        """All vertices in the cluster."""
+        return tuple(self._vertex_timestamps_table.keys())
 
     @property
-    def vertices_with_timestamps(self) -> dict[Vertex, int]:
-        """Returns all vertices with their timestamps."""
-        return self._vertex_timestamp_table
-
-    @property
-    def timestamp(self) -> int:
-        """Calculates the median timestamp of the cluster.
-
-        Raises:
-            ValueError: If the cluster is empty.
-        """
-        if self._timestamps:
-            return median(self._timestamps)
-
-        raise ValueError("Timestamp does not exist for empty cluster.")
+    def vertices_with_timestamps(self) -> dict[Vertex, dict[int, int]]:
+        """All vertices with their timestamps."""
+        return self._vertex_timestamps_table
 
     @property
     def time_range(self) -> TimeRange:
@@ -59,25 +44,10 @@ class VertexCluster:
         Raises:
             ValueError: If the cluster is empty.
         """
-        if self._timestamps:
-            start = min(self._timestamps)
-            stop = max(self._timestamps)
-            return TimeRange(start, stop)
+        if self._t_range:
+            return self._t_range
 
         raise ValueError("Time range does not exist for empty cluster.")
-
-    def timestamp_exists(self, timestamp: int) -> bool:
-        """Checks if a timestamp exists in the cluster.
-
-        TODO: improve O(N) complexity.
-
-        Args:
-            timestamp: timestamp to check.
-
-        Returns:
-            check status.
-        """
-        return timestamp in self._timestamps
 
     def add(self, vertex: Vertex, timestamp: int) -> None:
         """Adds a vertex with an associated timestamp to the cluster.
@@ -90,14 +60,12 @@ class VertexCluster:
         Raises:
             ItemExistsError: if the vertex already exists in the cluster.
         """
-        v_type = type(vertex)
-
-        if vertex in self._vertex_timestamp_table:
+        if vertex in self._vertex_timestamps_table:
             raise ItemExistsError(f"Vertex{vertex} already exists")
 
-        self._vertex_timestamp_table[vertex] = timestamp
-        self._vertices.setdefault(v_type, OrderedSet()).add(vertex)
-        self._timestamps.append(timestamp)
+        self._vertex_timestamps_table[vertex] = {timestamp: 1}
+
+        self._update_t_range_on_add(timestamp)
 
     def remove(self, vertex: Vertex) -> None:
         """Removes a vertex from the cluster.
@@ -108,44 +76,91 @@ class VertexCluster:
         Raises:
             ItemNotExistsError: a vertex does not exist in the cluster.
         """
-        v_type = type(vertex)
-        if vertex not in self._vertex_timestamp_table:
-            raise ItemNotExistsError(f"Vertex{vertex} does not exist")
+        if vertex not in self._vertex_timestamps_table:
+            raise ItemNotExistsError(f"Vertex{vertex} does not exist so can`t be removed.")
 
-        t = self._vertex_timestamp_table[vertex]
-        self._timestamps.remove(t)
-        self._vertices[v_type].remove(vertex)
-        del self._vertex_timestamp_table[vertex]
-        if not self._vertices[v_type]:
-            del self._vertices[v_type]
+        del self._vertex_timestamps_table[vertex]
 
-    def get_vertices_of_type(self, vertex_type: type[V]) -> list[V]:
-        """Returns all vertices of a specific type.
+        self._update_t_range()
+
+    def add_timestamp(self, vertex: Vertex, timestamp: int) -> None:
+        """Adds a timestamp to the vertex.
+
+        Args:
+            vertex: a vertex to add a timestamp.
+            timestamp: a timestamp to add.
+
+        Raises:
+            ItemNotExistsError: if the vertex does not exist in the cluster.
+        """
+        try:
+            t_occurences = self._vertex_timestamps_table[vertex]
+            t_occurences[timestamp] = t_occurences.get(timestamp, 0) + 1
+        except KeyError:
+            raise ItemNotExistsError(f"Vertex {vertex} does not exist in the cluster.")
+
+        self._update_t_range_on_add(timestamp)
+
+    def remove_timestamp(self, vertex: Vertex, timestamp: int) -> None:
+        """Removes a timestamp from the vertex.
+
+        Args:
+            vertex: a vertex to remove a timestamp.
+
+            timestamp: a timestamp to remove.
+
+        Raises:
+            ItemNotExistsError: if the vertex does not exist in the cluster.
+
+            ValueError: if the timestamp does not exist for the vertex.
+        """
+        try:
+            t_occurences = self._vertex_timestamps_table[vertex]
+            num = t_occurences.get(timestamp)
+            if num is None:
+                raise ValueError(f"Timestamp {timestamp} does not exist for vertex {vertex}.")
+            if num == 1:
+                del t_occurences[timestamp]
+            else:
+                t_occurences[timestamp] = num - 1
+
+            if not t_occurences:
+                del self._vertex_timestamps_table[vertex]
+
+        except KeyError:
+            raise ItemNotExistsError(f"Vertex {vertex} does not exist in the cluster.")
+
+        self._update_t_range()
+
+    def get_vertices_of_type(self, vertex_type: type[V]) -> tuple[V, ...]:
+        """Returns all vertices of the specific type.
 
         Args:
             vertex_type: The type of vertices to retrieve.
 
         Returns:
-            A list of vertices of the given type.
+             tuple with vertices of the given type.
         """
-        return [v for v in self._vertex_timestamp_table if isinstance(v, vertex_type)]
+        return tuple(v for v in self._vertex_timestamps_table if type(v) is vertex_type)
 
-    def get_last_vertex(self, vertex_type: type[V]) -> V | None:
-        """Gets the last added vertex of the specified type.
+    def get_vertex_of_type(self, vertex_type: type[V]) -> V | None:
+        """Gets the vertex of the given type.
 
         Args:
             vertex_type: a type of the vertex to retrieve.
 
         Returns:
-            the last added vertex or None if not exists.
+            the vertex or None if not exists.
         """
         try:
-            return self._vertices[vertex_type].last
-        except KeyError:
+            v = next(v for v in self._vertex_timestamps_table if type(v) is vertex_type)
+            return v
+
+        except StopIteration:
             return None
 
-    def get_timestamp(self, vertex: Vertex) -> int:
-        """Gets the timestamp of the vertex.
+    def get_timestamps(self, vertex: Vertex) -> list[int]:
+        """Gets the timestamps of the vertex.
 
         Args:
             vertex: a vertex whose timestamp to retrieve.
@@ -157,6 +172,38 @@ class VertexCluster:
             ItemNotExistsError: if the vertex does not exist in the cluster.
         """
         try:
-            return self._vertex_timestamp_table[vertex]
+            return list(self._vertex_timestamps_table[vertex].keys())
         except KeyError:
-            raise ItemNotExistsError(f"No timestamp exists for vertex{vertex}")
+            raise ItemNotExistsError(f"Vertex {vertex} does not exist in the cluster.")
+
+    def _update_t_range_on_add(self, timestamp: int) -> None:
+        """Updates the time range when a new timestamp is added.
+
+        Args:
+            timestamp: The new timestamp to add.
+        """
+        if self._t_range is None:
+            self._t_range = TimeRange(start=timestamp, stop=timestamp)
+        else:
+            self._t_range.start = min(self._t_range.start, timestamp)
+            self._t_range.stop = max(self._t_range.stop, timestamp)
+
+    def _update_t_range(self) -> None:
+        """Updates the time range of the cluster.
+
+        TODO: time range recalculation takes O(n) time.
+        """
+
+        if not self._vertex_timestamps_table:
+            self._t_range = None
+
+        else:
+            timestamps = [
+                timestamp
+                for t_occurences in self._vertex_timestamps_table.values()
+                for timestamp in t_occurences.keys()
+            ]
+
+            start = min(timestamps)
+            stop = max(timestamps)
+            self._t_range = TimeRange(start, stop)

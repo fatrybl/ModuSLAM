@@ -2,7 +2,7 @@ import logging
 from typing import Any, TypeVar
 
 from src.logger.logging_config import frontend_manager
-from src.moduslam.frontend_manager.main_graph.new_element import NewVertex
+from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
@@ -35,17 +35,21 @@ class VertexStorage:
         return item in self._vertex_cluster_table
 
     @property
-    def vertices(self) -> list[Vertex]:
-        """All vertices.
-
-        Complexity: O(N).
-        """
-        return list(self._vertex_cluster_table.keys())
+    def vertices(self) -> tuple[Vertex, ...]:
+        """All vertices. Complexity: O(N)."""
+        return tuple(self._vertex_cluster_table.keys())
 
     @property
     def clusters(self) -> OrderedSet[VertexCluster]:
         """Clusters with vertices."""
         return self._clusters
+
+    @property
+    def sorted_clusters(self) -> list[VertexCluster]:
+        """Clusters with vertices sorted by time range: start.
+        Complexity: O(N*log(N))
+        """
+        return sorted(self._clusters, key=lambda x: x.time_range.start)
 
     @property
     def optimizable_vertices(self) -> OrderedSet[OptimizableVertex]:
@@ -80,10 +84,13 @@ class VertexStorage:
         cluster = vertex.cluster
 
         cluster.add(v, t)
+
+        if cluster not in self._clusters:
+            self._clusters.add(cluster)
+
         self._timestamp_cluster_table[t] = cluster
         self._vertex_cluster_table[v] = cluster
         self._type_vertices_table.setdefault(v_type, OrderedSet()).add(v)
-        self._process_cluster(cluster, self._clusters)
 
         if isinstance(v, OptimizableVertex):
             self._optimizable_vertices.add(v)
@@ -109,28 +116,75 @@ class VertexStorage:
             logger.error(f"Validation failed: {e}")
             raise ValidationError(e)
 
-        v_type = type(vertex)
         cluster = self._vertex_cluster_table[vertex]
-        timestamp = cluster.get_timestamp(vertex)
+        timestamps = cluster.get_timestamps(vertex)
 
-        self._type_vertices_table[v_type].remove(vertex)
-        del self._vertex_cluster_table[vertex]
+        for t in timestamps:
+            del self._timestamp_cluster_table[t]
 
         cluster.remove(vertex)
         if cluster.empty:
             self._clusters.remove(cluster)
 
-        if not cluster.timestamp_exists(timestamp):
+        self._remove_vertex(vertex)
+
+    def add_vertex_timestamp(self, vertex: Vertex, timestamp: int) -> None:
+        """Adds the timestamp to the cluster which contains the vertex.
+
+        Args:
+            vertex: a vertex to add a timestamp.
+
+            timestamp: a timestamp to add.
+
+        Raises:
+            ItemNotExistsError: if the vertex does not exist in the storage.
+
+            ItemExistsError: if a new timestamp is already included in another cluster.
+        """
+        if vertex not in self._vertex_cluster_table:
+            raise ItemNotExistsError(f"Vertex {vertex} does not exist in the storage.")
+
+        cluster1 = self._vertex_cluster_table[vertex]
+        cluster2 = self._timestamp_cluster_table.get(timestamp, None)
+
+        if cluster2 and cluster1 is not cluster2:
+            raise ItemExistsError(f"A timestamp {timestamp} already exists in another cluster.")
+
+        cluster1.add_timestamp(vertex, timestamp)
+        self._timestamp_cluster_table[timestamp] = cluster1
+
+    def remove_vertex_timestamp(self, vertex: Vertex, timestamp: int) -> None:
+        """Removes the timestamp from the cluster which contains the vertex.
+
+        Args:
+            vertex: a vertex to remove a timestamp.
+
+            timestamp: a timestamp to remove.
+
+        Raises:
+            ItemNotExistsError:
+                if the vertex does not exist in the storage
+                if the vertex and the timestamp do not belong to the same cluster.
+        """
+        if vertex not in self._vertex_cluster_table:
+            raise ItemNotExistsError(f"Vertex {vertex} does not exist in the storage.")
+
+        cluster1 = self._vertex_cluster_table[vertex]
+        cluster2 = self._timestamp_cluster_table.get(timestamp, None)
+
+        if cluster2 is not cluster1:
+            raise ItemNotExistsError(
+                f"Timestamp {timestamp} and vertex {vertex} do not belong to the same cluster."
+            )
+
+        cluster1.remove_timestamp(vertex, timestamp)
+
+        if vertex not in cluster1:
+            self._remove_vertex(vertex)
+
+        if cluster1.empty:
+            self._clusters.remove(cluster1)
             del self._timestamp_cluster_table[timestamp]
-
-        if isinstance(vertex, OptimizableVertex):
-            self._optimizable_vertices.remove(vertex)
-
-        if isinstance(vertex, NonOptimizableVertex):
-            self._non_optimizable_vertices.remove(vertex)
-
-        if len(self._clusters) > len(self.vertices):
-            raise ValueError("The number of clusters bigger than the number of vertices.")
 
     def get_vertices(self, vertex_type: type[V]) -> OrderedSet[V]:
         """Gets vertices of the given type.
@@ -161,7 +215,7 @@ class VertexStorage:
         """Gets the cluster that contains the given vertex.
 
         Args:
-            vertex: a vertex to get a cluster for.
+            vertex: a vertex to get a cluster of.
 
         Returns:
             cluster if exists or None.
@@ -204,28 +258,20 @@ class VertexStorage:
         except KeyError:
             return None
 
-    @staticmethod
-    def _process_cluster(cluster: VertexCluster, clusters: OrderedSet[VertexCluster]) -> None:
-        """Adds cluster to the clusters list.
-        Complexity: O(N) in the worst case.
+    def _remove_vertex(self, vertex: Vertex) -> None:
+        """Removes vertex from all instances of the storage.
 
         Args:
-            cluster: a new cluster to be added.
+            vertex: a vertex to remove.
         """
-        if cluster in clusters:
-            return
+        del self._vertex_cluster_table[vertex]
 
-        if not clusters or cluster.timestamp > clusters.last.timestamp:
-            clusters.add(cluster)
-            return
+        self._type_vertices_table[type(vertex)].remove(vertex)
 
-        for i in range(len(clusters) - 1, -1, -1):
-            existing_cluster = clusters[i]
-            if cluster.timestamp > existing_cluster.timestamp:
-                clusters.insert(cluster, i + 1)
-                return
-
-        clusters.insert(cluster, 0)
+        if isinstance(vertex, OptimizableVertex):
+            self._optimizable_vertices.remove(vertex)
+        if isinstance(vertex, NonOptimizableVertex):
+            self._non_optimizable_vertices.remove(vertex)
 
     def _validate_new_vertex(self, vertex: NewVertex):
         """Validates a new vertex before adding.

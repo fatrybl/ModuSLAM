@@ -1,3 +1,5 @@
+"""TODO: implement."""
+
 from src.bridge.edge_factories.factory_protocol import EdgeFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
