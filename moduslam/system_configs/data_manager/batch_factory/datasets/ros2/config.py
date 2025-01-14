@@ -16,9 +16,12 @@ class Ros2Config(DatasetConfig):
 
     sensors_table: dict[str, str] = field(default_factory=lambda: {})
 
+    data_types: list[str] = field(default_factory=lambda: [])
+
     reader: str = DataReaders.ros2_reader
 
     name: str = "Ros2 Reader for Ros2bags"
 
     url: str = "example.com"
+
 

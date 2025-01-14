@@ -4,7 +4,8 @@ graph_builder:
   element_distributor:
     sensor_handlers_table:
       imu: [ 'imu_preprocessor' ]
-      lidar_left: [ 'kiss_icp_odometry' ]
+#      lidar_left: [ 'kiss_icp_odometry' ]
+#      stereo_camera: [ 'camera_features_detector' ]
 
 
   candidate_factory:

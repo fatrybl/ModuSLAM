@@ -53,7 +53,9 @@ class Ros2DataReader(DataReader):
 
         self._sensors_in_config = dataset_params.sensors_table
 
-        self._data_types = ["Image", "PointCloud2", "Imu"]
+        self._data_types = dataset_params.data_types
+
+        # self._data_types = ["Image", "PointCloud2", "Imu"]
 
         self._sensors_in_factory = SensorsFactory.get_all_sensors()
 
@@ -68,8 +70,8 @@ class Ros2DataReader(DataReader):
         self._connections: list = []
 
         if isinstance(self._regime, TimeLimit):
-            start = int(self._regime.start)
-            stop = int(self._regime.stop)
+            start = float(self._regime.start)
+            stop = float(self._regime.stop)
 
             self._time_range = TimeRange(start, stop)
             self._rosbag_iterator = rosbag_iterator(
@@ -98,7 +100,7 @@ class Ros2DataReader(DataReader):
         self._rosbag_reader.close()
         logger.info("ROS2 data reader closed.")
 
-    def set_initial_state(self, sensor: Sensor, timestamp: int):
+    def set_initial_state(self, sensor: Sensor, timestamp: float):
         """Sets the iterator position for the sensor at the given timestamp.
 
         Args:

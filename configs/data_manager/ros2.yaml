@@ -5,7 +5,10 @@ defaults:
 batch_factory:
 
   dataset:
-    directory: "/media/lab/4ee60397-b5e1-4ecd-853a-21a3fb20da4c/home/robot/20231102_kia/rosbag2_2023_11_02-12_18_16"
+#    directory: "/home/lab/Desktop/rosbag2_2023_11_02-12_18_16"
+    directory: "/home/lab/ModuSLAM/tests_data/datasets/ros2/test_rosbag_100"
+#    directory: "/home/lab/r2bdataset2023_3/r2b_lounge"
+
     sensors_table:
       stereo_camera_left: "left"
       stereo_camera_right: "right"
@@ -14,12 +17,20 @@ batch_factory:
       lidar_right: "vlp16r"
       lidar_center: "vlp32c"
 
+    data_types: ["Image", "PointCloud2", "Imu", "GPS"]
 
+#    sensors_table:
+#      stereo_camera_left: "d455_1_left_ir_camera_info"
+#      stereo_camera_right: "d455_1_right_ir_image"
+#      imu: "d455_1_imu"
+#      lidar_left: "pandar_xt_32_0_lidar"
+#      lidar_right: "vlp16r"
+#      lidar_center: "vlp32c"
 
   regime:
     name: "TimeLimit"
     start: 1698927496694033807
-    stop: 1698927497190095250
+    stop:  1698927497190095250
 
   batch_memory_percent: 100.0
 

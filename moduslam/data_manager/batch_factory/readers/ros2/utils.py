@@ -29,8 +29,15 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list)
 
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
-            sensor_name = connection.topic.split("/")[1]
+            parts = connection.topic.split("/")
+            sensor_name = parts[1] if len(parts) > 1 else connection.topic
+
+            # TODO: Make the / separator configurable, as not all ROS 2 datasets use it
             data_type = connection.msgtype.split("/")[-1]
+
+        # for connection in reader.connections:
+        #     sensor_name = connection.topic.split("/")[1]
+        #     data_type = connection.msgtype.split("/")[-1]
 
             if sensor_name not in sensors_table.keys() or data_type not in data_types:
                 continue
@@ -136,7 +143,7 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         yield (i, timestamp, sensor_name, data, data_type)
 
 
-def rosbag_read(bag_path: Path, num_readings: int = 1) -> list:
+def rosbag_read(bag_path: Path, num_readings: float = 1) -> list:
     """Reads a rosbag file and returns a list with the sensor readings.
 
     Args:
