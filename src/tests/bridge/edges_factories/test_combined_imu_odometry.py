@@ -1,12 +1,7 @@
 import pytest
 
 from src.bridge.edge_factories.imu_odometry.combined_odometry import Factory
-from src.measurement_storage.measurements.imu import (
-    ContinuousImu,
-    ImuCovariance,
-    ImuData,
-    ProcessedImu,
-)
+from src.measurement_storage.measurements.imu import ContinuousImu, ProcessedImu
 from src.measurement_storage.measurements.linear_velocity import (
     Velocity as VelocityMeasurement,
 )
@@ -31,19 +26,7 @@ from src.moduslam.frontend_manager.main_graph.vertices.custom import (
 from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.auxiliary_objects import identity3x3 as i3x3
 from src.utils.auxiliary_objects import identity4x4 as i4x4
-from src.utils.auxiliary_objects import one_vector3, zero_vector3
-
-
-@pytest.fixture
-def measurement() -> ContinuousImu[ProcessedImu]:
-    """Continuous IMU measurement with 3 raw measurements"""
-    t1, t2 = 0, 3
-    data = ImuData(one_vector3, one_vector3)
-    cov = ImuCovariance(i3x3, i3x3, i3x3, i3x3, i3x3)
-    imu1 = ProcessedImu(0, data, cov, i4x4)
-    imu2 = ProcessedImu(1, data, cov, i4x4)
-    imu3 = ProcessedImu(2, data, cov, i4x4)
-    return ContinuousImu([imu1, imu2, imu3], start=t1, stop=t2)
+from src.utils.auxiliary_objects import zero_vector3
 
 
 @pytest.fixture

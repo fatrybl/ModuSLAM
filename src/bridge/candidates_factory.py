@@ -15,7 +15,7 @@ from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
 from src.utils.auxiliary_dataclasses import TimeRange
-from src.utils.exceptions import SkipItemException
+from src.utils.exceptions import SkipItemException, ValidationError
 from src.utils.ordered_set import OrderedSet
 
 
@@ -30,13 +30,22 @@ def create_graph_elements(graph: Graph, clusters: list[MeasurementCluster]) -> l
 
     Returns:
         graph elements.
+
+    Raises:
+        ValidationError: if any cluster has no core measurements.
     """
     elements: list[GraphElement] = []
     local_db: dict[VertexCluster, TimeRange] = {}
 
     for m_cluster in clusters:
         v_cluster = VertexCluster()
-        local_db.update({v_cluster: m_cluster.time_range})
+
+        try:
+            t_range = m_cluster.time_range
+        except ValueError:
+            raise ValidationError("Measurement cluster must have at least 1 core measurement")
+
+        local_db.update({v_cluster: t_range})
 
         for measurement in m_cluster.measurements:
             edge_factory = get_factory(type(measurement))

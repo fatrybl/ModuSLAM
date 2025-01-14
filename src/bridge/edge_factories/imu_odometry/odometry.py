@@ -121,7 +121,8 @@ class Factory(EdgeFactory):
         if cluster:
             return cluster
 
-        cluster = get_cluster_for_timestamp_from_iterable(reversed(storage.clusters), timestamp)
+        sorted_clusters = reversed(storage.sorted_clusters)
+        cluster = get_cluster_for_timestamp_from_iterable(sorted_clusters, timestamp)
         if cluster:
             return cluster
 

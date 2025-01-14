@@ -11,7 +11,7 @@ from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 from src.utils.exceptions import ItemExistsError, ItemNotExistsError
 
 
-def test_add_timestamp_to_empty_storage():
+def test_timestamp_to_empty_storage():
     storage = VertexStorage()
     v = Pose(0)
     t = 0
@@ -20,7 +20,7 @@ def test_add_timestamp_to_empty_storage():
         storage.add_vertex_timestamp(v, t)
 
 
-def test_add_1_timestamp():
+def test_1_timestamp():
     storage = VertexStorage()
     cluster = VertexCluster()
     v = Pose(0)
@@ -37,7 +37,7 @@ def test_add_1_timestamp():
     assert cls.vertices_with_timestamps == {v: {t: 2}}
 
 
-def test_add_timestamp_for_2_vertices():
+def test_timestamp_for_2_vertices():
     storage = VertexStorage()
     cluster = VertexCluster()
     v1, v2 = Pose(0), Pose(1)
@@ -55,7 +55,7 @@ def test_add_timestamp_for_2_vertices():
     assert cls.vertices_with_timestamps == {v1: {t: 2}, v2: {t: 2}}
 
 
-def test_add_timestamps_for_2_vertices_same_cluster():
+def test_timestamps_for_2_vertices_same_cluster():
     storage = VertexStorage()
     cluster = VertexCluster()
     v1, v2 = Pose(0), Pose(1)
@@ -73,7 +73,7 @@ def test_add_timestamps_for_2_vertices_same_cluster():
     assert cls.vertices_with_timestamps == {v1: {t1: 1, t2: 1}, v2: {t1: 1, t2: 1}}
 
 
-def test_add_same_timestamp_to_different_clusters():
+def test_same_timestamp_to_different_clusters():
     storage = VertexStorage()
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     v1, v2 = Pose(0), Pose(1)
@@ -89,7 +89,7 @@ def test_add_same_timestamp_to_different_clusters():
         storage.add_vertex_timestamp(v2, t1)
 
 
-def test_add_timestamps_for_2_vertices_different_clusters():
+def test_timestamps_for_2_vertices_different_clusters():
     storage = VertexStorage()
     cluster1, cluster2 = VertexCluster(), VertexCluster()
     v1, v2 = Pose(0), Pose(1)

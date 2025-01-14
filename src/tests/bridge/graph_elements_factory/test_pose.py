@@ -25,7 +25,7 @@ def test_2_measurements(graph0: Graph):
     elements = create_graph_elements(graph0, [cluster1, cluster2])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -61,7 +61,8 @@ def test_2_measurements_equal_time(graph0: Graph):
     elements = create_graph_elements(graph0, [cluster])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -94,7 +95,8 @@ def test_2_measurements_equal_time_graph1(graph1: Graph):
     elements = create_graph_elements(graph1, [cluster])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -125,7 +127,8 @@ def test_2_measurements_different_time(graph1: Graph):
     elements = create_graph_elements(graph1, [cluster1, cluster2])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -163,7 +166,8 @@ def test_2_measurements_0_new_vertices(graph2: Graph):
     elements = create_graph_elements(graph2, [cluster1, cluster2])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -196,7 +200,8 @@ def test_2_measurements_1_new_vertex(graph2: Graph):
     elements = create_graph_elements(graph2, [cluster1, cluster2])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -230,7 +235,8 @@ def test_2_measurements_2_new_vertices(graph2: Graph):
     elements = create_graph_elements(graph2, [cluster1, cluster2])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -266,7 +272,8 @@ def test_2_measurements_in_1_cluster_0_new_vertices(graph2: Graph):
     elements = create_graph_elements(graph2, [cluster])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2
@@ -298,7 +305,8 @@ def test_2_measurements_in_1_cluster_1_new_vertex(graph2: Graph):
     elements = create_graph_elements(graph2, [cluster])
 
     assert len(elements) == 2
-    elem1, elem2 = elements[0], elements[1]
+
+    elem1, elem2 = elements
     e1, e2 = elem1.edge, elem2.edge
 
     assert elem1 is not elem2

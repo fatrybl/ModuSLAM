@@ -159,3 +159,25 @@ def test_add_multiple_clusters_with_equal_timestamp():
     assert v1 in storage
     assert v2 in storage
     assert v3 not in storage
+
+
+def test_no_time_range_intersection():
+    storage = VertexStorage()
+    cluster1, cluster2 = VertexCluster(), VertexCluster()
+    v1, v2 = Pose(0), Pose(1)
+    t1, t2 = 0, 1
+    new1 = NewVertex(v1, cluster1, t1)
+    new2 = NewVertex(v2, cluster2, t2)
+
+    storage.add(new1)
+    storage.add(new2)
+
+    with pytest.raises(ValidationError):
+        storage.add(NewVertex(v1, cluster2, t1))
+
+    with pytest.raises(ValidationError):
+        storage.add(NewVertex(v2, cluster1, t2))
+
+    assert len(storage.clusters) == 2
+    assert storage.get_cluster(t1) == cluster1
+    assert storage.get_cluster(t2) == cluster2

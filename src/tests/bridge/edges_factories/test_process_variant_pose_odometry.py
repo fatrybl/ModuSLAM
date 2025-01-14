@@ -1,3 +1,5 @@
+"""TODO: move these test to the proper location."""
+
 from src.bridge.edge_factories.pose_odometry import Factory
 from src.measurement_storage.measurements.pose_odometry import Odometry
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
