@@ -3,5 +3,4 @@ defaults:
 
 sensor_name: "velodyne_right"
 max_points_per_voxel: 3
-voxel_size: 2.5
-adaptive_initial_threshold: 1.0
+voxel_size: 2.0

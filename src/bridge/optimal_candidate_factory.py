@@ -76,7 +76,7 @@ class Factory:
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = storage.get_error_table()
+        table = storage.get_timeshift_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
             connectivity = storage.get_connectivity_status(candidate)

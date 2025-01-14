@@ -85,7 +85,7 @@ def set_combined_parameters(
     bias_acc_cov: Matrix3x3,
     bias_omega_cov: Matrix3x3,
 ) -> None:
-    """Sets the parameters for the IMU measurements preintegration.
+    """Sets the parameters for the IMU measurements pre-integration.
 
     Args:
         params: GTSAM integration parameters.

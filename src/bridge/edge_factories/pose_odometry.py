@@ -52,6 +52,8 @@ class Factory(EdgeFactory):
 
         new_vertices = create_new_vertices([pose_i, pose_j])
 
+        # print(f"Odom measurement: \n" f"{np.array(measurement.transformation)[:3, 3]}")
+
         edge = cls._create_edge(pose_i.instance, pose_j.instance, measurement)
 
         return GraphElement(edge, {pose_i.instance: start, pose_j.instance: stop}, new_vertices)

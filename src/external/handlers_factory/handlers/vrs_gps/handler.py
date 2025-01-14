@@ -24,6 +24,7 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         """
         self._sensor_name: str = config.sensor_name
         self._fix_statuses: set[int] = set(config.fix_statuses)
+        self._first_position: Vector3 | None = config.first_position
 
     @property
     def sensor_name(self) -> str:
@@ -58,6 +59,13 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
 
         position = self._get_position(element.measurement.values)
         covariance = self._get_covariance(element.measurement.values)
+
+        if self._first_position:
+            position = (
+                position[0] - self._first_position[0],
+                position[1] - self._first_position[1],
+                position[2] - self._first_position[2],
+            )
 
         return Position(element.timestamp, position, covariance)
 

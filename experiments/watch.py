@@ -10,13 +10,13 @@ path3 = current_dir / "mom.ply"
 
 # Define colors for each point cloud
 colors = [
-    # [1, 0, 0],  # Red
+    [1, 0, 0],  # Red
     [0, 1, 0],  # Green
-    [0, 0, 1],  # Blue
+    # [0, 0, 1],  # Blue
 ]
 
 # Define the file paths
-file_paths = [path2, path3]
+file_paths = [path1, path2]
 
 # Read and colorize point clouds
 point_clouds = []

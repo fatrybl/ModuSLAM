@@ -6,10 +6,15 @@ defaults:
   #  - /base_imu_bias@bias1
   - _self_
 
+#pose1:
+#  timestamp: 1544580712839874000
+#  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
+#  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
+
 pose1:
-  timestamp: 1544580712839874000
-  measurement: [ 330096.41562497173436, 4118151.5854207249358, 35.731699999999996464, 0.0, 0.0, 3.0 ]
-  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-0, 1e-0, 1e-0 ] # x, y, z, roll, pith, yaw
+  timestamp: 1544581170279399000
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
+  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e-2, 1e-2, 1e-2 ] # x, y, z, roll, pith, yaw
 
 #position1:
 #  timestamp: 1544580706889302000
@@ -22,14 +27,14 @@ pose1:
 #  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
 
 velocity1:
-  timestamp: 1544580712839874000
-  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
-  measurement: [ 0, 0, 0 ]
+  timestamp: 1544581170279399000
+  noise_covariance: [ 1e-1, 1e-1, 1e-1 ] # Vx, Vy, Vz
+  measurement: [ 0.6, 0, 0 ]
 
 #velocity1:
-#  timestamp: 1544581170279399000
-#  noise_covariance: [ 1e-0, 1e-1, 1e-2 ] # Vx, Vy, Vz
-#  measurement: [ 1.1, 0, 0 ]
+#  timestamp: 1544580712839874000
+#  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
+#  measurement: [ 0, 0, 0 ]
 
 #bias1:
 #  timestamp: 1544581170279399000
