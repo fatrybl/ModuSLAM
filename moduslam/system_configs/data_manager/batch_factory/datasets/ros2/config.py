@@ -16,7 +16,8 @@ class Ros2Config(DatasetConfig):
 
     sensors_table: dict[str, str] = field(default_factory=lambda: {})
 
-    data_types: list[str] = field(default_factory=lambda: [])
+    topics_table: dict[str, str]= field(default_factory=lambda: {})
+    # data_types: list[str] = field(default_factory=lambda: [])
 
     reader: str = DataReaders.ros2_reader
 

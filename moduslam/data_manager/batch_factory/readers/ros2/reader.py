@@ -53,8 +53,9 @@ class Ros2DataReader(DataReader):
 
         self._sensors_in_config = dataset_params.sensors_table
 
-        self._data_types = dataset_params.data_types
+        self.topics_table = dataset_params.topics_table
 
+        # self._data_types = dataset_params.data_types
         # self._data_types = ["Image", "PointCloud2", "Imu"]
 
         self._sensors_in_factory = SensorsFactory.get_all_sensors()
@@ -62,7 +63,7 @@ class Ros2DataReader(DataReader):
         self._sensors_table = check_setup_sensors(self._sensors_in_config, self._sensors_in_factory)
 
         self._sensors = get_rosbag_sensors(
-            self._dataset_directory, self._sensors_table, self._data_types
+            self._dataset_directory, self._sensors_table, self.topics_table
         )
 
         self._rosbag_reader = Reader(self._dataset_directory)

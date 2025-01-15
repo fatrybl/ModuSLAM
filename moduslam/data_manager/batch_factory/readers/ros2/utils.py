@@ -16,7 +16,7 @@ from moduslam.logger.logging_config import data_manager
 logger = logging.getLogger(data_manager)
 
 
-def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list) -> list:
+def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, topics_table: dict) -> dict:
     """Gets sensors and topics from a rosbag file.
 
     Args:
@@ -29,17 +29,14 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list)
 
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
+            sensor_name = sensors_table.get(connection.topic, connection.topic)
             parts = connection.topic.split("/")
             sensor_name = parts[1] if len(parts) > 1 else connection.topic
 
             # TODO: Make the / separator configurable, as not all ROS 2 datasets use it
             data_type = connection.msgtype.split("/")[-1]
 
-        # for connection in reader.connections:
-        #     sensor_name = connection.topic.split("/")[1]
-        #     data_type = connection.msgtype.split("/")[-1]
-
-            if sensor_name not in sensors_table.keys() or data_type not in data_types:
+            if sensor_name not in sensors_table.keys() or data_type not in topics_table.values():
                 continue
 
             sensor = {
@@ -51,7 +48,6 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, data_types: list)
                 "sensor": sensors_table[sensor_name],
             }
             sensors.append(sensor)
-
     return sensors
 
 

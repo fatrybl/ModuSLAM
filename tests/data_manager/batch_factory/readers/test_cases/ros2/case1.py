@@ -117,8 +117,14 @@ incorrect_sensors_table_e1_e10 = {
     "lidar_center": "vlp32c",
 }
 
-data_types = ["Image", "PointCloud2", "Imu", "GPS"]
-
+topics_table  = {
+      "stereo_camera_left": "Image",
+      "stereo_camera_right": "Image",
+      "imu": "Imu",
+      "lidar_left": "PointCloud2",
+      "lidar_right": "PointCloud2",
+      "lidar_center": "PointCloud2",
+}
 sensors1 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table1.keys())]
 sensors2 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_stereo_camera_left.keys())]
 sensors3 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_stereo_camera_right.keys())]
@@ -130,8 +136,8 @@ sensors7 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_ta
 sensors_e1_e10 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_e1_e10.keys())]
 incorrect_sensors_e1_e10 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(incorrect_sensors_table_e1_e10.keys())]
 
-dataset_cfg1 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table1, data_types=data_types)
-dataset_cfg_e1_e10 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table_e1_e10, data_types=data_types)
+dataset_cfg1 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table1, topics_table=topics_table)
+dataset_cfg_e1_e10 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table_e1_e10, topics_table=topics_table)
 incorrect_dataset_cfg_e1_e10 = Ros2Config(directory=ros2_dataset_dir, sensors_table=incorrect_sensors_table_e1_e10)
 
 stream = Stream()

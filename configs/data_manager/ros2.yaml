@@ -8,8 +8,7 @@ batch_factory:
 #    directory: "/home/lab/Desktop/rosbag2_2023_11_02-12_18_16"
     directory: "/home/lab/ModuSLAM/tests_data/datasets/ros2/test_rosbag_100"
 #    directory: "/home/lab/r2bdataset2023_3/r2b_lounge"
-
-    sensors_table:
+    sensors_table: # Mapping of sensor names to their corresponding topic names
       stereo_camera_left: "left"
       stereo_camera_right: "right"
       imu: "xsens"
@@ -17,7 +16,13 @@ batch_factory:
       lidar_right: "vlp16r"
       lidar_center: "vlp32c"
 
-    data_types: ["Image", "PointCloud2", "Imu", "GPS"]
+    topics_table: # Mapping of sensor names to their data types
+      stereo_camera_left: "Image"
+      stereo_camera_right: "Image"
+      imu: "Imu"
+      lidar_left: "PointCloud2"
+      lidar_right: "PointCloud2"
+      lidar_center: "PointCloud2"
 
 #    sensors_table:
 #      stereo_camera_left: "d455_1_left_ir_camera_info"
