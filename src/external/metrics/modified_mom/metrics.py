@@ -21,35 +21,16 @@ from src.external.metrics.modified_mom.utils import (
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
-def _get_orthogonal_clouds(
-    clouds: list[Cloud], config: BaseConfig, subsets: Iterable[Cloud] | None
-) -> list[np.ndarray]:
-    """Extracts numpy arrays form point clouds.
+def _get_median_index(length: int) -> int:
+    """Gets median index.
 
     Args:
-        clouds: 3D point clouds.
-
-        config: normals estimator parameters.
-
-        subsets: mutually orthogonal subsets.
+        length: length of the list.
 
     Returns:
-        list of matrices.
+        index.
     """
-    if subsets:
-        arrays = [np.asarray(cloud.points) for cloud in subsets]
-
-    else:
-        length = len(clouds)
-        if length > 1:
-            idx = length // 2 - 1 if length % 2 == 0 else length // 2
-            pcd = clouds[idx]
-        else:
-            pcd = clouds[0]
-
-        arrays, _, _ = extract_orthogonal_subsets(pcd, normals_config=config)
-
-    return arrays
+    return length // 2 - 1 if length % 2 == 0 else length // 2
 
 
 def mom(
@@ -75,14 +56,20 @@ def mom(
 
     TODO: add tests.
     """
+    orth_axes_stats = []
+
     pc_map = aggregate_map(clouds, ts)
     points = np.asarray(pc_map.points)
     nn_model = NearestNeighbors(radius=config.knn_rad)
     nn_model.fit(points)
 
-    orth_clouds = _get_orthogonal_clouds(clouds, config, subsets)
-
-    orth_axes_stats = []
+    if subsets:
+        orth_clouds = [np.asarray(cloud.points) for cloud in subsets]
+    else:
+        idx = _get_median_index(len(clouds))
+        pcd = clouds[idx]
+        orth_clouds = extract_orthogonal_subsets(pcd, normals_config=config)
+        # orth_clouds = extract_orthogonal_subsets(pcd, eps=0.5)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [

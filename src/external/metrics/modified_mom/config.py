@@ -75,7 +75,6 @@ class HdbscanConfig:
         The epsilon value for HDBSCAN clustering.
     """
 
-    min_cluster_size: int = 10
     n_jobs: int = -1
     alpha: float = 1.5
     cluster_selection_epsilon: float = 0.2

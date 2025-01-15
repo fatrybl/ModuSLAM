@@ -1,4 +1,3 @@
-import logging
 from collections.abc import Iterable, Sequence
 
 import numpy as np
@@ -10,7 +9,6 @@ from src.custom_types.numpy import MatrixNx3
 from src.external.metrics.base import Metrics
 from src.external.metrics.modified_mom.config import LidarConfig
 from src.external.metrics.modified_mom.metrics import mom
-from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
 from src.moduslam.data_manager.batch_factory.data_objects import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
@@ -36,8 +34,6 @@ from src.moduslam.sensors_factory.sensors import Lidar3D
 from src.utils.auxiliary_objects import identity4x4
 from src.utils.exceptions import ExternalModuleException
 from src.utils.ordered_set import OrderedSet
-
-logger = logging.getLogger(frontend_manager)
 
 
 class PlaneOrthogonality(Metrics):
@@ -76,8 +72,6 @@ class PlaneOrthogonality(Metrics):
         poses_with_edges = {p: connections[p] for p in poses}
 
         point_clouds = self._create_point_clouds(poses_with_edges)
-
-        logger.debug(f"Num clouds: {len(point_clouds)}, num poses: {len(poses)}")
 
         value = self._compute_mom(pose_arrays, point_clouds, self._mom_config)
 

@@ -77,7 +77,7 @@ def graph2() -> Graph:
 
 @pytest.fixture
 def measurement() -> ContinuousImu[ProcessedImu]:
-    """Continuous IMU measurement with 3 raw measurements"""
+    """Continuous IMU measurement in range [0, 3] with 3 raw measurements."""
     t1, t2 = 0, 3
     data = ImuData(one_vector3, one_vector3)
     cov = ImuCovariance(i3x3, i3x3, i3x3, i3x3, i3x3)

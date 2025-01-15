@@ -90,7 +90,6 @@ class Factory(EdgeFactory):
             measurement,
             pim,
         )
-        # print(f"Preintegrated IMU factor at {start} - {stop} \n" f"{pim.deltaPij()}")
 
         new_vertices = create_new_vertices([pose_i, velocity_i, bias_i, pose_j, velocity_j, bias_j])
 

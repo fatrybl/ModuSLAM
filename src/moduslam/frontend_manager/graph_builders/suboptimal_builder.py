@@ -7,7 +7,7 @@ from src.measurement_storage.storage import MeasurementStorage
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
 from src.moduslam.frontend_manager.main_graph.graph import Graph
 from src.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
-    SinglePoseOdometry,
+    DoublePoseOdometry,
 )
 from src.moduslam.frontend_manager.utils import fill_storage
 
@@ -23,7 +23,7 @@ class Builder:
             handlers: handlers for creating measurements.
         """
         self._handlers = handlers
-        self._analyzer = SinglePoseOdometry()
+        self._analyzer = DoublePoseOdometry()
         self._candidate_factory = Factory()
 
     def create_graph(self, graph: Graph, data_batch: DataBatch) -> Graph:

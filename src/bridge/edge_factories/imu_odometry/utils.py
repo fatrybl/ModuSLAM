@@ -175,6 +175,9 @@ def integrate_measurements(
         omega = np.array(measurement.angular_velocity)
         dt_secs = dt * time_scale
 
+        if dt == 0:
+            raise ValueError("Zero time difference between measurements.")
+
         pim.integrateMeasurement(acc, omega, dt_secs)
 
 

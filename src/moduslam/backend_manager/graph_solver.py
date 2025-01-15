@@ -14,11 +14,8 @@ class GraphSolver:
     def __init__(self) -> None:
         self._params = gtsam.LevenbergMarquardtParams()
         self._params.setlambdaInitial(1e-1)
-        # parameters = gtsam.ISAM2Params()
-        # parameters.setRelinearizeThreshold(0.1)
-        # parameters.relinearizeSkip = 1
-        # self._isam = gtsam.ISAM2(parameters)
-        # self._params = gtsam.ISAM2Params()
+        self._params.setlambdaUpperBound(1e3)
+        self._params.setlambdaLowerBound(1e-5)
 
     def solve(self, graph: Graph) -> tuple[gtsam.Values, float]:
         """Solves the optimization problem for the given graph.
@@ -31,11 +28,7 @@ class GraphSolver:
         """
         values = graph.get_backend_instances()
         optimizer = gtsam.LevenbergMarquardtOptimizer(graph.factor_graph, values, self._params)
-        # self._isam.update(graph.factor_graph, values)
-        # estimate = self._isam.calculateEstimate()
-        # error = self._isam.error()
-        # result = estimate
-        optimizer.optimize()
+        optimizer.optimizeSafely()
         result = optimizer.values()
         error = optimizer.error()
         logger.debug(f"optimization error: {error}")

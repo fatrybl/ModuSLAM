@@ -68,8 +68,8 @@ def detect_plane(
 
 def detect_multiple_planes(
     cloud: MatrixNx3,
-    thresh: float = 0.02,
-    max_iterations: int = 5000,
+    thresh: float = 0.025,
+    max_iterations: int = 7000,
     iterations_per_batch: int = 1000,
 ) -> list[PlaneWithPoints]:
     """Detects multiple planes in 3D point cloud using RANSAC.

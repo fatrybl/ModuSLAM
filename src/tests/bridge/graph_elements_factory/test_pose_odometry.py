@@ -2,6 +2,7 @@
 
 from src.bridge.candidates_factory import create_graph_elements
 from src.measurement_storage.cluster import MeasurementCluster
+from src.measurement_storage.measurements.auxiliary import SplitPoseOdometry
 from src.measurement_storage.measurements.pose import Pose as PoseMeasurement
 from src.measurement_storage.measurements.pose_odometry import Odometry
 from src.moduslam.frontend_manager.main_graph.graph import Graph
@@ -143,8 +144,7 @@ def test_3_measurements_1_cluster(graph2: Graph):
     cluster = MeasurementCluster()
     cluster.add(m1)
     cluster.add(m2)
-    existing_pose1 = graph2.vertex_storage.vertices[0]
-    existing_pose2 = graph2.vertex_storage.vertices[1]
+    existing_pose1, existing_pose2 = graph2.vertex_storage.vertices
 
     elements = create_graph_elements(graph2, [cluster])
 
@@ -203,17 +203,13 @@ def test_2_measurements_3_clusters(graph0: Graph):
     assert len(elem1.new_vertices) == 1
     assert len(elem2.new_vertices) == 2
     assert len(graph0.vertex_storage.vertices) == 3
-
-    pose1 = graph0.vertex_storage.vertices[0]
-    pose2 = graph0.vertex_storage.vertices[1]
-    pose3 = graph0.vertex_storage.vertices[2]
-
-    assert pose1 is e1.vertices[0]
-    assert pose2 is e2.vertices[0] and pose3 is e2.vertices[1]
     assert len(graph0.vertex_storage.clusters) == 3
 
     cls1, cls2, cls3 = graph0.vertex_storage.clusters
+    pose1, pose2, pose3 = graph0.vertex_storage.vertices
 
+    assert pose1 is e1.vertices[0]
+    assert pose2 is e2.vertices[0] and pose3 is e2.vertices[1]
     assert cls1.time_range == TimeRange(t1, t1)
     assert cls2.time_range == TimeRange(t0, t0)
     assert cls3.time_range == TimeRange(t2, t2)
@@ -228,4 +224,41 @@ def test_2_measurements_3_clusters(graph0: Graph):
     assert cls3.time_range == TimeRange(t2, t2)
     assert cls1.vertices_with_timestamps == {pose2: {t0: 1}}
     assert cls2.vertices_with_timestamps == {pose1: {t1: 1}}
+    assert cls3.vertices_with_timestamps == {pose3: {t2: 1}}
+
+
+def test_split_odometry_3_clusters(graph2: Graph):
+    t0, t1, t2 = 0, 1, 2
+    odom = Odometry(t2, TimeRange(t1, t2), i4x4, i3x3, i3x3)
+    m1 = SplitPoseOdometry(t1, odom)
+    m2 = SplitPoseOdometry(t2, odom)
+    cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
+    cluster1.add(m1)
+    cluster2.add(m2)
+
+    elements = create_graph_elements(graph2, [cluster1, cluster2])
+
+    assert len(elements) == 1
+
+    elem = elements[0]
+    e = elem.edge
+
+    assert e.index == 2
+
+    assert len(elem.new_vertices) == 1
+    assert len(graph2.vertex_storage.vertices) == 3
+    assert len(graph2.vertex_storage.clusters) == 3
+
+    pose1, pose2, pose3 = graph2.vertex_storage.vertices
+    cls1, cls2, cls3 = graph2.vertex_storage.clusters
+
+    assert len(e.vertices) == 2
+    assert pose2 is e.vertices[0]
+    assert pose3 is e.vertices[1]
+
+    assert cls1.time_range == TimeRange(t0, t0)
+    assert cls2.time_range == TimeRange(t1, t1)
+    assert cls3.time_range == TimeRange(t2, t2)
+    assert cls1.vertices_with_timestamps == {pose1: {t0: 1}}
+    assert cls2.vertices_with_timestamps == {pose2: {t1: 2}}
     assert cls3.vertices_with_timestamps == {pose3: {t2: 1}}

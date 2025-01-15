@@ -5,7 +5,7 @@ import numpy as np
 import open3d as o3d
 
 from src.custom_types.numpy import Matrix4x4, MatrixNx3
-from src.external.metrics.modified_mom.config import LidarConfig
+from src.external.metrics.modified_mom.config import HdbscanConfig, LidarConfig
 from src.external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
 from src.external.metrics.modified_mom.metrics import mom
 from src.moduslam.map_manager.utils import read_4_channel_bin_pcd
@@ -221,20 +221,24 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 
 # Example Usage
 if __name__ == "__main__":
-    config = LidarConfig()
-    config.eigen_scale = 30
-    config.min_cluster_size = 10
-    config.knn_rad = 1.5
-    config.min_knn = 10
+    normal_cfg = LidarConfig()
+    normal_cfg.eigen_scale = 10
+    normal_cfg.min_cluster_size = 10
+    normal_cfg.knn_rad = 1.5
+    normal_cfg.min_knn = 10
 
-    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_left/1544581170279399000.bin"
-    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170243112000.bin"
+    cluster_cfg = HdbscanConfig()
+    cluster_cfg.cluster_selection_epsilon = 0.2
+    cluster_cfg.alpha = 1.5
+
+    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677438252237000.bin"
+    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_right/1544677438186728000.bin"
     bin_file_path2 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
     bin_file_path3 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
-    pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
+    # pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
     pcd1 = read_4_channel_bin_pcd(Path(bin_file_path1))
-    pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))
-    pcd3 = read_4_channel_bin_pcd(Path(bin_file_path3))
+    # pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))
+    # pcd3 = read_4_channel_bin_pcd(Path(bin_file_path3))
 
     i4x4 = np.eye(4)
 
@@ -255,27 +259,16 @@ if __name__ == "__main__":
             [0.0, 0.0, 0.0, 1.0],
         ]
     )
-    pcd0.transform(left_tf_base_sensor)
+    # pcd0.transform(left_tf_base_sensor)
     pcd1.transform(right_tf_base_sensor)
-    pcd2.transform(right_tf_base_sensor)
-    pcd3.transform(right_tf_base_sensor)
-    pcd = pcd1 + pcd2 + pcd3
+    # pcd1.transform(right_tf_base_sensor)
+    # pcd3.transform(right_tf_base_sensor)
+    pcd = pcd1
 
-    subsets, _, _ = extract_orthogonal_subsets(pcd0 + pcd1, config)
-    print(f"Num subsets: {len(subsets)}")
+    subsets = extract_orthogonal_subsets(pcd, normal_cfg, cluster_cfg)
+    # subsets = extract_orthogonal_subsets(pcd, eps=0.5)
+    visualize_point_cloud_with_subsets(pcd, subsets)
+
     clouds = [array_to_pointcloud(subset) for subset in subsets]
-
-    visualize_point_cloud_with_subsets(pcd1, subsets)
-
-    value = mom([pcd1, pcd2, pcd3], [i4x4, i4x4, i4x4], subsets=clouds, config=config)
-    print(f"mom after tf: {value}")
-
-    # tf1 = rotate_pose_around_z(np.eye(4), 5)
-    # tf2 = rotate_pose_around_z(np.eye(4), -5)
-    tf1 = tf2 = np.eye(4)
-    tf1[0, 3] = 0.1
-    tf2[0, 3] = 0.1
-    pcd = pcd1 + pcd2 + pcd3
-
-    value = mom([pcd1, pcd2, pcd3], [i4x4, tf1, tf2], subsets=clouds, config=config)
-    print(f"mom after tf: {value}")
+    value = mom([pcd], [i4x4], subsets=clouds, config=normal_cfg)
+    print(f"mom: {value}")

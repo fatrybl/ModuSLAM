@@ -53,6 +53,6 @@ class MetricsFactory:
 
         timeshift = TimeShift.compute(item.clusters)
         connectivity = VerticesConnectivity.compute(all_vertices, elements)
-        # mom = self._mom.compute(connections, elements)
-        mom = 0
+        mom = self._mom.compute(connections, elements)
+        # mom = 0
         return MetricsResult(mom, error, connectivity, timeshift)

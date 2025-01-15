@@ -5,7 +5,7 @@ import numpy as np
 import open3d as o3d
 from sklearn.cluster import HDBSCAN
 
-from src.custom_types.numpy import MatrixNx3, Vector3, VectorN
+from src.custom_types.numpy import MatrixNx3, VectorN
 from src.external.metrics.modified_mom.config import BaseConfig, HdbscanConfig
 from src.external.metrics.modified_mom.utils import estimate_normals, filter_clusters
 
@@ -16,7 +16,7 @@ def extract_orthogonal_subsets(
     pc: Cloud,
     normals_config: BaseConfig = BaseConfig(),
     cluster_config: HdbscanConfig = HdbscanConfig(),
-) -> tuple[list[MatrixNx3], list[MatrixNx3], list[Vector3]]:
+) -> list[MatrixNx3]:
     """Extracts point clouds which mean norman vectors are mutually orthogonal.
 
     Args:
@@ -35,7 +35,7 @@ def extract_orthogonal_subsets(
     normals = np.asarray(pc_cut.normals)
 
     clustering = HDBSCAN(
-        min_cluster_size=cluster_config.min_cluster_size,
+        min_cluster_size=normals_config.min_cluster_size,
         cluster_selection_epsilon=cluster_config.cluster_selection_epsilon,
         alpha=cluster_config.alpha,
         n_jobs=cluster_config.n_jobs,
@@ -45,7 +45,7 @@ def extract_orthogonal_subsets(
     labels = clustering.labels_
 
     cluster_means, cluster_means_ind = filter_clusters(
-        labels, normals, min_clust_size=cluster_config.min_cluster_size
+        labels, normals, min_clust_size=normals_config.min_cluster_size
     )
 
     max_clique = find_max_clique(
@@ -53,15 +53,15 @@ def extract_orthogonal_subsets(
     )
 
     pc_points = np.asarray(pc_cut.points)
-    pc_normals = np.asarray(pc_cut.normals)
+    # pc_normals = np.asarray(pc_cut.normals)
 
     masks = [labels == cluster_means_ind[i] for i in max_clique]
 
     orth_subset = [pc_points[mask] for mask in masks]
-    orth_normals = [pc_normals[mask] for mask in masks]
-    clique_normals = [cluster_means[i] for i in max_clique]
+    # orth_normals = [pc_normals[mask] for mask in masks]
+    # clique_normals = [cluster_means[i] for i in max_clique]
 
-    return orth_subset, orth_normals, clique_normals
+    return orth_subset
 
 
 def find_max_clique(
