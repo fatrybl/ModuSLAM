@@ -16,14 +16,16 @@ from moduslam.logger.logging_config import data_manager
 logger = logging.getLogger(data_manager)
 
 
-def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, topics_table: dict) -> dict:
-    """Gets sensors and topics from a rosbag file.
+def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
+    """Gets sensors and topics from a ROS bag file.
 
     Args:
-        Path: a path to the rosbag file.
+        rosbag_path (Path): Path to the ROS bag file.
+        sensors_table (dict[str, str]): Mapping of sensor names to their corresponding topic names.
+        topics_table (dict[str, str]): Mapping of sensor names to their full topic paths.
 
     Returns:
-        topics: a list of sensors in a dict.
+        list[dict[str, str]]: A list of dictionaries containing metadata for each sensor.
     """
     sensors = []
 
@@ -46,6 +48,7 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, topics_table: dic
                 "sensor": sensors_table[sensor_name],
             }
             sensors.append(sensor)
+
     return sensors
 
 
