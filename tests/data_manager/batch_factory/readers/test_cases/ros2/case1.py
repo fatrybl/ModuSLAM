@@ -118,12 +118,12 @@ incorrect_sensors_table_e1_e10 = {
 }
 
 topics_table  = {
-      "stereo_camera_left": "Image",
-      "stereo_camera_right": "Image",
-      "imu": "Imu",
-      "lidar_left": "PointCloud2",
-      "lidar_right": "PointCloud2",
-      "lidar_center": "PointCloud2",
+      "stereo_camera_left": "/left/image_raw",
+      "stereo_camera_right": "/right/image_raw",
+      "imu": "/xsens/imu/data",
+      "lidar_left": "/vlp16l/velodyne_points",
+      "lidar_right": "/vlp16r/velodyne_points",
+      "lidar_center": "/vlp32c/velodyne_points",
 }
 sensors1 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table1.keys())]
 sensors2 = [Sensor(SensorConfig(sensor_name)) for sensor_name in list(sensors_table_stereo_camera_left.keys())]

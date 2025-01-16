@@ -71,6 +71,7 @@ class Ros2DataReader(DataReader):
         self._connections: list = []
 
         if isinstance(self._regime, TimeLimit):
+            #TODO: Add convertation function for float
             start = float(self._regime.start)
             stop = float(self._regime.stop)
 

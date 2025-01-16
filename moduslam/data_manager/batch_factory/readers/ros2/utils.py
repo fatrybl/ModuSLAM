@@ -29,14 +29,12 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict, topics_table: dic
 
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
-            sensor_name = sensors_table.get(connection.topic, connection.topic)
             parts = connection.topic.split("/")
             sensor_name = parts[1] if len(parts) > 1 else connection.topic
-
-            # TODO: Make the / separator configurable, as not all ROS 2 datasets use it
+            sensor_topic = connection.topic
+            # print(sensor_topic)
             data_type = connection.msgtype.split("/")[-1]
-
-            if sensor_name not in sensors_table.keys() or data_type not in topics_table.values():
+            if sensor_name not in sensors_table or sensor_topic not in topics_table.values():
                 continue
 
             sensor = {
