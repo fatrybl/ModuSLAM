@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from src.measurement_storage.cluster import MeasurementCluster
-from src.measurement_storage.measurements.base import Measurement
+from src.measurement_storage.measurements.imu import Imu
 from src.moduslam.frontend_manager.main_graph.graph import GraphCandidate
 from src.utils.exceptions import ValidationError
 
@@ -28,10 +28,15 @@ class ClustersWithConnections:
 
 @dataclass
 class ClustersWithLeftovers:
-    """Clusters with leftover measurements."""
+    """Measurements Clusters with leftovers and the number of unused measurements."""
 
     clusters: list[MeasurementCluster]
-    leftovers: list[Measurement]
+    leftovers: list[Imu]
+    num_unused_measurements: int = 0
+
+    def __post_init__(self):
+        if self.num_unused_measurements < 0:
+            raise ValidationError("Number of unused measurements can not be negative.")
 
 
 @dataclass

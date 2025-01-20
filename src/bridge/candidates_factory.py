@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import cast
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.distributor import get_factory
@@ -76,14 +77,21 @@ def create_candidates_with_clusters(
     """
     items: list[CandidateWithClusters] = []
 
-    variants = VariantsFactory.create(data)
+    if graph.vertex_storage.clusters:
+        latest_cluster = graph.vertex_storage.sorted_clusters[-1]
+        latest_t = latest_cluster.time_range.stop
+    else:
+        latest_t = None
+
+    variants = VariantsFactory.create(data, latest_t)
 
     for variant in variants:
         graph_copy = deepcopy(graph)
 
         elements = create_graph_elements(graph_copy, variant.clusters)
 
-        graph_candidate = GraphCandidate(graph_copy, elements, variant.leftovers)
-        items.append(CandidateWithClusters(graph_candidate, variant.clusters))
+        leftovers = cast(list[Measurement], variant.leftovers)
+        candidate = GraphCandidate(graph_copy, elements, variant.num_unused_measurements, leftovers)
+        items.append(CandidateWithClusters(candidate, variant.clusters))
 
     return items

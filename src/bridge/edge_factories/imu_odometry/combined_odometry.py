@@ -30,6 +30,7 @@ from src.moduslam.frontend_manager.main_graph.vertices.custom import (
 )
 from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.auxiliary_objects import identity4x4, zero_vector3
+from src.utils.exceptions import LoopError
 
 
 class Factory(EdgeFactory):
@@ -56,6 +57,11 @@ class Factory(EdgeFactory):
 
         Returns:
             new element.
+
+        Raises:
+            LoopError: if vertices or cluster of i & j are equal.
+
+        TODO: add loop tests for all binary edges.
         """
         start = measurement.time_range.start
         stop = measurement.time_range.stop
@@ -65,7 +71,7 @@ class Factory(EdgeFactory):
         cluster_i = cls._get_cluster(storage, clusters, start)
         cluster_j = cls._get_cluster(storage, clusters, stop)
         if cluster_i is cluster_j:
-            raise ValueError("Cluster-i and Cluster-j are equal !!!")
+            raise LoopError("Loop detected: cluster_i and cluster_j is the same cluster!")
 
         pose_i = create_vertex_i_with_status(Pose, storage, cluster_i, start, identity4x4)
         pose_j = create_vertex_j_with_status(storage, cluster_j, stop, pose_i)
@@ -75,6 +81,15 @@ class Factory(EdgeFactory):
         velocity_j = create_vertex_j_with_status(storage, cluster_j, stop, velocity_i)
         bias_i = create_vertex_i_with_status(ImuBias, storage, cluster_i, start, zero_bias)
         bias_j = create_vertex_j_with_status(storage, cluster_j, stop, bias_i)
+
+        if pose_i is pose_j:
+            raise LoopError("Loop detected: pose_i and pose_j is the same cluster!")
+
+        if velocity_i is velocity_j:
+            raise LoopError("Loop detected: velocity_i and velocity_j is the same cluster!")
+
+        if bias_i is bias_j:
+            raise LoopError("Loop detected: bias_i and bias_j is the same cluster!")
 
         pim = get_combined_integrated_measurement(
             cls._params, measurement, stop, cls.timescale_factor, bias_i.instance

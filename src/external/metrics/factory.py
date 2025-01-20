@@ -22,6 +22,7 @@ class MetricsResult:
     solver_error: float
     connectivity: bool
     timeshift: int
+    num_unused_measurements: int
 
 
 class MetricsFactory:
@@ -47,12 +48,13 @@ class MetricsFactory:
         elements = item.candidate.elements
         connections = graph.connections
         all_vertices = connections.keys()
+        num_unused = item.candidate.num_unused_measurements
 
         values, error = self._solver_error.compute(graph)
         graph.update_vertices(values)
 
         timeshift = TimeShift.compute(item.clusters)
         connectivity = VerticesConnectivity.compute(all_vertices, elements)
-        mom = self._mom.compute(connections, elements)
-        # mom = 0
-        return MetricsResult(mom, error, connectivity, timeshift)
+        # mom = self._mom.compute(connections, elements)
+        mom = 0
+        return MetricsResult(mom, error, connectivity, timeshift, num_unused)

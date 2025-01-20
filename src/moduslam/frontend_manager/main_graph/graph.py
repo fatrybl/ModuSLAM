@@ -339,11 +339,26 @@ class Graph:
 
 
 class GraphCandidate:
-    """TODO: maybe make dataclass ?"""
+    """Graph candidate with elements and leftover measurements."""
 
     def __init__(
-        self, graph: Graph, elements: list[GraphElement], leftovers: list[Measurement] | None = None
-    ):
+        self,
+        graph: Graph,
+        elements: list[GraphElement],
+        num_unused: int,
+        leftovers: list[Measurement],
+    ) -> None:
+        """
+        Args:
+            graph: a main Graph.
+
+            elements: new elements of the graph.
+
+            num_unused: number of unused measurements.
+
+            leftovers: leftover measurements for future preprocessing.
+        """
         self.graph = graph
         self.elements = elements
+        self.num_unused_measurements = num_unused
         self.leftovers = leftovers

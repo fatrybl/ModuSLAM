@@ -1,5 +1,5 @@
 defaults:
-  #  - /base_pose@pose1
+  - /base_pose@pose1
   #  - /base_position@position1
   #  - /base_pose@pose2
   - /base_linear_velocity@velocity1
@@ -11,10 +11,10 @@ defaults:
 #  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
 #  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e-2, 1e-2, 1e-2 ] # x, y, z, roll, pith, yaw
 
-#pose1:
-#  timestamp: 1544581120850164000
-#  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
-#  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e0, 1e0, 1e0 ] # x, y, z, roll, pith, yaw
+pose1:
+  timestamp: 1544677438151421000
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 2.18 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e0, 1e0, 1e0 ] # x, y, z, roll, pith, yaw
 
 #position1:
 #  timestamp: 1544581120850164000

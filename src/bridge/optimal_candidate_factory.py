@@ -42,8 +42,11 @@ class Factory:
         shift = self._metrics_storage.get_timeshift_table()[best_candidate]
         mom = self._metrics_storage.get_mom_table()[best_candidate]
         error = self._metrics_storage.get_error_table()[best_candidate]
+        num_unused = best_candidate.num_unused_measurements
 
-        logger.debug(f"Best candidate metrics: mom={mom}, error={error}, shift={shift}")
+        logger.debug(
+            f"Best candidate: mom={mom}, error={error}, shift={1e-9*shift}, unused={num_unused}"
+        )
 
         self._metrics_storage.clear()
 
@@ -61,6 +64,7 @@ class Factory:
 
             result = self._metrics_factory.evaluate(item)
 
+            self._metrics_storage.add_unused_measurements(can, result.num_unused_measurements)
             self._metrics_storage.add_mom(can, result.mom)
             self._metrics_storage.add_connectivity(can, result.connectivity)
             self._metrics_storage.add_timeshift(can, result.timeshift)
@@ -76,7 +80,7 @@ class Factory:
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = storage.get_mom_table()
+        table = storage.get_timeshift_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
             connectivity = storage.get_connectivity_status(candidate)

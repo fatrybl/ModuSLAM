@@ -1,8 +1,18 @@
+import pytest
+
 from src.bridge.auxiliary_dataclasses import ClustersWithLeftovers
 from src.external.utils import remove_duplicates
 from src.measurement_storage.cluster import MeasurementCluster
 from src.measurement_storage.measurements.auxiliary import PseudoMeasurement
 from src.measurement_storage.measurements.continuous import ContinuousMeasurement
+from src.measurement_storage.measurements.imu import Imu, ImuData
+from src.utils.auxiliary_objects import zero_vector3
+
+
+@pytest.fixture
+def data() -> ImuData:
+    """Zeroed ImuData object."""
+    return ImuData(zero_vector3, zero_vector3)
 
 
 def test_remove_duplicates_empty_input():
@@ -27,11 +37,9 @@ def test_remove_duplicates_all_unique():
     assert result == input_list
 
 
-def test_remove_duplicates_with_identical_measurements_and_leftovers():
+def test_remove_duplicates_with_identical_measurements_and_leftovers(data: ImuData):
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
-
-    m1 = PseudoMeasurement(1, "a")
-    m2 = PseudoMeasurement(2, "b")
+    m1, m2 = Imu(1, data), Imu(2, data)
 
     cluster1.add(m1)
     cluster2.add(m2)
@@ -47,14 +55,10 @@ def test_remove_duplicates_with_identical_measurements_and_leftovers():
     assert result == expected_result
 
 
-def test_remove_duplicates_with_continuous_measurements():
+def test_remove_duplicates_with_continuous_measurements(data: ImuData):
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
-
-    m1 = PseudoMeasurement(1, 1)
-    m2 = PseudoMeasurement(2, 1)
-    m3 = PseudoMeasurement(3, 1)
-    m4 = PseudoMeasurement(4, 1)
-
+    m1, m2 = Imu(1, data), Imu(2, data)
+    m3, m4 = Imu(3, data), Imu(4, data)
     continuous1 = ContinuousMeasurement(measurements=[m1, m2])
     continuous2 = ContinuousMeasurement(measurements=[m3, m4])
 
@@ -73,15 +77,15 @@ def test_remove_duplicates_with_continuous_measurements():
     assert result == expected_result
 
 
-def test_remove_duplicates_all_duplicates():
-    cluster1 = MeasurementCluster()
-    measurement1 = PseudoMeasurement(1, "a")
+def test_remove_duplicates_all_duplicates(data: ImuData):
+    cluster = MeasurementCluster()
+    m = Imu(1, data)
 
-    cluster1.add(measurement1)
+    cluster.add(m)
 
-    item1 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[measurement1])
-    item2 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[measurement1])
-    item3 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[measurement1])
+    item1 = ClustersWithLeftovers(clusters=[cluster], leftovers=[m])
+    item2 = ClustersWithLeftovers(clusters=[cluster], leftovers=[m])
+    item3 = ClustersWithLeftovers(clusters=[cluster], leftovers=[m])
     input_list = [item1, item2, item3]
 
     result = remove_duplicates(input_list)
@@ -90,18 +94,16 @@ def test_remove_duplicates_all_duplicates():
     assert result == expected_result
 
 
-def test_remove_duplicates_identical_measurements_different_leftovers():
+def test_remove_duplicates_identical_measurements_different_leftovers(data: ImuData):
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
+    m1, m2 = Imu(1, data), Imu(2, data)
 
-    measurement1 = PseudoMeasurement(1, "a")
-    measurement2 = PseudoMeasurement(2, "b")
+    cluster1.add(m1)
+    cluster2.add(m2)
 
-    cluster1.add(measurement1)
-    cluster2.add(measurement2)
-
-    item1 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[measurement1])
-    item2 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[measurement2])
-    item3 = ClustersWithLeftovers(clusters=[cluster2], leftovers=[measurement2])
+    item1 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[m1])
+    item2 = ClustersWithLeftovers(clusters=[cluster1], leftovers=[m2])
+    item3 = ClustersWithLeftovers(clusters=[cluster2], leftovers=[m2])
     input_list = [item1, item2, item3]
 
     result = remove_duplicates(input_list)
@@ -110,10 +112,10 @@ def test_remove_duplicates_identical_measurements_different_leftovers():
     assert result == expected_result
 
 
-def test_remove_duplicates_identical_continuous_different_core_measurements():
+def test_remove_duplicates_identical_continuous_different_core_measurements(data: ImuData):
     cluster1, cluster2 = MeasurementCluster(), MeasurementCluster()
-    pseudo1, pseudo2 = PseudoMeasurement(1, 1), PseudoMeasurement(2, 1)
-    continuous = ContinuousMeasurement(measurements=[pseudo1, pseudo2])
+    m1, m2 = Imu(1, data), Imu(2, data)
+    continuous = ContinuousMeasurement(measurements=[m1, m2])
     core1 = PseudoMeasurement(3, "a")
     core2 = PseudoMeasurement(4, "b")
 

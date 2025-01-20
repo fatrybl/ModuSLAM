@@ -1,4 +1,4 @@
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from collections.abc import Iterable
 from typing import TypeVar
@@ -13,7 +13,9 @@ from src.measurement_storage.measurements.continuous import ContinuousMeasuremen
 T = TypeVar("T", bound=Measurement)
 
 
-def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], int, int]:
+def get_subsequence(
+    sequence: list[T], start: int, stop: int, inclusive_stop: bool = False
+) -> tuple[list[T], int, int]:
     """Gets the sub-sequence of items within the given range for the sorted sequence.
 
     Args:
@@ -21,7 +23,9 @@ def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], 
 
         start: index of left timestamp limit (inclusive).
 
-        stop: index of right timestamp limit (exclusive).
+        stop: index of right timestamp limit.
+
+        inclusive_stop: whether the right timestamp limit is inclusive.
 
     Returns:
         a subsequence of the given range, start index, stop index.
@@ -31,7 +35,7 @@ def get_subsequence(sequence: list[T], start: int, stop: int) -> tuple[list[T], 
 
     timestamps: list[int] = [item.timestamp for item in sequence]
     start_idx = bisect_left(timestamps, start)
-    stop_idx = bisect_left(timestamps, stop)
+    stop_idx = bisect_right(timestamps, stop) if inclusive_stop else bisect_left(timestamps, stop)
 
     return sequence[start_idx:stop_idx], start_idx, stop_idx
 

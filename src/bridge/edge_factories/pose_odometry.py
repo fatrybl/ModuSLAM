@@ -22,6 +22,7 @@ from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
 )
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose, identity4x4
 from src.utils.auxiliary_dataclasses import TimeRange
+from src.utils.exceptions import LoopError
 
 
 class Factory(EdgeFactory):
@@ -43,6 +44,12 @@ class Factory(EdgeFactory):
             clusters: clusters with time ranges.
 
             measurement: a measurement to create edge(s).
+
+        Returns:
+            graph element with pose odometry edge.
+
+        Raises:
+            LoopError: if pose_i is equal to pose_j
         """
         start = measurement.time_range.start
         stop = measurement.time_range.stop
@@ -50,9 +57,10 @@ class Factory(EdgeFactory):
         pose_i = cls._get_pose_i_with_status(graph.vertex_storage, clusters, start)
         pose_j = cls._get_pose_j_with_status(graph.vertex_storage, clusters, stop, pose_i)
 
-        new_vertices = create_new_vertices([pose_i, pose_j])
+        if pose_i is pose_j:
+            raise LoopError("pose_i is equal to pose_j")
 
-        # print(f"Odom measurement: \n" f"{np.array(measurement.transformation)[:3, 3]}")
+        new_vertices = create_new_vertices([pose_i, pose_j])
 
         edge = cls._create_edge(pose_i.instance, pose_j.instance, measurement)
 

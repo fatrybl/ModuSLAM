@@ -10,6 +10,7 @@ class MetricsStorage:
         self._error_table: dict[GraphCandidate, float] = {}
         self._connectivity_table: dict[GraphCandidate, bool] = {}
         self._mom_table: dict[GraphCandidate, float] = {}
+        self._unused_measurements: dict[GraphCandidate, int] = {}
 
     def add_mom(self, candidate: GraphCandidate, value: float) -> None:
         """Adds MOM-metric value to the table."""
@@ -27,6 +28,10 @@ class MetricsStorage:
         """Adds solver error value to the table."""
         self._error_table[candidate] = value
 
+    def add_unused_measurements(self, candidate: GraphCandidate, value: int) -> None:
+        """Adds number of unused measurements to the table."""
+        self._unused_measurements[candidate] = value
+
     def get_mom_table(self) -> dict[GraphCandidate, float]:
         """The table with candidates and MOM values."""
         return self._mom_table
@@ -38,6 +43,10 @@ class MetricsStorage:
     def get_timeshift_table(self) -> dict[GraphCandidate, int]:
         """The table with candidates and accumulative time shifts."""
         return self._timeshift_table
+
+    def get_unused_measurements_table(self) -> dict[GraphCandidate, int]:
+        """The table with candidates and number of unused measurements."""
+        return self._unused_measurements
 
     def get_connectivity_status(self, candidate: GraphCandidate) -> bool:
         """The connectivity status of the candidate.
@@ -59,3 +68,4 @@ class MetricsStorage:
         self._error_table.clear()
         self._connectivity_table.clear()
         self._mom_table.clear()
+        self._unused_measurements.clear()

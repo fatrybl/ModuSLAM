@@ -1,5 +1,3 @@
-from typing import cast
-
 from src.bridge.auxiliary_dataclasses import (
     ClustersWithConnections,
     ClustersWithLeftovers,
@@ -7,41 +5,56 @@ from src.bridge.auxiliary_dataclasses import (
 from src.external.connections.connections_factory import Factory
 from src.external.utils import copy_cluster, create_copy, get_subsequence
 from src.measurement_storage.cluster import MeasurementCluster
-from src.measurement_storage.measurements.base import Measurement
+from src.measurement_storage.measurements.auxiliary import FakeMeasurement
 from src.measurement_storage.measurements.imu import ContinuousImu, Imu
 
 
-def fill_one_connection_with_imu(
-    cluster: MeasurementCluster, measurements: list[Imu]
-) -> tuple[MeasurementCluster, list[Imu]]:
-    """Creates a new cluster and adds a continuous measurement to it.
+def fill_one_connection(
+    cluster: MeasurementCluster, measurements: list[Imu], left_limit_t: int | None
+) -> tuple[int, list[Imu]]:
+    """Adds a continuous IMU measurement to the cluster, fills leftovers
+    and computes the number of unused measurements.
 
     Args:
         cluster: a cluster to be copied.
 
         measurements: discrete IMU measurements to fill in the connections.
 
+        left_limit_t: the left time limit for the 1-st IMU measurement.
+
     Returns:
-        new cluster and unused measurements.
+        number of unused measurements, leftovers for future processing.
     """
-    cluster_copy = copy_cluster(cluster)
-    start = measurements[0].timestamp
-    stop = cluster_copy.timestamp
-    leftovers = measurements[:]
+    t = cluster.timestamp
+    first_imu_t = measurements[0].timestamp
+    last_imu_t = measurements[-1].timestamp
+    first_core_t = cluster.time_range.start
 
-    subsequence, _, _ = get_subsequence(measurements, start, stop)
-    if subsequence:
-        subsequence_set = set(subsequence)
-        leftovers = [m for m in measurements if m not in subsequence_set]
-        new_measurement = ContinuousImu(subsequence, start, stop)
-        cluster_copy.add(new_measurement)
+    num_unused: int = 0
+    leftovers: list[Imu] = []
 
-    return cluster_copy, leftovers
+    if len(cluster.core_measurements) == 1 and first_imu_t >= t:
+        return 0, measurements
+
+    if last_imu_t >= t:
+        leftovers, _, _ = get_subsequence(measurements, t, last_imu_t, inclusive_stop=True)
+
+    if first_imu_t < first_core_t:
+        start = min(first_imu_t, left_limit_t) if left_limit_t is not None else first_imu_t
+        subsequence, _, _ = get_subsequence(measurements, start, t, inclusive_stop=False)
+        measurement = ContinuousImu(subsequence, start, t)
+        cluster.add(measurement)
+
+    else:
+        _, _, right_idx = get_subsequence(measurements, first_core_t, t, inclusive_stop=False)
+        num_unused = right_idx
+
+    return num_unused, leftovers
 
 
-def fill_connections_with_imu(
+def fill_multiple_connections(
     item: ClustersWithConnections, measurements: list[Imu]
-) -> tuple[list[MeasurementCluster], list[Imu]]:
+) -> tuple[list[MeasurementCluster], list[Imu], int]:
     """Replaces virtual connections with continuous IMU measurements.
 
     Args:
@@ -50,32 +63,72 @@ def fill_connections_with_imu(
         measurements: discrete IMU measurements to create continuous IMU measurements.
 
     Returns:
-        clusters and unused discrete IMU measurements.
+        1: filled clusters.
+        2: unused discrete IMU measurements for future processing.
+        3: number of unused IMU measurements.
     """
-    used_measurements = set[Imu]()
+    first_imu_t = measurements[0].timestamp
+    first_cluster_t = item.clusters[0].timestamp
+    last_cluster = item.clusters[-1]
+    leftovers: list[Imu] = []
+    num_unused: int = 0
 
     for connection in item.connections:
+        cls1, cls2 = connection.cluster1, connection.cluster2
+        start, stop = cls1.timestamp, cls2.timestamp
 
-        start = connection.cluster1.timestamp
-        stop = connection.cluster2.timestamp
-        subsequence, _, _ = get_subsequence(measurements, start, stop)
+        subsequence, _, _ = get_subsequence(measurements, start, stop, False)
         if not subsequence:
             continue
 
         m = ContinuousImu(subsequence, start, stop)
         connection.cluster2.add(m)
 
-        used_measurements.update(subsequence)
+        if cls1.fake_measurements:
+            item.clusters.remove(cls1)
 
-        if connection.cluster1.fake_measurements:
-            item.clusters.remove(connection.cluster1)
+        current_leftovers = get_leftovers(cls2, last_cluster, measurements)
+        if current_leftovers:
+            leftovers = current_leftovers
 
-    leftovers = [m for m in measurements if m not in used_measurements]
-    return item.clusters, leftovers
+    if first_imu_t < first_cluster_t:
+        _, _, idx = get_subsequence(measurements, first_imu_t, first_cluster_t, False)
+        num_unused = idx
+
+    return item.clusters, leftovers, num_unused
 
 
-def get_clusters_and_leftovers(
-    clusters_combinations: list[list[MeasurementCluster]], measurements: list[Imu]
+def get_leftovers(
+    current: MeasurementCluster, last: MeasurementCluster, measurements: list[Imu]
+) -> list[Imu]:
+    """Gets unused IMU measurements. Only for the last cluster.
+
+    Args:
+        current: a current cluster with core measurements.
+
+        last: the last cluster with core measurements.
+
+        measurements: IMU measurements to compute leftovers.
+
+    Returns:
+        unused IMU measurements or None.
+    """
+    leftovers: list[Imu] = []
+    if current is last:
+        start = last.timestamp
+        stop = measurements[-1].timestamp
+
+        if stop >= start:
+            leftovers, _, _ = get_subsequence(measurements, start, stop, inclusive_stop=True)
+
+    return leftovers
+
+
+def create_and_fill_connections(
+    clusters_combinations: list[list[MeasurementCluster]],
+    measurements: list[Imu],
+    first_core_t: int,
+    left_limit_t: int | None,
 ) -> list[ClustersWithLeftovers]:
     """Creates combinations of clusters and unused measurements.
 
@@ -84,28 +137,58 @@ def get_clusters_and_leftovers(
 
         measurements: IMU measurements to fill in the connections.
 
+        left_limit_t: the timestamp of the latest vertex in vertex cluster.
+
+        first_core_t: the timestamp of the 1-st core measurement.
+
     Returns:
         combinations of clusters with corresponding unused elements.
     """
     variants: list[ClustersWithLeftovers] = []
+    first_imu_t = measurements[0].timestamp
 
     for clusters in clusters_combinations:
 
         if len(clusters) == 1:
-            new_cluster, imu_leftovers = fill_one_connection_with_imu(clusters[0], measurements)
-            leftovers = cast(list[Measurement], imu_leftovers)
-            v = ClustersWithLeftovers([new_cluster], leftovers)
-            variants.append(v)
+            cluster = copy_cluster(clusters[0])
+            num_unused, leftovers = fill_one_connection(cluster, measurements, left_limit_t)
+            variants.append(ClustersWithLeftovers([cluster], leftovers, num_unused))
 
         else:
+            if first_imu_t < first_core_t:
+                add_fake_cluster(clusters, first_imu_t, left_limit_t)
+
             combinations = Factory.create_combinations(clusters)
 
             for connections in combinations:
                 clusters_copy, connections_copy = create_copy(clusters, connections)
                 item = ClustersWithConnections(clusters_copy, connections_copy)
-                new_clusters, imu_leftovers = fill_connections_with_imu(item, measurements)
-                leftovers = cast(list[Measurement], imu_leftovers)
-                v = ClustersWithLeftovers(new_clusters, leftovers)
+                new_clusters, leftovers, unused = fill_multiple_connections(item, measurements)
+                v = ClustersWithLeftovers(new_clusters, leftovers, unused)
                 variants.append(v)
 
     return variants
+
+
+def add_fake_cluster(
+    clusters: list[MeasurementCluster], first_imu_t: int, left_limit_t: int | None
+):
+    """Adds fake cluster with fake measurement if the 1-st IMU measurement is earlier than
+    the 1-st Core measurement in the Cluster.
+
+    Args:
+        clusters: list of measurement clusters.
+
+        first_imu_t: timestamp of the 1-st IMU measurement.
+
+        left_limit_t: a left time limit.
+    """
+    if left_limit_t is None:
+        t = first_imu_t
+    else:
+        t = min(first_imu_t, left_limit_t)
+
+    fake_m = FakeMeasurement(t)
+    fake_cluster = MeasurementCluster()
+    fake_cluster.add(fake_m)
+    clusters.insert(0, fake_cluster)

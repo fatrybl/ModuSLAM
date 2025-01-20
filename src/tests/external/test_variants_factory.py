@@ -8,7 +8,7 @@ from src.utils.ordered_set import OrderedSet
 
 def test_create_with_empty_data():
     data: dict[type[Measurement], OrderedSet] = {}
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
     assert result == []
 
 
@@ -18,7 +18,7 @@ def test_create_1_core():
     ord_set.add(m1)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 1
 
@@ -34,7 +34,7 @@ def test_create_1_imu():
     ord_set.add(m1)
     data: dict[type[Measurement], OrderedSet] = {Imu: ord_set}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert result == []
 
@@ -47,7 +47,7 @@ def test_create_1_core_1_imu_before():
     ord_set2.add(m2)
     data: dict[type[Measurement], OrderedSet] = {Imu: ord_set1, PseudoMeasurement: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 1
 
@@ -67,17 +67,17 @@ def test_create_1_core_1_imu_after():
     ord_set2.add(m2)
     data: dict[type[Measurement], OrderedSet] = {Imu: ord_set1, PseudoMeasurement: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 1
 
-    comb1 = result[0]
+    combination = result[0]
 
-    assert len(comb1.clusters) == 1
-    assert len(comb1.leftovers) == 1
-    assert m2 in comb1.clusters[0]
-    assert m1 in comb1.leftovers
-    assert comb1.clusters[0].continuous_measurements == ()
+    assert len(combination.clusters) == 1
+    assert len(combination.leftovers) == 1
+    assert m1 in combination.leftovers
+    assert m2 in combination.clusters[0]
+    assert combination.clusters[0].continuous_measurements == ()
 
 
 def test_create_with_imu_measurements():
@@ -90,7 +90,7 @@ def test_create_with_imu_measurements():
     ord_set2.add(m3)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set1, Imu: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
 
@@ -98,15 +98,17 @@ def test_create_with_imu_measurements():
 
     assert len(comb1.clusters) == 2
     assert len(comb1.leftovers) == 0
+    assert comb1.num_unused_measurements == 0
     assert m1 in comb1.clusters[0]
     assert m2 in comb1.clusters[1]
     assert m3 in comb1.clusters[1].continuous_measurements[0].items
 
     assert len(comb2.clusters) == 1
     assert len(comb2.leftovers) == 0
+    assert comb2.num_unused_measurements == 1
     assert m1 in comb2.clusters[0]
     assert m2 in comb2.clusters[0]
-    assert m3 in comb2.clusters[0].continuous_measurements[0].items
+    assert len(comb2.clusters[0].continuous_measurements) == 0
 
 
 def test_create_with_core_measurements():
@@ -117,7 +119,7 @@ def test_create_with_core_measurements():
     ord_set.add(m2)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
     comb1, comb2 = result[0], result[1]
@@ -146,7 +148,7 @@ def test_create_with_multiple_imu_measurements():
     ord_set2.add(m4)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set1, Imu: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
 
@@ -162,7 +164,7 @@ def test_create_with_multiple_imu_measurements():
 
     assert len(comb2.clusters) == 1
     assert m4 in comb2.leftovers
-    assert m3 in comb2.clusters[0].continuous_measurements[0].items
+    assert comb2.clusters[0].continuous_measurements == ()
     assert m1 in comb2.clusters[0]
     assert m2 in comb2.clusters[0]
 
@@ -177,7 +179,7 @@ def test_create_with_non_sequential_timestamps():
     ord_set2.add(m3)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set1, Imu: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
 
@@ -193,7 +195,8 @@ def test_create_with_non_sequential_timestamps():
     assert len(comb2.leftovers) == 0
     assert m2 in comb2.clusters[0]
     assert m1 in comb2.clusters[0]
-    assert m3 in comb2.clusters[0].continuous_measurements[0].items
+    assert comb2.clusters[0].continuous_measurements == ()
+    assert comb2.num_unused_measurements == 1
 
 
 def test_create_with_2_imu_between_core():
@@ -208,7 +211,7 @@ def test_create_with_2_imu_between_core():
     ord_set2.add(m4)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set1, Imu: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
 
@@ -225,8 +228,8 @@ def test_create_with_2_imu_between_core():
     assert len(comb2.leftovers) == 0
     assert m1 in comb2.clusters[0]
     assert m2 in comb2.clusters[0]
-    assert m3 in comb2.clusters[0].continuous_measurements[0].items
-    assert m4 in comb2.clusters[0].continuous_measurements[0].items
+    assert comb2.clusters[0].continuous_measurements == ()
+    assert comb2.num_unused_measurements == 2
 
 
 def test_create_with_2_imu_out():
@@ -241,7 +244,7 @@ def test_create_with_2_imu_out():
     ord_set2.add(m4)
     data: dict[type[Measurement], OrderedSet] = {PseudoMeasurement: ord_set1, Imu: ord_set2}
 
-    result = Factory.create(data)
+    result = Factory.create(data, 0)
 
     assert len(result) == 2
 
@@ -263,3 +266,4 @@ def test_create_with_2_imu_out():
     assert comb2.clusters[0].continuous_measurements == ()
     assert m3 in comb2.leftovers
     assert m4 in comb2.leftovers
+    assert comb2.num_unused_measurements == 0

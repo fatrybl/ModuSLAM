@@ -63,3 +63,7 @@ class SkipItemException(Exception):
 
 class NotEnoughMeasurementsError(Exception):
     """Raise when not enough measurements are available."""
+
+
+class LoopError(Exception):
+    """When 2 clusters or vertices are the same."""
