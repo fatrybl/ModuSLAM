@@ -8,7 +8,9 @@ from src.external.metrics.factory import MetricsFactory
 from src.external.metrics.storage import MetricsStorage
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.base import Measurement
+from src.moduslam.backend_manager.graph_solver import GraphSolver
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
+from src.utils.auxiliary_methods import nanosec2sec
 from src.utils.exceptions import ItemNotExistsError
 from src.utils.ordered_set import OrderedSet
 
@@ -21,6 +23,7 @@ class Factory:
     def __init__(self):
         self._metrics_factory = MetricsFactory()
         self._metrics_storage = MetricsStorage()
+        self._solver = GraphSolver()
 
     def create_candidate(
         self, graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
@@ -44,8 +47,10 @@ class Factory:
         error = self._metrics_storage.get_error_table()[best_candidate]
         num_unused = best_candidate.num_unused_measurements
 
+        secs_shift = nanosec2sec(shift)
+
         logger.debug(
-            f"Best candidate: mom={mom}, error={error}, shift={1e-9*shift}, unused={num_unused}"
+            f"Best candidate: mom={mom}, error={error}, shift={secs_shift}, unused={num_unused}"
         )
 
         self._metrics_storage.clear()
@@ -61,14 +66,18 @@ class Factory:
 
         for item in items:
             can = item.candidate
+            graph = can.graph
 
-            result = self._metrics_factory.evaluate(item)
+            new_values, error = self._solver.solve(graph)
+            graph.update_vertices(new_values)
+
+            result = self._metrics_factory.evaluate(item, error)
 
             self._metrics_storage.add_unused_measurements(can, result.num_unused_measurements)
             self._metrics_storage.add_mom(can, result.mom)
             self._metrics_storage.add_connectivity(can, result.connectivity)
             self._metrics_storage.add_timeshift(can, result.timeshift)
-            self._metrics_storage.add_solver_error(can, result.solver_error)
+            self._metrics_storage.add_solver_error(can, error)
 
     @staticmethod
     def _choose_best(storage: MetricsStorage) -> GraphCandidate:
@@ -80,7 +89,7 @@ class Factory:
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = storage.get_timeshift_table()
+        table = storage.get_mom_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
             connectivity = storage.get_connectivity_status(candidate)

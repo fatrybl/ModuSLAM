@@ -180,7 +180,7 @@ class PlaneOrthogonality(Metrics):
 
     @staticmethod
     def _compute_mom(
-        poses: list[NumpyMatrix4x4], point_clouds: list[MatrixNx3], config: LidarConfig
+        poses: list[NumpyMatrix4x4], point_clouds: list[MatrixNx3], mom_config: LidarConfig
     ) -> float:
         """Computes the MOM metrics.
 
@@ -198,7 +198,7 @@ class PlaneOrthogonality(Metrics):
             ExternalModuleException: if the external MOM module fails to compute the metric.
         """
         try:
-            value = mom(point_clouds, poses, config=config)
+            value = mom(point_clouds, poses, config=mom_config)
         except Exception as e:
             raise ExternalModuleException(e)
 

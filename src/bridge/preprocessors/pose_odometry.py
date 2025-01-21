@@ -44,11 +44,17 @@ def split(measurements: Iterable[Measurement], start: int | None) -> list[SplitP
             m_start = m.time_range.start
             m_stop = m.time_range.stop
 
-            if start is not None and m_start > start:
-
+            if start is None:
                 m1 = SplitPoseOdometry(m_start, m)
                 m2 = SplitPoseOdometry(m_stop, m)
                 splits.append(m1)
                 splits.append(m2)
+
+            else:
+                if start < m_start:
+                    m1 = SplitPoseOdometry(m_start, m)
+                    m2 = SplitPoseOdometry(m_stop, m)
+                    splits.append(m1)
+                    splits.append(m2)
 
     return splits

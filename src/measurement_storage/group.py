@@ -9,10 +9,13 @@ class MeasurementGroup:
 
     @property
     def measurements(self) -> set[Measurement]:
+        """Measurements of the group."""
         return self._measurements
 
     def add(self, measurement: Measurement):
+        """Adds a measurement to the group."""
         self._measurements.add(measurement)
 
     def remove(self, measurement: Measurement):
+        """Removes a measurement from the group."""
         self._measurements.remove(measurement)

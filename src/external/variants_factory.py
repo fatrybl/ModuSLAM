@@ -26,12 +26,12 @@ class Factory:
         Returns:
             combinations of clusters with leftover measurements.
         """
-        core_measurements, imu_measurements = cls._separate_measurements(data)
+        core_measurements, imu_measurements = cls.separate_measurements(data)
 
         if not core_measurements:
             return []
 
-        core_measurements = cls._split_and_sort(core_measurements, left_limit_t)
+        core_measurements = cls.split_and_sort(core_measurements, left_limit_t)
         start = core_measurements[0].timestamp
         stop = core_measurements[-1].timestamp
 
@@ -45,6 +45,45 @@ class Factory:
         items = cls._fill_combinations(combinations, imu_measurements, start, stop, left_limit_t)
 
         return items
+
+    @staticmethod
+    def separate_measurements(
+        data: dict[type[Measurement], OrderedSet[Measurement]]
+    ) -> tuple[list[Measurement], list[Imu]]:
+        """Splits data into core and IMU measurements.
+
+        Args:
+            data: a dictionary with measurements.
+
+        Returns:
+            Non-IMU and IMU measurements.
+        """
+        imu_measurements: list[Imu] = []
+        core_measurements: list[Measurement] = []
+
+        for m_type, m_set in data.items():
+            if issubclass(m_type, Imu):
+                imu_measurements.extend(m_set.items)
+            else:
+                core_measurements.extend(m_set.items)
+
+        return core_measurements, imu_measurements
+
+    @staticmethod
+    def split_and_sort(measurements: list[Measurement], start: int | None) -> list[Measurement]:
+        """Splits and sorts measurements by timestamps.
+
+        Args:
+            measurements: list of measurements.
+
+            start: a start timestamp.
+
+        Returns:
+            sorted and split measurements.
+        """
+        measurements = split_odometry(measurements, start)
+        measurements.sort(key=lambda x: x.timestamp)
+        return measurements
 
     @staticmethod
     def _fill_combinations(
@@ -112,45 +151,6 @@ class Factory:
                 items.append(ClustersWithLeftovers(comb, leftovers))
 
         return items
-
-    @staticmethod
-    def _separate_measurements(
-        data: dict[type[Measurement], OrderedSet[Measurement]]
-    ) -> tuple[list[Measurement], list[Imu]]:
-        """Splits data into core and IMU measurements.
-
-        Args:
-            data: a dictionary with measurements.
-
-        Returns:
-            Non-IMU and IMU measurements.
-        """
-        imu_measurements: list[Imu] = []
-        core_measurements: list[Measurement] = []
-
-        for m_type, m_set in data.items():
-            if issubclass(m_type, Imu):
-                imu_measurements.extend(m_set.items)
-            else:
-                core_measurements.extend(m_set.items)
-
-        return core_measurements, imu_measurements
-
-    @staticmethod
-    def _split_and_sort(measurements: list[Measurement], start: int | None) -> list[Measurement]:
-        """Splits and sorts measurements by timestamps.
-
-        Args:
-            measurements: list of measurements.
-
-            start: a start timestamp.
-
-        Returns:
-            sorted and split measurements.
-        """
-        measurements = split_odometry(measurements, start)
-        measurements.sort(key=lambda x: x.timestamp)
-        return measurements
 
     @staticmethod
     def _combine_with_continuous(

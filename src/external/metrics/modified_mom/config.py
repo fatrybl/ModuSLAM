@@ -55,7 +55,7 @@ class LidarConfig(BaseConfig):
     min_cluster_size: int = 10
     max_nn: int = 100
     min_knn: int = 10
-    eigen_scale: float = 20
+    eigen_scale: float = 30
 
 
 @dataclass

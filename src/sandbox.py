@@ -222,21 +222,21 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 # Example Usage
 if __name__ == "__main__":
     normal_cfg = LidarConfig()
-    normal_cfg.eigen_scale = 10
-    normal_cfg.min_cluster_size = 10
-    normal_cfg.knn_rad = 1.5
-    normal_cfg.min_knn = 10
+    normal_cfg.eigen_scale = 30
+    # normal_cfg.min_cluster_size = 10
+    # normal_cfg.knn_rad = 1.5
+    # normal_cfg.min_knn = 10
 
     cluster_cfg = HdbscanConfig()
-    cluster_cfg.cluster_selection_epsilon = 0.2
+    cluster_cfg.cluster_selection_epsilon = 0.3
     cluster_cfg.alpha = 1.5
 
     bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677438252237000.bin"
-    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_right/1544677438186728000.bin"
+    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_right/1544677438287586000.bin"
     bin_file_path2 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
     bin_file_path3 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
-    # pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
-    pcd1 = read_4_channel_bin_pcd(Path(bin_file_path1))
+    pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
+    # pcd1 = read_4_channel_bin_pcd(Path(bin_file_path1))
     # pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))
     # pcd3 = read_4_channel_bin_pcd(Path(bin_file_path3))
 
@@ -259,11 +259,11 @@ if __name__ == "__main__":
             [0.0, 0.0, 0.0, 1.0],
         ]
     )
-    # pcd0.transform(left_tf_base_sensor)
-    pcd1.transform(right_tf_base_sensor)
+    pcd0.transform(left_tf_base_sensor)
+    # pcd1.transform(right_tf_base_sensor)
     # pcd1.transform(right_tf_base_sensor)
     # pcd3.transform(right_tf_base_sensor)
-    pcd = pcd1
+    pcd = pcd0
 
     subsets = extract_orthogonal_subsets(pcd, normal_cfg, cluster_cfg)
     # subsets = extract_orthogonal_subsets(pcd, eps=0.5)
