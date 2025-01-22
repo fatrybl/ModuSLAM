@@ -23,6 +23,7 @@ from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config imp
 )
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.auxiliary_methods import to_float
 
 logger = logging.getLogger(data_manager)
 
@@ -64,7 +65,7 @@ class Ros2DataReader(DataReader):
 
         if isinstance(self._regime, TimeLimit):
             #TODO: Add convertation function for float
-            start, stop = float(self._regime.start), float(self._regime.stop)
+            start, stop = to_float(self._regime.start), to_float(self._regime.stop)
             self._time_range = TimeRange(start, stop)
             self._rosbag_iterator = rosbag_iterator(
                 self._rosbag_reader,
