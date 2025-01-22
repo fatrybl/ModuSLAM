@@ -36,30 +36,22 @@ class Ros2DataReader(DataReader):
         """
         Args:
             regime: regime to read the data.
-
             dataset_params: dataset parameters.
 
         Raises:
             FileNotFoundError: if any required file does not exist.
-
             NotADirectoryError: if the dataset directory does not exist.
         """
 
         super().__init__(regime, dataset_params)
 
         self._dataset_directory = dataset_params.directory
-
         check_directory(self._dataset_directory)
 
         self._sensors_in_config = dataset_params.sensors_table
-
         self.topics_table = dataset_params.topics_table
 
-        # self._data_types = dataset_params.data_types
-        # self._data_types = ["Image", "PointCloud2", "Imu"]
-
         self._sensors_in_factory = SensorsFactory.get_all_sensors()
-
         self._sensors_table = check_setup_sensors(self._sensors_in_config, self._sensors_in_factory)
 
         self._sensors = get_rosbag_sensors(
@@ -68,13 +60,11 @@ class Ros2DataReader(DataReader):
 
         self._rosbag_reader = Reader(self._dataset_directory)
 
-        self._connections: list = []
+        self._connections = []
 
         if isinstance(self._regime, TimeLimit):
             #TODO: Add convertation function for float
-            start = float(self._regime.start)
-            stop = float(self._regime.stop)
-
+            start, stop = float(self._regime.start), float(self._regime.stop)
             self._time_range = TimeRange(start, stop)
             self._rosbag_iterator = rosbag_iterator(
                 self._rosbag_reader,
@@ -82,7 +72,6 @@ class Ros2DataReader(DataReader):
                 self._connections,
                 self._time_range,
             )
-
         else:
             self._rosbag_iterator = rosbag_iterator(
                 self._rosbag_reader,

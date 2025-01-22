@@ -31,18 +31,16 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_
 
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
-            parts = connection.topic.split("/")
-            sensor_name = parts[1] if len(parts) > 1 else connection.topic
             sensor_topic = connection.topic
-            # print(sensor_topic)
             data_type = connection.msgtype.split("/")[-1]
+            sensor_name = sensor_topic.split("/")[1] if "/" in sensor_topic else sensor_topic
+
             if sensor_name not in sensors_table or sensor_topic not in topics_table.values():
                 continue
 
             sensor = {
                 "id": connection.id,
                 "topic": connection.topic,
-                "message_type": connection.msgtype,
                 "sensor_name": sensor_name,
                 "data_type": data_type,
                 "sensor": sensors_table[sensor_name],
@@ -98,46 +96,40 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
     and returns data of each reading.
 
     Args:
-        reader: Rosbag reader object
+        reader: Rosbag reader object.
         sensors: List of sensors in the moduslam configs.
-        connections: List of connections for the sensors
+        connections: List of connections for the sensors.
+        time_range (optional): Time range to filter messages.
+
+    Yields:
+        Tuple[int, float, str, any, str]: Index, timestamp, sensor name, data, and data type.
     """
 
-    data_getter: dict[str, Callable]
-    data_getter = {
+    data_getter: dict[str, Callable] = {
         "Imu": get_imu_measurement,
         "PointCloud2": get_lidar_measurement,
         "Image": get_stereo_measurement,
     }
 
+    sensors_dict = {sensor["sensor_name"]: sensor["sensor"] for sensor in sensors}
+
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
 
-        if time_range is not None:
-            if timestamp < time_range.start:
-                continue
-            elif timestamp > time_range.stop:
-                break
-        sensor_name = "no sensor"
+        if time_range is not None and not (time_range.start <= timestamp <= time_range.stop):
+            continue
+
         sensor_topic = connection.topic.split("/")[1]
         data_type = connection.msgtype.split("/")[-1]
 
         if data_type not in data_getter.keys():
             continue
-
-        msg = deserialize_cdr(rawdata, connection.msgtype)
-
-        for single_sensor in sensors:
-            if single_sensor["sensor_name"] == sensor_topic:
-                sensor_name = single_sensor["sensor"]
-                break
-
-        if sensor_name == "no sensor":
+        if sensor_topic not in sensors_dict:
             continue
 
-        message_getter = data_getter[data_type]
-        data = message_getter(msg)
+        msg = deserialize_cdr(rawdata, connection.msgtype)
+        data = data_getter[data_type](msg)
 
-        yield (i, timestamp, sensor_name, data, data_type)
+        yield (i, timestamp, sensors_dict[sensor_topic], data, data_type)
 
 
 def rosbag_read(bag_path: Path, num_readings: float = 1) -> list:
