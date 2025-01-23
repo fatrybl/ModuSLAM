@@ -1,9 +1,9 @@
 import logging
+from typing import TypeAlias
 
 import numpy as np
+import open3d
 
-from src.custom_types.aliases import Matrix4x4
-from src.custom_types.numpy import MatrixNx3
 from src.logger.logging_config import map_manager
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
@@ -13,20 +13,17 @@ from src.moduslam.map_manager.map_factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
 from src.moduslam.map_manager.map_factories.lidar_map.utils import (
+    create_point_cloud_from_element,
     create_pose_edges_table,
     map_elements2vertices,
-    values_to_array,
 )
-from src.moduslam.map_manager.map_factories.utils import (
-    fill_elements,
-    filter_array,
-    transform_pointcloud,
-)
+from src.moduslam.map_manager.map_factories.utils import fill_elements
 from src.moduslam.map_manager.maps.pointcloud import PointCloudMap
 from src.moduslam.map_manager.protocols import MapFactory
-from src.moduslam.sensors_factory.sensors import Lidar3D
 
 logger = logging.getLogger(map_manager)
+
+Cloud: TypeAlias = open3d.geometry.PointCloud
 
 
 class LidarMapFactory(MapFactory):
@@ -34,9 +31,7 @@ class LidarMapFactory(MapFactory):
 
     def __init__(self, config: LidarPointCloudConfig) -> None:
         self._map = PointCloudMap()
-        self._num_channels = config.num_channels
-        self._min_range = config.min_range
-        self._max_range = config.max_range
+        self._config = config
 
     @property
     def map(self) -> PointCloudMap:
@@ -56,66 +51,32 @@ class LidarMapFactory(MapFactory):
         table2 = create_pose_edges_table(table1)
         table3 = map_elements2vertices(table2)
         table4 = fill_elements(table3, batch_factory)
-        points_map = self._create_points_map(table4)
-        self._map.set_points(points_map)
+        points_map = self._aggregate_point_clouds(table4, self._config)
+        self._map.pointcloud = points_map
 
-    def _create_points_map(self, pose_elements_table: dict[Pose, list[Element]]) -> MatrixNx3:
-        """Creates a points map from the given "vertex -> elements" table.
+    @staticmethod
+    def _aggregate_point_clouds(
+        pose_elements_table: dict[Pose, list[Element]], config: LidarPointCloudConfig
+    ) -> Cloud:
+        """Creates and aggregates point clouds.
 
         Args:
             pose_elements_table: "pose -> elements" table.
 
         Returns:
-            Points map array [N,3].
+            a 3D point cloud.
 
         Raises:
             TypeError: if the sensor is not of type Lidar3D.
         """
-        point_clouds = []
+        points_map = Cloud()
 
         for pose, elements in pose_elements_table.items():
+            pose_array = np.array(pose.value)
+
             for element in elements:
-                cloud = self._get_cloud(pose.value, element)
-                point_clouds.append(cloud)
+                cloud = create_point_cloud_from_element(element, config)
+                cloud.transform(pose_array)
+                points_map += cloud
 
-        pcd_array = np.vstack(point_clouds)
-        return pcd_array
-
-    def _get_cloud(self, pose: Matrix4x4, element: Element) -> np.ndarray:
-        sensor = element.measurement.sensor
-        values = element.measurement.values
-
-        if isinstance(sensor, Lidar3D):
-            tf = sensor.tf_base_sensor
-            pointcloud = self._create_pointcloud(pose, tf, values)
-            return pointcloud
-
-        else:
-            msg = f"Sensor is of type {type(sensor).__name__!r} but not {Lidar3D.__name__!r}"
-            logger.error(msg)
-            raise TypeError(msg)
-
-    def _create_pointcloud(
-        self, pose: Matrix4x4, tf: Matrix4x4, values: tuple[float, ...]
-    ) -> np.ndarray:
-        """Creates a point cloud in global coordinate system by applying
-        transformations. Ignores intensity values.
-
-        Args:
-            pose: pose SE(3).
-
-            tf: base -> lidar transformation SE(3).
-
-            values: raw lidar point cloud data.
-
-        Returns:
-            Point cloud array [N, 3].
-        """
-        tf_array = np.array(tf)
-        pose_array = np.array(pose)
-        pointcloud = values_to_array(values, self._num_channels)
-        pointcloud = filter_array(pointcloud, self._min_range, self._max_range)
-        pointcloud[:, 3] = 1  # make SE(3) compatible.
-        pointcloud = transform_pointcloud(pose_array, tf_array, pointcloud)
-        pointcloud = pointcloud[:, :3]  # ignore 4-th channel,
-        return pointcloud
+        return points_map

@@ -48,6 +48,8 @@ class Factory:
 
         Returns:
             connections.
+
+        TODO: remove sorting after debugging to speed up the process.
         """
         n = len(items)
         if n <= 1:
@@ -74,7 +76,7 @@ class Factory:
                     results.append(f"{result}")
         # Remove duplicates
         results = list(set(results))
-        return results
+        return sorted(results)
 
     @classmethod
     def _encode_items(cls, items: Iterable):

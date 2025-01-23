@@ -1,4 +1,7 @@
 from collections.abc import Sequence
+from typing import TypeVar
+
+T = TypeVar("T")
 
 
 def sum_of_differences(sequence: Sequence[int], value: int) -> int:
@@ -22,7 +25,7 @@ def sum_of_differences(sequence: Sequence[int], value: int) -> int:
     return sum(abs(item - value) for item in sequence)
 
 
-def median(sequence: Sequence[int]) -> int:
+def median(sequence: Sequence[T]) -> T:
     """Gets median value in the sequence.
 
     Args:

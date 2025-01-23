@@ -26,10 +26,10 @@ class MeasurementCluster:
         return item in self._core_measurements or item in self._continuous_measurements
 
     def __repr__(self):
-        measurement = list(self._core_measurements.items) + list(
+        measurements = list(self._core_measurements.items) + list(
             self._continuous_measurements.items
         )
-        return str(measurement)
+        return str(measurements)
 
     @property
     def empty(self) -> bool:

@@ -86,6 +86,8 @@ def compute_variances(target_points, source_points, nn_model, knn_rad: float, mi
 
     Returns:
         median of plane variances.
+
+    TODO: add type hints.
     """
     indices = nn_model.radius_neighbors(target_points, radius=knn_rad, return_distance=False)
 

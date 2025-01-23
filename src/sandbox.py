@@ -1,5 +1,7 @@
 import random
+from collections.abc import Sequence
 from pathlib import Path
+from typing import TypeAlias
 
 import numpy as np
 import open3d as o3d
@@ -11,8 +13,10 @@ from src.external.metrics.modified_mom.metrics import mom
 from src.moduslam.map_manager.utils import read_4_channel_bin_pcd
 from src.utils.exceptions import DimensionalityError
 
+Cloud: TypeAlias = o3d.geometry.PointCloud
 
-def visualize_point_cloud_with_subsets(pcd, planes):
+
+def visualize_point_cloud_with_subsets(pcd: Cloud, planes: Sequence[MatrixNx3]):
     """
     Visualize the entire point cloud in grey and three subsets of points with RGB colors.
 
@@ -221,15 +225,15 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 
 # Example Usage
 if __name__ == "__main__":
-    normal_cfg = LidarConfig()
-    normal_cfg.eigen_scale = 30
+    mom_config = LidarConfig()
+    mom_config.eigen_scale = 30
     # normal_cfg.min_cluster_size = 10
     # normal_cfg.knn_rad = 1.5
     # normal_cfg.min_knn = 10
 
-    cluster_cfg = HdbscanConfig()
-    cluster_cfg.cluster_selection_epsilon = 0.3
-    cluster_cfg.alpha = 1.5
+    plane_detection_config = HdbscanConfig()
+    plane_detection_config.cluster_selection_epsilon = 0.3
+    plane_detection_config.alpha = 1.5
 
     bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677438252237000.bin"
     bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_right/1544677438287586000.bin"
@@ -265,10 +269,10 @@ if __name__ == "__main__":
     # pcd3.transform(right_tf_base_sensor)
     pcd = pcd0
 
-    subsets = extract_orthogonal_subsets(pcd, normal_cfg, cluster_cfg)
+    subsets = extract_orthogonal_subsets(pcd, mom_config, plane_detection_config)
     # subsets = extract_orthogonal_subsets(pcd, eps=0.5)
     visualize_point_cloud_with_subsets(pcd, subsets)
 
     clouds = [array_to_pointcloud(subset) for subset in subsets]
-    value = mom([pcd], [i4x4], subsets=clouds, config=normal_cfg)
+    value = mom([pcd], [i4x4], mom_config, plane_detection_config, subsets=clouds)
     print(f"mom: {value}")

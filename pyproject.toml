@@ -7,16 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-#======================
-# Now open3D is installed with pip, cause poetry has conflicts with legacy open3D code.
-#
-# TODO: Remove these when Open3D releases >0.18.0 with ML dependencies properly set that is
-#   compatible with Poetry. https://github.com/isl-org/Open3D/issues/5747
-#   https://github.com/isl-org/Open3D-ML/blob/main/requirements.txt
 hydra-core = "*"
 pillow = "*"
 plum-dispatch = "*"
-numpy = "^1.26.4"
+numpy = "*"
 psutil = "*"
 kiss-icp = "*"
 graphviz = "*"
@@ -31,7 +25,8 @@ scikit-learn = "*"
 opencv-python = "*"
 transformers = "*"
 torch = "*"
-torch-ransac3d = "^1.0.36"
+torch-ransac3d = "*"
+open3d = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -46,8 +41,8 @@ docformatter = "*"
 isort = "*"
 doc8 = "*"
 types-pillow = "*"
-types-psutil = "^6.1.0.20241102"
-polyscope = "^2.3.0"
+types-psutil = "*"
+polyscope = "*"
 
 [build-system]
 requires = ["poetry-core"]

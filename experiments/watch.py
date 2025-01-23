@@ -1,34 +1,43 @@
 from pathlib import Path
 
+import numpy as np
 import open3d as o3d
 
+# Paths to the point cloud files
 current_dir = Path(__file__).parent.absolute()
 sub_dir = "2_lidars_vrs_imu"
-
 current_dir = current_dir / sub_dir
 
-path1 = current_dir / "simple.ply"
-path2 = current_dir / "mom.ply"
+path1 = current_dir / "lidar_map.ply"
+path2 = current_dir / "lidar_map1.ply"
 
+# Colors for the point clouds
 colors = [
     [0.5, 0.5, 0.5],  # Grey
-    # [0, 1, 0],  # Green
-    # [0, 0, 1],  # Red
     [0, 0, 1],  # Blue
 ]
 
 file_paths = [path1, path2]
 
+# Load point clouds and color them
 point_clouds = []
 for file_path, color in zip(file_paths, colors):
     point_cloud = o3d.io.read_point_cloud(file_path.as_posix())
     point_cloud.paint_uniform_color(color)
     point_clouds.append(point_cloud)
 
-# difference_points = np.array(point_clouds[0].points) - np.array(point_clouds[1].points)
-o3d.visualization.draw_geometries(point_clouds)
-# cloud = o3d.geometry.PointCloud()
-# cloud.points = o3d.utility.Vector3dVector(difference_points)
-# o3d.visualization.draw_geometries([cloud])
-# cloud = o3d.io.read_point_cloud(path1.as_posix())
-# o3d.visualization.draw_geometries([cloud])
+# o3d.visualization.draw_geometries(point_clouds)
+
+difference = o3d.geometry.PointCloud()
+difference.points = o3d.utility.Vector3dVector(
+    np.array(point_clouds[0].points) - np.array(point_clouds[1].points)
+)
+
+o3d.visualization.draw_geometries([difference])
+# cloud = o3d.io.read_point_cloud(str(path1))
+# vis = o3d.visualization.Visualizer()
+# vis.create_window()
+# vis.add_geometry(cloud)
+#
+# vis.run()
+# vis.destroy_window()

@@ -28,8 +28,8 @@ class MetricsStorage:
         """Adds solver error value to the table."""
         self._error_table[candidate] = value
 
-    def add_unused_measurements(self, candidate: GraphCandidate, value: int) -> None:
-        """Adds number of unused measurements to the table."""
+    def add_num_unsued(self, candidate: GraphCandidate, value: int) -> None:
+        """Adds a number of unused measurements to the table."""
         self._unused_measurements[candidate] = value
 
     def get_mom_table(self) -> dict[GraphCandidate, float]:

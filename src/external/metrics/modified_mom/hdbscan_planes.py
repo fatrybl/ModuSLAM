@@ -13,9 +13,7 @@ Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
 def extract_orthogonal_subsets(
-    pc: Cloud,
-    normals_config: BaseConfig = BaseConfig(),
-    cluster_config: HdbscanConfig = HdbscanConfig(),
+    pc: Cloud, normals_config: BaseConfig, cluster_config: HdbscanConfig
 ) -> list[MatrixNx3]:
     """Extracts point clouds which mean norman vectors are mutually orthogonal.
 
@@ -27,7 +25,7 @@ def extract_orthogonal_subsets(
         cluster_config: a configuration for clustering algorithm
 
     Returns:
-        orthogonal clouds , normals, clique normals.
+        arrays with orthogonal point clouds.
     """
     pc_cut = estimate_normals(
         pc, normals_config.knn_rad, normals_config.max_nn, normals_config.eigen_scale

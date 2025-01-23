@@ -25,6 +25,8 @@ class Factory:
 
         Returns:
             combinations of clusters with leftover measurements.
+
+        TODO: remove sorting imu measurements ?
         """
         core_measurements, imu_measurements = cls.separate_measurements(data)
 
@@ -43,7 +45,6 @@ class Factory:
         combinations = remove_loops(combinations)
 
         items = cls._fill_combinations(combinations, imu_measurements, start, stop, left_limit_t)
-
         return items
 
     @staticmethod

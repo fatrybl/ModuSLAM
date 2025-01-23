@@ -66,4 +66,5 @@ class MapManager:
     def save_graph(self, graph: Graph) -> None:
         """Saves the graph."""
         self._graph_saver.save_to_pdf(graph)
+        # self._graph_saver.save_to_file(graph)
         logger.info("Graph has been saved.")

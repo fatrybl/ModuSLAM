@@ -49,7 +49,7 @@ class DepthConfig(BaseConfig):
 
 @dataclass
 class LidarConfig(BaseConfig):
-    """Config recommended for data obtained from Lidar."""
+    """Recommended config for Lidar point clouds from Kaist Urban Dataset."""
 
     knn_rad: float = 1.5
     min_cluster_size: int = 10

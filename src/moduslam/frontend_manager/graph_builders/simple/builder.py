@@ -73,27 +73,22 @@ class Builder:
         Args:
             candidate_with_clusters: a candidate with clusters.
 
-            error: solver error.
+            error: a solver error.
         """
         candidate = candidate_with_clusters.candidate
+        clusters = candidate_with_clusters.clusters
+        unused = candidate.num_unused_measurements
 
-        result = self._metrics_factory.evaluate(candidate_with_clusters, error)
+        timeshift = self._metrics_factory.compute_timeshift(clusters)
+        connectivity = self._metrics_factory.compute_connectivity(candidate)
 
-        self._metrics_storage.add_unused_measurements(candidate, result.num_unused_measurements)
-        self._metrics_storage.add_mom(candidate, result.mom)
-        self._metrics_storage.add_connectivity(candidate, result.connectivity)
-        self._metrics_storage.add_timeshift(candidate, result.timeshift)
         self._metrics_storage.add_solver_error(candidate, error)
+        self._metrics_storage.add_num_unsued(candidate, unused)
+        self._metrics_storage.add_connectivity(candidate, connectivity)
+        self._metrics_storage.add_timeshift(candidate, timeshift)
 
-        shift = self._metrics_storage.get_timeshift_table()[candidate]
-        mom = self._metrics_storage.get_mom_table()[candidate]
-        error = self._metrics_storage.get_error_table()[candidate]
-        num_unused = candidate.num_unused_measurements
+        secs_shift = nanosec2sec(timeshift)
 
-        secs_shift = nanosec2sec(shift)
-
-        logger.debug(
-            f"Best candidate: mom={mom}, error={error}, shift={secs_shift}, unused={num_unused}"
-        )
+        logger.debug(f"Best candidate: error={error}, shift={secs_shift}, unused={unused}")
 
         self._metrics_storage.clear()

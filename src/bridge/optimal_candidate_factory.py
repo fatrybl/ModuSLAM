@@ -1,10 +1,11 @@
 # from src.bridge.candidates_factory_no_copy import Factory as CandidatesFactory
 import logging
 from collections.abc import Iterable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.candidates_factory import create_candidates_with_clusters
-from src.external.metrics.factory import MetricsFactory
+from src.external.metrics.factory import MetricsFactory, MetricsResult
 from src.external.metrics.storage import MetricsStorage
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.base import Measurement
@@ -40,7 +41,7 @@ class Factory:
         """
         candidates_with_clusters = create_candidates_with_clusters(graph, data)
         self._evaluate(candidates_with_clusters)
-        best_candidate = self._choose_best(self._metrics_storage)
+        best_candidate = self._choose_best_candidate(self._metrics_storage)
 
         shift = self._metrics_storage.get_timeshift_table()[best_candidate]
         mom = self._metrics_storage.get_mom_table()[best_candidate]
@@ -57,39 +58,20 @@ class Factory:
 
         return best_candidate
 
-    def _evaluate(self, items: Iterable[CandidateWithClusters]) -> None:
-        """Evaluates candidates.
-
-        Args:
-            items: graph candidates with measurement clusters.
-        """
-
-        for item in items:
-            can = item.candidate
-            graph = can.graph
-
-            new_values, error = self._solver.solve(graph)
-            graph.update_vertices(new_values)
-
-            result = self._metrics_factory.evaluate(item, error)
-
-            self._metrics_storage.add_unused_measurements(can, result.num_unused_measurements)
-            self._metrics_storage.add_mom(can, result.mom)
-            self._metrics_storage.add_connectivity(can, result.connectivity)
-            self._metrics_storage.add_timeshift(can, result.timeshift)
-            self._metrics_storage.add_solver_error(can, error)
-
     @staticmethod
-    def _choose_best(storage: MetricsStorage) -> GraphCandidate:
-        """Chooses the best candidate.
+    def _choose_best_candidate(storage: MetricsStorage) -> GraphCandidate:
+        """Chooses the best candidate based on metrics in the storage.
 
         Args:
             storage: a storage with metrics.
 
+        Returns:
+            the best candidate.
+
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = storage.get_mom_table()
+        table = storage.get_timeshift_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
             connectivity = storage.get_connectivity_status(candidate)
@@ -97,3 +79,46 @@ class Factory:
                 return candidate
 
         raise ItemNotExistsError("No best candidate exists.")
+
+    def _evaluate(self, items: Iterable[CandidateWithClusters]) -> None:
+        """Evaluates candidates.
+
+        Args:
+            items: graph candidates with measurement clusters.
+        """
+
+        with ThreadPoolExecutor() as executor:
+            futures = {executor.submit(self._evaluate_item, item): item for item in items}
+            for future in as_completed(futures):
+                candidate, result = future.result()
+                self._metrics_storage.add_solver_error(candidate, result.solver_error)
+                self._metrics_storage.add_num_unsued(candidate, result.num_unused_measurements)
+                self._metrics_storage.add_connectivity(candidate, result.connectivity)
+                self._metrics_storage.add_timeshift(candidate, result.timeshift)
+
+        for item in items:
+            candidate = item.candidate
+            # mom = self._metrics_factory.compute_mom(candidate)
+            mom = 0
+            self._metrics_storage.add_mom(candidate, mom)
+
+    def _evaluate_item(self, item: CandidateWithClusters) -> tuple[GraphCandidate, MetricsResult]:
+        """Solves the graph, updates vertices and computes metrics (except MOM).
+
+        Args:
+            item: a graph candidate with clusters to solve and evaluate.
+
+        Returns:
+            candidate and metrics result.
+        """
+
+        candidate = item.candidate
+        graph = item.candidate.graph
+        values, error = self._solver.solve(graph)
+        graph.update_vertices(values)
+
+        connectivity = self._metrics_factory.compute_connectivity(candidate)
+        timeshift = self._metrics_factory.compute_timeshift(item.clusters)
+
+        result = MetricsResult(error, connectivity, timeshift, candidate.num_unused_measurements)
+        return candidate, result

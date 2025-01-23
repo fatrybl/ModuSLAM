@@ -22,6 +22,9 @@ class GraphSaver:
             graph: a graph to save.
         """
         backend_instances = graph.get_backend_instances()
+        graph_str = graph.factor_graph.serialize()
+        with open("serialized.txt", "w") as file:
+            file.write(graph_str)
         graph.factor_graph.saveGraph(self._path.as_posix(), backend_instances)
 
     def save_to_pdf(self, graph: Graph, name: str = "graph") -> None:

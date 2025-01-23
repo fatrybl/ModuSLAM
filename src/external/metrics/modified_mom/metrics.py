@@ -8,8 +8,8 @@ import numpy as np
 import open3d as o3d
 from sklearn.neighbors import NearestNeighbors
 
-from src.custom_types.numpy import Matrix4x4
-from src.external.metrics.modified_mom.config import BaseConfig
+from src.custom_types.numpy import Matrix4x4, MatrixNx3
+from src.external.metrics.modified_mom.config import BaseConfig, HdbscanConfig
 from src.external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
 from src.external.metrics.modified_mom.utils import (
     aggregate_map,
@@ -17,27 +17,17 @@ from src.external.metrics.modified_mom.utils import (
     compute_plane_variance,
     compute_variances,
 )
+from src.external.metrics.utils import median
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
-
-
-def _get_median_index(length: int) -> int:
-    """Gets median index.
-
-    Args:
-        length: length of the list.
-
-    Returns:
-        index.
-    """
-    return length // 2 - 1 if length % 2 == 0 else length // 2
 
 
 def mom(
     clouds: list[Cloud],
     ts: list[Matrix4x4],
-    config: BaseConfig = BaseConfig(),
-    subsets: Iterable[Cloud] | None = None,
+    mom_config: BaseConfig,
+    plane_detection_config: HdbscanConfig,
+    subsets: Iterable[MatrixNx3] | None = None,
 ):
     """Mutually Orthogonal Metric.
     https://www.researchgate.net/publication/352572583_Be_your_own_Benchmark_No-Reference_Trajectory_Metric_on_Registered_Point_Clouds
@@ -47,7 +37,9 @@ def mom(
 
         ts: transformation matrices (i.e., Point Cloud poses).
 
-        config: scene hyperparameters.
+        mom_config: parameters for MOM metric.
+
+        plane_detection_config: parameters for plane detection algorithm.
 
         subsets: mutually orthogonal subsets.
 
@@ -60,21 +52,25 @@ def mom(
 
     pc_map = aggregate_map(clouds, ts)
     points = np.asarray(pc_map.points)
-    nn_model = NearestNeighbors(radius=config.knn_rad)
+    nn_model = NearestNeighbors(radius=mom_config.knn_rad)
     nn_model.fit(points)
 
     if subsets:
-        orth_clouds = [np.asarray(cloud.points) for cloud in subsets]
+        orth_clouds = subsets
     else:
-        idx = _get_median_index(len(clouds))
-        pcd = clouds[idx]
-        orth_clouds = extract_orthogonal_subsets(pcd, normals_config=config)
+        pcd = median(clouds)
+        orth_clouds = extract_orthogonal_subsets(pcd, mom_config, plane_detection_config)
         # orth_clouds = extract_orthogonal_subsets(pcd, eps=0.5)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [
             executor.submit(
-                compute_variances, cloud, points, nn_model, config.knn_rad, config.min_neighbours
+                compute_variances,
+                cloud,
+                points,
+                nn_model,
+                mom_config.knn_rad,
+                mom_config.min_neighbours,
             )
             for cloud in orth_clouds
         ]

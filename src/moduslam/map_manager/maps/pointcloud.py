@@ -1,6 +1,4 @@
-from open3d import geometry, utility
-
-from src.custom_types.numpy import MatrixNx3
+from open3d import geometry
 
 
 class PointCloudMap:
@@ -11,7 +9,7 @@ class PointCloudMap:
 
     @property
     def pointcloud(self) -> geometry.PointCloud:
-        """Point cloud of the map."""
+        """3D point cloud."""
         return self._pointcloud
 
     @pointcloud.setter
@@ -19,14 +17,6 @@ class PointCloudMap:
         """Sets point cloud to the map instance.
 
         Args:
-            pointcloud: point cloud to set.
+            pointcloud: a 3D point cloud to set.
         """
         self._pointcloud = pointcloud
-
-    def set_points(self, points: MatrixNx3) -> None:
-        """Sets points to the map instance.
-
-        Args:
-            points: array [N, 3] of points to set.
-        """
-        self._pointcloud.points = utility.Vector3dVector(points)

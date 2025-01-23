@@ -1,7 +1,10 @@
 from copy import deepcopy
 from typing import cast
 
-from src.bridge.auxiliary_dataclasses import CandidateWithClusters
+from src.bridge.auxiliary_dataclasses import (
+    CandidateWithClusters,
+    ClustersWithLeftovers,
+)
 from src.bridge.distributor import get_factory
 from src.bridge.utils import add_elements_to_graph, expand_elements
 from src.external.variants_factory import Factory as VariantsFactory
@@ -62,6 +65,58 @@ def create_graph_elements(graph: Graph, clusters: list[MeasurementCluster]) -> l
     return elements
 
 
+def process_variant(graph: Graph, variant: ClustersWithLeftovers) -> CandidateWithClusters:
+    """Processes a variant of clusters with leftovers and creates a new candidate with measurement clusters.
+
+    Args:
+        graph: a main graph.
+
+        variant: measurement clusters with leftover measurements.
+
+    Returns:
+        a graph candidate with used clusters of measurements.
+    """
+    elements = create_graph_elements(graph, variant.clusters)
+    leftovers = cast(list[Measurement], variant.leftovers)
+    candidate = GraphCandidate(graph, elements, variant.num_unused_measurements, leftovers)
+    return CandidateWithClusters(candidate, variant.clusters)
+
+
+# def create_candidates_with_clusters(
+#     graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
+# ) -> list[CandidateWithClusters]:
+#     """Creates graph candidates.
+#
+#     Args:
+#         graph: a graph to create candidates for.
+#
+#         data: a table of typed Ordered Sets with measurements.
+#
+#     Returns:
+#         graph candidates with clusters of measurements.
+#     """
+#     items: list[CandidateWithClusters] = []
+#
+#     if graph.vertex_storage.clusters:
+#         latest_cluster = graph.vertex_storage.sorted_clusters[-1]
+#         latest_t = latest_cluster.time_range.stop
+#     else:
+#         latest_t = None
+#
+#     variants = VariantsFactory.create(data, latest_t)
+#     copies = [deepcopy(graph) for _ in variants]
+#
+#     with ThreadPoolExecutor() as executor:
+#         futures = [
+#             executor.submit(process_variant, graph, variant)
+#             for graph, variant in zip(copies, variants)
+#         ]
+#         for future in as_completed(futures):
+#             items.append(future.result())
+#
+#     return items
+
+
 def create_candidates_with_clusters(
     graph: Graph, data: dict[type[Measurement], OrderedSet[Measurement]]
 ) -> list[CandidateWithClusters]:
@@ -84,14 +139,10 @@ def create_candidates_with_clusters(
         latest_t = None
 
     variants = VariantsFactory.create(data, latest_t)
+    copies = [deepcopy(graph) for _ in variants]
 
-    for variant in variants:
-        graph_copy = deepcopy(graph)
-
-        elements = create_graph_elements(graph_copy, variant.clusters)
-
-        leftovers = cast(list[Measurement], variant.leftovers)
-        candidate = GraphCandidate(graph_copy, elements, variant.num_unused_measurements, leftovers)
-        items.append(CandidateWithClusters(candidate, variant.clusters))
+    for graph_copy, variant in zip(copies, variants):
+        can_with_clusters = process_variant(graph_copy, variant)
+        items.append(can_with_clusters)
 
     return items

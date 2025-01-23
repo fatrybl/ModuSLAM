@@ -32,7 +32,6 @@ class MainManager:
         self._frontend_manager.create_graph(data)
 
         graph = self._frontend_manager.graph
-
         self._backend_manager.solve(graph)
 
         self._map_manager.save_graph(graph)

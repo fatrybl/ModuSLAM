@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 
-from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.external.metrics.orthogonality import PlaneOrthogonality
 from src.external.metrics.timeshift import TimeShift
 from src.external.metrics.vertices_connectivity import VerticesConnectivity
-from src.moduslam.backend_manager.graph_solver import GraphSolver
+from src.measurement_storage.cluster import MeasurementCluster
 from src.moduslam.data_manager.batch_factory.config_factory import (
     get_config as get_bf_config,
 )
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
+from src.moduslam.frontend_manager.main_graph.graph import GraphCandidate
 from src.moduslam.map_manager.map_factories.lidar_map.config_factory import (
     get_config as get_pcd_config,
 )
@@ -18,11 +18,11 @@ from src.moduslam.map_manager.map_factories.lidar_map.config_factory import (
 class MetricsResult:
     """Metrics result."""
 
-    mom: float
-    solver_error: float
-    connectivity: bool
-    timeshift: int
-    num_unused_measurements: int
+    solver_error: float = 0.0
+    connectivity: bool = False
+    timeshift: int = 0
+    num_unused_measurements: int = 0
+    mom: float = 0.0
 
 
 class MetricsFactory:
@@ -33,30 +33,45 @@ class MetricsFactory:
         pcd_config = get_pcd_config()
         bf = BatchFactory(bf_config)
         self._mom = PlaneOrthogonality(pcd_config, bf)
-        self._solver = GraphSolver()
 
-    def evaluate(self, item: CandidateWithClusters, error: float | None = None) -> MetricsResult:
-        """Evaluates a candidate with measurement clusters.
+    @staticmethod
+    def compute_timeshift(clusters: list[MeasurementCluster]) -> int:
+        """Computes timeshift metric.
 
         Args:
-            item: a candidate with clusters of measurements to evaluate.
-
-            error: solver error.
+            clusters: clusters with measurements.
 
         Returns:
-            metrics result.
+            timeshift metric.
         """
-        graph = item.candidate.graph
-        elements = item.candidate.elements
-        connections = graph.connections
-        all_vertices = connections.keys()
-        num_unused = item.candidate.num_unused_measurements
+        value = TimeShift.compute(clusters)
+        return value
 
-        if error is None:
-            _, error = self._solver.solve(graph)
+    @staticmethod
+    def compute_connectivity(candidate: GraphCandidate) -> bool:
+        """Computes connectivity metric.
 
-        timeshift = TimeShift.compute(item.clusters)
-        connectivity = VerticesConnectivity.compute(all_vertices, elements)
-        mom = self._mom.compute(connections, elements)
-        # mom = 0
-        return MetricsResult(mom, error, connectivity, timeshift, num_unused)
+        Args:
+            candidate: a graph candidate to evaluate connectivity for.
+
+        Returns:
+            connectivity metric.
+        """
+        all_vertices = candidate.graph.connections.keys()
+        elements = candidate.elements
+        value = VerticesConnectivity.compute(all_vertices, elements)
+        return value
+
+    def compute_mom(self, candidate: GraphCandidate) -> float:
+        """Computes MOM metric.
+
+        Args:
+            candidate: a graph candidate to compute MOM metrics for.
+
+        Returns:
+            MOM metric.
+        """
+        connections = candidate.graph.connections
+        elements = candidate.elements
+        value = self._mom.compute(connections, elements)
+        return value
