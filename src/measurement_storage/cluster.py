@@ -17,19 +17,20 @@ class MeasurementCluster:
     """
 
     def __init__(self):
-        self._core_measurements = OrderedSet[Measurement]()
+        self._core_measurements: dict[int, set[Measurement]] = {}
         self._continuous_measurements = OrderedSet[ContinuousMeasurement]()
         self._timestamp: int | None = None
         self._time_range: TimeRange | None = None
 
     def __contains__(self, item) -> bool:
-        return item in self._core_measurements or item in self._continuous_measurements
+        return (
+            any(item in measurements for measurements in self._core_measurements.values())
+            or item in self._continuous_measurements
+        )
 
     def __repr__(self):
-        measurements = list(self._core_measurements.items) + list(
-            self._continuous_measurements.items
-        )
-        return str(measurements)
+        number = len(self._core_measurements) + len(self._continuous_measurements)
+        return f"Cluster with {number} measurements."
 
     @property
     def empty(self) -> bool:
@@ -39,14 +40,19 @@ class MeasurementCluster:
     @property
     def measurements(self) -> tuple[Measurement, ...]:
         """All measurements in the cluster: core + fake + continuous."""
-        tup1 = tuple(self._core_measurements.items)
-        tup2 = tuple(self._continuous_measurements.items)
+        tup1 = tuple(m for measurements in self._core_measurements.values() for m in measurements)
+        tup2 = tuple(self._continuous_measurements)
         return tup1 + tup2
 
     @property
     def core_measurements(self) -> tuple[Measurement, ...]:
         """Non-fake discrete measurements in the cluster."""
-        cores = tuple(m for m in self._core_measurements if not isinstance(m, FakeMeasurement))
+        cores = tuple(
+            m
+            for measurements in self._core_measurements.values()
+            for m in measurements
+            if not isinstance(m, FakeMeasurement)
+        )
         return cores
 
     @property
@@ -56,8 +62,14 @@ class MeasurementCluster:
 
     @property
     def fake_measurements(self) -> tuple[FakeMeasurement, ...]:
-        """Fake measurements in the cluster."""
-        fakes = tuple(m for m in self._core_measurements if isinstance(m, FakeMeasurement))
+        """Fake measurements in the cluster.
+        They are not used to compute time properties of the cluster."""
+        fakes = tuple(
+            m
+            for measurements in self._core_measurements.values()
+            for m in measurements
+            if isinstance(m, FakeMeasurement)
+        )
         return fakes
 
     @property
@@ -102,7 +114,11 @@ class MeasurementCluster:
             self._continuous_measurements.add(measurement)
             return
 
-        self._core_measurements.add(measurement)
+        t = measurement.timestamp
+        if t not in self._core_measurements:
+            self._core_measurements[t] = set()
+
+        self._core_measurements[t].add(measurement)
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
 
@@ -124,7 +140,11 @@ class MeasurementCluster:
             self._continuous_measurements.remove(measurement)
             return
 
-        self._core_measurements.remove(measurement)
+        t = measurement.timestamp
+        self._core_measurements[t].remove(measurement)
+        if not self._core_measurements[t]:
+            del self._core_measurements[t]
+
         self._timestamp = self._compute_timestamp()
         self._time_range = self._compute_time_range()
 
@@ -137,7 +157,10 @@ class MeasurementCluster:
         Raises:
             ItemExistsError: if a measurement is already present in the cluster.
         """
-        if measurement in self._core_measurements or measurement in self._continuous_measurements:
+        t = measurement.timestamp
+        if (
+            t in self._core_measurements and measurement in self._core_measurements[t]
+        ) or measurement in self._continuous_measurements:
             raise ItemExistsError(f"Measurement {measurement} already exists in the cluster.")
 
     def _validate_removing_measurement(self, measurement: Measurement):
@@ -149,23 +172,33 @@ class MeasurementCluster:
         Raises:
             ItemNotExistsError: if a measurement is not present in the cluster.
         """
+        t = measurement.timestamp
         if (
-            measurement not in self._core_measurements
-            and measurement not in self._continuous_measurements
-        ):
+            t not in self._core_measurements or measurement not in self._core_measurements[t]
+        ) and measurement not in self._continuous_measurements:
             raise ItemNotExistsError(f"Measurement {measurement} is not present in the cluster.")
 
     def _compute_timestamp(self) -> int | None:
-        timestamps = sorted([m.timestamp for m in self._core_measurements])
+        """Computes timestamp of the cluster as a median time of sorted measurements.
+
+        Returns:
+            median timestamp or None if no measurements.
+        """
+        timestamps = sorted(self._core_measurements.keys())
         if timestamps:
             return median(timestamps)
         else:
             return None
 
     def _compute_time_range(self) -> TimeRange | None:
+        """Computes time range of the cluster.
+
+        Returns:
+            time range or None if no measurements.
+        """
         if self._core_measurements:
-            start = min((m.timestamp for m in self._core_measurements))
-            stop = max((m.timestamp for m in self._core_measurements))
+            start = min(self._core_measurements.keys())
+            stop = max(self._core_measurements.keys())
             return TimeRange(start, stop)
         else:
             return None

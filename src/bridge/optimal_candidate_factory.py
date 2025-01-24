@@ -1,7 +1,6 @@
 # from src.bridge.candidates_factory_no_copy import Factory as CandidatesFactory
 import logging
 from collections.abc import Iterable
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.candidates_factory import create_candidates_with_clusters
@@ -49,7 +48,6 @@ class Factory:
         num_unused = best_candidate.num_unused_measurements
 
         secs_shift = nanosec2sec(shift)
-
         logger.debug(
             f"Best candidate: mom={mom}, error={error}, shift={secs_shift}, unused={num_unused}"
         )
@@ -86,15 +84,12 @@ class Factory:
         Args:
             items: graph candidates with measurement clusters.
         """
-
-        with ThreadPoolExecutor() as executor:
-            futures = {executor.submit(self._evaluate_item, item): item for item in items}
-            for future in as_completed(futures):
-                candidate, result = future.result()
-                self._metrics_storage.add_solver_error(candidate, result.solver_error)
-                self._metrics_storage.add_num_unsued(candidate, result.num_unused_measurements)
-                self._metrics_storage.add_connectivity(candidate, result.connectivity)
-                self._metrics_storage.add_timeshift(candidate, result.timeshift)
+        for item in items:
+            candidate, result = self._evaluate_item(item)
+            self._metrics_storage.add_solver_error(candidate, result.solver_error)
+            self._metrics_storage.add_num_unsued(candidate, result.num_unused_measurements)
+            self._metrics_storage.add_connectivity(candidate, result.connectivity)
+            self._metrics_storage.add_timeshift(candidate, result.timeshift)
 
         for item in items:
             candidate = item.candidate

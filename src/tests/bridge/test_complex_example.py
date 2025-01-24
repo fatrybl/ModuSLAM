@@ -1,8 +1,14 @@
+"""TODO: refactor this test or delete it."""
+
+from collections.abc import Iterable
+
 import pytest
 
+from src.bridge.auxiliary_dataclasses import CandidateWithClusters
 from src.bridge.candidates_factory import create_candidates_with_clusters
 from src.external.metrics.factory import MetricsFactory
 from src.external.metrics.storage import MetricsStorage
+from src.measurement_storage.cluster import MeasurementCluster
 from src.measurement_storage.measurements.base import Measurement
 from src.measurement_storage.measurements.imu import (
     ImuCovariance,
@@ -11,7 +17,7 @@ from src.measurement_storage.measurements.imu import (
 )
 from src.measurement_storage.measurements.pose_odometry import Odometry
 from src.measurement_storage.measurements.position import Position
-from src.moduslam.frontend_manager.main_graph.graph import Graph
+from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
 from src.utils.auxiliary_dataclasses import TimeRange
 from src.utils.auxiliary_objects import identity3x3 as i3x3
 from src.utils.auxiliary_objects import identity4x4 as i4x4
@@ -20,11 +26,13 @@ from src.utils.exceptions import ItemNotExistsError
 from src.utils.ordered_set import OrderedSet
 
 
-def get_best_candidate(storage: MetricsStorage):
+def get_best_candidate(
+    variants: Iterable[CandidateWithClusters],
+) -> tuple[GraphCandidate, list[MeasurementCluster]]:
     """Chooses the best candidate based on the timeshift.
 
     Args:
-        storage: a storage with metrics.
+        variants: candidates with clusters.
 
     Returns:
         the best candidate.
@@ -32,12 +40,22 @@ def get_best_candidate(storage: MetricsStorage):
     Raises:
         ItemNotExistsError: if no best candidate exists.
     """
-    table = storage.get_timeshift_table()
-    candidates = sorted(table, key=lambda k: table[k])
+    table: dict[GraphCandidate, list[MeasurementCluster]] = {}
+    storage = MetricsStorage()
+
+    for var in variants:
+        table.update({var.candidate: var.clusters})
+        timeshift = MetricsFactory.compute_timeshift(var.clusters)
+        connectivity = MetricsFactory.compute_connectivity(var.candidate)
+        storage.add_timeshift(var.candidate, timeshift)
+        storage.add_connectivity(var.candidate, connectivity)
+
+    result_table = storage.get_timeshift_table()
+    candidates = sorted(result_table, key=lambda k: result_table[k])
     for candidate in candidates:
         connectivity = storage.get_connectivity_status(candidate)
         if connectivity:
-            return candidate
+            return candidate, table[candidate]
 
     raise ItemNotExistsError("No best candidate exists.")
 
@@ -71,8 +89,6 @@ def data1() -> dict[type[Measurement], OrderedSet]:
     o1 = Odometry(t3, TimeRange(t1, t3), i4x4, i3x3, i3x3)
     o2 = Odometry(t4, TimeRange(t2, t4), i4x4, i3x3, i3x3)
 
-    pose = Position(t1, zero_vector3, i3x3)
-
     imu_data = ImuData(zero_vector3, zero_vector3)
     covariance = ImuCovariance(i3x3, i3x3, i3x3, i3x3, i3x3)
     imu_measurements = [
@@ -80,22 +96,13 @@ def data1() -> dict[type[Measurement], OrderedSet]:
         for t in [i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15]
     ]
 
-    o_set1, o_set2, o_set3 = (
-        OrderedSet[Odometry](),
-        OrderedSet[ProcessedImu](),
-        OrderedSet[Position](),
-    )
+    o_set1, o_set2 = (OrderedSet[Odometry](), OrderedSet[ProcessedImu]())
     o_set1.add(o1)
     o_set1.add(o2)
-    o_set3.add(pose)
     for m in imu_measurements:
         o_set2.add(m)
 
-    data: dict[type[Measurement], OrderedSet] = {
-        Odometry: o_set1,
-        ProcessedImu: o_set2,
-        Position: o_set3,
-    }
+    data: dict[type[Measurement], OrderedSet] = {Odometry: o_set1, ProcessedImu: o_set2}
     return data
 
 
@@ -154,20 +161,17 @@ def data2() -> dict[type[Measurement], OrderedSet]:
 def graph(data1: dict[type[Measurement], OrderedSet]) -> Graph:
     """A graph created from the 1-st data sequence."""
     graph = Graph()
-    storage = MetricsStorage()
 
     variants = create_candidates_with_clusters(graph, data1)
 
-    for var in variants:
-        timeshift = MetricsFactory.compute_timeshift(var.clusters)
-        connectivity = MetricsFactory.compute_connectivity(var.candidate)
-        storage.add_timeshift(var.candidate, timeshift)
-        storage.add_connectivity(var.candidate, connectivity)
-
-    best = get_best_candidate(storage)
-    return best.graph
+    candidate, _ = get_best_candidate(variants)
+    return candidate.graph
 
 
 def test_1(graph: Graph, data2: dict[type[Measurement], OrderedSet]):
-    items = create_candidates_with_clusters(graph, data2)
-    assert len(items) == 8
+
+    variants = create_candidates_with_clusters(graph, data2)
+
+    candidate, clusters = get_best_candidate(variants)
+
+    assert len(variants) == 8

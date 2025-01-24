@@ -52,7 +52,6 @@ def test_raises_value_error_for_empty_cluster():
 
 
 def test_with_measurements_equal_time():
-    """TODO: this test should be modified after Groups update."""
     t1, t2 = 0, 1
     m1 = FakeMeasurement(t1)
     m2 = FakeMeasurement(t1)
@@ -63,7 +62,7 @@ def test_with_measurements_equal_time():
     cluster.add(m2)
     cluster.add(m3)
 
-    assert cluster.timestamp == t1
+    assert cluster.timestamp == t2
     assert cluster.time_range == TimeRange(t1, t2)
 
 
@@ -115,8 +114,6 @@ def test_add_remove_multiple_measurements():
 
 
 def test_add_remove_measurements_with_equal_time():
-    """TODO: this test should be modified after Groups update."""
-
     t1, t2 = 0, 1
     m1 = FakeMeasurement(t1)
     m2 = FakeMeasurement(t1)
@@ -127,7 +124,7 @@ def test_add_remove_measurements_with_equal_time():
     cluster.add(m2)
     cluster.add(m3)
 
-    assert cluster.timestamp == t1
+    assert cluster.timestamp == t2
     assert cluster.time_range == TimeRange(t1, t2)
 
     cluster.remove(m1)

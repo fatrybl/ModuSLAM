@@ -12,8 +12,8 @@ defaults:
 #  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e-2, 1e-2, 1e-2 ] # x, y, z, roll, pith, yaw
 
 pose1:
-  #  timestamp: 1544677149182646000
-  timestamp: 1544677152006678000
+  timestamp: 1544677149182646000
+  #  timestamp: 1544677152006678000
   measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 2.0 ]
   noise_covariance: [ 1e0, 1e0, 1e0, 1e0, 1e0, 1e0 ] # x, y, z, roll, pith, yaw
 
