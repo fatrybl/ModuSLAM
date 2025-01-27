@@ -32,23 +32,53 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
             sensor_topic = connection.topic
-            data_type = connection.msgtype.split("/")[-1]
             sensor_name = sensor_topic.split("/")[1] if "/" in sensor_topic else sensor_topic
 
             if sensor_name not in sensors_table or sensor_topic not in topics_table.values():
                 continue
 
             sensor = {
-                "id": connection.id,
-                "topic": connection.topic,
                 "sensor_name": sensor_name,
-                "data_type": data_type,
                 "sensor": sensors_table[sensor_name],
             }
             sensors.append(sensor)
 
+    print("Final list of added sensors:")
+    for sensor in sensors:
+        print(sensor)
     return sensors
 
+def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
+    sensors = []
+
+    with Reader(rosbag_path) as reader:
+        for connection in reader.connections:
+            sensor_topic = connection.topic
+            sensor_name = sensor_topic.split("/")[1] if "/" in sensor_topic else sensor_topic
+            # print(f"Found topic in ROS bag: {sensor_topic}")
+
+            # Сравнение с topics_table
+            for sensor, topic_path in topics_table.items():
+                # print(f"Checking topic: {sensor_topic} against {topic_path}")
+                if sensor_topic == topic_path:
+                    # print(f"Topic match found for {sensor}: {topic_path}")
+
+                    # ищем соответствующее значение в sensors_table
+                    # Ищем по значению, а не по ключу
+                    # print(f"Looking for matching sensor in sensors_table...")
+                    for key, value in sensors_table.items():
+                        print(f"Checking sensor: {key} with value {value}")
+                        if value == sensor:  # Если значение в sensors_table совпадает с найденным ключом
+                            sensors.append({"sensor": key})
+                            print(f"Added sensor: {key} (from sensors_table)")
+                            break  # После добавления элемента не продолжаем искать
+                    else:
+                        print(f"Sensor with value {sensor} not found in sensors_table")
+                    break  # Не ищем дальше, если нашли соответствие
+    print("Final list of added sensors:")
+    for sensor in sensors:
+        print(sensor)
+    return sensors
 
 def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: set) -> dict:
     """Checks and compares the sensors in the setup_manager and the sensors available in
