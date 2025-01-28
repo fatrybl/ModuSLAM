@@ -12,6 +12,7 @@ from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector impo
     get_stereo_measurement,
 )
 from moduslam.logger.logging_config import data_manager
+from .data_getters import data_getter
 
 logger = logging.getLogger(data_manager)
 
@@ -178,11 +179,6 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         Tuple[int, float, str, any, str]: Index, timestamp, sensor name, data, and data type.
     """
 
-    data_getter: dict[str, Callable] = {
-        "Imu": get_imu_measurement,
-        "PointCloud2": get_lidar_measurement,
-        "Image": get_stereo_measurement,
-    }
 
     sensors_dict = {sensor["sensor_name"]: sensor["sensor_type"] for sensor in sensors}
 
