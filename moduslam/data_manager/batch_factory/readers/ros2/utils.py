@@ -185,7 +185,6 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
     }
 
     sensors_dict = {sensor["sensor_name"]: sensor["sensor_type"] for sensor in sensors}
-    # print(f"Sensors dict: {sensors_dict}")
 
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
 
@@ -202,10 +201,9 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
 
         msg = deserialize_cdr(rawdata, connection.msgtype)
         data = data_getter[data_type](msg)
-        print(
-            f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
+        # print( f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
 
-        yield (i, timestamp, sensors_dict[sensor_topic], data, data_type)
+        yield (i, timestamp, sensors_dict[sensor_topic], data)
 
 
 def rosbag_read(bag_path: Path, num_readings: float = 1) -> list:

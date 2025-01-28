@@ -64,6 +64,7 @@ class Ros2DataReader(DataReader):
         self._connections = []
 
         if isinstance(self._regime, TimeLimit):
+
             start, stop = to_float(self._regime.start), to_float(self._regime.stop)
             self._time_range = TimeRange(start, stop)
             self._rosbag_iterator = rosbag_iterator(
@@ -119,7 +120,7 @@ class Ros2DataReader(DataReader):
             raise RuntimeError(self._context_error_msg)
 
         try:
-            index, timestamp, sensor_name, data, data_type = next(self._rosbag_iterator)
+            index, timestamp, sensor_name, data = next(self._rosbag_iterator)
             logger.debug(f"Reading {sensor_name} sensor data at {timestamp}.")
 
         except (StopIteration, KeyError):
