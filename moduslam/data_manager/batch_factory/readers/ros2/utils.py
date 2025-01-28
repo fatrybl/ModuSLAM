@@ -15,8 +15,8 @@ from moduslam.logger.logging_config import data_manager
 
 logger = logging.getLogger(data_manager)
 
-
-def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
+#reference
+def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
     """Gets sensors and topics from a ROS bag file.
 
     Args:
@@ -48,13 +48,12 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_
         print(sensor)
     return sensors
 
-def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
+def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
     sensors = []
 
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
             sensor_topic = connection.topic
-            sensor_name = sensor_topic.split("/")[1] if "/" in sensor_topic else sensor_topic
             # print(f"Found topic in ROS bag: {sensor_topic}")
 
             # Сравнение с topics_table
@@ -69,7 +68,8 @@ def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics
                     for key, value in sensors_table.items():
                         print(f"Checking sensor: {key} with value {value}")
                         if value == sensor:  # Если значение в sensors_table совпадает с найденным ключом
-                            sensors.append({"sensor": key})
+                            # sensors.append({"sensor": key})
+                            sensors.append({"sensor_name": key, "sensor_type": value})
                             print(f"Added sensor: {key} (from sensors_table)")
                             break  # После добавления элемента не продолжаем искать
                     else:
@@ -79,6 +79,8 @@ def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics
     for sensor in sensors:
         print(sensor)
     return sensors
+    # структура {'sensor_name': 'sensor_type'}
+
 
 def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: set) -> dict:
     """Checks and compares the sensors in the setup_manager and the sensors available in
@@ -99,7 +101,6 @@ def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: se
 
     return new_sensors_table
 
-
 def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
     """Gets connections from a rosbag file. This will extract only the sensor data from
     specific sensor topics.
@@ -119,7 +120,49 @@ def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
             print(f"No connections found for topics: {topics_list}")
             return None
     return connections
+#reference
+def rosbag_iterator1(reader, sensors, connections, time_range=None):
+    """Iterates through the Readings of a Rosbag file based on the connections provided
+    and returns data of each reading.
 
+    Args:
+        reader: Rosbag reader object.
+        sensors: List of sensors in the moduslam configs.
+        connections: List of connections for the sensors.
+        time_range (optional): Time range to filter messages.
+
+    Yields:
+        Tuple[int, float, str, any, str]: Index, timestamp, sensor name, data, and data type.
+    """
+
+    data_getter: dict[str, Callable] = {
+
+        "Imu": get_imu_measurement,
+        "PointCloud2": get_lidar_measurement,
+        "Image": get_stereo_measurement,
+    }
+
+    sensors_dict = {sensor["sensor_name"]: sensor["sensor"] for sensor in sensors}
+    print("=================================================")
+    print(sensors_dict)
+    for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
+
+        if time_range is not None and not (time_range.start <= timestamp <= time_range.stop):
+            continue
+
+        sensor_topic = connection.topic.split("/")[1]
+        data_type = connection.msgtype.split("/")[-1]
+
+        if data_type not in data_getter.keys():
+            continue
+        if sensor_topic not in sensors_dict:
+            continue
+
+        msg = deserialize_cdr(rawdata, connection.msgtype)
+        data = data_getter[data_type](msg)
+        print(f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
+
+        yield (i, timestamp, sensors_dict[sensor_topic], data, data_type)
 
 def rosbag_iterator(reader, sensors, connections, time_range=None):
     """Iterates through the Readings of a Rosbag file based on the connections provided
@@ -141,7 +184,8 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         "Image": get_stereo_measurement,
     }
 
-    sensors_dict = {sensor["sensor_name"]: sensor["sensor"] for sensor in sensors}
+    sensors_dict = {sensor["sensor_name"]: sensor["sensor_type"] for sensor in sensors}
+    # print(f"Sensors dict: {sensors_dict}")
 
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
 
@@ -158,6 +202,8 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
 
         msg = deserialize_cdr(rawdata, connection.msgtype)
         data = data_getter[data_type](msg)
+        print(
+            f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
 
         yield (i, timestamp, sensors_dict[sensor_topic], data, data_type)
 

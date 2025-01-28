@@ -64,7 +64,6 @@ class Ros2DataReader(DataReader):
         self._connections = []
 
         if isinstance(self._regime, TimeLimit):
-            #TODO: Add convertation function for float
             start, stop = to_float(self._regime.start), to_float(self._regime.stop)
             self._time_range = TimeRange(start, stop)
             self._rosbag_iterator = rosbag_iterator(
