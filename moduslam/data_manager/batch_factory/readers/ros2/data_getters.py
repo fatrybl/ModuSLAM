@@ -13,6 +13,6 @@ data_getter: dict[str, Callable] = {
     "PointCloud2": get_lidar_measurement,
     "Image": get_stereo_measurement,
     "GPS": get_gps_measurement,
-    "Odometry": get_odometry_measurement,
+    # "Odometry": get_odometry_measurement,
     "LaserScan": get_laser_scan_measurement,
 }
