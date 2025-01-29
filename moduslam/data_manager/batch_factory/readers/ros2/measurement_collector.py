@@ -114,6 +114,21 @@ def get_odometry_measurement(raw_msg) -> tuple:
     )
     return odometry_data
 
+def get_laser_scan_measurement(raw_msg) -> tuple:
+    """Transform raw LaserScan messages from a rosbag into a tuple.
+
+    Args:
+        raw_msg: raw LaserScan message.
+
+    Returns:
+        data: tuple with the LaserScan data.
+    """
+    ranges = tuple(raw_msg.ranges)
+    intensities = tuple(raw_msg.intensities)
+
+    laser_scan_data = (ranges, intensities)
+    return laser_scan_data
+
 def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     """Decodes a ROS2 Image message into an array.
 
