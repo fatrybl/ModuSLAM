@@ -97,7 +97,7 @@ class CameraPointcloudMapFactory:
         Raises:
             TypeError: if the sensor is not of type StereoCamera.
         """
-        pointcloud_map = np.empty(shape=(3, 0))
+        pointcloud_list = []
 
         for vertex, elements in vertex_elements_table.items():
             for element in elements:
@@ -114,11 +114,12 @@ class CameraPointcloudMapFactory:
                         camera_matrix,
                     )
                     pointcloud = pointcloud[:3, :]
-                    pointcloud_map = np.concatenate((pointcloud_map, pointcloud), axis=1)
+                    pointcloud_list.append(pointcloud)
 
                 else:
                     msg = f"Sensor is of type {type(sensor).__name__!r} but not {StereoCamera.__name__!r}"
                     logger.error(msg)
                     raise TypeError(msg)
 
+        pointcloud_map = np.concatenate(pointcloud_list, axis=1)
         return pointcloud_map

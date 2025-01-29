@@ -48,9 +48,6 @@ class PlaneOrthogonality(Metrics):
         """
         self._point_cloud_config = point_cloud_config
         self._mom_config = LidarConfig()
-        self._mom_config.eigen_scale = 10
-        self._mom_config.min_knn = 5
-        self._mom_config.max_nn = 100
         self._plane_detection_config = HdbscanConfig()
         self._batch_factory = batch_factory
 

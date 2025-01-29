@@ -12,7 +12,9 @@ from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+    Pose,
+)
 from src.moduslam.frontend_manager.main_graph.vertices.custom import (
     PoseLandmark as LandmarkVertex,
 )

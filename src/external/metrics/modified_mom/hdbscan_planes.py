@@ -7,7 +7,10 @@ from sklearn.cluster import HDBSCAN
 
 from src.custom_types.numpy import MatrixNx3, VectorN
 from src.external.metrics.modified_mom.config import BaseConfig, HdbscanConfig
-from src.external.metrics.modified_mom.utils import estimate_normals, filter_clusters
+from src.external.metrics.modified_mom.utils import (
+    compute_mean_normals,
+    estimate_normals,
+)
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
@@ -33,18 +36,18 @@ def extract_orthogonal_subsets(
     normals = np.asarray(pc_cut.normals)
 
     clustering = HDBSCAN(
-        min_cluster_size=normals_config.min_cluster_size,
+        min_cluster_size=cluster_config.min_cluster_size,
         cluster_selection_epsilon=cluster_config.cluster_selection_epsilon,
         alpha=cluster_config.alpha,
         n_jobs=cluster_config.n_jobs,
+        algorithm="brute",
+        cluster_selection_method="leaf",
     )
 
     clustering.fit(normals)
     labels = clustering.labels_
 
-    cluster_means, cluster_means_ind = filter_clusters(
-        labels, normals, min_clust_size=normals_config.min_cluster_size
-    )
+    cluster_means, cluster_means_ind = compute_mean_normals(labels, normals)
 
     max_clique = find_max_clique(
         labels, cluster_means, cluster_means_ind, eps=normals_config.orthogonality_trh
@@ -63,7 +66,7 @@ def extract_orthogonal_subsets(
 
 
 def find_max_clique(
-    labels: VectorN, cluster_means: MatrixNx3, cluster_means_ind: list[int], eps: float
+    labels: VectorN, cluster_means: MatrixNx3, cluster_means_ind: list[int], eps: float = 1e-1
 ) -> list[int]:
     """Finds the maximum clique in the graph of cluster mean normals.
 

@@ -294,7 +294,7 @@ class VertexStorage:
             raise ItemExistsError(f"Vertex{vertex} already exists in the cluster.")
 
         if existing_cluster and existing_cluster is not vertex.cluster:
-            raise ItemExistsError(f"A timestamp{t} can not belong to different clusters.")
+            raise ItemExistsError(f"A timestamp {t!r} can not belong to different clusters.")
 
     def _validate_removal_vertex(self, vertex: Vertex) -> None:
         """Validates a vertex to be removed.

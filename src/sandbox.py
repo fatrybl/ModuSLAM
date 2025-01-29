@@ -226,17 +226,12 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 # Example Usage
 if __name__ == "__main__":
     mom_config = LidarConfig()
-    mom_config.eigen_scale = 30
-    # normal_cfg.min_cluster_size = 10
-    # normal_cfg.knn_rad = 1.5
-    # normal_cfg.min_knn = 10
+    mom_config.eigen_scale = 20
 
     plane_detection_config = HdbscanConfig()
-    plane_detection_config.cluster_selection_epsilon = 0.3
-    plane_detection_config.alpha = 1.5
 
-    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677438252237000.bin"
-    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_right/1544677438287586000.bin"
+    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677305112055000.bin"
+    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544580758844558000.bin"
     bin_file_path2 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
     bin_file_path3 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
     pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
@@ -268,11 +263,14 @@ if __name__ == "__main__":
     # pcd1.transform(right_tf_base_sensor)
     # pcd3.transform(right_tf_base_sensor)
     pcd = pcd0
+    # o3d.visualization.draw_geometries([pcd])
+
+    # o3d.visualization.draw_geometries([pcd])
 
     subsets = extract_orthogonal_subsets(pcd, mom_config, plane_detection_config)
     # subsets = extract_orthogonal_subsets(pcd, eps=0.5)
     visualize_point_cloud_with_subsets(pcd, subsets)
 
-    clouds = [array_to_pointcloud(subset) for subset in subsets]
-    value = mom([pcd], [i4x4], mom_config, plane_detection_config, subsets=clouds)
+    # clouds = [array_to_pointcloud(subset) for subset in subsets]
+    value = mom([pcd], [i4x4], mom_config, plane_detection_config, subsets)
     print(f"mom: {value}")

@@ -1,8 +1,8 @@
 import logging
-from pathlib import Path
 
 from src.bridge.optimal_candidate_factory import Factory
 from src.external.handlers_factory.handlers.handler_protocol import Handler
+from src.external.metrics.factory import MetricsResult
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.storage import MeasurementStorage
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
@@ -11,6 +11,7 @@ from src.moduslam.frontend_manager.measurement_storage_analyzers.analyzers impor
     DoublePoseOdometry,
 )
 from src.moduslam.frontend_manager.utils import fill_storage
+from src.utils.auxiliary_methods import nanosec2sec
 
 logger = logging.getLogger(frontend_manager)
 
@@ -40,12 +41,16 @@ class Builder:
         """
         storage = MeasurementStorage
 
+        total_metrics = MetricsResult()
+
         while not data_batch.empty:
 
             fill_storage(storage, data_batch, self._handlers, self._analyzer)
 
             data = storage.data()
-            candidate = self._candidate_factory.create_candidate(graph, data)
+            candidate, new_metrics = self._candidate_factory.create_candidate(graph, data)
+
+            accumulate_metrics(total_metrics, new_metrics)
 
             storage.clear()
 
@@ -57,14 +62,36 @@ class Builder:
             graph = candidate.graph
 
         logger.info("Input data batch is empty.")
+        print_metrics(total_metrics)
         return graph
 
-    @staticmethod
-    def _create_output_dir(directory: Path) -> None:
-        """Creates the output directory if it does not exist."""
-        if not directory.exists():
-            directory.mkdir(parents=True)
-        else:
-            for file in directory.iterdir():
-                if file.is_file():
-                    file.unlink()
+
+def accumulate_metrics(existing: MetricsResult, new: MetricsResult):
+    """Accumulates metrics.
+
+    Args:
+        existing: existing metrics.
+
+        new: new metrics.
+
+    Returns:
+        accumulated metrics.
+    """
+    existing.solver_error = new.solver_error
+    existing.connectivity = new.connectivity
+    existing.timeshift += new.timeshift
+    existing.num_unused_measurements += new.num_unused_measurements
+    existing.mom += new.mom
+
+
+def print_metrics(metrics: MetricsResult):
+    """Prints metrics.
+
+    Args:
+        metrics: metrics to print.
+    """
+    logger.info(f"Solver error: {metrics.solver_error}")
+    logger.info(f"Connectivity: {metrics.connectivity}")
+    logger.info(f"Timeshift: {nanosec2sec(metrics.timeshift)}")
+    logger.info(f"Unused measurements: {metrics.num_unused_measurements}")
+    logger.info(f"MOM: {metrics.mom}")

@@ -51,12 +51,20 @@ class Message:
 
 
 @dataclass
-class Position:
+class Position3D:
     """x, y, z point coordinates."""
 
     x: float
     y: float
     z: float
+
+
+@dataclass
+class Position2D:
+    """x, y point coordinates."""
+
+    x: float
+    y: float
 
 
 @dataclass

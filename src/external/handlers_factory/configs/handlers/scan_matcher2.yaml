@@ -3,7 +3,7 @@ defaults:
 
 sensor_name: "velodyne_right"
 
-min_range: 3.0
-max_points_per_voxel: 3
-voxel_size: 2.0
+min_range: 2.0
+#max_points_per_voxel: 3
+#voxel_size: 2.0
 measurement_noise_covariance: [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]

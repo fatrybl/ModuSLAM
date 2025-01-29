@@ -48,6 +48,7 @@ class Builder:
             a new graph.
         """
         storage = MeasurementStorage
+        total_shift = 0
 
         while not data_batch.empty:
 
@@ -62,12 +63,18 @@ class Builder:
 
             self._evaluate(can_with_clusters, error)
 
+            timeshift = self._metrics_storage.get_timeshift_table()[can_with_clusters.candidate]
+            total_shift += timeshift
+
+            self._metrics_storage.clear()
             storage.clear()
 
         logger.info("Input data batch is empty.")
+        logger.info(f"Total shift: {nanosec2sec(total_shift)}")
+
         return graph
 
-    def _evaluate(self, candidate_with_clusters: CandidateWithClusters, error: float) -> None:
+    def _evaluate(self, candidate_with_clusters: CandidateWithClusters, error: float):
         """Evaluates the candidate with clusters and stores the metrics.
 
         Args:
@@ -90,5 +97,3 @@ class Builder:
         secs_shift = nanosec2sec(timeshift)
 
         logger.debug(f"Best candidate: error={error}, shift={secs_shift}, unused={unused}")
-
-        self._metrics_storage.clear()

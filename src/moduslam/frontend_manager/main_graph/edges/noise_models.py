@@ -83,7 +83,7 @@ def pose_block_diagonal_noise_model(
 
 
 def diagonal2x2_noise_model(
-    noise_variances: tuple[float, float]
+    noise_variances: tuple[float, float],
 ) -> gtsam.noiseModel.Diagonal.Variances:
     """Diagonal Gaussian noise model for pixel: [u, v].
 

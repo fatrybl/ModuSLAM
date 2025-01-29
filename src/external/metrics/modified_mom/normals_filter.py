@@ -90,7 +90,7 @@ def process_batch(
         num_neighbours = neighbours.shape[0]
 
         if num_neighbours > min_neighbours:
-            status = evaluate_cloud(neighbours, eigen_scale)
+            status = evaluate_points(neighbours, eigen_scale)
             if status:
                 new_normals.append(main_normals[i])
                 new_points.append(points[i])
@@ -98,7 +98,7 @@ def process_batch(
     return new_normals, new_points
 
 
-def evaluate_cloud(points: MatrixNx3, eigen_scale: float) -> bool:
+def evaluate_points(points: np.ndarray, eigen_scale: float) -> bool:
     """Evaluates 3D points based on Eigen values.
 
     Args:

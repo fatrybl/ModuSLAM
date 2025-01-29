@@ -49,7 +49,7 @@ class Factory:
 
     @staticmethod
     def separate_measurements(
-        data: dict[type[Measurement], OrderedSet[Measurement]]
+        data: dict[type[Measurement], OrderedSet[Measurement]],
     ) -> tuple[list[Measurement], list[Imu]]:
         """Splits data into core and IMU measurements.
 

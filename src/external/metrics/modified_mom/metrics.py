@@ -70,7 +70,7 @@ def mom(
                 points,
                 nn_model,
                 mom_config.knn_rad,
-                mom_config.min_neighbours,
+                mom_config.min_knn,
             )
             for cloud in orth_clouds
         ]

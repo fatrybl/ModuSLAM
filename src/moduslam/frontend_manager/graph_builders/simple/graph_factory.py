@@ -152,5 +152,9 @@ class Factory:
 
         if start < stop:
             subsequence, _, _ = get_subsequence(imu_measurements, start, stop, False)
-            continuous = ContinuousImu(subsequence, start, stop)
-            cluster.add(continuous)
+            if subsequence:
+                continuous = ContinuousImu(subsequence, start, stop)
+                cluster.add(continuous)
+
+            else:
+                logger.warning("No IMU measurements co create a connection for simple scenario")

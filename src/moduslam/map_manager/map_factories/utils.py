@@ -49,7 +49,7 @@ def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4)
         transformed point_cloud array [N, 4].
     """
     result = tf1 @ tf2 @ point_cloud.T
-    return result.T
+    return result.T  # type: ignore
 
 
 def filter_array(array: MatrixNx4, lower_bound: float, upper_bound: float) -> MatrixNx4:

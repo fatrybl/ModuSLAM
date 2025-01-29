@@ -22,7 +22,7 @@ logger = logging.getLogger(map_manager)
 
 
 def map_elements2vertices(
-    vertex_edges_table: dict[Pose, set[PoseOdometry]]
+    vertex_edges_table: dict[Pose, set[PoseOdometry]],
 ) -> dict[Pose, set[Element]]:
     """Creates "pose -> elements" table.
 
@@ -71,7 +71,7 @@ def values_to_array(values: tuple[float, ...], num_channels: int) -> MatrixMxN:
 
 
 def create_pose_edges_table(
-    pose_edges_table: dict[Pose, set[Edge]]
+    pose_edges_table: dict[Pose, set[Edge]],
 ) -> dict[Pose, set[PoseOdometry]]:
     """Creates a table with poses and edges containing data elements.
 

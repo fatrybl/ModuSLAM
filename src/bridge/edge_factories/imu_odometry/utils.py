@@ -222,6 +222,7 @@ def get_combined_integrated_measurement(
     )
     pim = PreintegratedCombinedMeasurements(integration_params, bias.backend_instance)
     integrate_measurements(pim, measurement.items, timestamp, time_scale)
+
     return pim
 
 

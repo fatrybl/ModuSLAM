@@ -39,4 +39,10 @@ class MainManager:
         self._map_manager.save_map()
         self._map_manager.visualize_map()
 
+        logger.info(
+            f"num clusters: {len(graph.vertex_storage.clusters)},"
+            f"num edges: {len(graph.edges)},"
+            f"num vertices: {len(graph.vertex_storage.vertices)}"
+        )
+
         logger.info("The map has been built successfully.")

@@ -8,7 +8,7 @@ from PIL.Image import Image, fromarray
 from PIL.ImageFile import ImageFile
 
 from src.custom_types.numpy import Matrix3x3, MatrixMxN, VectorN
-from src.utils.auxiliary_dataclasses import Position, VisualFeature
+from src.utils.auxiliary_dataclasses import Position3D, VisualFeature
 from src.utils.auxiliary_methods import matrix_to_vector_list
 
 
@@ -60,7 +60,7 @@ class KeypointDetector:
     @staticmethod
     def project_3d(
         depth_image: MatrixMxN, keypoints: Sequence[cv2.KeyPoint], camera_matrix: Matrix3x3
-    ) -> list[Position]:
+    ) -> list[Position3D]:
         """Convert keypoints to 3D points using a depth image and a camera matrix.
 
         Args:
@@ -85,7 +85,7 @@ class KeypointDetector:
             z = depth_image[v, u]
             x = (u - cx) * z / fx
             y = (v - cy) * z / fy
-            p = Position(x, y, z)
+            p = Position3D(x, y, z)
             points_3d.append(p)
 
         return points_3d

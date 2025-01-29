@@ -1,17 +1,17 @@
 """
-    IMU data format: [
-            timestamp,
-            quaternion x, quaternion y, quaternion z, quaternion w,
-            Euler x, Euler y, Euler z,
-            Gyro x, Gyro y, Gyro z,
-            Acceleration x, Acceleration y, Acceleration z,
-            MagnetField x, MagnetField y, MagnetField z
-            ]
+IMU data format: [
+        timestamp,
+        quaternion x, quaternion y, quaternion z, quaternion w,
+        Euler x, Euler y, Euler z,
+        Gyro x, Gyro y, Gyro z,
+        Acceleration x, Acceleration y, Acceleration z,
+        MagnetField x, MagnetField y, MagnetField z
+        ]
 
-    timestamp is not present in element`s raw data.
+timestamp is not present in element`s raw data.
 
-    Transform IMU data to the base frame according to the transformation matrix tf_base_sensor:
-    https://github.com/TixiaoShan/LIO-SAM/issues/204#issuecomment-788827042
+Transform IMU data to the base frame according to the transformation matrix tf_base_sensor:
+https://github.com/TixiaoShan/LIO-SAM/issues/204#issuecomment-788827042
 """
 
 import logging

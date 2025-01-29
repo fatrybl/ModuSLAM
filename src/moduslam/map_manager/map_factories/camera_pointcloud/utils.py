@@ -45,7 +45,7 @@ def get_points_and_pixels(
 
         keypoints2: keypoints from the second image.
 
-        matches: matches between the keypoints.
+        matches: matches between keypoints.
 
         camera_matrix: camera matrix.
 
@@ -53,8 +53,8 @@ def get_points_and_pixels(
         points: 3D points.
         pixels: corresponding pixels.
     """
-    points = np.empty((0, 3), dtype=np.float64)
-    pixels = np.empty((0, 2), dtype=np.float64)
+    points_list = []
+    pixels_list = []
 
     for match in matches:
         u1, v1 = keypoints1[match.queryIdx].pt
@@ -71,8 +71,11 @@ def get_points_and_pixels(
             d = depth_1[v1, u1]
             x, y, z = pixel_to_xyz(pixel=(u1, v1), depth=d, camera_matrix=camera_matrix)
 
-            points = np.vstack((points, [x, y, z]))
-            pixels = np.vstack((pixels, [u2, v2]))
+            points_list.append([x, y, z])
+            pixels_list.append([u2, v2])
+
+    points = np.vstack(points_list)
+    pixels = np.vstack(pixels_list)
 
     return points, pixels
 

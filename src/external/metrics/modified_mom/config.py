@@ -18,9 +18,6 @@ class BaseConfig:
     min_cluster_size: int, default=5
         Minimal acceptable cluster size in orthogonal extraction.
 
-    min_neighbours: int, default=3
-        Minimal number of neighbours to calculate plane variance.
-
     eigen_scale: float, default=100
         Difference between 1-st and 2-nd eigen values.
 
@@ -29,12 +26,10 @@ class BaseConfig:
     """
 
     knn_rad: float = 1.0
-    min_knn: int = 5
+    min_knn: int = 3
     max_nn: int = 20
-    min_cluster_size: int = 5
-    min_neighbours: int = 3
     eigen_scale: float = 100.0
-    orthogonality_trh: float = 1e-1
+    orthogonality_trh: float = 0.1
 
 
 @dataclass
@@ -44,7 +39,6 @@ class DepthConfig(BaseConfig):
     knn_rad: float = 0.2
     min_knn: int = 5
     max_nn: int = 30
-    min_cluster_size: int = 5
 
 
 @dataclass
@@ -52,10 +46,9 @@ class LidarConfig(BaseConfig):
     """Recommended config for Lidar point clouds from Kaist Urban Dataset."""
 
     knn_rad: float = 1.5
-    min_cluster_size: int = 10
     max_nn: int = 100
-    min_knn: int = 10
-    eigen_scale: float = 30
+    min_knn: int = 3
+    eigen_scale: float = 10
 
 
 @dataclass
@@ -76,5 +69,6 @@ class HdbscanConfig:
     """
 
     n_jobs: int = -1
-    alpha: float = 1.5
-    cluster_selection_epsilon: float = 0.2
+    alpha: float = 1.2
+    cluster_selection_epsilon: float = 0.1
+    min_cluster_size: int = 3

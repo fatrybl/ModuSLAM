@@ -5,19 +5,19 @@ from typing import TypeAlias
 import numpy as np
 import open3d as o3d
 
-from src.custom_types.numpy import Matrix4x4, MatrixNx3, VectorN
+from src.custom_types.numpy import MatrixNx3, VectorN
 from src.external.metrics.modified_mom.normals_filter import filter_normals
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
-def aggregate_map(pcs: list[Cloud], ts: list[Matrix4x4]) -> Cloud:
+def aggregate_map(pcs: list[Cloud], ts: list[np.ndarray]) -> Cloud:
     """Builds a map from point clouds with their poses.
 
     Args:
         pcs: point clouds obtained from sensors.
 
-        ts: transformation matrices list (i.e., Point Cloud poses).
+        ts: SE(3) transformation matrices (i.e., Point Cloud poses).
 
     Returns:
         pc_map: a map aggregated from point clouds.
@@ -39,11 +39,11 @@ def aggregate_map(pcs: list[Cloud], ts: list[Matrix4x4]) -> Cloud:
     return pc_map
 
 
-def compute_plane_variance(points: MatrixNx3) -> float:
+def compute_plane_variance(points: np.ndarray) -> float:
     """Computes plane variance of given points.
 
     Args:
-        points: array of 3D points.
+        points: [N, 3] array of 3D points.
 
     Returns:
         points plane variance.
@@ -53,11 +53,11 @@ def compute_plane_variance(points: MatrixNx3) -> float:
     return np.min(eigenvalues)
 
 
-def compute_entropy(points: MatrixNx3) -> float | None:
+def compute_entropy(points: np.ndarray) -> float | None:
     """Computes entropy of given points.
 
     Args:
-        points: array of 3D points.
+        points: [N, 3] array of 3D points.
 
     Returns:
         points entropy if computed.
@@ -70,7 +70,7 @@ def compute_entropy(points: MatrixNx3) -> float | None:
     return None
 
 
-def compute_variances(target_points, source_points, nn_model, knn_rad: float, min_neighbours: int):
+def compute_variances(target_points, source_points, nn_model, knn_rad: float, min_nn: int):
     """Computes plane variances of the clouds made of neighbouring points.
 
     Args:
@@ -82,7 +82,7 @@ def compute_variances(target_points, source_points, nn_model, knn_rad: float, mi
 
         knn_rad: k-nearest neighbors radius.
 
-        min_neighbours: minimum number of neighbours per cloud.
+        min_nn: minimum number of neighbours per cloud.
 
     Returns:
         median of plane variances.
@@ -91,7 +91,7 @@ def compute_variances(target_points, source_points, nn_model, knn_rad: float, mi
     """
     indices = nn_model.radius_neighbors(target_points, radius=knn_rad, return_distance=False)
 
-    valid_indices = [idx for idx in indices if len(idx) > min_neighbours]
+    valid_indices = [idx for idx in indices if len(idx) > min_nn]
     if not valid_indices:
         return np.median([])
 
@@ -128,17 +128,13 @@ def estimate_normals(pc: Cloud, knn_rad: float, max_nn: int, eigen_scale: float)
     return cut_pcd
 
 
-def filter_clusters(
-    labels: VectorN, normals: MatrixNx3, min_clust_size: int
-) -> tuple[MatrixNx3, list[int]]:
-    """Filters clusters based on their size.
+def compute_mean_normals(labels: VectorN, normals: MatrixNx3) -> tuple[MatrixNx3, list[int]]:
+    """Computes mean normals for each cluster.
 
     Args:
         labels: cluster labels.
 
         normals: normal vectors.
-
-        min_clust_size: minimum cluster size.
 
     Returns:
         cluster mean normals, cluster indices
@@ -146,14 +142,12 @@ def filter_clusters(
     cluster_means: list[MatrixNx3] = []
     cluster_means_ind = []
 
-    unique_labels, counts = np.unique(labels, return_counts=True)
-    large_clusters = unique_labels[counts >= min_clust_size]
-
-    indices = np.isin(labels, large_clusters)
+    unique_labels = np.unique(labels)
+    indices = np.isin(labels, unique_labels)
     filtered_normals = normals[indices]
     filtered_labels = labels[indices]
 
-    for cluster_id in large_clusters:
+    for cluster_id in unique_labels:
         cluster_indices = filtered_labels == cluster_id
         normals_array = filtered_normals[cluster_indices]
         mean_normals = np.mean(normals_array, axis=0)
@@ -166,7 +160,7 @@ def filter_clusters(
     return means, cluster_means_ind
 
 
-def read_orthogonal_subset(subset_path: str, pose_path: str, ts: list[Matrix4x4]):
+def read_orthogonal_subset(subset_path: str, pose_path: str, ts: list[np.ndarray]):
     """Reads and aggregates an orthogonal subset.
 
     Args:
@@ -174,7 +168,7 @@ def read_orthogonal_subset(subset_path: str, pose_path: str, ts: list[Matrix4x4]
 
         pose_path: pose of orthogonal subset in the map.
 
-        ts: transformation (4x4) matrices list (i.e., Point Cloud poses)
+        ts: SE(3) transformation matrices (i.e., Point Cloud poses)
 
     Returns:
         aggregated orthogonal subset.
