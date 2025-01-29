@@ -76,6 +76,21 @@ def get_lidar_measurement(raw_msg) -> tuple:
 
     return data
 
+def get_gps_measurement(raw_msg) -> tuple:
+    """Transform raw GPS messages from a rosbag into a tuple.
+
+    Args:
+        raw_msg: raw GPS message.
+
+    Returns:
+        data: tuple with the GPS data.
+    """
+    latitude = raw_msg.latitude
+    longitude = raw_msg.longitude
+    altitude = raw_msg.altitude
+
+    gps_data = (latitude, longitude, altitude)
+    return gps_data
 
 def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     """Decodes a ROS2 Image message into an array.
