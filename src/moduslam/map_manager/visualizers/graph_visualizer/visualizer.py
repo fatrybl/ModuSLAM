@@ -45,7 +45,7 @@ from src.moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
 )
 from src.moduslam.map_manager.visualizers.graph_visualizer.utils import (
     calculate_curve_properties,
-    calculate_vertical_line_properties,
+    create_cluster_connections_table,
     generate_bezier_curve,
 )
 from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
@@ -283,35 +283,63 @@ def draw_unary_connections(
 
         vis_params: Visualization parameters.
     """
-    cluster_heights = calculate_vertical_line_properties(connections)
+    cluster_connections = create_cluster_connections_table(connections)
 
-    for connection in connections:
-        cluster = connection.source
-        heights = cluster_heights[cluster]
-        x_start, y = cluster.position.x, cluster.top_center.y
+    for cluster, connections in cluster_connections.items():
 
-        for i, height in enumerate(heights):
-            x = x_start + (i + 0.5) * (cluster.width / len(heights))
-            y_line = y + height * vis_params.line_spacing
+        x_start, y_start = cluster.position.x, cluster.top_center.y
+        step = cluster.width / len(connections)
 
-            ax.plot(
-                [x, x],
-                [y, y_line],
-                color=vis_params.line_color,
-                lw=vis_params.line_width,
-                alpha=vis_params.line_alpha,
-            )
+        for i, connection in enumerate(connections):
+            x = x_start + i * step
+            y_stop = y_start + vis_params.line_base_height * (i + 1)
+            draw_unary_connection(ax, vis_params, connection.label, x, y_start, y_stop)
 
-            ax.text(
-                x,
-                y_line + vis_params.label_offset,
-                connection.label,
-                ha="center",
-                va="bottom",
-                fontsize=vis_params.label_fontsize,
-                color=vis_params.label_color,
-                alpha=vis_params.label_alpha,
-            )
+
+def draw_unary_connection(
+    ax: plt.Axes,
+    vis_params: UnaryConnectionParams,
+    label: str,
+    x: float,
+    y_start: float,
+    y_stop: float,
+) -> None:
+    """Draws a single unary connection.
+
+    Args:
+        ax: Matplotlib Axes to draw on.
+
+        vis_params: visualization parameters.
+
+        label: a label for the connection.
+
+        x: x coordinate of the start point.
+
+        y_start: y coordinate of the vertical line start point.
+
+        y_stop: y coordinate of the vertical line end point.
+    """
+    ax.plot(
+        [x, x],
+        [y_start, y_stop],
+        color=vis_params.line_color,
+        lw=vis_params.line_width,
+        alpha=vis_params.line_alpha,
+    )
+
+    x_txt = x
+    y_txt = y_stop + vis_params.label_offset
+
+    ax.text(
+        x_txt,
+        y_txt,
+        label,
+        ha="center",
+        va="bottom",
+        fontsize=vis_params.label_fontsize,
+        color=vis_params.label_color,
+        alpha=vis_params.label_alpha,
+    )
 
 
 def imu_measurement(t1: int, t2: int) -> ContinuousImu[ProcessedImu]:

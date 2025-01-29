@@ -117,27 +117,23 @@ def create_cluster(vertex_cluster: VertexCluster, index: int) -> Cluster:
     return cluster
 
 
-def calculate_vertical_line_properties(
+def create_cluster_connections_table(
     connections: Iterable[Unary],
-) -> dict[Cluster, list[float]]:
-    """Calculate properties for drawing vertical lines for each cluster.
+) -> dict[Cluster, list[Unary]]:
+    """Creates a mapping between clusters and its unary connections for each cluster.
 
     Args:
         connections: Unary connections for clusters.
 
     Returns:
-        A dictionary mapping each cluster to a list of heights for its vertical lines.
+        cluster <-> connections table.
     """
-    cluster_heights: dict[Cluster, list[float]] = {}
+    table: dict[Cluster, list[Unary]] = {}
 
     for connection in connections:
-        cluster = connection.source
-        if cluster not in cluster_heights:
-            cluster_heights[cluster] = []
+        table.setdefault(connection.source, []).append(connection)
 
-        cluster_heights[cluster].append(len(cluster_heights[cluster]) + 1)
-
-    return cluster_heights
+    return table
 
 
 def calculate_curve_properties(

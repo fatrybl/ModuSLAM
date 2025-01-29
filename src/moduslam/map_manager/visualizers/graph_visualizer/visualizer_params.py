@@ -22,7 +22,7 @@ class UnaryConnectionParams:
     line_color: str = "gray"
     label_color: str = "black"
     label_fontsize: int = 16
-    line_spacing: float = 2
+    line_base_height: float = 2
     line_width: float = 1.0
     line_alpha: float = 1.0
     label_offset: float = 0.2
