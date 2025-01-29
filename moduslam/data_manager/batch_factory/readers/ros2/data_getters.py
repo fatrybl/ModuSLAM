@@ -4,6 +4,7 @@ from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector impo
     get_lidar_measurement,
     get_stereo_measurement,
     get_gps_measurement,
+    get_odometry_measurement,
 )
 
 data_getter: dict[str, Callable] = {
@@ -11,4 +12,5 @@ data_getter: dict[str, Callable] = {
     "PointCloud2": get_lidar_measurement,
     "Image": get_stereo_measurement,
     "GPS": get_gps_measurement,
+    "Odometry": get_odometry_measurement,
 }

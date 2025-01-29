@@ -92,6 +92,28 @@ def get_gps_measurement(raw_msg) -> tuple:
     gps_data = (latitude, longitude, altitude)
     return gps_data
 
+def get_odometry_measurement(raw_msg) -> tuple:
+    """Transform raw Odometry messages from a rosbag into a tuple.
+
+    Args:
+        raw_msg: raw Odometry message.
+
+    Returns:
+        data: tuple with the Odometry data.
+    """
+    position = raw_msg.pose.pose.position
+    orientation = raw_msg.pose.pose.orientation
+    linear_velocity = raw_msg.twist.twist.linear
+    angular_velocity = raw_msg.twist.twist.angular
+
+    odometry_data = (
+        position.x, position.y, position.z,
+        orientation.x, orientation.y, orientation.z, orientation.w,
+        linear_velocity.x, linear_velocity.y, linear_velocity.z,
+        angular_velocity.x, angular_velocity.y, angular_velocity.z
+    )
+    return odometry_data
+
 def image_decoding_bgr8(raw_image_msg) -> TupleImage:
     """Decodes a ROS2 Image message into an array.
 
