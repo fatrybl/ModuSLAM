@@ -66,7 +66,7 @@ def extract_orthogonal_subsets(
 
 
 def find_max_clique(
-    labels: VectorN, cluster_means: MatrixNx3, cluster_means_ind: list[int], eps: float = 1e-1
+    labels: VectorN, cluster_means: MatrixNx3, cluster_means_ind: list[int], eps: float
 ) -> list[int]:
     """Finds the maximum clique in the graph of cluster mean normals.
 

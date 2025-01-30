@@ -18,36 +18,41 @@ def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Ma
     """
     position_cov_matrix = np.array(block1)
     orientation_cov_matrix = np.array(block2)
+    zero_block = np.zeros((3, 3))
 
-    block_matrix = np.block(
-        [[position_cov_matrix, np.zeros((3, 3))], [np.zeros((3, 3)), orientation_cov_matrix]]
+    return np.block(
+        [
+            [position_cov_matrix, zero_block],
+            [zero_block, orientation_cov_matrix],
+        ]
     )
-    return block_matrix
 
 
 def covariance3x3_noise_model(covariance: Matrix3x3) -> gtsam.noiseModel.Gaussian.Covariance:
     """Gaussian noise model with 3x3 covariance matrix.
 
     Args:
-        covariance: 3x3 covariance matrix of the noise.
+        covariance: noise covariance matrix.
 
     Returns:
         gtsam noise model.
     """
-    noise = gtsam.noiseModel.Gaussian.Covariance(covariance)
+    array = np.array(covariance)
+    noise = gtsam.noiseModel.Gaussian.Covariance(array)
     return noise
 
 
-def diagonal3x3_noise_model(noise_variances: Vector3) -> gtsam.noiseModel.Diagonal.Variances:
+def diagonal3x3_noise_model(variances: Vector3) -> gtsam.noiseModel.Diagonal.Variances:
     """Diagonal Gaussian noise model for 3D vector.
 
     Args:
-        noise_variances: tuple of 3 floats representing the variances of the noise.
+        variances: noise variance vector.
 
     Returns:
         gtsam noise model.
     """
-    noise = gtsam.noiseModel.Diagonal.Variances(noise_variances)
+    array = np.array(variances)
+    noise = gtsam.noiseModel.Diagonal.Variances(array)
     return noise
 
 
@@ -55,7 +60,7 @@ def se3_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Var
     """Isotropic Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
 
     Args:
-        variance: float representing the standard deviation of the noise.
+        variance: noise variance scalar.
 
     Returns:
         gtsam noise model.
@@ -82,18 +87,17 @@ def pose_block_diagonal_noise_model(
     return noise
 
 
-def diagonal2x2_noise_model(
-    noise_variances: tuple[float, float],
-) -> gtsam.noiseModel.Diagonal.Variances:
-    """Diagonal Gaussian noise model for pixel: [u, v].
+def diagonal2x2_noise_model(variance: tuple[float, float]) -> gtsam.noiseModel.Diagonal.Sigmas:
+    """Diagonal Gaussian noise model in 2D: [u, v].
 
     Args:
-        noise_variances: tuple of 2 floats representing the variances of the noise.
+        variance: noise variance vector.
 
     Returns:
         gtsam noise model.
     """
-    noise = gtsam.noiseModel.Diagonal.Variances(noise_variances)
+    array = np.array(variance)
+    noise = gtsam.noiseModel.Diagonal.Sigmas(array)
     return noise
 
 
@@ -101,7 +105,7 @@ def isotropic_3d_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Vari
     """Isotropic Gaussian noise model for 3D vector.
 
     Args:
-        variance: float representing the standard deviation of the noise.
+        variance: noise variance scalar.
 
     Returns:
         gtsam noise model.

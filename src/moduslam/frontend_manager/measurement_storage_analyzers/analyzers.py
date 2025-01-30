@@ -41,6 +41,23 @@ class DoublePoseOdometry(StorageAnalyzer):
         return False
 
 
+class QuatroPoseOdometry(StorageAnalyzer):
+    @staticmethod
+    def check_storage(storage: type[MeasurementStorage]) -> bool:
+        """Checks measurements storage if the criterion is satisfied.
+        Criterion:
+            2 pose odometries.
+
+        Returns:
+            check status.
+        """
+        data = storage.data()
+        if OdometryWithElements in data and len(data[OdometryWithElements]) == 4:
+            return True
+
+        return False
+
+
 class PoseOdometryWithGps(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: type[MeasurementStorage]) -> bool:

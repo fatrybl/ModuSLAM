@@ -3,7 +3,7 @@ defaults:
   #  - /base_pose@pose2
   #  - /base_position@position1
   #  - /base_pose@pose2
-  #  - /base_linear_velocity@velocity1
+  - /base_linear_velocity@velocity1
   #  - /base_imu_bias@bias1
   - _self_
 
@@ -21,9 +21,14 @@ defaults:
 
 #Urban-30
 pose1:
-  timestamp: 1544677953199722977
+  timestamp: 1544682279133415000
   measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
   noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e0, 1e0, 1e0 ] # x, y, z, roll, pith, yaw
+
+velocity1:
+  timestamp: 1544682279133415000
+  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
+  measurement: [ 0, 0, 0 ]
 
 #pose2:
 #  timestamp: 1544677161230055000
@@ -45,10 +50,6 @@ pose1:
 #  noise_covariance: [ 1e-0, 1e-0, 1e-0 ] # Vx, Vy, Vz
 #  measurement: [ 0.8, 0, 0 ]
 
-#velocity1:
-#  timestamp: 1544677438151421000
-#  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
-#  measurement: [ 0, 0, 0 ]
 
 #bias1:
 #  timestamp: 1544581170279399000

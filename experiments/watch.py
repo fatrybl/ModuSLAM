@@ -4,13 +4,12 @@ import open3d as o3d
 
 # Paths to the point cloud files
 current_dir = Path(__file__).parent.absolute()
-sub_dir = "low_speed_3"
-current_dir = current_dir / sub_dir
+sub_dir = Path("urban-33")
+dir = current_dir / sub_dir
 
-path1 = current_dir / "simple.ply"
-path2 = current_dir / "mom.ply"
+path1 = dir / "timeshift.ply"
+path2 = dir / "mom.ply"
 
-# Colors for the point clouds
 colors = [
     [0.5, 0.5, 0.5],  # Grey
     [0, 0, 1],  # Blue
@@ -18,7 +17,6 @@ colors = [
 
 file_paths = [path1, path2]
 
-# Load point clouds and color them
 point_clouds = []
 for file_path, color in zip(file_paths, colors):
     point_cloud = o3d.io.read_point_cloud(file_path.as_posix())
@@ -28,7 +26,7 @@ for file_path, color in zip(file_paths, colors):
 o3d.visualization.draw_geometries(point_clouds)
 
 
-# cloud = o3d.io.read_point_cloud(str(path2))
+# cloud = o3d.io.read_point_cloud(str(path1))
 # vis = o3d.visualization.Visualizer()
 # vis.create_window()
 # vis.add_geometry(cloud)

@@ -3,6 +3,9 @@ from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import
     ImuOdometry,
 )
 from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
+from src.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
+    LinearVelocity as PriorVelocity,
+)
 from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
@@ -16,7 +19,7 @@ vertex_types = {Pose, LinearVelocity, ImuBias}
 edge_types = {GpsPosition, PoseOdometry, ImuOdometry}
 
 vertex_encodings: dict[type[Vertex], str] = {
-    Pose: "P",
+    Pose: "X",
     LinearVelocity: "V",
     ImuBias: "B",
 }
@@ -26,4 +29,5 @@ edge_encodings: dict[type[Edge], str] = {
     PoseOdometry: "PoseOdom",
     ImuOdometry: "ImuOdom",
     PriorPose: "PriorPose",
+    PriorVelocity: "PriorVelocity",
 }

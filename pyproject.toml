@@ -27,6 +27,7 @@ transformers = "*"
 torch = "*"
 torch-ransac3d = "*"
 open3d = "*"
+plotly = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

@@ -223,15 +223,14 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
     return point_cloud
 
 
-# Example Usage
 if __name__ == "__main__":
     mom_config = LidarConfig()
     mom_config.eigen_scale = 20
 
     plane_detection_config = HdbscanConfig()
 
-    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-30/sensor_data/VLP_left/1544677305112055000.bin"
-    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544580758844558000.bin"
+    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-33/sensor_data/VLP_left/1544682272275021000.bin"
+    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-33/sensor_data/VLP_right/1544682272334000000.bin"
     bin_file_path2 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
     bin_file_path3 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
     pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))

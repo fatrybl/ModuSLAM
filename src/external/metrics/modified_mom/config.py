@@ -29,7 +29,7 @@ class BaseConfig:
     min_knn: int = 3
     max_nn: int = 20
     eigen_scale: float = 100.0
-    orthogonality_trh: float = 0.1
+    orthogonality_trh: float = 0.01
 
 
 @dataclass
@@ -49,6 +49,7 @@ class LidarConfig(BaseConfig):
     max_nn: int = 100
     min_knn: int = 3
     eigen_scale: float = 10
+    orthogonality_trh: float = 0.3
 
 
 @dataclass

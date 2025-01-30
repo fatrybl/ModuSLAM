@@ -71,7 +71,7 @@ class Factory:
         Raises:
             ItemNotExistsError: if no best candidate exists.
         """
-        table = storage.get_mom_table()
+        table = storage.get_timeshift_table()
         candidates = sorted(table, key=lambda k: table[k])
         for candidate in candidates:
             connectivity = storage.get_connectivity_status(candidate)
@@ -95,8 +95,8 @@ class Factory:
 
         for item in items:
             candidate = item.candidate
-            mom = self._metrics_factory.compute_mom(candidate)
-            # mom = 0
+            # mom = self._metrics_factory.compute_mom(candidate)
+            mom = 0
             self._metrics_storage.add_mom(candidate, mom)
 
     def _evaluate_item(self, item: CandidateWithClusters) -> tuple[GraphCandidate, MetricsResult]:

@@ -4,6 +4,7 @@ from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params imp
     ClusterParams,
 )
 from src.utils.auxiliary_dataclasses import Position2D, TimeRange
+from src.utils.auxiliary_methods import nanosec2sec
 
 
 @dataclass(frozen=True, eq=True)
@@ -57,7 +58,9 @@ class Cluster:
     def time_range(self) -> str:
         """Time range of the cluster."""
         t_range = self._time_range
-        return f"time range: {t_range.start} - {t_range.stop}"
+        dt = nanosec2sec(t_range.stop - t_range.start)
+        delta = "\u0394"
+        return f"{delta}T: {dt:.5f}"
 
     @property
     def top_center(self) -> Position2D:

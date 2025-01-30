@@ -5,6 +5,9 @@ from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import
     ImuOdometry,
 )
 from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
+from src.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
+    LinearVelocity,
+)
 from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -159,6 +162,31 @@ def pose_connection(
     return Unary(cluster, label)
 
 
+def velocity_connection(
+    edge: LinearVelocity, storage: VertexStorage, mapping: dict[VertexCluster, Cluster]
+) -> Unary:
+    """Create unary connection for Velocity edge.
+
+    Args:
+        edge: a Velocity edge.
+
+        storage: a vertex storage.
+
+        mapping: a mapping table from vertex clusters to visualizable clusters.
+
+    Returns:
+        a unary connection.
+
+    Raises:
+        ItemNotExistsError: if vertex clusters not found for timestamps.
+    """
+    cluster = get_cluster_for_unary_connection(edge.measurement, storage, mapping)
+
+    label = get_label(edge)
+
+    return Unary(cluster, label)
+
+
 """Mapping between edge types and methods to create connections between visualizable clusters."""
 
 edge_type_method_table: dict[type[Edge], Callable] = {
@@ -166,4 +194,5 @@ edge_type_method_table: dict[type[Edge], Callable] = {
     ImuOdometry: imu_odometry_connection,
     GpsPosition: gps_connection,
     PriorPose: pose_connection,
+    LinearVelocity: velocity_connection,
 }

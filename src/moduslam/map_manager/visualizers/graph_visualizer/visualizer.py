@@ -1,8 +1,7 @@
 from collections.abc import Iterable
 
 import gtsam
-import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch
+import plotly.graph_objects as go
 
 from src.custom_types.numpy import VectorN
 from src.measurement_storage.measurements.imu import (
@@ -72,22 +71,15 @@ def draw(data: Data, vis_params: VisualizationParams) -> None:
     binary_conns = data.binary_connections
     unary_conns = data.unary_connections
 
-    fig, ax = plt.subplots(figsize=(30, 15))
+    fig = go.Figure()
 
-    draw_clusters_and_vertices(ax, data.clusters, vis_params)
+    draw_clusters_and_vertices(fig, data.clusters, vis_params)
 
-    draw_binary_connections(ax, binary_conns, vis_params.binary_connection_params)
+    draw_binary_connections(fig, binary_conns, vis_params.binary_connection_params)
 
-    draw_unary_connections(ax, unary_conns, vis_params.unary_connection_params)
+    draw_unary_connections(fig, unary_conns, vis_params.unary_connection_params)
 
-    ax.set_aspect("equal", adjustable="box")
-    ax.axis("off")
-    plt.title(
-        "Clusters with connections",
-        fontsize=vis_params.title_font_size,
-        pad=vis_params.title_padding,
-    )
-    plt.show()
+    fig.show()
 
 
 def set_cluster_positions(clusters: Iterable[Cluster], space: float) -> None:
@@ -105,27 +97,29 @@ def set_cluster_positions(clusters: Iterable[Cluster], space: float) -> None:
 
 
 def draw_clusters_and_vertices(
-    ax: plt.Axes, clusters: Iterable[Cluster], vis_params: VisualizationParams
+    fig: go.Figure, clusters: Iterable[Cluster], vis_params: VisualizationParams
 ) -> None:
     """Draw each cluster (box) with and vertices (circles).
 
     Args:
-        ax: Matplotlib axis to draw on.
+        fig: a figure to draw on.
 
         clusters: clusters to draw.
 
         vis_params: visualization parameters.
     """
-    set_cluster_positions(data.clusters, vis_params.between_clusters_space)
-    draw_cluster_bbox(ax, clusters, vis_params.cluster_params)
-    draw_circles(ax, clusters, vis_params.vertex_params)
+    set_cluster_positions(clusters, vis_params.between_clusters_space)
+    draw_cluster_bbox(fig, clusters, vis_params.cluster_params)
+    draw_circles(fig, clusters, vis_params.vertex_params)
 
 
-def draw_cluster_bbox(ax: plt.Axes, clusters: Iterable[Cluster], vis_params: ClusterParams) -> None:
+def draw_cluster_bbox(
+    fig: go.Figure, clusters: Iterable[Cluster], vis_params: ClusterParams
+) -> None:
     """Draws bounding box of the cluster.
 
     Args:
-        ax: Matplotlib axis to draw on.
+        fig: a figure to draw on.
 
         clusters: clusters to draw.
 
@@ -134,77 +128,89 @@ def draw_cluster_bbox(ax: plt.Axes, clusters: Iterable[Cluster], vis_params: Clu
     for cluster in clusters:
         x, y = cluster.position.x, cluster.position.y
 
-        rect = FancyBboxPatch(
-            (x, y),
-            cluster.width,
-            cluster.height,
-            boxstyle="round, pad=0, rounding_size=0.7",
-            edgecolor="black",
-            facecolor="lightgray",
-        )
-        ax.add_patch(rect)
-
-        ax.text(
-            x + cluster.width / 2,
-            y - vis_params.label_offset,
-            cluster.label,
-            ha="center",
-            va="top",
-            fontsize=vis_params.label_fontsize,
-            color="black",
+        fig.add_shape(
+            type="rect",
+            x0=x,
+            y0=y,
+            x1=x + cluster.width,
+            y1=y + cluster.height,
+            line=dict(color="black"),
+            fillcolor="lightgray",
+            opacity=0.5,
         )
 
-        ax.text(
-            x + cluster.width / 2,
-            y - vis_params.label_offset / 2,
-            cluster.time_range,
-            ha="center",
-            va="top",
-            fontsize=vis_params.label_fontsize,
-            color="black",
+        fig.add_annotation(
+            x=x + cluster.width / 2,
+            y=y - vis_params.label_offset,
+            text=cluster.label,
+            showarrow=False,
+            font=dict(size=vis_params.label_fontsize, color="black"),
+            xanchor="center",
+            yanchor="top",
+        )
+
+        fig.add_annotation(
+            x=x + cluster.width / 2,
+            y=y - vis_params.label_offset / 2,
+            text=cluster.time_range,
+            showarrow=False,
+            font=dict(size=vis_params.label_fontsize, color="black"),
+            xanchor="center",
+            yanchor="top",
         )
 
 
-def draw_circles(ax: plt.Axes, clusters: Iterable[Cluster], vis_params: VertexParams) -> None:
-    """Draws circles for each cluster.
+def draw_circles(fig: go.Figure, clusters: Iterable[Cluster], vis_params: VertexParams) -> None:
+    """Draws circles for each cluster using Plotly.
 
     Args:
-        ax: Matplotlib axis to draw on.
+        fig: a figure to draw on.
 
         clusters: clusters to draw.
 
         vis_params: visualization parameters.
     """
-
     for cluster in clusters:
         vertices_with_positions = cluster.vertices_with_positions
 
         for vertex, position in vertices_with_positions.items():
-
             x, y = position.x, position.y
 
-            ax.plot(x, y, "o", color=vis_params.color, markersize=vertex.radius)
+            fig.add_trace(
+                go.Scatter(
+                    x=[x],
+                    y=[y],
+                    mode="markers",
+                    marker=dict(
+                        size=vertex.radius * 2,
+                        color=vis_params.color,
+                        line=dict(width=1, color="black"),
+                    ),
+                    name=vertex.label,
+                    showlegend=False,
+                )
+            )
 
-            ax.text(
-                x,
-                y,
-                vertex.label,
-                ha="center",
-                va="center",
-                fontsize=vis_params.label_fontsize,
-                color="black",
+            fig.add_annotation(
+                x=x,
+                y=y,
+                text=vertex.label,
+                showarrow=False,
+                font=dict(size=vis_params.label_fontsize, color="black"),
+                xanchor="center",
+                yanchor="middle",
             )
 
 
 def draw_binary_connections(
-    ax: plt.Axes,
+    fig: go.Figure,
     connections: Iterable[Binary],
     vis_params: BinaryConnectionParams,
 ) -> None:
-    """Draws curved connections between clusters with Bézier curves.
+    """Draws curved connections between clusters using Plotly.
 
     Args:
-        ax: Matplotlib Axes to draw on.
+        fig: a figure to draw on.
 
         connections: binary connections between clusters.
 
@@ -225,20 +231,20 @@ def draw_binary_connections(
             mid_point.y += vis_params.base_offset
             curve_x, curve_y = generate_bezier_curve(pos1, pos2, mid_point)
 
-        plot_curve(ax, curve_x, curve_y, connection, vis_params)
+        plot_curve(fig, curve_x, curve_y, connection, vis_params)
 
 
 def plot_curve(
-    ax: plt.Axes,
+    fig: go.Figure,
     curve_x: VectorN,
     curve_y: VectorN,
     connection: Binary,
     vis_params: BinaryConnectionParams,
 ) -> None:
-    """Plots the Bézier curve and label it.
+    """Plots the Bézier curve and labels it using Plotly.
 
     Args:
-        ax: Matplotlib Axes to draw on.
+        fig: a figure to draw on.
 
         curve_x: x coordinates of the curve.
 
@@ -248,36 +254,46 @@ def plot_curve(
 
         vis_params: visualization parameters.
     """
-    ax.plot(
-        curve_x,
-        curve_y,
-        color=vis_params.curve_color,
-        lw=vis_params.curve_lw,
-        alpha=vis_params.curve_alpha,
+    fig.add_trace(
+        go.Scatter(
+            x=curve_x,
+            y=curve_y,
+            mode="lines",
+            line=dict(
+                color=vis_params.curve_color,
+                width=vis_params.curve_lw,
+            ),
+            opacity=vis_params.curve_alpha,
+            hoverinfo="none",
+            showlegend=False,
+        )
     )
 
     mid_i = len(curve_x) // 2
-    ax.text(
-        curve_x[mid_i],
-        curve_y[mid_i] + vis_params.label_offset,
-        connection.label,
-        ha="center",
-        va="bottom",
-        fontsize=vis_params.label_fontsize,
-        color=vis_params.label_color,
-        alpha=vis_params.label_alpha,
+    fig.add_annotation(
+        x=curve_x[mid_i],
+        y=curve_y[mid_i] + vis_params.label_offset,
+        text=connection.label,
+        showarrow=False,
+        font=dict(
+            size=vis_params.label_fontsize,
+            color=vis_params.label_color,
+        ),
+        opacity=vis_params.label_alpha,
+        xanchor="center",
+        yanchor="bottom",
     )
 
 
 def draw_unary_connections(
-    ax: plt.Axes,
+    fig: go.Figure,
     connections: Iterable[Unary],
     vis_params: UnaryConnectionParams,
 ) -> None:
     """Draws ladder-style vertical lines for each cluster.
 
     Args:
-        ax: Matplotlib Axes to draw on.
+        fig: a figure to draw on.
 
         connections: Unary connections for clusters.
 
@@ -293,52 +309,47 @@ def draw_unary_connections(
         for i, connection in enumerate(connections):
             x = x_start + i * step
             y_stop = y_start + vis_params.line_base_height * (i + 1)
-            draw_unary_connection(ax, vis_params, connection.label, x, y_start, y_stop)
+            draw_unary_connection(fig, vis_params, connection.label, x, y_start, y_stop)
 
 
 def draw_unary_connection(
-    ax: plt.Axes,
+    fig: go.Figure,
     vis_params: UnaryConnectionParams,
     label: str,
     x: float,
     y_start: float,
     y_stop: float,
 ) -> None:
-    """Draws a single unary connection.
+    """Draws a single unary connection using Plotly.
 
     Args:
-        ax: Matplotlib Axes to draw on.
-
-        vis_params: visualization parameters.
-
-        label: a label for the connection.
-
-        x: x coordinate of the start point.
-
-        y_start: y coordinate of the vertical line start point.
-
-        y_stop: y coordinate of the vertical line end point.
+        fig: Plotly Figure to draw on.
+        vis_params: Visualization parameters.
+        label: A label for the connection.
+        x: X coordinate of the start point.
+        y_start: Y coordinate of the vertical line start point.
+        y_stop: Y coordinate of the vertical line end point.
     """
-    ax.plot(
-        [x, x],
-        [y_start, y_stop],
-        color=vis_params.line_color,
-        lw=vis_params.line_width,
-        alpha=vis_params.line_alpha,
+    fig.add_trace(
+        go.Scatter(
+            x=[x, x],
+            y=[y_start, y_stop],
+            mode="lines",
+            line=dict(color=vis_params.line_color, width=vis_params.line_width),
+            opacity=vis_params.line_alpha,
+            showlegend=False,
+        )
     )
 
-    x_txt = x
-    y_txt = y_stop + vis_params.label_offset
-
-    ax.text(
-        x_txt,
-        y_txt,
-        label,
-        ha="center",
-        va="bottom",
-        fontsize=vis_params.label_fontsize,
-        color=vis_params.label_color,
-        alpha=vis_params.label_alpha,
+    fig.add_annotation(
+        x=x,
+        y=y_stop + vis_params.label_offset,
+        text=label,
+        showarrow=False,
+        font=dict(size=vis_params.label_fontsize, color=vis_params.label_color),
+        opacity=vis_params.label_alpha,
+        xanchor="center",
+        yanchor="bottom",
     )
 
 
