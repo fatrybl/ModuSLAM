@@ -33,10 +33,10 @@ class UnaryConnectionParams:
 class ClusterParams:
     """Parameters for the Cluster."""
 
-    width_step: int = 7
+    width_step: int = 5
     label_fontsize: int = 16
     label_offset: float = 10
-    width: float = 7.0
+    width: float = 5.0
     height: float = 5.0
 
 
@@ -55,7 +55,7 @@ class VisualizationParams:
 
     title_font_size: int = 30
     title_padding: float = 50
-    between_clusters_space: float = 5
+    between_clusters_space: float = 3
 
     vertex_params: VertexParams = field(default_factory=VertexParams)
     cluster_params: ClusterParams = field(default_factory=ClusterParams)

@@ -18,6 +18,7 @@ if TYPE_CHECKING:
         Lidar3DConfig,
         SensorConfig,
         StereoCameraConfig,
+        VrsGpsConfig,
     )
 
 
@@ -165,12 +166,18 @@ class Gps(GNSS):
 class VrsGps(GNSS):
     """Base class for any Virtual Reference Station."""
 
-    def __init__(self, config: SensorConfig):
+    def __init__(self, config: VrsGpsConfig):
         """
         Args:
             config: sensor configuration.
         """
         super().__init__(config)
+        self._tf_base_sensor = tuple4x4(config.tf_base_sensor)
+
+    @property
+    def tf_base_sensor(self) -> Matrix4x4:
+        """Base -> sensor transformation SE(3)."""
+        return self._tf_base_sensor
 
 
 class Altimeter(Sensor):

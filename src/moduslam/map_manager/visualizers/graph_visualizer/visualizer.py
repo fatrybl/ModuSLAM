@@ -471,7 +471,7 @@ def create_graph2() -> Graph:
 
 if __name__ == "__main__":
 
-    graph = create_graph2()
+    graph = create_graph1()
 
     data = create_data(graph)
 

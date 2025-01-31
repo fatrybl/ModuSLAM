@@ -7,6 +7,7 @@ from src.moduslam.sensors_factory.configs import (
     Lidar3DConfig,
     SensorConfig,
     StereoCameraConfig,
+    VrsGpsConfig,
 )
 from src.moduslam.sensors_factory.sensors import (
     Altimeter,
@@ -125,6 +126,7 @@ class SensorsFactory:
             case Gps.__name__:
                 sensor = Gps(config)
             case VrsGps.__name__:
+                config = cast(VrsGpsConfig, config)
                 sensor = VrsGps(config)
             case _:
                 msg = f"Unsupported sensor type: {sensor_type}"

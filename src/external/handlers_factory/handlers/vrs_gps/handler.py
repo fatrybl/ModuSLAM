@@ -2,7 +2,7 @@
 
 import logging
 
-from src.custom_types.aliases import Matrix3x3, Vector3
+from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from src.external.handlers_factory.handlers.handler_protocol import Handler
 from src.external.handlers_factory.handlers.vrs_gps.config import VrsGpsHandlerConfig
 from src.logger.logging_config import frontend_manager
@@ -48,26 +48,65 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         Raises:
             TypeError: if the sensor of the measurement is not VrsGps.
         """
-        if not isinstance(element.measurement.sensor, VrsGps):
-            msg = f"Expected sensor of type {VrsGps}, got {type(element.measurement.sensor)}"
+        sensor = element.measurement.sensor
+        values = element.measurement.values
+
+        if not isinstance(sensor, VrsGps):
+            msg = f"Expected sensor of type {VrsGps}, got {type(sensor)}"
             logger.error(msg)
             raise TypeError(msg)
 
-        fix_status = str_to_int(element.measurement.values[5])
+        fix_status = str_to_int(values[5])
         if fix_status not in self._fix_statuses:
             return None
 
-        position = self._get_position(element.measurement.values)
-        covariance = self._get_covariance(element.measurement.values)
+        position = self._get_position(values)
 
         if self._first_position:
-            position = (
-                position[0] - self._first_position[0],
-                position[1] - self._first_position[1],
-                position[2] - self._first_position[2],
-            )
+            position = self._subtract_position(position, self._first_position)
+        else:
+            position = self._apply_transform(position, sensor.tf_base_sensor)
+
+        covariance = self._get_covariance(values)
 
         return Position(element.timestamp, position, covariance)
+
+    @staticmethod
+    def _subtract_position(source: Vector3, target: Vector3) -> Vector3:
+        """Subtracts two position vectors.
+
+        Args:
+            source: a source position vector.
+
+            target: a target position vector.
+
+        Returns:
+            a position vector.
+        """
+        return (
+            source[0] - target[0],
+            source[1] - target[1],
+            source[2] - target[2],
+        )
+
+    @staticmethod
+    def _apply_transform(position: Vector3, tf: Matrix4x4) -> Vector3:
+        """Applies base->sensor transformation to the measurement.
+
+        Args:
+            position: The position vector.
+
+            tf: The transformation matrix.
+
+        Returns:
+            a position vector.
+        """
+        position_base_sensor = (tf[0][3], tf[1][3], tf[2][3])
+        return (
+            position[0] - position_base_sensor[0],
+            position[1] - position_base_sensor[1],
+            position[2] - position_base_sensor[2],
+        )
 
     @staticmethod
     def _get_position(data: list[str]) -> Vector3:

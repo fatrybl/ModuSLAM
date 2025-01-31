@@ -10,7 +10,7 @@ from src.measurement_storage.measurements.pose_odometry import (
     Odometry as OdometryMeasurement,
 )
 from src.moduslam.frontend_manager.main_graph.edges.noise_models import (
-    pose_block_diagonal_noise_model,
+    huber_diagonal_noise_model,
 )
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
@@ -146,8 +146,19 @@ class Factory(EdgeFactory):
         Returns:
             new PoseOdometry edge.
         """
+        huber_loss_trh = 0.5
 
-        noise = pose_block_diagonal_noise_model(
-            measurement.transition_covariance, measurement.orientation_covariance
+        trans_cov = measurement.position_covariance
+        rot_cov = measurement.orientation_covariance
+
+        variance = (
+            rot_cov[0][0],
+            rot_cov[1][1],
+            rot_cov[2][2],
+            trans_cov[0][0],
+            trans_cov[1][1],
+            trans_cov[2][2],
         )
+
+        noise = huber_diagonal_noise_model(variance, huber_loss_trh)
         return PoseOdometry(pose_i, pose_j, measurement, noise)

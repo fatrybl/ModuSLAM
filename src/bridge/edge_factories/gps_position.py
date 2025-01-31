@@ -7,7 +7,7 @@ from src.bridge.edge_factories.utils import (
 from src.measurement_storage.measurements.position import Position
 from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
 from src.moduslam.frontend_manager.main_graph.edges.noise_models import (
-    covariance3x3_noise_model,
+    huber_diagonal_noise_model,
 )
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -36,6 +36,7 @@ class Factory(EdgeFactory):
         Returns:
             a new element.
         """
+        huber_loss_trh = 1.0
         t = measurement.timestamp
         storage = graph.vertex_storage
 
@@ -43,7 +44,9 @@ class Factory(EdgeFactory):
 
         pose = create_vertex_i_with_status(Pose, storage, cluster, t, identity4x4)
 
-        noise_model = covariance3x3_noise_model(measurement.covariance)
+        cov = measurement.covariance
+        variances = (cov[0][0], cov[1][1], cov[2][2])
+        noise_model = huber_diagonal_noise_model(variances, huber_loss_trh)
 
         edge = GpsPosition(pose.instance, measurement, noise_model)
 

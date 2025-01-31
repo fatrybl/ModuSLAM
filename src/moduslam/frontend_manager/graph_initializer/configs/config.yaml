@@ -19,16 +19,28 @@ defaults:
 #  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
 #  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1 ] # x, y, z, roll, pith, yaw
 
-#Urban-30
+#Urban-27
 pose1:
-  timestamp: 1544682279133415000
-  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
-  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e0, 1e0, 1e0 ] # x, y, z, roll, pith, yaw
+  timestamp: 1544582982827346727
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
 
 velocity1:
-  timestamp: 1544682279133415000
-  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # Vx, Vy, Vz
+  timestamp: 1544582982827346727
   measurement: [ 0, 0, 0 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1 ] # Vx, Vy, Vz
+
+
+#Urban-33
+#pose1:
+#  timestamp: 1544681686136785765
+#  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.5 ]
+#  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
+#
+#velocity1:
+#  timestamp: 1544681686136785765
+#  measurement: [ 0, 0, 0 ]
+#  noise_covariance: [ 5e-1, 5e-1, 5e-1 ] # Vx, Vy, Vz
 
 #pose2:
 #  timestamp: 1544677161230055000
@@ -46,7 +58,7 @@ velocity1:
 #  noise_covariance: [ 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3 ] # x, y, z, roll, pith, yaw
 
 #velocity1:
-#  timestamp: 1544581120850164000
+#  timestamp: 1544681686136785765
 #  noise_covariance: [ 1e-0, 1e-0, 1e-0 ] # Vx, Vy, Vz
 #  measurement: [ 0.8, 0, 0 ]
 

@@ -6,13 +6,6 @@ from src.moduslam.backend_manager.manager import BackendManager
 from src.moduslam.data_manager.manager import DataManager
 from src.moduslam.frontend_manager.manager import FrontendManager
 from src.moduslam.map_manager.manager import MapManager
-from src.moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
-    create_data,
-)
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer import draw
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
-    VisualizationParams,
-)
 
 logger = logging.getLogger(main_manager)
 
@@ -46,8 +39,8 @@ class MainManager:
         self._map_manager.save_map()
         self._map_manager.visualize_map()
 
-        vis_data = create_data(graph)
-        draw(vis_data, VisualizationParams())
+        # vis_data = create_data(graph)
+        # draw(vis_data, VisualizationParams())
 
         logger.info(
             f"num clusters: {len(graph.vertex_storage.clusters)},"

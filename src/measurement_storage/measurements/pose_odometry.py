@@ -39,8 +39,8 @@ class Odometry(TimeRangeMeasurement):
         return self._tf
 
     @property
-    def transition_covariance(self) -> Matrix3x3:
-        """Noise covariance matrix of the transition [x, y, z] part."""
+    def position_covariance(self) -> Matrix3x3:
+        """Noise covariance matrix of the translation [x, y, z] part."""
         return self._trans_covariance
 
     @property

@@ -229,10 +229,14 @@ if __name__ == "__main__":
 
     plane_detection_config = HdbscanConfig()
 
-    bin_file_path0 = "/media/mark/New Volume/datasets/kaist/urban-33/sensor_data/VLP_left/1544682272275021000.bin"
-    bin_file_path1 = "/media/mark/New Volume/datasets/kaist/urban-33/sensor_data/VLP_right/1544682272334000000.bin"
-    bin_file_path2 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
-    bin_file_path3 = "/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
+    bin_file_path0 = "/media/mark/WD/kaist/urban-27/sensor_data/VLP_left/1544582987907141000.bin"
+    bin_file_path1 = "/media/mark/WD/kaist/urban-27/sensor_data/VLP_right/1544582983872813000.bin"
+    bin_file_path2 = (
+        "/media/mark/New Volume/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
+    )
+    bin_file_path3 = (
+        "/media/mark/New Volume/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
+    )
     pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
     # pcd1 = read_4_channel_bin_pcd(Path(bin_file_path1))
     # pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))

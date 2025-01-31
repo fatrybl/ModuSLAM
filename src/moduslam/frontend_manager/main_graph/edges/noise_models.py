@@ -1,11 +1,11 @@
 import gtsam
 import numpy as np
 
-from src.custom_types.aliases import Matrix3x3, Vector3
+from src.custom_types.aliases import Matrix3x3, Vector3, Vector6, VectorN
 from src.custom_types.numpy import Matrix6x6
 
 
-def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
+def block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:
     """Numpy block-diagonal matrix with two 3x3 blocks.
 
     Args:
@@ -16,14 +16,13 @@ def create_block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Ma
     Returns:
         numpy block-diagonal matrix.
     """
-    position_cov_matrix = np.array(block1)
-    orientation_cov_matrix = np.array(block2)
     zero_block = np.zeros((3, 3))
+    array1, array2 = np.array(block1), np.array(block2)
 
     return np.block(
         [
-            [position_cov_matrix, zero_block],
-            [zero_block, orientation_cov_matrix],
+            [array1, zero_block],
+            [zero_block, array2],
         ]
     )
 
@@ -56,6 +55,26 @@ def diagonal3x3_noise_model(variances: Vector3) -> gtsam.noiseModel.Diagonal.Var
     return noise
 
 
+def huber_diagonal_noise_model(
+    variances: VectorN, threshold: float
+) -> gtsam.noiseModel.Diagonal.Variances:
+    """Diagonal Gaussian noise model for N dimensional vector.
+
+    Args:
+        variances: noise variance vector.
+
+        threshold: Huber loss threshold.
+
+    Returns:
+        gtsam noise model.
+    """
+    array = np.array(variances)
+    base = gtsam.noiseModel.Diagonal.Variances(array)
+    loss = gtsam.noiseModel.mEstimator.Huber(threshold)
+    robust = gtsam.noiseModel.Robust.Create(loss, base)
+    return robust
+
+
 def se3_isotropic_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Variance:
     """Isotropic Gaussian noise model for pose: [x, y, z, roll, pitch, yaw].
 
@@ -82,8 +101,8 @@ def pose_block_diagonal_noise_model(
     Returns:
         gtsam noise model.
     """
-    block_matrix = create_block_diagonal_matrix_6x6(position_covariance, orientation_covariance)
-    noise = gtsam.noiseModel.Gaussian.Covariance(block_matrix)
+    matrix = block_diagonal_matrix_6x6(orientation_covariance, position_covariance)
+    noise = gtsam.noiseModel.Gaussian.Covariance(matrix)
     return noise
 
 
@@ -111,4 +130,33 @@ def isotropic_3d_noise_model(variance: float) -> gtsam.noiseModel.Isotropic.Vari
         gtsam noise model.
     """
     noise = gtsam.noiseModel.Isotropic.Variance(3, variance)
+    return noise
+
+
+def isotropic_n_dim(noise_dim: int, variance: float) -> gtsam.noiseModel.Isotropic.Variance:
+    """Isotropic Gaussian noise model for n-dimensional vector.
+
+    Args:
+        noise_dim: dimension of the noise vector.
+
+        variance: noise variance scalar.
+
+    Returns:
+        gtsam noise model.
+    """
+    noise = gtsam.noiseModel.Isotropic.Variance(noise_dim, variance)
+    return noise
+
+
+def variance_6d(variance: Vector6) -> gtsam.noiseModel.Diagonal.Variances:
+    """Diagonal Gaussian noise model for 6D vector.
+
+    Args:
+        variance: noise variance vector.
+
+    Returns:
+        gtsam noise model.
+    """
+    array = np.array(variance)
+    noise = gtsam.noiseModel.Diagonal.Variances(array)
     return noise

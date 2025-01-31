@@ -7,7 +7,7 @@ from src.bridge.edge_factories.utils import (
 from src.measurement_storage.measurements.imu_bias import Bias as BiasMeasurement
 from src.moduslam.frontend_manager.main_graph.edges.imu_bias import ImuBias as PriorBias
 from src.moduslam.frontend_manager.main_graph.edges.noise_models import (
-    pose_block_diagonal_noise_model,
+    variance_6d,
 )
 from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
 from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
@@ -45,7 +45,10 @@ class Factory(EdgeFactory):
 
         cov1 = measurement.linear_acceleration_noise_covariance
         cov2 = measurement.angular_velocity_noise_covariance
-        noise = pose_block_diagonal_noise_model(cov1, cov2)
+
+        variance = (cov1[0][0], cov1[1][1], cov1[2][2], cov2[0][0], cov2[1][1], cov2[2][2])
+
+        noise = variance_6d(variance)
 
         edge = PriorBias(bias.instance, measurement, noise)
 
