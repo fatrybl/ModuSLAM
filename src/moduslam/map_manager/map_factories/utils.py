@@ -13,7 +13,7 @@ V = TypeVar("V", bound=Vertex)
 
 
 def fill_elements(
-    vertex_elements_table: dict[V, set[Element]], batch_factory: BatchFactory
+    vertex_elements_table: dict[V, list[Element]], batch_factory: BatchFactory
 ) -> dict[V, list[Element]]:
     """Creates a table with vertices and elements with raw measurements.
 

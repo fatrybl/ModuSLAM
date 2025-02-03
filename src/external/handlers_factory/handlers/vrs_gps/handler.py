@@ -76,12 +76,12 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         """Subtracts two position vectors.
 
         Args:
-            source: a source position vector.
+            source: a source position.
 
-            target: a target position vector.
+            target: a target position.
 
         Returns:
-            a position vector.
+            a position.
         """
         return (
             source[0] - target[0],
@@ -94,12 +94,12 @@ class KaistUrbanVrsGpsPreprocessor(Handler):
         """Applies base->sensor transformation to the measurement.
 
         Args:
-            position: The position vector.
+            position: a position measurement.
 
-            tf: The transformation matrix.
+            tf: a base->sensor SE(3) transformation.
 
         Returns:
-            a position vector.
+            a transformed measurement.
         """
         position_base_sensor = (tf[0][3], tf[1][3], tf[2][3])
         return (

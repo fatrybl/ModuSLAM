@@ -4,5 +4,6 @@ moduslam.egg-info
 __pycache__
 logs
 dist
-*.pdf, *.ply
+*.pdf
+*.ply
 /experiments/

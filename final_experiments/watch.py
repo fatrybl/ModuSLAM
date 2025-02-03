@@ -4,10 +4,10 @@ import open3d as o3d
 
 # Paths to the point cloud files
 current_dir = Path(__file__).parent.absolute()
-sub_dir = Path("urban-27/2_lidars_imu_gps")
+sub_dir = Path("constant_speed/urban-33/output")
 dir = current_dir / sub_dir
 
-path1 = dir / "simple.ply"
+path1 = dir / "base.ply"
 path2 = dir / "mom.ply"
 
 colors = [
@@ -23,10 +23,10 @@ for file_path, color in zip(file_paths, colors):
     point_cloud.paint_uniform_color(color)
     point_clouds.append(point_cloud)
 
-o3d.visualization.draw_geometries(point_clouds)
+# o3d.visualization.draw_geometries(point_clouds)
 
 
-cloud = o3d.io.read_point_cloud(str(path2))
+cloud = o3d.io.read_point_cloud(str(path1))
 vis = o3d.visualization.Visualizer()
 vis.create_window()
 vis.add_geometry(cloud)

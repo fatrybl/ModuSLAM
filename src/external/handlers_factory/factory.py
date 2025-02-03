@@ -31,6 +31,8 @@ logger = logging.getLogger(data_manager)
 
 @dataclass
 class Handlers:
+    """Measurement handlers configuration."""
+
     scan_matcher1: KissIcpScanMatcherConfig = MISSING
     scan_matcher2: KissIcpScanMatcherConfig = MISSING
     imu_preprocessor: ImuHandlerConfig = MISSING
@@ -38,6 +40,11 @@ class Handlers:
 
 
 def get_config() -> Handlers:
+    """Gets configuration for measurement handlers.
+
+    Returns:
+        configurations.
+    """
     cs = ConfigStore.instance()
     cs.store(name="base_handlers_factory", node=Handlers)
     cs.store(name="base_imu_preprocessor", node=ImuHandlerConfig)
@@ -53,6 +60,7 @@ def get_config() -> Handlers:
 
 
 class Factory:
+    """Initializes and stores measurement handlers."""
 
     _handlers: set[Handler] = set()
 

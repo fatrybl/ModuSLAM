@@ -10,3 +10,5 @@ regime:
   stop: 1544681935165024000
 
 batch_memory_percent: 90.0
+
+# 5 secs movement

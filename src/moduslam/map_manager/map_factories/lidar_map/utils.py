@@ -22,8 +22,8 @@ logger = logging.getLogger(map_manager)
 
 
 def map_elements2vertices(
-    vertex_edges_table: dict[Pose, set[PoseOdometry]],
-) -> dict[Pose, set[Element]]:
+    vertex_edges_table: dict[Pose, list[PoseOdometry]],
+) -> dict[Pose, list[Element]]:
     """Creates "pose -> elements" table.
 
     Args:
@@ -35,7 +35,7 @@ def map_elements2vertices(
     Raises:
         LookupError: none of edge`s vertices is a key in the input table.
     """
-    table: dict[Pose, set[Element]] = defaultdict(set)
+    table: dict[Pose, list[Element]] = defaultdict(list)
 
     for current_pose, edges in vertex_edges_table.items():
         for edge in edges:
@@ -47,9 +47,9 @@ def map_elements2vertices(
                 el2 = measurement.elements[1]
 
                 if current_pose is pose1:
-                    table[current_pose].add(el1)
+                    table[current_pose].append(el1)
                 elif current_pose is pose2:
-                    table[current_pose].add(el2)
+                    table[current_pose].append(el2)
                 else:
                     raise LookupError(f"Current pose {current_pose} is not in the edge {edge}")
     return table
@@ -72,7 +72,7 @@ def values_to_array(values: tuple[float, ...], num_channels: int) -> MatrixMxN:
 
 def create_pose_edges_table(
     pose_edges_table: dict[Pose, set[Edge]],
-) -> dict[Pose, set[PoseOdometry]]:
+) -> dict[Pose, list[PoseOdometry]]:
     """Creates a table with poses and edges containing data elements.
 
     Args:
@@ -81,13 +81,13 @@ def create_pose_edges_table(
     Returns:
         "pose -> pose odometries" table.
     """
-    table: defaultdict[Pose, set[PoseOdometry]] = defaultdict(set)
+    table: defaultdict[Pose, list[PoseOdometry]] = defaultdict(list)
 
     for vertex, edges in pose_edges_table.items():
         for edge in edges:
             m = edge.measurement
             if isinstance(edge, PoseOdometry) and isinstance(m, OdometryWithElements):
-                table[vertex].add(edge)
+                table[vertex].append(edge)
 
     return table
 
