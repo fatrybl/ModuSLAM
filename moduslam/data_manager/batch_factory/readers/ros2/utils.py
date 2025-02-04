@@ -14,15 +14,35 @@ from collections import defaultdict
 import heapq
 from rosbags.rosbag2 import Reader
 
+class MergedSensorIterator:
+    def __init__(self, sensor_iterators):
+        self.messages = []
+
+        # Collect all messages into one list
+        for sensor, iterator in sensor_iterators.items():
+            for timestamp, rawdata in iterator.messages:
+                self.messages.append((timestamp, sensor, rawdata))
+
+        # Сортируем по таймштампам
+        self.messages.sort(key=lambda x: x[0])
+        self.index = 0  # Индекс для итерации
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index >= len(self.messages):
+            raise StopIteration
+        message = self.messages[self.index]
+        self.index += 1
+        return message  # (timestamp, sensor, rawdata)
+
 
 class SensorIterator:
     def __init__(self, messages):
         # Сортируем сообщения по таймштампу (первый элемент каждого кортежа)
         self.messages = sorted(messages, key=lambda x: x[0])
         self.index = 0
-        # print("Создан SensorIterator с сообщениями:")
-        # for m in self.messages:
-        #     print("  ", m)
 
     def __iter__(self):
         return self
@@ -48,14 +68,24 @@ def read_rosbag(bag_path, topics_table: dict[str, str]):
                 sensor_data[sensor_name].append((timestamp, rawdata))
     # For each sensor we create our own iterator
     sensor_iterators = {sensor: SensorIterator(messages) for sensor, messages in sensor_data.items()}
-    print("\nIterators for sensors have been created:")
-    for sensor, iterator in sensor_iterators.items():
-        print(f"  Sensor: {sensor}, number of messages: {len(iterator.messages)}")
-        print("Message list:")
-        for msg in iterator.messages:
-            print(f"  Timestamp: {msg[0]}")
+    merged_iterator = MergedSensorIterator(sensor_iterators)
 
-    return sensor_iterators
+    print("\nMerged and sorted sensor messages:")
+    for timestamp, sensor, rawdata in merged_iterator:
+        print(f"Timestamp: {timestamp}, Sensor: {sensor}")
+
+    # print("\nIterators for sensors have been created:")
+    # for sensor, iterator in sensor_iterators.items():
+    #     print(f"  Sensor: {sensor}, number of messages: {len(iterator.messages)}")
+    #     print("Message list:")
+    #     for msg in iterator.messages:
+    #         print(f"  Timestamp: {msg[0]}")
+
+    # merged_iterator = MergedSensorIterator(sensor_iterators)
+    #
+    # print("\nMerged and sorted sensor messages:")
+    # for msg in merged_iterator:
+    #     print(msg)
 
 def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
     sensors = []
