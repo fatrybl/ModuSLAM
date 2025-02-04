@@ -6,8 +6,8 @@ defaults:
 regime:
   name: "TimeLimit"
   # Urban-33
-  start: 1544681590135154000
-  stop: 1544681600215064000
+  start: 1544681590129223000
+  stop: 1544681600220961000
 
 batch_memory_percent: 90.0
 

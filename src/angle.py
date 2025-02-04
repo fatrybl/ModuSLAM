@@ -24,6 +24,6 @@ def calculate_angle(point1: Position2D, point2: Position2D) -> float:
     return angle_radians
 
 
-p1 = Position2D(316131.44278981100069, 4155383.0833355686627)
-p2 = Position2D(316130.53556347417179, 4155384.3384735439904)
+p1 = Position2D(315610.78409584797919, 4155433.4416373516433)
+p2 = Position2D(315610.78673472336959, 4155433.4410236971453)
 print(calculate_angle(p1, p2))
