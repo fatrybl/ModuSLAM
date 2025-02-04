@@ -6,48 +6,56 @@ import pandas as pd
 from rosbags.rosbag2 import Reader, Writer
 from rosbags.serde import deserialize_cdr
 
-from moduslam.data_manager.batch_factory.readers.ros2.measurement_collector import (
-    get_imu_measurement,
-    get_lidar_measurement,
-    get_stereo_measurement,
-)
 from moduslam.logger.logging_config import data_manager
 from .data_getters import data_getter
 
 logger = logging.getLogger(data_manager)
+from collections import defaultdict
+import heapq
+from rosbags.rosbag2 import Reader
 
-#reference
-def get_rosbag_sensors1(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
-    """Gets sensors and topics from a ROS bag file.
 
-    Args:
-        rosbag_path (Path): Path to the ROS bag file.
-        sensors_table (dict[str, str]): Mapping of sensor names to their corresponding topic names.
-        topics_table (dict[str, str]): Mapping of sensor names to their full topic paths.
+class SensorIterator:
+    def __init__(self, messages):
+        # Сортируем сообщения по таймштампу (первый элемент каждого кортежа)
+        self.messages = sorted(messages, key=lambda x: x[0])
+        self.index = 0
+        # print("Создан SensorIterator с сообщениями:")
+        # for m in self.messages:
+        #     print("  ", m)
 
-    Returns:
-        list[dict[str, str]]: A list of dictionaries containing metadata for each sensor.
-    """
-    sensors = []
+    def __iter__(self):
+        return self
 
-    with Reader(rosbag_path) as reader:
-        for connection in reader.connections:
-            sensor_topic = connection.topic
-            sensor_name = sensor_topic.split("/")[1] if "/" in sensor_topic else sensor_topic
+    def __next__(self):
+        if self.index < len(self.messages):
+            entry = self.messages[self.index]
+            self.index += 1
+            return entry
+        raise StopIteration
 
-            if sensor_name not in sensors_table or sensor_topic not in topics_table.values():
-                continue
 
-            sensor = {
-                "sensor_name": sensor_name,
-                "sensor": sensors_table[sensor_name],
-            }
-            sensors.append(sensor)
+def read_rosbag(bag_path, topics_table: dict[str, str]):
+    sensor_data = {}  # key is sensor name, value is message list
+    valid_topics = set(topics_table.values())
 
-    print("Final list of added sensors:")
-    for sensor in sensors:
-        print(sensor)
-    return sensors
+    with Reader(bag_path) as reader:
+        for connection, timestamp, rawdata in reader.messages():
+            sensor_name = connection.topic # Define the sensor name
+            if sensor_name in valid_topics:
+                if sensor_name not in sensor_data:
+                    sensor_data[sensor_name] = []
+                sensor_data[sensor_name].append((timestamp, rawdata))
+    # For each sensor we create our own iterator
+    sensor_iterators = {sensor: SensorIterator(messages) for sensor, messages in sensor_data.items()}
+    print("\nIterators for sensors have been created:")
+    for sensor, iterator in sensor_iterators.items():
+        print(f"  Sensor: {sensor}, number of messages: {len(iterator.messages)}")
+        print("Message list:")
+        for msg in iterator.messages:
+            print(f"  Timestamp: {msg[0]}")
+
+    return sensor_iterators
 
 def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
     sensors = []
@@ -55,9 +63,6 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_
     with Reader(rosbag_path) as reader:
         for connection in reader.connections:
             sensor_topic = connection.topic
-            # print(f"Found topic in ROS bag: {sensor_topic}")
-
-            # Сравнение с topics_table
             for sensor, topic_path in topics_table.items():
                 # print(f"Checking topic: {sensor_topic} against {topic_path}")
                 if sensor_topic == topic_path:
@@ -121,49 +126,6 @@ def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
             print(f"No connections found for topics: {topics_list}")
             return None
     return connections
-#reference
-def rosbag_iterator1(reader, sensors, connections, time_range=None):
-    """Iterates through the Readings of a Rosbag file based on the connections provided
-    and returns data of each reading.
-
-    Args:
-        reader: Rosbag reader object.
-        sensors: List of sensors in the moduslam configs.
-        connections: List of connections for the sensors.
-        time_range (optional): Time range to filter messages.
-
-    Yields:
-        Tuple[int, float, str, any, str]: Index, timestamp, sensor name, data, and data type.
-    """
-
-    data_getter: dict[str, Callable] = {
-
-        "Imu": get_imu_measurement,
-        "PointCloud2": get_lidar_measurement,
-        "Image": get_stereo_measurement,
-    }
-
-    sensors_dict = {sensor["sensor_name"]: sensor["sensor"] for sensor in sensors}
-    print("=================================================")
-    print(sensors_dict)
-    for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
-
-        if time_range is not None and not (time_range.start <= timestamp <= time_range.stop):
-            continue
-
-        sensor_topic = connection.topic.split("/")[1]
-        data_type = connection.msgtype.split("/")[-1]
-
-        if data_type not in data_getter.keys():
-            continue
-        if sensor_topic not in sensors_dict:
-            continue
-
-        msg = deserialize_cdr(rawdata, connection.msgtype)
-        data = data_getter[data_type](msg)
-        print(f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
-
-        yield (i, timestamp, sensors_dict[sensor_topic], data, data_type)
 
 def rosbag_iterator(reader, sensors, connections, time_range=None):
     """Iterates through the Readings of a Rosbag file based on the connections provided
@@ -176,10 +138,8 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
         time_range (optional): Time range to filter messages.
 
     Yields:
-        Tuple[int, float, str, any, str]: Index, timestamp, sensor name, data, and data type.
+        Tuple[int, float, str, any]: Index, timestamp, sensor name, data.
     """
-
-
     sensors_dict = {sensor["sensor_name"]: sensor["sensor_type"] for sensor in sensors}
 
     for i, (connection, timestamp, rawdata) in enumerate(reader.messages(connections=connections)):
@@ -188,7 +148,15 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
             continue
 
         sensor_topic = connection.topic.split("/")[1]
+        # print("------------------------------------")
+        # print("sensor_topic", sensor_topic)
         data_type = connection.msgtype.split("/")[-1]
+        # print("------------------------------------")
+        # print("data_type", data_type)
+        # print("------------------------------------")
+        # message_type = connection.msgtype
+        # print("data_type", message_type)
+        # print("------------------------------------")
 
         if data_type not in data_getter.keys():
             continue
@@ -197,10 +165,9 @@ def rosbag_iterator(reader, sensors, connections, time_range=None):
 
         msg = deserialize_cdr(rawdata, connection.msgtype)
         data = data_getter[data_type](msg)
-        # print( f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data Type: {data_type}, Data: {data}")
+        print( f"Yielding: Index: {i}, Timestamp: {timestamp}, Sensor: {sensors_dict[sensor_topic]}, Data: {data}")
 
         yield (i, timestamp, sensors_dict[sensor_topic], data)
-
 
 def rosbag_read(bag_path: Path, num_readings: float = 1) -> list:
     """Reads a rosbag file and returns a list with the sensor readings.

@@ -13,6 +13,7 @@ from moduslam.data_manager.batch_factory.readers.ros2.utils import (
     check_setup_sensors,
     get_rosbag_sensors,
     rosbag_iterator,
+    read_rosbag,
 )
 from moduslam.data_manager.batch_factory.readers.utils import check_directory
 from moduslam.logger.logging_config import data_manager
@@ -58,6 +59,7 @@ class Ros2DataReader(DataReader):
         self._sensors = get_rosbag_sensors(
             self._dataset_directory, self._sensors_table, self.topics_table
         )
+        # self._sensors = read_rosbag(self._dataset_directory, self.topics_table)
 
         self._rosbag_reader = Reader(self._dataset_directory)
 
