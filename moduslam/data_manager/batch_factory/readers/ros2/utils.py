@@ -40,7 +40,7 @@ class MergedSensorIterator:
 
 class SensorIterator:
     def __init__(self, messages):
-        # Сортируем сообщения по таймштампу (первый элемент каждого кортежа)
+        # Sort messages by timestamp (first element of each tuple)
         self.messages = sorted(messages, key=lambda x: x[0])
         self.index = 0
 
@@ -81,12 +81,6 @@ def read_rosbag(bag_path, topics_table: dict[str, str]):
     #     for msg in iterator.messages:
     #         print(f"  Timestamp: {msg[0]}")
 
-    # merged_iterator = MergedSensorIterator(sensor_iterators)
-    #
-    # print("\nMerged and sorted sensor messages:")
-    # for msg in merged_iterator:
-    #     print(msg)
-
 def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_table: dict[str, str]) -> list[dict[str, str]]:
     sensors = []
 
@@ -117,7 +111,6 @@ def get_rosbag_sensors(rosbag_path: Path, sensors_table: dict[str, str], topics_
     return sensors
     # структура {'sensor_name': 'sensor_type'}
 
-
 def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: set) -> dict:
     """Checks and compares the sensors in the setup_manager and the sensors available in
     the rosbag.
@@ -137,25 +130,25 @@ def check_setup_sensors(dataset_manager_sensors: dict, setup_manager_sensors: se
 
     return new_sensors_table
 
-def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
-    """Gets connections from a rosbag file. This will extract only the sensor data from
-    specific sensor topics.
-
-    Args:
-        topics: a string or a list of strings with topics names.
-
-    Returns:
-        connections: a list of connections.
-    """
-    topics_list = topics if isinstance(topics, list) else [topics]
-
-    with Reader(rosbag_path) as reader:
-        connections = [c for c in reader.connections if c.topic in topics_list]
-
-        if len(connections) == 0:
-            print(f"No connections found for topics: {topics_list}")
-            return None
-    return connections
+# def get_connections(topics: str | list[str], rosbag_path: Path) -> list | None:
+#     """Gets connections from a rosbag file. This will extract only the sensor data from
+#     specific sensor topics.
+#
+#     Args:
+#         topics: a string or a list of strings with topics names.
+#
+#     Returns:
+#         connections: a list of connections.
+#     """
+#     topics_list = topics if isinstance(topics, list) else [topics]
+#
+#     with Reader(rosbag_path) as reader:
+#         connections = [c for c in reader.connections if c.topic in topics_list]
+#
+#         if len(connections) == 0:
+#             print(f"No connections found for topics: {topics_list}")
+#             return None
+#     return connections
 
 def rosbag_iterator(reader, sensors, connections, time_range=None):
     """Iterates through the Readings of a Rosbag file based on the connections provided
