@@ -15,6 +15,16 @@ import heapq
 from rosbags.rosbag2 import Reader
 
 class MergedSensorIterator:
+    """
+    Iterates through the readings of a Rosbag file based on the provided connections
+    and returns data of each reading in a merged, sorted order.
+
+    Args:
+        sensor_iterators: Dictionary of sensor iterators.
+
+    Returns:
+        Tuple[int, str, any]: Timestamp, sensor name, and data.
+    """
     def __init__(self, sensor_iterators):
         self.messages = []
 
@@ -37,6 +47,17 @@ class MergedSensorIterator:
         return message  # (timestamp, sensor, rawdata)
 
 class TimeRangeSensorIterator:
+    """
+    Iterator for sensor messages filtered by a specific time range.
+
+    Args:
+        messages: List of tuples containing (timestamp, data).
+        start_time: Start of the time range.
+        end_time: End of the time range.
+
+    Returns:
+        Tuple[int, any]: Timestamp and data within the given range.
+    """
     def __init__(self, messages, start_time, end_time):
         # Filter messages by the given time range
         self.messages = [m for m in messages if start_time <= m[0] <= end_time]
@@ -53,6 +74,15 @@ class TimeRangeSensorIterator:
         raise StopIteration
 
 class SensorIterator:
+    """
+    Iterator for sensor messages in stream mode.
+
+    Args:
+        messages: List of tuples containing (timestamp, data).
+
+    Returns:
+        Tuple[int, any]: Timestamp and data.
+    """
     def __init__(self, messages):
         # Sort messages by timestamp (first element of each tuple)
         self.messages = sorted(messages, key=lambda x: x[0])
@@ -68,7 +98,20 @@ class SensorIterator:
             return entry
         raise StopIteration
 
-def read_rosbag(bag_path, topics_table: dict[str, str]):
+def read_rosbag(bag_path, topics_table: dict[str, str], mode="stream", start_time=None, end_time=None):
+    """
+    Reads a Rosbag file and returns sensor data iterators based on the selected mode.
+
+    Args:
+        bag_path: Path to the Rosbag file.
+        topics_table: Dictionary mapping sensor names to topics.
+        mode: Processing mode ('stream' or 'time_range').
+        start_time (optional): Start time for 'time_range' mode.
+        end_time (optional): End time for 'time_range' mode.
+
+    Returns:
+        MergedSensorIterator: An iterator over all sensor messages.
+    """
     sensor_data = {}  # key is sensor name, value is message list
     valid_topics = set(topics_table.values())
 
@@ -80,9 +123,16 @@ def read_rosbag(bag_path, topics_table: dict[str, str]):
                     sensor_data[sensor_name] = []
                 sensor_data[sensor_name].append((timestamp, rawdata))
     # For each sensor we create our own iterator
-    sensor_iterators = {sensor: SensorIterator(messages) for sensor, messages in sensor_data.items()}
+    if mode == "stream":
+        sensor_iterators = {sensor: SensorIterator(messages) for sensor, messages in sensor_data.items()}
+    elif mode == "time_range":
+        if start_time is None or end_time is None:
+            raise ValueError("start_time and end_time must be provided for time_range mode")
+        sensor_iterators = {sensor: TimeRangeSensorIterator(messages, start_time, end_time) for sensor, messages in
+                            sensor_data.items()}
+    else:
+        raise ValueError("Invalid mode")
     merged_iterator = MergedSensorIterator(sensor_iterators)
-
     print("\nMerged and sorted sensor messages:")
     for timestamp, sensor, rawdata in merged_iterator:
         print(f"Timestamp: {timestamp}, Sensor: {sensor}")
