@@ -19,9 +19,13 @@ from plum import dispatch
 
 from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
 from src.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
-from src.custom_types.numpy import MatrixMxN
+from src.custom_types.numpy import (
+    MatrixMxN,
+)
 from src.custom_types.numpy import Vector3 as NumpyVector3
-from src.custom_types.numpy import VectorN
+from src.custom_types.numpy import (
+    VectorN,
+)
 from src.logger.logging_config import utils
 from src.utils.exceptions import DimensionalityError
 

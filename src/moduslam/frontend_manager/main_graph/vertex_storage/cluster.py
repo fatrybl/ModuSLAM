@@ -29,12 +29,12 @@ class VertexCluster:
 
     @property
     def vertices(self) -> tuple[Vertex, ...]:
-        """All vertices in the cluster."""
+        """Vertices in the cluster."""
         return tuple(self._vertex_timestamps_table.keys())
 
     @property
     def vertices_with_timestamps(self) -> dict[Vertex, dict[int, int]]:
-        """All vertices with their timestamps."""
+        """Table of <Vertex - {timestamp: num_occurrences}>."""
         return self._vertex_timestamps_table
 
     @property
@@ -172,7 +172,7 @@ class VertexCluster:
             ItemNotExistsError: if the vertex does not exist in the cluster.
         """
         try:
-            return list(self._vertex_timestamps_table[vertex].keys())
+            return sorted(self._vertex_timestamps_table[vertex].keys())
         except KeyError:
             raise ItemNotExistsError(f"Vertex {vertex} does not exist in the cluster.")
 

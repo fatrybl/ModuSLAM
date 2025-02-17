@@ -7,8 +7,8 @@ class BinaryConnectionParams:
 
     curve_color: str = "gray"
     label_color: str = "black"
-    label_fontsize: int = 16
-    curve_lw: float = 2
+    label_fontsize: int = 80
+    curve_lw: float = 2.5
     curve_alpha: float = 1.0
     label_alpha: float = 1.0
     label_offset: float = 0.2
@@ -21,9 +21,9 @@ class UnaryConnectionParams:
 
     line_color: str = "gray"
     label_color: str = "black"
-    label_fontsize: int = 16
+    label_fontsize: int = 80
     line_base_height: float = 2
-    line_width: float = 1.0
+    line_width: float = 2.5
     line_alpha: float = 1.0
     label_offset: float = 0.2
     label_alpha: float = 1.0
@@ -34,7 +34,7 @@ class ClusterParams:
     """Parameters for the Cluster."""
 
     width_step: int = 5
-    label_fontsize: int = 16
+    label_fontsize: int = 80
     label_offset: float = 10
     width: float = 5.0
     height: float = 5.0
@@ -45,15 +45,15 @@ class VertexParams:
     """Parameters for the Vertex."""
 
     color: str = "skyblue"
-    label_fontsize: int = 16
-    label_offset: float = 0.2
+    label_fontsize: int = 80
+    label_offset: float = 0.1
 
 
 @dataclass
 class VisualizationParams:
     """Parameters for the Graph Visualizer."""
 
-    title_font_size: int = 30
+    title_font_size: int = 80
     title_padding: float = 50
     between_clusters_space: float = 3
 

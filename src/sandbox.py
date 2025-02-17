@@ -225,21 +225,16 @@ def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
 
 if __name__ == "__main__":
     mom_config = LidarConfig()
-    mom_config.eigen_scale = 20
 
     plane_detection_config = HdbscanConfig()
 
     bin_file_path0 = "/media/mark/WD/kaist/urban-27/sensor_data/VLP_left/1544582987907141000.bin"
     bin_file_path1 = "/media/mark/WD/kaist/urban-27/sensor_data/VLP_right/1544582983872813000.bin"
-    bin_file_path2 = (
-        "/media/mark/New Volume/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
-    )
-    bin_file_path3 = (
-        "/media/mark/New Volume/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
-    )
-    pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
+    bin_file_path2 = "/media/mark/WD/kaist/urban-26/sensor_data/VLP_right/1544581170343974000.bin"
+    bin_file_path3 = "/media/mark/WD/kaist/urban-26/sensor_data/VLP_right/1544581170444842000.bin"
+    # pcd0 = read_4_channel_bin_pcd(Path(bin_file_path0))
     # pcd1 = read_4_channel_bin_pcd(Path(bin_file_path1))
-    # pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))
+    pcd2 = read_4_channel_bin_pcd(Path(bin_file_path2))
     # pcd3 = read_4_channel_bin_pcd(Path(bin_file_path3))
 
     i4x4 = np.eye(4)
@@ -261,11 +256,11 @@ if __name__ == "__main__":
             [0.0, 0.0, 0.0, 1.0],
         ]
     )
-    pcd0.transform(left_tf_base_sensor)
+    # pcd0.transform(left_tf_base_sensor)
     # pcd1.transform(right_tf_base_sensor)
-    # pcd1.transform(right_tf_base_sensor)
+    pcd2.transform(right_tf_base_sensor)
     # pcd3.transform(right_tf_base_sensor)
-    pcd = pcd0
+    pcd = pcd2
     # o3d.visualization.draw_geometries([pcd])
 
     # o3d.visualization.draw_geometries([pcd])

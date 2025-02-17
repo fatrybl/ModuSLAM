@@ -1,0 +1,10 @@
+defaults:
+  - /base_pose@pose1
+  - _self_
+
+
+#Urban-26
+pose1:
+  timestamp: 1544581121858695000
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.4 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw

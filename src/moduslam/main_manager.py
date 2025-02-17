@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from src.logger.logging_config import main_manager
 from src.measurement_storage.storage import MeasurementStorage
@@ -18,6 +19,7 @@ class MainManager:
         self._frontend_manager = FrontendManager()
         self._backend_manager = BackendManager()
         self._map_manager = MapManager()
+        self._trajectory_file = Path(__file__).parent / "trajectory.txt"
         logger.info("The system has been successfully initialized.")
 
     def build_map(self) -> None:
@@ -34,13 +36,13 @@ class MainManager:
         graph = self._frontend_manager.graph
         self._backend_manager.solve(graph)
 
+        self._map_manager.save_trajectory(graph, self._trajectory_file)
         self._map_manager.save_graph(graph)
         self._map_manager.create_map(graph)
         self._map_manager.save_map()
-        self._map_manager.visualize_map()
 
-        # vis_data = create_data(graph)
-        # draw(vis_data, VisualizationParams())
+        self._map_manager.visualize_map()
+        # self._map_manager.visualize_clusters(graph)
 
         logger.info(
             f"num clusters: {len(graph.vertex_storage.clusters)},"

@@ -28,6 +28,8 @@ torch = "*"
 torch-ransac3d = "*"
 open3d = "*"
 plotly = "*"
+laspy = "^2.5.4"
+evo = "^1.30.6"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
