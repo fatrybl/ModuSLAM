@@ -4,34 +4,6 @@ import numpy as np
 import open3d as o3d
 from PIL import Image
 
-current_dir = Path(__file__).parent.absolute()
-sub_dir = Path("acceleration/urban-33/output")
-dir = current_dir / sub_dir
-
-path1 = dir / "base.ply"
-path2 = dir / "mom.ply"
-
-colors = [
-    [0.5, 0.5, 0.5],  # Grey
-    [0, 0, 1],  # Blue
-]
-
-file_paths = [path1, path2]
-
-point_clouds = []
-for file_path, color in zip(file_paths, colors):
-    point_cloud = o3d.io.read_point_cloud(file_path.as_posix())
-    point_cloud.paint_uniform_color(color)
-    point_clouds.append(point_cloud)
-
-vis = o3d.visualization.Visualizer()
-vis.create_window(width=3840, height=2160)  # Set window size to a higher resolution
-
-cloud = o3d.io.read_point_cloud(path2.as_posix())
-
-vis.add_geometry(cloud)
-ctr = vis.get_view_control()
-
 
 def rotate_around_x(vector, angle_deg):
     angle_rad = np.radians(angle_deg)
@@ -69,14 +41,48 @@ def rotate_around_z(vector, angle_deg):
     return rotation_matrix @ vector
 
 
+current_dir = Path(__file__).parent.absolute()
+sub_dir = Path("visualization/urban-26_no_gps/output")
+dir = current_dir / sub_dir
+
+path1 = dir / "base.ply"
+path2 = dir / "mom.ply"
+path3 = dir / "error.ply"
+path4 = dir / "timeshift.ply"
+
+colors = [
+    [0.5, 0.5, 0.5],  # Grey
+    [0, 0, 1],  # Blue
+]
+
+file_paths = [path1, path2]
+
+point_clouds = []
+for file_path, color in zip(file_paths, colors):
+    point_cloud = o3d.io.read_point_cloud(file_path.as_posix())
+    point_cloud.paint_uniform_color(color)
+    point_clouds.append(point_cloud)
+
+
+# o3d.visualization.draw_geometries(point_clouds)
+
+vis = o3d.visualization.Visualizer()
+vis.create_window(width=3840, height=2160)  # Set window size to a higher resolution
+
+cloud = o3d.io.read_point_cloud(path2.as_posix())
+
+vis.add_geometry(cloud)
+ctr = vis.get_view_control()
+
+
 # Initial front and up vectors for bird's-eye view
 front = np.array([0, 0, 1])  # Camera looks upward along the Z-axis
 up = np.array([0, 1, 0])  # Camera's up direction is the Y-axis
 
 # Define rotation angles in degrees
-angle_x = -30
-angle_y = 10
-angle_z = -40
+angle_x = 0
+angle_y = 0
+angle_z = 0
 
 # Rotate the front and up vectors around each axis
 front_rotated = rotate_around_x(front, angle_x)
@@ -103,7 +109,7 @@ image = np.asarray(image)
 image = (image * 255).astype(np.uint8)
 
 # Save the image using Pillow
-image_path = dir / "high_res_visualized_cloud.png"
+image_path = dir / "cloud.png"
 Image.fromarray(image).save(image_path)
 
 # Run the visualizer

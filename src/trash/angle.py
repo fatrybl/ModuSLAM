@@ -86,8 +86,8 @@ def visualize_trajectory_with_frames(file_path: str) -> None:
     o3d.visualization.draw_geometries([line_set] + coordinate_frames)
 
 
-p2 = Position2D(328761.36892160237767, 4117872.7992414003238)
-p1 = Position2D(328765.85663684143219, 4117874.7578463018872)
+p2 = Position2D(332415.06980044580996, 4140883.4476946620271)
+p1 = Position2D(332414.69802094681654, 4140884.5215138434432)
 print(calculate_angle(p1, p2))
 
 

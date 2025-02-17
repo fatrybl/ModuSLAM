@@ -124,7 +124,7 @@ def get_rpe(
     return stats
 
 
-ref_file = Path("/media/mark/WD/kaist/urban-26/global_pose.csv")
+ref_file = Path("/media/mark/WD/kaist/urban-38/global_pose.csv")
 
 traj_dir = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/")
 est_file = traj_dir / "trajectory.txt"
@@ -135,7 +135,7 @@ ref_traj.align_origin(est_traj)
 
 print(len(ref_traj.poses_se3), len(est_traj.poses_se3))
 
-relation = metrics.PoseRelation.rotation_angle_deg
+relation = metrics.PoseRelation.translation_part
 rpe_stats = get_rpe(ref_traj, est_traj, relation)
 
 for metric, value in rpe_stats.items():
