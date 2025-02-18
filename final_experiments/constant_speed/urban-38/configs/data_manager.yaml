@@ -5,8 +5,7 @@ defaults:
 
 regime:
   name: "TimeLimit"
+  start: 1559194408106803132
+  stop: 1559194414146270000
 
-  start: 1559194794098995359
-  stop: 1559194803169225000
-
-batch_memory_percent: 95.0
+batch_memory_percent: 90.0
