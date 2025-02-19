@@ -2,5 +2,5 @@ defaults:
   - /sensors/kaist/imu@_here_
   - /sensors/kaist/lidar_3D_left@_here_
   - /sensors/kaist/lidar_3D_right@_here_
-  - /sensors/kaist/vrs_gps@_here_
+  #  - /sensors/kaist/vrs_gps@_here_
   - _self_
