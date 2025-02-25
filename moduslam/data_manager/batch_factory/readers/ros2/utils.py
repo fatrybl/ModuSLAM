@@ -124,7 +124,13 @@ def read_rosbag(bag_path, topics_table: dict[str, str], mode="stream", start_tim
                 sensor_data[sensor_name].append((timestamp, rawdata))
     # For each sensor we create our own iterator
     if mode == "stream":
-        sensor_iterators = {sensor: SensorIterator(messages) for sensor, messages in sensor_data.items()}
+        sensor_iterators = {}
+        for sensor, messages in sensor_data.items():
+            print(f"Creating iterator for sensor: {sensor} with {len(messages)} messages")
+            for i, msg in enumerate(messages, start=1):  # нумерация
+                print(f"  Message {i}: Timestamp: {msg[0]}")
+            sensor_iterators[sensor] = SensorIterator(messages)
+            sensor_iterators[sensor] = SensorIterator(messages)
     elif mode == "time_range":
         if start_time is None or end_time is None:
             raise ValueError("start_time and end_time must be provided for time_range mode")

@@ -56,10 +56,10 @@ class Ros2DataReader(DataReader):
         self._sensors_in_factory = SensorsFactory.get_all_sensors()
         self._sensors_table = check_setup_sensors(self._sensors_in_config, self._sensors_in_factory)
 
-        self._sensors = get_rosbag_sensors(
-            self._dataset_directory, self._sensors_table, self.topics_table
-        )
-        # self._sensors = read_rosbag(self._dataset_directory, self.topics_table)
+        # self._sensors = get_rosbag_sensors(
+        #     self._dataset_directory, self._sensors_table, self.topics_table
+        # )
+        self._sensors = read_rosbag(self._dataset_directory, self.topics_table)
 
         self._rosbag_reader = Reader(self._dataset_directory)
 
