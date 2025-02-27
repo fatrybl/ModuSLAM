@@ -59,7 +59,12 @@ class Ros2DataReader(DataReader):
         # self._sensors = get_rosbag_sensors(
         #     self._dataset_directory, self._sensors_table, self.topics_table
         # )
-        self._sensors = read_rosbag(self._dataset_directory, self.topics_table)
+        self._sensor_iterator = read_rosbag(self._dataset_directory, self.topics_table)
+
+        if self._sensor_iterator is None:
+            raise ValueError("Ошибка: read_rosbag() вернул None!")
+        else:
+            print(f"Debug: read_rosbag() вернул {self._sensor_iterator}")
 
         self._rosbag_reader = Reader(self._dataset_directory)
 
@@ -68,19 +73,11 @@ class Ros2DataReader(DataReader):
         if isinstance(self._regime, TimeLimit):
 
             start, stop = to_float(self._regime.start), to_float(self._regime.stop)
-            self._time_range = TimeRange(start, stop)
-            self._rosbag_iterator = rosbag_iterator(
-                self._rosbag_reader,
-                self._sensors,
-                self._connections,
-                self._time_range,
-            )
+            self._sensor_iterator = read_rosbag(self._dataset_directory, self.topics_table)
+
         else:
-            self._rosbag_iterator = rosbag_iterator(
-                self._rosbag_reader,
-                self._sensors,
-                self._connections,
-            )
+            self._sensor_iterator = read_rosbag(self._dataset_directory, self.topics_table)
+
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -122,7 +119,7 @@ class Ros2DataReader(DataReader):
             raise RuntimeError(self._context_error_msg)
 
         try:
-            index, timestamp, sensor_name, data = next(self._rosbag_iterator)
+            index, timestamp, sensor_name, data = next(self._sensor_iterator)
             logger.debug(f"Reading {sensor_name} sensor data at {timestamp}.")
 
         except (StopIteration, KeyError):
