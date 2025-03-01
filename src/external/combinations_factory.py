@@ -1,3 +1,9 @@
+"""Creates all possible combinations by merging adjacent measurement groups.
+
+In total for N groups: sum of N-th row of Pascal triangle
+or 2^(N-1) combinations.
+"""
+
 from collections import OrderedDict
 from collections.abc import Iterable
 from typing import TypeVar
@@ -134,14 +140,27 @@ if __name__ == "__main__":
     m1 = PseudoMeasurement(1, "a")
     m2 = PseudoMeasurement(2, "b")
     m3 = PseudoMeasurement(3, "c")
+    m4 = PseudoMeasurement(4, "d")
+    m5 = PseudoMeasurement(5, "e")
+    m6 = PseudoMeasurement(6, "f")
+    m7 = PseudoMeasurement(7, "g")
+    m8 = PseudoMeasurement(8, "h")
+    m9 = PseudoMeasurement(9, "i")
 
-    g1, g2, g3 = MeasurementGroup(), MeasurementGroup(), MeasurementGroup()
+    measurements = [m1, m2, m3, m4]
+    groups = [MeasurementGroup() for _ in measurements]
 
-    g1.add(m1)
-    g2.add(m2)
-    g3.add(m3)
+    for group, measurement in zip(groups, measurements):
+        group.add(measurement)
 
-    combinations = Factory.combine((g1, g2, g3))
+    combinations = Factory.combine(groups)
 
+    combs_dict = {}
     for c in combinations:
-        print(c)
+        num_elements = len(c)
+        if num_elements not in combs_dict:
+            combs_dict[num_elements] = 1
+        else:
+            combs_dict[num_elements] += 1
+
+    print(combs_dict)

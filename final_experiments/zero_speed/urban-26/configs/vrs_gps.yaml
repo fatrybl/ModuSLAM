@@ -1,9 +1,0 @@
-defaults:
-  - /base_vrs_gps_preprocessor@_here_
-
-sensor_name: "vrs"
-
-fix_statuses: [ 4 ]
-
-# Urban-26
-first_position: [ 328749.89494426583406,4117867.9263330078684,51.442300000000003024 ]

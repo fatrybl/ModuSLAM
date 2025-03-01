@@ -5,39 +5,42 @@ from dataclasses import dataclass, field
 class BinaryConnectionParams:
     """Visualization parameters for connections."""
 
-    curve_color: str = "gray"
     label_color: str = "black"
-    label_fontsize: int = 80
-    curve_lw: float = 2.5
-    curve_alpha: float = 1.0
+    label_fontsize: int = 14
     label_alpha: float = 1.0
-    label_offset: float = 0.2
-    base_offset: float = 0.07
+    label_offset: float = 0.05
+    line_width: float = 4.0
+    line_alpha: float = 1.0
+    line_color: str = "gray"
+    base_offset: float = 0.004
+    curvature: float = 0.01
 
 
 @dataclass
 class UnaryConnectionParams:
     """Visualization parameters for unary connections."""
 
-    line_color: str = "gray"
     label_color: str = "black"
-    label_fontsize: int = 80
-    line_base_height: float = 2
-    line_width: float = 2.5
-    line_alpha: float = 1.0
-    label_offset: float = 0.2
+    label_fontsize: int = 14
+    label_offset: float = 0.01
     label_alpha: float = 1.0
+    line_color: str = "gray"
+    line_base_height: float = 0.05
+    line_width: float = 5.0
+    line_alpha: float = 1.0
 
 
 @dataclass
 class ClusterParams:
     """Parameters for the Cluster."""
 
-    width_step: int = 5
-    label_fontsize: int = 80
-    label_offset: float = 10
-    width: float = 5.0
-    height: float = 5.0
+    label_fontsize: int = 14
+    cluster_label_offset: float = 0.15
+    width: float = 1
+    width_step: int = 1
+    height: float = 0.05
+    time_range_fontsize: int = 14
+    time_range_label_offset: float = 0.1
 
 
 @dataclass
@@ -45,17 +48,15 @@ class VertexParams:
     """Parameters for the Vertex."""
 
     color: str = "skyblue"
-    label_fontsize: int = 80
-    label_offset: float = 0.1
+    label_fontsize: int = 14
+    scale: float = 0.5
 
 
 @dataclass
 class VisualizationParams:
     """Parameters for the Graph Visualizer."""
 
-    title_font_size: int = 80
-    title_padding: float = 50
-    between_clusters_space: float = 3
+    between_clusters_space: float = 1.0
 
     vertex_params: VertexParams = field(default_factory=VertexParams)
     cluster_params: ClusterParams = field(default_factory=ClusterParams)

@@ -28,8 +28,7 @@ torch = "*"
 torch-ransac3d = "*"
 open3d = "*"
 plotly = "*"
-laspy = "^2.5.4"
-evo = "^1.30.6"
+laspy = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -46,6 +45,11 @@ doc8 = "*"
 types-pillow = "*"
 types-psutil = "*"
 polyscope = "*"
+
+[tool.poetry.group.experiments.dependencies]
+moviepy = { git = "https://github.com/Zulko/moviepy.git" }
+evo = "*"
+imageio = "*"
 
 [build-system]
 requires = ["poetry-core"]

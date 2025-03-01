@@ -1,4 +1,0 @@
-defaults:
-  #  - /base_pose@pose1
-  #  - /base_linear_velocity@velocity1
-  - _self_

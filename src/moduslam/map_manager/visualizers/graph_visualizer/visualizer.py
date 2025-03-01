@@ -141,7 +141,7 @@ def draw_cluster_bbox(
 
         fig.add_annotation(
             x=x + cluster.width / 2,
-            y=y - vis_params.label_offset,
+            y=y - vis_params.cluster_label_offset,
             text=cluster.label,
             showarrow=False,
             font=dict(size=vis_params.label_fontsize, color="black"),
@@ -151,10 +151,10 @@ def draw_cluster_bbox(
 
         fig.add_annotation(
             x=x + cluster.width / 2,
-            y=y - vis_params.label_offset / 2,
+            y=y - vis_params.time_range_label_offset,
             text=cluster.time_range,
             showarrow=False,
-            font=dict(size=vis_params.label_fontsize, color="black"),
+            font=dict(size=vis_params.time_range_fontsize, color="black"),
             xanchor="center",
             yanchor="top",
         )
@@ -182,7 +182,7 @@ def draw_circles(fig: go.Figure, clusters: Iterable[Cluster], vis_params: Vertex
                     y=[y],
                     mode="markers",
                     marker=dict(
-                        size=vertex.radius * 2,
+                        size=vertex.radius * vis_params.scale,
                         color=vis_params.color,
                         line=dict(width=1, color="black"),
                     ),
@@ -223,13 +223,7 @@ def draw_binary_connections(
             connection, connection_counts, vis_params
         )
 
-        if connection.draw_below:
-            pos1.y = pos2.y = connection.source.position.y
-            mid_point.y = pos1.y - vis_params.base_offset
-            curve_x, curve_y = generate_bezier_curve(pos1, pos2, mid_point, curvature=-0.2)
-        else:
-            mid_point.y += vis_params.base_offset
-            curve_x, curve_y = generate_bezier_curve(pos1, pos2, mid_point)
+        curve_x, curve_y = generate_bezier_curve(pos1, pos2, mid_point)
 
         plot_curve(fig, curve_x, curve_y, connection, vis_params)
 
@@ -260,19 +254,26 @@ def plot_curve(
             y=curve_y,
             mode="lines",
             line=dict(
-                color=vis_params.curve_color,
-                width=vis_params.curve_lw,
+                color=vis_params.line_color,
+                width=vis_params.line_width,
             ),
-            opacity=vis_params.curve_alpha,
+            opacity=vis_params.line_alpha,
             hoverinfo="none",
             showlegend=False,
         )
     )
 
     mid_i = len(curve_x) // 2
+    label_x = curve_x[mid_i]
+    label_y = (
+        curve_y[mid_i] + vis_params.label_offset
+        if not connection.draw_below
+        else curve_y[mid_i] - vis_params.label_offset
+    )
+
     fig.add_annotation(
-        x=curve_x[mid_i],
-        y=curve_y[mid_i] + vis_params.label_offset,
+        x=label_x,
+        y=label_y,
         text=connection.label,
         showarrow=False,
         font=dict(

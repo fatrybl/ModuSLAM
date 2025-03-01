@@ -151,28 +151,47 @@ def calculate_curve_properties(
     Returns:
         start point, stop point, middle point
     """
-    cls1, cls2 = connection.source, connection.target
-    key = (cls1, cls2) if cls1.top_center.x < cls2.top_center.x else (cls2, cls1)
+    convex = connection.draw_below
 
-    if key not in connection_counts:
-        connection_counts[key] = 0
-    connection_counts[key] += 1
+    cluster1, cluster2 = connection.source, connection.target
+    key = (
+        (cluster1, cluster2)
+        if cluster1.top_center.x < cluster2.top_center.x
+        else (cluster2, cluster1)
+    )
 
-    dynamic_offset = vis_params.base_offset * ((connection_counts[key] + 1) // 2)
-    if connection_counts[key] % 2 == 0:
-        dynamic_offset *= -1
+    connection_counts[key] = connection_counts.setdefault(key, 0) + 1
 
-    pos1, pos2 = cls1.top_center, cls2.top_center
+    if convex:
+        dynamic_offset = vis_params.base_offset
+        pos1, pos2 = cluster1.bottom_center, cluster2.bottom_center
+    else:
+        dynamic_offset = vis_params.base_offset * ((connection_counts[key] + 1) // 2)
+        if connection_counts[key] % 2 == 0:
+            dynamic_offset *= -1
+        pos1, pos2 = cluster1.top_center, cluster2.top_center
+
     mid_x = (pos1.x + pos2.x) / 2
-    mid_y = (pos1.y + pos2.y) / 2 + abs(pos2.x - pos1.x) * (0.3 + dynamic_offset)
+    mid_y = (pos1.y + pos2.y) / 2
+
+    curve_offset = max(abs(pos2.x - pos1.x), vis_params.base_offset) * (
+        vis_params.curvature + dynamic_offset
+    )
+
+    if convex:
+        mid_y -= curve_offset
+    else:
+        mid_y += curve_offset
 
     return pos1, pos2, Position2D(mid_x, mid_y)
 
 
 def generate_bezier_curve(
-    point1: Position2D, point2: Position2D, mid_point: Position2D, curvature: float = 0.2
+    point1: Position2D,
+    point2: Position2D,
+    mid_point: Position2D,
 ) -> tuple[VectorN, VectorN]:
-    """Generate a Bézier curve between two points with adjustable curvature.
+    """Generate a Bézier curve between two points.
 
     Args:
         point1: start point.
@@ -181,16 +200,12 @@ def generate_bezier_curve(
 
         mid_point: middle point.
 
-        curvature: factor to adjust the curvature of the curve.
-
     Returns:
         x, y coordinates of the curve.
     """
     x1, y1 = point1.x, point1.y
     x2, y2 = point2.x, point2.y
     mid_x, mid_y = mid_point.x, mid_point.y
-
-    mid_y += abs(x2 - x1) * curvature
 
     t = np.linspace(0, 1, 100)
     curve_x = (1 - t) ** 2 * x1 + 2 * (1 - t) * t * mid_x + t**2 * x2

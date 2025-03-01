@@ -26,8 +26,8 @@ vertex_encodings: dict[type[Vertex], str] = {
 
 edge_encodings: dict[type[Edge], str] = {
     GpsPosition: "GPS",
-    PoseOdometry: "PoseOdom",
-    ImuOdometry: "ImuOdom",
-    PriorPose: "PriorPose",
-    PriorVelocity: "PriorVelocity",
+    PoseOdometry: "Lidar odom",
+    ImuOdometry: "IMU odom",
+    PriorPose: "Prior pose",
+    PriorVelocity: "Prior velocity",
 }
