@@ -31,5 +31,5 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest src/tests -k "not test_combined_imu_odometry and not test_gps_position"
+          poetry run pytest src/tests -k "not edges_factories"
   #          Skip test_combined_imu_odometry until gtsam 4.3 is released.
