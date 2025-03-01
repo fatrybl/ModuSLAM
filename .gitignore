@@ -6,4 +6,3 @@ logs
 dist
 *.pdf
 *.ply
-/experiments/
