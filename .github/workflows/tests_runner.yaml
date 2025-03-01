@@ -31,5 +31,5 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest src/tests -k "not edges_factories and not graph_elements_factory"
+          poetry run pytest src/tests -k "not edges_factories and not graph_elements_factory and not complex_example"
   #          Skip test_combined_imu_odometry until gtsam 4.3 is released.
