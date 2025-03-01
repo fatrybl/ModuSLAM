@@ -1,9 +1,9 @@
-# mySLAM
+# ModuSLAM
 
 ![Run Tests](https://github.com/fatrybl/ModuSLAM/workflows/Run%20Tests/badge.svg)
 
-This is the first version of Factor Graph-based localization and mapping system
+Architecture of the system
 ![alt text](/docs/diagrams/Pipeline/pipeline.png?raw=true "Pipeline Scheme")
 
-Main roles of managers
-![alt text](/docs/diagrams/Pipeline/managers.png?raw=true "Managers")
+Demo of factor graph compression method
+![alt text](/docs/compression_demo.png?raw=true "Managers")
