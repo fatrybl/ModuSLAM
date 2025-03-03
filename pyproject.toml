@@ -1,0 +1,83 @@
+[tool.poetry]
+name = "moduslam"
+version = "0.1.0"
+description = "Modular framework for simultaneous localization and mapping."
+authors = ["Mark Griguletskii <fatrybl@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+hydra-core = "*"
+pillow = "*"
+plum-dispatch = "*"
+numpy = "*"
+psutil = "*"
+kiss-icp = "*"
+graphviz = "*"
+colorlog = "*"
+addict = "*"
+tqdm = "*"
+pyquaternion = "*"
+matplotlib = "*"
+pandas = "*"
+pyyaml = "*"
+scikit-learn = "*"
+opencv-python = "*"
+transformers = "*"
+torch = "*"
+torch-ransac3d = "*"
+open3d = "*"
+plotly = "*"
+laspy = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+mypy = "*"
+black = "*"
+flake8 = "*"
+sphinx = "*"
+pre-commit = "*"
+types-setuptools = "*"
+sphinx-rtd-theme = "*"
+docformatter = "*"
+isort = "*"
+doc8 = "*"
+types-pillow = "*"
+types-psutil = "*"
+polyscope = "*"
+
+[tool.poetry.group.experiments.dependencies]
+moviepy = { git = "https://github.com/Zulko/moviepy.git" }
+evo = "*"
+imageio = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+
+[tool.docformatter]
+black = true
+in-place = true
+style = "google"
+recursive = true
+
+[tool.doc8]
+max-line-length = 100
+paths = ["docs"]
+ignore = ["D001"]
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+follow_imports = "normal"
+ignore_missing_imports = true

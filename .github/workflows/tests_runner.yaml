@@ -1,0 +1,35 @@
+name: Run Tests
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Install pip dependencies
+        run: |
+          poetry run pip install -r .github/requirements.txt
+
+      - name: Set Test Data Directory
+        run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: |
+          poetry run pytest src/tests -k "not bridge"
+  #          Skip test_combined_imu_odometry until gtsam 4.3 is released.

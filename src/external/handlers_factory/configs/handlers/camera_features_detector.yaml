@@ -1,0 +1,4 @@
+defaults:
+  - /base_camera_features_detector@_here_
+
+noise_variance: [ 1, 1 ]
