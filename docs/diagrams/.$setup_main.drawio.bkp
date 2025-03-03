@@ -1,0 +1,253 @@
+<mxfile host="Electron" modified="2023-04-14T15:13:35.580Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="vMZQ6JTtRyAJihF389Uf" version="21.1.2" type="device">
+  <diagram name="Page-1" id="5f0bae14-7c28-e335-631c-24af17079c00">
+    <mxGraphModel dx="2856" dy="1864" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="39150e848f15840c-1" value="Setup Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="-1280" y="-1140" width="440" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="39150e848f15840c-3" value="Main Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
+          <mxGeometry x="-1630" y="-1140" width="110" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="39150e848f15840c-4" value="«interface»&lt;br&gt;&lt;b&gt;Communication&lt;/b&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="1" vertex="1">
+          <mxGeometry x="-1450" y="-1090" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="39150e848f15840c-10" value="Abstract&lt;br&gt;Config Parser" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-980" y="-1090" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dUrjKeg1zeAPbJrwFZfT-1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br/&gt;&lt;b&gt;Interface&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ field1: Type&lt;br/&gt;+ field2: Type&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ method1(Type): Type&lt;br/&gt;+ method2(Type, Type): Type&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="-770" y="-1140" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-5" value="Frontend&lt;br&gt;Params &lt;br&gt;Collector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1263" y="-1010" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-6" value="Backend&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Params&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Collector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1263" y="-1090" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-7" value="Data Manager&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Params&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Collector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1120" y="-1090" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-8" value="Map Manager&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Params&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Collector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1120" y="-1010" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-15" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=110;exitDy=0;exitPerimeter=0;entryX=0.555;entryY=1.001;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="39150e848f15840c-3" target="39150e848f15840c-1">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="-1270" y="-760" as="sourcePoint" />
+            <mxPoint x="-1280" y="-1035" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-20" value="Initializer" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-1100" width="80" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-21" value="Params Collector" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-1053.75" width="80" height="47.5" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-23" value="Params&lt;br&gt;Setter" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-993.75" width="80" height="47.5" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-24" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Parse configs and grab params&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Send params to Main Manager&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Send logs&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1280" y="-930" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-53" value="Data Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="-710" width="460" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-54" value="Main Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="-676.25" width="170" height="126.25" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-55" value="«interface»&lt;br&gt;&lt;b&gt;Communication&lt;/b&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-1330" y="-676.25" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-56" value="Data File&lt;br&gt;Manager" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="-670" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-58" value="Raw Data Filter" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="-590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-59" value="RAM Analyzer" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="-670" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-60" value="Synchronizer" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="-670" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-61" value="Batches Creator" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="-590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-62" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=65;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=100;entryDy=460;entryPerimeter=0;" edge="1" parent="1" source="s7-B_7x2W1H-S5CJYKVV-54" target="s7-B_7x2W1H-S5CJYKVV-53">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="-1280" y="-300" as="sourcePoint" />
+            <mxPoint x="-1110" y="-570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-63" value="Data Batch collector" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-632.5" width="130" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-66" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Check if data available&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Analyze RAM&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Read multiple data files with different extensions&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;4) Filter&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;5) Split data to batches&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;6) Synchronize&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;7) Send batches to Main&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1117" y="-500" width="290" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-67" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Init all systems&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Get params from Setup Manager&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Compose &amp;amp; Create param vector for every system&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;4) Init systems with param vectors if requirements are satisfied&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;5) Get logs&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="-880" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-68" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Send command to make batches&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Get Batches&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Get logs&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="-530" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-70" value="Frontend Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="-270" width="610" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-71" value="Main Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="-236.25" width="250" height="166.25" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-72" value="«interface»&lt;br&gt;&lt;b&gt;Communication&lt;/b&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-1290" y="-230" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-73" value="Loop detector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="-230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-74" value="Anomalies&lt;br&gt;&amp;nbsp;detector" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="-150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-75" value="Sensor Data&lt;br&gt;&amp;nbsp;Processing" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="-230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-76" value="Graph &amp;amp;&lt;br&gt;Measurements&amp;nbsp;&lt;br&gt;associator" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="-150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-77" value="Graph &amp;amp; Factors&lt;br&gt;manager" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="-150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-78" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=65;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=100;entryDy=610;entryPerimeter=0;" edge="1" parent="1" source="s7-B_7x2W1H-S5CJYKVV-71" target="s7-B_7x2W1H-S5CJYKVV-70">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="-1280" y="140" as="sourcePoint" />
+            <mxPoint x="-1110" y="-170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-79" value="Data Batch transmitter" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-192.5" width="150" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-80" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Process sensors measurements&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Form &amp;amp; send factor graph&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Detect and filter Anomalies&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;4) Dectect Loops&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;5) Sparcify/Marginalize graph&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;6) Associate graph &amp;amp; measurements&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="-60" width="227" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-81" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Send data batch to Frontend&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Get factor graph from Frontend&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Get associated graph with measuremetns&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;4) Get logs&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="-60" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-82" value="Debug Info&lt;br&gt;Saver" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="-230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-83" value="" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="-590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-84" value="" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-980" y="-1010" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-85" value="Factor graph collector" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-150" width="150" height="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-86" value="Backend Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="150" width="330" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-87" value="Main Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="150" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-88" value="«interface»&lt;br&gt;&lt;b&gt;Communication&lt;/b&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-1290" y="190" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-91" value="Solver Manager" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-92" value="" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="185" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-94" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=98.125;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=100;entryDy=330;entryPerimeter=0;" edge="1" parent="1" source="s7-B_7x2W1H-S5CJYKVV-87" target="s7-B_7x2W1H-S5CJYKVV-86">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="-1280" y="560" as="sourcePoint" />
+            <mxPoint x="-1110" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-95" value="Graph transmitter-reciever" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="193.75" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-96" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Solve &amp;amp; update graph&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Compute debug metrics&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="366.25" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-97" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Send/Get graph &amp;amp; factors to/from solver&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Get metrics from solver&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;3) Get logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="342.5" width="250" height="53.75" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-98" value="Debug&lt;br&gt;Metrics&lt;br&gt;Calculator" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-101" value="Metrics collector" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="240" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-102" value="Logger" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="280" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-103" value="Map Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="500" width="330" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-104" value="Main Manager" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="500" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-105" value="«interface»&lt;br&gt;&lt;b&gt;Communication&lt;/b&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-1290" y="540" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-106" value="Full Map Saver" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-107" value="Map converter" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-108" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=98.125;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=100;entryDy=330;entryPerimeter=0;" edge="1" parent="1" source="s7-B_7x2W1H-S5CJYKVV-104" target="s7-B_7x2W1H-S5CJYKVV-103">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="-1280" y="910" as="sourcePoint" />
+            <mxPoint x="-1110" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-109" value="High-level graph transmitter" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="540" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-110" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Main responsibilities:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Save full map&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Save graph only&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;3) Convert map&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1110" y="700" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-111" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Main responsibilities:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1) Transmit graph and&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;associated measurements&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;2) Log info&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1630" y="650" width="210" height="73.75" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-112" value="Graph saver" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1090" y="620" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-116" value="" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="620" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-117" value="Logger" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="600" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-118" value="" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-650" y="-230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-119" value="&lt;div style=&quot;text-align: justify;&quot;&gt;1) Init system Manager based on params&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;2) Save logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-800" y="-480" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-120" value="&lt;div style=&quot;text-align: justify;&quot;&gt;1) Init system Manager based on params&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;2) Save logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-845" y="-50" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-122" value="&lt;div style=&quot;text-align: justify;&quot;&gt;1) Init system Manager based on params&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;2) Save logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-940" y="356.25" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-123" value="&lt;div style=&quot;text-align: justify;&quot;&gt;1) Init system Manager based on params&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;2) Save logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-950" y="706.25" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-124" value="&lt;div style=&quot;text-align: justify;&quot;&gt;1) Init system Manager based on params&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;2) Save logs&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1070" y="-930" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-125" value="Logger" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-110" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-127" value="Logger" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-590" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s7-B_7x2W1H-S5CJYKVV-128" value="Logger" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1620" y="-930" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

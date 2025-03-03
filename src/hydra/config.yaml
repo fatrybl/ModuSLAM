@@ -1,0 +1,14 @@
+defaults:
+  - _self_ # default hydra config to override job_logging and hydra_logging
+  - structured_schema_config # base Structured Schema Validation config
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: none
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+logger:
+  level: "DEBUG"
+  logs_directory: "logs"

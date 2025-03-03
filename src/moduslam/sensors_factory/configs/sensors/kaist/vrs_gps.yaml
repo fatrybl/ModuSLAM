@@ -1,0 +1,10 @@
+defaults:
+  - /base_vrs_gps@vrs
+
+vrs:
+  name: "vrs"
+  type_name: "VrsGps"
+  tf_base_sensor: [ [ 1.0, 0.0 ,0.0, 0.0 ],
+                    [ 0.0, 1.0, 0.0, 0.0 ],
+                    [ 0.0, 0.0, 1.0, 1.93 ],
+                    [ 0.0, 0.0, 0.0, 1.0 ] ]

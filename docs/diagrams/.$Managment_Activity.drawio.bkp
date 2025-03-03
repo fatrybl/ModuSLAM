@@ -1,0 +1,58 @@
+<mxfile host="Electron" modified="2023-04-13T09:51:42.606Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="bbI_tj6X7ozKR90Gy5Ny" version="21.1.2" type="device">
+  <diagram name="Page-1" id="YDc-z4v7WRkN0deBonVe">
+    <mxGraphModel dx="893" dy="517" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5lSR19IxtUanClILFoR_-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="BA0Zyk_CsK59yM79TpyX-1" target="5lSR19IxtUanClILFoR_-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BA0Zyk_CsK59yM79TpyX-1" value="Setup Manager" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BA0Zyk_CsK59yM79TpyX-2" value="&lt;ol style=&quot;font-size: 10px;&quot;&gt;&lt;li&gt;Sensors to use&lt;/li&gt;&lt;li&gt;Sensor params&lt;/li&gt;&lt;li&gt;Data params&lt;/li&gt;&lt;li&gt;Factors to use&lt;/li&gt;&lt;li&gt;Anomaly detector params&lt;/li&gt;&lt;li&gt;Map params&lt;/li&gt;&lt;li&gt;Solver params&lt;/li&gt;&lt;li&gt;Output params&lt;/li&gt;&lt;li&gt;Factor Graph params&lt;/li&gt;&lt;li&gt;Init params&lt;/li&gt;&lt;li&gt;smth else&lt;/li&gt;&lt;/ol&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" parent="1" vertex="1">
+          <mxGeometry x="120" y="90" width="190" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="BA0Zyk_CsK59yM79TpyX-3" target="BA0Zyk_CsK59yM79TpyX-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BA0Zyk_CsK59yM79TpyX-3" value="Main Manager" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5lSR19IxtUanClILFoR_-2" target="5lSR19IxtUanClILFoR_-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-2" value="Data Manager" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5lSR19IxtUanClILFoR_-4" target="5lSR19IxtUanClILFoR_-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-4" value="Frontend Manager" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5lSR19IxtUanClILFoR_-6" target="5lSR19IxtUanClILFoR_-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-6" value="Backend Manager" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-11" value="Map Manager" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="20" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-13" value="&lt;ol style=&quot;font-size: 10px;&quot;&gt;&lt;li&gt;Get info about available RAM&lt;/li&gt;&lt;li&gt;Get info about data file&lt;/li&gt;&lt;li&gt;Split data to batches&lt;/li&gt;&lt;li&gt;Remove simple outliers&lt;/li&gt;&lt;li&gt;Sync data in batches&lt;/li&gt;&lt;li&gt;Care about left data&lt;/li&gt;&lt;/ol&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="280" y="60" width="160" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-14" value="&lt;ol style=&quot;font-size: 10px;&quot;&gt;&lt;li&gt;Init Graph&lt;/li&gt;&lt;li&gt;Get synced batch&lt;/li&gt;&lt;li&gt;Form factors from measurements&lt;/li&gt;&lt;li&gt;Care about loops&lt;/li&gt;&lt;li&gt;Care about anomalies&lt;/li&gt;&lt;/ol&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="425" y="50" width="160" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-15" value="&lt;ol style=&quot;font-size: 10px;&quot;&gt;&lt;li&gt;Init solver&lt;/li&gt;&lt;li&gt;Solve system&lt;/li&gt;&lt;li&gt;Update Graph&lt;/li&gt;&lt;li&gt;Compute debug metrics&lt;/li&gt;&lt;/ol&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="585" y="40" width="160" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="5lSR19IxtUanClILFoR_-16" value="&lt;ol style=&quot;font-size: 10px;&quot;&gt;&lt;li&gt;Save/dump map&lt;/li&gt;&lt;li&gt;Change map&lt;/li&gt;&lt;li&gt;smthing else&lt;/li&gt;&lt;/ol&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="740" y="40" width="160" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

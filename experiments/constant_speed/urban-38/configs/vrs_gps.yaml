@@ -1,0 +1,8 @@
+defaults:
+  - /base_vrs_gps_preprocessor@_here_
+
+sensor_name: "vrs"
+
+fix_statuses: [ 4 ]
+
+first_position: [ 331901.047740262351,4141023.9548842981458,49.893999999999998352 ]
