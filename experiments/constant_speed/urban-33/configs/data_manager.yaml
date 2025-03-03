@@ -1,0 +1,14 @@
+defaults:
+  - /base_factory
+  - dataset: kaist_urban
+  - _self_
+
+regime:
+  name: "TimeLimit"
+  # Urban-33
+  start: 1544681931133362188
+  stop: 1544681935165024000
+
+batch_memory_percent: 90.0
+
+# 5 secs movement

@@ -1,0 +1,16 @@
+defaults:
+  - /base_factory
+  - dataset: kaist_urban
+  - _self_
+
+regime:
+  name: "TimeLimit"
+  #  stop: 1544581175185121000 full demo map
+  #  start: 1544581167556220000
+  #  stop: 1544581168024224000
+  start: 1544581126870152013
+  stop: 1544581127305017000
+
+
+
+batch_memory_percent: 95.0

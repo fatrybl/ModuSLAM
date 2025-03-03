@@ -1,0 +1,6 @@
+defaults:
+  - /base_handlers_factory
+  - handlers/scan_matcher1@scan_matcher1
+  - handlers/scan_matcher2@scan_matcher2
+  - handlers/imu_preprocessor@imu_preprocessor
+  - handlers/vrs_gps@vrs_preprocessor
