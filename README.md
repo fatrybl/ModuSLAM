@@ -6,10 +6,10 @@ ModuSLAM - A modular framework for Factor Graph-based Simultaneous Localization 
 compression and synchronization algorithm.
 
 Demo of factor graph compression method
-![alt text](/docs/compression_demo1.png?raw=true "Managers")
+![alt text](/docs/images/compression_demo1.png?raw=true "Managers")
 
 Comparable map quality with the base scenario
-![alt text](/docs/compression_demo2.png?raw=true "Managers")
+![alt text](/docs/images/compression_demo2.png?raw=true "Managers")
 
 If you use this repository in your research, please cite it as follows:
 
