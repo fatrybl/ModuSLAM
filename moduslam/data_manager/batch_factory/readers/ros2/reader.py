@@ -30,21 +30,27 @@ class Ros2DataReader(DataReader):
         """
         super().__init__(regime, dataset_params)
 
+        logger.debug("Ros2DataReader initialized")  # !!!!!!!!!!!!!!!!!!!!!!!!!!2
+
         self._dataset_directory = dataset_params.directory
         check_directory(self._dataset_directory)
 
         self.topics_table = dataset_params.topics_table
 
-        # Initialize iterator
-        self._sensor_iterator = read_rosbag(self._dataset_directory, self.topics_table)
-        if self._sensor_iterator is None:
-            raise ValueError("Error: read_rosbag() returned None!")
-
-        # Adjust iterator if using a time range
         if isinstance(self._regime, TimeLimit):
             start, stop = to_float(self._regime.start), to_float(self._regime.stop)
-            self._sensor_iterator = read_rosbag(self._dataset_directory, self.topics_table, mode='time_range',
-                                                start_time=start, end_time=stop)
+            mode = "time_range"
+        else:
+            start, stop = None, None
+            mode = "stream"
+
+        self._sensor_iterator = read_rosbag(
+            self._dataset_directory, self.topics_table,
+            mode=mode, start_time=start, end_time=stop
+        )
+
+        if self._sensor_iterator is None:
+            raise ValueError("Error: read_rosbag() returned None!")
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -98,4 +104,3 @@ class Ros2DataReader(DataReader):
         Currently not implemented.
         """
         pass
-
