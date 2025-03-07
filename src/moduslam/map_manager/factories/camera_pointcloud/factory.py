@@ -11,13 +11,13 @@ from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.map_factories.camera_pointcloud.depth_estimator import (
+from src.moduslam.map_manager.factories.camera_pointcloud.depth_estimator import (
     DepthEstimator,
 )
-from src.moduslam.map_manager.map_factories.camera_pointcloud.utils import (
+from src.moduslam.map_manager.factories.camera_pointcloud.utils import (
     pointcloud_from_image,
 )
-from src.moduslam.map_manager.map_factories.utils import (
+from src.moduslam.map_manager.factories.utils import (
     convert_pointcloud,
     transform_pointcloud,
 )

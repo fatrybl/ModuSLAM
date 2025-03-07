@@ -4,7 +4,7 @@ from pathlib import Path
 import open3d as o3d
 
 from src.logger.logging_config import map_manager
-from src.moduslam.map_manager.map_loaders.lidar_pointcloud.config import (
+from src.moduslam.map_manager.loaders.lidar_pointcloud.config import (
     LidarMapLoaderConfig,
 )
 from src.moduslam.map_manager.maps.pointcloud import PointCloudMap

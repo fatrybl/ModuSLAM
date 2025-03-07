@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "moduslam"
 version = "0.1.0"
-description = "Modular framework for simultaneous localization and mapping."
+description = "A modular framework for simultaneous localization and mapping."
 authors = ["Mark Griguletskii <fatrybl@yandex.ru>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-hydra-core = "*"
+hydra-core = { git = "https://github.com/facebookresearch/hydra" }
 pillow = "*"
 plum-dispatch = "*"
 numpy = "*"
