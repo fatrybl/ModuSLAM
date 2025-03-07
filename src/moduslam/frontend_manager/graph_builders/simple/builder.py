@@ -12,7 +12,7 @@ from src.moduslam.frontend_manager.graph_builders.simple.graph_factory import (
     Factory as GraphFactory,
 )
 from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
+from src.moduslam.frontend_manager.storage_analyzers.analyzers import (
     DoublePoseOdometry,
 )
 from src.moduslam.frontend_manager.utils import fill_storage
@@ -51,7 +51,6 @@ class Builder:
         total_shift = 0
 
         while not data_batch.empty:
-
             fill_storage(storage, data_batch, self._handlers, self._analyzer)
 
             data = storage.data()

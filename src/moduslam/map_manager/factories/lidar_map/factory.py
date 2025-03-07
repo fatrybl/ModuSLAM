@@ -9,15 +9,15 @@ from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.map_factories.lidar_map.config import (
+from src.moduslam.map_manager.factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
-from src.moduslam.map_manager.map_factories.lidar_map.utils import (
+from src.moduslam.map_manager.factories.lidar_map.utils import (
     create_point_cloud_from_element,
     create_pose_edges_table,
     map_elements2vertices,
 )
-from src.moduslam.map_manager.map_factories.utils import fill_elements
+from src.moduslam.map_manager.factories.utils import fill_elements
 from src.moduslam.map_manager.maps.pointcloud import PointCloudMap
 from src.moduslam.map_manager.protocols import MapFactory
 

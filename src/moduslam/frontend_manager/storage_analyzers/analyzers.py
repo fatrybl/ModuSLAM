@@ -1,7 +1,7 @@
 from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
 from src.measurement_storage.measurements.position import Position
 from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.frontend_manager.measurement_storage_analyzers.base import (
+from src.moduslam.frontend_manager.storage_analyzers.protocol import (
     StorageAnalyzer,
 )
 

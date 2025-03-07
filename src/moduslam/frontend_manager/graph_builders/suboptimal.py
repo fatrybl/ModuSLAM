@@ -7,7 +7,7 @@ from src.logger.logging_config import frontend_manager
 from src.measurement_storage.storage import MeasurementStorage
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
 from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.measurement_storage_analyzers.analyzers import (
+from src.moduslam.frontend_manager.storage_analyzers.analyzers import (
     DoublePoseOdometry,
 )
 from src.moduslam.frontend_manager.utils import fill_storage
