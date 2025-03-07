@@ -10,15 +10,15 @@ from src.moduslam.data_manager.batch_factory.config_factory import (
 )
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.map_manager.graph_saver import GraphSaver
-from src.moduslam.map_manager.map_factories.lidar_map.config_factory import (
+from src.moduslam.map_manager.factories.lidar_map.config_factory import (
     get_config as get_mf_config,
 )
-from src.moduslam.map_manager.map_factories.lidar_map.factory import LidarMapFactory
-from src.moduslam.map_manager.map_loaders.lidar_pointcloud.config import (
+from src.moduslam.map_manager.factories.lidar_map.factory import LidarMapFactory
+from src.moduslam.map_manager.graph_saver import GraphSaver
+from src.moduslam.map_manager.loaders.lidar_pointcloud.config import (
     LidarMapLoaderConfig,
 )
-from src.moduslam.map_manager.map_loaders.lidar_pointcloud.lidar_map import (
+from src.moduslam.map_manager.loaders.lidar_pointcloud.lidar_map import (
     LidarMapLoader,
 )
 from src.moduslam.map_manager.trajectory import get_trajectory, save_trajectory_to_txt

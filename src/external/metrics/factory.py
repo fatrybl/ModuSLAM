@@ -9,7 +9,7 @@ from src.moduslam.data_manager.batch_factory.config_factory import (
 )
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.graph import GraphCandidate
-from src.moduslam.map_manager.map_factories.lidar_map.config_factory import (
+from src.moduslam.map_manager.factories.lidar_map.config_factory import (
     get_config as get_pcd_config,
 )
 
