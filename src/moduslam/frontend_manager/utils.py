@@ -20,9 +20,7 @@ from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import
 )
 from src.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.moduslam.frontend_manager.measurement_storage_analyzers.base import (
-    StorageAnalyzer,
-)
+from src.moduslam.frontend_manager.storage_analyzers.protocol import StorageAnalyzer
 from src.utils.exceptions import NotEnoughMeasurementsError
 
 
