@@ -12,10 +12,10 @@ from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.frontend_manager.main_graph.edges.base import Edge
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.map_factories.lidar_map.config import (
+from src.moduslam.map_manager.factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
-from src.moduslam.map_manager.map_factories.utils import filter_array
+from src.moduslam.map_manager.factories.utils import filter_array
 from src.moduslam.sensors_factory.sensors import Lidar3D
 
 logger = logging.getLogger(map_manager)

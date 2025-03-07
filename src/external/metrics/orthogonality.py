@@ -19,15 +19,15 @@ from src.moduslam.frontend_manager.main_graph.edges.base import Edge
 from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
 from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.map_factories.lidar_map.config import (
+from src.moduslam.map_manager.factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
-from src.moduslam.map_manager.map_factories.lidar_map.utils import (
+from src.moduslam.map_manager.factories.lidar_map.utils import (
     create_point_cloud_from_element,
     create_pose_edges_table,
     map_elements2vertices,
 )
-from src.moduslam.map_manager.map_factories.utils import fill_elements
+from src.moduslam.map_manager.factories.utils import fill_elements
 from src.utils.exceptions import ExternalModuleException
 from src.utils.ordered_set import OrderedSet
 
