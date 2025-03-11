@@ -38,6 +38,10 @@ class Ros2DataReader(DataReader):
         self.topics_table = dataset_params.topics_table
 
         if isinstance(self._regime, TimeLimit):
+            if regime.start < 0:
+                raise ValueError(f"timestamp start={regime.start} can not be negative")
+            if regime.start > regime.stop:
+                raise ValueError(f"timestamp start={regime.start} can not be greater than stop={regime.stop}")
             start, stop = to_float(self._regime.start), to_float(self._regime.stop)
             mode = "time_range"
         else:

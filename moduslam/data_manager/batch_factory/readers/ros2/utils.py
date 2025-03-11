@@ -142,9 +142,18 @@ def read_rosbag(bag_path, topics_table: dict[str, str], mode="stream", start_tim
     else:
         raise ValueError("Invalid mode")
 
+    # merged_iterator = MergedSensorIterator(sensor_iterators)
+    # print("\nMerged and sorted sensor messages:")
+    # for timestamp, sensor, rawdata in merged_iterator:
+    #     print(f"Timestamp: {timestamp}, Sensor: {sensor}")
+    #
+    # return merged_iterator  # Returns an iterator over all sensor types
+
     merged_iterator = MergedSensorIterator(sensor_iterators)
+    messages_list = list(merged_iterator)  # Преобразуем итератор в список
+
     print("\nMerged and sorted sensor messages:")
-    for timestamp, sensor, rawdata in merged_iterator:
+    for timestamp, sensor, rawdata in messages_list:
         print(f"Timestamp: {timestamp}, Sensor: {sensor}")
 
-    return merged_iterator  # Returns an iterator over all sensor types
+    return merged_iterator  # messages_list  Теперь возвращаем список

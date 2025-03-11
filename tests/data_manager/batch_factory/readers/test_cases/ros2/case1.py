@@ -9,6 +9,7 @@ from tests.conftest import ros2_dataset_dir
 from tests_data_generators.ros2_dataset.data import elements
 from tests_data_generators.utils import generate_sensors_factory_config
 
+
 # TODO: Optimize cases for Ros2 because the test is taking too long to run
 el1 = elements[0]
 el2 = elements[1]
@@ -64,6 +65,13 @@ el51 = elements[50]
 el52 = elements[51]
 el53 = elements[52]
 el54 = elements[53]
+
+# Debugging: загружены ли элементы из rosbag
+print("Debug: Elements list:", elements)
+print("Debug: Length of elements:", len(elements))
+
+if not elements:
+    raise ValueError("Error: elements list is empty! Check read_rosbag function or rosbag path.")
 
 timestamp1 = 1698927496694033807
 timestamp2 = 1698927496739239954  # 20 sensor readings

@@ -93,21 +93,6 @@ def test_reader_with_valid_short_time_range():
     reader = Ros2DataReader(regime=TimeLimit(0, 5000), dataset_params=dataset_cfg)
     assert reader is not None
 
-# def test_ros2_reader_9():
-#
-#     dataset_cfg = Ros2Config(directory=ros2_dataset_dir, sensors_table={"invalid_sensor": "sensor_info"})
-#     reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
-#     # try:
-#     #     reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
-#     #     assert "invalid_sensor" not in reader._sensors, "Unexpected sensor found in the factory."
-#     # except ValueError as e:
-#     #     assert "not found in factory" in str(e), f"Unexpected error message: {e}"
-
-# #TODO: check list of sensors in factory
-# def test_reader_with_invalid_sensor_not_in_factory():
-#     dataset_cfg = Ros2Config(directory=ros2_dataset_dir, sensors_table={"invalid_sensor": "sensor_info"})
-#     reader = Ros2DataReader(regime=Stream(), dataset_params=dataset_cfg)
-#     assert "invalid_sensor" not in reader._sensors, "Unexpected sensor found in the factory."
 
 
 
