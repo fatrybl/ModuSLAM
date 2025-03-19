@@ -86,13 +86,10 @@ sensors_table = {
 elements_iterator = read_rosbag(bag_path=rosbag_path, topics_table=sensors_table, mode="stream")
 
 # Создаем список элементов
-elements_list = [elem for elem in elements_iterator]  # Создаем список сразу
-
+elements = list(read_rosbag(bag_path=rosbag_path, topics_table=sensors_table, mode="stream"))
 print("Debug: Преобразование итератора в список прошло успешно.")
-print("Debug: Длина elements:", len(elements_list))
+print("Debug: Длина elements:", len(elements))
 
-if not elements_list:
-    raise ValueError("Error: elements list is empty! Check read_rosbag function or rosbag path.")
 
 
 

@@ -18,12 +18,12 @@ batch_factory:
       lidar_center: "vlp32c"
 
     topics_table: # Mapping of sensor names to their data types
-      stereo_camera_left: "/left/image_raw"
-      stereo_camera_right: "/right/image_raw"
+#      stereo_camera_left: "/left/image_raw"
+#      stereo_camera_right: "/right/image_raw"
       imu: "/xsens/imu/data"
-      lidar_left: "/vlp16l/velodyne_points"
-      lidar_right: "/vlp16r/velodyne_points"
-      lidar_center: "/vlp32c/velodyne_points"
+#      lidar_left: "/vlp16l/velodyne_points"
+#      lidar_right: "/vlp16r/velodyne_points"
+#      lidar_center: "/vlp32c/velodyne_points"
 
 
 #    sensors_table:

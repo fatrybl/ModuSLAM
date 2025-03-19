@@ -28,13 +28,21 @@ class MergedSensorIterator:
     def __init__(self, sensor_iterators):
         self.messages = []
 
-        # Collect all messages into one list
+        # Собираем все сообщения от каждого сенсора в общий список
         for sensor, iterator in sensor_iterators.items():
             for timestamp, rawdata in iterator.messages:
                 self.messages.append((timestamp, sensor, rawdata))
 
+        # Сортируем список по временным меткам
         self.messages.sort(key=lambda x: x[0])
-        self.index = 0  # Index for iteration
+
+        # После сортировки назначаем глобальный индекс
+        self.messages = [
+            (idx, timestamp, sensor, rawdata)
+            for idx, (timestamp, sensor, rawdata) in enumerate(self.messages)
+        ]
+
+        self.index = 0
 
     def __iter__(self):
         return self
@@ -42,9 +50,10 @@ class MergedSensorIterator:
     def __next__(self):
         if self.index >= len(self.messages):
             raise StopIteration
-        message = self.messages[self.index]
+        result = self.messages[self.index]
         self.index += 1
-        return message  # (timestamp, sensor, rawdata)
+        return result  # (global_index, timestamp, sensor, rawdata)
+
 
 class TimeRangeSensorIterator:
     """
@@ -112,24 +121,27 @@ def read_rosbag(bag_path, topics_table: dict[str, str], mode="stream", start_tim
     Returns:
         MergedSensorIterator: An iterator over all sensor messages.
     """
-    sensor_data = {}  # key is sensor name, value is message list
+    sensor_data = {}  # ключ - имя сенсора, значение - список сообщений
     valid_topics = set(topics_table.values())
 
     with Reader(bag_path) as reader:
         for connection, timestamp, rawdata in reader.messages():
-            sensor_name = connection.topic  # Define the sensor name
-            if sensor_name in valid_topics:
-                if sensor_name not in sensor_data:
-                    sensor_data[sensor_name] = []
-                sensor_data[sensor_name].append((timestamp, rawdata))
+            # Ищем имя сенсора (например, imu) по имени топика (/xsens/imu/data)
+            sensor_name = next(
+                (sensor for sensor, topic in topics_table.items() if topic == connection.topic),
+                None
+            )
 
-    # For each sensor we create our own iterator
+            if sensor_name is None:
+                continue
+
+            if sensor_name not in sensor_data:
+                sensor_data[sensor_name] = []
+            sensor_data[sensor_name].append((timestamp, rawdata))
+
     if mode == "stream":
         sensor_iterators = {}
         for sensor, messages in sensor_data.items():
-            print(f"Creating iterator for sensor: {sensor} with {len(messages)} messages")
-            for i, msg in enumerate(messages, start=1):  # numeration
-                print(f"  Message {i}: Timestamp: {msg[0]}")
             sensor_iterators[sensor] = SensorIterator(messages)
 
     elif mode == "time_range":
@@ -142,18 +154,8 @@ def read_rosbag(bag_path, topics_table: dict[str, str], mode="stream", start_tim
     else:
         raise ValueError("Invalid mode")
 
-    # merged_iterator = MergedSensorIterator(sensor_iterators)
-    # print("\nMerged and sorted sensor messages:")
-    # for timestamp, sensor, rawdata in merged_iterator:
-    #     print(f"Timestamp: {timestamp}, Sensor: {sensor}")
-    #
-    # return merged_iterator  # Returns an iterator over all sensor types
-
+    # Создаём общий итератор со всеми сообщениями
     merged_iterator = MergedSensorIterator(sensor_iterators)
-    messages_list = list(merged_iterator)  # Преобразуем итератор в список
 
-    print("\nMerged and sorted sensor messages:")
-    for timestamp, sensor, rawdata in messages_list:
-        print(f"Timestamp: {timestamp}, Sensor: {sensor}")
+    return merged_iterator
 
-    return merged_iterator  # messages_list  Теперь возвращаем список

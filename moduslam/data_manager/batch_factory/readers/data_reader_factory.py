@@ -55,6 +55,7 @@ class DataReaderFactory:
             case DataReaders.ros2_reader:
                 regime = Factory.ros2_regime(regime_config)
                 dataset_config = cast(Ros2Config, dataset_config)
+                logger.debug("Creating Ros2DataReader111111111111111111111111111111111111111111111111111111111...")
                 return Ros2DataReader(regime, dataset_config)
 
             case _:
