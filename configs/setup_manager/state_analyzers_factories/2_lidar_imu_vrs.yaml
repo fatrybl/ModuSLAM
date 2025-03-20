@@ -1,8 +1,0 @@
-package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
-
-analyzers:
-
-  lidars_imu_gps_state_analyzer:
-    name: "lidars_imu_gps_state_analyzer"
-    type_name: "LidarsImuGpsAnalyzer"
-    module_name: ".lidars_imu_gps"

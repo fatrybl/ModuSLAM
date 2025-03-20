@@ -1,8 +1,0 @@
-package_name: "moduslam.frontend_manager.graph_builder.state_analyzers"
-
-analyzers:
-
-  lidar_imu_state_analyzer:
-    name: "lidar_imu_state_analyzer"
-    type_name: "LidarInertialOdometryStateAnalyzer"
-    module_name: ".lidar_imu_odometry"

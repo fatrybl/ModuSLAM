@@ -1,5 +1,0 @@
-defaults:
-  - /sensors/base_lidar3D@vlp32c
-
-velodyne_left:
-  name: "vlp32c"

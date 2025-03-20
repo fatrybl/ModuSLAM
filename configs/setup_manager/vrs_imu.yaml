@@ -1,6 +1,0 @@
-defaults:
-  - /sensors/imu@sensors_factory.sensors
-  - /sensors/vrs_gps@sensors_factory.sensors
-  - handlers_factories/vrs_imu@handlers_factory
-  - edge_factories_initializers/vrs_imu@edge_factories_initializer
-  - state_analyzers_factories/vrs_imu@state_analyzers_factory

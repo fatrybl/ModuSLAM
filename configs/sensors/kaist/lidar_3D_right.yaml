@@ -1,9 +1,0 @@
-defaults:
-  - /sensors/base_lidar3D@velodyne_right
-
-velodyne_right:
-  name: "velodyne_right"
-  tf_base_sensor: [ [ -0.514521, 0.701075, -0.493723, -0.333596 ],
-                    [ -0.492472, -0.712956, -0.499164, -0.373928 ],
-                    [ -0.701954, -0.0136853, 0.712091, 1.94377 ],
-                    [ 0.0, 0.0, 0.0, 1.0 ] ]

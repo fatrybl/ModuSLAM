@@ -1,4 +1,0 @@
-# @package _global_
-defaults:
-  - override /setup_manager: 2_lidar_vrs
-  - override /frontend_manager: 2_lidar_vrs

@@ -1,5 +1,0 @@
-# @package _global_
-defaults:
-  - override /data_manager: tum_vie
-  - override /setup_manager: stereo_imu
-  - override /frontend_manager: stereo_imu
