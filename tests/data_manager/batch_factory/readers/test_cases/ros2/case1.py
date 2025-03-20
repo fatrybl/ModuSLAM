@@ -20,26 +20,14 @@ print("Debug: Path exists?", rosbag_path.exists())
 sensors_table = {
     "left": "/left/image_raw",
     "right": "/right/image_raw",
-    "xsens": "/xsens/imu/data",
+    "imu": "/xsens/imu/data",
     "vlp16l": "/vlp16l/velodyne_points",
     "vlp16r": "/vlp16r/velodyne_points",
     "vlp32c": "/vlp32c/velodyne_points",
 }
 
-# Читаем данные из Rosbag (итератор)
+
 elements_iterator = read_rosbag(bag_path=rosbag_path, topics_table=sensors_table, mode="stream")
-
-# Проверяем, есть ли данные
-try:
-    first_element = next(elements_iterator)  # Берём первый элемент
-    elements = [first_element] + list(elements_iterator)  # Создаём список
-except StopIteration:
-    raise ValueError("Error: elements list is empty! Check read_rosbag function or rosbag path.")
-
-print("Debug: Successfully loaded", len(elements), "elements")
-
-# Извлекаем первые 5 элементов
-el1, el2, el3, el4, el5 = (next(iter(elements)) for _ in range(5))
 
 # Временные метки
 timestamp1 = 1698927496694033807
@@ -81,10 +69,9 @@ timelimit40_60 = TimeLimit(start=timestamp3, stop=timestamp4)
 timelimit60_80 = TimeLimit(start=timestamp4, stop=timestamp5)
 timelimit80_100 = TimeLimit(start=timestamp5, stop=timestamp6)
 
-# Тестовые сценарии
-# valid_stream_scenarios = (
-#     (sensors_factory_config1, dataset_cfg1, stream, Ros2DataReader, elements),
-# )
+valid_stream_scenarios = (
+    (sensors_factory_config1, dataset_cfg1, stream, Ros2DataReader, elements),
+)
 
 valid_timelimit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit20, Ros2DataReader, elements_0_20),
@@ -93,15 +80,15 @@ valid_timelimit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
-# stream_scenarios = (
-#     *valid_stream_scenarios,
-# )
+stream_scenarios = (
+    *valid_stream_scenarios,
+)
 
 time_limit_scenarios = (
     *valid_timelimit_scenarios,
 )
 
 ros2_case1 = (
-
+    *stream_scenarios,
     *time_limit_scenarios,
 )
