@@ -124,6 +124,48 @@ def get_rpe(
     return stats
 
 
+def get_ape(
+    ref: PoseTrajectory3D, est: PoseTrajectory3D, component: metrics.PoseRelation
+) -> dict[str, float]:
+    """Computes Absolute Pose Error.
+
+    Args:
+        ref: reference trajectory
+
+        est: estimated trajectory
+
+        component: component of APE.
+
+    Returns:
+        statistics.
+    """
+    ape_metric = metrics.APE(pose_relation=component)
+    ape_metric.process_data((ref, est))
+    stats = ape_metric.get_all_statistics()
+    return stats
+
+
+def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D):
+    """Plots both estimated and reference trajectories in 3D using evo tools and adds coordinate frames to each pose.
+
+    Args:
+        ref_traj: reference trajectory.
+        est_traj: estimated trajectory.
+    """
+    mode = plot.PlotMode.xyz
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    traj_by_label = {
+        "Reference Trajectory": ref_traj,
+        "Estimated Trajectory": est_traj,
+    }
+    plot.draw_coordinate_axes(ax, ref_traj, plot_mode=mode, marker_scale=0.1)
+    plot.draw_coordinate_axes(ax, est_traj, plot_mode=mode, marker_scale=0.1)
+    plot.trajectories(ax, traj_by_label, mode, plot_start_end_markers=True, title="Trajectories")
+
+    plt.show()
+
+
 ref_file = Path("/media/mark/WD/kaist/urban-26/global_pose.csv")
 
 traj_dir = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/")
@@ -137,14 +179,9 @@ print(len(ref_traj.poses_se3), len(est_traj.poses_se3))
 
 relation = metrics.PoseRelation.rotation_angle_deg
 rpe_stats = get_rpe(ref_traj, est_traj, relation)
+ape_stats = get_ape(ref_traj, est_traj, relation)
 
 for metric, value in rpe_stats.items():
     print(metric, value)
 
-fig = plt.figure()
-traj_by_label = {
-    "estimate": est_traj,
-    "GT": ref_traj,
-}
-plot.trajectories(fig, traj_by_label, plot.PlotMode.xy)
-plt.show()
+plot_trajectories_3d(ref_traj, est_traj)

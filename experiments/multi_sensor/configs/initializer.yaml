@@ -1,0 +1,28 @@
+defaults:
+  - /base_pose@pose1
+  - /base_pose@pose2
+  - /base_linear_velocity@velocity1
+  - /base_linear_velocity@velocity2
+  - _self_
+
+
+#Urban-26
+pose1:
+  timestamp: 1544580839822268000
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 2.8 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
+
+pose2:
+  timestamp: 1544580839833353000
+  measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 2.8 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
+
+velocity1:
+  timestamp: 1544580839822268000
+  measurement: [ 0.0, 0.0, 0.0 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1 ] # x, y, z
+
+velocity2:
+  timestamp: 1544580839833353000
+  measurement: [ 0.0, 0.0, 0.0 ]
+  noise_covariance: [ 1e-1, 1e-1, 1e-1 ] # x, y, z

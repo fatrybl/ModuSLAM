@@ -38,11 +38,11 @@ class MainManager:
 
         self._map_manager.save_trajectory(graph, self._trajectory_file)
         self._map_manager.save_graph(graph)
-        self._map_manager.create_map(graph)
-        self._map_manager.save_map()
+        # self._map_manager.create_map(graph)
+        # self._map_manager.save_map()
 
-        self._map_manager.visualize_map()
-        # self._map_manager.visualize_clusters(graph)
+        # self._map_manager.visualize_map()
+        self._map_manager.visualize_clusters(graph)
 
         logger.info(
             f"num clusters: {len(graph.vertex_storage.clusters)},"

@@ -20,13 +20,13 @@ class TumVieConfig(DatasetConfig):
     url: str = "https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset"
 
     imu_name: str = "imu"
-    stereo_name: str = "stereo"
+    stereo_camera_name: str = "stereo_camera"
 
     csv_files: dict[str, Path] = field(
         metadata={"description": "table of: {<SENSOR_NAME>, <CSV_FILE_PATH>}"},
         default_factory=lambda: {
             TumVieConfig.imu_name: TumPaths.imu_data_file,
-            TumVieConfig.stereo_name: TumPaths.stereo_left_timestamps,
+            TumVieConfig.stereo_camera_name: TumPaths.stereo_left_timestamps,
         },
     )
 

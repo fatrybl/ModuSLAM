@@ -4,7 +4,7 @@ import numpy as np
 import open3d as o3d
 from PIL import Image
 
-from moduslam.map_manager.map_factories.camera_pointcloud.depth_estimator import (
+from src.moduslam.map_manager.factories.camera_pointcloud.depth_estimator import (
     DepthEstimator,
 )
 
@@ -176,7 +176,6 @@ T_lr = np.array(
     ]
 )
 
-
 # Extract rotation and translation from T_lr
 R = T_lr[:3, :3]
 t = T_lr[:3, 3]
@@ -213,10 +212,8 @@ points = depth_to_point_cloud(depth, K_left)
 img_left_rgb = np.stack((img_left_undist,) * 3, axis=-1)
 depth_int = (depth * 1000).astype(np.uint16)
 
-
 color_o3d = o3d.geometry.Image(img_left_rgb)
 depth_o3d = o3d.geometry.Image(depth_int)
-
 
 rgbd_img = o3d.geometry.RGBDImage.create_from_color_and_depth(
     color=color_o3d,

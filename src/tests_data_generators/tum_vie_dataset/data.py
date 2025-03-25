@@ -27,7 +27,7 @@ class Data:
     def __init__(self, dataset_cfg: TumVieConfig):
 
         imu_name = dataset_cfg.imu_name
-        stereo_name = dataset_cfg.stereo_name
+        stereo_name = dataset_cfg.stereo_camera_name
         imu_file = dataset_cfg.directory / dataset_cfg.csv_files[imu_name]
         stereo_timestamps_file = dataset_cfg.directory / dataset_cfg.csv_files[stereo_name]
         left_images_dir = dataset_cfg.directory / dataset_cfg.stereo_data_dirs[0]

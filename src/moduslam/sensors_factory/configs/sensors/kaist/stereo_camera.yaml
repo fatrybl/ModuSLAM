@@ -3,7 +3,6 @@ defaults:
 
 stereo:
   name: "stereo"
-  type_name: "StereoCamera"
 
   distortion_model_left: "plumb_bob"
   distortion_model_right: "plumb_bob"

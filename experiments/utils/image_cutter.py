@@ -59,13 +59,13 @@ def extract_sub_image(image_path, output_path, left, upper, right, lower):
     sub_image.save(output_path)
 
 
-current_dir = Path(__file__).parent.parent.absolute()
-sub_dir = Path("final_experiments")
+current_dir = Path(__file__).parent.parent.parent.absolute()
+sub_dir = Path("current_experiment")
 dir = current_dir / sub_dir
 
-path1 = dir / "base_cloud.png"
-path2 = dir / "mom_cloud.png"
-path3 = dir / "timeshift_cloud.png"
+path1 = dir / "lidars.png"
+path2 = dir / "lidars_imu.png"
+path3 = dir / "lidars_imu_gps.png"
 path4 = dir / "error_cloud.png"
 
 # Define the paths to your images
@@ -74,13 +74,13 @@ image_paths = [path1, path2, path3, path4]
 # path1 = dir / "base.png"
 # path2 = dir / "mom.png"
 
-image_paths = [path1, path4]
+image_paths = [path1, path2, path3]
 
 # Define the percentage of edges to crop for each side
 crop_percentages = {
     "upper": 0,
     "lower": 0,
-    "left": 20,
+    "left": 8,
     "right": 20,
 }
 

@@ -60,7 +60,7 @@ class Cluster:
         t_range = self._time_range
         dt = nanosec2sec(t_range.stop - t_range.start)
         delta = "\u0394"
-        return f"{delta}T, s: {dt:.4f}"
+        return f"{delta}T, s: {dt:.1f}"
 
     @property
     def top_center(self) -> Position2D:
