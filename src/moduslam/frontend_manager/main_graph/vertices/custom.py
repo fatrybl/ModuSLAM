@@ -1,3 +1,5 @@
+"""TODO: check & correct MyPy types for numpy arrays."""
+
 import gtsam
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 

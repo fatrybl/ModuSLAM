@@ -45,7 +45,6 @@ logger = logging.getLogger(data_manager)
 
 
 class TumVieReader(DataReader):
-
     _image_file_extension = ".jpg"
 
     def __init__(self, regime: TimeLimit | Stream, dataset_params: TumVieConfig):
@@ -73,7 +72,7 @@ class TumVieReader(DataReader):
             raise DataReaderConfigurationError(e)
 
         self._imu = dataset_params.imu_name
-        self._stereo = dataset_params.stereo_name
+        self._stereo = dataset_params.stereo_camera_name
         self._csv_files = dataset_params.csv_files
         self._stereo_data_dirs = dataset_params.stereo_data_dirs
 

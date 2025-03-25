@@ -3,7 +3,6 @@ import logging
 import numpy as np
 from kiss_icp.kiss_icp import KISSConfig, KissICP
 
-from src.custom_types.aliases import Matrix3x3
 from src.custom_types.numpy import Matrix4x4 as NumpyMatrix4x4
 from src.custom_types.numpy import MatrixNx3
 from src.external.handlers_factory.handlers.handler_protocol import Handler
@@ -16,7 +15,7 @@ from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.utils import create_empty_element
 from src.moduslam.sensors_factory.sensors import Lidar3D
 from src.utils.auxiliary_dataclasses import TimeRange
-from src.utils.auxiliary_methods import numpy_array4x4_to_tuple4x4
+from src.utils.auxiliary_methods import diagonal_matrix3x3, numpy_array4x4_to_tuple4x4
 
 logger = logging.getLogger(frontend_manager)
 
@@ -65,12 +64,12 @@ class ScanMatcher(Handler):
         Raises:
             TypeError: if the sensor is not an instance of Lidar3D.
         """
-        if not isinstance(element.measurement.sensor, Lidar3D):
+        sensor = element.measurement.sensor
+
+        if not isinstance(sensor, Lidar3D):
             msg = f"Expected sensor of type {Lidar3D}, got {type(element.measurement.sensor)}"
             logger.error(msg)
             raise TypeError(msg)
-
-        sensor = element.measurement.sensor
 
         tf_base_sensor = np.array(sensor.tf_base_sensor)
         tf_base_sensor_inv = np.linalg.inv(tf_base_sensor)
@@ -83,7 +82,6 @@ class ScanMatcher(Handler):
         self._scan_matcher.register_frame(point_cloud, timestamps)
 
         if len(self._elements_queue) == self._elements_queue_size:
-
             d_tf = self._scan_matcher.last_delta
 
             d_tf_base = tf_base_sensor @ d_tf @ tf_base_sensor_inv
@@ -149,8 +147,8 @@ class ScanMatcher(Handler):
         t_range = TimeRange(start, stop)
 
         cov = self._noise_covariance
-        position_covariance = self._get_diagonal_matrix(cov[0], cov[1], cov[2])
-        orientation_covariance = self._get_diagonal_matrix(cov[3], cov[4], cov[5])
+        position_covariance = diagonal_matrix3x3(cov[0:3])
+        orientation_covariance = diagonal_matrix3x3(cov[3:])
 
         pose = numpy_array4x4_to_tuple4x4(tf)
 
@@ -163,11 +161,3 @@ class ScanMatcher(Handler):
             elements=[empty_pre_last_element, empty_last_element],
         )
         return m
-
-    @staticmethod
-    def _get_diagonal_matrix(v1: float, v2: float, v3: float) -> Matrix3x3:
-        return (
-            (v1, 0.0, 0.0),
-            (0.0, v2, 0.0),
-            (0.0, 0.0, v3),
-        )

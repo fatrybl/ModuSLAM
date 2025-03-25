@@ -17,7 +17,7 @@ from src.moduslam.sensors_factory.configs import SensorConfig
 from src.tests.conftest import kaist_custom_dataset_dir, tum_vie_dataset_dir
 
 sensor_factory_kaist = {"encoder": SensorConfig("encoder")}
-sensor_factory_tum_vie = {"stereo": SensorConfig("stereo")}
+sensor_factory_tum_vie = {"stereo_camera": SensorConfig("stereo_camera")}
 
 valid_regime_config1 = DataRegimeConfig(name=Stream.name)
 valid_regime_config2 = DataRegimeConfig(name=TimeLimit.name, start="0", stop="1")
@@ -39,8 +39,10 @@ tum_vie = (
     (tum_vie_cfg, valid_regime_config3, sensor_factory_tum_vie, TumVieReader),
 )
 
-
-valid_readers = (*kaist, *tum_vie)
+valid_readers = (
+    *kaist,
+    *tum_vie,
+)
 
 invalid_dataset = (
     DatasetConfig(
