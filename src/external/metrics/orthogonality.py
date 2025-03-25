@@ -28,6 +28,7 @@ from src.moduslam.map_manager.factories.lidar_map.utils import (
     map_elements2vertices,
 )
 from src.moduslam.map_manager.factories.utils import fill_elements
+from src.moduslam.sensors_factory.sensors import Lidar3D
 from src.utils.exceptions import ExternalModuleException
 from src.utils.ordered_set import OrderedSet
 
@@ -163,8 +164,11 @@ class PlaneOrthogonality(Metrics):
             m = edge.measurement
 
             if isinstance(edge, PoseOdometry) and isinstance(m, OdometryWithElements):
-                poses.add(edge.vertex1)
-                poses.add(edge.vertex2)
+                sensor = m.elements[0].measurement.sensor
+
+                if isinstance(sensor, Lidar3D):
+                    poses.add(edge.vertex1)
+                    poses.add(edge.vertex2)
 
         return poses
 
