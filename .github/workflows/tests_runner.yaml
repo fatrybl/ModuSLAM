@@ -19,7 +19,11 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake libboost-all-dev
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            libboost-all-dev \
+            libtbb-dev
 
       - name: Install Python build dependencies
         run: |
@@ -38,12 +42,12 @@ jobs:
             gtsam/install
           key: ${{ runner.os }}-gtsam-${{ steps.cache-key.outputs.key }}
 
-      - name: Clone GTSAM
+      - name: Clone GTSAM (develop branch)
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
-          git clone --depth 1 https://github.com/borglab/gtsam.git
+          git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
-      - name: Build and install GTSAM
+      - name: Build and install GTSAM with TBB
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           cd gtsam
@@ -53,6 +57,8 @@ jobs:
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
+            -DGTSAM_USE_SYSTEM_EIGEN=OFF \
+            -DGTSAM_WITH_TBB=ON \
             -DCMAKE_INSTALL_PREFIX="../install"
           make python-install -j4
 
