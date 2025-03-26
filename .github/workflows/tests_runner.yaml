@@ -16,8 +16,7 @@ jobs:
             build-essential \
             cmake \
             libboost-all-dev \
-            libtbb-dev \
-            libeigen3-dev
+            libtbb-dev
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -53,4 +52,4 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest src/tests -k "not bridge"
+          poetry run pytest src/tests
