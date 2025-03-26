@@ -42,13 +42,14 @@ jobs:
           cd gtsam
           mkdir build
           cd build
-          poetry run cmake .. \
+          PYTHON_EXECUTABLE=$(which python)
+          cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
             -DGTSAM_DISABLE_EIGEN_VECTORIZE=ON \
-            -DPYTHON_EXECUTABLE=$(which python)
-          poetry run make python-install -j$(nproc)
+            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+          make python-install -j$(nproc)
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
