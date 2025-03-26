@@ -59,7 +59,6 @@ jobs:
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_USE_SYSTEM_EIGEN=ON \
             -DCMAKE_INSTALL_PREFIX="../install"
           make python-install -j$(nproc)
 
