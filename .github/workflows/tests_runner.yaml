@@ -23,7 +23,13 @@ jobs:
             build-essential \
             cmake \
             libboost-all-dev \
-            libtbb-dev
+            libtbb-dev \
+            libeigen3-dev  # System Eigen installation
+
+      - name: Verify Eigen version
+        run: |
+          echo "Eigen version:"
+          pkg-config --modversion eigen3
 
       - name: Install Python build dependencies
         run: |
@@ -47,7 +53,7 @@ jobs:
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
-      - name: Build and install GTSAM with TBB
+      - name: Build and install GTSAM with system Eigen
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           cd gtsam
@@ -57,7 +63,7 @@ jobs:
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_USE_SYSTEM_EIGEN=OFF \
+            -DGTSAM_USE_SYSTEM_EIGEN=ON \  # Use system Eigen
             -DGTSAM_WITH_TBB=ON \
             -DCMAKE_INSTALL_PREFIX="../install"
           make python-install -j4
@@ -83,7 +89,10 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libboost-all-dev
+          sudo apt-get install -y \
+            libboost-all-dev \
+            libtbb-dev \
+            libeigen3-dev  # Runtime Eigen dependency
 
       - name: Restore GTSAM
         uses: actions/cache@v3
