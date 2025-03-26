@@ -31,11 +31,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pyparsing numpy pybind11-stubgen
 
-      - name: Verify installations
-        run: |
-          python -m pip show pyparsing numpy pybind11-stubgen
-          pybind11-stubgen --version
-
       - name: Generate cache key
         id: cache-key
         run: echo "key=$(date +%Y%m%d)" >> $GITHUB_OUTPUT
@@ -66,7 +61,7 @@ jobs:
             -DGTSAM_PYTHON_VERSION=3.11 \
             -DGTSAM_USE_SYSTEM_EIGEN=ON \
             -DCMAKE_INSTALL_PREFIX="../install"
-          make python-install -j4
+          make python-install -j$(nproc)
 
       - name: Package GTSAM
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
