@@ -23,8 +23,7 @@ jobs:
             build-essential \
             cmake \
             libboost-all-dev \
-            libtbb-dev \
-            libeigen3-dev
+            libtbb-dev
 
       - name: Install Python build dependencies
         run: |
