@@ -14,7 +14,7 @@ logger = logging.getLogger("data_manager")
 
 @runtime_checkable
 class DataReader(Protocol):
-    """Protocol for any data reader."""
+    """Interface for any data reader."""
 
     _context_error_msg: str = "Method must be called within a context."
 
@@ -49,6 +49,7 @@ class DataReader(Protocol):
 
         Args:
             sensor: sensor to set the iterator(s) position(s) to.
+
             timestamp: timestamp to set the iterator(s) position(s) to.
 
         Raises:
