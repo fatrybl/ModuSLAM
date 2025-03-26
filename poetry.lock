@@ -557,14 +557,14 @@ tests = ["pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
 name = "dash"
-version = "3.0.0"
+version = "3.0.1"
 description = "A Python framework for building reactive web-apps. Developed by Plotly."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "dash-3.0.0-py3-none-any.whl", hash = "sha256:684de3765bdb24f2c5a7b5d9d4dffb02bb122586b08784a394769004af444f03"},
-    {file = "dash-3.0.0.tar.gz", hash = "sha256:2cbb071836b3ca546dbe38655083908b8be543f3bea9c4bf660b96490d3d4953"},
+    {file = "dash-3.0.1-py3-none-any.whl", hash = "sha256:b5355580d16d75713e32d3609792ac39f840c0341699c0fec62771fb24b59a59"},
+    {file = "dash-3.0.1.tar.gz", hash = "sha256:8cfa02f8a3bd0905af1e721614dc6b23bbf00bf78fd3110ec2423cf74c6c9564"},
 ]
 
 [package.dependencies]
@@ -575,7 +575,6 @@ plotly = ">=5.0.0"
 requests = "*"
 retrying = "*"
 setuptools = "*"
-stringcase = ">=1.2.0"
 typing-extensions = ">=4.1.1"
 Werkzeug = "<3.1"
 
@@ -3624,14 +3623,14 @@ stats = ["scipy (>=1.7)", "statsmodels (>=0.12)"]
 
 [[package]]
 name = "setuptools"
-version = "78.0.2"
+version = "78.1.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "setuptools-78.0.2-py3-none-any.whl", hash = "sha256:4a612c80e1f1d71b80e4906ce730152e8dec23df439f82731d9d0b608d7b700d"},
-    {file = "setuptools-78.0.2.tar.gz", hash = "sha256:137525e6afb9022f019d6e884a319017f9bf879a0d8783985d32cbc8683cab93"},
+    {file = "setuptools-78.1.0-py3-none-any.whl", hash = "sha256:3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8"},
+    {file = "setuptools-78.1.0.tar.gz", hash = "sha256:18fd474d4a82a5f83dac888df697af65afa82dec7323d09c3e37d1f14288da54"},
 ]
 
 [package.extras]
@@ -3886,17 +3885,6 @@ files = [
 pbr = ">=2.0.0"
 
 [[package]]
-name = "stringcase"
-version = "1.2.0"
-description = "String case converter."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "stringcase-1.2.0.tar.gz", hash = "sha256:48a06980661908efe8d9d34eab2b6c13aefa2163b3ced26972902e3bdfd87008"},
-]
-
-[[package]]
 name = "sympy"
 version = "1.13.1"
 description = "Computer algebra system (CAS) in Python"
@@ -4120,14 +4108,14 @@ setuptools = "*"
 
 [[package]]
 name = "typing-extensions"
-version = "4.12.2"
+version = "4.13.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev", "experiments"]
 files = [
-    {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
-    {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
+    {file = "typing_extensions-4.13.0-py3-none-any.whl", hash = "sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5"},
+    {file = "typing_extensions-4.13.0.tar.gz", hash = "sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b"},
 ]
 
 [[package]]

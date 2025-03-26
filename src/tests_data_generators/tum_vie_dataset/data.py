@@ -9,14 +9,14 @@ import PIL
 from PIL.Image import Image
 
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.readers.directory_iterator import (
+from src.moduslam.data_manager.batch_factory.data_readers.directory_iterator import (
     DirectoryIterator,
 )
-from src.moduslam.data_manager.batch_factory.readers.locations import (
+from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     CsvDataLocation,
     StereoImagesLocation,
 )
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 from src.moduslam.sensors_factory.sensors import Sensor
@@ -28,8 +28,8 @@ class Data:
 
         imu_name = dataset_cfg.imu_name
         stereo_name = dataset_cfg.stereo_camera_name
-        imu_file = dataset_cfg.directory / dataset_cfg.csv_files[imu_name]
-        stereo_timestamps_file = dataset_cfg.directory / dataset_cfg.csv_files[stereo_name]
+        imu_file = dataset_cfg.directory / dataset_cfg.txt_files[imu_name]
+        stereo_timestamps_file = dataset_cfg.directory / dataset_cfg.txt_files[stereo_name]
         left_images_dir = dataset_cfg.directory / dataset_cfg.stereo_data_dirs[0]
         right_images_dir = dataset_cfg.directory / dataset_cfg.stereo_data_dirs[1]
 

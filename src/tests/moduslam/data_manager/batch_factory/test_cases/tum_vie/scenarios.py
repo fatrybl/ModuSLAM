@@ -4,7 +4,7 @@ from src.moduslam.data_manager.batch_factory.configs import (
     BatchFactoryConfig,
     DataRegimeConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
@@ -118,7 +118,6 @@ tum_vie_scenarios3_success = (
     (sensors_factory_config1, batch_factory_config2, imu_request2, imu_batch_2),
     (sensors_factory_config1, batch_factory_config2, imu_request3, all_imu_batch),
 )
-
 
 tum_vie_scenarios3_fail = (
     (sensors_factory_config1, batch_factory_config6, stereo_request1, UnfeasibleRequestError),

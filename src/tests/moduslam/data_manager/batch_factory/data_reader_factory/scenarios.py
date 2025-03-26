@@ -4,14 +4,18 @@ from src.moduslam.data_manager.batch_factory.configs import (
     DataRegimeConfig,
     DatasetConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.kaist.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.kaist.reader import KaistReader
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.kaist.reader import (
+    KaistReader,
+)
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.reader import TumVieReader
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.reader import (
+    TumVieReader,
+)
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.tests.conftest import kaist_custom_dataset_dir, tum_vie_dataset_dir
