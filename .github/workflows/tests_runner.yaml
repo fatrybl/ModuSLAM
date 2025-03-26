@@ -28,11 +28,12 @@ jobs:
 
       - name: Install Python build dependencies
         run: |
-          python -m pip install pyparsing numpy pybind-stubgen  # Added pybind-stubgen here
+          python -m pip install --upgrade pip
+          python -m pip install pyparsing numpy pybind11-stubgen
 
-      - name: Verify pybind-stubgen installation
+      - name: Verify installations
         run: |
-          python -m pip show pybind-stubgen
+          python -m pip show pyparsing numpy pybind11-stubgen
           pybind11-stubgen --version
 
       - name: Generate cache key
@@ -53,7 +54,7 @@ jobs:
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
-      - name: Build and install GTSAM with system Eigen
+      - name: Build and install GTSAM
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           cd gtsam
@@ -108,11 +109,7 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install
-
-      - name: Install pip dependencies
-        run: |
-          poetry run pip install -r .github/requirements.txt
-          poetry run pip install pybind-stubgen  # Also install in test environment
+          poetry run pip install pyparsing numpy pybind11-stubgen
 
       - name: Install GTSAM Python package
         run: |
