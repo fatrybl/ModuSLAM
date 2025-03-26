@@ -3,18 +3,11 @@ name: Run Tests
 on: [ push, workflow_dispatch ]
 
 jobs:
-  install_gtsam:
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
 
       - name: Install system dependencies
         run: |
@@ -23,33 +16,27 @@ jobs:
             build-essential \
             cmake \
             libboost-all-dev \
-            libtbb-dev
+            libtbb-dev \
+            libeigen3-dev
 
-      - name: Install Python build dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install pyparsing numpy pybind11-stubgen
-
-      - name: Generate cache key
-        id: cache-key
-        run: echo "key=$(date +%Y%m%d)" >> $GITHUB_OUTPUT
-
-      - name: Cache GTSAM
-        id: cache-gtsam
-        uses: actions/cache@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          path: |
-            gtsam/build
-            gtsam/install
-          key: ${{ runner.os }}-gtsam-${{ steps.cache-key.outputs.key }}
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install project dependencies with Poetry
+        run: poetry install
 
       - name: Clone GTSAM (develop branch)
-        if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
-      - name: Build and install GTSAM
-        if: steps.cache-gtsam.outputs.cache-hit != 'true'
+      - name: Build and install GTSAM Python wrapper
         run: |
           cd gtsam
           mkdir -p build
@@ -58,56 +45,8 @@ jobs:
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DCMAKE_INSTALL_PREFIX="../install"
+            -DCMAKE_INSTALL_PREFIX="./install"
           make python-install -j$(nproc)
-
-      - name: Package GTSAM
-        if: steps.cache-gtsam.outputs.cache-hit != 'true'
-        run: |
-          cd gtsam/python
-          python setup.py bdist_wheel
-
-  test:
-    needs: install_gtsam
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libboost-all-dev \
-            libtbb-dev \
-            libeigen3-dev
-
-      - name: Restore GTSAM
-        uses: actions/cache@v3
-        with:
-          path: |
-            gtsam/build
-            gtsam/install
-          key: ${{ runner.os }}-gtsam-${{ needs.install_gtsam.outputs.cache-key }}
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python -
-
-      - name: Install dependencies
-        run: |
-          poetry install
-          poetry run pip install pyparsing numpy pybind11-stubgen
-
-      - name: Install GTSAM Python package
-        run: |
-          cd gtsam/python
-          poetry run pip install .
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV

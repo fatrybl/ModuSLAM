@@ -44,6 +44,7 @@ doc8 = "*"
 types-pillow = "*"
 types-psutil = "*"
 polyscope = "*"
+pyparsing = "*"
 
 [tool.poetry.group.experiments.dependencies]
 moviepy = { git = "https://github.com/Zulko/moviepy.git" }
