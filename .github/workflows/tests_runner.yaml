@@ -40,21 +40,15 @@ jobs:
       - name: Build and install GTSAM Python wrapper
         run: |
           cd gtsam
-          mkdir -p build
+          mkdir build
           cd build
-          PYTHON_EXECUTABLE=$(poetry run which python)
-          cmake .. \
+          poetry run cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_DISABLE_EIGEN_VECTORIZE=ON \
-            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-          make python-install -j$(nproc)
+            -DGTSAM_DISABLE_EIGEN_VECTORIZE=ON
 
-      - name: Debug Python Package Paths
-        run: |
-          poetry run python -c "import sys; print(sys.path)"
-          poetry run python -c "import gtsam; print(gtsam)"
+          poetry run make python-install -j$(nproc)
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
