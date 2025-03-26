@@ -14,10 +14,8 @@ from src.moduslam.data_manager.batch_factory.configs import (
     DataRegimeConfig,
     DatasetConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
-from src.moduslam.data_manager.batch_factory.readers.reader_factory import (
-    DataReaderFactory,
-)
+from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from src.moduslam.data_manager.batch_factory.data_readers.reader_factory import create
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.moduslam.sensors_factory.factory import SensorsFactory
 from src.tests.moduslam.data_manager.batch_factory.data_reader_factory.scenarios import (
@@ -41,9 +39,10 @@ def test_get_reader(
 ):
     SensorsFactory.init_sensors(sensors_config)
 
-    reader = DataReaderFactory.create(dataset_config, regime_config)
+    reader, regime = create(dataset_config, regime_config)
 
     assert isinstance(reader, reference_reader)
+    assert regime.name == regime_config.name
 
 
 @mark.parametrize(
@@ -52,7 +51,7 @@ def test_get_reader(
 )
 def test_get_reader_invalid_dataset(dataset_config: DatasetConfig, regime_config: DataRegimeConfig):
     with raises(NotImplementedError):
-        DataReaderFactory.create(dataset_config, regime_config)
+        create(dataset_config, regime_config)
 
 
 @mark.parametrize(
@@ -61,4 +60,4 @@ def test_get_reader_invalid_dataset(dataset_config: DatasetConfig, regime_config
 )
 def test_get_reader_invalid_regime(dataset_config: DatasetConfig, regime_config: DataRegimeConfig):
     with raises(ValueError):
-        DataReaderFactory.create(dataset_config, regime_config)
+        create(dataset_config, regime_config)

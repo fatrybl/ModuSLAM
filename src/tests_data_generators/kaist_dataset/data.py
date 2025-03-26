@@ -7,7 +7,7 @@ from numpy import dtype, ndarray, ones, uint8
 from PIL import Image
 
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.readers.locations import (
+from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,
     StereoImagesLocation,

@@ -13,7 +13,7 @@ def test_init_sensors():
 
     SensorsFactory.init_sensors({"test_sensor": sensor_config})
 
-    sensors = SensorsFactory.get_all_sensors()
+    sensors = SensorsFactory.get_sensors()
     expected_sensor = SensorsFactory.get_sensor("test_sensor")
 
     assert expected_sensor.name == sensor_config.name

@@ -4,7 +4,7 @@ from src.moduslam.data_manager.batch_factory.configs import (
     BatchFactoryConfig,
     DataRegimeConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.kaist.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
@@ -103,7 +103,6 @@ kaist_scenarios2_success = (
 
 kaist_scenarios2_fail = ((sensors_factory_config1, batch_factory_config6, elements),)
 
-
 kaist_scenarios3_success = (
     (sensors_factory_config1, batch_factory_config2, imu_request1, imu_batch_1),
     (sensors_factory_config1, batch_factory_config2, imu_request2, imu_batch_3),
@@ -116,7 +115,6 @@ kaist_scenarios3_success = (
     (sensors_factory_config1, batch_factory_config2, stereo_request2, stereo_batch_2),
     (sensors_factory_config1, batch_factory_config1, stereo_request3, all_stereo_batch),
 )
-
 
 kaist_scenarios3_fail = (
     (sensors_factory_config1, batch_factory_config4, imu_request1, UnfeasibleRequestError),

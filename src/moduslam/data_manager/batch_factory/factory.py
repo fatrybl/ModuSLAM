@@ -4,11 +4,10 @@ from collections.abc import Sequence
 from src.logger.logging_config import data_manager
 from src.moduslam.data_manager.batch_factory.batch import DataBatch, Element
 from src.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
-from src.moduslam.data_manager.batch_factory.readers.reader_ABC import DataReader
-from src.moduslam.data_manager.batch_factory.readers.reader_factory import (
-    DataReaderFactory,
-)
+from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from src.moduslam.data_manager.batch_factory.data_readers.reader_factory import create
 from src.moduslam.data_manager.memory_analyzer import MemoryAnalyzer
+from src.moduslam.sensors_factory.factory import SensorsFactory
 from src.utils.auxiliary_dataclasses import PeriodicDataRequest
 from src.utils.exceptions import StateNotSetError, UnfeasibleRequestError
 
@@ -19,10 +18,12 @@ class BatchFactory:
     """Factory for creating and managing data batch."""
 
     def __init__(self, config: BatchFactoryConfig) -> None:
-        self._all_data_processed: bool = False
+        self._all_data_processed = False
         self._batch = DataBatch()
         self._memory_analyzer = MemoryAnalyzer(config.batch_memory_percent)
-        self._data_reader = DataReaderFactory.create(config.dataset, config.regime)
+        self._data_reader, regime = create(config.dataset, config.regime)
+        sensors = SensorsFactory.get_sensors()
+        self._data_reader.configure(regime, sensors)
 
     @property
     def batch(self) -> DataBatch:
@@ -59,7 +60,6 @@ class BatchFactory:
 
         with self._data_reader as reader:
             for empty_element in elements:
-
                 self._check_memory()
                 element = reader.get_element(empty_element)
                 self._batch.add(element)
