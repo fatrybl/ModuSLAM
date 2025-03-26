@@ -2987,7 +2987,7 @@ version = "3.2.3"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "experiments"]
+groups = ["main", "dev", "experiments"]
 files = [
     {file = "pyparsing-3.2.3-py3-none-any.whl", hash = "sha256:a749938e02d6fd0b59b356ca504a24982314bb090c383e3cf201c95ef7e2bfcf"},
     {file = "pyparsing-3.2.3.tar.gz", hash = "sha256:b9c13f1ab8b3b542f72e28f634bad4de758ab3ce4546e4301970ad6fa77c38be"},
@@ -4358,4 +4358,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "50dec643cd3c1cf8e6f41fadc4135c9f1c724f00cb117a1f3f370768ed42f6ca"
+content-hash = "ad559fead5cb76bc88ed26f9064649e3687bb069f18a8d05ada8de1556fc69cf"
