@@ -16,7 +16,9 @@ jobs:
             build-essential \
             cmake \
             libboost-all-dev \
-            libtbb-dev
+            libtbb-dev \
+            python3-venv \
+            python3-dev
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -40,12 +42,18 @@ jobs:
           cd gtsam
           mkdir -p build
           cd build
+          PYTHON_EXECUTABLE=$(poetry run which python)
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DCMAKE_INSTALL_PREFIX="./install"
+            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
           make python-install -j$(nproc)
+
+      - name: Debug Python Package Paths
+        run: |
+          poetry run python -c "import sys; print(sys.path)"
+          poetry run python -c "import gtsam; print(gtsam)"
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
