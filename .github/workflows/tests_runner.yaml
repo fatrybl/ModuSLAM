@@ -50,10 +50,13 @@ jobs:
           restore-keys: |
             gtsam-build-${{ runner.os }}-
 
+      - name: Remove existing GTSAM directory
+        if: steps.cache-gtsam.outputs.cache-hit != 'true'
+        run: rm -rf gtsam
+
       - name: Clone GTSAM (develop branch)
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
-        run: |
-          git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
+        run: git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
       - name: Build and install GTSAM Python wrapper
         if: steps.cache-gtsam.outputs.cache-hit != 'true'
