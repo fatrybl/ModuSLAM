@@ -37,11 +37,22 @@ jobs:
       - name: Install project dependencies with Poetry
         run: poetry install
 
+      - name: Cache GTSAM build
+        id: cache-gtsam
+        uses: actions/cache@v4
+        with:
+          path: gtsam/build
+          key: gtsam-build-${{ runner.os }}-${{ hashFiles('gtsam/CMakeLists.txt') }}
+          restore-keys: |
+            gtsam-build-${{ runner.os }}-
+
       - name: Clone GTSAM (develop branch)
+        if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
       - name: Build and install GTSAM Python wrapper
+        if: steps.cache-gtsam.outputs.cache-hit != 'true'
         run: |
           cd gtsam
           mkdir build
