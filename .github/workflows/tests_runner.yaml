@@ -43,6 +43,7 @@ jobs:
       - name: Build and install GTSAM Python wrapper
         run: |
           cd gtsam
+          rm -rf build
           mkdir build
           cd build
           PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
