@@ -44,7 +44,9 @@ doc8 = "*"
 types-pillow = "*"
 types-psutil = "*"
 polyscope = "*"
+# for GTSAM compilation
 pyparsing = "*"
+pybind11-stubgen = "*"
 
 [tool.poetry.group.experiments.dependencies]
 moviepy = { git = "https://github.com/Zulko/moviepy.git" }
