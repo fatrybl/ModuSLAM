@@ -47,15 +47,16 @@ jobs:
       - name: Build and install GTSAM Python wrapper
         run: |
           cd gtsam
-          rm -rf build
           mkdir build
           cd build
           PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_PYTHON_VERSION=3.11 \
+            -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_BUILD_UNSTABLE=OFF \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+            -DCMAKE_INSTALL_PREFIX="./install"
           make python-install -j$(nproc)
 
       - name: Set Test Data Directory
