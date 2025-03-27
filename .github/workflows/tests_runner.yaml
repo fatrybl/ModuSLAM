@@ -56,7 +56,6 @@ jobs:
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
             -DGTSAM_BUILD_UNSTABLE=OFF \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-            -DCMAKE_INSTALL_PREFIX="./install"
           make python-install -j$(nproc)
 
       - name: Set Test Data Directory
