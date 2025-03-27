@@ -54,6 +54,7 @@ jobs:
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_PYTHON_VERSION=3.11 \
+            -DGTSAM_BUILD_UNSTABLE=OFF \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
           make python-install -j$(nproc)
 
