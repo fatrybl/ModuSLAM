@@ -1,2 +1,4 @@
 defaults:
-  - base_tum_vie_dataset
+  - /base_tum_vie_dataset
+
+directory: "/media/mark/WD/tum/visual_inertial_event/loop_floor_0"

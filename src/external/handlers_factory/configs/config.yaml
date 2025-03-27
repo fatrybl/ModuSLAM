@@ -4,3 +4,4 @@ defaults:
   - handlers/scan_matcher2@scan_matcher2
   - handlers/imu_preprocessor@imu_preprocessor
   - handlers/vrs_gps@vrs_preprocessor
+  - handlers/visual_odometry@visual_odometry

@@ -11,7 +11,7 @@ class DequeSet(Sequence, Generic[T]):
     """DequeSet is a combination of set and deque.
 
     Complexity:
-    O(1): add, contains(item), remove_first, remove_last, __getitem__(index).
+    O(1): add, contains(item), remove_first, remove_last.
     O(N): remove(item)
     """
 
@@ -35,7 +35,7 @@ class DequeSet(Sequence, Generic[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
 
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        """Complexity: O(K) for slice, O(1) for index access.
+        """Complexity: O(1) - O(K).
 
         Args:
             index: index of an item or a slice.

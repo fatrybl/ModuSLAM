@@ -132,6 +132,14 @@ def numpy_array4x4_to_tuple4x4(matrix: NumpyMatrix4x4) -> Matrix4x4:
 
 
 def diagonal_matrix3x3(values: Vector3) -> Matrix3x3:
+    """Creates a 3x3 diagonal matrix from 3D vector.
+
+    Args:
+        values: 3D vector.
+
+    Returns:
+        diagonal matrix.
+    """
     return (
         (values[0], 0.0, 0.0),
         (0.0, values[1], 0.0),
