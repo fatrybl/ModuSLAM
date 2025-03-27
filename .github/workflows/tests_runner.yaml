@@ -37,12 +37,16 @@ jobs:
       - name: Install project dependencies with Poetry
         run: poetry install
 
+      - name: Get GTSAM latest commit hash
+        id: gtsam-commit
+        run: echo "GTSAM_COMMIT=$(git ls-remote https://github.com/borglab/gtsam.git develop | cut -f1)" >> $GITHUB_ENV
+
       - name: Cache GTSAM build
         id: cache-gtsam
         uses: actions/cache@v4
         with:
           path: gtsam/build
-          key: gtsam-build-${{ runner.os }}-${{ hashFiles('gtsam/CMakeLists.txt') }}
+          key: gtsam-build-${{ runner.os }}-${{ hashFiles('gtsam/CMakeLists.txt') }}-${{ env.GTSAM_COMMIT }}
           restore-keys: |
             gtsam-build-${{ runner.os }}-
 
