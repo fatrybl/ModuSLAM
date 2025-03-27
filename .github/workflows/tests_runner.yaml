@@ -30,6 +30,9 @@ jobs:
           curl -sSL https://install.python-poetry.org | python -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
+      - name: Configure Poetry to Use the Correct Python
+        run: poetry env use $(which python)
+
       - name: Install project dependencies with Poetry
         run: poetry install
 
@@ -42,7 +45,7 @@ jobs:
           cd gtsam
           mkdir build
           cd build
-          PYTHON_EXECUTABLE=$(which python)
+          PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
