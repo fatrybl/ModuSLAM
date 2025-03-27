@@ -46,6 +46,7 @@ types-psutil = "*"
 polyscope = "*"
 # for GTSAM compilation
 pyparsing = "*"
+pybind11 = "*"
 pybind11-stubgen = "*"
 
 [tool.poetry.group.experiments.dependencies]
