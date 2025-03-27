@@ -4,10 +4,22 @@ on: [ push, workflow_dispatch ]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            libboost-all-dev \
+            libtbb-dev \
+            python3-venv \
+            python3-dev \
+            libeigen3-dev
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -17,19 +29,35 @@ jobs:
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
-        run: |
-          poetry install
+      - name: Configure Poetry to Use the Correct Python
+        run: poetry env use $(which python)
 
-      - name: Install pip dependencies
+      - name: Install project dependencies with Poetry
+        run: poetry install
+
+      - name: Clone GTSAM (develop branch)
         run: |
-          poetry run pip install -r .github/requirements.txt
+          git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
+
+      - name: Build and install GTSAM Python wrapper
+        run: |
+          cd gtsam
+          mkdir build
+          cd build
+          PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
+          cmake .. \
+            -DGTSAM_BUILD_PYTHON=1 \
+            -DGTSAM_PYTHON_VERSION=3.11 \
+            -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
+            -DGTSAM_BUILD_UNSTABLE=OFF \
+            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+          make python-install -j$(nproc)
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
-          poetry run pytest src/tests -k "not bridge"
-  #          Skip test_combined_imu_odometry until gtsam 4.3 is released.
+          poetry run pytest src/tests

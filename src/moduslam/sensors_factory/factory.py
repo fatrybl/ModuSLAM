@@ -33,7 +33,7 @@ class SensorsFactory:
     _sensors_table: dict[str, Sensor] = {}
 
     @classmethod
-    def get_all_sensors(cls) -> set[Sensor]:
+    def get_sensors(cls) -> set[Sensor]:
         """Gets all sensors."""
         return cls._sensors
 

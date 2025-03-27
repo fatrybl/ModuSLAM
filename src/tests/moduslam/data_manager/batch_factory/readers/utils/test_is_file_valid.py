@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.moduslam.data_manager.batch_factory.readers.utils import is_file_valid
+from src.moduslam.data_manager.batch_factory.data_readers.utils import is_file_valid
 
 
 def test_is_file_valid():

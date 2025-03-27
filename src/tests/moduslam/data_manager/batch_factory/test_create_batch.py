@@ -1,6 +1,4 @@
-"""Tests for BatchFactory.create_batch() overloaded methods.
-
-All test cases must be run on any DataReader implementation.
+"""Tests for BatchFactory class with different data readers and regimes.
 
 1. create_batch ():
     1.1 all sensors, stream -> DataBatch
@@ -32,32 +30,32 @@ All test cases must be run on any DataReader implementation.
 
 Checklist:
 
-| Test case | KaistReader | Ros1Reader  | Ros2Reader  |
-=======================================================
-| 1.1       |      +      |      +      |             |
-| 1.2       |      +      |      +      |             |
-| 1.3       |      +      |      +      |             |
-| 1.4       |      +      |      +      |             |
-| 1.5       |      +      |      +      |             |
-| 1.6       |      +      |      +      |             |
-| 1.7       |      +      |      +      |             |
-| 1.8       |      +      |      +      |             |
-| 1.9       |      +      |      +      |             |
-| 1.10      |      +      |      +      |             |
-=======================================================
-| 2.1       |      +      |      +      |             |
-| 2.2       |      +      |      +      |             |
-| 2.3       |      +      |      +      |             |
-| 2.4       |      +      |      +      |             |
-| 2.5       |      +      |      +      |             |
-| 2.6       |      +      |      +      |             |
-=======================================================
-| 3.1       |      +      |      +      |             |
-| 3.2       |      +      |      +      |             |
-| 3.3       |      +      |      +      |             |
-| 3.4       |      +      |      +      |             |
-| 3.5       |      +      |      +      |             |
-=======================================================
+| Test case | KaistReader | Ros1Reader  | Ros2Reader |
+======================================================
+| 1.1       |      +      |            |             |
+| 1.2       |      +      |            |             |
+| 1.3       |      +      |            |             |
+| 1.4       |      +      |            |             |
+| 1.5       |      +      |            |             |
+| 1.6       |      +      |            |             |
+| 1.7       |      +      |            |             |
+| 1.8       |      +      |            |             |
+| 1.9       |      +      |            |             |
+| 1.10      |      +      |            |             |
+======================================================
+| 2.1       |      +      |            |             |
+| 2.2       |      +      |            |             |
+| 2.3       |      +      |            |             |
+| 2.4       |      +      |            |             |
+| 2.5       |      +      |            |             |
+| 2.6       |      +      |            |             |
+======================================================
+| 3.1       |      +      |            |             |
+| 3.2       |      +      |            |             |
+| 3.3       |      +      |            |             |
+| 3.4       |      +      |            |             |
+| 3.5       |      +      |            |             |
+======================================================
 """
 
 from pytest import mark, raises
@@ -159,7 +157,6 @@ def test_create_batch_by_request(
     periodic_data_request: PeriodicDataRequest,
     reference_batch: DataBatch,
 ):
-
     SensorsFactory.init_sensors(sensors_configs)
     batch_factory = BatchFactory(batch_factory_config)
 

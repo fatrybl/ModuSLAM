@@ -1,14 +1,13 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from src.moduslam.data_manager.batch_factory.readers.kaist.configs.paths import (
+from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.paths import (
     KaistDatasetPathConfig,
 )
 
 
 @dataclass
 class DatasetStructure:
-
     dataset_directory: Path
 
     calibration_data_dir: Path = field(init=False)
