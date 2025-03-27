@@ -2775,6 +2775,21 @@ files = [
 tests = ["pytest"]
 
 [[package]]
+name = "pybind11"
+version = "2.13.6"
+description = "Seamless operability between C++11 and Python"
+optional = false
+python-versions = ">=3.7"
+groups = ["dev"]
+files = [
+    {file = "pybind11-2.13.6-py3-none-any.whl", hash = "sha256:237c41e29157b962835d356b370ededd57594a26d5894a795960f0047cb5caf5"},
+    {file = "pybind11-2.13.6.tar.gz", hash = "sha256:ba6af10348c12b24e92fa086b39cfba0eff619b61ac77c406167d813b096d39a"},
+]
+
+[package.extras]
+global = ["pybind11-global (==2.13.6)"]
+
+[[package]]
 name = "pybind11-stubgen"
 version = "2.5.3"
 description = "PEP 561 type stubs generator for pybind11 modules"
@@ -4381,4 +4396,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "4e9ac90f0b44e02d05562d0953c10f5a82659e6a640b0f83585f29214bfe5e65"
+content-hash = "09ea453bf1243ec57c792611dcd230409089ebe4885dbfc5dace6b441ce99f3c"
