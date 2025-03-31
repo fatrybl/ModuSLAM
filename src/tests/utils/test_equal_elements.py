@@ -4,7 +4,7 @@ import numpy as np
 import PIL.Image as Image
 
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.readers.locations import (
+from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     CsvDataLocation,
     Location,
 )
@@ -14,7 +14,6 @@ from src.moduslam.sensors_factory.sensors import Sensor, StereoCamera
 
 
 class TestEqualElements:
-
     sensor_config = StereoCameraConfig(name="test_camera", type_name="StereoCamera")
     sensor = StereoCamera(sensor_config)
 

@@ -1,5 +1,5 @@
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 from src.tests.conftest import tum_vie_dataset_dir
@@ -47,7 +47,6 @@ all_stereo_batch = DataBatch()
 for element in elements:
     if element.measurement.sensor == stereo:
         all_stereo_batch.add(element)
-
 
 batch_1 = DataBatch()
 for element in different_elements:

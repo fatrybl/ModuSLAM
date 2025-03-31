@@ -13,7 +13,7 @@ from src.moduslam.frontend_manager.graph_builders.simple.graph_factory import (
 )
 from src.moduslam.frontend_manager.main_graph.graph import Graph
 from src.moduslam.frontend_manager.storage_analyzers.analyzers import (
-    DoublePoseOdometry,
+    SinglePoseOdometry,
 )
 from src.moduslam.frontend_manager.utils import fill_storage
 from src.utils.auxiliary_methods import nanosec2sec
@@ -30,7 +30,7 @@ class Builder:
             handlers: handlers for creating measurements.
         """
         self._handlers = handlers
-        self._analyzer = DoublePoseOdometry()
+        self._analyzer = SinglePoseOdometry()
         self._factory = GraphFactory()
         self._metrics_factory = MetricsFactory()
         self._metrics_storage = MetricsStorage()

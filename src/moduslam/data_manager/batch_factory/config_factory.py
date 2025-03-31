@@ -4,10 +4,10 @@ from hydra.core.config_store import ConfigStore
 
 from hydra import compose, initialize
 from src.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
-from src.moduslam.data_manager.batch_factory.readers.kaist.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
-from src.moduslam.data_manager.batch_factory.readers.tum_vie.configs.base import (
+from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 
