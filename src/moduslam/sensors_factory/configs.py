@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from src.moduslam.sensors_factory.sensors import (
     Imu,
     Lidar3D,
+    MonocularCamera,
     Sensor,
     StereoCamera,
     VrsGps,
@@ -18,8 +19,50 @@ class SensorConfig:
 
 
 @dataclass
-class StereoCameraConfig(SensorConfig):
+class MonocularCameraConfig(SensorConfig):
+    type_name: str = MonocularCamera.__name__
 
+    camera_matrix: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+
+    distortion_coefficients: list[float] = field(default_factory=lambda: [0.0, 0.0, 0.0, 0.0, 0.0])
+
+    rectification_matrix: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+
+    projection_matrix: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+        ]
+    )
+
+    tf_base_sensor: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
+    )
+
+    distortion_model_left: str = "plumb_bob"
+    distortion_model_right: str = "plumb_bob"
+
+
+@dataclass
+class StereoCameraConfig(SensorConfig):
     type_name: str = StereoCamera.__name__
 
     camera_matrix_left: list[list[float]] = field(
@@ -181,7 +224,6 @@ class Lidar3DConfig(SensorConfig):
 
 @dataclass
 class VrsGpsConfig(SensorConfig):
-
     type_name = VrsGps.__name__
 
     tf_base_sensor: list[list[float]] = field(

@@ -16,11 +16,6 @@ class Location:
 
 
 @dataclass(frozen=True, eq=True)
-class ConfigFileLocation(Location):
-    file: Path
-
-
-@dataclass(frozen=True, eq=True)
 class BinaryDataLocation(Location):
     """The location of binary data file."""
 
@@ -45,3 +40,11 @@ class CsvDataLocation(Location):
 @dataclass(frozen=True, eq=True)
 class TxtDataLocation(CsvDataLocation):
     """The location of .txt file and the position (line number) in it."""
+
+
+@dataclass(frozen=True, eq=True)
+class Ros2DataLocation(Location):
+    """The location of ROS2 data."""
+
+    topic: str
+    timestamp: int

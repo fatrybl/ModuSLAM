@@ -1,0 +1,5 @@
+defaults:
+  - /base_imu@imu
+
+imu:
+  name: "Alpha_imu"

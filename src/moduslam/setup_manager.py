@@ -9,6 +9,6 @@ logger = logging.getLogger(setup_manager)
 
 def setup_sensors() -> None:
     """Initializes global Sensors Factory."""
-    config = get_config()
-    SensorsFactory.init_sensors(config)
+    config = get_config()  # Hydra does not support lists -> we use dictionaries.
+    SensorsFactory.init_sensors(config.values())
     logger.debug("Sensors have been initialized.")

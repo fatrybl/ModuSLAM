@@ -9,7 +9,11 @@ from PIL.Image import Image
 from src.logger.logging_config import data_manager
 from src.moduslam.data_manager.batch_factory.data_readers.data_sources import Source
 from src.utils.auxiliary_dataclasses import Message
-from src.utils.exceptions import ExternalModuleException, ItemNotFoundError
+from src.utils.exceptions import (
+    ExternalModuleException,
+    FileNotValid,
+    ItemNotFoundError,
+)
 
 logger = logging.getLogger(data_manager)
 
@@ -63,7 +67,7 @@ def read_csv_file(file_path: Path, delimiter: str = ",") -> Iterator[list[str]]:
 
 
 def is_file_valid(file_path: Path) -> bool:
-    """Checks if the file is valid: exists and not empty.
+    """Checks if file exists and is not empty.
 
     Args:
         file_path: path to the file.
@@ -84,19 +88,20 @@ def is_file_valid(file_path: Path) -> bool:
 
 
 def check_files(files: Iterable[Path]) -> None:
-    """Checks if the files exist.
+    """Checks if files are valid.
 
     Args:
-        files: collection of files.
+        files: files to check.
 
     Raises:
         FileNotFoundError: if any path does not correspond to file.
     """
     for f in files:
-        if not f.is_file():
-            msg = f"File {f!r} does not exist."
+        status = is_file_valid(f)
+        if not status:
+            msg = f"Empty or non-existing file {f!r}."
             logger.critical(msg)
-            raise FileNotFoundError(msg)
+            raise FileNotValid(msg)
 
 
 def check_directory(directory_path: Path) -> None:

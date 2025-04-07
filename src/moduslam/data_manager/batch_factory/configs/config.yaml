@@ -1,10 +1,12 @@
 defaults:
   - /base_factory
-  - dataset: kaist_urban
+  - dataset: s3e
   - _self_
 
 regime:
-  name: "TimeLimit"
+  name: "Stream"
+  start: 1661164286641000000
+  stop: 1661164286641855181
 
   #  # Urban-26 stereo
   #  start: 1544581218520741817
@@ -16,8 +18,8 @@ regime:
   #  start: 1544581126870152013
   #  stop: 1544581127305017000
 
-  start: 1544581126870152013
-  stop: 1544581127882897000
+  #  start: 1544581126870152013
+  #  stop: 1544581127882897000
 
   #TUM VIE:
 #  start: 3.421838072500000149e+07

@@ -7,6 +7,8 @@
     tests sequential reading of sensor`s elements in different regimes.
 """
 
+from collections.abc import Iterable
+
 from pytest import mark
 
 from src.moduslam.data_manager.batch_factory.batch import Element
@@ -30,16 +32,16 @@ from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.data.case
 
 
 @mark.parametrize(
-    "sensor_factory_cfg, dataset_cfg, regime, reference_outputs",
+    "sensors_configs, dataset_cfg, regime, reference_outputs",
     [*kaist1],
 )
 def test_get_next_element(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
     reference_outputs: list[Element | None],
 ):
-    SensorsFactory.init_sensors(sensor_factory_cfg)
+    SensorsFactory.init_sensors(sensors_configs)
     sensors = SensorsFactory.get_sensors()
     reader = KaistReader(dataset_cfg)
     reader.configure(regime, sensors)
@@ -55,7 +57,7 @@ def test_get_next_element(
     [*kaist2],
 )
 def test_get_next_element_of_sensor(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensor_factory_cfg: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
     inputs: list[Sensor],

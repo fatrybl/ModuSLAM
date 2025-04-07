@@ -10,6 +10,8 @@ get_next_element() should be tested for both of them.
     tests sequential reading of sensor-specific elements.
 """
 
+from collections.abc import Iterable
+
 from pytest import mark
 
 from src.moduslam.data_manager.batch_factory.batch import Element
@@ -37,7 +39,7 @@ from src.tests.moduslam.data_manager.batch_factory.readers.tum_vie.data.case2 im
     [*tum_vie1],
 )
 def test_get_next_element(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensor_factory_cfg: Iterable[SensorConfig],
     dataset_cfg: TumVieConfig,
     regime: Stream | TimeLimit,
     reference_outputs: list[Element | None],
@@ -58,7 +60,7 @@ def test_get_next_element(
     [*tum_vie2],
 )
 def test_get_next_element_of_sensor(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensor_factory_cfg: Iterable[SensorConfig],
     dataset_cfg: TumVieConfig,
     regime: Stream | TimeLimit,
     inputs: list[Sensor],

@@ -28,6 +28,7 @@ torch-ransac3d = "*"
 open3d = "*"
 plotly = "*"
 laspy = "*"
+rosbags = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

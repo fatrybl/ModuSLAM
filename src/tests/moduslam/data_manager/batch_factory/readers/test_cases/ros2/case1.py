@@ -1,13 +1,16 @@
 from pathlib import Path
+
 from moduslam.data_manager.batch_factory.readers.ros2.reader import Ros2DataReader
+from moduslam.data_manager.batch_factory.readers.ros2.utils import read_rosbag
 from moduslam.setup_manager.sensors_factory.sensors import Sensor
-from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import Ros2Config
+from moduslam.system_configs.data_manager.batch_factory.datasets.ros2.config import (
+    Ros2Config,
+)
 from moduslam.system_configs.data_manager.batch_factory.regimes import Stream, TimeLimit
 from moduslam.system_configs.setup_manager.sensors import SensorConfig
 from tests.conftest import ros2_dataset_dir
 from tests_data_generators.ros2_dataset.data import elements
 from tests_data_generators.utils import generate_sensors_factory_config
-from moduslam.data_manager.batch_factory.readers.ros2.utils import read_rosbag
 
 rosbag_path = Path(ros2_dataset_dir)
 
@@ -35,7 +38,7 @@ timestamp4 = 1698927496898641344  # 60 sensor readings
 timestamp5 = 1698927497046583719  # 80 sensor readings
 timestamp6 = 1698927497190095250  # 100 sensor readings
 
-elements_0_20 = [e for e in elements if timestamp1<= e[0] < timestamp2]
+elements_0_20 = [e for e in elements if timestamp1 <= e[0] < timestamp2]
 elements20_40 = [e for e in elements if timestamp2 <= e[0] < timestamp3]
 elements40_60 = [e for e in elements if timestamp3 <= e[0] < timestamp4]
 elements60_80 = [e for e in elements if timestamp4 <= e[0] < timestamp5]
@@ -52,7 +55,9 @@ sensors_table1 = {
 }
 sensors1 = [Sensor(SensorConfig(sensor_name)) for sensor_name in sensors_table1.keys()]
 
-dataset_cfg1 = Ros2Config(directory=ros2_dataset_dir, sensors_table=sensors_table1, topics_table=sensors_table)
+dataset_cfg1 = Ros2Config(
+    directory=ros2_dataset_dir, sensors_table=sensors_table1, topics_table=sensors_table
+)
 stream = Stream()
 
 sensors_factory_config1 = generate_sensors_factory_config(sensors1)
@@ -74,13 +79,9 @@ valid_timelimit_scenarios = (
     (sensors_factory_config1, dataset_cfg1, timelimit80_100, Ros2DataReader, elements80_100),
 )
 
-stream_scenarios = (
-    *valid_stream_scenarios,
-)
+stream_scenarios = (*valid_stream_scenarios,)
 
-time_limit_scenarios = (
-    *valid_timelimit_scenarios,
-)
+time_limit_scenarios = (*valid_timelimit_scenarios,)
 
 ros2_case1 = (
     *stream_scenarios,

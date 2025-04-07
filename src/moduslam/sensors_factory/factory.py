@@ -1,10 +1,12 @@
 import logging
+from collections.abc import Iterable
 from typing import cast
 
 from src.logger.logging_config import setup_manager
 from src.moduslam.sensors_factory.configs import (
     ImuConfig,
     Lidar3DConfig,
+    MonocularCameraConfig,
     SensorConfig,
     StereoCameraConfig,
     VrsGpsConfig,
@@ -17,6 +19,7 @@ from src.moduslam.sensors_factory.sensors import (
     Imu,
     Lidar2D,
     Lidar3D,
+    MonocularCamera,
     Sensor,
     StereoCamera,
     VrsGps,
@@ -57,11 +60,11 @@ class SensorsFactory:
             raise ItemNotExistsError(msg)
 
     @classmethod
-    def init_sensors(cls, sensors: dict[str, SensorConfig]) -> None:
-        """Initializes sensors for the given configuration.
+    def init_sensors(cls, configs: Iterable[SensorConfig]) -> None:
+        """Initializes sensors for the given configurations.
 
         Args:
-            sensors: "sensor name <-> sensor config" table.
+            configs: sensors configurations.
 
         Raises:
             ValueError: if sensor`s name does not match the name in the config.
@@ -69,14 +72,8 @@ class SensorsFactory:
         cls._sensors.clear()
         cls._sensors_table.clear()
 
-        for name, config in sensors.items():
-
-            if name != config.name:
-                msg = "Sensor`s name does not match the name in the config."
-                logger.critical(msg)
-                raise ValueError(msg)
-
-            sensor = cls.sensor_from_config(config)
+        for cfg in configs:
+            sensor = cls.sensor_from_config(cfg)
             cls._sensors.add(sensor)
             cls._sensors_table[sensor.name] = sensor
 
@@ -98,6 +95,8 @@ class SensorsFactory:
 
         Raises:
             TypeError: if sensor`s type is not supported.
+
+        TODO: refactor weired type casting
         """
 
         sensor_type: str = config.type_name
@@ -123,6 +122,9 @@ class SensorsFactory:
             case StereoCamera.__name__:
                 config = cast(StereoCameraConfig, config)
                 sensor = StereoCamera(config)
+            case MonocularCamera.__name__:
+                config = cast(MonocularCameraConfig, config)
+                sensor = MonocularCamera(config)
             case Gps.__name__:
                 sensor = Gps(config)
             case VrsGps.__name__:

@@ -58,6 +58,8 @@ Checklist:
 ======================================================
 """
 
+from collections.abc import Iterable
+
 from pytest import mark, raises
 
 from src.moduslam.data_manager.batch_factory.batch import DataBatch, Element
@@ -94,7 +96,7 @@ test_cases_3_fail = (*tum_vie_scenarios3_fail,)
 
 @mark.parametrize("sensors_configs, batch_factory_config, reference_batch", [*test_cases_1_success])
 def test_create_batch_sequentially(
-    sensors_configs: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     batch_factory_config: BatchFactoryConfig,
     reference_batch: DataBatch,
 ):
@@ -108,7 +110,7 @@ def test_create_batch_sequentially(
 
 @mark.parametrize("sensors_configs, batch_factory_config", [*test_cases_1_fail])
 def test_create_batch_sequentially_memory_error(
-    sensors_configs: dict[str, SensorConfig], batch_factory_config: BatchFactoryConfig
+    sensors_configs: Iterable[SensorConfig], batch_factory_config: BatchFactoryConfig
 ):
     SensorsFactory.init_sensors(sensors_configs)
     batch_factory = BatchFactory(batch_factory_config)
@@ -122,7 +124,7 @@ def test_create_batch_sequentially_memory_error(
     [*test_cases_2_success],
 )
 def test_create_batch_with_elements(
-    sensors_configs: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     batch_factory_config: BatchFactoryConfig,
     input_elements: list[Element],
     reference_batch: DataBatch,
@@ -137,7 +139,7 @@ def test_create_batch_with_elements(
 
 @mark.parametrize("sensors_configs, batch_factory_config, input_elements", [*test_cases_2_fail])
 def test_create_batch_with_elements_memory_error(
-    sensors_configs: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     batch_factory_config: BatchFactoryConfig,
     input_elements: list[Element],
 ):
@@ -152,7 +154,7 @@ def test_create_batch_with_elements_memory_error(
     [*test_cases_3_success],
 )
 def test_create_batch_by_request(
-    sensors_configs: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     batch_factory_config: BatchFactoryConfig,
     periodic_data_request: PeriodicDataRequest,
     reference_batch: DataBatch,
@@ -169,7 +171,7 @@ def test_create_batch_by_request(
     "sensors_configs, batch_factory_config, data_request, reference_exception", [*test_cases_3_fail]
 )
 def test_create_batch_3_by_request_with_exception(
-    sensors_configs: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     batch_factory_config: BatchFactoryConfig,
     data_request: PeriodicDataRequest,
     reference_exception: type[MemoryError | UnfeasibleRequestError],
