@@ -1,5 +1,4 @@
 from io import BytesIO
-from typing import TypeAlias
 
 from PIL import Image as ImageIO
 from PIL.Image import Image
@@ -12,8 +11,6 @@ from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.point_cloud
     structured_to_regular_array,
 )
 from src.utils.exceptions import ExternalModuleException
-
-StereoImage: TypeAlias = tuple[Image, Image]
 
 
 def get_image(raw_msg) -> Image:

@@ -46,9 +46,7 @@ class BatchFactory:
                     self._all_data_processed = True
                     logger.info("All data in the dataset has been processed.")
 
-        if not self._batch.is_sorted:
-            logger.warning("The batch is not sorted by timestamp. Sorting it now.")
-            self._batch.sort()
+        self._sort_if_needed()
 
     def fill_batch_with_elements(self, elements: Sequence[Element]) -> None:
         """Adds elements with raw sensor measurements to the batch for the given
@@ -66,9 +64,7 @@ class BatchFactory:
                 element = reader.get_element(empty_element)
                 self._batch.add(element)
 
-        if not self._batch.is_sorted:
-            logger.warning("The batch is not sorted by timestamp. Sorting it now.")
-            self._batch.sort()
+        self._sort_if_needed()
 
     def fill_batch_by_request(self, request: PeriodicDataRequest) -> None:
         """Adds elements with raw sensor measurements to the batch for the given
@@ -93,9 +89,7 @@ class BatchFactory:
                 logger.error(msg)
                 raise UnfeasibleRequestError(msg)
 
-        if not self._batch.is_sorted:
-            logger.warning("The batch is not sorted by timestamp. Sorting it now.")
-            self._batch.sort()
+        self._sort_if_needed()
 
     def _fulfill_request(
         self, reader: DataReader, request: PeriodicDataRequest
@@ -145,3 +139,9 @@ class BatchFactory:
         if not self._memory_analyzer.enough_memory:
             logger.error(msg)
             raise MemoryError(msg)
+
+    def _sort_if_needed(self) -> None:
+        """Sorts the batch if needed."""
+        if not self._batch.is_sorted:
+            logger.warning("The batch is not sorted by timestamp. Sorting it now.")
+            self._batch.sort()
