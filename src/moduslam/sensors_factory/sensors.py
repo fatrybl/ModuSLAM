@@ -19,6 +19,7 @@ if TYPE_CHECKING:
         MonocularCameraConfig,
         SensorConfig,
         StereoCameraConfig,
+        UltraWideBandConfig,
         VrsGpsConfig,
     )
 
@@ -241,3 +242,14 @@ class Lidar3D(Sensor):
     def tf_base_sensor(self) -> Matrix4x4:
         """Base -> sensor transformation SE(3)."""
         return self._tf_base_sensor
+
+
+class UltraWideBand(Sensor):
+    """Base class for any Ultra Wide Band."""
+
+    def __init__(self, config: UltraWideBandConfig):
+        """
+        Args:
+            config: sensor configuration.
+        """
+        super().__init__(config.name)

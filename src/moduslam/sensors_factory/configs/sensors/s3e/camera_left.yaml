@@ -1,5 +1,0 @@
-defaults:
-  - /base_monocular_camera@camera_left
-
-camera_left:
-  name: "left_camera"

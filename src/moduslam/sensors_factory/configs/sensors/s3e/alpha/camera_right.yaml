@@ -2,4 +2,7 @@ defaults:
   - /base_monocular_camera@camera_right
 
 camera_right:
-  name: "right_camera"
+  name: "Alpha_right_camera"
+
+  width: 1224
+  height: 1024

@@ -34,16 +34,23 @@ def get_image(raw_msg) -> Image:
     return img
 
 
-def get_stereo_images(raw_msg) -> StereoImage:
-    """Gets stereo images.
+def get_navsat_fix(raw_msg) -> Vector6:
+    """Gets raw NavSatFix message.
+
     Args:
-        raw_msg: raw message.
+        raw_msg: raw NavSatFix message.
 
     Returns:
-        left & right images.
+        NavSatFix data: latitude, longitude, altitude, covariance, covariance_type, status.
     """
+    latitude = raw_msg.latitude
+    longitude = raw_msg.longitude
+    altitude = raw_msg.altitude
+    covariance = raw_msg.position_covariance
+    covariance_type = raw_msg.position_covariance_type
+    status = raw_msg.status
 
-    raise NotImplementedError
+    return latitude, longitude, altitude, covariance, covariance_type, status
 
 
 def get_imu_measurement(raw_msg) -> Vector6:
@@ -100,50 +107,49 @@ def get_3d_pointcloud(raw_msg) -> MatrixMxN:
     return points
 
 
-def get_gps_measurement(raw_msg) -> tuple:
-    """Transform raw GPS message.
+def get_uwb(raw_msg) -> tuple:
+    """Gets raw Ultra Wide Band message.
 
     Args:
-        raw_msg: raw GPS message.
+        raw_msg: raw UWB message.
 
     Returns:
-        data: tuple with the GPS data.
+        data: tuple with the UWB data.
     """
-    latitude = raw_msg.latitude
-    longitude = raw_msg.longitude
-    altitude = raw_msg.altitude
-
-    gps_data = (latitude, longitude, altitude)
-    return gps_data
+    raise NotImplementedError
 
 
-def get_pose_odometry(raw_msg) -> tuple:
-    """Transform raw Odometry message.
+def get_time_reference(raw_msg) -> tuple:
+    """Gets raw TimeReference message.
 
     Args:
-        raw_msg: raw Odometry message.
+        raw_msg: raw TimeReference message.
 
     Returns:
-        data: tuple with the Odometry data.
+        data: tuple with the TimeReference data.
     """
-    position = raw_msg.pose.pose.position
-    orientation = raw_msg.pose.pose.orientation
-    linear_velocity = raw_msg.twist.twist.linear
-    angular_velocity = raw_msg.twist.twist.angular
+    raise NotImplementedError
 
-    odometry_data = (
-        position.x,
-        position.y,
-        position.z,
-        orientation.x,
-        orientation.y,
-        orientation.z,
-        orientation.w,
-        linear_velocity.x,
-        linear_velocity.y,
-        linear_velocity.z,
-        angular_velocity.x,
-        angular_velocity.y,
-        angular_velocity.z,
-    )
-    return odometry_data
+
+def get_twist_stamped(raw_msg) -> tuple:
+    """Gets raw TwistStamped message.
+
+    Args:
+        raw_msg: raw TwistStamped message.
+
+    Returns:
+        data: tuple with the TwistStamped data.
+    """
+    raise NotImplementedError
+
+
+def get_quaternion_stamped(raw_msg) -> tuple:
+    """Gets raw QuaternionStamped message.
+
+    Args:
+        raw_msg: raw QuaternionStamped message.
+
+    Returns:
+        data: tuple with the QuaternionStamped data.
+    """
+    raise NotImplementedError

@@ -114,6 +114,8 @@ class Ros2Reader(DataReader):
         location = Ros2DataLocation(topic, timestamp)
         measurement = RawMeasurement(sensor, processed_data)
 
+        print(sensor, timestamp)
+
         return Element(timestamp, measurement, location)
 
     @overload

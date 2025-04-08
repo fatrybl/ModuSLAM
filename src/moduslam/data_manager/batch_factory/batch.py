@@ -37,6 +37,22 @@ class DataBatch:
         """
         raise NotImplementedError
 
+    @property
+    def is_sorted(self) -> bool:
+        """Order of the batch. Takes O(N) operations."""
+        iterator = iter(self._deque_set.items)
+        try:
+            previous = next(iterator)
+        except StopIteration:
+            return True
+
+        for current in iterator:
+            if current.timestamp < previous.timestamp:
+                return False
+            previous = current
+
+        return True
+
     def add(self, new_element: Element) -> None:
         """Adds new element to the Batch.
 

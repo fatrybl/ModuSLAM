@@ -9,6 +9,7 @@ from src.moduslam.sensors_factory.configs import (
     MonocularCameraConfig,
     SensorConfig,
     StereoCameraConfig,
+    UltraWideBandConfig,
     VrsGpsConfig,
 )
 from src.moduslam.sensors_factory.sensors import (
@@ -22,6 +23,7 @@ from src.moduslam.sensors_factory.sensors import (
     MonocularCamera,
     Sensor,
     StereoCamera,
+    UltraWideBand,
     VrsGps,
 )
 from src.utils.exceptions import ItemNotExistsError
@@ -99,7 +101,7 @@ class SensorsFactory:
         TODO: refactor weired type casting
         """
 
-        sensor_type: str = config.type_name
+        sensor_type: str = config.sensor_type_name
 
         match sensor_type:
 
@@ -130,6 +132,9 @@ class SensorsFactory:
             case VrsGps.__name__:
                 config = cast(VrsGpsConfig, config)
                 sensor = VrsGps(config)
+            case UltraWideBand.__name__:
+                config = cast(UltraWideBandConfig, config)
+                sensor = UltraWideBand(config)
             case _:
                 msg = f"Unsupported sensor type: {sensor_type}"
                 logger.critical(msg)
