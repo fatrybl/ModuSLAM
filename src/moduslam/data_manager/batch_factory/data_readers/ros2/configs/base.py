@@ -13,14 +13,13 @@ class Ros2Config(DatasetConfig):
     name: str = "Any ROS2 Dataset"
     url: str = "Any ROS2 Dataset url"
 
-    ros_distro: Stores = Stores.LATEST  # Storage scheme for ROS2 messages
-
     directory: Path = MISSING
+    ros_distro: Stores = MISSING  # Storage scheme for ROS2 messages
     sensor_topic_mapping: dict[str, str] = MISSING  # unique sensor name -> topic name mapping
 
 
 @dataclass
-class Ros2Humble(Ros2Config):
+class Ros2HumbleConfig(Ros2Config):
     name: str = "S3E: A Multi-Robot Multimodal Dataset for Collaborative SLAM"
     url: str = "https://pengyu-team.github.io/S3E/"
 

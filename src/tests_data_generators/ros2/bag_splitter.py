@@ -6,10 +6,10 @@ from rosbags.typesys import Stores, get_typestore
 from rosbags.typesys.store import Typestore
 
 
-def copy_first_n_messages(
+def split_ros2_bag(
     input_bag_path: str, output_bag_path: str, n_messages: int, typestore: Typestore
 ):
-    """Copies first N messages from the input bag to the output bag.
+    """Creates a ROS-2 bag with first N messages of the input bag.
 
     Args:
         input_bag_path: path to input ROS 2 bag
@@ -31,7 +31,7 @@ def copy_first_n_messages(
             )
 
         for con in reader.connections:
-            writer.add_connection(topic=con.topic, msgtype=con.msgtype, typestore=typestore)
+            writer.add_connection(topic=con.topic_name, msgtype=con.msgtype, typestore=typestore)
 
         for con in writer.connections:
             topic_connection_map[con.topic] = con
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     typestore = get_typestore(Stores.LATEST)
 
     # Use absolute paths to the input and output bag files
-    copy_first_n_messages(
+    split_ros2_bag(
         input_bag_path="/home/mark/Downloads/s3e_dataset",
         output_bag_path="/home/mark/Desktop/PhD/ModuSLAM/src/tests_data/datasets/ros2/s3e_playground_2",
         n_messages=20,

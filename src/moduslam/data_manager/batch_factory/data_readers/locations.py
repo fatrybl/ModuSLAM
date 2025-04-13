@@ -1,4 +1,4 @@
-"""Locations of different data sources.
+"""Unique locations for different data sources.
 
 Defines the location of a data batch element.
 """
@@ -44,7 +44,6 @@ class TxtDataLocation(CsvDataLocation):
 
 @dataclass(frozen=True, eq=True)
 class Ros2DataLocation(Location):
-    """The location of ROS2 data."""
+    """The location of ROS 2 message."""
 
-    topic: str
-    timestamp: int
+    topic_name: str

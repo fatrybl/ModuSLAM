@@ -1,6 +1,6 @@
 import logging
-from collections.abc import Generator, Iterable
-from typing import TypeAlias, overload
+from collections.abc import Iterable
+from typing import overload
 
 from plum import dispatch
 from rosbags.interfaces import Connection
@@ -19,14 +19,35 @@ from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base impo
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.message_processor import (
     get_msg_processor,
 )
+from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.generator_setup import (
+    setup_messages_gen,
+)
+from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (
+    RosbagsMessageGenerator,
+)
 from src.moduslam.data_manager.batch_factory.data_readers.utils import check_directory
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.moduslam.sensors_factory.sensors import Sensor
-from src.utils.exceptions import ConfigurationError
+from src.utils.exceptions import ConfigurationError, DataReaderConfigurationError
 
 logger = logging.getLogger(data_manager)
 
-RosbagsMessageGenerator: TypeAlias = Generator[tuple[Connection, int, bytes], None, None]
+
+def get_start_end_time(reader: Reader) -> tuple[int, int]:
+    """Gets start and end time of the dataset. The built-in properties
+    of rosbags.rosbag2.Reader are not used since it adds extra nanosecond to the end time.
+
+    Args:
+        reader: a rosbags ROS-2 reader.
+
+    Returns:
+        start and end time of the dataset.
+    """
+    duration = reader.metadata["duration"]["nanoseconds"]
+    start_time = reader.metadata["starting_time"]["nanoseconds_since_epoch"]
+    end_time = start_time + duration
+
+    return start_time, end_time
 
 
 class Ros2Reader(DataReader):
@@ -46,14 +67,25 @@ class Ros2Reader(DataReader):
         self._connections: list[Connection] = []
         self._topic_sensor_table: dict[str, Sensor] = {}
 
-        check_directory(self._dataset_directory)
+        try:
+            check_directory(self._dataset_directory)
+        except NotADirectoryError as e:
+            raise DataReaderConfigurationError(e)
+
+        try:
+            self._msg_processor = get_msg_processor(dataset_params.ros_distro)
+        except NotImplementedError:
+            raise DataReaderConfigurationError(
+                f"Message processor for {dataset_params.ros_distro} is not implemented."
+            )
 
         self._type_store = get_typestore(dataset_params.ros_distro)
-        self._msg_processor = get_msg_processor(dataset_params.ros_distro)
 
         self._reader = Reader(self._dataset_directory)
-        self._all_messages_gen: RosbagsMessageGenerator = self._reader.messages()
+        self._all_messages_gen = self._reader.messages()
         self._sensor_msg_gen_table: dict[Sensor, RosbagsMessageGenerator] = {}
+
+        self._start_time, self._end_time = get_start_end_time(self._reader)
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -75,7 +107,9 @@ class Ros2Reader(DataReader):
             logger.critical("No topics to read data from.")
             raise ConfigurationError
 
-        self._setup_all_messages_gen(regime)
+        self._all_messages_gen = setup_messages_gen(
+            regime, self._reader, self._connections, self._end_time
+        )
 
         self._setup_sensor_msg_gen_table(regime, sensors)
 
@@ -111,7 +145,7 @@ class Ros2Reader(DataReader):
         topic = connection.topic
         sensor = self._topic_sensor_table[topic]
 
-        location = Ros2DataLocation(topic, timestamp)
+        location = Ros2DataLocation(topic)
         measurement = RawMeasurement(sensor, processed_data)
 
         return Element(timestamp, measurement, location)
@@ -145,7 +179,7 @@ class Ros2Reader(DataReader):
 
         processed_data = self._msg_processor.process(msg, connection.msgtype)
 
-        location = Ros2DataLocation(connection.topic, timestamp)
+        location = Ros2DataLocation(connection.topic)
         measurement = RawMeasurement(sensor, processed_data)
 
         return Element(timestamp, measurement, location)
@@ -180,18 +214,6 @@ class Ros2Reader(DataReader):
 
         return Element(t, measurement, element.location)
 
-    def _setup_all_messages_gen(self, regime: Stream | TimeLimit) -> None:
-        """Sets up the generator for all messages.
-
-        Args:
-            regime: a data reader regime.
-        """
-        if isinstance(regime, TimeLimit):
-            start, stop = int(regime.start), int(regime.stop)
-            self._all_messages_gen = self._reader.messages(self._connections, start, stop)
-        else:
-            self._all_messages_gen = self._reader.messages(self._connections)
-
     def _setup_sensor_msg_gen_table(
         self, regime: Stream | TimeLimit, sensors: Iterable[Sensor]
     ) -> None:
@@ -205,11 +227,8 @@ class Ros2Reader(DataReader):
         for sensor in sensors:
             topic = self._sensor_name_topic_table[sensor.name]
             connections = [с for с in self._connections if с.topic == topic]
-            if isinstance(regime, TimeLimit):
-                start, stop = int(regime.start), int(regime.stop)
-                messages_gen = self._reader.messages(connections, start, stop)
-            else:
-                messages_gen = self._reader.messages(connections)
+
+            messages_gen = setup_messages_gen(regime, self._reader, connections, self._end_time)
 
             self._sensor_msg_gen_table[sensor] = messages_gen
 
