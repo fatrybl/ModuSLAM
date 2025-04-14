@@ -39,7 +39,7 @@ def test_get_next_element(
     sensors_configs: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
-    reference_outputs: list[Element | None],
+    reference_outputs: Iterable[Element | None],
 ):
     SensorsFactory.init_sensors(sensors_configs)
     sensors = SensorsFactory.get_sensors()
@@ -53,22 +53,22 @@ def test_get_next_element(
 
 
 @mark.parametrize(
-    "sensor_factory_cfg, dataset_cfg, regime, inputs, reference_outputs",
+    "sensor_factory_cfg, dataset_cfg, regime, sensors, reference_outputs",
     [*kaist2],
 )
 def test_get_next_element_of_sensor(
     sensor_factory_cfg: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
-    inputs: list[Sensor],
-    reference_outputs: list[Element | None],
+    sensors: Iterable[Sensor],
+    reference_outputs: Iterable[Element | None],
 ):
     SensorsFactory.init_sensors(sensor_factory_cfg)
-    sensors = SensorsFactory.get_sensors()
+    all_sensors = SensorsFactory.get_sensors()
     reader = KaistReader(dataset_cfg)
-    reader.configure(regime, sensors)
+    reader.configure(regime, all_sensors)
 
     with reader:
-        for sensor, reference in zip(inputs, reference_outputs):
+        for sensor, reference in zip(sensors, reference_outputs):
             result = reader.get_next_element(sensor)
             assert equal_elements(result, reference) is True

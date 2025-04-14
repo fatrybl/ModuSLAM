@@ -66,6 +66,7 @@ class Ros2Reader(DataReader):
 
         self._connections: list[Connection] = []
         self._topic_sensor_table: dict[str, Sensor] = {}
+        self._sensor_msg_gen_table: dict[Sensor, RosbagsMessageGenerator] = {}
 
         try:
             check_directory(self._dataset_directory)
@@ -82,10 +83,10 @@ class Ros2Reader(DataReader):
         self._type_store = get_typestore(dataset_params.ros_distro)
 
         self._reader = Reader(self._dataset_directory)
-        self._all_messages_gen = self._reader.messages()
-        self._sensor_msg_gen_table: dict[Sensor, RosbagsMessageGenerator] = {}
-
         self._start_time, self._end_time = get_start_end_time(self._reader)
+        self._time_limit_end = self._end_time
+
+        self._all_messages_gen = self._reader.messages()
 
     def __enter__(self):
         """Opens the dataset for reading."""
@@ -111,7 +112,7 @@ class Ros2Reader(DataReader):
             regime, self._reader, self._connections, self._end_time
         )
 
-        self._setup_sensor_msg_gen_table(regime, sensors)
+        self._setup_sensor_msg_gen_mapping(regime, sensors)
 
         self._is_configured = True
 
@@ -177,6 +178,9 @@ class Ros2Reader(DataReader):
         except StopIteration:
             return None
 
+        if timestamp > self._time_limit_end:
+            return None
+
         processed_data = self._msg_processor.process(msg, connection.msgtype)
 
         location = Ros2DataLocation(connection.topic)
@@ -214,7 +218,7 @@ class Ros2Reader(DataReader):
 
         return Element(t, measurement, element.location)
 
-    def _setup_sensor_msg_gen_table(
+    def _setup_sensor_msg_gen_mapping(
         self, regime: Stream | TimeLimit, sensors: Iterable[Sensor]
     ) -> None:
         """Sets up the generator for each sensor separately.
@@ -224,11 +228,18 @@ class Ros2Reader(DataReader):
 
             sensors: sensors to initialize generators for.
         """
+
         for sensor in sensors:
             topic = self._sensor_name_topic_table[sensor.name]
             connections = [с for с in self._connections if с.topic == topic]
 
-            messages_gen = setup_messages_gen(regime, self._reader, connections, self._end_time)
+            if isinstance(regime, TimeLimit):
+                start, stop = int(regime.start), int(regime.stop)
+                messages_gen = self._reader.messages(connections, start)
+                self._time_limit_end = stop
+
+            else:
+                messages_gen = self._reader.messages(connections)
 
             self._sensor_msg_gen_table[sensor] = messages_gen
 

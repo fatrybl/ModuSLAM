@@ -65,6 +65,7 @@ class TumVieReader(DataReader):
             self._stereo: 0,
         }
 
+        self._time_limit_end: int = 0
         self._in_context = False
         self._is_configured = False
         self._sensors: dict[str, Sensor] = {}
@@ -121,6 +122,13 @@ class TumVieReader(DataReader):
 
         self._data_sequence, indices = create_sequence(self._txt_files, regime, sensor_names)
         self._data_sequence_iter = iter(self._data_sequence)
+
+        if isinstance(regime, Stream):
+            self._time_limit_end = self._data_sequence[-1][0]
+
+        else:
+            self._time_limit_end = microsec2nanosec(regime.stop)
+
         for sensor_name, index in indices.items():
             self._state[sensor_name] = index
 
@@ -227,8 +235,12 @@ class TumVieReader(DataReader):
         except (StopIteration, KeyError):
             return None
 
-        measurement = RawMeasurement(sensor, message.data)
         timestamp = microsec2nanosec(message.timestamp)
+
+        if timestamp > self._time_limit_end:
+            return None
+
+        measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
 

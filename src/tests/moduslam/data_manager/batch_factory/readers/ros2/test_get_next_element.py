@@ -20,8 +20,12 @@ from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.moduslam.data_manager.batch_factory.utils import equal_elements
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.moduslam.sensors_factory.factory import SensorsFactory
+from src.moduslam.sensors_factory.sensors import Sensor
 from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E.data.case1 import (
     S3E_1,
+)
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E.data.case2 import (
+    S3E_2,
 )
 
 
@@ -33,7 +37,7 @@ def test_get_next_element(
     sensors_configs: Iterable[SensorConfig],
     dataset_cfg: Ros2HumbleConfig,
     regime: Stream | TimeLimit,
-    reference_outputs: list[Element | None],
+    reference_outputs: Iterable[Element | None],
 ):
     SensorsFactory.init_sensors(sensors_configs)
     sensors = SensorsFactory.get_sensors()
@@ -46,23 +50,23 @@ def test_get_next_element(
             assert equal_elements(result, reference) is True
 
 
-# @mark.parametrize(
-#     "sensor_factory_cfg, dataset_cfg, regime, inputs, reference_outputs",
-#     [*S3E_2],
-# )
-# def test_get_next_element_of_sensor(
-#         sensor_factory_cfg: Iterable[SensorConfig],
-#         dataset_cfg: Ros2HumbleConfig,
-#         regime: Stream | TimeLimit,
-#         inputs: list[Sensor],
-#         reference_outputs: list[Element | None],
-# ):
-#     SensorsFactory.init_sensors(sensor_factory_cfg)
-#     sensors = SensorsFactory.get_sensors()
-#     reader = Ros2Reader(dataset_cfg)
-#     reader.configure(regime, sensors)
-#
-#     with reader:
-#         for sensor, reference in zip(inputs, reference_outputs):
-#             result = reader.get_next_element(sensor)
-#             assert equal_elements(result, reference) is True
+@mark.parametrize(
+    "sensor_factory_cfg, dataset_cfg, regime, sensors, reference_outputs",
+    [*S3E_2],
+)
+def test_get_next_element_of_sensor(
+    sensor_factory_cfg: Iterable[SensorConfig],
+    dataset_cfg: Ros2HumbleConfig,
+    regime: Stream | TimeLimit,
+    sensors: Iterable[Sensor],
+    reference_outputs: Iterable[Element | None],
+):
+    SensorsFactory.init_sensors(sensor_factory_cfg)
+    all_sensors = SensorsFactory.get_sensors()
+    reader = Ros2Reader(dataset_cfg)
+    reader.configure(regime, all_sensors)
+
+    with reader:
+        for sensor, reference in zip(sensors, reference_outputs):
+            result = reader.get_next_element(sensor)
+            assert equal_elements(result, reference) is True

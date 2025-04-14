@@ -43,9 +43,9 @@ timelimit7 = TimeLimit(
     start=nanosec2microsec(el10.timestamp), stop=nanosec2microsec(el23.timestamp)
 )
 
-sensors_factory_config1 = generate_sensors_factory_config((imu, stereo))
-sensors_factory_config2 = generate_sensors_factory_config((imu,))
-sensors_factory_config3 = generate_sensors_factory_config((stereo,))
+sensors_factory_config1 = generate_sensors_factory_config([imu, stereo])
+sensors_factory_config2 = generate_sensors_factory_config([imu])
+sensors_factory_config3 = generate_sensors_factory_config([stereo])
 
 valid_stream_scenarios = (
     (sensors_factory_config1, dataset_cfg, stream, all_sensors, elements),
@@ -64,6 +64,13 @@ valid_stream_scenarios = (
         stream,
         [element.measurement.sensor for element in (elements[1:10] + elements[11:])],
         elements[1:10] + elements[11:23],
+    ),
+    (
+        sensors_factory_config2,
+        dataset_cfg,
+        stream,
+        [stereo, imu, imu, stereo],
+        [None, el2, el3, None],
     ),
 )
 
@@ -117,6 +124,23 @@ valid_timelimit_scenarios = (
         [element.measurement.sensor for element in elements[9:23]],
         elements[9:23],
     ),
+    (
+        sensors_factory_config1,
+        dataset_cfg,
+        timelimit5,
+        [imu, imu],
+        [el5, None],
+    ),
+    (
+        sensors_factory_config1,
+        dataset_cfg,
+        timelimit6,
+        [stereo, imu],
+        [el24, None],
+    ),
 )
 
-tum_vie2 = (*valid_stream_scenarios, *valid_timelimit_scenarios)
+tum_vie2 = (
+    *valid_stream_scenarios,
+    *valid_timelimit_scenarios,
+)

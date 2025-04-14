@@ -87,6 +87,7 @@ class KaistReader(DataReader):
         }
         self._in_context = False
         self._is_configured = False
+        self._time_limit_end: int = 0
         self._data_sequence: list[tuple[int, str, int]] = []
         self._data_sequence_iter: Iterator = iter([])
         self._sensors: dict[str, Sensor] = {}
@@ -149,6 +150,13 @@ class KaistReader(DataReader):
 
         self._data_sequence, indices = create_sequence(self._timestamp_file, regime, sensor_names)
         self._data_sequence_iter = iter(self._data_sequence)
+
+        if isinstance(regime, Stream):
+            self._time_limit_end = self._data_sequence[-1][0]
+
+        else:
+            self._time_limit_end = int(regime.stop)
+
         for sensor_name, index in indices.items():
             self._state[sensor_name] = index
 
@@ -266,8 +274,12 @@ class KaistReader(DataReader):
         except (StopIteration, KeyError):
             return None
 
-        measurement = RawMeasurement(sensor, message.data)
         timestamp = str_to_int(message.timestamp)
+
+        if timestamp > self._time_limit_end:
+            return None
+
+        measurement = RawMeasurement(sensor, message.data)
         element = Element(timestamp, measurement, location)
         return element
 

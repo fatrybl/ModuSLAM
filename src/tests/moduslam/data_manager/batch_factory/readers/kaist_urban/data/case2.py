@@ -41,6 +41,7 @@ timelimit3 = TimeLimit(start=el2.timestamp, stop=el12.timestamp)
 timelimit4 = TimeLimit(start=el19.timestamp, stop=el24.timestamp)
 timelimit5 = TimeLimit(start=el5.timestamp, stop=el25.timestamp)
 timelimit6 = TimeLimit(start=el3.timestamp, stop=el8.timestamp)
+timelimit7 = TimeLimit(start=el3.timestamp, stop=el10.timestamp)
 
 all_sensors: list[Sensor] = [element.measurement.sensor for element in elements]
 sensors_factory_config1 = generate_sensors_factory_config(all_sensors)
@@ -73,6 +74,13 @@ valid_stream_scenarios = (
         stream,
         [lidar2D_middle, lidar2D_middle, lidar2D_middle],
         [el5, el14, el25],
+    ),
+    (
+        sensors_factory_config5,
+        dataset_cfg,
+        stream,
+        [lidar2D_middle, imu, lidar2D_middle, stereo],
+        [el5, None, el14, None],
     ),
 )
 
@@ -121,6 +129,20 @@ valid_timelimit_scenarios = (
         [el19, el22],
     ),
     (sensors_factory_config6, dataset_cfg, timelimit6, [imu, altimeter], [el3, el8]),
+    (
+        sensors_factory_config6,
+        dataset_cfg,
+        timelimit6,
+        [imu, altimeter, stereo, imu],
+        [el3, el8, None, None],
+    ),
+    (
+        sensors_factory_config6,
+        dataset_cfg,
+        timelimit7,
+        [imu, altimeter, stereo, imu],
+        [el3, el8, None, el10],
+    ),
 )
 
 kaist2 = (
