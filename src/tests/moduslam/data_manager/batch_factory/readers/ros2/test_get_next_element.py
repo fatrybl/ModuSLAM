@@ -13,7 +13,7 @@ from pytest import mark
 
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
-    Ros2HumbleConfig,
+    Ros2Config,
 )
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.reader import Ros2Reader
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
@@ -21,10 +21,10 @@ from src.moduslam.data_manager.batch_factory.utils import equal_elements
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.moduslam.sensors_factory.factory import SensorsFactory
 from src.moduslam.sensors_factory.sensors import Sensor
-from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E.data.case1 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E_data.case1 import (
     S3E_1,
 )
-from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E.data.case2 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E_data.case2 import (
     S3E_2,
 )
 
@@ -35,7 +35,7 @@ from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E.data.case2 i
 )
 def test_get_next_element(
     sensors_configs: Iterable[SensorConfig],
-    dataset_cfg: Ros2HumbleConfig,
+    dataset_cfg: Ros2Config,
     regime: Stream | TimeLimit,
     reference_outputs: Iterable[Element | None],
 ):
@@ -56,7 +56,7 @@ def test_get_next_element(
 )
 def test_get_next_element_of_sensor(
     sensor_factory_cfg: Iterable[SensorConfig],
-    dataset_cfg: Ros2HumbleConfig,
+    dataset_cfg: Ros2Config,
     regime: Stream | TimeLimit,
     sensors: Iterable[Sensor],
     reference_outputs: Iterable[Element | None],

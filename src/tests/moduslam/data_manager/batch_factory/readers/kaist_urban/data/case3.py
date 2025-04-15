@@ -36,7 +36,7 @@ dataset_cfg = KaistConfig(directory=kaist_custom_dataset_dir)
 all_sensors: list[Sensor] = [element.measurement.sensor for element in elements]
 incorrect_sensors_factory_config = generate_sensors_factory_config([])
 
-unlocated_element = Element(
+unallocated_element = Element(
     timestamp=el3.timestamp, measurement=el3.measurement, location=Location()
 )
 
@@ -48,6 +48,4 @@ valid_scenarios = (
     (dataset_cfg, [el5, el14, el25], [el5, el14, el25]),
 )
 
-invalid_scenario = (dataset_cfg, [unlocated_element], [Exception])
-
-out_of_context = (dataset_cfg, el3)
+invalid_scenario = (dataset_cfg, [unallocated_element])

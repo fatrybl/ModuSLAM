@@ -12,23 +12,29 @@ from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMea
 from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     Ros2DataLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+    DataReader,
+)
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2Config,
 )
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.message_processor import (
     get_msg_processor,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.generator_setup import (
-    setup_messages_gen,
-)
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (
     RosbagsMessageGenerator,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import check_directory
+from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+    check_directory,
+    check_setup,
+)
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.moduslam.sensors_factory.sensors import Sensor
-from src.utils.exceptions import ConfigurationError, DataReaderConfigurationError
+from src.utils.exceptions import (
+    ConfigurationError,
+    DataReaderConfigurationError,
+    ItemNotFoundError,
+)
 
 logger = logging.getLogger(data_manager)
 
@@ -83,9 +89,6 @@ class Ros2Reader(DataReader):
         self._type_store = get_typestore(dataset_params.ros_distro)
 
         self._reader = Reader(self._dataset_directory)
-        self._start_time, self._end_time = get_start_end_time(self._reader)
-        self._time_limit_end = self._end_time
-
         self._all_messages_gen = self._reader.messages()
 
     def __enter__(self):
@@ -100,7 +103,17 @@ class Ros2Reader(DataReader):
         self._in_context = False
 
     def configure(self, regime: Stream | TimeLimit, sensors: Iterable[Sensor]) -> None:
-        """Configures the reader with a regime."""
+        """Configures the reader with a regime.
+
+        Args:
+            regime: data collection regime.
+
+            sensors: sensors to read data of.
+
+        Raises:
+            DataReaderConfigurationError: if no measurements exist for the
+            given regime and sensors.
+        """
         self._setup_mappings(sensors)
 
         self._fill_connections()
@@ -108,9 +121,7 @@ class Ros2Reader(DataReader):
             logger.critical("No topics to read data from.")
             raise ConfigurationError
 
-        self._all_messages_gen = setup_messages_gen(
-            regime, self._reader, self._connections, self._end_time
-        )
+        self._all_messages_gen = self._setup_messages_gen(regime, self._reader, self._connections)
 
         self._setup_sensor_msg_gen_mapping(regime, sensors)
 
@@ -125,14 +136,15 @@ class Ros2Reader(DataReader):
 
         Returns:
             next element or None.
-        """
-        if not self._in_context:
-            logger.critical("Attempted to read data outside of context manager.")
-            raise RuntimeError("Reader must be used within a context manager.")
 
-        if not self._is_configured:
-            logger.critical("Attempted to read next measurement without configuration.")
-            raise RuntimeError("Reader must be configured before reading data.")
+        Raises:
+            RuntimeError: if a method has been called outside the context manager.
+        """
+        try:
+            check_setup(self._in_context, self._is_configured)
+        except RuntimeError as e:
+            logger.error(e)
+            raise
 
         try:
             connection, timestamp, raw_data = next(self._all_messages_gen)
@@ -160,14 +172,15 @@ class Ros2Reader(DataReader):
 
         Returns:
             next element or None.
-        """
-        if not self._in_context:
-            logger.critical("Attempted to read data outside of context manager.")
-            raise RuntimeError("Reader must be used within a context manager.")
 
-        if not self._is_configured:
-            logger.critical("Attempted to read next measurement without configuration.")
-            raise RuntimeError("Reader must be configured before reading data.")
+        Raises:
+            RuntimeError: if a method has been called outside the context manager.
+        """
+        try:
+            check_setup(self._in_context, self._is_configured)
+        except RuntimeError as e:
+            logger.error(e)
+            raise
 
         messages_gen = self._sensor_msg_gen_table[sensor]
 
@@ -176,9 +189,6 @@ class Ros2Reader(DataReader):
             msg = self._type_store.deserialize_cdr(raw_data, connection.msgtype)
 
         except StopIteration:
-            return None
-
-        if timestamp > self._time_limit_end:
             return None
 
         processed_data = self._msg_processor.process(msg, connection.msgtype)
@@ -192,7 +202,7 @@ class Ros2Reader(DataReader):
     def get_next_element(self, element=None):
         """Get an element from the dataset."""
 
-    def get_element(self, element: Element):
+    def get_element(self, element: Element) -> Element:
         """Gets element from a dataset based on the given element w/o raw data.
 
         Args:
@@ -201,15 +211,25 @@ class Ros2Reader(DataReader):
         Return:
             element with raw data.
 
-        TODO: test if start=stop=t in the reader.messages() method works.
+        Raises:
+            ItemNotFoundError: if no real measurement has been found
+            in the dataset for the given element.
         """
         t = element.timestamp
         sensor = element.measurement.sensor
         topic = self._sensor_name_topic_table[sensor.name]
         connections = [с for с in self._connections if с.topic == topic]
-        messages_gen = self._reader.messages(connections, t, t)
 
-        connection, t, raw_data = next(messages_gen)
+        messages_gen = self._reader.messages(connections, t, t + 1)
+
+        try:
+            connection, t, raw_data = next(messages_gen)
+
+        except StopIteration:
+            error = f"A real measurement has not been found for the given element {element}."
+            logger.critical(error)
+            raise ItemNotFoundError(error)
+
         msg = self._type_store.deserialize_cdr(raw_data, connection.msgtype)
 
         processed_data = self._msg_processor.process(msg, connection.msgtype)
@@ -217,6 +237,32 @@ class Ros2Reader(DataReader):
         measurement = RawMeasurement(sensor, processed_data)
 
         return Element(t, measurement, element.location)
+
+    @staticmethod
+    def _setup_messages_gen(
+        regime: Stream | TimeLimit, reader: Reader, connections: Iterable[Connection]
+    ) -> RosbagsMessageGenerator:
+        """Sets up messages generator.
+
+        Args:
+            regime: a data reader regime.
+
+            reader: a reader to set up a message generator for.
+
+            connections: connections to set up message generator for.
+
+        Returns:
+            messages generator.
+        """
+        if isinstance(regime, TimeLimit):
+            start, stop = int(regime.start), int(regime.stop)
+            # add +1 to include the last message
+            messages_gen = reader.messages(connections, start, stop + 1)
+
+        else:
+            messages_gen = reader.messages(connections)
+
+        return messages_gen
 
     def _setup_sensor_msg_gen_mapping(
         self, regime: Stream | TimeLimit, sensors: Iterable[Sensor]
@@ -233,13 +279,7 @@ class Ros2Reader(DataReader):
             topic = self._sensor_name_topic_table[sensor.name]
             connections = [с for с in self._connections if с.topic == topic]
 
-            if isinstance(regime, TimeLimit):
-                start, stop = int(regime.start), int(regime.stop)
-                messages_gen = self._reader.messages(connections, start)
-                self._time_limit_end = stop
-
-            else:
-                messages_gen = self._reader.messages(connections)
+            messages_gen = self._setup_messages_gen(regime, self._reader, connections)
 
             self._sensor_msg_gen_table[sensor] = messages_gen
 

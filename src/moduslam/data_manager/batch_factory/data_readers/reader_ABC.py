@@ -11,12 +11,13 @@ from src.moduslam.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger("data_manager")
 
+context_error_msg: str = "Method must be called within a context."
+configuration_error_msg: str = "Reader has not been configured. Call the configure() method first."
+
 
 @runtime_checkable
 class DataReader(Protocol):
     """Interface for any data reader."""
-
-    _context_error_msg: str = "Method must be called within a context."
 
     def __enter__(self) -> "DataReader":
         """Opens the dataset for reading."""
@@ -53,7 +54,7 @@ class DataReader(Protocol):
             timestamp: timestamp to set the iterator(s) position(s) to.
 
         Raises:
-            SetNotStateError: if no measurement for the given sensor and timestamp has been found.
+            SetNotStateError: if no measurement has been found for the given sensor and timestamp.
         """
 
     @overload
@@ -65,7 +66,7 @@ class DataReader(Protocol):
             element with raw measurement or None if all measurements from a dataset have already been read.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            RuntimeError: if a method has been called outside the context manager.
         """
 
     @overload
@@ -80,7 +81,7 @@ class DataReader(Protocol):
             element with raw measurement or None if all measurements from a dataset has already been processed.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            RuntimeError: if a method has been called outside the context manager.
         """
 
     @dispatch
@@ -100,5 +101,6 @@ class DataReader(Protocol):
             element with raw measurement.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            ItemNotFoundError: if no real measurement has been found
+            in the dataset for the given element.
         """

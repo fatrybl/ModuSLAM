@@ -8,8 +8,13 @@ from PIL.Image import Image
 
 from src.logger.logging_config import data_manager
 from src.moduslam.data_manager.batch_factory.data_readers.data_sources import Source
+from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+    configuration_error_msg,
+    context_error_msg,
+)
 from src.utils.auxiliary_dataclasses import Message
 from src.utils.exceptions import (
+    DataReaderConfigurationError,
     ExternalModuleException,
     FileNotValid,
     ItemNotFoundError,
@@ -104,6 +109,33 @@ def check_files(files: Iterable[Path]) -> None:
             raise FileNotValid(msg)
 
 
+def check_data_sources(dataset_dir: Path, files: Iterable[Path]) -> None:
+    """Validate files and subdirectories in dataset directory.
+
+    Args:
+        dataset_dir: dataset directory.
+
+        files: files to check.
+
+    Raises:
+        DataReaderConfigurationError:
+            1. a data directory does not exist.
+            2. csv files have not been found in the dataset directory.
+    """
+    try:
+        check_directory(dataset_dir)
+    except NotADirectoryError as e:
+        logger.critical(e)
+        raise DataReaderConfigurationError(e)
+
+    try:
+        check_files(files)
+
+    except FileNotFoundError as e:
+        logger.critical(e)
+        raise DataReaderConfigurationError(e)
+
+
 def check_directory(directory_path: Path) -> None:
     """Checks if a directory exists for the given path.
 
@@ -117,6 +149,20 @@ def check_directory(directory_path: Path) -> None:
         msg = f"The path {directory_path!r} either does not exist or is not a directory"
         logger.error(msg)
         raise NotADirectoryError(msg)
+
+
+def check_setup(in_context: bool, is_configured: bool) -> None:
+    """Checks if the reader is in context and configured.
+
+    Raises:
+        RuntimeError: if the reader is not in context or not configured.
+    """
+
+    if not in_context:
+        raise RuntimeError(context_error_msg)
+
+    if not is_configured:
+        raise RuntimeError(configuration_error_msg)
 
 
 def get_csv_message(line: str, separator: str = " ") -> Message:

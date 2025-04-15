@@ -32,6 +32,4 @@ valid_scenarios = (
     (dataset_cfg, elements[10:15], elements[10:15]),
 )
 
-invalid_scenario = (dataset_cfg, [invalid_element], [Exception])
-
-out_of_context = (dataset_cfg, el3)
+invalid_scenario = (dataset_cfg, [invalid_element])

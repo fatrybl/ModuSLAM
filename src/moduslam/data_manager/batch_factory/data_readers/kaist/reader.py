@@ -26,11 +26,13 @@ from src.moduslam.data_manager.batch_factory.data_readers.kaist.measurement_coll
 from src.moduslam.data_manager.batch_factory.data_readers.kaist.utils import (
     create_sequence,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+    DataReader,
+)
 from src.moduslam.data_manager.batch_factory.data_readers.utils import (
     apply_state,
-    check_directory,
-    check_files,
+    check_data_sources,
+    check_setup,
     filter_table,
     set_state,
 )
@@ -93,7 +95,9 @@ class KaistReader(DataReader):
         self._sensors: dict[str, Sensor] = {}
 
         self._set_root_path(dataset_params.directory)
-        self._check_data_sources(dataset_params.directory)
+
+        csv_files = (*self._csv_files.values(), self._timestamp_file)
+        check_data_sources(dataset_params.directory, csv_files)
 
         ext = self._pointcloud_extension
         self._sensor_source_table: dict[str, Source] = {
@@ -129,9 +133,10 @@ class KaistReader(DataReader):
         exc_tb: TracebackType | None,
     ):
         """Closes all opened files."""
-        self._in_context = False
         for src in self._sensor_source_table.values():
             src.close()
+
+        self._in_context = False
 
     def configure(self, regime: Stream | TimeLimit, sensors: Iterable[Sensor]) -> None:
         """Configures the reader.
@@ -179,7 +184,7 @@ class KaistReader(DataReader):
             timestamp: timestamp to set the iterator position.
 
         Raises:
-            StateNotSetError: if no measurement for the given sensor and timestamp has been found.
+            StateNotSetError: if no measurement has been found for the given sensor and timestamp.
 
         TODO: add tests
         """
@@ -209,16 +214,13 @@ class KaistReader(DataReader):
             element with raw measurement or None if all measurements from a dataset have already been read.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            RuntimeError: if a method has been called outside the context manager.
         """
-        if not self._in_context:
-            logger.critical(self._context_error_msg)
-            raise RuntimeError(self._context_error_msg)
-
-        if not self._is_configured:
-            msg = "The reader has not been configured. Call the configure() method first."
-            logger.critical(msg)
-            raise RuntimeError(msg)
+        try:
+            check_setup(self._in_context, self._is_configured)
+        except RuntimeError as e:
+            logger.error(e)
+            raise
 
         try:
             timestamp, sensor_name, index = next(self._data_sequence_iter)
@@ -256,16 +258,13 @@ class KaistReader(DataReader):
             element with raw data or None if all measurements from a dataset have already been read.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
+            RuntimeError: if a method has been called outside the context manager.
         """
-        if not self._in_context:
-            logger.critical(self._context_error_msg)
-            raise RuntimeError(self._context_error_msg)
-
-        if not self._is_configured:
-            msg = "The reader has not been configured. Call the configure() method first."
-            logger.critical(msg)
-            raise RuntimeError(msg)
+        try:
+            check_setup(self._in_context, self._is_configured)
+        except RuntimeError as e:
+            logger.error(e)
+            raise
 
         try:
             source = self._sensor_source_table[sensor.name]
@@ -297,43 +296,19 @@ class KaistReader(DataReader):
             element with raw data.
 
         Raises:
-            RuntimeError: if the method is called outside the context manager.
-
-        TODO: add try block to catch exceptions from get_measurement()
+            ItemNotFoundError: if no real measurement has been found
+            in the dataset for the given element.
         """
-        if not self._in_context:
-            logger.critical(self._context_error_msg)
-            raise RuntimeError(self._context_error_msg)
+        try:
+            raw_measurement = get_measurement(element.location)
+        except Exception:
+            msg = f"A real measurement has not been found for the given element {element}."
+            logger.critical(msg)
+            raise ItemNotFoundError(msg)
 
-        raw_measurement = get_measurement(element.location)
         measurement = RawMeasurement(element.measurement.sensor, raw_measurement.data)
         element_with_data = Element(element.timestamp, measurement, element.location)
         return element_with_data
-
-    def _check_data_sources(self, dataset_dir: Path) -> None:
-        """Validate files and subdirectories in dataset directory.
-
-        Args:
-            dataset_dir: dataset directory.
-
-        Raises:
-            DataReaderConfigurationError:
-                1. a data directory does not exist.
-                2. csv files have not been found in the dataset directory.
-        """
-        try:
-            check_directory(dataset_dir)
-        except NotADirectoryError as e:
-            logger.critical(e)
-            raise DataReaderConfigurationError(e)
-
-        csv_files = (*self._csv_files.values(), self._timestamp_file)
-        try:
-            check_files(csv_files)
-
-        except FileNotFoundError as e:
-            logger.critical(e)
-            raise DataReaderConfigurationError(e)
 
     def _set_root_path(self, root_path: Path) -> None:
         """Sets the root path for all files and directories.
