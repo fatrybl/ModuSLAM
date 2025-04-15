@@ -1,4 +1,4 @@
-"""Tests scenarios for Kaist dataset."""
+"""Tests scenarios for Kaist Urban dataset."""
 
 from src.moduslam.data_manager.batch_factory.configs import (
     BatchFactoryConfig,

@@ -1,55 +1,39 @@
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
-    KaistConfig,
+from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.scenarios.data import (
+    all_sensors,
+    altimeter,
+    dataset_cfg,
+    el2,
+    el3,
+    el5,
+    el8,
+    el10,
+    el12,
+    el14,
+    el19,
+    el22,
+    el23,
+    el24,
+    el25,
+    elements,
+    imu,
+    lidar2D_back,
+    lidar2D_middle,
+    sensors_factory_config1,
+    sensors_factory_config2,
+    sensors_factory_config3,
+    sensors_factory_config4,
+    sensors_factory_config5,
+    sensors_factory_config6,
+    stereo,
+    stream,
+    timelimit1,
+    timelimit2,
+    timelimit3,
+    timelimit4,
+    timelimit5,
+    timelimit6,
+    timelimit7,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
-from src.tests.conftest import kaist_custom_dataset_dir
-from src.tests_data_generators.kaist_dataset.data import Data
-from src.tests_data_generators.utils import generate_sensors_factory_config
-
-data = Data(kaist_custom_dataset_dir)
-elements = data.elements
-el1 = elements[0]
-el2 = elements[1]
-el3 = elements[2]
-el5 = elements[4]
-el8 = elements[7]
-el10 = elements[9]
-el12 = elements[11]
-el14 = elements[13]
-el19 = elements[18]
-el22 = elements[21]
-el23 = elements[22]
-el24 = elements[23]
-el25 = elements[24]
-
-imu = data.imu
-stereo = data.stereo
-lidar2D_back = data.sick_back
-lidar2D_middle = data.sick_middle
-lidar3D_left = data.velodyne_left
-lidar3D_right = data.velodyne_right
-altimeter = data.altimeter
-
-dataset_cfg = KaistConfig(directory=kaist_custom_dataset_dir)
-
-stream = Stream()
-
-timelimit1 = TimeLimit(start=el1.timestamp, stop=el25.timestamp)
-timelimit2 = TimeLimit(start=el3.timestamp, stop=el23.timestamp)
-timelimit3 = TimeLimit(start=el2.timestamp, stop=el12.timestamp)
-timelimit4 = TimeLimit(start=el19.timestamp, stop=el24.timestamp)
-timelimit5 = TimeLimit(start=el5.timestamp, stop=el25.timestamp)
-timelimit6 = TimeLimit(start=el3.timestamp, stop=el8.timestamp)
-timelimit7 = TimeLimit(start=el3.timestamp, stop=el10.timestamp)
-
-all_sensors: list[Sensor] = [element.measurement.sensor for element in elements]
-sensors_factory_config1 = generate_sensors_factory_config(all_sensors)
-sensors_factory_config2 = generate_sensors_factory_config([imu])
-sensors_factory_config3 = generate_sensors_factory_config([lidar2D_back])
-sensors_factory_config4 = generate_sensors_factory_config([stereo])
-sensors_factory_config5 = generate_sensors_factory_config([lidar2D_middle])
-sensors_factory_config6 = generate_sensors_factory_config([imu, altimeter])
 
 valid_stream_scenarios = (
     (sensors_factory_config1, dataset_cfg, stream, all_sensors, elements),

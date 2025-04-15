@@ -2,6 +2,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base i
     TumVieConfig,
 )
 from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from src.moduslam.sensors_factory.sensors import Sensor
 from src.tests.conftest import tum_vie_dataset_dir
 from src.tests_data_generators.tum_vie_dataset.data import Data
 from src.tests_data_generators.utils import generate_sensors_factory_config
@@ -14,14 +15,19 @@ elements = data.elements
 imu = data.imu
 stereo = data.stereo
 
-regime = Stream()
+all_sensors: list[Sensor] = [element.measurement.sensor for element in elements]
+
+stream = Stream()
 
 el1 = elements[0]  # stereo
 el2 = elements[1]  # imu
+el3 = elements[2]  # imu
 el5 = elements[4]  # imu
 el10 = elements[9]  # imu
 el11 = elements[10]  # stereo
 el12 = elements[11]  # imu
+el19 = elements[18]  # imu
+el22 = elements[21]  # imu
 el23 = elements[22]  # imu
 el24 = elements[23]  # stereo
 
@@ -42,24 +48,3 @@ timelimit7 = TimeLimit(
 sensors_factory_config1 = generate_sensors_factory_config((imu, stereo))
 sensors_factory_config2 = generate_sensors_factory_config((imu,))
 sensors_factory_config3 = generate_sensors_factory_config((stereo,))
-
-valid_stream_scenarios = (
-    (sensors_factory_config1, dataset_cfg, regime, elements),
-    (sensors_factory_config2, dataset_cfg, regime, elements[1:10] + elements[11:23]),
-    (sensors_factory_config3, dataset_cfg, regime, [el1, el11, el24, None]),
-)
-
-valid_timelimit_scenarios = (
-    (sensors_factory_config1, dataset_cfg, timelimit1, elements),
-    (sensors_factory_config1, dataset_cfg, timelimit2, elements[:11]),
-    (sensors_factory_config1, dataset_cfg, timelimit3, elements[10:]),
-    (sensors_factory_config2, dataset_cfg, timelimit4, elements[1:10]),
-    (sensors_factory_config2, dataset_cfg, timelimit5, [el5, None]),
-    (sensors_factory_config3, dataset_cfg, timelimit6, [el24, None]),
-    (sensors_factory_config2, dataset_cfg, timelimit7, elements[11:23]),
-)
-
-tum_vie1 = (
-    *valid_stream_scenarios,
-    *valid_timelimit_scenarios,
-)

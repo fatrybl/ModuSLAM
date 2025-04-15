@@ -12,7 +12,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.reader import 
     TumVieReader,
 )
 from src.moduslam.data_manager.batch_factory.utils import equal_elements
-from src.tests.moduslam.data_manager.batch_factory.readers.tum_vie.data.case3 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.tum_vie.scenarios.case3 import (
     invalid_scenario,
     valid_scenarios,
 )

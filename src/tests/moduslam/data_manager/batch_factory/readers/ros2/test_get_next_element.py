@@ -21,10 +21,10 @@ from src.moduslam.data_manager.batch_factory.utils import equal_elements
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.moduslam.sensors_factory.factory import SensorsFactory
 from src.moduslam.sensors_factory.sensors import Sensor
-from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E_data.case1 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.case1 import (
     S3E_1,
 )
-from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E_data.case2 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.case2 import (
     S3E_2,
 )
 

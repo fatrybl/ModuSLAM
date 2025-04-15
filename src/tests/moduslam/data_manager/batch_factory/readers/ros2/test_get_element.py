@@ -10,7 +10,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base impo
 )
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.reader import Ros2Reader
 from src.moduslam.data_manager.batch_factory.utils import equal_elements
-from src.tests.moduslam.data_manager.batch_factory.readers.ros2.S3E_data.case3 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.case3 import (
     invalid_scenario,
     valid_stream_scenarios,
 )

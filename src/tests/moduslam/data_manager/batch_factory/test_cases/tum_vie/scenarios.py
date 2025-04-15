@@ -1,4 +1,4 @@
-"""Tests scenarios for TumVie dataset."""
+"""Tests scenarios for Tum Vie dataset."""
 
 from src.moduslam.data_manager.batch_factory.configs import (
     BatchFactoryConfig,

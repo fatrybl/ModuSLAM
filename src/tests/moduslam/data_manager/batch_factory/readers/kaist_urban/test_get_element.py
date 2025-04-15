@@ -12,7 +12,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.kaist.reader import (
     KaistReader,
 )
 from src.moduslam.data_manager.batch_factory.utils import equal_elements
-from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.data.case3 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.scenarios.case3 import (
     invalid_scenario,
     valid_scenarios,
 )

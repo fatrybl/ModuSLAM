@@ -1,26 +1,13 @@
-import random
-
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
 from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     Ros2DataLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
-    Ros2HumbleConfig,
+from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.s3e_data import (
+    dataset_cfg,
+    elements,
+    shuffled_elements,
 )
-from src.tests.conftest import s3e_dataset_dir
-from src.tests_data_generators.ros2.s3e_dataset.data import (
-    Data,
-    imu,
-    sensor_name_topic_map,
-)
-
-data = Data(s3e_dataset_dir)
-elements = data.elements
-shuffled_elements = random.sample(elements, len(elements))
-
-dataset_cfg = Ros2HumbleConfig(
-    directory=s3e_dataset_dir, sensor_topic_mapping=sensor_name_topic_map
-)
+from src.tests_data_generators.ros2.s3e_dataset.data import imu
 
 valid_stream_scenarios = (
     (dataset_cfg, elements, elements),

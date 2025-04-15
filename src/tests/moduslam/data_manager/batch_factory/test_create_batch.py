@@ -30,32 +30,32 @@
 
 Checklist:
 
-| Test case | KaistReader | Ros1Reader  | Ros2Reader |
-======================================================
-| 1.1       |      +      |            |             |
-| 1.2       |      +      |            |             |
-| 1.3       |      +      |            |             |
-| 1.4       |      +      |            |             |
-| 1.5       |      +      |            |             |
-| 1.6       |      +      |            |             |
-| 1.7       |      +      |            |             |
-| 1.8       |      +      |            |             |
-| 1.9       |      +      |            |             |
-| 1.10      |      +      |            |             |
-======================================================
-| 2.1       |      +      |            |             |
-| 2.2       |      +      |            |             |
-| 2.3       |      +      |            |             |
-| 2.4       |      +      |            |             |
-| 2.5       |      +      |            |             |
-| 2.6       |      +      |            |             |
-======================================================
-| 3.1       |      +      |            |             |
-| 3.2       |      +      |            |             |
-| 3.3       |      +      |            |             |
-| 3.4       |      +      |            |             |
-| 3.5       |      +      |            |             |
-======================================================
+| Test case | Kaist Urban | Tum Vie | Ros2 (S3E) |
+==================================================
+| 1.1       |      +      |    +    |      +     |
+| 1.2       |      +      |    +    |      +     |
+| 1.3       |      +      |    +    |      +     |
+| 1.4       |      +      |    +    |      +     |
+| 1.5       |      +      |    +    |      +     |
+| 1.6       |      +      |    +    |      +     |
+| 1.7       |      +      |    +    |      +     |
+| 1.8       |      +      |    +    |      +     |
+| 1.9       |      +      |    +    |      +     |
+| 1.10      |      +      |    +    |      +     |
+==================================================
+| 2.1       |      +      |    +    |      +     |
+| 2.2       |      +      |    +    |      +     |
+| 2.3       |      +      |    +    |      +     |
+| 2.4       |      +      |    +    |      +     |
+| 2.5       |      +      |    +    |      +     |
+| 2.6       |      +      |    +    |      +     |
+==================================================
+| 3.1       |      +      |    +    |      +     |
+| 3.2       |      +      |    +    |      +     |
+| 3.3       |      +      |    +    |      +     |
+| 3.4       |      +      |    +    |      +     |
+| 3.5       |      +      |    +    |      +     |
+==================================================
 """
 
 from collections.abc import Iterable
@@ -86,7 +86,10 @@ from src.tests.moduslam.data_manager.batch_factory.test_cases.tum_vie.scenarios 
 from src.utils.auxiliary_dataclasses import PeriodicDataRequest
 from src.utils.exceptions import UnfeasibleRequestError
 
-test_cases_1_success = (*kaist_scenarios1_success, *tum_vie_scenarios1_success)
+test_cases_1_success = (
+    *kaist_scenarios1_success,
+    *tum_vie_scenarios1_success,
+)
 test_cases_2_success = (*kaist_scenarios2_success, *tum_vie_scenarios2_success)
 test_cases_3_success = (*kaist_scenarios3_success, *tum_vie_scenarios3_success)
 test_cases_1_fail = (*kaist_scenarios1_fail, *tum_vie_scenarios1_fail)
