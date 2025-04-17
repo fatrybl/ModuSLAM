@@ -31,7 +31,7 @@ def split_ros2_bag(
             )
 
         for con in reader.connections:
-            writer.add_connection(topic=con.topic_name, msgtype=con.msgtype, typestore=typestore)
+            writer.add_connection(topic=con.topic, msgtype=con.msgtype, typestore=typestore)
 
         for con in writer.connections:
             topic_connection_map[con.topic] = con

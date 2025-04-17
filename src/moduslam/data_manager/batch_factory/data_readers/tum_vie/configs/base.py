@@ -15,7 +15,7 @@ class TumVieConfig(DatasetConfig):
 
     directory: Path = MISSING
 
-    reader: str = DataReaders.tum_vie_reader
+    reader: str = DataReaders.tum_vie
 
     name: str = "TUM Visual-Inertial Event Dataset"
 

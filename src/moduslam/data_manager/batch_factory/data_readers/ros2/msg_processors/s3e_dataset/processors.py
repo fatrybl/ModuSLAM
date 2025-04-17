@@ -4,7 +4,6 @@ from PIL import Image as ImageIO
 from PIL.Image import Image
 
 from src.custom_types.aliases import Vector6
-from src.custom_types.numpy import MatrixMxN
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.point_cloud2_processor import (
     filter_nans,
     pointcloud2_to_array,
@@ -56,20 +55,27 @@ def get_imu_measurement(raw_msg) -> Vector6:
         raw_msg: raw IMU message.
 
     Returns:
-        imu_data: a_x, a_y, a_z, w_x, w_y, w_z.
+        imu_data: w_x, w_y, w_z, a_x, a_y, a_z.
 
     """
-    linear_acceleration = raw_msg.linear_acceleration
     angular_velocity = raw_msg.angular_velocity
+    linear_acceleration = raw_msg.linear_acceleration
 
-    a_x = linear_acceleration.x
-    a_y = linear_acceleration.y
-    a_z = linear_acceleration.z
     w_x = angular_velocity.x
     w_y = angular_velocity.y
     w_z = angular_velocity.z
+    a_x = linear_acceleration.x
+    a_y = linear_acceleration.y
+    a_z = linear_acceleration.z
 
-    return a_x, a_y, a_z, w_x, w_y, w_z
+    return (
+        w_x,
+        w_y,
+        w_z,
+        a_x,
+        a_y,
+        a_z,
+    )
 
 
 def get_2d_pointcloud(raw_msg) -> tuple:
@@ -88,20 +94,22 @@ def get_2d_pointcloud(raw_msg) -> tuple:
     return laser_scan_data
 
 
-def get_3d_pointcloud(raw_msg) -> MatrixMxN:
-    """Processes raw LiDAR ROS-2 PointCloud2 message into a NumPy array [NxM].
+def get_3d_pointcloud(raw_msg) -> tuple[float, ...]:
+    """Processes raw LiDAR ROS-2 PointCloud2 message into a sequential tuple of floats
+    representing 3D points, intensities, rings, times, etc.
 
     Args:
         raw_msg: a PointCloud2 message.
 
     Returns:
-        points array.
+        float values.
     """
     structured = pointcloud2_to_array(raw_msg)
     points = structured_to_regular_array(structured)
     points = filter_nans(points)
-
-    return points
+    vector = points.flatten().astype(float)
+    points_tuple = tuple(vector)
+    return points_tuple
 
 
 def get_uwb(raw_msg) -> tuple:

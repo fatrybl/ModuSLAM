@@ -15,7 +15,7 @@ class KaistConfig(DatasetConfig):
 
     directory: Path = MISSING
 
-    reader: str = DataReaders.kaist_reader
+    reader: str = DataReaders.kaist_urban
 
     name: str = "Kaist Urban Dataset"
 

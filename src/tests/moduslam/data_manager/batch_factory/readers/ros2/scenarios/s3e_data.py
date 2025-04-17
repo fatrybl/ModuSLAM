@@ -1,5 +1,10 @@
 import random
 
+from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+    Location,
+    Ros2DataLocation,
+)
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2HumbleConfig,
 )
@@ -28,7 +33,7 @@ imu_elements = [el for el in elements if el.measurement.sensor.name == imu_cfg.n
 lidar_elements = [el for el in elements if el.measurement.sensor.name == lidar_cfg.name]
 left_camera_elements = [el for el in elements if el.measurement.sensor.name == left_camera_cfg.name]
 
-left_camera_with_lidar_elements = sorted(
+left_camera_lidar_elements = sorted(
     lidar_elements + left_camera_elements, key=lambda el: el.timestamp
 )
 
@@ -48,7 +53,7 @@ t_limit_6 = TimeLimit(elements[5].timestamp, elements[15].timestamp)
 t_limit_7 = TimeLimit(imu_elements[0].timestamp, imu_elements[-1].timestamp)
 t_limit_8 = TimeLimit(lidar_elements[0].timestamp, lidar_elements[-1].timestamp)
 t_limit_9 = TimeLimit(
-    left_camera_with_lidar_elements[0].timestamp, left_camera_with_lidar_elements[-1].timestamp
+    left_camera_lidar_elements[0].timestamp, left_camera_lidar_elements[-1].timestamp
 )
 t_limit_10 = TimeLimit(left_camera_elements[0].timestamp, left_camera_elements[1].timestamp)
 t_limit_11 = TimeLimit(imu_elements[0].timestamp, imu_elements[1].timestamp)
@@ -60,4 +65,16 @@ sensors_configs_3 = [left_camera_cfg, lidar_cfg]
 imu_list = [imu] * len(imu_elements)
 lidar_list = [lidar] * len(lidar_elements)
 left_camera_list = [left_camera] * len(left_camera_elements)
-left_camera_lidar_sensors = [el.measurement.sensor for el in left_camera_with_lidar_elements]
+left_camera_lidar_sensors = [el.measurement.sensor for el in left_camera_lidar_elements]
+
+invalid_element_1 = Element(
+    timestamp=1,
+    measurement=RawMeasurement(imu, "some data"),
+    location=Ros2DataLocation("some topic"),
+)
+
+invalid_element_2 = Element(
+    timestamp=1,
+    measurement=RawMeasurement(imu, "some data"),
+    location=Location(),
+)

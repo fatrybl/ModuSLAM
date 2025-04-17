@@ -1,5 +1,7 @@
 import numpy as np
 
+from src.custom_types.numpy import MatrixMxN
+
 _DATATYPE_MAPPINGS = {
     1: ("int8", 1),
     2: ("uint8", 1),
@@ -12,7 +14,7 @@ _DATATYPE_MAPPINGS = {
 }
 
 
-def pointcloud2_to_array(msg):
+def pointcloud2_to_array(msg) -> np.ndarray:
     """Converts sensor_msgs/PointCloud2 message to a structured NumPy array.
 
     Args:
@@ -28,19 +30,19 @@ def pointcloud2_to_array(msg):
     return np.frombuffer(msg.data, dtype=np.dtype(dtype_list))
 
 
-def structured_to_regular_array(struct_array):
+def structured_to_regular_array(structured_array: np.ndarray) -> MatrixMxN:
     """Converts structured NumPy array to regular [N, M] float array.
 
     Args:
-        struct_array: Structured array with named fields.
+        structured_array: Structured array with named fields.
 
     Returns:
         a regular NumPy array of shape [N, M].
     """
-    return np.stack([struct_array[name] for name in struct_array.dtype.names], axis=-1)
+    return np.stack([structured_array[name] for name in structured_array.dtype.names], axis=-1)
 
 
-def filter_nans(points):
+def filter_nans(points: MatrixMxN) -> MatrixMxN:
     """Removes rows with NaN or Inf values from point array.
 
     Args:

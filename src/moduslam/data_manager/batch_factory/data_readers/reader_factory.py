@@ -51,7 +51,7 @@ def create(
     """
 
     match dataset_config.reader:
-        case DataReaders.kaist_reader:
+        case DataReaders.kaist_urban:
             try:
                 regime = kaist_regime(regime_config)
             except ValueError as e:
@@ -61,7 +61,7 @@ def create(
             dataset_config = cast(KaistConfig, dataset_config)
             return KaistReader(dataset_config), regime
 
-        case DataReaders.tum_vie_reader:
+        case DataReaders.tum_vie:
             try:
                 regime = tum_vie_regime(regime_config)
             except ValueError as e:
@@ -71,7 +71,7 @@ def create(
             dataset_config = cast(TumVieConfig, dataset_config)
             return TumVieReader(dataset_config), regime
 
-        case DataReaders.ros2_reader:
+        case DataReaders.ros2:
             try:
                 regime = ros2_regime(regime_config)
             except ValueError as e:

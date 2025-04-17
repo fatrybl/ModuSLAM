@@ -9,7 +9,7 @@ from src.moduslam.data_manager.batch_factory.configs import DataReaders, Dataset
 
 @dataclass
 class Ros2Config(DatasetConfig):
-    reader: str = DataReaders.ros2_reader
+    reader: str = DataReaders.ros2
     name: str = "Any ROS2 Dataset"
     url: str = "Any ROS2 Dataset url"
 

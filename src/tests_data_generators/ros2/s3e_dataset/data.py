@@ -4,7 +4,7 @@ from pathlib import Path
 
 from rosbags.typesys import Stores, get_typestore
 
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.message_processor import (
+from src.moduslam.data_manager.batch_factory.data_readers.ros2.ros_distro_processors import (
     Ros2Humble,
 )
 from src.moduslam.sensors_factory.configs import (

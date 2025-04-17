@@ -7,11 +7,11 @@ from omegaconf import MISSING
 
 from hydra import compose, initialize
 from src.external.handlers_factory.handlers.handler_protocol import Handler
-from src.external.handlers_factory.handlers.imu_data_preprocessors.config import (
+from src.external.handlers_factory.handlers.imu.config import (
     ImuHandlerConfig,
 )
-from src.external.handlers_factory.handlers.imu_data_preprocessors.tum_vie_handler import (
-    TumVieImuDataPreprocessor,
+from src.external.handlers_factory.handlers.imu.handler import (
+    ImuHandler,
 )
 from src.external.handlers_factory.handlers.scan_matcher.config import (
     KissIcpScanMatcherConfig,
@@ -75,7 +75,7 @@ class Factory:
         scan_matcher1 = ScanMatcher(config.scan_matcher1)
         scan_matcher2 = ScanMatcher(config.scan_matcher2)
         # imu_preprocessor = KaistUrbanImuDataPreprocessor(config.imu_preprocessor)
-        imu_preprocessor = TumVieImuDataPreprocessor(config.imu_preprocessor)
+        imu_preprocessor = ImuHandler(config.imu_preprocessor)
         vrs_gps_preprocessor = KaistUrbanVrsGpsPreprocessor(config.vrs_preprocessor)
         visual_odometry = VisualOdometry(config.visual_odometry)
 

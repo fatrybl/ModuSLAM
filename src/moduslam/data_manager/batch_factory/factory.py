@@ -141,7 +141,7 @@ class BatchFactory:
             raise MemoryError(msg)
 
     def _sort_if_needed(self) -> None:
-        """Sorts the batch if needed."""
+        """Sorts the batch if unsorted."""
         if not self._batch.is_sorted:
             logger.warning("The batch is not sorted by timestamp. Sorting it now.")
             self._batch.sort()

@@ -30,6 +30,11 @@ class DataBatch:
         return self._deque_set[0]
 
     @property
+    def last(self) -> Element:
+        """The first element of the batch."""
+        return self._deque_set[-1]
+
+    @property
     def size_bytes(self) -> int:
         """The size of the batch in bytes.
 

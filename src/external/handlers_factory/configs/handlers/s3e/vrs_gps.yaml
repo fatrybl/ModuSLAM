@@ -1,0 +1,6 @@
+defaults:
+  - /base_vrs_gps_preprocessor@_here_
+
+sensor_name: "Alpha_rtk"
+
+fix_statuses: [ 4 ]

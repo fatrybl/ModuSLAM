@@ -18,7 +18,7 @@ def get_config() -> LidarPointCloudConfig:
     cs.store(name="base_lidar_pointcloud", node=LidarPointCloudConfig)
 
     with initialize(version_base=None, config_path="../configs"):
-        cfg = compose(config_name="lidar_pointcloud")
+        cfg = compose(config_name="config")
         config = cast(LidarPointCloudConfig, cfg)
 
     return config

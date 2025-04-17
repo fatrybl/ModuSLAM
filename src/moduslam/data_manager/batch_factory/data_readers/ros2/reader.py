@@ -10,6 +10,7 @@ from rosbags.typesys import get_typestore
 from src.logger.logging_config import data_manager
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
 from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+    Location,
     Ros2DataLocation,
 )
 from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
@@ -18,7 +19,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2Config,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.message_processor import (
+from src.moduslam.data_manager.batch_factory.data_readers.ros2.ros_distro_processors import (
     get_msg_processor,
 )
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (
@@ -34,6 +35,7 @@ from src.utils.exceptions import (
     ConfigurationError,
     DataReaderConfigurationError,
     ItemNotFoundError,
+    StateNotSetError,
 )
 
 logger = logging.getLogger(data_manager)
@@ -128,7 +130,12 @@ class Ros2Reader(DataReader):
         self._is_configured = True
 
     def set_initial_state(self, sensor: Sensor, timestamp: float):
-        """Sets the iterator position for the sensor at the given timestamp."""
+        """Sets the iterator position for the sensor at the given timestamp.
+
+        TODO: change description or method name.
+        """
+        if sensor.name not in self._sensor_name_topic_table:
+            raise StateNotSetError(f"Reader has not been configured with sensor '{sensor.name}'.")
 
     @overload
     def get_next_element(self) -> Element | None:
@@ -216,8 +223,13 @@ class Ros2Reader(DataReader):
             in the dataset for the given element.
         """
         t = element.timestamp
-        sensor = element.measurement.sensor
-        topic = self._sensor_name_topic_table[sensor.name]
+
+        try:
+            topic = self._get_topic_name(element.location)
+        except TypeError as e:
+            logger.error(e)
+            raise ItemNotFoundError(e)
+
         connections = [с for с in self._connections if с.topic == topic]
 
         messages_gen = self._reader.messages(connections, t, t + 1)
@@ -234,9 +246,25 @@ class Ros2Reader(DataReader):
 
         processed_data = self._msg_processor.process(msg, connection.msgtype)
 
-        measurement = RawMeasurement(sensor, processed_data)
+        measurement = RawMeasurement(element.measurement.sensor, processed_data)
 
         return Element(t, measurement, element.location)
+
+    @staticmethod
+    def _get_topic_name(location: Location) -> str:
+        """Gets topic name with ROS-2 messages from location if exists.
+
+        Args:
+            location: a location to get topic from.
+
+        Returns:
+            topic name.
+        """
+        if not isinstance(location, Ros2DataLocation):
+            raise TypeError("Location should be of type Ros2DataLocation.")
+
+        else:
+            return location.topic_name
 
     @staticmethod
     def _setup_messages_gen(
@@ -256,8 +284,9 @@ class Ros2Reader(DataReader):
         """
         if isinstance(regime, TimeLimit):
             start, stop = int(regime.start), int(regime.stop)
-            # add +1 to include the last message
-            messages_gen = reader.messages(connections, start, stop + 1)
+            messages_gen = reader.messages(
+                connections, start, stop + 1
+            )  # add +1 to include the last message
 
         else:
             messages_gen = reader.messages(connections)

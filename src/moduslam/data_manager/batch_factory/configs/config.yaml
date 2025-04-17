@@ -4,9 +4,10 @@ defaults:
   - _self_
 
 regime:
-  name: "Stream"
-  start: 1661164286641000000
-  stop: 1661164286641855181
+  name: "TimeLimit"
+  start: 1661164286607675136
+  #  stop: 1661164286708535040
+  stop: 1661164306507739648 # 100 lidar scans
 
   #  # Urban-26 stereo
   #  start: 1544581218520741817

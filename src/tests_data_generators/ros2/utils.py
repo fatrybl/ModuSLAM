@@ -8,7 +8,7 @@ from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMea
 from src.moduslam.data_manager.batch_factory.data_readers.locations import (
     Ros2DataLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.message_processor import (
+from src.moduslam.data_manager.batch_factory.data_readers.ros2.ros_distro_processors import (
     MessageProcessor,
 )
 from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (

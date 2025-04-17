@@ -1,43 +1,34 @@
-"""
-IMU data format: [
-        timestamp,
-        quaternion x, quaternion y, quaternion z, quaternion w,
-        Euler x, Euler y, Euler z,
-        Gyro x, Gyro y, Gyro z,
-        Acceleration x, Acceleration y, Acceleration z,
-        MagnetField x, MagnetField y, MagnetField z
-        ]
-
-timestamp is not present in element`s raw data.
-
-Transform IMU data to the base frame according to the transformation matrix tf_base_sensor:
-https://github.com/TixiaoShan/LIO-SAM/issues/204#issuecomment-788827042
-"""
-
 import logging
 
 from src.external.handlers_factory.handlers.handler_protocol import Handler
-from src.external.handlers_factory.handlers.imu_data_preprocessors.config import (
+from src.external.handlers_factory.handlers.imu.config import (
     ImuHandlerConfig,
 )
+from src.external.handlers_factory.handlers.imu.parsers import dataset_parser_mapping
 from src.logger.logging_config import frontend_manager
 from src.measurement_storage.measurements.imu import (
     ImuCovariance,
-    ImuData,
     ProcessedImu,
 )
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.sensors_factory.sensors import Imu as ImuSensor
-from src.utils.auxiliary_methods import str_to_float
+from src.utils.exceptions import ConfigurationError
 
 logger = logging.getLogger(frontend_manager)
 
 
-class TumVieImuDataPreprocessor(Handler):
+class ImuHandler(Handler):
     """Tum Vie IMU data preprocessor."""
 
     def __init__(self, config: ImuHandlerConfig):
         self._sensor_name = config.sensor_name
+
+        try:
+            self._parser = dataset_parser_mapping[config.data_reader]
+        except KeyError:
+            msg = f"Parser not found for {config.data_reader}"
+            logger.error(msg)
+            raise ConfigurationError(msg)
 
     @property
     def sensor_name(self) -> str:
@@ -68,29 +59,11 @@ class TumVieImuDataPreprocessor(Handler):
             logger.error(msg)
             raise TypeError(msg)
 
-        imu_data = self._parse_line(element.measurement.values)
+        imu_data = self._parser(element.measurement.values)
 
         covariance = self._get_covariance(sensor)
 
         return ProcessedImu(element.timestamp, imu_data, covariance, sensor.tf_base_sensor)
-
-    @staticmethod
-    def _parse_line(values: tuple[str, ...]) -> ImuData:
-        """Extracts IMU raw data from an element created with the TUM VIE dataset.
-
-        Args:
-            values: an imu data.
-
-        Returns:
-            IMU data.
-        """
-        wx = str_to_float(values[0])
-        wy = str_to_float(values[1])
-        wz = str_to_float(values[2])
-        ax = str_to_float(values[3])
-        ay = str_to_float(values[4])
-        az = str_to_float(values[5])
-        return ImuData((wx, wy, wz), (ax, ay, az))
 
     @staticmethod
     def _get_covariance(sensor: ImuSensor) -> ImuCovariance:

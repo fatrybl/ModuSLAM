@@ -7,6 +7,7 @@ from src.external.handlers_factory.handlers.handler_protocol import HandlerConfi
 class KissIcpScanMatcherConfig(HandlerConfig):
     """Configuration for the KISS ICP odometry."""
 
+    num_channels: int = 4  # x, y, z, intensity
     max_points_per_voxel: int = 5
     voxel_size: float = 3.0
     adaptive_initial_threshold: float = 1.0

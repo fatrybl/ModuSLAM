@@ -2,7 +2,7 @@ from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.s3e_da
     dataset_cfg,
     elements,
     imu_elements,
-    left_camera_with_lidar_elements,
+    left_camera_lidar_elements,
     sensors_configs_1,
     sensors_configs_2,
     sensors_configs_3,
@@ -18,7 +18,7 @@ from src.tests.moduslam.data_manager.batch_factory.readers.ros2.scenarios.s3e_da
 valid_stream_scenarios = (
     (sensors_configs_1, dataset_cfg, stream, elements),
     (sensors_configs_2, dataset_cfg, stream, imu_elements),
-    (sensors_configs_3, dataset_cfg, stream, left_camera_with_lidar_elements),
+    (sensors_configs_3, dataset_cfg, stream, left_camera_lidar_elements),
     (sensors_configs_2, dataset_cfg, stream, [*imu_elements, None]),
     (sensors_configs_1, dataset_cfg, stream, [*elements, None]),
 )
@@ -31,7 +31,7 @@ valid_timelimit_scenarios = (
     (sensors_configs_1, dataset_cfg, t_limit_5, elements[10:]),
     (sensors_configs_1, dataset_cfg, t_limit_6, elements[5:15]),
     (sensors_configs_2, dataset_cfg, t_limit_1, imu_elements),
-    (sensors_configs_3, dataset_cfg, t_limit_1, left_camera_with_lidar_elements),
+    (sensors_configs_3, dataset_cfg, t_limit_1, left_camera_lidar_elements),
     (sensors_configs_1, dataset_cfg, t_limit_1, [*elements, None]),
 )
 

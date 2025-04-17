@@ -2,3 +2,5 @@ defaults:
   - /base_imu_preprocessor@_here_
 
 sensor_name: 'imu'
+
+data_reader: 'Kaist Urban Reader'
