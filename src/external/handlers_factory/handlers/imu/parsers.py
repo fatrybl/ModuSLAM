@@ -11,21 +11,21 @@ from src.utils.auxiliary_methods import str_to_float
 def parse_kaist_urban(values: tuple[str, ...]) -> ImuData:
     """Extracts IMU data from a line of Kaist Urban dataset.
 
+    Args:
+        values: tuple of values as strings.
+
+    Returns:
+        IMU data.
+
     IMU data format: [
             quaternion x, quaternion y, quaternion z, quaternion w,
             Euler x, Euler y, Euler z,
             Gyro x, Gyro y, Gyro z,
             Acceleration x, Acceleration y, Acceleration z,
             MagnetField x, MagnetField y, MagnetField z
-            ]
+    ]
 
     timestamp is not present in values.
-
-    Args:
-        values: tuple of values as strings.
-
-    Returns:
-        IMU data.
     """
     wx = str_to_float(values[7])
     wy = str_to_float(values[8])
@@ -42,6 +42,9 @@ def parse_tum_vie(values: tuple[str, ...]) -> ImuData:
     Args:
         values: tuple of values as strings.
 
+    Returns:
+        IMU data.
+
     IMU data format: [
         gx(rad/s), gy(rad/s), gz(rad/s),
         ax(m/s^2), ay(m/s^2), az(m/s^2),
@@ -49,9 +52,6 @@ def parse_tum_vie(values: tuple[str, ...]) -> ImuData:
     ]
 
     timestamp is not present in values.
-
-    Returns:
-        IMU data.
     """
     wx = str_to_float(values[0])
     wy = str_to_float(values[1])
@@ -68,15 +68,15 @@ def parse_ros_message(values: Vector6) -> ImuData:
     Args:
         values: vector with 6 floats.
 
+    Returns:
+        IMU data.
+
     IMU data format: [
         Gyro x, Gyro y, Gyro z,
         Acceleration x, Acceleration y, Acceleration z
     ]
 
     timestamp is not present in values.
-
-    Returns:
-        IMU data.
     """
     w_x, w_y, w_z = values[0], values[1], values[2]
     a_x, a_y, a_z = values[3], values[4], values[5]

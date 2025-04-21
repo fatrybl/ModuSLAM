@@ -57,6 +57,8 @@ def load_calib(filepath):
     return K, P
 
 
-K, P = load_calib("/src/external/handlers_factory/handlers/monocular_odometry/calib.txt")
-print(K)
-print(P)
+if __name__ == "__main__":
+    # Example usage
+    K, P = load_calib("/src/external/handlers_factory/handlers/monocular_odometry/calib.txt")
+    print(K)
+    print(P)

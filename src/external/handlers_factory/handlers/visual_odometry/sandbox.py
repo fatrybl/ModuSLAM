@@ -121,131 +121,132 @@ def rectify_stereo_images(
     return rectified_imgL, rectified_imgR
 
 
-img_left = cv2.imread(
-    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00278.jpg",
-    cv2.IMREAD_GRAYSCALE,
-)
-img_right = cv2.imread(
-    "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/right_images/00278.jpg",
-    cv2.IMREAD_GRAYSCALE,
-)
+if __name__ == "__main__":
+    img_left = cv2.imread(
+        "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/left_images/00278.jpg",
+        cv2.IMREAD_GRAYSCALE,
+    )
+    img_right = cv2.imread(
+        "/media/mark/New Volume/datasets/tum/visual_inertial_event/loop_floor_0/right_images/00278.jpg",
+        cv2.IMREAD_GRAYSCALE,
+    )
 
-width, height = img_left.shape[::-1]
-# Intrinsic parameters for the left camera
-fx_left = 747.3121949097032
-fy_left = 747.1524375957724
-cx_left = 490.8606682225008
-cy_left = 505.2373814853779
+    width, height = img_left.shape[::-1]
+    # Intrinsic parameters for the left camera
+    fx_left = 747.3121949097032
+    fy_left = 747.1524375957724
+    cx_left = 490.8606682225008
+    cy_left = 505.2373814853779
 
-# Intrinsic parameters for the right camera
-fx_right = 742.5207932360779
-fy_right = 742.4219114252868
-cx_right = 494.72989356499005
-cy_right = 513.9144417615198
+    # Intrinsic parameters for the right camera
+    fx_right = 742.5207932360779
+    fy_right = 742.4219114252868
+    cx_right = 494.72989356499005
+    cy_right = 513.9144417615198
 
-# Camera intrinsic matrices
-K_left = np.array([[fx_left, 0, cx_left], [0, fy_left, cy_left], [0, 0, 1]])
-K_right = np.array([[fx_right, 0, cx_right], [0, fy_right, cy_right], [0, 0, 1]])
+    # Camera intrinsic matrices
+    K_left = np.array([[fx_left, 0, cx_left], [0, fy_left, cy_left], [0, 0, 1]])
+    K_right = np.array([[fx_right, 0, cx_right], [0, fy_right, cy_right], [0, 0, 1]])
 
-# Distortion coefficients for the left camera
-k1_left, k2_left, k3_left, k4_left = (
-    0.019702988705266412,
-    0.0019647288278805426,
-    0.0020858202586604944,
-    -0.0009536922337319427,
-)
+    # Distortion coefficients for the left camera
+    k1_left, k2_left, k3_left, k4_left = (
+        0.019702988705266412,
+        0.0019647288278805426,
+        0.0020858202586604944,
+        -0.0009536922337319427,
+    )
 
-# Distortion coefficients for the right camera
-k1_right, k2_right, k3_right, k4_right = (
-    0.019143394892292526,
-    0.0017469400418519364,
-    0.003535762629018563,
-    -0.0014236433279599385,
-)
+    # Distortion coefficients for the right camera
+    k1_right, k2_right, k3_right, k4_right = (
+        0.019143394892292526,
+        0.0017469400418519364,
+        0.003535762629018563,
+        -0.0014236433279599385,
+    )
 
-dist_coeffs_right = np.array([k1_right, k2_right, k3_right, k4_right])
-dist_coeffs_left = np.array([k1_left, k2_left, k3_left, k4_left])
+    dist_coeffs_right = np.array([k1_right, k2_right, k3_right, k4_right])
+    dist_coeffs_left = np.array([k1_left, k2_left, k3_left, k4_left])
 
-# SE(3) transformation matrix (4x4)
-T_lr = np.array(
-    [
-        [9.99957877e-01, 2.00814303e-04, -9.16651861e-03, 1.09417253e-01],
-        [-1.81060018e-04, 9.99997662e-01, 2.15324322e-03, 3.06599632e-04],
-        [9.16683841e-03, -2.15147900e-03, 9.99955732e-01, 7.51548808e-04],
-        [0.0, 0.0, 0.0, 1.0],
-    ]
-)
+    # SE(3) transformation matrix (4x4)
+    T_lr = np.array(
+        [
+            [9.99957877e-01, 2.00814303e-04, -9.16651861e-03, 1.09417253e-01],
+            [-1.81060018e-04, 9.99997662e-01, 2.15324322e-03, 3.06599632e-04],
+            [9.16683841e-03, -2.15147900e-03, 9.99955732e-01, 7.51548808e-04],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
+    )
 
-# Extract rotation and translation from T_lr
-R = T_lr[:3, :3]
-t = T_lr[:3, 3]
+    # Extract rotation and translation from T_lr
+    R = T_lr[:3, :3]
+    t = T_lr[:3, 3]
 
-img_left_undist, K_left_new = undistort_image(img_left, K_left, dist_coeffs_left)
-img_right_undist, K_right_new = undistort_image(img_right, K_right, dist_coeffs_right)
+    img_left_undist, K_left_new = undistort_image(img_left, K_left, dist_coeffs_left)
+    img_right_undist, K_right_new = undistort_image(img_right, K_right, dist_coeffs_right)
 
-# Rectify images
-rectified_left, rectified_right = rectify_stereo_images(
-    img_left_undist,
-    img_right_undist,
-    K_left_new,
-    K_right_new,
-    dist_coeffs_left,
-    dist_coeffs_right,
-    R,
-    t,
-)
+    # Rectify images
+    rectified_left, rectified_right = rectify_stereo_images(
+        img_left_undist,
+        img_right_undist,
+        K_left_new,
+        K_right_new,
+        dist_coeffs_left,
+        dist_coeffs_right,
+        R,
+        t,
+    )
 
-# Estimate depth
-scale = 2
-depth_est = DepthEstimator()
-depth = depth_est.estimate_depth(Image.fromarray(rectified_left))
-depth = np.maximum(depth, 1e-4)
-depth = depth / scale
+    # Estimate depth
+    scale = 2
+    depth_est = DepthEstimator()
+    depth = depth_est.estimate_depth(Image.fromarray(rectified_left))
+    depth = np.maximum(depth, 1e-4)
+    depth = depth / scale
 
-plt.imshow(depth)
-plt.show()
+    plt.imshow(depth)
+    plt.show()
 
-# Convert depth map to point cloud with depth filtering
-points = depth_to_point_cloud(depth, K_left)
+    # Convert depth map to point cloud with depth filtering
+    points = depth_to_point_cloud(depth, K_left)
 
-# Convert grayscale to RGB by duplicating the grayscale values across three channels
-img_left_rgb = np.stack((img_left_undist,) * 3, axis=-1)
-depth_int = (depth * 1000).astype(np.uint16)
+    # Convert grayscale to RGB by duplicating the grayscale values across three channels
+    img_left_rgb = np.stack((img_left_undist,) * 3, axis=-1)
+    depth_int = (depth * 1000).astype(np.uint16)
 
-color_o3d = o3d.geometry.Image(img_left_rgb)
-depth_o3d = o3d.geometry.Image(depth_int)
+    color_o3d = o3d.geometry.Image(img_left_rgb)
+    depth_o3d = o3d.geometry.Image(depth_int)
 
-rgbd_img = o3d.geometry.RGBDImage.create_from_color_and_depth(
-    color=color_o3d,
-    depth=depth_o3d,
-    depth_scale=1000.0,
-    depth_trunc=10.0,
-    convert_rgb_to_intensity=True,
-)
+    rgbd_img = o3d.geometry.RGBDImage.create_from_color_and_depth(
+        color=color_o3d,
+        depth=depth_o3d,
+        depth_scale=1000.0,
+        depth_trunc=10.0,
+        convert_rgb_to_intensity=True,
+    )
 
-# Create Open3D point cloud
-pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
-    image=rgbd_img,
-    intrinsic=o3d.camera.PinholeCameraIntrinsic(width, height, K_left),
-)
-# Visualize point cloud
+    # Create Open3D point cloud
+    pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
+        image=rgbd_img,
+        intrinsic=o3d.camera.PinholeCameraIntrinsic(width, height, K_left),
+    )
+    # Visualize point cloud
 
-points = np.asarray(pcd.points)
+    points = np.asarray(pcd.points)
 
-# Define threshold value (example threshold)
-threshold = 2
+    # Define threshold value (example threshold)
+    threshold = 2
 
-# Filter points based on threshold condition
-filtered_points = points[
-    points[:, 2] <= threshold
-]  # Assuming Z-axis (third column) value is used for thresholding
+    # Filter points based on threshold condition
+    filtered_points = points[
+        points[:, 2] <= threshold
+    ]  # Assuming Z-axis (third column) value is used for thresholding
 
-# Create a new Open3D point cloud object with filtered points
-filtered_pcd = o3d.geometry.PointCloud()
-filtered_pcd.points = o3d.utility.Vector3dVector(filtered_points)
+    # Create a new Open3D point cloud object with filtered points
+    filtered_pcd = o3d.geometry.PointCloud()
+    filtered_pcd.points = o3d.utility.Vector3dVector(filtered_points)
 
-# # Visualize original and filtered point clouds (optional)
-# o3d.visualization.draw_geometries([pcd, filtered_pcd])
+    # # Visualize original and filtered point clouds (optional)
+    # o3d.visualization.draw_geometries([pcd, filtered_pcd])
 
-pcd.transform([[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]])
-o3d.visualization.draw_geometries([pcd])
+    pcd.transform([[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]])
+    o3d.visualization.draw_geometries([pcd])

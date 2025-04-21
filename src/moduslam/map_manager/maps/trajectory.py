@@ -1,6 +1,6 @@
 """Trajectory of SE(3) poses with timestamps."""
 
-from moduslam.custom_types.numpy import Matrix4x4
+from src.custom_types.numpy import Matrix4x4
 
 
 class TrajectoryMap:

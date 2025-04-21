@@ -107,12 +107,13 @@ def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D)
     plt.show()
 
 
-# Define file paths
-ref_file = Path("/media/mark/WD/tum/visual_inertial_event/loop_floor_0/mocap_data.txt")
-est_file = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/trajectory.txt")
+if __name__ == "__main__":
+    # Define file paths
+    ref_file = Path("/media/mark/WD/tum/visual_inertial_event/loop_floor_0/mocap_data.txt")
+    est_file = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/trajectory.txt")
 
-# Load and synchronize trajectories
-ref_traj, est_traj = load_and_sync_trajectories(ref_file, est_file)
+    # Load and synchronize trajectories
+    ref_traj, est_traj = load_and_sync_trajectories(ref_file, est_file)
 
-# Plot the trajectories
-plot_trajectories_3d(ref_traj, est_traj)
+    # Plot the trajectories
+    plot_trajectories_3d(ref_traj, est_traj)

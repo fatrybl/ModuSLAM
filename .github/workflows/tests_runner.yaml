@@ -1,63 +1,36 @@
-name: Run Tests
+name: Build Documentation
 
-on: [ push, workflow_dispatch ]
+on:
+  push:
+    branches: [ '**' ]  # All branches
+  pull_request:
+    branches: [ main, develop ]  # Optional PR handling
+  workflow_dispatch:  # Manual trigger
 
 jobs:
-  test:
-    runs-on: ubuntu-22.04
+  build-docs:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            cmake \
-            libboost-all-dev \
-            libtbb-dev \
-            python3-venv \
-            python3-dev \
-            libeigen3-dev
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install Poetry
+      - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | python -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          python -m pip install --upgrade pip
+          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
 
-      - name: Configure Poetry to Use the Correct Python
-        run: poetry env use $(which python)
-
-      - name: Install project dependencies with Poetry
-        run: poetry install
-
-      - name: Clone GTSAM (develop branch)
+      - name: Build documentation
+        working-directory: ./docs
         run: |
-          git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
+          sphinx-apidoc -f -o source/ ../src/
+          make clean html
 
-      - name: Build and install GTSAM Python wrapper
-        run: |
-          cd gtsam
-          mkdir build
-          cd build
-          PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
-          cmake .. \
-            -DGTSAM_BUILD_PYTHON=1 \
-            -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
-            -DGTSAM_BUILD_UNSTABLE=OFF \
-            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-          make python-install -j$(nproc)
-
-      - name: Set Test Data Directory
-        run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
-
-      - name: Run tests
-        run: |
-          poetry run pytest src/tests
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: docs/_build/html

@@ -11,6 +11,7 @@ class SinglePoseOdometry(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
+
         Criterion:
             1 pose odometry.
 
@@ -29,6 +30,7 @@ class DoublePoseOdometry(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
+
         Criterion:
             2 pose odometries.
 
@@ -47,6 +49,7 @@ class QuatroPoseOdometry(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
+
         Criterion:
             2 pose odometries.
 
@@ -65,6 +68,7 @@ class PoseOdometryWithGps(StorageAnalyzer):
     @staticmethod
     def check_storage(storage: type[MeasurementStorage]) -> bool:
         """Checks measurements storage if the criterion is satisfied.
+
         Criterion:
             1 pose odometry and GPS measurements.
 

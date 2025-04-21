@@ -1,0 +1,36 @@
+name: Build Documentation
+
+on:
+  push:
+    branches: # Triggers on push to any branch
+      - '**'
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+
+      - name: Build documentation
+        working-directory: ./docs
+        run: |
+          sphinx-apidoc -f -o source/ ../src/
+          make clean html
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: docs/_build/html

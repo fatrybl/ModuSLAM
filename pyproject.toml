@@ -48,7 +48,8 @@ polyscope = "*"
 # for GTSAM compilation
 pyparsing = "*"
 pybind11-stubgen = "*"
-pyyaml = "^6.0.2"
+pyyaml = "*"
+sphinx-autodoc-typehints = "*"
 
 [tool.poetry.group.experiments.dependencies]
 moviepy = { git = "https://github.com/Zulko/moviepy.git" }
