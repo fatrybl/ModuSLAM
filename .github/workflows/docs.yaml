@@ -2,7 +2,7 @@ name: Deploy Sphinx Docs to GitHub Pages
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -17,6 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,28 +32,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
 
-      - name: Generate reStructuredText with sphinx-apidoc
+      - name: Generate rst from source
         working-directory: ./docs
         run: |
           sphinx-apidoc -f -o source/ ../src/
 
-      - name: Build HTML documentation
+      - name: Build Sphinx HTML
         working-directory: ./docs
-        run: |
-          make clean html
+        run: make html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload artifact (GitHub Pages expects name=github-pages)
+        uses: actions/upload-artifact@v4
         with:
-          path: ./docs/_build/html
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          name: github-pages
+          path: ./docs
