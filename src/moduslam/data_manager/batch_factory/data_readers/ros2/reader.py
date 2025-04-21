@@ -41,23 +41,6 @@ from src.utils.exceptions import (
 logger = logging.getLogger(data_manager)
 
 
-def get_start_end_time(reader: Reader) -> tuple[int, int]:
-    """Gets start and end time of the dataset. The built-in properties
-    of rosbags.rosbag2.Reader are not used since it adds extra nanosecond to the end time.
-
-    Args:
-        reader: a rosbags ROS-2 reader.
-
-    Returns:
-        start and end time of the dataset.
-    """
-    duration = reader.metadata["duration"]["nanoseconds"]
-    start_time = reader.metadata["starting_time"]["nanoseconds_since_epoch"]
-    end_time = start_time + duration
-
-    return start_time, end_time
-
-
 class Ros2Reader(DataReader):
     """ROS2 dataset reader."""
 
@@ -129,10 +112,16 @@ class Ros2Reader(DataReader):
 
         self._is_configured = True
 
-    def set_initial_state(self, sensor: Sensor, timestamp: float):
-        """Sets the iterator position for the sensor at the given timestamp.
+    def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
+        """Checks if the reader has been configured with the sensor.
 
-        TODO: change description or method name.
+        Args:
+            sensor: a sensor to chek.
+
+            timestamp: a timestamp to check.
+
+        Raises:
+            StateNotSetError: if the reader has not been configured with the sensor.
         """
         if sensor.name not in self._sensor_name_topic_table:
             raise StateNotSetError(f"Reader has not been configured with sensor '{sensor.name}'.")

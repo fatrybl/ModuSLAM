@@ -46,12 +46,13 @@ class DataReader(Protocol):
         """
 
     def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
-        """Sets the iterator(s) position(s) for the given sensor and timestamp.
+        """ "Performs the necessary setup for the required configuration or initialization."
 
+        TODO: method is not required for all readers. Maybe remove it from BatchFactory ?
         Args:
-            sensor: sensor to set the iterator(s) position(s) to.
+            sensor: a sensor to set up.
 
-            timestamp: timestamp to set the iterator(s) position(s) to.
+            timestamp: a timestamp to set up.
 
         Raises:
             SetNotStateError: if no measurement has been found for the given sensor and timestamp.

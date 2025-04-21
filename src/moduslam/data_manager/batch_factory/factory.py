@@ -84,12 +84,13 @@ class BatchFactory:
             if elements:
                 for el in elements:
                     self._batch.add(el)
+
+                self._sort_if_needed()
+
             else:
                 msg = f"Can not fulfill the request {request}."
                 logger.error(msg)
                 raise UnfeasibleRequestError(msg)
-
-        self._sort_if_needed()
 
     def _fulfill_request(
         self, reader: DataReader, request: PeriodicDataRequest

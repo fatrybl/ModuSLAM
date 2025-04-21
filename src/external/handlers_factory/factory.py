@@ -9,6 +9,7 @@ from hydra import compose, initialize
 from src.external.handlers_factory.handlers.handler_protocol import Handler
 from src.external.handlers_factory.handlers.imu.config import (
     ImuHandlerConfig,
+    Ros2ImuHandlerConfig,
 )
 from src.external.handlers_factory.handlers.imu.handler import (
     ImuHandler,
@@ -18,13 +19,9 @@ from src.external.handlers_factory.handlers.scan_matcher.config import (
 )
 from src.external.handlers_factory.handlers.scan_matcher.handler import ScanMatcher
 from src.external.handlers_factory.handlers.visual_odometry.handler import (
-    VisualOdometry,
     VisualOdometryConfig,
 )
 from src.external.handlers_factory.handlers.vrs_gps.config import VrsGpsHandlerConfig
-from src.external.handlers_factory.handlers.vrs_gps.handler import (
-    KaistUrbanVrsGpsPreprocessor,
-)
 from src.logger.logging_config import data_manager
 
 logger = logging.getLogger(data_manager)
@@ -49,7 +46,7 @@ def get_config() -> Handlers:
     """
     cs = ConfigStore.instance()
     cs.store(name="base_handlers_factory", node=Handlers)
-    cs.store(name="base_imu_preprocessor", node=ImuHandlerConfig)
+    cs.store(name="base_imu_preprocessor", node=Ros2ImuHandlerConfig)
     cs.store(name="base_scan_matcher", node=KissIcpScanMatcherConfig)
     cs.store(name="base_visual_odometry", node=VisualOdometryConfig)
     cs.store(name="base_vrs_gps_preprocessor", node=VrsGpsHandlerConfig)
@@ -73,23 +70,25 @@ class Factory:
         config = get_config()
 
         scan_matcher1 = ScanMatcher(config.scan_matcher1)
-        scan_matcher2 = ScanMatcher(config.scan_matcher2)
-        # imu_preprocessor = KaistUrbanImuDataPreprocessor(config.imu_preprocessor)
+        # scan_matcher2 = ScanMatcher(config.scan_matcher2)
         imu_preprocessor = ImuHandler(config.imu_preprocessor)
-        vrs_gps_preprocessor = KaistUrbanVrsGpsPreprocessor(config.vrs_preprocessor)
-        visual_odometry = VisualOdometry(config.visual_odometry)
+        # vrs_gps_preprocessor = KaistUrbanVrsGpsPreprocessor(config.vrs_preprocessor)
+        # visual_odometry = VisualOdometry(config.visual_odometry)
 
         cls._handlers = {
             scan_matcher1,
-            scan_matcher2,
             imu_preprocessor,
-            vrs_gps_preprocessor,
-            visual_odometry,
+            # vrs_gps_preprocessor,
+            # visual_odometry,
         }
 
         logger.debug("All handlers have been initialized.")
 
     @classmethod
     def get_handlers(cls) -> set[Handler]:
-        """Gets all handlers."""
+        """Gets all handlers.
+
+        Returns:
+            handlers.
+        """
         return cls._handlers

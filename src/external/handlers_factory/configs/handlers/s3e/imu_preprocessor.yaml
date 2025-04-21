@@ -2,5 +2,3 @@ defaults:
   - /base_imu_preprocessor@_here_
 
 sensor_name: 'Alpha_imu'
-
-data_reader: 'Ros-2 Reader'
