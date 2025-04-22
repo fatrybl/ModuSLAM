@@ -1,4 +1,4 @@
-name: Deploy Sphinx Docs to GitHub Pages
+name: Build Sphynx Docs
 
 on:
   push:
