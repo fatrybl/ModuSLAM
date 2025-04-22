@@ -1,7 +1,8 @@
 # ModuSLAM
 
-![Run Tests](https://github.com/fatrybl/ModuSLAM/workflows/Run%20Tests/badge.svg)
-![Build Documentation](https://github.com/fatrybl/ModuSLAM/actions/workflows/docs.yaml/badge.svg)
+![Run tests](https://github.com/fatrybl/ModuSLAM/workflows/Run%20Tests/badge.svg)
+![Build docs](https://github.com/fatrybl/ModuSLAM/actions/workflows/docs_build.yaml/badge.svg)
+![Deploy docs](https://github.com/fatrybl/ModuSLAM/actions/workflows/docs_deploy.yaml/badge.svg)
 
 ModuSLAM - A modular framework for Factor Graph-based Simultaneous Localization and Mapping. Implements measurement
 compression and synchronization algorithm.
