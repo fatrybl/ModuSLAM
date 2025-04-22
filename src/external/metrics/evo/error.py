@@ -166,22 +166,28 @@ def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D)
     plt.show()
 
 
-ref_file = Path("/media/mark/WD/kaist/urban-26/global_pose.csv")
+if __name__ == "__main__":
+    """Example usage.
+    Reference trajectory from the KAIST Urban dataset.
+    Estimated trajectory from ModuSLAM.
+    The estimated trajectory is in the form of a .txt file
+    """
+    ref_file = Path("/media/mark/WD/kaist/urban-26/global_pose.csv")
 
-traj_dir = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/")
-est_file = traj_dir / "trajectory.txt"
+    traj_dir = Path("/home/mark/Desktop/PhD/ModuSLAM/src/moduslam/")
+    est_file = traj_dir / "trajectory.txt"
 
-ref_traj, est_traj = load_and_sync_trajectories(ref_file, est_file)
+    ref_traj, est_traj = load_and_sync_trajectories(ref_file, est_file)
 
-ref_traj.align_origin(est_traj)
+    ref_traj.align_origin(est_traj)
 
-print(len(ref_traj.poses_se3), len(est_traj.poses_se3))
+    print(len(ref_traj.poses_se3), len(est_traj.poses_se3))
 
-relation = metrics.PoseRelation.rotation_angle_deg
-rpe_stats = get_rpe(ref_traj, est_traj, relation)
-ape_stats = get_ape(ref_traj, est_traj, relation)
+    relation = metrics.PoseRelation.rotation_angle_deg
+    rpe_stats = get_rpe(ref_traj, est_traj, relation)
+    ape_stats = get_ape(ref_traj, est_traj, relation)
 
-for metric, value in rpe_stats.items():
-    print(metric, value)
+    for metric, value in rpe_stats.items():
+        print(metric, value)
 
-plot_trajectories_3d(ref_traj, est_traj)
+    plot_trajectories_3d(ref_traj, est_traj)

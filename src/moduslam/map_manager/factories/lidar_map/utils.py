@@ -109,8 +109,8 @@ def create_3d_point_cloud(
     """
     tf_array = np.array(tf)
     points = values_to_array(values, config.num_channels)
+    points = points[:, :3]  # remove unnecessary channels.
     points = filter_array(points, config.min_range, config.max_range)
-    points = points[:, :-1]  # remove unnecessary 4-th channel.
 
     cloud = geometry.PointCloud()
     cloud.points = utility.Vector3dVector(points)

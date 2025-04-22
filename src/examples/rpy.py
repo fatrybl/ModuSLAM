@@ -34,8 +34,9 @@ def compute_roll_pitch_yaw(
     return roll, pitch, yaw
 
 
-# Example usage
-point1 = zero_vector3
-point2 = (-0.0025537763722240925, 0.00541700329631567, -0.0006000000000057071)
-roll, pitch, yaw = compute_roll_pitch_yaw(point1, point2)
-print(f"Roll: {roll}, Pitch: {pitch}, Yaw: {yaw}")
+if __name__ == "__main__":
+    # Example usage
+    point1 = zero_vector3
+    point2 = (-0.0025537763722240925, 0.00541700329631567, -0.0006000000000057071)
+    roll, pitch, yaw = compute_roll_pitch_yaw(point1, point2)
+    print(f"Roll: {roll}, Pitch: {pitch}, Yaw: {yaw}")

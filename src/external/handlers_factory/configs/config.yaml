@@ -1,7 +1,7 @@
 defaults:
   - /base_handlers_factory
-  - handlers/scan_matcher1@scan_matcher1
-  - handlers/scan_matcher2@scan_matcher2
-  - handlers/imu_preprocessor@imu_preprocessor
-  - handlers/vrs_gps@vrs_preprocessor
-  - handlers/visual_odometry@visual_odometry
+  - handlers/s3e/scan_matcher@scan_matcher1
+  - handlers/s3e/imu_preprocessor@imu_preprocessor
+#  - handlers/kaist_urban/scan_matcher2@scan_matcher2
+#  - handlers/kaist_urban/vrs_gps@vrs_preprocessor
+#  - handlers/kaist_urban/visual_odometry@visual_odometry

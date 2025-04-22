@@ -1,0 +1,11 @@
+defaults:
+  - /base_scan_matcher@_here_
+
+sensor_name: "Alpha_vlp_16"
+
+min_range: 1.0
+num_channels: 6 # x, y, z, intensity, ring, time
+max_points_per_voxel: 7
+voxel_size: 1.5
+measurement_noise_covariance: [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]
+adaptive_initial_threshold: 2.0

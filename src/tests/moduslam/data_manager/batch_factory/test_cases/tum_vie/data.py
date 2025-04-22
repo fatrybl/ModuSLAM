@@ -1,10 +1,17 @@
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
+from src.moduslam.data_manager.batch_factory.configs import (
+    BatchFactoryConfig,
+    DataRegimeConfig,
+)
 from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
+from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.tests.conftest import tum_vie_dataset_dir
 from src.tests_data_generators.tum_vie_dataset.data import Data
+from src.tests_data_generators.utils import generate_sensors_factory_config
 from src.utils.auxiliary_dataclasses import PeriodicDataRequest, TimeRange
+from src.utils.auxiliary_methods import nanosec2microsec
 
 dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
 data = Data(dataset_cfg)
@@ -25,6 +32,50 @@ el15 = elements[14]
 el23 = elements[22]
 el24 = elements[23]
 different_elements = elements[1:15]
+
+dataset_cfg = TumVieConfig(directory=tum_vie_dataset_dir)
+
+sensors_factory_config1 = generate_sensors_factory_config([imu, stereo])
+sensors_factory_config2 = generate_sensors_factory_config([imu])
+sensors_factory_config3 = generate_sensors_factory_config([stereo])
+
+stream = DataRegimeConfig(name=Stream.name)
+t_limit_1 = DataRegimeConfig(
+    TimeLimit.name,
+    start=str(nanosec2microsec(el1.timestamp)),
+    stop=str(nanosec2microsec(el24.timestamp)),
+)
+t_limit_2 = DataRegimeConfig(
+    TimeLimit.name,
+    start=str(nanosec2microsec(el1.timestamp)),
+    stop=str(nanosec2microsec(el1.timestamp)),
+)
+t_limit_3 = DataRegimeConfig(
+    TimeLimit.name,
+    start=str(nanosec2microsec(el24.timestamp)),
+    stop=str(nanosec2microsec(el24.timestamp)),
+)
+t_limit_4 = DataRegimeConfig(
+    TimeLimit.name,
+    start=str(nanosec2microsec(el2.timestamp)),
+    stop=str(nanosec2microsec(el15.timestamp)),
+)
+t_limit_5 = DataRegimeConfig(
+    TimeLimit.name,
+    start=str(nanosec2microsec(el2.timestamp)),
+    stop=str(nanosec2microsec(el2.timestamp)),
+)
+
+full_memory_percent = 100.0
+low_memory_percent = 1.0
+
+batch_factory_config1 = BatchFactoryConfig(dataset_cfg, stream, full_memory_percent)
+batch_factory_config2 = BatchFactoryConfig(dataset_cfg, t_limit_1, full_memory_percent)
+batch_factory_config3 = BatchFactoryConfig(dataset_cfg, t_limit_2, full_memory_percent)
+batch_factory_config4 = BatchFactoryConfig(dataset_cfg, t_limit_3, full_memory_percent)
+batch_factory_config5 = BatchFactoryConfig(dataset_cfg, t_limit_4, full_memory_percent)
+batch_factory_config6 = BatchFactoryConfig(dataset_cfg, t_limit_5, full_memory_percent)
+batch_factory_config7 = BatchFactoryConfig(dataset_cfg, stream, low_memory_percent)
 
 imu_batch_1 = DataBatch()
 imu_batch_1.add(el2)

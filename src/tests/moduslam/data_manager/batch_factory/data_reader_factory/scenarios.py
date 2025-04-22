@@ -20,8 +20,8 @@ from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.tests.conftest import kaist_custom_dataset_dir, tum_vie_dataset_dir
 
-sensor_factory_kaist = {"encoder": SensorConfig("encoder")}
-sensor_factory_tum_vie = {"stereo_camera": SensorConfig("stereo_camera")}
+sensor_factory_kaist = [SensorConfig("encoder")]
+sensor_factory_tum_vie = [SensorConfig("stereo_camera")]
 
 valid_regime_config1 = DataRegimeConfig(name=Stream.name)
 valid_regime_config2 = DataRegimeConfig(name=TimeLimit.name, start="0", stop="1")
