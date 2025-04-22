@@ -1,6 +1,10 @@
 """Custom exceptions."""
 
 
+class ConfigurationError(Exception):
+    """Configuration is invalid."""
+
+
 class ValidationError(Exception):
     """Validations has failed."""
 

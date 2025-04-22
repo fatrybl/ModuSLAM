@@ -27,7 +27,6 @@ class ScanMatcher(Handler):
     """
 
     _elements_queue_size: int = 2  # number of elements to compute the transformation
-    _num_channels: int = 4  # x, y, z, intensity
 
     def __init__(self, config: KissIcpScanMatcherConfig) -> None:
         """
@@ -39,6 +38,7 @@ class ScanMatcher(Handler):
         self._noise_covariance = config.measurement_noise_covariance
         self._scan_matcher = KissICP(cfg)
         self._elements_queue: list[Element] = []
+        self._num_channels = config.num_channels
 
     @property
     def sensor_name(self) -> str:

@@ -1,7 +1,8 @@
 import gtsam
+import numpy as np
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.with_raw_elements import (
+from src.measurement_storage.measurements.pose_landmark import (
     PoseLandmark as DetectedLandmark,
 )
 from src.moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
@@ -34,8 +35,9 @@ class PoseToLandmark(BinaryEdge):
         self._vertex1 = pose
         self._vertex2 = landmark
         self._measurement = measurement
+        tf = gtsam.Pose3(np.asarray(measurement.pose))
         self._factor = gtsam.BetweenFactorPose3(
-            pose.backend_index, landmark.backend_index, measurement.transformation, noise_model
+            pose.backend_index, landmark.backend_index, tf, noise_model
         )
 
     @property
