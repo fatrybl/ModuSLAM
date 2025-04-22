@@ -19,50 +19,50 @@ def timer(func):
     return wrapper
 
 
-graph = gtsam.NonlinearFactorGraph()
+if __name__ == "__main__":
+    graph = gtsam.NonlinearFactorGraph()
 
-init_values = gtsam.Values()
-pose1 = gtsam.gtsam.Pose3()
-pose2 = gtsam.gtsam.Pose3()
+    init_values = gtsam.Values()
+    pose1 = gtsam.gtsam.Pose3()
+    pose2 = gtsam.gtsam.Pose3()
 
-init_values.insert_pose3(X(0), pose1)
-init_values.insert_pose3(X(1), pose2)
+    init_values.insert_pose3(X(0), pose1)
+    init_values.insert_pose3(X(1), pose2)
 
-prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
-odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
+    prior_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.001, 0.001, 0.001, 0.001, 0.001, 0.001])
+    odom_noise = gtsam.gtsam.noiseModel.Diagonal.Sigmas([0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
 
-prior = gtsam.PriorFactorPose3(X(0), pose1, prior_noise)
-odom = gtsam.BetweenFactorPose3(X(0), X(1), pose2, odom_noise)
+    prior = gtsam.PriorFactorPose3(X(0), pose1, prior_noise)
+    odom = gtsam.BetweenFactorPose3(X(0), X(1), pose2, odom_noise)
 
-k = gtsam.gtsam.Cal3_S2()
-smart_f1 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
-smart_f1.add(np.array([1, 1]), X(0))
-# smart_f2 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
-# smart_f2.add(np.array([1, 1]), X(0))
-# smart_f2.add(np.array([20, 20]), X(1))
-graph.add(prior)
-graph.add(odom)
-graph.add(smart_f1)
+    k = gtsam.gtsam.Cal3_S2()
+    smart_f1 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+    smart_f1.add(np.array([1, 1]), X(0))
+    # smart_f2 = gtsam.gtsam.SmartProjectionPose3Factor(odom_noise, k)
+    # smart_f2.add(np.array([1, 1]), X(0))
+    # smart_f2.add(np.array([20, 20]), X(1))
+    graph.add(prior)
+    graph.add(odom)
+    graph.add(smart_f1)
 
-params = gtsam.LevenbergMarquardtParams()
-optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
-result = optimizer.optimizeSafely()
+    params = gtsam.LevenbergMarquardtParams()
+    optimizer = gtsam.LevenbergMarquardtOptimizer(graph, init_values, params)
+    result = optimizer.optimizeSafely()
 
-print(graph)
+    print(graph)
 
-graph.remove(2)
+    graph.remove(2)
 
-smart_f1.add(np.array([2, 2]), X(1))
+    smart_f1.add(np.array([2, 2]), X(1))
 
-print("==========================================")
-print(graph)
+    print("==========================================")
+    print(graph)
 
-graph.add(smart_f1)
+    graph.add(smart_f1)
 
-print("++++++++++++++++++++++++++++++++++++++++++++")
-print(smart_f1.linearize())
+    print("++++++++++++++++++++++++++++++++++++++++++++")
+    print(smart_f1.linearize())
 
-
-# dot = graph.dot(result)
-# source = Source(dot)
-# source.render("graph", format="pdf", cleanup=True)
+    # dot = graph.dot(result)
+    # source = Source(dot)
+    # source.render("graph", format="pdf", cleanup=True)

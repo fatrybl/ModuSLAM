@@ -1,8 +1,7 @@
-from PIL.Image import Image
+import numpy as np
 
 from src.moduslam.data_manager.batch_factory.batch import DataBatch
 from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.utils.auxiliary_methods import equal_images
 
 
 def create_empty_element(element: Element) -> Element:
@@ -24,41 +23,30 @@ def create_empty_element(element: Element) -> Element:
     return empty_element
 
 
-def equal_elements(el1: Element | None, el2: Element | None) -> bool:
+def equal_elements(element1: Element | None, element2: Element | None) -> bool:
     """Compares two elements.
 
-    If the values are of type Image, they are compared separately with equal_images() method.
-
     Args:
-        el1: 1-st element.
+        element1: 1-st element.
 
-        el2: 2-nd element.
+        element2: 2-nd element.
 
     Returns:
         comparison result.
     """
-    if el1 is None and el2 is None:
+    if element1 is None and element2 is None:
         return True
 
-    elif el1 is not None and el2 is not None:
-        if isinstance(el1.measurement.values[0], Image):
-            if equal_images(el1.measurement.values, el2.measurement.values) is False:
-                return False
-        else:
-            if el1.measurement.values != el2.measurement.values:
-                return False
-
-        if el1.timestamp != el2.timestamp:
-            return False
-        if el1.location != el2.location:
-            return False
-        if el1.measurement.sensor != el2.measurement.sensor:
-            return False
-
-    else:
+    if element1 is None or element2 is None:
         return False
 
-    return True
+    t1, t2 = element1.timestamp, element2.timestamp
+    loc1, loc2 = element1.location, element2.location
+    sens1, sens2 = element1.measurement.sensor, element2.measurement.sensor
+    val1 = np.asarray(element1.measurement.values)
+    val2 = np.asarray(element2.measurement.values)
+
+    return t1 == t2 and loc1 == loc2 and sens1 == sens2 and np.array_equal(val1, val2)
 
 
 def equal_batches(batch1: DataBatch, batch2: DataBatch) -> bool:

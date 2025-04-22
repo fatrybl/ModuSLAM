@@ -4,8 +4,8 @@ defaults:
 stereo:
   name: "stereo"
 
-  distortion_model_left: "plumb_bob"
-  distortion_model_right: "plumb_bob"
+  distortion_model_left: "plumb bob"
+  distortion_model_right: "plumb bob"
 
   camera_matrix_left:
     [ [ 8.1690378992770002e+02, 5.0510166700000003e-01, 6.0850726281690004e+02 ],

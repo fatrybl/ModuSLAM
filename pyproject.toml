@@ -28,6 +28,7 @@ torch-ransac3d = "*"
 open3d = "*"
 plotly = "*"
 laspy = "*"
+rosbags = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -47,6 +48,8 @@ polyscope = "*"
 # for GTSAM compilation
 pyparsing = "*"
 pybind11-stubgen = "*"
+pyyaml = "*"
+sphinx-autodoc-typehints = "*"
 
 [tool.poetry.group.experiments.dependencies]
 moviepy = { git = "https://github.com/Zulko/moviepy.git" }

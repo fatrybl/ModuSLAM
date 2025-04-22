@@ -16,8 +16,10 @@ if TYPE_CHECKING:
     from src.moduslam.sensors_factory.configs import (
         ImuConfig,
         Lidar3DConfig,
+        MonocularCameraConfig,
         SensorConfig,
         StereoCameraConfig,
+        UltraWideBandConfig,
         VrsGpsConfig,
     )
 
@@ -94,6 +96,29 @@ class Imu(Sensor):
     def gyroscope_bias_noise_covariance(self) -> Matrix3x3:
         """Gyroscope bias noise covariance diagonal matrix [3, 3]."""
         return self._gyro_bias_noise_covariance
+
+
+class MonocularCamera(Sensor):
+    """Base class for any Monocular Camera."""
+
+    def __init__(self, config: MonocularCameraConfig):
+        """
+        Args:
+            config: Sensor configuration.
+        """
+        super().__init__(config.name)
+        self._config = config
+        self._tf_base_sensor = tuple4x4(config.tf_base_sensor)
+
+    @property
+    def tf_base_sensor(self) -> Matrix4x4:
+        """Base -> sensor transformation SE(3)."""
+        return self._tf_base_sensor
+
+    @property
+    def calibrations(self) -> MonocularCameraConfig:
+        """Camera calibration parameters."""
+        return self._config
 
 
 class StereoCamera(Sensor):
@@ -217,3 +242,14 @@ class Lidar3D(Sensor):
     def tf_base_sensor(self) -> Matrix4x4:
         """Base -> sensor transformation SE(3)."""
         return self._tf_base_sensor
+
+
+class UltraWideBand(Sensor):
+    """Base class for any Ultra Wide Band."""
+
+    def __init__(self, config: UltraWideBandConfig):
+        """
+        Args:
+            config: sensor configuration.
+        """
+        super().__init__(config.name)

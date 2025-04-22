@@ -11,7 +11,7 @@ from src.moduslam.data_manager.batch_factory.data_readers.kaist.reader import (
     KaistReader,
 )
 from src.tests.conftest import kaist_custom_dataset_dir
-from src.utils.exceptions import DataReaderConfigurationError
+from src.utils.exceptions import DataReaderConfigurationError, FileNotValid
 
 
 def test_kaist_reader_successful_creation():
@@ -33,5 +33,5 @@ def test_kaist_reader_invalid_datastamp_file():
     dataset_cfg = KaistConfig(directory=kaist_custom_dataset_dir)
     dataset_cfg.data_stamp_file = Path("some_invalid_data_stamp.csv")
 
-    with pytest.raises(DataReaderConfigurationError):
+    with pytest.raises(FileNotValid):
         KaistReader(dataset_params=dataset_cfg)

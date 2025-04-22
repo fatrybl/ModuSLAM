@@ -77,22 +77,23 @@ def create_imu_list(filtered_df: pd.DataFrame) -> list[ProcessedImu]:
     return measurements
 
 
-file_path = Path("/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/xsens_imu.csv")
-start = 1544581170281231410
-stop = 1544581171187127000
-filtered_data = read_imu_data(file_path, start, stop)
+if __name__ == "__main__":
+    file_path = Path("/media/mark/New Volume/datasets/kaist/urban-26/sensor_data/xsens_imu.csv")
+    start = 1544581170281231410
+    stop = 1544581171187127000
+    filtered_data = read_imu_data(file_path, start, stop)
 
-timescale: float = 1e-9
-params = gtsam.PreintegrationCombinedParams.MakeSharedU(9.81)
-imu_list = create_imu_list(filtered_data)
-continuous = ContinuousImu(imu_list, start, stop)
-bias = ImuBias(0)
-pim = get_combined_integrated_measurement(params, continuous, stop, timescale, bias)
+    timescale: float = 1e-9
+    params = gtsam.PreintegrationCombinedParams.MakeSharedU(9.81)
+    imu_list = create_imu_list(filtered_data)
+    continuous = ContinuousImu(imu_list, start, stop)
+    bias = ImuBias(0)
+    pim = get_combined_integrated_measurement(params, continuous, stop, timescale, bias)
 
-state = gtsam.NavState()
-gyro_b = np.array((0.1, 0.1, 0.1))
-accel_b = np.array((0.1, 0.1, 0.1))
-b = gtsam.imuBias.ConstantBias(gyro_b, accel_b)
-pim1 = gtsam.PreintegratedCombinedMeasurements(params, b)
-print(pim.predict(state, b))
-print(pim.deltaPij())
+    state = gtsam.NavState()
+    gyro_b = np.array((0.1, 0.1, 0.1))
+    accel_b = np.array((0.1, 0.1, 0.1))
+    b = gtsam.imuBias.ConstantBias(gyro_b, accel_b)
+    pim1 = gtsam.PreintegratedCombinedMeasurements(params, b)
+    print(pim.predict(state, b))
+    print(pim.deltaPij())

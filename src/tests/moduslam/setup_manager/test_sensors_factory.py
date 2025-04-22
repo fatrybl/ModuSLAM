@@ -9,29 +9,22 @@ from src.utils.exceptions import ItemNotExistsError
 
 
 def test_init_sensors():
-    sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
+    config = SensorConfig(name="test_sensor")
 
-    SensorsFactory.init_sensors({"test_sensor": sensor_config})
+    SensorsFactory.init_sensors([config])
 
     sensors = SensorsFactory.get_sensors()
     expected_sensor = SensorsFactory.get_sensor("test_sensor")
 
-    assert expected_sensor.name == sensor_config.name
+    assert expected_sensor.name == config.name
     assert isinstance(expected_sensor, Sensor)
     assert expected_sensor in sensors
 
 
-def test_init_sensors_names_mismatch():
-    sensor_config = SensorConfig(name="sensor_name_A", type_name=Sensor.__name__)
-
-    with pytest.raises(ValueError, match="Sensor`s name does not match the name in the config."):
-        SensorsFactory.init_sensors({"sensor_name_B": sensor_config})
-
-
 def test_get_sensor_not_found():
-    sensor_config = SensorConfig(name="test_sensor", type_name=Sensor.__name__)
+    config = SensorConfig(name="test_sensor")
 
-    SensorsFactory.init_sensors({"test_sensor": sensor_config})
+    SensorsFactory.init_sensors([config])
 
     with pytest.raises(ItemNotExistsError):
         SensorsFactory.get_sensor("non_existing_sensor")

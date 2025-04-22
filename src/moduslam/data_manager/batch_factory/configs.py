@@ -6,9 +6,9 @@ from omegaconf import MISSING
 
 @dataclass
 class DataReaders:
-    kaist_reader: str = "Kaist Reader"
-    tum_vie_reader: str = "Tum Vie Reader"
-    ros2_reader: str = "Ros2 Reader"
+    kaist_urban: str = "Kaist Urban Reader"
+    tum_vie: str = "Tum Vie Reader"
+    ros2: str = "Ros-2 Reader"
 
 
 @dataclass

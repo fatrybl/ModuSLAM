@@ -8,6 +8,8 @@ Test cases:
 3) Regime config is invalid: incorrect name of the regime -> ValueError
 """
 
+from collections.abc import Iterable
+
 from pytest import mark, raises
 
 from src.moduslam.data_manager.batch_factory.configs import (
@@ -28,16 +30,16 @@ valid_scenarios = (*valid_readers,)
 
 
 @mark.parametrize(
-    "dataset_config, regime_config, sensors_config, reference_reader",
+    "dataset_config, regime_config, sensors_configs, reference_reader",
     [*valid_scenarios],
 )
 def test_get_reader(
     dataset_config: DatasetConfig,
     regime_config: DataRegimeConfig,
-    sensors_config: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     reference_reader: type[DataReader],
 ):
-    SensorsFactory.init_sensors(sensors_config)
+    SensorsFactory.init_sensors(sensors_configs)
 
     reader, regime = create(dataset_config, regime_config)
 

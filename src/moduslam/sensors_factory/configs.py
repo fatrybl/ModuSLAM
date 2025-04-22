@@ -1,10 +1,14 @@
 from dataclasses import dataclass, field
 
+from omegaconf import MISSING
+
 from src.moduslam.sensors_factory.sensors import (
     Imu,
     Lidar3D,
+    MonocularCamera,
     Sensor,
     StereoCamera,
+    UltraWideBand,
     VrsGps,
 )
 
@@ -14,69 +18,62 @@ class SensorConfig:
     """Base sensor configuration."""
 
     name: str
-    type_name: str = Sensor.__name__
+    sensor_type_name: str = Sensor.__name__
+
+
+@dataclass
+class MonocularCameraConfig(SensorConfig):
+    sensor_type_name: str = MonocularCamera.__name__
+
+    distortion_model: str = "plumb bob"
+    camera_type: str = "pinhole"
+
+    width: int = MISSING
+    height: int = MISSING
+
+    camera_matrix: list[list[float]] = MISSING
+
+    distortion_coefficients: list[float] = MISSING
+
+    rectification_matrix: list[list[float]] = MISSING
+
+    projection_matrix: list[list[float]] = MISSING
+
+    tf_base_sensor: list[list[float]] = field(
+        default_factory=lambda: [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
+    )
 
 
 @dataclass
 class StereoCameraConfig(SensorConfig):
+    sensor_type_name: str = StereoCamera.__name__
 
-    type_name: str = StereoCamera.__name__
+    distortion_model_left: str = "plumb bob"
+    distortion_model_right: str = "plumb bob"
 
-    camera_matrix_left: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-        ]
-    )
+    width: int = MISSING
+    height: int = MISSING
 
-    camera_matrix_right: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-        ]
-    )
+    camera_matrix_left: list[list[float]] = MISSING
 
-    distortion_coefficients_left: list[float] = field(
-        default_factory=lambda: [0.0, 0.0, 0.0, 0.0, 0.0]
-    )
+    camera_matrix_right: list[list[float]] = MISSING
 
-    distortion_coefficients_right: list[float] = field(
-        default_factory=lambda: [0.0, 0.0, 0.0, 0.0, 0.0]
-    )
+    distortion_coefficients_left: list[float] = MISSING
 
-    rectification_matrix_left: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-        ]
-    )
+    distortion_coefficients_right: list[float] = MISSING
 
-    rectification_matrix_right: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-        ]
-    )
+    rectification_matrix_left: list[list[float]] = MISSING
 
-    projection_matrix_left: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-        ]
-    )
+    rectification_matrix_right: list[list[float]] = MISSING
 
-    projection_matrix_right: list[list[float]] = field(
-        default_factory=lambda: [
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-        ]
-    )
+    projection_matrix_left: list[list[float]] = MISSING
+
+    projection_matrix_right: list[list[float]] = MISSING
 
     tf_left_right: list[list[float]] = field(
         default_factory=lambda: [
@@ -96,15 +93,12 @@ class StereoCameraConfig(SensorConfig):
         ]
     )
 
-    distortion_model_left: str = "plumb_bob"
-    distortion_model_right: str = "plumb_bob"
-
 
 @dataclass
 class ImuConfig(SensorConfig):
     """IMU sensor configuration."""
 
-    type_name: str = Imu.__name__
+    sensor_type_name: str = Imu.__name__
 
     tf_base_sensor: list[list[float]] = field(
         default_factory=lambda: [
@@ -156,7 +150,7 @@ class ImuConfig(SensorConfig):
 class Lidar3DConfig(SensorConfig):
     """Lidar 3D sensor configuration."""
 
-    type_name: str = Lidar3D.__name__
+    sensor_type_name: str = Lidar3D.__name__
 
     max_range: float = 100.0
     min_range: float = 0.0
@@ -181,8 +175,7 @@ class Lidar3DConfig(SensorConfig):
 
 @dataclass
 class VrsGpsConfig(SensorConfig):
-
-    type_name = VrsGps.__name__
+    sensor_type_name: str = VrsGps.__name__
 
     tf_base_sensor: list[list[float]] = field(
         default_factory=lambda: [
@@ -193,3 +186,8 @@ class VrsGpsConfig(SensorConfig):
         ],
         metadata={"help": "Transformation matrix base link -> sensor."},
     )
+
+
+@dataclass
+class UltraWideBandConfig(SensorConfig):
+    sensor_type_name: str = UltraWideBand.__name__
