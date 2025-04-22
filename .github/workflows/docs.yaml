@@ -2,7 +2,7 @@ name: Deploy Sphinx Docs to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '**' ]
   workflow_dispatch:
 
 permissions:
@@ -11,18 +11,20 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -30,19 +32,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+          pip install -e .[docs]
+          pip install sphinx sphinx-rtd-theme myst-parser sphinx-autodoc-typehints
 
-      - name: Generate rst from source
-        working-directory: ./docs
-        run: |
-          sphinx-apidoc -f -o source/ ../src/
-
-      - name: Build Sphinx HTML
-        working-directory: ./docs
-        run: make html
-
-      - name: Upload artifact (GitHub Pages expects name=github-pages)
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'  # Only deploy from main branch
+        id: deployment
+        uses: sphinx-notes/pages@v3
         with:
-          name: github-pages
-          path: ./docs
+        # Optional customizations:
+        # docs-dir: "docs/"  # if your docs source is in docs/
+        # build-dir: "_build/html"  # if using custom build directory
+        # pre-build-command: "make clean"  # command to run before building
