@@ -30,12 +30,33 @@ class DataBatch:
         return self._deque_set[0]
 
     @property
+    def last(self) -> Element:
+        """The first element of the batch."""
+        return self._deque_set[-1]
+
+    @property
     def size_bytes(self) -> int:
         """The size of the batch in bytes.
 
         Not implemented.
         """
         raise NotImplementedError
+
+    @property
+    def is_sorted(self) -> bool:
+        """Order of the batch. Takes O(N) operations."""
+        iterator = iter(self._deque_set.items)
+        try:
+            previous = next(iterator)
+        except StopIteration:
+            return True
+
+        for current in iterator:
+            if current.timestamp < previous.timestamp:
+                return False
+            previous = current
+
+        return True
 
     def add(self, new_element: Element) -> None:
         """Adds new element to the Batch.

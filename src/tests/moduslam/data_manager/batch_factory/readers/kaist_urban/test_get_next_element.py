@@ -7,6 +7,8 @@
     tests sequential reading of sensor`s elements in different regimes.
 """
 
+from collections.abc import Iterable
+
 from pytest import mark
 
 from src.moduslam.data_manager.batch_factory.batch import Element
@@ -21,25 +23,25 @@ from src.moduslam.data_manager.batch_factory.utils import equal_elements
 from src.moduslam.sensors_factory.configs import SensorConfig
 from src.moduslam.sensors_factory.factory import SensorsFactory
 from src.moduslam.sensors_factory.sensors import Sensor
-from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.data.case1 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.scenarios.case1 import (
     kaist1,
 )
-from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.data.case2 import (
+from src.tests.moduslam.data_manager.batch_factory.readers.kaist_urban.scenarios.case2 import (
     kaist2,
 )
 
 
 @mark.parametrize(
-    "sensor_factory_cfg, dataset_cfg, regime, reference_outputs",
+    "sensors_configs, dataset_cfg, regime, reference_outputs",
     [*kaist1],
 )
 def test_get_next_element(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensors_configs: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
-    reference_outputs: list[Element | None],
+    reference_outputs: Iterable[Element | None],
 ):
-    SensorsFactory.init_sensors(sensor_factory_cfg)
+    SensorsFactory.init_sensors(sensors_configs)
     sensors = SensorsFactory.get_sensors()
     reader = KaistReader(dataset_cfg)
     reader.configure(regime, sensors)
@@ -51,22 +53,22 @@ def test_get_next_element(
 
 
 @mark.parametrize(
-    "sensor_factory_cfg, dataset_cfg, regime, inputs, reference_outputs",
+    "sensor_factory_cfg, dataset_cfg, regime, sensors, reference_outputs",
     [*kaist2],
 )
 def test_get_next_element_of_sensor(
-    sensor_factory_cfg: dict[str, SensorConfig],
+    sensor_factory_cfg: Iterable[SensorConfig],
     dataset_cfg: KaistConfig,
     regime: Stream | TimeLimit,
-    inputs: list[Sensor],
-    reference_outputs: list[Element | None],
+    sensors: Iterable[Sensor],
+    reference_outputs: Iterable[Element | None],
 ):
     SensorsFactory.init_sensors(sensor_factory_cfg)
-    sensors = SensorsFactory.get_sensors()
+    all_sensors = SensorsFactory.get_sensors()
     reader = KaistReader(dataset_cfg)
-    reader.configure(regime, sensors)
+    reader.configure(regime, all_sensors)
 
     with reader:
-        for sensor, reference in zip(inputs, reference_outputs):
+        for sensor, reference in zip(sensors, reference_outputs):
             result = reader.get_next_element(sensor)
             assert equal_elements(result, reference) is True

@@ -13,14 +13,14 @@ defaults:
 
 
 pose1:
-  timestamp: 1544581126870152013
+  timestamp: 1661164286607675136
   measurement: [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
-  noise_covariance: [ 1e-1, 1e-1, 1e-1, 1e1, 1e1, 1e1 ] # x, y, z, roll, pith, yaw
+  noise_covariance: [ 1e-2, 1e-2, 1e-2, 1e1, 1e1, 1e0 ] # x, y, z, roll, pith, yaw
 
 velocity1:
-  timestamp: 1544581126870152013
-  measurement: [ 5.0, 0.0, 0.0 ]
-  noise_covariance: [ 1e1, 1e0, 1e-1 ] # x, y, z
+  timestamp: 1661164286607675136
+  measurement: [ 0.0, 0.0, 0.0 ]
+  noise_covariance: [ 1e-2, 1e-2, 1e-2 ] # x, y, z
 
 #Urban-26
 #pose1:

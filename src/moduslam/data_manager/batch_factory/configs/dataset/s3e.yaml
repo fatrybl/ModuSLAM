@@ -1,0 +1,12 @@
+defaults:
+  - /base_ros2_s3e_dataset
+
+directory: "/home/mark/Downloads/s3e_dataset"
+
+# names must match the ones in the Sensors Factory config.
+sensor_topic_mapping:
+  "Alpha_left_camera": "/Alpha/left_camera/compressed"
+  "Alpha_right_camera": "/Alpha/right_camera/compressed"
+  "Alpha_imu": "/Alpha/imu/data"
+  "Alpha_vlp_16": "/Alpha/velodyne_points"
+  "Alpha_rtk": "/Alpha/fix"

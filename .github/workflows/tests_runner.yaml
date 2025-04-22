@@ -1,6 +1,6 @@
-name: Run Tests
+name: Run tests
 
-on: [ push, workflow_dispatch ]
+on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   test:
@@ -40,6 +40,7 @@ jobs:
       - name: Clone GTSAM (develop branch)
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
+
 
       - name: Build and install GTSAM Python wrapper
         run: |

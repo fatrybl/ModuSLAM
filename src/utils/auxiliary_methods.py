@@ -14,7 +14,6 @@ from typing import Any, overload
 
 import gtsam
 import numpy as np
-from PIL.Image import Image
 from plum import dispatch
 
 from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
@@ -294,39 +293,6 @@ def check_dimensionality(array: np.ndarray, shape: tuple[int, ...]) -> None:
         msg = f"Array must have shape {shape}, got {array.shape}"
         logger.critical(msg)
         raise DimensionalityError(msg)
-
-
-def equal_images(imgs_1: tuple[Image, ...], imgs_2: tuple[Image, ...]) -> bool:
-    """Compares two items with Image data.
-
-    PIL images can not be compared directly because of different subclasses.
-    Manually created image from numpy.array is of type Image.Image,
-    but the one obtained from file is of type PIL.PngImagePlugin.PngImageFile.
-
-    Args:
-        imgs_1: 1-st tuple with images.
-
-        imgs_2: 2-nd tuple with images.
-
-    Returns:
-        equality result.
-
-    Raises:
-        DimensionalityError: if the tuples have different number of images.
-    """
-
-    if len(imgs_1) != len(imgs_2):
-        msg = "Tuples have different number of images."
-        logger.critical(msg)
-        raise DimensionalityError(msg)
-
-    for img1, img2 in zip(imgs_1, imgs_2):
-        array_img1 = np.asarray(img1)
-        array_img2 = np.asarray(img2)
-        if np.array_equal(array_img1, array_img2) is False:
-            return False
-
-    return True
 
 
 def sort_files_numerically(files: list[Path]) -> list[Path]:

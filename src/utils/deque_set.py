@@ -35,7 +35,7 @@ class DequeSet(Sequence, Generic[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
 
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        """Complexity: O(1) - O(K).
+        """Complexity: O(1) or O(K), with K - number of elements in slice.
 
         Args:
             index: index of an item or a slice.
@@ -49,11 +49,8 @@ class DequeSet(Sequence, Generic[T]):
         if isinstance(index, slice):
             return [self._deque[i] for i in range(*index.indices(len(self._deque)))]
 
-        if isinstance(index, int):
-            try:
-                return self._deque[index]
-            except IndexError:
-                raise IndexError("Index out of range.")
+        else:
+            return self._deque[index]
 
     def __eq__(self, other: Any) -> bool:
         """Compares if this DequeSet is equal to another DequeSet. Two DequeSets are

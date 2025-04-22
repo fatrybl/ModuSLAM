@@ -1,4 +1,4 @@
-"""Locations of different data sources.
+"""Unique locations for different data sources.
 
 Defines the location of a data batch element.
 """
@@ -13,11 +13,6 @@ class Location:
 
     Use for inheritance.
     """
-
-
-@dataclass(frozen=True, eq=True)
-class ConfigFileLocation(Location):
-    file: Path
 
 
 @dataclass(frozen=True, eq=True)
@@ -45,3 +40,10 @@ class CsvDataLocation(Location):
 @dataclass(frozen=True, eq=True)
 class TxtDataLocation(CsvDataLocation):
     """The location of .txt file and the position (line number) in it."""
+
+
+@dataclass(frozen=True, eq=True)
+class Ros2DataLocation(Location):
+    """The location of ROS 2 message."""
+
+    topic_name: str

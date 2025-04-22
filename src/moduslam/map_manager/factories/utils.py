@@ -52,21 +52,21 @@ def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4)
     return result.T  # type: ignore
 
 
-def filter_array(array: MatrixNx4, lower_bound: float, upper_bound: float) -> MatrixNx4:
-    """Filters 2D array [N, 4] with lower/upper bounds on the radius vector.
+def filter_array(array: MatrixNx3, lower_bound: float, upper_bound: float) -> MatrixNx3:
+    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector.
     The point is removed if its radius vector is outside the bounds.
 
     Args:
-        array: array [N, 4] of points to filter.
+        array: array [N, 3] of points to filter.
 
         lower_bound: lower bound value for the radius vector.
 
         upper_bound: upper bound value for the radius vector.
 
     Returns:
-        filtered array [K, 4].
+        filtered array [K, 3].
     """
-    n, m = array.shape[0], 4
+    n, m = array.shape[0], 3
     check_dimensionality(array, shape=(n, m))
 
     radius_vectors = np.linalg.norm(array[:, :3], axis=1)

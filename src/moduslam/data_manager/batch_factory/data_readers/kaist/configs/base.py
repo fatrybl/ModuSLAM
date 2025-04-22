@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from omegaconf import MISSING
+
 from src.moduslam.data_manager.batch_factory.configs import DataReaders, DatasetConfig
 from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.paths import (
     KaistDatasetPathConfig as KaistPaths,
@@ -11,9 +13,9 @@ from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.paths im
 class KaistConfig(DatasetConfig):
     """Base Kaist Urban Dataset configuration."""
 
-    directory: Path = Path()
+    directory: Path = MISSING
 
-    reader: str = DataReaders.kaist_reader
+    reader: str = DataReaders.kaist_urban
 
     name: str = "Kaist Urban Dataset"
 

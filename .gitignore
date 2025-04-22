@@ -6,3 +6,4 @@ logs
 dist
 *.pdf
 *.ply
+/docs/build/
