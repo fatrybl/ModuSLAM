@@ -1,6 +1,6 @@
-name: Build Sphinx Docs
+name: Build and Deploy Sphinx Docs
 
-on: [ push, pull_request, workflow_dispatch ]
+on: [ push, workflow_dispatch ]
 
 permissions:
   contents: read
@@ -31,10 +31,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs/build/html/'  # Your built docs directory
+          path: 'docs/build/html/'
 
   deploy:
     needs: build
+    if: github.ref == 'refs/heads/main'  # DEPLOY ONLY FROM MAIN
     permissions:
       pages: write
       id-token: write
