@@ -1,8 +1,0 @@
-defaults:
-  - /base_visual_odometry@_here_
-
-sensor_name: 'stereo'
-
-skip_n_frames: 0
-
-measurement_noise_covariance: [ 0.3, 0.3, 0.3, 0.3, 0.3, 0.3 ]
