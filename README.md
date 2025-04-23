@@ -1,6 +1,6 @@
 # ModuSLAM
 
-![Run tests](https://github.com/fatrybl/ModuSLAM/workflows/Run%20Tests/badge.svg)
+![Run tests](https://github.com/fatrybl/ModuSLAM/actions/workflows/tests_runner.yaml/badge.svg)
 ![Build docs](https://github.com/fatrybl/ModuSLAM/actions/workflows/docs_build.yaml/badge.svg)
 ![Deploy docs](https://github.com/fatrybl/ModuSLAM/actions/workflows/docs_deploy.yaml/badge.svg)
 
