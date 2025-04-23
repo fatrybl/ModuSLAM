@@ -1,33 +1,56 @@
-name: Deploy Sphinx Docs to GitHub Pages
+name: Build and Deploy Sphinx Docs # build & deploy docs to Github pages
 
 on:
-  workflow_run:
-    workflows: [ "Build Sphinx Docs" ]  # Must match the name of your docs build workflow
+  push:
     branches: [ main ]
-    types:
-      - completed
+  pull_request:
+    branches: [ main ]
 
 permissions:
-  pages: write    # Needed for GitHub Pages deployment
-  id-token: write # Needed for OIDC auth
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+
+      - name: Build documentation
+        run: |
+          sphinx-apidoc -f -o docs/source/ ./src/
+          cd docs
+          make clean html
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-artifact
+          path: docs/build/html/
+
   deploy:
-    # Only deploy if the build succeeded
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: build
+
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Download artifact from build
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: docs-artifact  # Must match the artifact name in build.yml
-          path: ./docs-build   # Temporary directory to store the downloaded files
+          name: docs-artifact
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          artifact: docs-artifact  # Must match the downloaded artifact name
