@@ -26,8 +26,13 @@ jobs:
       - name: Build docs
         run: |
           sphinx-apidoc -f -o docs/source/ ./src/
+          rm -rf docs/build
           cd docs
           make clean html
+
+      - name: Remove symlinks
+        run: find docs/build/html/ -type l -delete
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
