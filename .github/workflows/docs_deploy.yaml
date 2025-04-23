@@ -1,4 +1,4 @@
-name: Build and Deploy Sphinx Docs # build & deploy docs to Github pages
+name: Build and Deploy Sphinx Docs
 
 on:
   push:
@@ -16,22 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
-
-      - name: Build documentation
+      - name: Build docs
         run: |
           sphinx-apidoc -f -o docs/source/ ./src/
           cd docs
           make clean html
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -40,7 +36,6 @@ jobs:
 
   deploy:
     needs: build
-
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -54,3 +49,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact: docs-artifact
