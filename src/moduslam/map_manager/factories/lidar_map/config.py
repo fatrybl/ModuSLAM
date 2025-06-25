@@ -5,6 +5,6 @@ from dataclasses import dataclass
 class LidarPointCloudConfig:
     """Lidar point cloud map factory configuration."""
 
-    num_channels: int = 4
-    min_range: float = 3
-    max_range: float = 120
+    num_channels: int = 4  # x, y, z, intensity
+    min_range: float | None = None
+    max_range: float | None = None

@@ -10,7 +10,7 @@ defaults:
   #  - /sensors/tum_vie/imu@_here_
 
   # ROS2 S3E:
-  - /sensors/s3e/alpha/imu@_here_
+  #  - /sensors/s3e/alpha/imu@_here_
   - /sensors/s3e/alpha/lidar@_here_
   #  - /sensors/s3e/alpha/camera_left@_here_
   #  - /sensors/s3e/alpha/camera_right@_here_

@@ -6,8 +6,8 @@ defaults:
 regime:
   name: "TimeLimit"
   start: 1661164286607675136
-  #  stop: 1661164286708535040
-  stop: 1661164306507739648 # 100 lidar scans
+  #  stop: 1661164286708535040 # 2 scans
+  stop: 1661164291506052096 # 200 scans
 
   #  # Urban-26 stereo
   #  start: 1544581218520741817
