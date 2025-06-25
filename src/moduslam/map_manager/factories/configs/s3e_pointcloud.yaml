@@ -3,5 +3,5 @@ defaults:
   - _self_
 
 num_channels: 6
-min_range: 1.0
+min_range: 0.0
 max_range: 120.0

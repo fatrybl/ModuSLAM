@@ -3,11 +3,10 @@ from typing import TypeVar
 
 import numpy as np
 
-from src.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3, MatrixNx4
+from src.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixMxN, MatrixNx3, MatrixNx4
 from src.moduslam.data_manager.batch_factory.batch import Element
 from src.moduslam.data_manager.batch_factory.factory import BatchFactory
 from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.utils.auxiliary_methods import check_dimensionality
 
 V = TypeVar("V", bound=Vertex)
 
@@ -52,28 +51,35 @@ def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4)
     return result.T  # type: ignore
 
 
-def filter_array(array: MatrixNx3, lower_bound: float, upper_bound: float) -> MatrixNx3:
-    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector.
-    The point is removed if its radius vector is outside the bounds.
+def filter_array(
+    array: MatrixMxN, lower_bound: float | None, upper_bound: float | None
+) -> MatrixMxN:
+    """Filters 2D array with lower/upper bounds based on the radius vector.
+    Uses the first three columns of the array to calculate the radius vector.
 
     Args:
-        array: array [N, 3] of points to filter.
+        array: array of points to filter.
 
         lower_bound: lower bound value for the radius vector.
 
         upper_bound: upper bound value for the radius vector.
 
     Returns:
-        filtered array [K, 3].
+        filtered array.
     """
-    n, m = array.shape[0], 3
-    check_dimensionality(array, shape=(n, m))
+    if lower_bound is None and upper_bound is None:
+        return array
 
     radius_vectors = np.linalg.norm(array[:, :3], axis=1)
 
-    mask = (radius_vectors >= lower_bound) & (radius_vectors <= upper_bound)
+    if lower_bound is not None and upper_bound is not None:
+        mask = (radius_vectors >= lower_bound) & (radius_vectors <= upper_bound)
+    elif lower_bound is not None:
+        mask = radius_vectors >= lower_bound
+    else:
+        mask = radius_vectors <= upper_bound
 
-    filtered_arr = array[mask, :]
+    filtered_arr = array[mask]
     return filtered_arr
 
 

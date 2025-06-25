@@ -109,14 +109,33 @@ def create_3d_point_cloud(
     """
     tf_array = np.array(tf)
     points = values_to_array(values, config.num_channels)
-    points = points[:, :3]  # remove unnecessary channels.
     points = filter_array(points, config.min_range, config.max_range)
+    points_coordinates = points[:, :3]  # assume the first three columns are x, y, z
 
     cloud = geometry.PointCloud()
-    cloud.points = utility.Vector3dVector(points)
+    cloud.points = utility.Vector3dVector(points_coordinates)
+
+    if config.num_channels > 3:
+        add_intensity_to_point_cloud(cloud, points)
+
     cloud.transform(tf_array)
 
     return cloud
+
+
+def add_intensity_to_point_cloud(cloud: geometry.PointCloud, points: MatrixMxN) -> None:
+    """Adds intensity information to the point cloud as colors.
+
+    Args:
+        cloud: a point cloud to add intensity.
+
+        points: raw point cloud data.
+    """
+    intensity = points[:, 3].reshape(-1, 1)
+    max_intensity = np.max(intensity)
+    normalized = np.divide(intensity, max_intensity)
+    colors = np.hstack([normalized, normalized, normalized])
+    cloud.colors = utility.Vector3dVector(colors)
 
 
 def create_point_cloud_from_element(
