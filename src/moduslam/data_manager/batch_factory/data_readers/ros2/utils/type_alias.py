@@ -1,4 +1,4 @@
-"""Type alias for ROS-2 data reader based on rosbags.rosbag2.Reader"""
+"""Type alias for ROS-2 data reader based on rosbags.rosbag2.Reader."""
 
 from collections.abc import Generator
 from typing import TypeAlias

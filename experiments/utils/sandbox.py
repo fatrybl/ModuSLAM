@@ -17,8 +17,8 @@ Cloud: TypeAlias = o3d.geometry.PointCloud
 
 
 def visualize_point_cloud_with_subsets(pcd: Cloud, planes: Sequence[MatrixNx3]):
-    """
-    Visualize the entire point cloud in grey and three subsets of points with RGB colors.
+    """Visualize the entire point cloud in grey and three subsets of points with RGB
+    colors.
 
     Parameters:
     - pcd: open3d.geometry.PointCloud object
@@ -67,8 +67,8 @@ def visualize_point_cloud_with_subsets(pcd: Cloud, planes: Sequence[MatrixNx3]):
 
 
 def visualize_point_cloud_with_subsets_multiple(pcd, planes):
-    """
-    Visualize the entire point cloud in grey and multiple subsets of points with distinct RGB colors.
+    """Visualize the entire point cloud in grey and multiple subsets of points with
+    distinct RGB colors.
 
     Parameters:
     - pcd: open3d.geometry.PointCloud object
@@ -149,8 +149,7 @@ def rotate_pose_around_z(pose: Matrix4x4, angle_degrees: float) -> Matrix4x4:
 
 
 def generate_distinct_colors(num_colors):
-    """
-    Generate a list of distinct colors.
+    """Generate a list of distinct colors.
 
     Args:
         num_colors: Number of distinct colors to generate.
@@ -165,8 +164,8 @@ def generate_distinct_colors(num_colors):
 
 
 def visualize_point_cloud_with_planes(pcd, planes):
-    """
-    Visualize the entire point cloud in grey and multiple planes' points with distinct colors.
+    """Visualize the entire point cloud in grey and multiple planes' points with
+    distinct colors.
 
     Parameters:
     - pcd: open3d.geometry.PointCloud object
@@ -206,8 +205,7 @@ def visualize_point_cloud_with_planes(pcd, planes):
 
 
 def array_to_pointcloud(array: MatrixNx3) -> o3d.geometry.PointCloud:
-    """
-    Convert a numpy array of shape (N, 3) to an Open3D PointCloud.
+    """Convert a numpy array of shape (N, 3) to an Open3D PointCloud.
 
     Args:
         array: numpy array of shape (N, 3) representing point cloud data.

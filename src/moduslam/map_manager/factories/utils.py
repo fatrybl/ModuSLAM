@@ -53,8 +53,8 @@ def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4)
 
 
 def filter_array(array: MatrixNx3, lower_bound: float, upper_bound: float) -> MatrixNx3:
-    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector.
-    The point is removed if its radius vector is outside the bounds.
+    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector. The point
+    is removed if its radius vector is outside the bounds.
 
     Args:
         array: array [N, 3] of points to filter.

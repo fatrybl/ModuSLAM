@@ -176,7 +176,8 @@ class PlaneOrthogonality(Metrics):
     def _create_pose_elements_table(
         factory: BatchFactory, connections: dict[Pose, set[Edge]]
     ) -> dict[Pose, list[Element]]:
-        """Creates a table with poses and the corresponding raw elements with Lidar measurements.
+        """Creates a table with poses and the corresponding raw elements with Lidar
+        measurements.
 
         Args:
             factory: a factory for creating elements with raw lidar measurements.
