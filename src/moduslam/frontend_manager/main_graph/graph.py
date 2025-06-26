@@ -169,7 +169,7 @@ class Graph:
             logger.error(msg)
             raise ValidationError(msg)
 
-        new.index = existing.index
+        new.index = existing.index  # type: ignore
         self._edges.remove(existing)
         self._edges.add(new)
         self._factor_graph.replace(existing.index, new.factor)
@@ -290,7 +290,9 @@ class Graph:
 
             ItemExistsError: if a new edge already exists.
 
-            TypeError: if the types of the existing edge and the new edge do not match.
+            TypeError:
+                - if the types of the existing edge and the new edge do not match.
+                - if the index of the existing edge is None.
         """
         if edge not in self._edges:
             raise ItemNotExistsError(f"Edge {edge} does not exist.")
@@ -300,6 +302,9 @@ class Graph:
 
         if type(edge) is not type(new_edge):
             raise TypeError("Type mismatch between the existing edge and the new edge.")
+
+        if edge.index is None:
+            raise TypeError("Edge index is None and cannot be replaced.")
 
         if edge.vertices != new_edge.vertices:
             raise NotSubsetError("Vertices of the new edge do not match with the existing edge.")
