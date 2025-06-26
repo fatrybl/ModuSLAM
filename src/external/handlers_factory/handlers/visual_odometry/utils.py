@@ -39,8 +39,8 @@ print(tf_left_to_right_list)
 
 
 def load_calib(filepath):
-    """
-    Loads the calibration of the camera
+    """Loads the calibration of the camera.
+
     Parameters
     ----------
     filepath (str): The file path to the camera file

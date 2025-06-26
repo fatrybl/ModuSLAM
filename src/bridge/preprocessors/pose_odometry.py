@@ -26,8 +26,8 @@ def split_odometry(measurements: Iterable[Measurement], start: int | None) -> li
 
 
 def split(measurements: Iterable[Measurement], start: int | None) -> list[SplitPoseOdometry]:
-    """Splits PoseOdometry measurements (inside time_range only) into children measurements with the same
-    parent but different timestamps.
+    """Splits PoseOdometry measurements (inside time_range only) into children
+    measurements with the same parent but different timestamps.
 
     Args:
         measurements: parent measurements to split.

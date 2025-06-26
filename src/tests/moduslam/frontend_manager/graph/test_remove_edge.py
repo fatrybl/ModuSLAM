@@ -35,7 +35,7 @@ from src.utils.ordered_set import OrderedSet
 
 @pytest.fixture
 def imu() -> ImuMeasurement:
-    """IMU measurement with zero data and identity covariance"""
+    """IMU measurement with zero data and identity covariance."""
     data = ImuData(zero_vector3, zero_vector3)
     covariance = ImuCovariance(identity3x3, identity3x3, identity3x3, identity3x3, identity3x3)
     return ImuMeasurement(0, data, covariance, identity4x4)

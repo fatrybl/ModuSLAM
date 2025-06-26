@@ -45,8 +45,8 @@ def calculate_angle(v1: Position2D, v2: Position2D) -> float:
 
 
 def visualize_trajectory_with_frames(file_path: str) -> None:
-    """
-    Reads SE(3) poses from a CSV file and visualizes the trajectory with coordinate frames using open3d.
+    """Reads SE(3) poses from a CSV file and visualizes the trajectory with coordinate
+    frames using open3d.
 
     Args:
         file_path: Path to the CSV file.

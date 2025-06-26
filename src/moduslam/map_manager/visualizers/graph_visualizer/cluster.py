@@ -104,6 +104,7 @@ class Cluster:
     @property
     def width(self) -> float:
         """The width of the cluster based on the number of vertices.
+
         0 if no vertices are present.
         """
         return len(self._vertices) * self._width_step
