@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "moduslam"
 version = "0.1.0"
@@ -55,11 +59,6 @@ sphinx-autodoc-typehints = "*"
 moviepy = { git = "https://github.com/Zulko/moviepy.git" }
 evo = "*"
 imageio = "*"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 
 [tool.black]
 line-length = 100

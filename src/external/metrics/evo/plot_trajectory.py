@@ -12,7 +12,8 @@ from src.utils.auxiliary_methods import microsec2nanosec, str_to_float
 
 
 def load_gt_trajectory(file_path: Path) -> list:
-    """Loads a trajectory from a .txt file with the format: time(us) px py pz qx qy qz qw.
+    """Loads a trajectory from a .txt file with the format: time(us) px py pz qx qy qz
+    qw.
 
     Args:
         file_path: a Path to the .txt file.
@@ -88,7 +89,8 @@ def load_and_sync_trajectories(
 
 
 def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D):
-    """Plots both estimated and reference trajectories in 3D using evo tools and adds coordinate frames to each pose.
+    """Plots both estimated and reference trajectories in 3D using evo tools and adds
+    coordinate frames to each pose.
 
     Args:
         ref_traj: reference trajectory.

@@ -146,7 +146,8 @@ def get_ape(
 
 
 def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D):
-    """Plots both estimated and reference trajectories in 3D using evo tools and adds coordinate frames to each pose.
+    """Plots both estimated and reference trajectories in 3D using evo tools and adds
+    coordinate frames to each pose.
 
     Args:
         ref_traj: reference trajectory.
@@ -168,9 +169,9 @@ def plot_trajectories_3d(ref_traj: PoseTrajectory3D, est_traj: PoseTrajectory3D)
 
 if __name__ == "__main__":
     """Example usage.
-    Reference trajectory from the KAIST Urban dataset.
-    Estimated trajectory from ModuSLAM.
-    The estimated trajectory is in the form of a .txt file
+
+    Reference trajectory from the KAIST Urban dataset. Estimated trajectory from
+    ModuSLAM. The estimated trajectory is in the form of a .txt file
     """
     ref_file = Path("/media/mark/WD/kaist/urban-26/global_pose.csv")
 

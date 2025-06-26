@@ -1,5 +1,5 @@
-"""Tests create_graph_element() method with imu odometry measurements
-and combinedImu factors.
+"""Tests create_graph_element() method with imu odometry measurements and combinedImu
+factors.
 
 Warning:
     all measurements of equal time must be added to Measurement Clusters.

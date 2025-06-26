@@ -18,7 +18,8 @@ class FlannMatcher:
         self._matcher = cv2.FlannBasedMatcher(indexParams=index_params, searchParams=search_params)
 
     def get_matches(self, des1, des2, threshold: float = 0.5) -> list[cv2.DMatch]:
-        """Detect and compute keypoints and descriptors from the i-1'th and i'th image using the class orb object
+        """Detect and compute keypoints and descriptors from the i-1'th and i'th image
+        using the class orb object.
 
         Args:
             des1: descriptors in the 1st image.
@@ -51,7 +52,8 @@ class BfMatcher:
         self._matcher = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck=True)
 
     def get_matches(self, des1, des2) -> list[cv2.DMatch]:
-        """Detect and compute keypoints and descriptors from the i-1'th and i'th image using the class orb object
+        """Detect and compute keypoints and descriptors from the i-1'th and i'th image
+        using the class orb object.
 
         Args:
             des1: descriptors in the 1st image.
@@ -69,7 +71,7 @@ class BfMatcher:
 
 
 def draw_matches(image1, image2, kp1, kp2, matches) -> None:
-    """Draws the matches between two images
+    """Draws the matches between two images.
 
     Args:
         image1: first image.

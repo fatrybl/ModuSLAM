@@ -66,7 +66,8 @@ def create_graph_elements(graph: Graph, clusters: list[MeasurementCluster]) -> l
 
 
 def process_variant(graph: Graph, variant: ClustersWithLeftovers) -> CandidateWithClusters:
-    """Processes a variant of clusters with leftovers and creates a new candidate with measurement clusters.
+    """Processes a variant of clusters with leftovers and creates a new candidate with
+    measurement clusters.
 
     Args:
         graph: a main graph.

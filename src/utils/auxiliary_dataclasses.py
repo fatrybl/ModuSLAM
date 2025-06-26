@@ -52,7 +52,7 @@ class Message:
 
 @dataclass
 class Position3D:
-    """x, y, z point coordinates."""
+    """X, y, z point coordinates."""
 
     x: float
     y: float
@@ -61,7 +61,7 @@ class Position3D:
 
 @dataclass
 class Position2D:
-    """x, y point coordinates."""
+    """X, y point coordinates."""
 
     x: float
     y: float

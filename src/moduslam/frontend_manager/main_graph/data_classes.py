@@ -78,18 +78,19 @@ class GraphElement(Generic[E]):
                 time_cluster_map[vertex.timestamp] = vertex.cluster
 
     def _validate_table_timestamps(self) -> None:
-        """Validates that all vertices in vertex_timestamp_table have non-negative timestamps.
+        """Validates that all vertices in vertex_timestamp_table have non-negative
+        timestamps.
 
         Raises:
             ValueError: if some timestamps are negative.
-
         """
         for timestamp in self.vertex_timestamp_table.values():
             if timestamp < 0:
                 raise ValueError("Timestamp should be positive")
 
     def _validate_table_vertices(self) -> None:
-        """Validates that vertices in the vertex_timestamp_table are present in edge vertices.
+        """Validates that vertices in the vertex_timestamp_table are present in edge
+        vertices.
 
         Raises:
             NotSubsetError: missmatch between edge`s vertices and vertex_timestamp_table.
