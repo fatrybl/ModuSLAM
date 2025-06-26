@@ -33,7 +33,8 @@ class EdgeConsistency(Metrics):
 
     @staticmethod
     def _get_num_elements_between(measurements: list[Measurement], start: int, stop: int) -> int:
-        """Get number of elements in a sorted sequence which are in the range [start, stop].
+        """Get number of elements in a sorted sequence which are in the range [start,
+        stop].
 
         Args:
             measurements: discrete measurements sorted by timestamp.

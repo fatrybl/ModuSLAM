@@ -81,8 +81,7 @@ def mom(
 
 
 def mme(pcs: list[Cloud], ts: list[Matrix4x4], config: BaseConfig = BaseConfig()) -> float:
-    """Mean Map Entropy.
-    A no-reference metric algorithm based on entropy.
+    """Mean Map Entropy. A no-reference metric algorithm based on entropy.
 
     Args:
         pcs: point clouds obtained from sensors.
@@ -98,8 +97,7 @@ def mme(pcs: list[Cloud], ts: list[Matrix4x4], config: BaseConfig = BaseConfig()
 
 
 def mpv(pcs: list[Cloud], ts: list[Matrix4x4], config: BaseConfig = BaseConfig()) -> float:
-    """Mean Plane Variance.
-    A no-reference metric algorithm based on plane variance.
+    """Mean Plane Variance. A no-reference metric algorithm based on plane variance.
 
     Args:
         pcs: point clouds obtained from sensors.

@@ -63,7 +63,9 @@ class MeasurementCluster:
     @property
     def fake_measurements(self) -> tuple[FakeMeasurement, ...]:
         """Fake measurements in the cluster.
-        They are not used to compute time properties of the cluster."""
+
+        They are not used to compute time properties of the cluster.
+        """
         fakes = tuple(
             m
             for measurements in self._core_measurements.values()

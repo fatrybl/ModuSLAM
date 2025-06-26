@@ -12,8 +12,8 @@ from src.measurement_storage.measurements.imu import ContinuousImu, Imu
 def fill_one_connection(
     cluster: MeasurementCluster, measurements: list[Imu], left_limit_t: int | None
 ) -> tuple[int, list[Imu]]:
-    """Adds a continuous IMU measurement to the cluster, fills leftovers
-    and computes the number of unused measurements.
+    """Adds a continuous IMU measurement to the cluster, fills leftovers and computes
+    the number of unused measurements.
 
     Args:
         cluster: a cluster to be copied.
@@ -173,8 +173,8 @@ def create_and_fill_connections(
 def add_fake_cluster(
     clusters: list[MeasurementCluster], first_imu_t: int, left_limit_t: int | None
 ):
-    """Adds fake cluster with fake measurement if the 1-st IMU measurement is earlier than
-    the 1-st Core measurement in the Cluster.
+    """Adds fake cluster with fake measurement if the 1-st IMU measurement is earlier
+    than the 1-st Core measurement in the Cluster.
 
     Args:
         clusters: list of measurement clusters.

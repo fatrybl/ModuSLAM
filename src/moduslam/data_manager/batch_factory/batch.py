@@ -44,7 +44,10 @@ class DataBatch:
 
     @property
     def is_sorted(self) -> bool:
-        """Order of the batch. Takes O(N) operations."""
+        """Order of the batch.
+
+        Takes O(N) operations.
+        """
         iterator = iter(self._deque_set.items)
         try:
             previous = next(iterator)

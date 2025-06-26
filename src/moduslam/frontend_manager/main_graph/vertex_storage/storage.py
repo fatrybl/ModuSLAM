@@ -39,7 +39,10 @@ class VertexStorage:
 
     @property
     def vertices(self) -> tuple[Vertex, ...]:
-        """All vertices. Complexity: O(N)."""
+        """All vertices.
+
+        Complexity: O(N).
+        """
         return tuple(self._vertex_cluster_table.keys())
 
     @property
