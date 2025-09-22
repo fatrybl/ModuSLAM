@@ -1,7 +1,7 @@
 import math
 from typing import Tuple
 
-from src.utils.auxiliary_objects import zero_vector3
+from moduslam.utils.auxiliary_objects import zero_vector3
 
 
 def compute_roll_pitch_yaw(

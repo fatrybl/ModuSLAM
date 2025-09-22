@@ -3,13 +3,13 @@ from io import BytesIO
 from PIL import Image as ImageIO
 from PIL.Image import Image
 
-from src.custom_types.aliases import Vector6
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.point_cloud2_processor import (
+from moduslam.custom_types.aliases import Vector6
+from moduslam.data_manager.batch_factory.data_readers.ros2.utils.point_cloud2_processor import (
     filter_nans,
     pointcloud2_to_array,
     structured_to_regular_array,
 )
-from src.utils.exceptions import ExternalModuleException
+from moduslam.utils.exceptions import ExternalModuleException
 
 
 def get_image(raw_msg) -> Image:

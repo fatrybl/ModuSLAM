@@ -5,7 +5,7 @@ import laspy
 import numpy as np
 import open3d as o3d
 
-from src.utils.auxiliary_dataclasses import Position2D
+from moduslam.utils.auxiliary_dataclasses import Position2D
 
 
 def visualize_las_file(file_path: str) -> None:

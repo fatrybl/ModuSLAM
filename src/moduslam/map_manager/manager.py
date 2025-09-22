@@ -4,32 +4,32 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from src.logger.logging_config import map_manager
-from src.moduslam.data_manager.batch_factory.config_factory import (
+from moduslam.data_manager.batch_factory.config_factory import (
     get_config as get_bf_config,
 )
-from src.moduslam.data_manager.batch_factory.factory import BatchFactory
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.map_manager.factories.lidar_map.config_factory import (
+from moduslam.data_manager.batch_factory.factory import BatchFactory
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.logger.logging_config import map_manager
+from moduslam.map_manager.factories.lidar_map.config_factory import (
     get_config as get_mf_config,
 )
-from src.moduslam.map_manager.factories.lidar_map.factory import LidarMapFactory
-from src.moduslam.map_manager.graph_saver import GraphSaver
-from src.moduslam.map_manager.loaders.lidar_pointcloud.config import (
+from moduslam.map_manager.factories.lidar_map.factory import LidarMapFactory
+from moduslam.map_manager.graph_saver import GraphSaver
+from moduslam.map_manager.loaders.lidar_pointcloud.config import (
     LidarMapLoaderConfig,
 )
-from src.moduslam.map_manager.loaders.lidar_pointcloud.lidar_map import (
+from moduslam.map_manager.loaders.lidar_pointcloud.lidar_map import (
     LidarMapLoader,
 )
-from src.moduslam.map_manager.trajectory import get_trajectory, save_trajectory_to_txt
-from src.moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
+from moduslam.map_manager.trajectory import get_trajectory, save_trajectory_to_txt
+from moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
     create_data,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer import draw
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
+from moduslam.map_manager.visualizers.graph_visualizer.visualizer import draw
+from moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
     VisualizationParams,
 )
-from src.moduslam.map_manager.visualizers.pointcloud import PointcloudVisualizer
+from moduslam.map_manager.visualizers.pointcloud import PointcloudVisualizer
 
 logger = logging.getLogger(map_manager)
 

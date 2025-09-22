@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.utils.exceptions import ItemExistsError, NotSubsetError, ValidationError
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.utils.exceptions import ItemExistsError, NotSubsetError, ValidationError
 
 E = TypeVar("E", bound=Edge)
 V = TypeVar("V", bound=Vertex)

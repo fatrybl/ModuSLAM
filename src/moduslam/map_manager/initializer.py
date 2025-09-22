@@ -2,8 +2,8 @@
 
 import logging
 
-from src.logger.logging_config import map_manager
-from src.moduslam.map_manager.protocols import MapFactory, MapLoader, MapVisualizer
+from moduslam.logger.logging_config import map_manager
+from moduslam.map_manager.protocols import MapFactory, MapLoader, MapVisualizer
 
 logger = logging.getLogger(map_manager)
 

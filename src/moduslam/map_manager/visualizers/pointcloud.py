@@ -1,7 +1,7 @@
 import open3d as o3d
 
-from src.moduslam.map_manager.maps.pointcloud import PointCloudMap
-from src.moduslam.map_manager.protocols import MapVisualizer
+from moduslam.map_manager.maps.pointcloud import PointCloudMap
+from moduslam.map_manager.protocols import MapVisualizer
 
 
 class PointcloudVisualizer(MapVisualizer):

@@ -3,26 +3,26 @@ from collections.abc import Callable
 
 from PIL.Image import Image
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import Source
-from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+from moduslam.data_manager.batch_factory.data_readers.data_sources import Source
+from moduslam.data_manager.batch_factory.data_readers.locations import (
     CsvDataLocation,
     Location,
     StereoImagesLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.source import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.source import (
     TumVieCsvData,
     TumVieStereoImageData,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.utils import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.utils import (
     get_csv_data_by_location,
     get_stereo_data_by_location,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     get_csv_message,
     get_images,
 )
-from src.utils.auxiliary_dataclasses import Message
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.auxiliary_dataclasses import Message
 
 logger = logging.getLogger(data_manager)
 

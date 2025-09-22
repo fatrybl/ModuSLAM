@@ -5,9 +5,9 @@ from typing import Any, Protocol, overload, runtime_checkable
 
 from plum import dispatch
 
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger("data_manager")
 

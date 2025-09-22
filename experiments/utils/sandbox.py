@@ -5,13 +5,13 @@ from typing import TypeAlias
 
 import numpy as np
 import open3d as o3d
+from custom_types.numpy import Matrix4x4, MatrixNx3
+from external.metrics.modified_mom.config import HdbscanConfig, LidarConfig
+from external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
+from external.metrics.modified_mom.metrics import mom
 
-from src.custom_types.numpy import Matrix4x4, MatrixNx3
-from src.external.metrics.modified_mom.config import HdbscanConfig, LidarConfig
-from src.external.metrics.modified_mom.hdbscan_planes import extract_orthogonal_subsets
-from src.external.metrics.modified_mom.metrics import mom
-from src.moduslam.map_manager.utils import read_4_channel_bin_pcd
-from src.utils.exceptions import DimensionalityError
+from moduslam.map_manager.utils import read_4_channel_bin_pcd
+from moduslam.utils.exceptions import DimensionalityError
 
 Cloud: TypeAlias = o3d.geometry.PointCloud
 

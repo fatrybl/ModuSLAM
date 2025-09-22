@@ -2,8 +2,8 @@ import logging
 
 import gtsam
 
-from src.logger.logging_config import backend_manager
-from src.moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.logger.logging_config import backend_manager
 
 logger = logging.getLogger(backend_manager)
 

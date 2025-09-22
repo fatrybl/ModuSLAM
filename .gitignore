@@ -2,6 +2,8 @@ moduslam.egg-info
 .idea
 .vscode
 __pycache__
+.mypy_cache
+.pytest_cache
 logs
 dist
 *.pdf

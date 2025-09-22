@@ -1,17 +1,17 @@
 import logging
 from collections.abc import Iterable, Sequence
 
-from src.bridge.auxiliary_dataclasses import CandidateWithClusters
-from src.bridge.candidates_factory import create_graph_elements
-from src.external.utils import get_subsequence, group_by_timestamp
-from src.external.variants_factory import Factory as VariantsFactory
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.cluster import MeasurementCluster
-from src.measurement_storage.group import MeasurementGroup
-from src.measurement_storage.measurements.base import Measurement
-from src.measurement_storage.measurements.imu import ContinuousImu, Imu
-from src.moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
-from src.utils.ordered_set import OrderedSet
+from moduslam.bridge.auxiliary_dataclasses import CandidateWithClusters
+from moduslam.bridge.candidates_factory import create_graph_elements
+from moduslam.external.utils import get_subsequence, group_by_timestamp
+from moduslam.external.variants_factory import Factory as VariantsFactory
+from moduslam.frontend_manager.main_graph.graph import Graph, GraphCandidate
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.cluster import MeasurementCluster
+from moduslam.measurement_storage.group import MeasurementGroup
+from moduslam.measurement_storage.measurements.base import Measurement
+from moduslam.measurement_storage.measurements.imu import ContinuousImu, Imu
+from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 

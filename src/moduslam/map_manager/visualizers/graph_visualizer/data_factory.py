@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
-from src.moduslam.map_manager.visualizers.graph_visualizer.connection_methods import (
+from moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
+from moduslam.map_manager.visualizers.graph_visualizer.connection_methods import (
     Binary,
     Unary,
     create_connection,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.utils import create_cluster
+from moduslam.map_manager.visualizers.graph_visualizer.utils import create_cluster
 
 
 @dataclass

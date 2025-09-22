@@ -3,8 +3,8 @@ from pathlib import Path
 
 from omegaconf import MISSING
 
-from src.moduslam.data_manager.batch_factory.configs import DataReaders, DatasetConfig
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.paths import (
+from moduslam.data_manager.batch_factory.configs import DataReaders, DatasetConfig
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.paths import (
     TumVieDatasetPathConfig as TumPaths,
 )
 

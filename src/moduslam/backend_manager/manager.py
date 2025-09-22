@@ -1,8 +1,8 @@
 import logging
 
-from src.logger.logging_config import backend_manager
-from src.moduslam.backend_manager.graph_solver import GraphSolver
-from src.moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.backend_manager.graph_solver import GraphSolver
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.logger.logging_config import backend_manager
 
 logger = logging.getLogger(backend_manager)
 

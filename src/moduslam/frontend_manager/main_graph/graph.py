@@ -3,25 +3,25 @@ from collections.abc import Iterable
 
 import gtsam
 
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.frontend_manager.main_graph.data_classes import (
+from moduslam.frontend_manager.main_graph.data_classes import (
     GraphElement,
     NewVertex,
 )
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.moduslam.frontend_manager.utils import get_vertices_with_measurement_timestamps
-from src.utils.exceptions import (
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.frontend_manager.utils import get_vertices_with_measurement_timestamps
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.measurements.base import Measurement
+from moduslam.utils.exceptions import (
     ItemExistsError,
     ItemNotExistsError,
     NotSubsetError,
     ValidationError,
 )
-from src.utils.ordered_set import OrderedSet
+from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 

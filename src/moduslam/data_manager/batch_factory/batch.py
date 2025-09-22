@@ -1,9 +1,9 @@
 import logging
 from collections import deque
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_objects import Element
-from src.utils.deque_set import DequeSet
+from moduslam.data_manager.batch_factory.data_objects import Element
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.deque_set import DequeSet
 
 logger = logging.getLogger(data_manager)
 

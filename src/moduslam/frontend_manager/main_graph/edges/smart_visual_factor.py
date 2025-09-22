@@ -1,14 +1,14 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from src.custom_types.aliases import Matrix4x4
-from src.measurement_storage.measurements.visual_feature import Feature, Features
-from src.moduslam.frontend_manager.main_graph.edges.base import RadialEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.custom_types.aliases import Matrix4x4
+from moduslam.frontend_manager.main_graph.edges.base import RadialEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     Feature3D,
     Pose,
     identity4x4,
 )
+from moduslam.measurement_storage.measurements.visual_feature import Feature, Features
 
 
 class SmartVisualFeature(RadialEdge):

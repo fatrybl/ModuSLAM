@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from src.measurement_storage.storage import MeasurementStorage
+from moduslam.measurement_storage.storage import MeasurementStorage
 
 
 class StorageAnalyzer(Protocol):

@@ -1,9 +1,9 @@
 from typing import cast
 
+from hydra import compose, initialize
 from hydra.core.config_store import ConfigStore
 
-from hydra import compose, initialize
-from src.moduslam.map_manager.factories.lidar_map.config import (
+from moduslam.map_manager.factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
 

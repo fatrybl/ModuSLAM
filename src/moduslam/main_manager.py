@@ -1,12 +1,12 @@
 import logging
 from pathlib import Path
 
-from src.logger.logging_config import main_manager
-from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.backend_manager.manager import BackendManager
-from src.moduslam.data_manager.manager import DataManager
-from src.moduslam.frontend_manager.manager import FrontendManager
-from src.moduslam.map_manager.manager import MapManager
+from moduslam.backend_manager.manager import BackendManager
+from moduslam.data_manager.manager import DataManager
+from moduslam.frontend_manager.manager import FrontendManager
+from moduslam.logger.logging_config import main_manager
+from moduslam.map_manager.manager import MapManager
+from moduslam.measurement_storage.storage import MeasurementStorage
 
 logger = logging.getLogger(main_manager)
 

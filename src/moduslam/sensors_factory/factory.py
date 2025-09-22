@@ -2,8 +2,8 @@ import logging
 from collections.abc import Iterable
 from typing import cast
 
-from src.logger.logging_config import setup_manager
-from src.moduslam.sensors_factory.configs import (
+from moduslam.logger.logging_config import setup_manager
+from moduslam.sensors_factory.configs import (
     ImuConfig,
     Lidar3DConfig,
     MonocularCameraConfig,
@@ -12,7 +12,7 @@ from src.moduslam.sensors_factory.configs import (
     UltraWideBandConfig,
     VrsGpsConfig,
 )
-from src.moduslam.sensors_factory.sensors import (
+from moduslam.sensors_factory.sensors import (
     Altimeter,
     Encoder,
     Fog,
@@ -26,7 +26,7 @@ from src.moduslam.sensors_factory.sensors import (
     UltraWideBand,
     VrsGps,
 )
-from src.utils.exceptions import ItemNotExistsError
+from moduslam.utils.exceptions import ItemNotExistsError
 
 logger = logging.getLogger(setup_manager)
 

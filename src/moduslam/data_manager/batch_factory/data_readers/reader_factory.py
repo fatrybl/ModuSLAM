@@ -1,35 +1,35 @@
 import logging
 from typing import cast
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.configs import (
+from moduslam.data_manager.batch_factory.configs import (
     DataReaders,
     DataRegimeConfig,
     DatasetConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.reader import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.reader import (
     KaistReader,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
-from src.moduslam.data_manager.batch_factory.data_readers.regime_factory import (
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.data_readers.regime_factory import (
     kaist_regime,
     ros2_regime,
     tum_vie_regime,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2Config,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.reader import Ros2Reader
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.reader import Ros2Reader
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.reader import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.reader import (
     TumVieReader,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.logger.logging_config import data_manager
 
 logger = logging.getLogger(data_manager)
 
