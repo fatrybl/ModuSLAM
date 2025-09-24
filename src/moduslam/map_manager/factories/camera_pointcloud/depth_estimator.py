@@ -2,7 +2,7 @@
 
 from PIL.Image import Image
 
-from src.custom_types.numpy import MatrixMxN
+from moduslam.custom_types.numpy import MatrixMxN
 
 
 class DepthEstimator:

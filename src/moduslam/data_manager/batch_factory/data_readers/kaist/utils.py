@@ -2,19 +2,19 @@ from pathlib import Path
 
 import numpy as np
 
-from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+from moduslam.data_manager.batch_factory.data_readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,
     StereoImagesLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     get_csv_message,
     get_images,
     read_csv_file,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.utils.auxiliary_dataclasses import Message
-from src.utils.auxiliary_methods import str_to_int
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.utils.auxiliary_dataclasses import Message
+from moduslam.utils.auxiliary_methods import str_to_int
 
 
 def read_binary(file: Path) -> tuple[float, ...]:

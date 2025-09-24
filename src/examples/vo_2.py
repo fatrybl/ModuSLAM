@@ -15,10 +15,10 @@ import numpy as np
 import PIL.Image as Image
 from gtsam.symbol_shorthand import X
 
-from src.external.handlers_factory.handlers.visual_odometry.feature_detector import (
+from moduslam.external.handlers_factory.handlers.visual_odometry.feature_detector import (
     Detector,
 )
-from src.external.handlers_factory.handlers.visual_odometry.feature_matcher import (
+from moduslam.external.handlers_factory.handlers.visual_odometry.feature_matcher import (
     BfMatcher,
 )
 

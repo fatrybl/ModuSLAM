@@ -4,19 +4,19 @@ from collections import defaultdict
 import numpy as np
 from open3d import geometry, utility
 
-from src.custom_types.aliases import Matrix4x4
-from src.custom_types.numpy import MatrixMxN
-from src.logger.logging_config import map_manager
-from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.factories.lidar_map.config import (
+from moduslam.custom_types.aliases import Matrix4x4
+from moduslam.custom_types.numpy import MatrixMxN
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.logger.logging_config import map_manager
+from moduslam.map_manager.factories.lidar_map.config import (
     LidarPointCloudConfig,
 )
-from src.moduslam.map_manager.factories.utils import filter_array
-from src.moduslam.sensors_factory.sensors import Lidar3D
+from moduslam.map_manager.factories.utils import filter_array
+from moduslam.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from moduslam.sensors_factory.sensors import Lidar3D
 
 logger = logging.getLogger(map_manager)
 

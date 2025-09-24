@@ -8,12 +8,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from src.custom_types.aliases import Matrix3x3, Matrix4x4
-from src.utils.auxiliary_methods import matrix3x3_list_to_tuple as tuple3x3
-from src.utils.auxiliary_methods import matrix4x4_list_to_tuple as tuple4x4
+from moduslam.custom_types.aliases import Matrix3x3, Matrix4x4
+from moduslam.utils.auxiliary_methods import matrix3x3_list_to_tuple as tuple3x3
+from moduslam.utils.auxiliary_methods import matrix4x4_list_to_tuple as tuple4x4
 
 if TYPE_CHECKING:
-    from src.moduslam.sensors_factory.configs import (
+    from moduslam.sensors_factory.configs import (
         ImuConfig,
         Lidar3DConfig,
         MonocularCameraConfig,

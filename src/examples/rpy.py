@@ -1,14 +1,13 @@
 import math
 from typing import Tuple
 
-from src.utils.auxiliary_objects import zero_vector3
+from moduslam.utils.auxiliary_objects import zero_vector3
 
 
 def compute_roll_pitch_yaw(
     point1: Tuple[float, float, float], point2: Tuple[float, float, float]
 ) -> Tuple[float, float, float]:
-    """
-    Computes the roll, pitch, and yaw angles between two points in 3D space.
+    """Computes the roll, pitch, and yaw angles between two points in 3D space.
 
     Args:
         point1: A tuple representing the first point (x1, y1, z1).

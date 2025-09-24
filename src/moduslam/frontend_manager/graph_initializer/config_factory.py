@@ -1,9 +1,9 @@
 from typing import cast
 
+from hydra import compose, initialize
 from hydra.core.config_store import ConfigStore
 
-from hydra import compose, initialize
-from src.moduslam.frontend_manager.graph_initializer.configs import (
+from moduslam.frontend_manager.graph_initializer.configs import (
     EdgeConfig,
     PriorImuBias,
     PriorLinearVelocity,

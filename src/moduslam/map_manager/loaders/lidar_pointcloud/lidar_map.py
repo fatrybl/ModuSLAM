@@ -3,13 +3,13 @@ from pathlib import Path
 
 import open3d as o3d
 
-from src.logger.logging_config import map_manager
-from src.moduslam.map_manager.loaders.lidar_pointcloud.config import (
+from moduslam.logger.logging_config import map_manager
+from moduslam.map_manager.loaders.lidar_pointcloud.config import (
     LidarMapLoaderConfig,
 )
-from src.moduslam.map_manager.maps.pointcloud import PointCloudMap
-from src.moduslam.map_manager.protocols import MapLoader
-from src.utils.exceptions import ExternalModuleException
+from moduslam.map_manager.maps.pointcloud import PointCloudMap
+from moduslam.map_manager.protocols import MapLoader
+from moduslam.utils.exceptions import ExternalModuleException
 
 logger = logging.getLogger(map_manager)
 

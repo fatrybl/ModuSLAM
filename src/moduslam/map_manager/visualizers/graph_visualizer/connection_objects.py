@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
+from moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
 
 
 @dataclass

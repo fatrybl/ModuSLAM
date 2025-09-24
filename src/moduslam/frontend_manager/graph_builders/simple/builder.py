@@ -1,22 +1,22 @@
 import logging
 
-from src.bridge.auxiliary_dataclasses import CandidateWithClusters
-from src.external.handlers_factory.handlers.handler_protocol import Handler
-from src.external.metrics.factory import MetricsFactory
-from src.external.metrics.storage import MetricsStorage
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.backend_manager.graph_solver import GraphSolver
-from src.moduslam.data_manager.batch_factory.batch import DataBatch
-from src.moduslam.frontend_manager.graph_builders.simple.graph_factory import (
+from moduslam.backend_manager.graph_solver import GraphSolver
+from moduslam.bridge.auxiliary_dataclasses import CandidateWithClusters
+from moduslam.data_manager.batch_factory.batch import DataBatch
+from moduslam.external.handlers_factory.handlers.handler_protocol import Handler
+from moduslam.external.metrics.factory import MetricsFactory
+from moduslam.external.metrics.storage import MetricsStorage
+from moduslam.frontend_manager.graph_builders.simple.graph_factory import (
     Factory as GraphFactory,
 )
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.storage_analyzers.analyzers import (
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.storage_analyzers.analyzers import (
     SinglePoseOdometry,
 )
-from src.moduslam.frontend_manager.utils import fill_storage
-from src.utils.auxiliary_methods import nanosec2sec
+from moduslam.frontend_manager.utils import fill_storage
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.storage import MeasurementStorage
+from moduslam.utils.auxiliary_methods import nanosec2sec
 
 logger = logging.getLogger(frontend_manager)
 

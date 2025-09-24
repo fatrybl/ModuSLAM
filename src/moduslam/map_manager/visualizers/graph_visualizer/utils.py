@@ -2,30 +2,33 @@ from collections.abc import Iterable
 
 import numpy as np
 
-from src.custom_types.numpy import VectorN
-from src.measurement_storage.measurements.base import Measurement, TimeRangeMeasurement
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.custom_types.numpy import VectorN
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+from moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.cluster import (
+from moduslam.map_manager.visualizers.graph_visualizer.cluster import (
     Cluster,
     Vertex,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
+from moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
     Binary,
     Unary,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.mappings import (
+from moduslam.map_manager.visualizers.graph_visualizer.mappings import (
     vertex_encodings,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
+from moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
     BinaryConnectionParams,
 )
-from src.utils.auxiliary_dataclasses import Position2D
-from src.utils.exceptions import ItemNotExistsError
+from moduslam.measurement_storage.measurements.base import (
+    Measurement,
+    TimeRangeMeasurement,
+)
+from moduslam.utils.auxiliary_dataclasses import Position2D
+from moduslam.utils.exceptions import ItemNotExistsError
 
 
 def get_clusters_for_binary_connections(

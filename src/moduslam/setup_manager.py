@@ -1,8 +1,8 @@
 import logging
 
-from src.logger.logging_config import setup_manager
-from src.moduslam.sensors_factory.config_factory import get_config
-from src.moduslam.sensors_factory.factory import SensorsFactory
+from moduslam.logger.logging_config import setup_manager
+from moduslam.sensors_factory.config_factory import get_config
+from moduslam.sensors_factory.factory import SensorsFactory
 
 logger = logging.getLogger(setup_manager)
 

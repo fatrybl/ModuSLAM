@@ -8,38 +8,38 @@ from typing import overload
 
 from plum import dispatch
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import (
+from moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.data_readers.data_sources import (
     CsvData,
     PointCloudData,
     Source,
     StereoImageData,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.measurement_collector import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.measurement_collector import (
     get_measurement,
     get_next_measurement,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.utils import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.utils import (
     create_sequence,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
     DataReader,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     apply_state,
     check_data_sources,
     check_setup,
     filter_table,
     set_state,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
-from src.utils.auxiliary_methods import str_to_int
-from src.utils.exceptions import (
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.logger.logging_config import data_manager
+from moduslam.sensors_factory.sensors import Sensor
+from moduslam.utils.auxiliary_methods import str_to_int
+from moduslam.utils.exceptions import (
     DataReaderConfigurationError,
     ItemNotFoundError,
     StateNotSetError,

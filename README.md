@@ -16,9 +16,10 @@ Comparable map quality with the base scenario
 If you use this repository in your research, please cite it as follows:
 
 ```bibtex
-@misc{ModuSLAM,
-  author = {Mark Griguletskii},
-  title = {ModuSLAM - A modular framework for Factor Graph-based Simultaneous Localization and Mapping},
-  year = {2025},
-  howpublished = {\url{https://github.com/fatrybl/ModuSLAM}},
-}
+@INPROCEEDINGS{ModuSLAM,
+  author={Griguletskii, Mark and Osinenko, Pavel},
+  booktitle={2025 IEEE 26th International Conference of Young Professionals in Electron Devices and Materials (EDM)},
+  title={Moduslam: A Modular Framework for Factor Graph-Based Localization and Mapping},
+  year={2025},
+  pages={1210-1215},
+  doi={10.1109/EDM65517.2025.11096772}}

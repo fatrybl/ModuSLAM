@@ -1,0 +1,53 @@
+from moduslam.bridge.edge_factories.factory_protocol import EdgeFactory
+from moduslam.bridge.edge_factories.utils import (
+    create_new_vertices,
+    create_vertex_i_with_status,
+    get_cluster,
+)
+from moduslam.frontend_manager.main_graph.edges.noise_models import (
+    pose_block_diagonal_noise_model,
+)
+from moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
+from moduslam.frontend_manager.main_graph.graph import Graph, GraphElement
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+    VertexCluster,
+)
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.auxiliary_objects import identity4x4
+
+
+class Factory(EdgeFactory):
+
+    @classmethod
+    def create(
+        cls, graph: Graph, clusters: dict[VertexCluster, TimeRange], measurement: PoseMeasurement
+    ) -> GraphElement[PriorPose]:
+        """Creates a new edge with prior SE(3) pose factor.
+
+        Args:
+            graph: a main graph.
+
+            clusters: clusters with time ranges.
+
+            measurement: a measurement with pose SE(3).
+
+        Returns:
+            a new element.
+        """
+        t = measurement.timestamp
+        trans_cov = measurement.position_noise_covariance
+        rot_cov = measurement.orientation_noise_covariance
+        storage = graph.vertex_storage
+
+        cluster = get_cluster(storage, clusters, t)
+        pose = create_vertex_i_with_status(Pose, storage, cluster, t, identity4x4)
+
+        noise = pose_block_diagonal_noise_model(trans_cov, rot_cov)
+
+        edge = PriorPose(pose.instance, measurement, noise)
+
+        new_vertices = create_new_vertices([pose])
+
+        return GraphElement(edge, {pose.instance: t}, new_vertices)

@@ -4,25 +4,25 @@ from collections import deque
 import numpy as np
 from PIL.Image import Image
 
-from src.custom_types.aliases import Matrix4x4
-from src.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
-from src.logger.logging_config import map_manager
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.data_manager.batch_factory.factory import BatchFactory
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.moduslam.map_manager.factories.camera_pointcloud.depth_estimator import (
+from moduslam.custom_types.aliases import Matrix4x4
+from moduslam.custom_types.numpy import Matrix3x3, Matrix4xN, MatrixNx3
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.factory import BatchFactory
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.logger.logging_config import map_manager
+from moduslam.map_manager.factories.camera_pointcloud.depth_estimator import (
     DepthEstimator,
 )
-from src.moduslam.map_manager.factories.camera_pointcloud.utils import (
+from moduslam.map_manager.factories.camera_pointcloud.utils import (
     pointcloud_from_image,
 )
-from src.moduslam.map_manager.factories.utils import (
+from moduslam.map_manager.factories.utils import (
     convert_pointcloud,
     transform_pointcloud,
 )
-from src.moduslam.map_manager.maps.pointcloud import PointCloudMap
-from src.moduslam.sensors_factory.sensors import StereoCamera
+from moduslam.map_manager.maps.pointcloud import PointCloudMap
+from moduslam.sensors_factory.sensors import StereoCamera
 
 logger = logging.getLogger(map_manager)
 

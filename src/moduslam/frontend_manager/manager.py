@@ -1,13 +1,13 @@
 import logging
 
-from src.external.handlers_factory.factory import Factory
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.data_manager.batch_factory.batch import DataBatch
-from src.moduslam.frontend_manager.graph_builders.simple.builder import Builder
-from src.moduslam.frontend_manager.graph_initializer.config_factory import get_config
-from src.moduslam.frontend_manager.graph_initializer.initializer import GraphInitializer
-from src.moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.data_manager.batch_factory.batch import DataBatch
+from moduslam.external.handlers_factory.factory import Factory
+from moduslam.frontend_manager.graph_builders.simple.builder import Builder
+from moduslam.frontend_manager.graph_initializer.config_factory import get_config
+from moduslam.frontend_manager.graph_initializer.initializer import GraphInitializer
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.measurements.base import Measurement
 
 logger = logging.getLogger(frontend_manager)
 

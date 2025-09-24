@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from omegaconf import MISSING
 
-from src.moduslam.sensors_factory.sensors import (
+from moduslam.sensors_factory.sensors import (
     Imu,
     Lidar3D,
     MonocularCamera,

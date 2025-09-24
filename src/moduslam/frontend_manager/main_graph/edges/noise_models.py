@@ -1,8 +1,8 @@
 import gtsam
 import numpy as np
 
-from src.custom_types.aliases import Matrix3x3, Vector3, Vector6, VectorN
-from src.custom_types.numpy import Matrix6x6
+from moduslam.custom_types.aliases import Matrix3x3, Vector3, Vector6, VectorN
+from moduslam.custom_types.numpy import Matrix6x6
 
 
 def block_diagonal_matrix_6x6(block1: Matrix3x3, block2: Matrix3x3) -> Matrix6x6:

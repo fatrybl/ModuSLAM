@@ -2,8 +2,8 @@ from pathlib import Path
 
 import open3d as o3d
 
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.utils import read_binary
-from src.moduslam.map_manager.factories.lidar_map.utils import values_to_array
+from moduslam.data_manager.batch_factory.data_readers.kaist.utils import read_binary
+from moduslam.map_manager.factories.lidar_map.utils import values_to_array
 
 
 def read_4_channel_bin_pcd(file_path: Path) -> o3d.geometry.PointCloud:

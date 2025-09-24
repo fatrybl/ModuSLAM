@@ -7,31 +7,31 @@ from rosbags.interfaces import Connection
 from rosbags.rosbag2 import Reader
 from rosbags.typesys import get_typestore
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+from moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.data_readers.locations import (
     Location,
     Ros2DataLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
     DataReader,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2Config,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.ros_distro_processors import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.ros_distro_processors import (
     get_msg_processor,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.utils.type_alias import (
     RosbagsMessageGenerator,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     check_directory,
     check_setup,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
-from src.utils.exceptions import (
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.logger.logging_config import data_manager
+from moduslam.sensors_factory.sensors import Sensor
+from moduslam.utils.exceptions import (
     ConfigurationError,
     DataReaderConfigurationError,
     ItemNotFoundError,

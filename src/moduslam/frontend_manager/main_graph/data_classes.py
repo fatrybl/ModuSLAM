@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.utils.exceptions import ItemExistsError, NotSubsetError, ValidationError
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.utils.exceptions import ItemExistsError, NotSubsetError, ValidationError
 
 E = TypeVar("E", bound=Edge)
 V = TypeVar("V", bound=Vertex)
@@ -78,18 +78,19 @@ class GraphElement(Generic[E]):
                 time_cluster_map[vertex.timestamp] = vertex.cluster
 
     def _validate_table_timestamps(self) -> None:
-        """Validates that all vertices in vertex_timestamp_table have non-negative timestamps.
+        """Validates that all vertices in vertex_timestamp_table have non-negative
+        timestamps.
 
         Raises:
             ValueError: if some timestamps are negative.
-
         """
         for timestamp in self.vertex_timestamp_table.values():
             if timestamp < 0:
                 raise ValueError("Timestamp should be positive")
 
     def _validate_table_vertices(self) -> None:
-        """Validates that vertices in the vertex_timestamp_table are present in edge vertices.
+        """Validates that vertices in the vertex_timestamp_table are present in edge
+        vertices.
 
         Raises:
             NotSubsetError: missmatch between edge`s vertices and vertex_timestamp_table.

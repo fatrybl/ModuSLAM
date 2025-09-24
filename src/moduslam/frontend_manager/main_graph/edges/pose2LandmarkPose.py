@@ -2,15 +2,15 @@ import gtsam
 import numpy as np
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.pose_landmark import (
-    PoseLandmark as DetectedLandmark,
-)
-from src.moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     Pose,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     PoseLandmark as LandmarkVertex,
+)
+from moduslam.measurement_storage.measurements.pose_landmark import (
+    PoseLandmark as DetectedLandmark,
 )
 
 

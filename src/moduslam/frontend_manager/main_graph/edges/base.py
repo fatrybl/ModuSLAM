@@ -3,8 +3,8 @@ from collections.abc import Collection
 
 import gtsam
 
-from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.measurement_storage.measurements.base import Measurement
 
 
 class Edge(ABC):

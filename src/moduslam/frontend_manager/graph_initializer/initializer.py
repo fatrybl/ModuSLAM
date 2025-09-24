@@ -1,13 +1,13 @@
 import logging
 from collections.abc import Iterable
 
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.measurements.base import Measurement
-from src.moduslam.frontend_manager.graph_initializer.configs import EdgeConfig
-from src.moduslam.frontend_manager.graph_initializer.distributor import (
+from moduslam.frontend_manager.graph_initializer.configs import EdgeConfig
+from moduslam.frontend_manager.graph_initializer.distributor import (
     type_method_table,
 )
-from src.utils.exceptions import ItemNotExistsError
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.measurements.base import Measurement
+from moduslam.utils.exceptions import ItemNotExistsError
 
 logger = logging.getLogger(frontend_manager)
 

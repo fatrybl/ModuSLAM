@@ -3,7 +3,7 @@ from pathlib import Path
 import gtsam
 from graphviz import Source
 
-from src.moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.main_graph.graph import Graph
 
 
 class GraphSaver:

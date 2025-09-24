@@ -1,15 +1,15 @@
 import logging
 from collections.abc import Sequence
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.batch import DataBatch, Element
-from src.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
-from src.moduslam.data_manager.batch_factory.data_readers.reader_factory import create
-from src.moduslam.data_manager.memory_analyzer import MemoryAnalyzer
-from src.moduslam.sensors_factory.factory import SensorsFactory
-from src.utils.auxiliary_dataclasses import PeriodicDataRequest
-from src.utils.exceptions import StateNotSetError, UnfeasibleRequestError
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element
+from moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import DataReader
+from moduslam.data_manager.batch_factory.data_readers.reader_factory import create
+from moduslam.data_manager.memory_analyzer import MemoryAnalyzer
+from moduslam.logger.logging_config import data_manager
+from moduslam.sensors_factory.factory import SensorsFactory
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
+from moduslam.utils.exceptions import StateNotSetError, UnfeasibleRequestError
 
 logger = logging.getLogger(data_manager)
 

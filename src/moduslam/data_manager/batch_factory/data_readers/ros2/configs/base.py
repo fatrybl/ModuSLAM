@@ -4,7 +4,7 @@ from pathlib import Path
 from omegaconf import MISSING
 from rosbags.typesys import Stores
 
-from src.moduslam.data_manager.batch_factory.configs import DataReaders, DatasetConfig
+from moduslam.data_manager.batch_factory.configs import DataReaders, DatasetConfig
 
 
 @dataclass

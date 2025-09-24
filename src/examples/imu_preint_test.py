@@ -4,16 +4,16 @@ import gtsam
 import numpy as np
 import pandas as pd
 
-from src.bridge.edge_factories.imu_odometry.utils import (
+from moduslam.bridge.edge_factories.imu_odometry.utils import (
     get_combined_integrated_measurement,
 )
-from src.measurement_storage.measurements.imu import (
+from moduslam.frontend_manager.main_graph.vertices.custom import ImuBias
+from moduslam.measurement_storage.measurements.imu import (
     ContinuousImu,
     ImuCovariance,
     ImuData,
     ProcessedImu,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.custom import ImuBias
 
 
 def read_imu_data(file_path: Path, start: int, stop: int):

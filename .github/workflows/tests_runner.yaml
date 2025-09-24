@@ -57,8 +57,8 @@ jobs:
           make python-install -j$(nproc)
 
       - name: Set Test Data Directory
-        run: echo "SRC_DIR=${GITHUB_WORKSPACE}/src" >> $GITHUB_ENV
+        run: echo "SRC_DIR=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
-          poetry run pytest src/tests
+          poetry run pytest tests

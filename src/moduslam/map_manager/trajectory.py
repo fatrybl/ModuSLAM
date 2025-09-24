@@ -3,12 +3,12 @@
 from collections.abc import Iterable
 from pathlib import Path
 
-from src.custom_types.aliases import Matrix4x4
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.custom_types.aliases import Matrix4x4
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
-from src.utils.auxiliary_methods import str_to_float, str_to_int
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.utils.auxiliary_methods import str_to_float, str_to_int
 
 Trajectory = list[tuple[int, Matrix4x4]]
 

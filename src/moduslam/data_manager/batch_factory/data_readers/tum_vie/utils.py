@@ -3,17 +3,17 @@ from pathlib import Path
 
 from PIL.Image import Image
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+from moduslam.data_manager.batch_factory.data_readers.locations import (
     CsvDataLocation,
     StereoImagesLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     get_images,
     read_csv_file,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.utils.auxiliary_methods import microsec2nanosec
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.auxiliary_methods import microsec2nanosec
 
 logger = logging.getLogger(data_manager)
 

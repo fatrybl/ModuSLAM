@@ -6,14 +6,14 @@ from pathlib import Path
 import PIL
 from PIL.Image import Image
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import Source
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+from moduslam.data_manager.batch_factory.data_readers.data_sources import Source
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
     configuration_error_msg,
     context_error_msg,
 )
-from src.utils.auxiliary_dataclasses import Message
-from src.utils.exceptions import (
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.auxiliary_dataclasses import Message
+from moduslam.utils.exceptions import (
     DataReaderConfigurationError,
     ExternalModuleException,
     FileNotValid,

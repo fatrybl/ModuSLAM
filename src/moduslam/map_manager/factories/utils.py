@@ -3,11 +3,11 @@ from typing import TypeVar
 
 import numpy as np
 
-from src.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3, MatrixNx4
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.data_manager.batch_factory.factory import BatchFactory
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.utils.auxiliary_methods import check_dimensionality
+from moduslam.custom_types.numpy import Matrix4x4, Matrix4xN, MatrixNx3, MatrixNx4
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.factory import BatchFactory
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.utils.auxiliary_methods import check_dimensionality
 
 V = TypeVar("V", bound=Vertex)
 
@@ -53,8 +53,8 @@ def transform_pointcloud(tf1: Matrix4x4, tf2: Matrix4x4, point_cloud: MatrixNx4)
 
 
 def filter_array(array: MatrixNx3, lower_bound: float, upper_bound: float) -> MatrixNx3:
-    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector.
-    The point is removed if its radius vector is outside the bounds.
+    """Filters 2D array [N, 3] with lower/upper bounds on the radius vector. The point
+    is removed if its radius vector is outside the bounds.
 
     Args:
         array: array [N, 3] of points to filter.

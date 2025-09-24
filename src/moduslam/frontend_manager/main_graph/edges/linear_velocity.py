@@ -1,12 +1,12 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.linear_velocity import (
-    Velocity as VelocityMeasurement,
-)
-from src.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     LinearVelocity as VelocityVertex,
+)
+from moduslam.measurement_storage.measurements.linear_velocity import (
+    Velocity as VelocityMeasurement,
 )
 
 

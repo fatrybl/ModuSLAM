@@ -1,12 +1,12 @@
 from gtsam import CombinedImuFactor, PreintegratedCombinedMeasurements
 
-from src.measurement_storage.measurements.imu import ContinuousImu
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
     LinearVelocity,
     Pose,
 )
+from moduslam.measurement_storage.measurements.imu import ContinuousImu
 
 
 class ImuOdometry(Edge):

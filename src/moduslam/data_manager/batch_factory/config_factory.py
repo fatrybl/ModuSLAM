@@ -1,16 +1,16 @@
 from typing import cast
 
+from hydra import compose, initialize
 from hydra.core.config_store import ConfigStore
 
-from hydra import compose, initialize
-from src.moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
+from moduslam.data_manager.batch_factory.configs import BatchFactoryConfig
+from moduslam.data_manager.batch_factory.data_readers.kaist.configs.base import (
     KaistConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.configs.base import (
     Ros2HumbleConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
 

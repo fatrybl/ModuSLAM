@@ -11,7 +11,6 @@ Subpackages
    src.moduslam.data_manager
    src.moduslam.frontend_manager
    src.moduslam.map_manager
-   src.moduslam.sensors_factory
 
 Submodules
 ----------

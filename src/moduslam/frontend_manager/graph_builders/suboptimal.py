@@ -1,17 +1,17 @@
 import logging
 
-from src.bridge.optimal_candidate_factory import Factory
-from src.external.handlers_factory.handlers.handler_protocol import Handler
-from src.external.metrics.factory import MetricsResult
-from src.logger.logging_config import frontend_manager
-from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.data_manager.batch_factory.batch import DataBatch
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.storage_analyzers.analyzers import (
+from moduslam.bridge.optimal_candidate_factory import Factory
+from moduslam.data_manager.batch_factory.batch import DataBatch
+from moduslam.external.handlers_factory.handlers.handler_protocol import Handler
+from moduslam.external.metrics.factory import MetricsResult
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.storage_analyzers.analyzers import (
     DoublePoseOdometry,
 )
-from src.moduslam.frontend_manager.utils import fill_storage
-from src.utils.auxiliary_methods import nanosec2sec
+from moduslam.frontend_manager.utils import fill_storage
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.measurement_storage.storage import MeasurementStorage
+from moduslam.utils.auxiliary_methods import nanosec2sec
 
 logger = logging.getLogger(frontend_manager)
 

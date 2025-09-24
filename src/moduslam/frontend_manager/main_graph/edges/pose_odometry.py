@@ -1,11 +1,11 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.pose_odometry import (
+from moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.measurement_storage.measurements.pose_odometry import (
     Odometry as OdometryMeasurement,
 )
-from src.moduslam.frontend_manager.main_graph.edges.base import BinaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
 
 
 class PoseOdometry(BinaryEdge):
