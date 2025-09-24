@@ -1,15 +1,15 @@
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
     ImuOdometry,
 )
-from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
-from src.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
+from moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
+from moduslam.frontend_manager.main_graph.edges.linear_velocity import (
     LinearVelocity as PriorVelocity,
 )
-from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
-from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
+from moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
     LinearVelocity,
     Pose,

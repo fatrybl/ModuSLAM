@@ -2,8 +2,9 @@
 name = "moduslam"
 version = "0.1.0"
 description = "A modular framework for simultaneous localization and mapping."
-authors = ["Mark Griguletskii <fatrybl@yandex.ru>"]
+authors = ["Mark Griguletskii <mark.griguletskii@skoltech.ru>"]
 readme = "README.md"
+packages = [{include = "moduslam", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -78,11 +79,10 @@ max-line-length = 100
 paths = ["docs"]
 ignore = ["D001"]
 
-[tool.pytest.ini_options]
-addopts = ["--import-mode=importlib"]
-
 [tool.mypy]
 python_version = "3.11"
 check_untyped_defs = true
 follow_imports = "normal"
 ignore_missing_imports = true
+mypy_path = "src"
+explicit_package_bases = true

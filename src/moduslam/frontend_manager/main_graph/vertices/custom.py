@@ -3,12 +3,12 @@
 import gtsam
 from gtsam.symbol_shorthand import B, L, N, P, V, X
 
-from src.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
-from src.moduslam.frontend_manager.main_graph.vertices.base import (
+from moduslam.custom_types.aliases import Matrix3x3, Matrix4x4, Vector3
+from moduslam.frontend_manager.main_graph.vertices.base import (
     NonOptimizableVertex,
     OptimizableVertex,
 )
-from src.utils.auxiliary_objects import identity4x4, zero_vector3
+from moduslam.utils.auxiliary_objects import identity4x4, zero_vector3
 
 
 class Pose(OptimizableVertex):

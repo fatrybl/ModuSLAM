@@ -1,9 +1,9 @@
 import gtsam
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.pose import Pose as PoseMeasurement
-from src.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
+from moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose as PoseVertex
+from moduslam.measurement_storage.measurements.pose import Pose as PoseMeasurement
 
 
 class Pose(UnaryEdge):

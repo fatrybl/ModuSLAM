@@ -35,8 +35,7 @@ def crop_edges(image_path, output_dir, crop_percentages):
 
 
 def extract_sub_image(image_path, output_path, left, upper, right, lower):
-    """
-    Extracts a sub-image from the given image using the specified pixel coordinates.
+    """Extracts a sub-image from the given image using the specified pixel coordinates.
 
     Args:
         image_path (str or Path): Path to the input image.

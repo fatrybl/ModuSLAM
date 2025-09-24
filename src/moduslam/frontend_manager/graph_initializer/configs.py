@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from src.custom_types.aliases import Vector3, Vector6
-from src.measurement_storage.measurements.imu_bias import Bias
-from src.measurement_storage.measurements.linear_velocity import Velocity
-from src.measurement_storage.measurements.pose import Pose
-from src.measurement_storage.measurements.position import Position
+from moduslam.custom_types.aliases import Vector3, Vector6
+from moduslam.measurement_storage.measurements.imu_bias import Bias
+from moduslam.measurement_storage.measurements.linear_velocity import Velocity
+from moduslam.measurement_storage.measurements.pose import Pose
+from moduslam.measurement_storage.measurements.position import Position
 
 
 @dataclass

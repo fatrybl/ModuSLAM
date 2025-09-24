@@ -1,8 +1,8 @@
 """Parses regime config and create regimes for different datasets."""
 
-from src.moduslam.data_manager.batch_factory.configs import DataRegimeConfig
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.utils.auxiliary_methods import str_to_float, str_to_int
+from moduslam.data_manager.batch_factory.configs import DataRegimeConfig
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.utils.auxiliary_methods import str_to_float, str_to_int
 
 
 def kaist_regime(regime_config: DataRegimeConfig) -> Stream | TimeLimit:

@@ -1,8 +1,8 @@
 from typing import Any, TypeVar
 
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.utils.auxiliary_dataclasses import TimeRange
-from src.utils.exceptions import ItemExistsError, ItemNotExistsError
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.utils.auxiliary_dataclasses import TimeRange
+from moduslam.utils.exceptions import ItemExistsError, ItemNotExistsError
 
 V = TypeVar("V", bound=Vertex)
 

@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import TextIO
 
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import (
+from moduslam.data_manager.batch_factory.data_readers.data_sources import (
     CsvData,
     StereoImageData,
 )
-from src.utils.exceptions import ClosedSourceError
+from moduslam.utils.exceptions import ClosedSourceError
 
 
 class TumVieCsvData(CsvData):

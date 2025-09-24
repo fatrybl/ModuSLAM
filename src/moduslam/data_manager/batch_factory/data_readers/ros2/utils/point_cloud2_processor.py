@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.custom_types.numpy import MatrixMxN
+from moduslam.custom_types.numpy import MatrixMxN
 
 _DATATYPE_MAPPINGS = {
     1: ("int8", 1),

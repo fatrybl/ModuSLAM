@@ -1,27 +1,27 @@
 from collections.abc import Iterable
 
-from src.external.handlers_factory.handlers.handler_protocol import Handler
-from src.measurement_storage.measurements.base import Measurement
-from src.measurement_storage.measurements.imu import ContinuousImu
-from src.measurement_storage.measurements.imu_bias import Bias
-from src.measurement_storage.measurements.linear_velocity import Velocity
-from src.measurement_storage.measurements.pose import Pose
-from src.measurement_storage.measurements.pose_odometry import Odometry
-from src.measurement_storage.measurements.position import Position
-from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.data_manager.batch_factory.batch import DataBatch, Element
-from src.moduslam.frontend_manager.main_graph.edges.base import (
+from moduslam.data_manager.batch_factory.batch import DataBatch, Element
+from moduslam.external.handlers_factory.handlers.handler_protocol import Handler
+from moduslam.frontend_manager.main_graph.edges.base import (
     BinaryEdge,
     Edge,
     UnaryEdge,
 )
-from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+from moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
     ImuOdometry as CombinedImuOdometry,
 )
-from src.moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
-from src.moduslam.frontend_manager.main_graph.vertices.base import Vertex
-from src.moduslam.frontend_manager.storage_analyzers.protocol import StorageAnalyzer
-from src.utils.exceptions import NotEnoughMeasurementsError
+from moduslam.frontend_manager.main_graph.edges.imu_odometry import ImuOdometry
+from moduslam.frontend_manager.main_graph.vertices.base import Vertex
+from moduslam.frontend_manager.storage_analyzers.protocol import StorageAnalyzer
+from moduslam.measurement_storage.measurements.base import Measurement
+from moduslam.measurement_storage.measurements.imu import ContinuousImu
+from moduslam.measurement_storage.measurements.imu_bias import Bias
+from moduslam.measurement_storage.measurements.linear_velocity import Velocity
+from moduslam.measurement_storage.measurements.pose import Pose
+from moduslam.measurement_storage.measurements.pose_odometry import Odometry
+from moduslam.measurement_storage.measurements.position import Position
+from moduslam.measurement_storage.storage import MeasurementStorage
+from moduslam.utils.exceptions import NotEnoughMeasurementsError
 
 
 def distribute_element(handlers: Iterable[Handler], element: Element) -> Measurement | None:

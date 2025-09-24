@@ -2,18 +2,18 @@ from typing import cast
 
 import gtsam
 
-from src.custom_types.aliases import Matrix4x4, Vector6
-from src.measurement_storage.measurements.imu_bias import Bias
-from src.measurement_storage.measurements.linear_velocity import Velocity
-from src.measurement_storage.measurements.pose import Pose
-from src.measurement_storage.measurements.position import Position
-from src.moduslam.frontend_manager.graph_initializer.configs import (
+from moduslam.custom_types.aliases import Matrix4x4, Vector6
+from moduslam.frontend_manager.graph_initializer.configs import (
     PriorImuBias,
     PriorLinearVelocity,
     PriorPose,
     PriorPosition,
 )
-from src.utils.auxiliary_methods import diagonal_matrix3x3
+from moduslam.measurement_storage.measurements.imu_bias import Bias
+from moduslam.measurement_storage.measurements.linear_velocity import Velocity
+from moduslam.measurement_storage.measurements.pose import Pose
+from moduslam.measurement_storage.measurements.position import Position
+from moduslam.utils.auxiliary_methods import diagonal_matrix3x3
 
 
 def pose_se3_from_tuple(values: Vector6) -> Matrix4x4:

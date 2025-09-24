@@ -5,9 +5,9 @@ from typing import Any, Protocol, overload, runtime_checkable
 
 from plum import dispatch
 
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.sensors_factory.sensors import Sensor
 
 logger = logging.getLogger("data_manager")
 
@@ -46,7 +46,8 @@ class DataReader(Protocol):
         """
 
     def set_initial_state(self, sensor: Sensor, timestamp: int) -> None:
-        """ "Performs the necessary setup for the required configuration or initialization."
+        """ "Performs the necessary setup for the required configuration or
+        initialization.".
 
         TODO: method is not required for all readers. Maybe remove it from BatchFactory ?
         Args:
@@ -60,8 +61,7 @@ class DataReader(Protocol):
 
     @overload
     def get_next_element(self) -> Element | None:
-        """
-        Gets element from a dataset sequentially based on iterator position.
+        """Gets element from a dataset sequentially based on iterator position.
 
         Returns:
             element with raw measurement or None if all measurements from a dataset have already been read.
@@ -72,8 +72,8 @@ class DataReader(Protocol):
 
     @overload
     def get_next_element(self, sensor: Sensor) -> Element | None:
-        """
-        Gets element from a dataset sequentially based on iterator position for the specific sensor.
+        """Gets element from a dataset sequentially based on iterator position for the
+        specific sensor.
 
         Args:
             sensor: a sensor to get measurement of.
@@ -87,9 +87,7 @@ class DataReader(Protocol):
 
     @dispatch
     def get_next_element(self, sensor: Sensor | None = None) -> Element | None:
-        """
-        Gets element from a dataset in different regimes based on arguments.
-        """
+        """Gets element from a dataset in different regimes based on arguments."""
 
     def get_element(self, element: Element) -> Element:
         """Gets the element with raw measurement from a dataset for the given element

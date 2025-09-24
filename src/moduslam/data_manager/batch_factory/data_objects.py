@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Any
 
-from src.moduslam.data_manager.batch_factory.data_readers.locations import Location
-from src.moduslam.sensors_factory.sensors import Sensor
+from moduslam.data_manager.batch_factory.data_readers.locations import Location
+from moduslam.sensors_factory.sensors import Sensor
 
 
 @dataclass(frozen=True, eq=True)

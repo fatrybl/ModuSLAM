@@ -1,9 +1,9 @@
 import gtsam
 from gtsam.gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.position import Position
-from src.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import Pose
+from moduslam.measurement_storage.measurements.position import Position
 
 
 class GpsPosition(UnaryEdge):

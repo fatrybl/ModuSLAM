@@ -1,9 +1,9 @@
-from src.measurement_storage.measurements.pose_odometry import OdometryWithElements
-from src.measurement_storage.measurements.position import Position
-from src.measurement_storage.storage import MeasurementStorage
-from src.moduslam.frontend_manager.storage_analyzers.protocol import (
+from moduslam.frontend_manager.storage_analyzers.protocol import (
     StorageAnalyzer,
 )
+from moduslam.measurement_storage.measurements.pose_odometry import OdometryWithElements
+from moduslam.measurement_storage.measurements.position import Position
+from moduslam.measurement_storage.storage import MeasurementStorage
 
 
 class SinglePoseOdometry(StorageAnalyzer):

@@ -1,6 +1,6 @@
 from collections.abc import Callable
 
-from src.moduslam.data_manager.batch_factory.data_readers.ros2.msg_processors.s3e_dataset.processors import (
+from moduslam.data_manager.batch_factory.data_readers.ros2.msg_processors.s3e_dataset.processors import (
     get_3d_pointcloud,
     get_image,
     get_imu_measurement,

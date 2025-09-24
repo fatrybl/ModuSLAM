@@ -2,7 +2,7 @@ import logging
 
 import psutil
 
-from src.logger.logging_config import data_manager
+from moduslam.logger.logging_config import data_manager
 
 logger = logging.getLogger(data_manager)
 

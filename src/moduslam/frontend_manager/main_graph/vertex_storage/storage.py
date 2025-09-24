@@ -1,18 +1,22 @@
 import logging
 from typing import Any, TypeVar
 
-from src.logger.logging_config import frontend_manager
-from src.moduslam.frontend_manager.main_graph.data_classes import NewVertex
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.data_classes import NewVertex
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.base import (
+from moduslam.frontend_manager.main_graph.vertices.base import (
     NonOptimizableVertex,
     OptimizableVertex,
     Vertex,
 )
-from src.utils.exceptions import ItemExistsError, ItemNotExistsError, ValidationError
-from src.utils.ordered_set import OrderedSet
+from moduslam.logger.logging_config import frontend_manager
+from moduslam.utils.exceptions import (
+    ItemExistsError,
+    ItemNotExistsError,
+    ValidationError,
+)
+from moduslam.utils.ordered_set import OrderedSet
 
 logger = logging.getLogger(frontend_manager)
 
@@ -39,7 +43,10 @@ class VertexStorage:
 
     @property
     def vertices(self) -> tuple[Vertex, ...]:
-        """All vertices. Complexity: O(N)."""
+        """All vertices.
+
+        Complexity: O(N).
+        """
         return tuple(self._vertex_cluster_table.keys())
 
     @property

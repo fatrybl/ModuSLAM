@@ -1,8 +1,8 @@
-from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+from moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
-from src.moduslam.map_manager.maps.trajectory import TrajectoryMap
-from src.moduslam.map_manager.protocols import MapFactory
+from moduslam.map_manager.maps.trajectory import TrajectoryMap
+from moduslam.map_manager.protocols import MapFactory
 
 
 class TrajectoryMapFactory(MapFactory):

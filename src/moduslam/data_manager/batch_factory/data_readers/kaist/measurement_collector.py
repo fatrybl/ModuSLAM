@@ -3,30 +3,30 @@
 import logging
 from collections.abc import Callable
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import (
+from moduslam.data_manager.batch_factory.data_readers.data_sources import (
     CsvData,
     PointCloudData,
     Source,
     StereoImageData,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.kaist.utils import (
+from moduslam.data_manager.batch_factory.data_readers.kaist.utils import (
     get_csv_message_by_location,
     get_pointcloud_message_by_location,
     get_stereo_message_by_location,
     read_binary,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.locations import (
+from moduslam.data_manager.batch_factory.data_readers.locations import (
     BinaryDataLocation,
     CsvDataLocation,
     Location,
     StereoImagesLocation,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     get_csv_message,
     get_images,
 )
-from src.utils.auxiliary_dataclasses import Message
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.auxiliary_dataclasses import Message
 
 logger = logging.getLogger(data_manager)
 

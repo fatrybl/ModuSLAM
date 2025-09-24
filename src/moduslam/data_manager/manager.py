@@ -1,11 +1,11 @@
 import logging
 from collections.abc import Sequence
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.batch import Element
-from src.moduslam.data_manager.batch_factory.config_factory import get_config
-from src.moduslam.data_manager.batch_factory.factory import BatchFactory
-from src.utils.auxiliary_dataclasses import PeriodicDataRequest
+from moduslam.data_manager.batch_factory.batch import Element
+from moduslam.data_manager.batch_factory.config_factory import get_config
+from moduslam.data_manager.batch_factory.factory import BatchFactory
+from moduslam.logger.logging_config import data_manager
+from moduslam.utils.auxiliary_dataclasses import PeriodicDataRequest
 
 logger = logging.getLogger(data_manager)
 

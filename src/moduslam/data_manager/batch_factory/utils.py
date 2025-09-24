@@ -1,7 +1,7 @@
 import numpy as np
 
-from src.moduslam.data_manager.batch_factory.batch import DataBatch
-from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.batch import DataBatch
+from moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
 
 
 def create_empty_element(element: Element) -> Element:

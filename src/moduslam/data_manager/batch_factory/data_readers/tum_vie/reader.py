@@ -8,37 +8,37 @@ from typing import overload
 
 from plum import dispatch
 
-from src.logger.logging_config import data_manager
-from src.moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
-from src.moduslam.data_manager.batch_factory.data_readers.data_sources import Source
-from src.moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
+from moduslam.data_manager.batch_factory.data_objects import Element, RawMeasurement
+from moduslam.data_manager.batch_factory.data_readers.data_sources import Source
+from moduslam.data_manager.batch_factory.data_readers.reader_ABC import (
     DataReader,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.configs.base import (
     TumVieConfig,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.measurement_collector import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.measurement_collector import (
     get_measurement,
     get_next_measurement,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.source import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.source import (
     TumVieCsvData,
     TumVieStereoImageData,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.tum_vie.utils import (
+from moduslam.data_manager.batch_factory.data_readers.tum_vie.utils import (
     create_sequence,
 )
-from src.moduslam.data_manager.batch_factory.data_readers.utils import (
+from moduslam.data_manager.batch_factory.data_readers.utils import (
     apply_state,
     check_data_sources,
     check_setup,
     filter_table,
     set_state,
 )
-from src.moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
-from src.moduslam.sensors_factory.sensors import Sensor
-from src.utils.auxiliary_methods import microsec2nanosec
-from src.utils.exceptions import (
+from moduslam.data_manager.batch_factory.regimes import Stream, TimeLimit
+from moduslam.logger.logging_config import data_manager
+from moduslam.sensors_factory.sensors import Sensor
+from moduslam.utils.auxiliary_methods import microsec2nanosec
+from moduslam.utils.exceptions import (
     DataReaderConfigurationError,
     ItemNotFoundError,
     StateNotSetError,

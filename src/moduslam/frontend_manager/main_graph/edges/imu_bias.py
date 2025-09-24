@@ -2,11 +2,9 @@ import gtsam
 import numpy as np
 from gtsam.noiseModel import Base
 
-from src.measurement_storage.measurements.imu_bias import Bias as BiasMeasurement
-from src.moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
-    ImuBias as BiasVertex,
-)
+from moduslam.frontend_manager.main_graph.edges.base import UnaryEdge
+from moduslam.frontend_manager.main_graph.vertices.custom import ImuBias as BiasVertex
+from moduslam.measurement_storage.measurements.imu_bias import Bias as BiasMeasurement
 
 
 class ImuBias(UnaryEdge):

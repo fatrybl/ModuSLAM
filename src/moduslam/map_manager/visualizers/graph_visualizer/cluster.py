@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
+from moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
     ClusterParams,
 )
-from src.utils.auxiliary_dataclasses import Position2D, TimeRange
-from src.utils.auxiliary_methods import nanosec2sec
+from moduslam.utils.auxiliary_dataclasses import Position2D, TimeRange
+from moduslam.utils.auxiliary_methods import nanosec2sec
 
 
 @dataclass(frozen=True, eq=True)
@@ -104,6 +104,7 @@ class Cluster:
     @property
     def width(self) -> float:
         """The width of the cluster based on the number of vertices.
+
         0 if no vertices are present.
         """
         return len(self._vertices) * self._width_step

@@ -1,30 +1,30 @@
 from collections.abc import Callable
 
-from src.moduslam.frontend_manager.main_graph.edges.base import Edge
-from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+from moduslam.frontend_manager.main_graph.edges.base import Edge
+from moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
     ImuOdometry,
 )
-from src.moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
-from src.moduslam.frontend_manager.main_graph.edges.linear_velocity import (
+from moduslam.frontend_manager.main_graph.edges.gps_position import GpsPosition
+from moduslam.frontend_manager.main_graph.edges.linear_velocity import (
     LinearVelocity,
 )
-from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
-from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
+from moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertex_storage.storage import (
+from moduslam.frontend_manager.main_graph.vertex_storage.storage import (
     VertexStorage,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
-from src.moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
+from moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
+from moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
     Binary,
     Unary,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.mappings import (
+from moduslam.map_manager.visualizers.graph_visualizer.mappings import (
     edge_encodings,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.utils import (
+from moduslam.map_manager.visualizers.graph_visualizer.utils import (
     get_cluster_for_unary_connection,
     get_clusters_for_binary_connections,
 )

@@ -3,61 +3,61 @@ from collections.abc import Iterable
 import gtsam
 import plotly.graph_objects as go
 
-from src.custom_types.numpy import VectorN
-from src.measurement_storage.measurements.imu import (
-    ContinuousImu,
-    ImuCovariance,
-    ImuData,
-    ProcessedImu,
-)
-from src.measurement_storage.measurements.pose import Pose as PoseMeasurement
-from src.measurement_storage.measurements.pose_odometry import Odometry
-from src.moduslam.frontend_manager.main_graph.data_classes import (
+from moduslam.custom_types.numpy import VectorN
+from moduslam.frontend_manager.main_graph.data_classes import (
     GraphElement,
     NewVertex,
 )
-from src.moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
+from moduslam.frontend_manager.main_graph.edges.combined_imu_odometry import (
     ImuOdometry,
 )
-from src.moduslam.frontend_manager.main_graph.edges.noise_models import (
+from moduslam.frontend_manager.main_graph.edges.noise_models import (
     se3_isotropic_noise_model,
 )
-from src.moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
-from src.moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
-from src.moduslam.frontend_manager.main_graph.graph import Graph
-from src.moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
+from moduslam.frontend_manager.main_graph.edges.pose import Pose as PriorPose
+from moduslam.frontend_manager.main_graph.edges.pose_odometry import PoseOdometry
+from moduslam.frontend_manager.main_graph.graph import Graph
+from moduslam.frontend_manager.main_graph.vertex_storage.cluster import (
     VertexCluster,
 )
-from src.moduslam.frontend_manager.main_graph.vertices.custom import (
+from moduslam.frontend_manager.main_graph.vertices.custom import (
     ImuBias,
     LinearVelocity,
     Pose,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
-from src.moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
+from moduslam.map_manager.visualizers.graph_visualizer.cluster import Cluster
+from moduslam.map_manager.visualizers.graph_visualizer.connection_objects import (
     Binary,
     Unary,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
+from moduslam.map_manager.visualizers.graph_visualizer.data_factory import (
     Data,
     create_data,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.utils import (
+from moduslam.map_manager.visualizers.graph_visualizer.utils import (
     calculate_curve_properties,
     create_cluster_connections_table,
     generate_bezier_curve,
 )
-from src.moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
+from moduslam.map_manager.visualizers.graph_visualizer.visualizer_params import (
     BinaryConnectionParams,
     ClusterParams,
     UnaryConnectionParams,
     VertexParams,
     VisualizationParams,
 )
-from src.utils.auxiliary_dataclasses import Position2D, TimeRange
-from src.utils.auxiliary_objects import identity3x3 as i3x3
-from src.utils.auxiliary_objects import identity4x4 as i4x4
-from src.utils.auxiliary_objects import one_vector3
+from moduslam.measurement_storage.measurements.imu import (
+    ContinuousImu,
+    ImuCovariance,
+    ImuData,
+    ProcessedImu,
+)
+from moduslam.measurement_storage.measurements.pose import Pose as PoseMeasurement
+from moduslam.measurement_storage.measurements.pose_odometry import Odometry
+from moduslam.utils.auxiliary_dataclasses import Position2D, TimeRange
+from moduslam.utils.auxiliary_objects import identity3x3 as i3x3
+from moduslam.utils.auxiliary_objects import identity4x4 as i4x4
+from moduslam.utils.auxiliary_objects import one_vector3
 
 
 def draw(data: Data, vis_params: VisualizationParams) -> None:
