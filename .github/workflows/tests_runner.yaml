@@ -51,7 +51,7 @@ jobs:
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} \
             -DCMAKE_INSTALL_PREFIX="./install"
           make install -j4
 
