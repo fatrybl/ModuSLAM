@@ -30,11 +30,7 @@ open3d = "*"
 plotly = "*"
 laspy = "*"
 rosbags = "*"
-
-[tool.poetry.group.gtsam.dependencies]
-# for GTSAM compilation
-pyparsing = "*"
-pybind11-stubgen = "*"
+gtsam-develop = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
