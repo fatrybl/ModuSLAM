@@ -51,10 +51,9 @@ jobs:
           cmake .. \
             -DGTSAM_BUILD_PYTHON=1 \
             -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
-            -DGTSAM_BUILD_UNSTABLE=OFF \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-          make install -j$(nproc)
+            -DCMAKE_INSTALL_PREFIX="./install"
+          make install -j4
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
