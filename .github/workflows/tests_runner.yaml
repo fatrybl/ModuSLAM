@@ -13,13 +13,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential \
-            cmake \
-            libboost-all-dev \
-            libtbb-dev \
             python3-venv \
-            python3-dev \
-            libeigen3-dev
+            python3-dev
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,26 +30,7 @@ jobs:
         run: poetry env use $(which python)
 
       - name: Install project dependencies with Poetry
-        run: poetry install
-
-      - name: Clone GTSAM (develop branch)
-        run: |
-          git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
-
-
-      - name: Build and install GTSAM Python wrapper
-        run: |
-          cd gtsam
-          mkdir build
-          cd build
-          PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
-          cmake .. \
-            -DGTSAM_BUILD_PYTHON=1 \
-            -DGTSAM_PYTHON_VERSION=3.11 \
-            -DGTSAM_BUILD_WITH_MARCH_NATIVE=ON \
-            -DGTSAM_BUILD_UNSTABLE=OFF \
-            -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-          make python-install -j$(nproc)
+        run: poetry install --only=main,test
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
