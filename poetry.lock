@@ -835,6 +835,36 @@ docs = ["sphinx (>=5,<7)", "sphinx-autodoc-typehints", "sphinx-rtd-theme (>=0.2.
 test = ["coverage", "pytest (>=7,<8.1)", "pytest-cov", "pytest-mock (>=3)"]
 
 [[package]]
+name = "gtsam-develop"
+version = "4.3a0.dev202509290210"
+description = "Georgia Tech Smoothing And Mapping library"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:5ca3b7be0390f85118c163af5db57450a55e5c6b8e55d6be618813c346e2120e"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:33ec52adbf10f4c4df7dac64353c7bed77a04d932e5af4250477b4ecaade23bc"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7fe325c28e88cda52be087e77ce94cecfc30eb720153e477d7f0ef8804ed5b91"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:21c66f757a7e052e276e6b4766b9d00684a55faa7192565e4dcd8c6104d510e2"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:7b17ea6e94871bf0efba58da839e209432bdfa4133309f5e438d1319082b157c"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:3d02414913d0284a6e0afb5ad415bbe437b772bdfdaf246cd70628692b555f0c"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:f8f81c8af78d51cf19bf5647f6ff035222e29c97f1122564d6f22fe34bb3f0de"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:1b0ce318afca094d209cfe1f81af218d7acfe1aa8543f5954d0cde4fd5be9168"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-macosx_10_15_x86_64.whl", hash = "sha256:d0fb47b0371412d63f93352ecb1c53f4aca0f2ce6646ce2084ab5b1362412bfc"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:59d13ace4a8d68daa37b9ff3cc16e541f280d3b831420232c6a0ef68b6c3f149"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:bcdaaae3ca0d3596dc10dbe6ef3071db897df181f7553ffc2b62dc0b2aa409f7"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:8bf9d87b51de9ddf665d71e0efd22b1885bf3506bcbb0d9ac9505b68de1107e5"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-macosx_10_15_x86_64.whl", hash = "sha256:5a87a892a2e2354fd420156eb34d65680c234c203368052ebb25853dfcf6d525"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:acc8c836665e2bdc5c14bab113b027b47becd219171cfc699e205fe88def6c72"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:326cdf6173b1b731aa6f7088d2782d99842b15217dbbab967dc80b7e2f77bbe6"},
+    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:dd6cbe9b2a5f9757ec955ce6018e21b93e92fe852f8752d3e717572efea05190"},
+]
+
+[package.dependencies]
+numpy = ">=1.11.0"
+pytest = "*"
+
+[[package]]
 name = "hydra-core"
 version = "1.4.0.dev1"
 description = "A framework for elegantly configuring complex applications"
@@ -977,7 +1007,7 @@ version = "2.1.0"
 description = "brain-dead simple config-ini parsing"
 optional = false
 python-versions = ">=3.8"
-groups = ["test"]
+groups = ["main", "test"]
 files = [
     {file = "iniconfig-2.1.0-py3-none-any.whl", hash = "sha256:9deba5723312380e77435581c6bf4935c94cbfab9b1ed33ef8d238ea168eb760"},
     {file = "iniconfig-2.1.0.tar.gz", hash = "sha256:3abbd2e30b36733fee78f9c7f7308f2d0050e88f0087fd25c2645f63c773e1c7"},
@@ -2894,7 +2924,7 @@ version = "1.6.0"
 description = "plugin and hook calling mechanisms for python"
 optional = false
 python-versions = ">=3.9"
-groups = ["test"]
+groups = ["main", "test"]
 files = [
     {file = "pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"},
     {file = "pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3"},
@@ -3137,18 +3167,6 @@ files = [
 tests = ["pytest"]
 
 [[package]]
-name = "pybind11-stubgen"
-version = "2.5.5"
-description = "PEP 561 type stubs generator for pybind11 modules"
-optional = false
-python-versions = "~=3.7"
-groups = ["gtsam"]
-files = [
-    {file = "pybind11_stubgen-2.5.5-py3-none-any.whl", hash = "sha256:10824cd2fc5cbbee032b8fb39e6f6c08de232deb309bc66d786a6c6e8a4601bd"},
-    {file = "pybind11_stubgen-2.5.5.tar.gz", hash = "sha256:758d6d6bbeefc62ad7f78d5e5bbf357ccf6af83cd4504f5f549403f452942708"},
-]
-
-[[package]]
 name = "pycodestyle"
 version = "2.14.0"
 description = "Python style guide checker"
@@ -3351,7 +3369,7 @@ version = "3.2.5"
 description = "pyparsing - Classes and methods to define and execute parsing grammars"
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "experiments", "gtsam"]
+groups = ["main", "experiments"]
 files = [
     {file = "pyparsing-3.2.5-py3-none-any.whl", hash = "sha256:e38a4f02064cf41fe6593d328d0512495ad1f3d8a91c4f73fc401b3079a59a5e"},
     {file = "pyparsing-3.2.5.tar.gz", hash = "sha256:2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6"},
@@ -3386,7 +3404,7 @@ version = "8.4.2"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.9"
-groups = ["test"]
+groups = ["main", "test"]
 files = [
     {file = "pytest-8.4.2-py3-none-any.whl", hash = "sha256:872f880de3fc3a5bdc88a11b39c9710c3497a547cfa9320bc3c5e62fbf272e79"},
     {file = "pytest-8.4.2.tar.gz", hash = "sha256:86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01"},
@@ -4954,4 +4972,4 @@ cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and pyt
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "373fe8b9ab6dd1152181e5876477071fcf0e9945b91177245bccd471105cad1a"
+content-hash = "71b226139a77cb8c835b7680e5b11b555e68ce1c226826a613a35f26527db7f8"
