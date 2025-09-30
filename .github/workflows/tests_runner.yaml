@@ -53,7 +53,7 @@ jobs:
             -DGTSAM_PYTHON_VERSION=3.11 \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} \
             -DCMAKE_INSTALL_PREFIX="./install"
-          make install -j4
+          make install -j2
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
