@@ -41,19 +41,37 @@ jobs:
         run: |
           git clone --depth 1 --branch develop https://github.com/borglab/gtsam.git
 
-
       - name: Build and install GTSAM Python wrapper
         run: |
           cd gtsam
-          mkdir build
-          cd build
           PYTHON_EXECUTABLE=$(poetry run which python)  # Use Poetry's Python
-          cmake .. \
-            -DGTSAM_BUILD_PYTHON=1 \
+          export CMAKE_GENERATOR=Ninja
+          
+          # Install ninja for faster builds
+          sudo apt-get install -y ninja-build
+          
+          # flags are take from gtsam scripts for action runners
+          cmake . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DGTSAM_BUILD_TESTS=OFF \
+            -DGTSAM_BUILD_UNSTABLE=ON \
+            -DGTSAM_USE_QUATERNIONS=OFF \
+            -DGTSAM_WITH_TBB=ON \
+            -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF \
+            -DGTSAM_BUILD_WITH_MARCH_NATIVE=OFF \
+            -DGTSAM_BUILD_PYTHON=ON \
+            -DGTSAM_UNSTABLE_BUILD_PYTHON=ON \
             -DGTSAM_PYTHON_VERSION=3.11 \
             -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} \
-            -DCMAKE_INSTALL_PREFIX="./install"
-          make install -j2
+            -DGTSAM_USE_BOOST_FEATURES=ON \
+            -DGTSAM_ENABLE_BOOST_SERIALIZATION=ON \
+            -DGTSAM_ALLOW_DEPRECATED_SINCE_V43=OFF \
+            -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/gtsam_install
+          
+          # Build with reduced parallelism to avoid resource exhaustion
+          cmake --build build -j2
+          cmake --build build --target python-install
 
       - name: Set Test Data Directory
         run: echo "SRC_DIR=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
