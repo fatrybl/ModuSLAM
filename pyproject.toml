@@ -2,7 +2,7 @@
 name = "moduslam"
 version = "0.1.0"
 description = "A modular framework for simultaneous localization and mapping."
-authors = ["Mark Griguletskii <mark.griguletskii@skoltech.ru>"]
+authors = ["Mark Griguletskii <fatrybl@yandex.ru>"]
 readme = "README.md"
 packages = [{include = "moduslam", from = "src"}]
 
@@ -30,9 +30,12 @@ open3d = "*"
 plotly = "*"
 laspy = "*"
 rosbags = "*"
+gtsam-develop = "*"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
 mypy = "*"
 black = "*"
 flake8 = "*"
@@ -46,9 +49,6 @@ doc8 = "*"
 types-pillow = "*"
 types-psutil = "*"
 polyscope = "*"
-# for GTSAM compilation
-pyparsing = "*"
-pybind11-stubgen = "*"
 pyyaml = "*"
 sphinx-autodoc-typehints = "*"
 

@@ -1,4 +1,4 @@
-name: Build Sphinx Docs
+name: Build Sphinx docs
 
 on: [ push, pull_request, workflow_dispatch ]
 
