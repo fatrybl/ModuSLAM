@@ -38,8 +38,8 @@ def compute_transformation(
     matches = matches[:1000]
     draw_matches(image1, image2, keypoints1, keypoints2, matches)
 
-    q1 = np.float32([keypoints1[m.queryIdx].pt for m in matches])
-    q2 = np.float32([keypoints2[m.trainIdx].pt for m in matches])
+    q1 = np.array([keypoints1[m.queryIdx].pt for m in matches], dtype=np.float32)
+    q2 = np.array([keypoints2[m.trainIdx].pt for m in matches], dtype=np.float32)
 
     tf = _get_transformation(
         q1,
