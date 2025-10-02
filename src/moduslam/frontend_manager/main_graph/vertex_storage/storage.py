@@ -322,7 +322,7 @@ class VertexStorage:
             )
 
         if v_type not in self._type_vertices_table:
-            raise ItemNotExistsError(f"Vertex of type{v_type } does not exist in the storage.")
+            raise ItemNotExistsError(f"Vertex of type {v_type} does not exist in the storage.")
 
         if vertex not in self._vertex_cluster_table:
             raise ItemNotExistsError(f"Vertex {vertex} is not in the storage.")
