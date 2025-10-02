@@ -131,7 +131,10 @@ if __name__ == "__main__":
         cv2.IMREAD_GRAYSCALE,
     )
 
-    width, height = img_left.shape[::-1]
+    if img_left is not None:
+        width, height = img_left.shape[::-1]
+    else:
+        raise ValueError("Failed to load left image")
     # Intrinsic parameters for the left camera
     fx_left = 747.3121949097032
     fy_left = 747.1524375957724

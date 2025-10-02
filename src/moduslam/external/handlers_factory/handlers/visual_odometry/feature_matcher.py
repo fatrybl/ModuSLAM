@@ -7,13 +7,13 @@ class FlannMatcher:
 
     def __init__(self):
         FLANN_INDEX_LSH = 6
-        index_params: dict[str, int] = {
+        index_params: dict[str, bool | int | float | str] = {
             "algorithm": FLANN_INDEX_LSH,
             "table_number": 6,
             "key_size": 12,
             "multi_probe_level": 1,
         }
-        search_params: dict[str, int] = {"checks": 100}
+        search_params: dict[str, bool | int | float | str] = {"checks": 100}
 
         self._matcher = cv2.FlannBasedMatcher(indexParams=index_params, searchParams=search_params)
 
@@ -87,12 +87,10 @@ def draw_matches(image1, image2, kp1, kp2, matches) -> None:
     image1_array = np.array(image1)
     image2_array = np.array(image2)
 
-    draw_params = dict(
-        singlePointColor=(0, 255, 0),  # Green color for single points
-        matchesMask=None,  # draw only inliers
-        flags=2,
-    )
-
-    img3 = cv2.drawMatches(image1_array, kp1, image2_array, kp2, matches, None, **draw_params)
+    # Create output image
+    h1, w1 = image1_array.shape[:2]
+    h2, w2 = image2_array.shape[:2]
+    output_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype=np.uint8)
+    img3 = cv2.drawMatches(image1_array, kp1, image2_array, kp2, matches, output_img)
     cv2.imshow("image", img3)
     cv2.waitKey(200)
