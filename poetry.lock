@@ -69,23 +69,15 @@ test = ["astroid (>=2,<4)", "pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
 name = "attrs"
-version = "25.3.0"
+version = "25.4.0"
 description = "Classes Without Boilerplate"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "attrs-25.3.0-py3-none-any.whl", hash = "sha256:427318ce031701fea540783410126f03899a97ffc6f61596ad581ac2e40e3bc3"},
-    {file = "attrs-25.3.0.tar.gz", hash = "sha256:75d7cefc7fb576747b2c81b4442d4d4a1ce0900973527c011d1030fd3bf4af1b"},
+    {file = "attrs-25.4.0-py3-none-any.whl", hash = "sha256:adcf7e2a1fb3b36ac48d97835bb6d8ade15b8dcce26aba8bf1d14847b57a3373"},
+    {file = "attrs-25.4.0.tar.gz", hash = "sha256:16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11"},
 ]
-
-[package.extras]
-benchmark = ["cloudpickle ; platform_python_implementation == \"CPython\"", "hypothesis", "mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pympler", "pytest (>=4.3.0)", "pytest-codspeed", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-xdist[psutil]"]
-cov = ["cloudpickle ; platform_python_implementation == \"CPython\"", "coverage[toml] (>=5.3)", "hypothesis", "mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-xdist[psutil]"]
-dev = ["cloudpickle ; platform_python_implementation == \"CPython\"", "hypothesis", "mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pre-commit-uv", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-xdist[psutil]"]
-docs = ["cogapp", "furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier"]
-tests = ["cloudpickle ; platform_python_implementation == \"CPython\"", "hypothesis", "mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-xdist[psutil]"]
-tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\""]
 
 [[package]]
 name = "babel"
@@ -104,21 +96,21 @@ dev = ["backports.zoneinfo ; python_version < \"3.9\"", "freezegun (>=1.0,<2.0)"
 
 [[package]]
 name = "beartype"
-version = "0.21.0"
+version = "0.22.2"
 description = "Unbearably fast near-real-time hybrid runtime-static type-checking in pure Python."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "beartype-0.21.0-py3-none-any.whl", hash = "sha256:b6a1bd56c72f31b0a496a36cc55df6e2f475db166ad07fa4acc7e74f4c7f34c0"},
-    {file = "beartype-0.21.0.tar.gz", hash = "sha256:f9a5078f5ce87261c2d22851d19b050b64f6a805439e8793aecf01ce660d3244"},
+    {file = "beartype-0.22.2-py3-none-any.whl", hash = "sha256:12077afe3528eba5c5b801f816712f7ff06f6da5509994c79561e29b48bcedb8"},
+    {file = "beartype-0.22.2.tar.gz", hash = "sha256:ff3a7df26af8d15fa87f97934f0f6d41bbdadca971c410819104998dd26013d2"},
 ]
 
 [package.extras]
-dev = ["autoapi (>=0.9.0)", "click", "coverage (>=5.5)", "equinox ; sys_platform == \"linux\"", "jax[cpu] ; sys_platform == \"linux\"", "jaxtyping ; sys_platform == \"linux\"", "langchain", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\"", "numba ; python_version < \"3.13.0\"", "numpy ; sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera", "pydata-sphinx-theme (<=0.7.2)", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "sphinx", "sphinx (>=4.2.0,<6.0.0)", "sphinxext-opengraph (>=0.7.5)", "sqlalchemy", "tox (>=3.20.1)", "typing-extensions (>=3.10.0.0)", "xarray"]
-doc-rtd = ["autoapi (>=0.9.0)", "pydata-sphinx-theme (<=0.7.2)", "sphinx (>=4.2.0,<6.0.0)", "sphinxext-opengraph (>=0.7.5)"]
-test = ["click", "coverage (>=5.5)", "equinox ; sys_platform == \"linux\"", "jax[cpu] ; sys_platform == \"linux\"", "jaxtyping ; sys_platform == \"linux\"", "langchain", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\"", "numba ; python_version < \"3.13.0\"", "numpy ; sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "sphinx", "sqlalchemy", "tox (>=3.20.1)", "typing-extensions (>=3.10.0.0)", "xarray"]
-test-tox = ["click", "equinox ; sys_platform == \"linux\"", "jax[cpu] ; sys_platform == \"linux\"", "jaxtyping ; sys_platform == \"linux\"", "langchain", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\"", "numba ; python_version < \"3.13.0\"", "numpy ; sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "sphinx", "sqlalchemy", "typing-extensions (>=3.10.0.0)", "xarray"]
+dev = ["autoapi (>=0.9.0)", "celery", "click", "coverage (>=5.5)", "equinox ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "fastmcp ; python_version > \"3.9.0\" and python_version < \"3.14.0\"", "jax[cpu] ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "jaxtyping ; sys_platform == \"linux\"", "langchain ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "numba ; python_version < \"3.14.0\"", "numpy ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera (>=0.26.0) ; python_version < \"3.14.0\"", "polars ; python_version < \"3.14.0\"", "pydata-sphinx-theme (<=0.7.2)", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "setuptools", "sphinx", "sphinx (>=4.2.0,<6.0.0)", "sphinxext-opengraph (>=0.7.5)", "sqlalchemy", "torch ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "tox (>=3.20.1)", "typer", "typing-extensions (>=3.10.0.0)", "xarray ; python_version < \"3.14.0\""]
+doc-rtd = ["autoapi (>=0.9.0)", "pydata-sphinx-theme (<=0.7.2)", "setuptools", "sphinx (>=4.2.0,<6.0.0)", "sphinxext-opengraph (>=0.7.5)"]
+test = ["celery", "click", "coverage (>=5.5)", "equinox ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "fastmcp ; python_version > \"3.9.0\" and python_version < \"3.14.0\"", "jax[cpu] ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "jaxtyping ; sys_platform == \"linux\"", "langchain ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "numba ; python_version < \"3.14.0\"", "numpy ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera (>=0.26.0) ; python_version < \"3.14.0\"", "polars ; python_version < \"3.14.0\"", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "sphinx", "sqlalchemy", "torch ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "tox (>=3.20.1)", "typer", "typing-extensions (>=3.10.0.0)", "xarray ; python_version < \"3.14.0\""]
+test-tox = ["celery", "click", "equinox ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "fastmcp ; python_version > \"3.9.0\" and python_version < \"3.14.0\"", "jax[cpu] ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "jaxtyping ; sys_platform == \"linux\"", "langchain ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "mypy (>=0.800) ; platform_python_implementation != \"PyPy\"", "nuitka (>=1.2.6) ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "numba ; python_version < \"3.14.0\"", "numpy ; python_version < \"3.14.0\" and sys_platform != \"darwin\" and platform_python_implementation != \"PyPy\"", "pandera (>=0.26.0) ; python_version < \"3.14.0\"", "polars ; python_version < \"3.14.0\"", "pygments", "pyright (>=1.1.370)", "pytest (>=4.0.0)", "rich-click", "sphinx", "sqlalchemy", "torch ; sys_platform == \"linux\" and python_version < \"3.14.0\"", "typer", "typing-extensions (>=3.10.0.0)", "xarray ; python_version < \"3.14.0\""]
 test-tox-coverage = ["coverage (>=5.5)"]
 
 [[package]]
@@ -181,14 +173,14 @@ files = [
 
 [[package]]
 name = "certifi"
-version = "2025.8.3"
+version = "2025.10.5"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.7"
 groups = ["main", "dev"]
 files = [
-    {file = "certifi-2025.8.3-py3-none-any.whl", hash = "sha256:f6c12493cfb1b06ba2ff328595af9350c65d6644968e5d3a2ffd78699af217a5"},
-    {file = "certifi-2025.8.3.tar.gz", hash = "sha256:e564105f78ded564e3ae7c923924435e1daa7463faeab5bb932bc53ffae63407"},
+    {file = "certifi-2025.10.5-py3-none-any.whl", hash = "sha256:0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de"},
+    {file = "certifi-2025.10.5.tar.gz", hash = "sha256:47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43"},
 ]
 
 [[package]]
@@ -584,14 +576,14 @@ files = [
 
 [[package]]
 name = "evo"
-version = "1.31.1"
+version = "1.32.0"
 description = "Python package for the evaluation of odometry and SLAM"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["experiments"]
 files = [
-    {file = "evo-1.31.1-py3-none-any.whl", hash = "sha256:2531e6aa58fdd8e0cab923a16fe8250325c38ef087afe6bce3e91bd4c1877276"},
-    {file = "evo-1.31.1.tar.gz", hash = "sha256:81bd49dbdcae94eb30597c21e038be60140f82ae794ec62b04f2cd5a1ed9d8a6"},
+    {file = "evo-1.32.0-py3-none-any.whl", hash = "sha256:06bc76f7a63cc736473c4550d4c9e6bf6e0ff540af33afa069d6c7ae93bf9efc"},
+    {file = "evo-1.32.0.tar.gz", hash = "sha256:2d72d2413b0bd5879a95724c06b796008cde77126a1d21aae5e2d36b1c9eac68"},
 ]
 
 [package.dependencies]
@@ -601,17 +593,19 @@ matplotlib = ">=3.6.0"
 natsort = "*"
 numexpr = ">=2.7.3"
 numpy = ">=1.18.5"
+packaging = "*"
 pandas = "*"
 pillow = "*"
 pygments = "*"
 pyyaml = "*"
-rosbags = ">=0.9.20"
+rosbags = ">=0.10.9"
 scipy = ">=1.2"
 seaborn = ">=0.9"
 
 [package.extras]
 geo = ["contextily"]
-gui = ["pyqt5"]
+gui = ["pyqt6"]
+rerun = ["rerun-sdk (>=0.24.0)"]
 
 [[package]]
 name = "executing"
@@ -836,28 +830,28 @@ test = ["coverage", "pytest (>=7,<8.1)", "pytest-cov", "pytest-mock (>=3)"]
 
 [[package]]
 name = "gtsam-develop"
-version = "4.3a0.dev202509290210"
+version = "4.3a0.dev202510031704"
 description = "Georgia Tech Smoothing And Mapping library"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:5ca3b7be0390f85118c163af5db57450a55e5c6b8e55d6be618813c346e2120e"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:33ec52adbf10f4c4df7dac64353c7bed77a04d932e5af4250477b4ecaade23bc"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7fe325c28e88cda52be087e77ce94cecfc30eb720153e477d7f0ef8804ed5b91"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:21c66f757a7e052e276e6b4766b9d00684a55faa7192565e4dcd8c6104d510e2"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:7b17ea6e94871bf0efba58da839e209432bdfa4133309f5e438d1319082b157c"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:3d02414913d0284a6e0afb5ad415bbe437b772bdfdaf246cd70628692b555f0c"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:f8f81c8af78d51cf19bf5647f6ff035222e29c97f1122564d6f22fe34bb3f0de"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:1b0ce318afca094d209cfe1f81af218d7acfe1aa8543f5954d0cde4fd5be9168"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-macosx_10_15_x86_64.whl", hash = "sha256:d0fb47b0371412d63f93352ecb1c53f4aca0f2ce6646ce2084ab5b1362412bfc"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:59d13ace4a8d68daa37b9ff3cc16e541f280d3b831420232c6a0ef68b6c3f149"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:bcdaaae3ca0d3596dc10dbe6ef3071db897df181f7553ffc2b62dc0b2aa409f7"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:8bf9d87b51de9ddf665d71e0efd22b1885bf3506bcbb0d9ac9505b68de1107e5"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-macosx_10_15_x86_64.whl", hash = "sha256:5a87a892a2e2354fd420156eb34d65680c234c203368052ebb25853dfcf6d525"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:acc8c836665e2bdc5c14bab113b027b47becd219171cfc699e205fe88def6c72"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:326cdf6173b1b731aa6f7088d2782d99842b15217dbbab967dc80b7e2f77bbe6"},
-    {file = "gtsam_develop-4.3a0.dev202509290210-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:dd6cbe9b2a5f9757ec955ce6018e21b93e92fe852f8752d3e717572efea05190"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:067c7d6c5e918a73b5ea9f681bde9d957c0036c2655b10ac584df396cd166528"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:4bb2fb3d66df33eb3abc63700816acf119bcb8fe6698a04781db7182eb56fc42"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3b08eeb671b39432bfd5dc84cf53d0055ade35043677d792ad9ed680f6d99f5f"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0f710056d0403b9b487ead33a72dcb7e90b4f80c77d3777ec9fbf8a58974bf58"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:b955279f6de87a951c1bbadc386cd4a97880b7183036c947dde3e64d700e2284"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:de14be5681c704518a40be945c01ab5b4f70ea5b94fa83ce5f83e0e458feb7f3"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:e83588fb827d152c29222c79abb5e8a8cecc8da88064bec85bceee6c0d3e8c04"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:8ccc55a89af06af5eb84cb651cde02c2e2a7badf1edf4e0091c7f94e233320b4"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp312-cp312-macosx_10_15_x86_64.whl", hash = "sha256:135c538a65ea08f959ae0661f8d5b3235bba1cd19a5351b09531955b21af6baf"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:81b59b9f89f3374a81be2144f2bb9822d89e978df49e456f8a30762666882b05"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:654fe9b8554c363ec9736ab8781555cb0fa2ab8eba931d705601c52a8840d4f4"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:1414e461b1385404011b2b43caee99de89ea78b50eae7d6630ea83b99ce1b71f"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp313-cp313-macosx_10_15_x86_64.whl", hash = "sha256:f35794b3cbc9c386786acfb5245a03b5e1cb2e77949197325ce4b377f2c0bcf6"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:72f802e9c78ae4eb41b06a149468da746dea5e23686ec40d95a5579e0ab6c7a2"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:cf598bf0cc1b9f0e58dc3b6d6aece1c98eaf0783e8079a2b2a318a1f99c1e8f3"},
+    {file = "gtsam_develop-4.3a0.dev202510031704-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:9a3490524b7526cb6ca99c3e475acadac4a681da630e3a9a335c8f56b09f5da6"},
 ]
 
 [package.dependencies]
@@ -886,14 +880,14 @@ resolved_reference = "b785290504577b06d7131d87f85cfe121004dce2"
 
 [[package]]
 name = "identify"
-version = "2.6.14"
+version = "2.6.15"
 description = "File identification library for Python"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "identify-2.6.14-py2.py3-none-any.whl", hash = "sha256:11a073da82212c6646b1f39bb20d4483bfb9543bd5566fec60053c4bb309bf2e"},
-    {file = "identify-2.6.14.tar.gz", hash = "sha256:663494103b4f717cb26921c52f8751363dc89db64364cd836a9bf1535f53cd6a"},
+    {file = "identify-2.6.15-py2.py3-none-any.whl", hash = "sha256:1181ef7608e00704db228516541eb83a88a9f94433a8c80bb9b5bd54b1d81757"},
+    {file = "identify-2.6.15.tar.gz", hash = "sha256:e4f4864b96c6557ef2a1e1c951771838f4edc9df3a72ec7118b338801b11c7bf"},
 ]
 
 [package.extras]
@@ -1828,14 +1822,14 @@ files = [
 
 [[package]]
 name = "narwhals"
-version = "2.6.0"
+version = "2.7.0"
 description = "Extremely lightweight compatibility layer between dataframe libraries"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "narwhals-2.6.0-py3-none-any.whl", hash = "sha256:3215ea42afb452c6c8527e79cefbe542b674aa08d7e2e99d46b2c9708870e0d4"},
-    {file = "narwhals-2.6.0.tar.gz", hash = "sha256:5c9e2ba923e6a0051017e146184e49fb793548936f978ce130c9f55a9a81240e"},
+    {file = "narwhals-2.7.0-py3-none-any.whl", hash = "sha256:010791aa0cee86d90bf2b658264aaec3eeea34fb4ddf2e83746ea4940bcffae3"},
+    {file = "narwhals-2.7.0.tar.gz", hash = "sha256:e3fff7f1610fd3318ede78c969bc5954ce710d585eefdb689586fb69da3da43c"},
 ]
 
 [package.extras]
@@ -2684,14 +2678,14 @@ type = ["mypy (>=1.14.1)"]
 
 [[package]]
 name = "plotly"
-version = "6.3.0"
+version = "6.3.1"
 description = "An open-source interactive data visualization library for Python"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "plotly-6.3.0-py3-none-any.whl", hash = "sha256:7ad806edce9d3cdd882eaebaf97c0c9e252043ed1ed3d382c3e3520ec07806d4"},
-    {file = "plotly-6.3.0.tar.gz", hash = "sha256:8840a184d18ccae0f9189c2b9a2943923fd5cae7717b723f36eef78f444e5a73"},
+    {file = "plotly-6.3.1-py3-none-any.whl", hash = "sha256:8b4420d1dcf2b040f5983eed433f95732ed24930e496d36eb70d211923532e64"},
+    {file = "plotly-6.3.1.tar.gz", hash = "sha256:dd896e3d940e653a7ce0470087e82c2bd903969a55e30d1b01bb389319461bb0"},
 ]
 
 [package.dependencies]
@@ -2968,14 +2962,14 @@ files = [
 
 [[package]]
 name = "pydantic"
-version = "2.11.9"
+version = "2.11.10"
 description = "Data validation using Python type hints"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pydantic-2.11.9-py3-none-any.whl", hash = "sha256:c42dd626f5cfc1c6950ce6205ea58c93efa406da65f479dcb4029d5934857da2"},
-    {file = "pydantic-2.11.9.tar.gz", hash = "sha256:6b8ffda597a14812a7975c90b82a8a2e777d9257aba3453f973acd3c032a18e2"},
+    {file = "pydantic-2.11.10-py3-none-any.whl", hash = "sha256:802a655709d49bd004c31e865ef37da30b540786a46bfce02333e0e24b5fe29a"},
+    {file = "pydantic-2.11.10.tar.gz", hash = "sha256:dc280f0982fbda6c38fada4e476dc0a4f3aeaf9c6ad4c28df68a666ec3c61423"},
 ]
 
 [package.dependencies]
@@ -3304,6 +3298,13 @@ optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev", "experiments"]
 files = [
+    {file = "PyYAML-6.0.3-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:c2514fceb77bc5e7a2f7adfaa1feb2fb311607c9cb518dbc378688ec73d8292f"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9c57bb8c96f6d1808c030b1687b9b5fb476abaa47f0db9c0101f5e9f394e97f4"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:efd7b85f94a6f21e4932043973a7ba2613b059c4a000551892ac9f1d11f5baf3"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:22ba7cfcad58ef3ecddc7ed1db3409af68d023b7f940da23c6c2a1890976eda6"},
+    {file = "PyYAML-6.0.3-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:6344df0d5755a2c9a276d4473ae6b90647e216ab4757f8426893b5dd2ac3f369"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win32.whl", hash = "sha256:3ff07ec89bae51176c0549bc4c63aa6202991da2d9a6129d7aef7f1407d3f295"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win_amd64.whl", hash = "sha256:5cf4e27da7e3fbed4d6c3d8e797387aaad68102272f8f9752883bc32d61cb87b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_10_13_x86_64.whl", hash = "sha256:214ed4befebe12df36bcc8bc2b64b396ca31be9304b8f59e25c11cf94a4c033b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:02ea2dfa234451bbb8772601d7b8e426c2bfa197136796224e50e35a78777956"},
     {file = "pyyaml-6.0.3-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b30236e45cf30d2b8e7b3e85881719e98507abed1011bf463a8fa23e9c3e98a8"},
